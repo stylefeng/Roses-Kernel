@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.stylefeng.roses</groupId>
+        <artifactId>kernel-d-file</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>file-sdk-minio</artifactId>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!--file模块的api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>file-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--jwt模块-->
+        <!--用来给生成带鉴权的url用-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>jwt-sdk</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--minio客户端-->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

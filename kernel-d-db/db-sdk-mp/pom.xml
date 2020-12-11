@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.stylefeng.roses</groupId>
+        <artifactId>kernel-d-db</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>db-sdk-mp</artifactId>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!--db操作的api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>db-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--auth鉴权模块的api-->
+        <!--需要用auth模块的LoginContext获取当前登录用户，然后填充到create_user这类字段里-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>auth-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.stylefeng.roses</groupId>
+        <artifactId>roses-kernel</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>kernel-s-system</artifactId>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>system-api</module>
+        <module>system-business-app</module>
+        <module>system-business-organization</module>
+        <module>system-business-resource</module>
+        <module>system-business-user</module>
+        <module>system-business-role</module>
+        <module>system-business-menu</module>
+        <module>system-spring-boot-starter</module>
+    </modules>
+
+    <dependencies>
+
+        <!-- 开发规则 -->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>kernel-a-rule</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

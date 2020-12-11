@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.stylefeng.roses</groupId>
+        <artifactId>kernel-d-auth</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>auth-sdk</artifactId>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!--auth本模块的api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>auth-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--资源模块的api-->
+        <!--权限校验等功能，需要用到资源模块的接口-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>scanner-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--system业务模块的api-->
+        <!--登录和鉴权需要用到用户相关的接口-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--jwt模块的api-->
+        <!--token用的jwt token-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>jwt-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--web模块-->
+        <!--web获取token的操作需要从http header中取-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+
+        <!--redis的依赖-->
+        <!--session manager可以用redis，可以用内存的-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+</project>

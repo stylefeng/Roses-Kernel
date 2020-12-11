@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.stylefeng.roses.kernel.resource.modular.mapper.SysResourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.roses.kernel.resource.modular.entity.SysResource">
+        <id column="id" property="id"/>
+        <result column="app_code" property="appCode"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="project_code" property="projectCode"/>
+        <result column="class_name" property="className"/>
+        <result column="method_name" property="methodName"/>
+        <result column="modular_code" property="modularCode"/>
+        <result column="modular_name" property="modularName"/>
+        <result column="ip_address" property="ipAddress"/>
+        <result column="url" property="url"/>
+        <result column="http_method" property="httpMethod"/>
+        <result column="menu_flag" property="menuFlag"/>
+        <result column="required_login_flag" property="requiredLoginFlag"/>
+        <result column="required_permission_flag" property="requiredPermissionFlag"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+</mapper>

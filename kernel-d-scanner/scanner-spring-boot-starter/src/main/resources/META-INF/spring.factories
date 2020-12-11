@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.stylefeng.roses.kernel.resource.starter.GunsResourceAutoConfiguration
+org.springframework.context.ApplicationListener=\
+  cn.stylefeng.roses.kernel.resource.scanner.ResourceReportListener

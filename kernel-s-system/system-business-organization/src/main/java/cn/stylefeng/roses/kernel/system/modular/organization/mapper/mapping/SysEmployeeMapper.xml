@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.stylefeng.roses.kernel.system.modular.organization.mapper.SysEmployeeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.roses.kernel.system.modular.organization.entity.SysEmployee">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="organization_id" property="organizationId" />
+		<result column="position_ids" property="positionIds" />
+		<result column="main_dept_flag" property="mainDeptFlag" />
+		<result column="employee_no" property="employeeNo" />
+		<result column="create_time" property="createTime" />
+		<result column="create_user" property="createUser" />
+		<result column="update_time" property="updateTime" />
+		<result column="update_user" property="updateUser" />
+	</resultMap>
+
+</mapper>

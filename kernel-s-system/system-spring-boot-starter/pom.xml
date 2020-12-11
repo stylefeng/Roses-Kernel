@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.stylefeng.roses</groupId>
+        <artifactId>kernel-s-system</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>system-spring-boot-starter</artifactId>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!--应用管理的业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-app</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--菜单管理的业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-menu</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--组织机构管理的业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-organization</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--资源管理的业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-resource</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--角色管理的业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-role</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--用户管理的业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-user</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,70 @@
+package cn.stylefeng.roses.kernel.resource.starter;
+
+import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.resource.api.ResourceCollectorApi;
+import cn.stylefeng.roses.kernel.resource.api.pojo.scanner.ScannerProperties;
+import cn.stylefeng.roses.kernel.resource.scanner.ApiResourceScanner;
+import cn.stylefeng.roses.kernel.resource.scanner.DefaultResourceCollector;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * 资源的自动配置
+ *
+ * @author fengshuonan
+ * @date 2020/12/1 17:24
+ */
+@Configuration
+public class GunsResourceAutoConfiguration {
+
+    public static final String SCANNER_PREFIX = "scanner";
+
+    @Value("${spring.application.name}")
+    private String springApplicationName;
+
+    /**
+     * 资源扫描器的配置
+     *
+     * @author fengshuonan
+     * @date 2020/12/3 17:54
+     */
+    @Bean
+    @ConfigurationProperties(prefix = SCANNER_PREFIX)
+    public ScannerProperties scannerProperties() {
+        return new ScannerProperties();
+    }
+
+    /**
+     * 资源扫描器
+     *
+     * @author fengshuonan
+     * @date 2020/12/1 17:29
+     */
+    @Bean
+    @ConditionalOnMissingBean(ApiResourceScanner.class)
+    @ConditionalOnProperty(prefix = GunsResourceAutoConfiguration.SCANNER_PREFIX, name = "open", havingValue = "true")
+    public ApiResourceScanner apiResourceScanner(ResourceCollectorApi resourceCollectorApi, ScannerProperties scannerProperties) {
+        if (StrUtil.isBlank(scannerProperties.getProjectCode())) {
+            scannerProperties.setProjectCode(springApplicationName);
+        }
+        return new ApiResourceScanner(resourceCollectorApi, scannerProperties, scannerProperties.getAppCode());
+    }
+
+    /**
+     * 资源搜集器
+     *
+     * @author fengshuonan
+     * @date 2020/12/1 17:29
+     */
+    @Bean
+    @ConditionalOnMissingBean(ResourceCollectorApi.class)
+    @ConditionalOnProperty(prefix = GunsResourceAutoConfiguration.SCANNER_PREFIX, name = "open", havingValue = "true")
+    public ResourceCollectorApi resourceCollectorApi() {
+        return new DefaultResourceCollector();
+    }
+
+}

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.stylefeng.roses</groupId>
+        <artifactId>kernel-d-log</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>log-api</artifactId>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!--auth模块的api-->
+        <!--记录日志时候，有可能需要记录当前登录用户id-->
+        <!--如果不要记录当前登录用户id时就不用本模块，所以optional=true-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>auth-api</artifactId>
+            <version>1.0.0</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!--参数校验模块-->
+        <!--包含带参数校验注解的类-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>validator-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--数据库模块 api-->
+        <!--分页查询需要用到PageResult相关类-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>db-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--web-->
+        <!--LogRecordFactory快速创建http类的日志参数会用到-->
+        <!--如果不要记录当前请求的http接口信息，就不用本模块，所以optional=true-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

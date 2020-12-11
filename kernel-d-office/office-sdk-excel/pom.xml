@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.stylefeng.roses</groupId>
+        <artifactId>kernel-d-office</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>office-sdk-excel</artifactId>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!--office模块 api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>office-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- servlet库 -->
+        <!-- 导出Excel需要用到 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+
+    </dependencies>
+
+
+</project>
