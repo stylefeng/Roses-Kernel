@@ -7,12 +7,6 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
-import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -24,8 +18,14 @@ import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
 import cn.stylefeng.roses.kernel.file.modular.mapper.SysFileInfoMapper;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
+import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
+import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.util.DownloadUtil;
 import cn.stylefeng.roses.kernel.file.util.PicFileTypeUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -241,7 +241,8 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     private SysFileInfo querySysFileInfo(SysFileInfoRequest sysFileInfoRequest) {
         SysFileInfo sysFileInfo = this.getById(sysFileInfoRequest.getId());
         if (ObjectUtil.isEmpty(sysFileInfo)) {
-            throw new FileException(FileExceptionEnum.NOT_EXISTED);
+            String userTip = StrUtil.format(FileExceptionEnum.NOT_EXISTED.getUserTip(), sysFileInfoRequest.getId());
+            throw new FileException(FileExceptionEnum.NOT_EXISTED, userTip);
         }
         return sysFileInfo;
     }

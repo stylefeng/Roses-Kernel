@@ -40,9 +40,9 @@ public enum FileExceptionEnum implements AbstractExceptionEnum {
     ERROR_FILE(RuleConstants.BUSINESS_ERROR_TYPE_CODE + FileConstants.FILE_EXCEPTION_STEP_CODE + "05", "上传文件操作异常，具体信息为：{}"),
 
     /**
-     * 该条记录不存在
+     * 该文件信息不存在
      */
-    NOT_EXISTED(RuleConstants.BUSINESS_ERROR_TYPE_CODE + FileConstants.FILE_EXCEPTION_STEP_CODE + "06", "该文件信息不存在"),
+    NOT_EXISTED(RuleConstants.BUSINESS_ERROR_TYPE_CODE + FileConstants.FILE_EXCEPTION_STEP_CODE + "06", "该文件信息不存在，文件id为：{}"),
 
     /**
      * 获取文件流错误
