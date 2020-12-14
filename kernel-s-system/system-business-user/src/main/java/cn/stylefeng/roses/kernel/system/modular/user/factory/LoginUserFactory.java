@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.factory;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.file.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.FileOperatorApi;
@@ -76,7 +77,11 @@ public class LoginUserFactory {
 
         // 填充用户的数据范围
         DataScopeResponse dataScopeResponse = dataScopeApi.getDataScope(userId);
-        loginUser.setDataScopeTypes(dataScopeResponse.getDataScopeTypeEnums());
+        if (loginUser.getSuperAdmin()) {
+            loginUser.setDataScopeTypes(getSuperAdminDataScopeTypeEnum());
+        } else {
+            loginUser.setDataScopeTypes(dataScopeResponse.getDataScopeTypeEnums());
+        }
         loginUser.setOrganizationIdDataScope(dataScopeResponse.getOrganizationIds());
         loginUser.setUserIdDataScope(dataScopeResponse.getUserIds());
 
@@ -124,6 +129,18 @@ public class LoginUserFactory {
         }
 
         return simpleRoles;
+    }
+
+    /**
+     * 超级管理员的数据范围是所有数据范围
+     *
+     * @author fengshuonan
+     * @date 2020/12/14 23:12
+     */
+    private static Set<DataScopeTypeEnum> getSuperAdminDataScopeTypeEnum() {
+        HashSet<DataScopeTypeEnum> dataScopeTypeEnums = new HashSet<>();
+        dataScopeTypeEnums.add(DataScopeTypeEnum.ALL);
+        return dataScopeTypeEnums;
     }
 
 }

@@ -28,9 +28,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 角色资源关联
@@ -38,10 +36,9 @@ import lombok.EqualsAndHashCode;
  * @author fengshuonan
  * @date 2020/11/5 下午4:30
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("sys_role_resource")
-public class SysRoleResource extends BaseEntity {
+public class SysRoleResource {
 
     /**
      * 主键

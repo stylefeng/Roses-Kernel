@@ -24,12 +24,12 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.roses.kernel.role.modular.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleResource;
-import cn.stylefeng.roses.kernel.role.modular.mapper.SysRoleMenuMapper;
+import cn.stylefeng.roses.kernel.role.modular.mapper.SysRoleResourceMapper;
 import cn.stylefeng.roses.kernel.role.modular.service.SysRoleResourceService;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +43,7 @@ import java.util.List;
  * @date 2020/11/5 上午11:32
  */
 @Service
-public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleResource> implements SysRoleResourceService {
+public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMapper, SysRoleResource> implements SysRoleResourceService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)

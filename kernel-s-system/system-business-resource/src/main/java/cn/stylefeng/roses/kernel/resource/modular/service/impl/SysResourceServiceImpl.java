@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.resource.modular.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.resource.api.ResourceReportApi;
@@ -162,8 +161,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         // 获取资源详情
         List<SysResource> list = this.list(queryWrapper);
         for (SysResource sysResource : list) {
-            ResourceDefinition resourceDefinition = new ResourceDefinition();
-            BeanUtil.copyProperties(sysResource, resourceDefinition);
+            ResourceDefinition resourceDefinition = ResourceFactory.createResourceDefinition(sysResource);
             resourceDefinitions.add(resourceDefinition);
         }
 
