@@ -50,15 +50,9 @@ public class ApiResourceScanner implements BeanPostProcessor {
      */
     private final ScannerProperties scannerProperties;
 
-    /**
-     * 项目名称
-     */
-    private final String springApplicationName;
-
-    public ApiResourceScanner(ResourceCollectorApi resourceCollectorApi, ScannerProperties scannerProperties, String springApplicationName) {
+    public ApiResourceScanner(ResourceCollectorApi resourceCollectorApi, ScannerProperties scannerProperties) {
         this.resourceCollectorApi = resourceCollectorApi;
         this.scannerProperties = scannerProperties;
-        this.springApplicationName = springApplicationName;
     }
 
     @Override
@@ -229,7 +223,7 @@ public class ApiResourceScanner implements BeanPostProcessor {
         resourceDefinition.setRequiredPermission(requiredPermission);
         resourceDefinition.setMenuFlag(menuFlag);
         resourceDefinition.setName(name);
-        resourceDefinition.setUrl(getControllerClassRequestPath(clazz) + path[0]);
+        resourceDefinition.setUrl(getControllerClassRequestPath(clazz, path[0]));
         StringBuilder methodNames = new StringBuilder();
         for (RequestMethod requestMethod : requestMethods) {
             methodNames.append(requestMethod.name()).append(",");
@@ -251,7 +245,7 @@ public class ApiResourceScanner implements BeanPostProcessor {
         resourceDefinition.setCreateTime(new Date());
 
         // 填充项目编码
-        resourceDefinition.setProjectCode(scannerProperties.getProjectCode());
+        resourceDefinition.setProjectCode(scannerProperties.getAppCode());
 
         // 填充方法的校验分组
         Set<String> methodValidateGroup = MethodReflectUtil.getMethodValidateGroup(method);
@@ -277,28 +271,48 @@ public class ApiResourceScanner implements BeanPostProcessor {
     }
 
     /**
-     * 获取控制器类上的RequestMapping注解的映射路径,用于拼接path
-     * <p>
-     * 2018年5月2日修改，控制器路径前加上spring.application.name
+     * 根据控制器类上的RequestMapping注解的映射路径，以及方法上的路径，拼出整个接口的路径
+     *
+     * @param clazz 控制器类
+     * @param path  当前被扫描接口的path路径
+     * @author fengshuonan
+     * @date 2020/12/14 22:17
      */
-    private String getControllerClassRequestPath(Class<?> clazz) {
-        String result;
+    private String getControllerClassRequestPath(Class<?> clazz, String path) {
+        String controllerPath;
 
         ApiResource controllerRequestMapping = clazz.getDeclaredAnnotation(ApiResource.class);
         if (controllerRequestMapping == null) {
-            result = "";
+            controllerPath = "";
         } else {
             String[] paths = controllerRequestMapping.path();
             if (paths.length > 0) {
-                result = paths[0];
+                controllerPath = paths[0];
             } else {
-                result = "";
+                controllerPath = "";
             }
         }
 
-        // 拼接spring.application.name
-        result = "/" + springApplicationName + result;
-        return result;
+        // 拼接最终url的时候，依据如下规则拼接：/appCode/contextPath/xxx
+        // 第一部分是appCode
+        String appCode = "";
+        if (scannerProperties.getUrlWithAppCode()) {
+            appCode = "/" + StrUtil.removePrefix(scannerProperties.getAppCode(), "/");
+        }
+
+        // 第二部分是context-path
+        String contextPath = "";
+        if (scannerProperties.getUrlWithContextPath()) {
+            contextPath = "/" + StrUtil.removePrefix(scannerProperties.getContextPath(), "/");
+        }
+
+        // 依据如下规则拼接：/appCode/contextPath/xxx
+        String resultPath = appCode + contextPath + controllerPath + path;
+
+        // 前缀多个左斜杠替换为一个
+        resultPath = resultPath.replaceAll("/+", "/");
+
+        return resultPath;
     }
 
     /**
@@ -311,7 +325,7 @@ public class ApiResourceScanner implements BeanPostProcessor {
         try {
             Class<? extends Annotation> annotationType = apiResource.annotationType();
             Method method = annotationType.getMethod(methodName);
-            return (T)method.invoke(apiResource);
+            return (T) method.invoke(apiResource);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             log.error("扫描api资源时出错!", e);
         }

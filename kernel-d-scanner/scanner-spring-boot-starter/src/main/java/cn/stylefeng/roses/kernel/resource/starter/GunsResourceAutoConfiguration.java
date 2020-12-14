@@ -23,8 +23,11 @@ public class GunsResourceAutoConfiguration {
 
     public static final String SCANNER_PREFIX = "scanner";
 
-    @Value("${spring.application.name}")
+    @Value("${spring.application.name:}")
     private String springApplicationName;
+
+    @Value("${server.servlet.context-path:}")
+    private String contextPath;
 
     /**
      * 资源扫描器的配置
@@ -48,10 +51,13 @@ public class GunsResourceAutoConfiguration {
     @ConditionalOnMissingBean(ApiResourceScanner.class)
     @ConditionalOnProperty(prefix = GunsResourceAutoConfiguration.SCANNER_PREFIX, name = "open", havingValue = "true")
     public ApiResourceScanner apiResourceScanner(ResourceCollectorApi resourceCollectorApi, ScannerProperties scannerProperties) {
-        if (StrUtil.isBlank(scannerProperties.getProjectCode())) {
-            scannerProperties.setProjectCode(springApplicationName);
+        if (StrUtil.isBlank(scannerProperties.getAppCode())) {
+            scannerProperties.setAppCode(springApplicationName);
         }
-        return new ApiResourceScanner(resourceCollectorApi, scannerProperties, scannerProperties.getAppCode());
+        if (StrUtil.isBlank(scannerProperties.getContextPath())) {
+            scannerProperties.setContextPath(contextPath);
+        }
+        return new ApiResourceScanner(resourceCollectorApi, scannerProperties);
     }
 
     /**

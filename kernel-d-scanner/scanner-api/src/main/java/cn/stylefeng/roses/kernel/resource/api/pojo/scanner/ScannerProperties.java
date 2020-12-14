@@ -17,27 +17,36 @@ public class ScannerProperties {
     private Boolean open;
 
     /**
-     * 被扫描应用的名称
+     * 扫描到的资源的url是否要带appCode属性，此值默认为false
+     * <p>
+     * 也就是资源的url上不会带appCode属性，一般在微服务的系统中需要把此值设为true
      */
-    private String appName;
+    private Boolean urlWithAppCode = false;
 
     /**
-     * 应用的编码
+     * 项目编码（如果您不设置的话，默认使用spring.application.name填充，一般不用手动设置此值）
      */
     private String appCode;
 
     /**
-     * 链接符号
+     * 扫描到的url是否要带context-path，默认为true也就是会带上
+     * <p>
+     * 如果设置为true，则资源的url属性会带当前项目的context-path
+     * <p>
+     * 如果设置为false，则资源url属性不会带context-path
+     * <p>
+     * 如果urlWithAppCode开关和urlWithContextPath都开了，生成的url会是如下： /appCode/contextPath/xxx
      */
-    private String linkSymbol = "$";
+    private Boolean urlWithContextPath = true;
 
     /**
-     * 项目编码（如果您不设置的话，默认使用spring.application.name填充，请不要设置此值，这个值和网关资源过滤有关）
-     * <p>
-     * 修复一个项目启动的时候会误删别的项目资源的问题
-     *
-     * @since 2.2.12
+     * 项目的context-path
      */
-    private String projectCode;
+    private String contextPath;
+
+    /**
+     * 链接符号，一般不要修改此符号
+     */
+    private String linkSymbol = "$";
 
 }

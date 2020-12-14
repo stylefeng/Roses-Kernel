@@ -47,7 +47,7 @@ public class ResourceReportListener implements ApplicationListener<ApplicationRe
 
             // 持久化资源，发送资源到资源服务或本项目（单体项目）
             ResourceReportApi resourceService = applicationContext.getBean(ResourceReportApi.class);
-            resourceService.reportResources(new ReportResourceParam(scannerProperties.getProjectCode(), modularResources));
+            resourceService.reportResources(new ReportResourceParam(scannerProperties.getAppCode(), modularResources));
 
             // 设置标识已经扫描过
             InitScanFlagHolder.setFlag();
