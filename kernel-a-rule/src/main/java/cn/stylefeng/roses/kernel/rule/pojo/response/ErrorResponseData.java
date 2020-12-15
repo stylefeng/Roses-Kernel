@@ -22,7 +22,8 @@ public class ErrorResponseData extends ResponseData {
         super(Boolean.FALSE, code, message, null);
     }
 
-    ErrorResponseData(String code, String message, Object object) {
+    public ErrorResponseData(String code, String message, Object object) {
         super(Boolean.FALSE, code, message, object);
     }
+
 }

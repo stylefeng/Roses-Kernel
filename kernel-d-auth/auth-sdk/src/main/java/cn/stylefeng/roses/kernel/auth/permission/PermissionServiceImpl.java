@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Set;
 
-import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.*;
+import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.PERMISSION_RES_VALIDATE_ERROR;
+import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.TOKEN_ERROR;
 
 /**
  * 权限相关的service
@@ -32,30 +33,31 @@ public class PermissionServiceImpl implements PermissionServiceApi {
     @Override
     public void checkPermission(String token, String requestUrl) {
 
-        // 获取token对应的用户信息
+        // 1. 获取url对应的资源信息ResourceDefinition
+        ResourceUrlParam resourceUrlReq = new ResourceUrlParam();
+        resourceUrlReq.setUrl(requestUrl);
+        ResourceDefinition resourceDefinition = resourceServiceApi.getResourceByUrl(resourceUrlReq);
+
+        // 2. 如果此接口不需要权限校验或者查询到资源为空，则放开过滤
+        if (resourceDefinition == null || !resourceDefinition.getRequiredPermission()) {
+            return;
+        }
+
+        // 3. 获取token对应的用户信息
         LoginUser session = sessionManagerApi.getSession(token);
         if (session == null) {
             throw new AuthException(TOKEN_ERROR);
         }
 
-        // 获取url对应的资源信息ResourceDefinition
-        ResourceUrlParam resourceUrlReq = new ResourceUrlParam();
-        resourceUrlReq.setUrl(requestUrl);
-        ResourceDefinition resourceDefinition = resourceServiceApi.getResourceByUrl(resourceUrlReq);
-
-        // 资源为空，直接响应异常，禁止用户访问
-        if (resourceDefinition == null) {
-            throw new AuthException(RESOURCE_DEFINITION_ERROR);
-        }
-
-        // 检查接口是否需要权限验证
-        Boolean requiredPermission = resourceDefinition.getRequiredPermission();
-
-        // 需要权限认证，验证用户有没有当前url的权限
-        if (requiredPermission) {
+        // 4. 如果需要权限认证，验证用户有没有当前url的权限
+        if (resourceDefinition.getRequiredPermission()) {
             Set<String> resourceUrls = session.getResourceUrls();
             if (resourceUrls == null || resourceUrls.size() == 0) {
                 throw new AuthException(PERMISSION_RES_VALIDATE_ERROR);
+            } else {
+                if (!resourceUrls.contains(requestUrl)) {
+                    throw new AuthException(PERMISSION_RES_VALIDATE_ERROR);
+                }
             }
         }
     }

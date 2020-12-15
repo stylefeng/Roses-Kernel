@@ -32,7 +32,7 @@ public class DefaultJwtPayload {
     /**
      * 是否记住我
      */
-    private boolean rememberMe;
+    private Boolean rememberMe;
 
     /**
      * 其他载体信息

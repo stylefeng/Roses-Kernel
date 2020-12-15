@@ -17,7 +17,7 @@ public enum AuthExceptionEnum implements AbstractExceptionEnum {
     /**
      * 认证异常
      */
-    AUTH_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "01", "认证失败，请检查您的操作是否正确"),
+    AUTH_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "01", "认证失败，请检查您的登录是否过期"),
 
     /**
      * 登陆时，账号或密码为空

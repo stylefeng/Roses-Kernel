@@ -27,9 +27,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
 
-import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.RESOURCE_DEFINITION_ERROR;
-import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.TOKEN_ERROR;
-
 /**
  * 认证服务的实现
  *
@@ -94,29 +91,39 @@ public class AuthServiceImpl implements AuthServiceApi {
     @Override
     public void checkAuth(String token, String requestUrl) {
 
-        // 获取url对应的资源信息ResourceDefinition
+        // 1. 获取url对应的资源信息ResourceDefinition
         ResourceUrlParam resourceUrlReq = new ResourceUrlParam();
         resourceUrlReq.setUrl(requestUrl);
         ResourceDefinition resourceDefinition = resourceServiceApi.getResourceByUrl(resourceUrlReq);
 
-        // 获取token对应的用户信息
-        LoginUser session = sessionManagerApi.getSession(token);
-        if (session == null) {
-            throw new AuthException(TOKEN_ERROR);
+        // 2. 如果此接口不需要权限校验或者查询到资源为空，则放开过滤
+        if (resourceDefinition == null || !resourceDefinition.getRequiredLogin()) {
+            return;
         }
 
-        // 资源为空，直接响应异常，禁止用户访问
-        if (resourceDefinition == null) {
-            throw new AuthException(RESOURCE_DEFINITION_ERROR);
-        }
-
-        // 检查接口是否需要鉴权
-        Boolean requiredLogin = resourceDefinition.getRequiredLogin();
-
-        // 需要鉴权，则判断token是否过期
-        if (requiredLogin) {
+        // 3. 如果当前接口需要鉴权，则校验用户token是否正确，校验失败会抛出异常
+        if (resourceDefinition.getRequiredLogin()) {
             this.validateToken(token);
         }
+
+        // 4. 如果token校验通过，获取token的payload，以及是否开启了记住我功能
+        DefaultJwtPayload defaultPayload = JwtContext.me().getDefaultPayload(token);
+        Boolean rememberMe = defaultPayload.getRememberMe();
+
+        // 5. 获取用户的当前会话信息
+        LoginUser loginUser = sessionManagerApi.getSession(token);
+
+        // 6. 如果开了记住我，但是会话为空，则创建一次会话信息
+        if (rememberMe && loginUser == null) {
+            UserLoginInfoDTO userLoginInfo = userServiceApi.getUserLoginInfo(defaultPayload.getAccount());
+            sessionManagerApi.createSession(token, userLoginInfo.getLoginUser());
+        }
+
+        // 7. 如果会话信息为空，则判定此次校验失败
+        if (loginUser == null) {
+            throw new AuthException(AuthExceptionEnum.AUTH_ERROR);
+        }
+
     }
 
     /**
