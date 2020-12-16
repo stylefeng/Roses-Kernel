@@ -18,6 +18,18 @@ public class ErrorResponseData extends ResponseData {
      */
     private String exceptionClazz;
 
+    /**
+     * 异常的提示信息
+     */
+    private String exceptionTip;
+
+    /**
+     * 跟项目有关的具体异常位置
+     * <p>
+     * 一般是堆栈中第一个出现项目包名的地方
+     */
+    private String exceptionPlace;
+
     public ErrorResponseData(String code, String message) {
         super(Boolean.FALSE, code, message, null);
     }
