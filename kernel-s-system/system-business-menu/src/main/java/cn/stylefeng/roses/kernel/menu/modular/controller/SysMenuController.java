@@ -90,7 +90,7 @@ public class SysMenuController {
      * @author fengshuonan
      * @date 2020/4/19 15:50
      */
-    @GetResource(name = "获取某个应用的菜单", path = "/sysMenu/getAppMenus")
+    @GetResource(name = "获取某个应用的菜单", path = "/sysMenu/getAppMenus", requiredPermission = false)
     public ResponseData getAppMenus(@RequestBody @Validated(SysMenuRequest.getAppMenus.class) SysMenuRequest sysMenuRequest) {
         return new SuccessResponseData(sysMenuService.getAppMenusAntDesign(sysMenuRequest.getAppCode()));
     }
