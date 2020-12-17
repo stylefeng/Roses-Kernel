@@ -1,11 +1,12 @@
 package cn.stylefeng.roses.kernel.db.starter;
 
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
-import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import cn.stylefeng.roses.kernel.db.mp.dbid.CustomDatabaseIdProvider;
 import cn.stylefeng.roses.kernel.db.mp.fieldfill.CustomMetaObjectHandler;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,8 +17,19 @@ import org.springframework.context.annotation.Configuration;
  * @date 2020/11/30 22:40
  */
 @Configuration
-@AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
+@AutoConfigureBefore(MybatisPlusAutoConfiguration.class)
 public class GunsMyBatisPlusAutoConfiguration {
+
+    /**
+     * 新的分页插件
+     */
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        // 使用分页插插件
+        interceptor.addInnerInterceptor(paginationInterceptor());
+        return interceptor;
+    }
 
     /**
      * 分页插件
