@@ -35,7 +35,7 @@ public class HrPositionRequest extends BaseRequest {
     /**
      * 职位编码
      */
-    @NotBlank(message = "职位编码不能为空", groups = {add.class, edit.class})
+    @NotBlank(message = "职位编码不能为空", groups = {add.class})
     @TableUniqueValue(
             message = "职位编码存在重复",
             groups = {add.class, edit.class},
