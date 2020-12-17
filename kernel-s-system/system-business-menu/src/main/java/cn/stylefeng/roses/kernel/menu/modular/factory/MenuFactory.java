@@ -54,7 +54,7 @@ public class MenuFactory {
             mateItem.setLink(sysMenu.getLinkUrl());
 
             // 是否可见
-            mateItem.setShow(!YesOrNotEnum.N.getCode().equals(sysMenu.getVisible()));
+            mateItem.setShow(YesOrNotEnum.Y.getCode().equals(sysMenu.getVisible()));
 
             // 是否是外链
             if (LinkOpenTypeEnum.INNER.getCode().equals(sysMenu.getLinkOpenType())) {
