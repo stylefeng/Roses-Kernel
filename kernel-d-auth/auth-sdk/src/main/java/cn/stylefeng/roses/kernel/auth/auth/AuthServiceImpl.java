@@ -15,8 +15,6 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
 import cn.stylefeng.roses.kernel.jwt.api.exception.JwtException;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
-import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
-import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceUrlParam;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
@@ -91,35 +89,28 @@ public class AuthServiceImpl implements AuthServiceApi {
     @Override
     public void checkAuth(String token, String requestUrl) {
 
-        // 1. 获取url对应的资源信息ResourceDefinition
-        ResourceUrlParam resourceUrlReq = new ResourceUrlParam();
-        resourceUrlReq.setUrl(requestUrl);
-        ResourceDefinition resourceDefinition = resourceServiceApi.getResourceByUrl(resourceUrlReq);
-
-        // 2. 如果此接口不需要权限校验或者查询到资源为空，则放开过滤
-        if (resourceDefinition == null || !resourceDefinition.getRequiredLogin()) {
-            return;
+        // 1. 校验token是否传参
+        if (StrUtil.isEmpty(token)) {
+            throw new AuthException(AuthExceptionEnum.TOKEN_GET_ERROR);
         }
 
-        // 3. 如果当前接口需要鉴权，则校验用户token是否正确，校验失败会抛出异常
-        if (resourceDefinition.getRequiredLogin()) {
-            this.validateToken(token);
-        }
+        // 2. 校验用户token是否正确，校验失败会抛出异常
+        this.validateToken(token);
 
-        // 4. 如果token校验通过，获取token的payload，以及是否开启了记住我功能
+        // 3. 如果token校验通过，获取token的payload，以及是否开启了记住我功能
         DefaultJwtPayload defaultPayload = JwtContext.me().getDefaultPayload(token);
         Boolean rememberMe = defaultPayload.getRememberMe();
 
-        // 5. 获取用户的当前会话信息
+        // 4. 获取用户的当前会话信息
         LoginUser loginUser = sessionManagerApi.getSession(token);
 
-        // 6. 如果开了记住我，但是会话为空，则创建一次会话信息
+        // 5. 如果开了记住我，但是会话为空，则创建一次会话信息
         if (rememberMe && loginUser == null) {
             UserLoginInfoDTO userLoginInfo = userServiceApi.getUserLoginInfo(defaultPayload.getAccount());
             sessionManagerApi.createSession(token, userLoginInfo.getLoginUser());
         }
 
-        // 7. 如果会话信息为空，则判定此次校验失败
+        // 6. 如果会话信息为空，则判定此次校验失败
         if (loginUser == null) {
             throw new AuthException(AuthExceptionEnum.AUTH_ERROR);
         }

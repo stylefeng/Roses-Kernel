@@ -75,7 +75,7 @@ public interface AuthServiceApi {
      * <p>
      * 第一，校验用户的token是否过期
      * <p>
-     * 第二，校验用户的session是否失效，但是记住我的session失效后会自动创建session，之道jwt失效后
+     * 第二，校验用户的session是否失效，但是记住我的session失效后会自动创建session，直到jwt失效后
      *
      * @param token      用户登陆的token
      * @param requestUrl 被校验的url
