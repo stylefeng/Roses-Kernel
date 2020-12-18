@@ -46,7 +46,7 @@ public class CommonBaseTreeNode implements AbstractTreeNode {
 
     @Override
     public void setChildrenNodes(List childrenNodes) {
-        this.children = children;
+        this.children = childrenNodes;
     }
 
 }
