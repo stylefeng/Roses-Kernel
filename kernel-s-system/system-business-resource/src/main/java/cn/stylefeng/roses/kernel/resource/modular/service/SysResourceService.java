@@ -1,6 +1,8 @@
 package cn.stylefeng.roses.kernel.resource.modular.service;
 
+import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.resource.modular.entity.SysResource;
+import cn.stylefeng.roses.kernel.resource.modular.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -45,5 +47,24 @@ public interface SysResourceService extends IService<SysResource> {
      * @date 2020/11/24 20:46
      */
     void deleteResourceByProjectCode(String projectCode);
+
+    /**
+     * 获取资源树列表，用于生成api接口
+     *
+     * @return 资源树列表
+     * @author fengshuonan
+     * @date 2020/12/18 15:06
+     */
+    List<ResourceTreeNode> getResourceTree();
+
+    /**
+     * 获取资源的详情
+     *
+     * @param resourceRequest 请求参数
+     * @return 资源详情
+     * @author fengshuonan
+     * @date 2020/12/18 16:04
+     */
+    ResourceDefinition getResourceDetail(ResourceRequest resourceRequest);
 
 }

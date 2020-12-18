@@ -12,7 +12,7 @@ import java.util.Set;
  * @date 2020/12/8 18:25
  */
 @Data
-public class FieldDescription {
+public class FieldMetadata {
 
     /**
      * 字段中文名称，例如：创建用户
@@ -41,5 +41,10 @@ public class FieldDescription {
      * key = add, value = [NotBlank,TableUniqueValue]
      */
     private Map<String, Set<String>> groupAnnotations;
+
+    /**
+     * 泛型或object类型的字段的描述
+     */
+    private Set<FieldMetadata> genericFieldMetadata;
 
 }

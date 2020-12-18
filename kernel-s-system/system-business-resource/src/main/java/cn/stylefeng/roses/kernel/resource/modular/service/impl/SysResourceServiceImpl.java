@@ -10,6 +10,7 @@ import cn.stylefeng.roses.kernel.resource.modular.cache.ResourceCache;
 import cn.stylefeng.roses.kernel.resource.modular.entity.SysResource;
 import cn.stylefeng.roses.kernel.resource.modular.factory.ResourceFactory;
 import cn.stylefeng.roses.kernel.resource.modular.mapper.SysResourceMapper;
+import cn.stylefeng.roses.kernel.resource.modular.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.resource.modular.service.SysResourceService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
@@ -25,9 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static cn.stylefeng.roses.kernel.system.constants.SystemConstants.DEFAULT_PARENT_ID;
 
 /**
  * 资源表 服务实现类
@@ -78,6 +82,33 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         LambdaQueryWrapper<SysResource> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysResource::getProjectCode, projectCode);
         this.remove(wrapper);
+    }
+
+    @Override
+    public List<ResourceTreeNode> getResourceTree() {
+
+        // 1. 获取所有的资源
+        LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysResourceLambdaQueryWrapper.select(SysResource::getAppCode, SysResource::getModularCode, SysResource::getModularName, SysResource::getCode, SysResource::getUrl, SysResource::getName);
+        List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
+
+        // 2. 按应用和模块编码设置map
+        Map<String, Map<String, List<ResourceTreeNode>>> appModularResources = divideResources(allResource);
+
+        // 3. 根据map组装资源树
+        return createResourceTree(appModularResources);
+    }
+
+    @Override
+    public ResourceDefinition getResourceDetail(ResourceRequest resourceRequest) {
+        LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysResourceLambdaQueryWrapper.eq(SysResource::getCode, resourceRequest.getResourceCode());
+        SysResource sysResource = this.getOne(sysResourceLambdaQueryWrapper);
+        if (sysResource != null) {
+            return ResourceFactory.createResourceDefinition(sysResource);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -214,6 +245,91 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         }
 
         return queryWrapper;
+    }
+
+    /**
+     * 划分数据库中的资源，切分成应用和模块分类的集合
+     *
+     * @return 第一个key是应用名称，第二个key是模块名称，值是应用对应的模块对应的资源列表
+     * @author fengshuonan
+     * @date 2020/12/18 15:34
+     */
+    private Map<String, Map<String, List<ResourceTreeNode>>> divideResources(List<SysResource> sysResources) {
+        HashMap<String, Map<String, List<ResourceTreeNode>>> appModularResources = new HashMap<>();
+        for (SysResource sysResource : sysResources) {
+
+            // 查询应用下有无资源
+            String appCode = sysResource.getAppCode();
+            Map<String, List<ResourceTreeNode>> modularResource = appModularResources.get(appCode);
+
+            // 该应用下没资源就创建一个map
+            if (modularResource == null) {
+                modularResource = new HashMap<>();
+            }
+
+            // 查询当前资源的模块，有没有在appModularResources存在
+            List<ResourceTreeNode> resourceTreeNodes = modularResource.get(sysResource.getModularCode());
+            if (resourceTreeNodes == null) {
+                resourceTreeNodes = new ArrayList<>();
+            }
+
+            // 将当前资源放入资源集合
+            ResourceTreeNode resourceTreeNode = new ResourceTreeNode();
+            resourceTreeNode.setResourceFlag(true);
+            resourceTreeNode.setNodeName(sysResource.getUrl() + "(" + sysResource.getName() + ")");
+            resourceTreeNode.setCode(sysResource.getCode());
+            resourceTreeNode.setParentCode(sysResource.getModularCode());
+            resourceTreeNodes.add(resourceTreeNode);
+
+            modularResource.put(sysResource.getModularCode(), resourceTreeNodes);
+            appModularResources.put(appCode, modularResource);
+        }
+        return appModularResources;
+    }
+
+    /**
+     * 根据归好类的资源，创建资源树
+     *
+     * @author fengshuonan
+     * @date 2020/12/18 15:45
+     */
+    private List<ResourceTreeNode> createResourceTree(Map<String, Map<String, List<ResourceTreeNode>>> appModularResources) {
+
+        List<ResourceTreeNode> finalTree = new ArrayList<>();
+
+        // 按应用遍历应用模块资源集合
+        for (String appName : appModularResources.keySet()) {
+
+            // 创建当前应用节点
+            ResourceTreeNode appNode = new ResourceTreeNode();
+            appNode.setCode(appName);
+            appNode.setNodeName(appName);
+            appNode.setResourceFlag(false);
+            appNode.setParentCode(DEFAULT_PARENT_ID.toString());
+
+            // 遍历当前应用下的模块资源
+            Map<String, List<ResourceTreeNode>> modularResources = appModularResources.get(appName);
+
+            // 创建模块节点
+            ArrayList<ResourceTreeNode> modularNodes = new ArrayList<>();
+            for (String modularName : modularResources.keySet()) {
+                ResourceTreeNode modularNode = new ResourceTreeNode();
+                modularNode.setCode(modularName);
+                modularNode.setNodeName(modularName);
+                modularNode.setResourceFlag(false);
+                modularNode.setParentCode(appName);
+                modularNode.setChildren(modularResources.get(modularName));
+                modularNodes.add(modularNode);
+            }
+
+            // 当前应用下添加模块的资源
+            appNode.setChildren(modularNodes);
+
+            // 添加到最终结果
+            finalTree.add(appNode);
+        }
+
+        return finalTree;
     }
 
 }

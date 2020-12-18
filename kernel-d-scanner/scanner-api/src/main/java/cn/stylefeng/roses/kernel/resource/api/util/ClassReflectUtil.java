@@ -2,7 +2,8 @@ package cn.stylefeng.roses.kernel.resource.api.util;
 
 import cn.hutool.core.util.ClassUtil;
 import cn.stylefeng.roses.kernel.resource.api.annotation.field.ChineseDescription;
-import cn.stylefeng.roses.kernel.resource.api.pojo.resource.FieldDescription;
+import cn.stylefeng.roses.kernel.resource.api.pojo.resource.FieldMetadata;
+import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -29,12 +30,12 @@ public class ClassReflectUtil {
      * @author fengshuonan
      * @date 2020/12/8 18:27
      */
-    public static Set<FieldDescription> getClassFieldDescription(Class<?> clazz) {
+    public static Set<FieldMetadata> getClassFieldDescription(Class<?> clazz) {
 
-        HashSet<FieldDescription> fieldDescriptions = new HashSet<>();
+        HashSet<FieldMetadata> metadataHashSet = new HashSet<>();
 
         if (clazz == null) {
-            return fieldDescriptions;
+            return metadataHashSet;
         }
 
         // 获取类中的所有字段
@@ -42,22 +43,27 @@ public class ClassReflectUtil {
 
         for (Field declaredField : declaredFields) {
 
-            FieldDescription fieldDescription = new FieldDescription();
+            FieldMetadata fieldMetadata = new FieldMetadata();
 
             // 获取字段的名称
             String name = declaredField.getName();
-            fieldDescription.setFieldName(name);
+            fieldMetadata.setFieldName(name);
 
             // 获取字段的类型
             Class<?> declaredFieldType = declaredField.getType();
-            fieldDescription.setFieldClassType(declaredFieldType.getSimpleName());
+            fieldMetadata.setFieldClassType(declaredFieldType.getSimpleName());
+
+            // 如果字段类型是Object类型，则遍历Object类型里的字段
+            if (BaseRequest.class.isAssignableFrom(declaredFieldType)) {
+                fieldMetadata.setGenericFieldMetadata(getClassFieldDescription(declaredFieldType));
+            }
 
             // 获取字段的所有注解
             Annotation[] annotations = declaredField.getAnnotations();
             if (annotations != null && annotations.length > 0) {
 
                 // 设置字段的所有注解
-                fieldDescription.setAnnotations(annotationsToStrings(annotations));
+                fieldMetadata.setAnnotations(annotationsToStrings(annotations));
 
                 // 遍历字段上的所有注解，找到带groups属性的，按group分类组装注解
                 Map<String, Set<String>> groupAnnotations = new HashMap<>();
@@ -70,19 +76,19 @@ public class ClassReflectUtil {
                     }
                 }
                 // 设置分组注解
-                fieldDescription.setGroupAnnotations(groupAnnotations);
+                fieldMetadata.setGroupAnnotations(groupAnnotations);
 
                 // 填充字段的中文名称
                 ChineseDescription chineseDescription = declaredField.getAnnotation(ChineseDescription.class);
                 if (chineseDescription != null) {
-                    fieldDescription.setChineseName(chineseDescription.value());
+                    fieldMetadata.setChineseName(chineseDescription.value());
                 }
             }
 
-            fieldDescriptions.add(fieldDescription);
+            metadataHashSet.add(fieldMetadata);
         }
 
-        return fieldDescriptions;
+        return metadataHashSet;
     }
 
     /**
@@ -95,7 +101,7 @@ public class ClassReflectUtil {
         try {
             Class<? extends Annotation> annotationType = apiResource.annotationType();
             Method method = annotationType.getMethod(methodName);
-            return (T)method.invoke(apiResource);
+            return (T) method.invoke(apiResource);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             // 忽略异常
         }

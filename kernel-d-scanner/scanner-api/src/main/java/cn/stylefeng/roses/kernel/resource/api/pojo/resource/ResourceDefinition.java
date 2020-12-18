@@ -102,11 +102,11 @@ public class ResourceDefinition implements Serializable {
     /**
      * 接口参数的字段描述
      */
-    private Set<FieldDescription> paramFieldDescriptions;
+    private Set<FieldMetadata> paramFieldMetadata;
 
     /**
      * 接口返回结果的字段描述
      */
-    private Set<FieldDescription> responseFieldDescriptions;
+    private Set<FieldMetadata> responseFieldMetadata;
 
 }

@@ -257,15 +257,15 @@ public class ApiResourceScanner implements BeanPostProcessor {
         // @ApiResource注解上标识了responseClass属性，则用responseClass的值为准，否则按真实方法的返回值class
         Class<?> responseClass = invokeAnnotationMethod(apiResource, "responseClass", Class.class);
         if (!Void.class.equals(responseClass)) {
-            resourceDefinition.setResponseFieldDescriptions(ClassReflectUtil.getClassFieldDescription(responseClass));
+            resourceDefinition.setResponseFieldMetadata(ClassReflectUtil.getClassFieldDescription(responseClass));
         } else {
             Class<?> methodReturnClass = MethodReflectUtil.getMethodReturnClass(method);
-            resourceDefinition.setResponseFieldDescriptions(ClassReflectUtil.getClassFieldDescription(methodReturnClass));
+            resourceDefinition.setResponseFieldMetadata(ClassReflectUtil.getClassFieldDescription(methodReturnClass));
         }
 
         // 填充方法的请求参数字段的详细信息
         Class<?> firstParamClass = MethodReflectUtil.getMethodFirstParamClass(method);
-        resourceDefinition.setParamFieldDescriptions(ClassReflectUtil.getClassFieldDescription(firstParamClass));
+        resourceDefinition.setParamFieldMetadata(ClassReflectUtil.getClassFieldDescription(firstParamClass));
 
         return resourceDefinition;
     }

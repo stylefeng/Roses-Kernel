@@ -1,8 +1,9 @@
 package cn.stylefeng.roses.kernel.system.pojo.resource.request;
 
+import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
 
 /**
  * 资源请求封装
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * @since 2019-09-10
  */
 @Data
-public class ResourceRequest implements Serializable {
+public class ResourceRequest extends BaseRequest {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,6 +25,12 @@ public class ResourceRequest implements Serializable {
      * 资源名称
      */
     private String resourceName;
+
+    /**
+     * 资源编码
+     */
+    @NotBlank(message = "资源编码为空", groups = detail.class)
+    private String resourceCode;
 
     /**
      * 资源地址

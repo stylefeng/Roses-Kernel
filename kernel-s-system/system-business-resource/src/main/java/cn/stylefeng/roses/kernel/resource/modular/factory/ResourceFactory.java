@@ -56,13 +56,13 @@ public class ResourceFactory {
         }
 
         // 转化接口参数的字段描述
-        if (ObjectUtil.isNotEmpty(resourceDefinition.getParamFieldDescriptions())) {
-            resource.setParamFieldDescriptions(JSON.toJSONString(resourceDefinition.getParamFieldDescriptions(), SerializerFeature.WriteClassName));
+        if (ObjectUtil.isNotEmpty(resourceDefinition.getParamFieldMetadata())) {
+            resource.setParamFieldDescriptions(JSON.toJSONString(resourceDefinition.getParamFieldMetadata(), SerializerFeature.WriteClassName));
         }
 
         // 转化接口返回结果的字段描述
-        if (ObjectUtil.isNotEmpty(resourceDefinition.getResponseFieldDescriptions())) {
-            resource.setResponseFieldDescriptions(JSON.toJSONString(resourceDefinition.getResponseFieldDescriptions(), SerializerFeature.WriteClassName));
+        if (ObjectUtil.isNotEmpty(resourceDefinition.getResponseFieldMetadata())) {
+            resource.setResponseFieldDescriptions(JSON.toJSONString(resourceDefinition.getResponseFieldMetadata(), SerializerFeature.WriteClassName));
         }
 
         return resource;
@@ -94,12 +94,12 @@ public class ResourceFactory {
 
         // 转化接口参数的字段描述
         if (ObjectUtil.isNotEmpty(sysResource.getParamFieldDescriptions())) {
-            resourceDefinition.setParamFieldDescriptions(JSON.parseObject(sysResource.getParamFieldDescriptions(), Set.class, Feature.SupportAutoType));
+            resourceDefinition.setParamFieldMetadata(JSON.parseObject(sysResource.getParamFieldDescriptions(), Set.class, Feature.SupportAutoType));
         }
 
         // 转化接口返回结果的字段描述
         if (ObjectUtil.isNotEmpty(sysResource.getResponseFieldDescriptions())) {
-            resourceDefinition.setResponseFieldDescriptions(JSON.parseObject(sysResource.getResponseFieldDescriptions(), Set.class, Feature.SupportAutoType));
+            resourceDefinition.setResponseFieldMetadata(JSON.parseObject(sysResource.getResponseFieldDescriptions(), Set.class, Feature.SupportAutoType));
         }
 
         return resourceDefinition;
