@@ -48,34 +48,34 @@ public class SysRoleRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "id不能为空，请检查id参数", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class, grantData.class})
-    private Long id;
+    @NotNull(message = "roleId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class, grantData.class})
+    private Long roleId;
 
     /**
-     * 名称
+     * 角色名称
      */
-    @NotBlank(message = "名称不能为空，请检查name参数", groups = {add.class, edit.class})
-    private String name;
+    @NotBlank(message = "角色名称不能为空", groups = {add.class, edit.class})
+    private String roleName;
 
     /**
-     * 编码
+     * 角色编码
      */
-    @NotBlank(message = "编码不能为空，请检查code参数", groups = {add.class, edit.class})
+    @NotBlank(message = "角色编码不能为空", groups = {add.class, edit.class})
     @TableUniqueValue(
-            message = "编码存在重复，请检查code参数",
+            message = "角色编码存在重复",
             groups = {add.class, edit.class},
-            tableName = "sys_menu",
-            columnName = "code")
-    private String code;
+            tableName = "sys_role",
+            columnName = "role_code")
+    private String roleCode;
 
     /**
      * 排序
      */
-    @NotNull(message = "排序不能为空，请检查sort参数", groups = {add.class, edit.class})
-    private BigDecimal sort;
+    @NotNull(message = "排序不能为空", groups = {add.class, edit.class})
+    private BigDecimal roleSort;
 
     /**
-     * 数据范围类型（字典 10全部数据 20本部门及以下数据 30本部门数据 40仅本人数据 50自定义数据）
+     * 数据范围类型：10-全部数据，20-本部门及以下数据，30-本部门数据，40-仅本人数据，50-自定义数据
      */
     @Null(message = "数据范围类型应该为空， 请移除dataScopeType参数", groups = {add.class, edit.class})
     @NotNull(message = "数据范围类型不能为空，请检查dataScopeType参数", groups = {grantData.class})

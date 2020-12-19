@@ -1,7 +1,6 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
@@ -14,8 +13,6 @@ import cn.stylefeng.roses.kernel.office.api.OfficeExcelApi;
 import cn.stylefeng.roses.kernel.office.api.pojo.report.ExcelExportParam;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
-import cn.stylefeng.roses.kernel.system.DataScopeApi;
-import cn.stylefeng.roses.kernel.system.SysEmployeeApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
@@ -30,10 +27,10 @@ import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeService;
+import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysEmployeeRequest;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysEmployeeResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.alibaba.excel.support.ExcelTypeEnum;
@@ -64,7 +61,7 @@ import java.util.stream.Collectors;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService, UserServiceApi {
 
     @Resource
-    private SysEmployeeApi sysEmployeeApi;
+    private SysUserOrgService sysUserOrgService;
 
     @Resource
     private SysUserRoleService sysUserRoleService;
@@ -75,15 +72,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private OfficeExcelApi officeExcelApi;
 
-    @Resource
-    private DataScopeApi dataScopeApi;
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void add(SysUserRequest sysUserRequest) {
 
         // 获取被添加用户的主组织机构id
-        Long organizationId = sysUserRequest.getUserMainEmployee().getOrganizationId();
+        Long organizationId = sysUserRequest.getOrgId();
 
         // 获取用户有无该企业的数据权限
         if (DataScopeUtil.validateDataScopeByOrganizationId(organizationId)) {
@@ -99,16 +93,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 保存用户
         this.save(sysUser);
 
-        Long sysUserId = sysUser.getId();
-
-        // 增加员工信息
-        List<SysEmployeeRequest> sysEmployeeRequest = sysUserRequest.getSysEmployeeRequest();
-        for (SysEmployeeRequest employeeRequest : sysEmployeeRequest) {
-            employeeRequest.setUserId(sysUserId);
-        }
-
         // 更新用户员工信息
-        sysEmployeeApi.updateEmployee(sysUserId, ListUtil.toList(sysEmployeeRequest));
+        sysUserOrgService.updateUserOrg(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
     }
 
     @Override
@@ -116,7 +102,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void edit(SysUserRequest sysUserRequest) {
 
         // 获取被添加用户的主组织机构id
-        Long organizationId = sysUserRequest.getUserMainEmployee().getOrganizationId();
+        Long organizationId = sysUserRequest.getOrgId();
 
         // 获取用户有无该企业的数据权限
         if (DataScopeUtil.validateDataScopeByOrganizationId(organizationId)) {
@@ -132,16 +118,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUserFactory.fillEditSysUser(sysUser);
         this.updateById(sysUser);
 
-        Long sysUserId = sysUser.getId();
-
-        // 编辑员工信息
-        List<SysEmployeeRequest> sysEmployeeRequest = sysUserRequest.getSysEmployeeRequest();
-        for (SysEmployeeRequest employeeRequest : sysEmployeeRequest) {
-            employeeRequest.setUserId(sysUserId);
-        }
+        Long sysUserId = sysUser.getUserId();
 
         // 更新用户员工信息
-        sysEmployeeApi.updateEmployee(sysUserId, ListUtil.toList(sysEmployeeRequest));
+        sysUserOrgService.updateUserOrg(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
     }
 
     @Override
@@ -168,11 +148,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new SystemModularException(SysUserExceptionEnum.USER_CAN_NOT_UPDATE_ADMIN);
         }
 
-        Long id = sysUser.getId();
+        Long id = sysUser.getUserId();
 
         // 更新枚举，更新只能更新未删除状态的
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysUser::getId, id)
+        updateWrapper.eq(SysUser::getUserId, id)
                 .and(i -> i.ne(SysUser::getDelFlag, YesOrNotEnum.Y.getCode()))
                 .set(SysUser::getStatusFlag, statusFlag);
 
@@ -225,8 +205,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.querySysUser(sysUserRequest);
 
         // 获取要授权角色的用户的所属机构
-        SysEmployeeResponse sysEmployeeResponse = sysEmployeeApi.getUserMainEmployee(sysUser.getId());
-        Long organizationId = sysEmployeeResponse.getOrganizationId();
+        SysUserOrgResponse userOrgInfo = sysUserOrgService.getUserOrgInfo(sysUser.getUserId());
+        Long organizationId = userOrgInfo.getOrgId();
 
         // 判断当前用户有无该用户的权限
         DataScopeUtil.validateDataScopeByOrganizationId(organizationId);
@@ -241,8 +221,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.querySysUser(sysUserRequest);
 
         // 获取被授权用户的所属机构
-        SysEmployeeResponse sysEmployeeResponse = sysEmployeeApi.getUserMainEmployee(sysUser.getId());
-        Long organizationId = sysEmployeeResponse.getOrganizationId();
+        SysUserOrgResponse userOrgInfo = sysUserOrgService.getUserOrgInfo(sysUser.getUserId());
+        Long organizationId = userOrgInfo.getOrgId();
 
         // 判断当前用户有无该用户的权限
         DataScopeUtil.validateDataScopeByOrganizationId(organizationId);
@@ -261,8 +241,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         // 获取被授权用户的所属机构
-        SysEmployeeResponse sysEmployeeResponse = sysEmployeeApi.getUserMainEmployee(sysUser.getId());
-        Long organizationId = sysEmployeeResponse.getOrganizationId();
+        SysUserOrgResponse userOrgInfo = sysUserOrgService.getUserOrgInfo(sysUser.getUserId());
+        Long organizationId = userOrgInfo.getOrgId();
 
         // 判断当前用户有无该用户的权限
         DataScopeUtil.validateDataScopeByOrganizationId(organizationId);
@@ -271,10 +251,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setDelFlag(YesOrNotEnum.Y.getCode());
         this.updateById(sysUser);
 
-        Long userId = sysUser.getId();
+        Long userId = sysUser.getUserId();
 
         // 删除该用户对应的员工表信息
-        sysEmployeeApi.deleteEmployeeByUserId(userId);
+        sysUserOrgService.deleteUserOrg(userId);
 
         // 删除该用户对应的用户-角色表关联信息
         sysUserRoleService.deleteUserRoleListByUserId(userId);
@@ -291,9 +271,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.querySysUser(sysUserRequest);
         BeanUtil.copyProperties(sysUser, sysUserResponse);
 
-        // 获取对应员工信息
-        List<SysEmployeeResponse> sysEmployeeResponse = sysEmployeeApi.getUserAllEmployee(sysUser.getId());
-        sysUserResponse.setSysEmployeeResponse(sysEmployeeResponse);
+        // 获取用户组织绑定信息
+        SysUserOrgResponse userOrgInfo = sysUserOrgService.getUserOrgInfo(sysUser.getUserId());
+        sysUserResponse.setOrgId(userOrgInfo.getOrgId());
+        sysUserResponse.setPositionId(userOrgInfo.getPositionId());
 
         return sysUserResponse;
     }
@@ -321,14 +302,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         wrapper.ne(SysUser::getSuperAdminFlag, YesOrNotEnum.Y.getCode());
 
         // 只查询id和name
-        wrapper.select(SysUser::getName, SysUser::getId);
+        wrapper.select(SysUser::getRealName, SysUser::getUserId);
         List<SysUser> list = this.list(wrapper);
 
         ArrayList<SimpleDict> results = new ArrayList<>();
         for (SysUser sysUser : list) {
             SimpleDict simpleDict = new SimpleDict();
-            simpleDict.setId(sysUser.getId());
-            simpleDict.setName(sysUser.getName());
+            simpleDict.setId(sysUser.getUserId());
+            simpleDict.setName(sysUser.getRealName());
             results.add(simpleDict);
         }
 
@@ -383,13 +364,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 根据用户id获取用户信息实体
         LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysUserLambdaQueryWrapper.eq(SysUser::getId, userId).eq(SysUser::getDelFlag, YesOrNotEnum.N.getCode());
+        sysUserLambdaQueryWrapper.eq(SysUser::getUserId, userId).eq(SysUser::getDelFlag, YesOrNotEnum.N.getCode());
         SysUser sysUser = this.getOne(sysUserLambdaQueryWrapper);
 
         if (sysUser != null) {
             // 更新用户登录信息
             SysUser newSysUser = new SysUser();
-            newSysUser.setId(sysUser.getId());
+            newSysUser.setUserId(sysUser.getUserId());
             newSysUser.setLastLoginIp(ip);
             newSysUser.setLastLoginTime(date);
             this.updateById(newSysUser);
@@ -401,7 +382,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void deleteUserDataScopeListByOrgIdList(Set<Long> organizationIds) {
         if (organizationIds != null && organizationIds.size() > 0) {
             LambdaQueryWrapper<SysUserDataScope> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.in(SysUserDataScope::getOrganizationId, organizationIds);
+            queryWrapper.in(SysUserDataScope::getOrgId, organizationIds);
             sysUserDataScopeService.remove(queryWrapper);
         }
     }
@@ -462,7 +443,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
             // 组装用户姓名的查询条件
             if (ObjectUtil.isNotEmpty(sysUserRequest.getName())) {
-                queryWrapper.eq(SysUser::getName, sysUserRequest.getName());
+                queryWrapper.eq(SysUser::getRealName, sysUserRequest.getName());
             }
         }
 

@@ -5,14 +5,6 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
-import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
-import cn.stylefeng.roses.kernel.system.exception.enums.OrganizationExceptionEnum;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.db.api.context.DbOperatorContext;
@@ -24,15 +16,21 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
-import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysEmployee;
+import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
+import cn.stylefeng.roses.kernel.system.exception.enums.OrganizationExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysOrganization;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.SysOrganizationMapper;
-import cn.stylefeng.roses.kernel.system.modular.organization.service.SysEmployeeService;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.SysOrganizationService;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysEmployeeRequest;
 import cn.stylefeng.roses.kernel.system.pojo.organization.SysOrganizationRequest;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +49,7 @@ import java.util.Set;
 public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMapper, SysOrganization> implements SysOrganizationService {
 
     @Resource
-    private SysEmployeeService sysEmployeeService;
+    private UserOrgServiceApi userOrgServiceApi;
 
     @Resource
     private RoleServiceApi roleServiceApi;
@@ -121,10 +119,8 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
         }
 
         // 该机构下有员工，则不能删
-        SysEmployeeRequest sysEmployeeRequest = new SysEmployeeRequest();
-        sysEmployeeRequest.setOrganizationId(organizationId);
-        List<SysEmployee> sysEmployees = sysEmployeeService.list(sysEmployeeRequest);
-        if (sysEmployees != null && !sysEmployees.isEmpty()) {
+        Boolean userOrgFlag = userOrgServiceApi.getUserOrgFlag(organizationId, null);
+        if (userOrgFlag) {
             throw new SystemModularException(OrganizationExceptionEnum.DELETE_ORGANIZATION_ERROR);
         }
 

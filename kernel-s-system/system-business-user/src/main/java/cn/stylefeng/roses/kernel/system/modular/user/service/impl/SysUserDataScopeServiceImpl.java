@@ -3,9 +3,9 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserDataScope;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserDataScopeMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMap
         for (Long orgId : orgIdList) {
             SysUserDataScope sysUserDataScope = new SysUserDataScope();
             sysUserDataScope.setUserId(userId);
-            sysUserDataScope.setOrganizationId(orgId);
+            sysUserDataScope.setOrgId(orgId);
             sysUserDataScopes.add(sysUserDataScope);
         }
         this.saveBatch(sysUserDataScopes);
@@ -49,10 +49,10 @@ public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMap
     public List<Long> getUserDataScopeIdList(Long uerId) {
         LambdaQueryWrapper<SysUserDataScope> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysUserDataScope::getUserId, uerId);
-        queryWrapper.select(SysUserDataScope::getOrganizationId);
+        queryWrapper.select(SysUserDataScope::getOrgId);
 
         List<SysUserDataScope> list = this.list(queryWrapper);
-        return list.stream().map(SysUserDataScope::getOrganizationId).collect(Collectors.toList());
+        return list.stream().map(SysUserDataScope::getOrgId).collect(Collectors.toList());
     }
 
     @Override

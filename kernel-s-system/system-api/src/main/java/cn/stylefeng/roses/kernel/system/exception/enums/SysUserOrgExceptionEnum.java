@@ -12,7 +12,7 @@ import lombok.Getter;
  * @date 2020/11/19 23:07
  */
 @Getter
-public enum EmployeeExceptionEnum implements AbstractExceptionEnum {
+public enum SysUserOrgExceptionEnum implements AbstractExceptionEnum {
 
     /**
      * 企业员工信息不存在
@@ -20,9 +20,9 @@ public enum EmployeeExceptionEnum implements AbstractExceptionEnum {
     EMPLOYEE_NOT_FOUND(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "21", "企业员工信息不存在,用户id：{}"),
 
     /**
-     * 用户存在多个主部门信息（系统不允许）
+     * 用户绑定多个或未绑定机构信息
      */
-    EMPLOYEE_MANY_MAIN_NOT_FOUND(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "22", "获取用户主部门失败，用户存在多个主部门信息,用户id：{}"),
+    EMPLOYEE_MANY_MAIN_NOT_FOUND(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "22", "用户绑定多个或未绑定机构信息"),
 
     /**
      * 用户未设置主部门，或主部门信息为多个
@@ -39,7 +39,7 @@ public enum EmployeeExceptionEnum implements AbstractExceptionEnum {
      */
     private final String userTip;
 
-    EmployeeExceptionEnum(String errorCode, String userTip) {
+    SysUserOrgExceptionEnum(String errorCode, String userTip) {
         this.errorCode = errorCode;
         this.userTip = userTip;
     }

@@ -46,7 +46,6 @@ import cn.stylefeng.roses.kernel.role.modular.service.SysRoleService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
-import cn.stylefeng.roses.kernel.system.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.constants.SymbolConstant;
@@ -86,9 +85,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysRoleDataScopeService sysRoleDataScopeService;
 
     @Resource
-    private MenuServiceApi menuServiceApi;
-
-    @Resource
     private SysRoleMenuService roleMenuService;
 
     @Override
@@ -98,6 +94,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // 默认设置为启用
         sysRole.setStatusFlag(StatusEnum.ENABLE.getCode());
+
         this.save(sysRole);
     }
 
@@ -122,7 +119,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         this.updateById(sysRole);
 
-        Long id = sysRole.getId();
+        Long id = sysRole.getRoleId();
 
         // 级联删除该角色对应的角色-数据范围关联信息
         sysRoleDataScopeService.deleteRoleDataScopeListByRoleId(id);
@@ -204,7 +201,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             if (ObjectUtil.isEmpty(loginUserRoleIds)) {
                 return dictList;
             }
-            queryWrapper.in(SysRole::getId, loginUserRoleIds);
+            queryWrapper.in(SysRole::getRoleId, loginUserRoleIds);
         }
 
         // 只查询正常状态
@@ -212,9 +209,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         this.list(queryWrapper).forEach(sysRole -> {
             SimpleDict simpleDict = new SimpleDict();
-            simpleDict.setId(sysRole.getId());
-            simpleDict.setCode(sysRole.getCode());
-            simpleDict.setName(sysRole.getName());
+            simpleDict.setId(sysRole.getRoleId());
+            simpleDict.setCode(sysRole.getRoleCode());
+            simpleDict.setName(sysRole.getRoleName());
             dictList.add(simpleDict);
         });
         return dictList;
@@ -223,7 +220,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<Long> getRoleDataScope(SysRoleRequest sysRoleRequest) {
         SysRole sysRole = this.querySysRole(sysRoleRequest);
-        return sysRoleDataScopeService.getRoleDataScopeIdList(CollectionUtil.newArrayList(sysRole.getId()));
+        return sysRoleDataScopeService.getRoleDataScopeIdList(CollectionUtil.newArrayList(sysRole.getRoleId()));
     }
 
     @Override
@@ -234,16 +231,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         List<Long> roleIdList = userServiceApi.getUserRoleIdList(userId);
         if (ObjectUtil.isNotEmpty(roleIdList)) {
             LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.in(SysRole::getId, roleIdList)
+            queryWrapper.in(SysRole::getRoleId, roleIdList)
                     .eq(SysRole::getStatusFlag, StatusEnum.ENABLE.getCode())
                     .ne(SysRole::getDelFlag, YesOrNotEnum.N.getCode());
 
             // 根据角色id集合查询并返回结果
             this.list(queryWrapper).forEach(sysRole -> {
                 SimpleDict simpleDict = new SimpleDict();
-                simpleDict.setId(sysRole.getId());
-                simpleDict.setCode(sysRole.getCode());
-                simpleDict.setName(sysRole.getName());
+                simpleDict.setId(sysRole.getRoleId());
+                simpleDict.setCode(sysRole.getRoleCode());
+                simpleDict.setName(sysRole.getRoleName());
                 dictList.add(simpleDict);
             });
         }
@@ -257,8 +254,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isNotNull(sysRoleParam)) {
 
             // 根据角色名称或编码模糊查询
-            if (ObjectUtil.isNotEmpty(sysRoleParam.getName())) {
-                queryWrapper.and(i -> i.like(SysRole::getName, sysRoleParam.getName()).or().like(SysRole::getCode, sysRoleParam.getName()));
+            if (ObjectUtil.isNotEmpty(sysRoleParam.getRoleName())) {
+                queryWrapper.and(i -> i.like(SysRole::getRoleName, sysRoleParam.getRoleName()).or().like(SysRole::getRoleCode, sysRoleParam.getRoleName()));
             }
         }
 
@@ -266,11 +263,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         queryWrapper.eq(SysRole::getStatusFlag, StatusEnum.ENABLE.getCode());
 
         // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(SysRole::getSort);
+        queryWrapper.orderByAsc(SysRole::getRoleSort);
         this.list(queryWrapper).forEach(sysRole -> {
             SimpleDict simpleDict = new SimpleDict();
-            simpleDict.setId(sysRole.getId());
-            simpleDict.setName(sysRole.getName() + SymbolConstant.LEFT_SQUARE_BRACKETS + sysRole.getCode() + SymbolConstant.RIGHT_SQUARE_BRACKETS);
+            simpleDict.setId(sysRole.getRoleId());
+            simpleDict.setName(sysRole.getRoleName() + SymbolConstant.LEFT_SQUARE_BRACKETS + sysRole.getRoleCode() + SymbolConstant.RIGHT_SQUARE_BRACKETS);
             dictList.add(simpleDict);
         });
         return dictList;
@@ -282,7 +279,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isEmpty(sysRole)) {
             throw new SystemModularException(SysRoleExceptionEnum.ROLE_NOT_EXIST);
         }
-        return sysRole.getName();
+        return sysRole.getRoleName();
     }
 
     @Override
@@ -296,7 +293,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         ArrayList<SysRoleResponse> sysRoleResponses = new ArrayList<>();
 
         LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysRole::getId, roleIds);
+        queryWrapper.in(SysRole::getRoleId, roleIds);
         List<SysRole> sysRoles = this.list(queryWrapper);
 
         // 角色列表不为空，角色信息转化为SysRoleResponse
@@ -351,7 +348,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         List<String> resourceList = CollectionUtil.newArrayList();
         LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(SysRoleResource::getRoleId, roleIdList);
-        sysRoleResourceService.list(queryWrapper).forEach(sysRoleResource -> resourceList.add(sysRoleResource.getResourceId()));
+        sysRoleResourceService.list(queryWrapper).forEach(sysRoleResource -> resourceList.add(sysRoleResource.getResourceCode()));
         return resourceList;
     }
 
@@ -363,7 +360,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @date 2020/11/5 下午4:12
      */
     private SysRole querySysRole(SysRoleRequest sysRoleRequest) {
-        SysRole sysRole = this.getById(sysRoleRequest.getId());
+        SysRole sysRole = this.getById(sysRoleRequest.getRoleId());
         if (ObjectUtil.isNull(sysRole)) {
             throw new SystemModularException(SysRoleExceptionEnum.ROLE_NOT_EXIST);
         }
@@ -381,13 +378,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isNotNull(sysRoleRequest)) {
 
             // 根据名称模糊查询
-            if (ObjectUtil.isNotEmpty(sysRoleRequest.getName())) {
-                queryWrapper.like(SysRole::getName, sysRoleRequest.getName());
+            if (ObjectUtil.isNotEmpty(sysRoleRequest.getRoleName())) {
+                queryWrapper.like(SysRole::getRoleName, sysRoleRequest.getRoleName());
             }
 
             // 根据编码模糊查询
-            if (ObjectUtil.isNotEmpty(sysRoleRequest.getCode())) {
-                queryWrapper.like(SysRole::getCode, sysRoleRequest.getCode());
+            if (ObjectUtil.isNotEmpty(sysRoleRequest.getRoleCode())) {
+                queryWrapper.like(SysRole::getRoleCode, sysRoleRequest.getRoleCode());
             }
         }
 
@@ -395,7 +392,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         queryWrapper.eq(SysRole::getDelFlag, YesOrNotEnum.N.getCode());
 
         // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(SysRole::getSort);
+        queryWrapper.orderByAsc(SysRole::getRoleSort);
 
         return queryWrapper;
     }

@@ -12,11 +12,15 @@ import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.rule.enums.SexEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
-import cn.stylefeng.roses.kernel.system.*;
+import cn.stylefeng.roses.kernel.system.AppServiceApi;
+import cn.stylefeng.roses.kernel.system.DataScopeApi;
+import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
+import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
+import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysEmployeeResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 
 import java.util.HashSet;
 import java.util.List;
@@ -44,18 +48,18 @@ public class LoginUserFactory {
         FileInfoApi fileInfoApi = SpringUtil.getBean(FileInfoApi.class);
         RoleServiceApi roleServiceApi = SpringUtil.getBean(RoleServiceApi.class);
         ResourceServiceApi resourceServiceApi = SpringUtil.getBean(ResourceServiceApi.class);
-        SysEmployeeApi sysEmployeeApi = SpringUtil.getBean(SysEmployeeApi.class);
+        SysUserOrgService sysUserOrgService = SpringUtil.getBean(SysUserOrgService.class);
         DataScopeApi dataScopeApi = SpringUtil.getBean(DataScopeApi.class);
         AppServiceApi appServiceApi = SpringUtil.getBean(AppServiceApi.class);
 
         // 填充基本信息
         LoginUser loginUser = new LoginUser();
         BeanUtil.copyProperties(sysUser, loginUser);
-        Long userId = sysUser.getId();
+        Long userId = sysUser.getUserId();
 
         // 填充用户主组织机构id
-        SysEmployeeResponse userMainEmployee = sysEmployeeApi.getUserMainEmployee(userId);
-        loginUser.setOrganizationId(userMainEmployee.getOrganizationId());
+        SysUserOrgResponse userOrgInfo = sysUserOrgService.getUserOrgInfo(userId);
+        loginUser.setOrganizationId(userOrgInfo.getOrgId());
 
         // 获取头像文件详细信息
         SysFileInfoResponse fileInfoWithoutContent = fileInfoApi.getFileInfoWithoutContent(sysUser.getAvatar());
@@ -122,9 +126,9 @@ public class LoginUserFactory {
         Set<SimpleDict> simpleRoles = new HashSet<>();
         for (SysRoleResponse sysRoleResponse : sysRoleResponses) {
             SimpleDict simpleRole = new SimpleDict();
-            simpleRole.setId(sysRoleResponse.getId());
-            simpleRole.setName(sysRoleResponse.getName());
-            simpleRole.setCode(sysRoleResponse.getCode());
+            simpleRole.setId(sysRoleResponse.getRoleId());
+            simpleRole.setName(sysRoleResponse.getRoleName());
+            simpleRole.setCode(sysRoleResponse.getRoleCode());
             simpleRoles.add(simpleRole);
         }
 

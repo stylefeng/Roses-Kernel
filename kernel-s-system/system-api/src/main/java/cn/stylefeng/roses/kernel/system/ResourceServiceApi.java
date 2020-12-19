@@ -26,12 +26,12 @@ public interface ResourceServiceApi {
     /**
      * 获取资源详情，根据资源id集合
      *
-     * @param resourceIds 资源id集合
+     * @param resourceCodes 资源code集合
      * @return 资源详情列表
      * @author fengshuonan
      * @date 2020/11/29 19:49
      */
-    List<ResourceDefinition> getResourceListByIds(List<String> resourceIds);
+    List<ResourceDefinition> getResourceListByIds(List<String> resourceCodes);
 
     /**
      * 获取资源的url列表，根据资源ids查询

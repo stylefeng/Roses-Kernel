@@ -1,11 +1,9 @@
 package cn.stylefeng.roses.kernel.system.modular.user.pojo.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysEmployeeResponse;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * 系统用户结果
@@ -68,12 +66,18 @@ public class SysUserResponse {
     private String tel;
 
     /**
-     * 用户员工信息
+     * 用户所属机构
      */
-    private List<SysEmployeeResponse> sysEmployeeResponse;
+    private Long orgId;
+
+    /**
+     * 用户所属机构的职务
+     */
+    private Long positionId;
 
     /**
      * 状态
      */
     private Integer statusFlag;
+
 }

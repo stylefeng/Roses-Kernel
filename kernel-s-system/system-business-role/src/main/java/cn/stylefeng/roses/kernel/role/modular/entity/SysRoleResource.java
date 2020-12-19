@@ -44,8 +44,8 @@ public class SysRoleResource {
      * 主键
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @TableField("id")
-    private Long id;
+    @TableField("role_resource_id")
+    private Long roleResourceId;
 
     /**
      * 角色id
@@ -54,9 +54,9 @@ public class SysRoleResource {
     private Long roleId;
 
     /**
-     * 资源id
+     * 资源编码
      */
-    @TableField("resource_id")
-    private String resourceId;
+    @TableField("resource_code")
+    private String resourceCode;
 
 }

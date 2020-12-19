@@ -19,8 +19,8 @@ public class SysUserDataScope {
     /**
      * 主键
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "user_data_scope_id", type = IdType.ASSIGN_ID)
+    private Long userDataScopeId;
 
     /**
      * 用户id
@@ -31,6 +31,7 @@ public class SysUserDataScope {
     /**
      * 机构id
      */
-    @TableField("organization_id")
-    private Long organizationId;
+    @TableField("org_id")
+    private Long orgId;
+
 }

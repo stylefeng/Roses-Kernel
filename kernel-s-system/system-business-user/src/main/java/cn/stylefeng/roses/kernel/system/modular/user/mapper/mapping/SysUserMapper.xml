@@ -2,20 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserMapper">
 
-    <resultMap id="sysUserResponse" type="cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse">
-        <id column="id" property="id"/>
-        <result column="account" property="account"/>
-        <result column="nick_name" property="nickName"/>
-        <result column="name" property="name"/>
-        <result column="avatar" property="avatar"/>
-        <result column="birthday" property="birthday"/>
-        <result column="sex" property="sex"/>
-        <result column="email" property="email"/>
-        <result column="phone" property="phone"/>
-        <result column="tel" property="tel"/>
-        <result column="status_flag" property="statusFlag"/>
-    </resultMap>
-
     <!--获取用户分页列表-->
     <select id="findUserPage" resultType="cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse">
         select sys_user.*,

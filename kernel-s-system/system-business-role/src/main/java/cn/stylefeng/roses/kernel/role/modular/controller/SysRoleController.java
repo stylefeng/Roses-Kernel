@@ -136,7 +136,7 @@ public class SysRoleController {
      */
     @GetResource(name = "角色拥有菜单", path = "/sysRole/getRoleMenus")
     public ResponseData getRoleMenus(@Validated(SysRoleRequest.detail.class) SysRoleRequest sysRoleRequest) {
-        Long roleId = sysRoleRequest.getId();
+        Long roleId = sysRoleRequest.getRoleId();
         return new SuccessResponseData(roleServiceApi.getMenuIdsByRoleIds(ListUtil.toList(roleId)));
     }
 

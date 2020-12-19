@@ -19,8 +19,8 @@ public class SysUserRole {
     /**
      * 主键
      */
-    @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "user_role_id", type = IdType.ASSIGN_ID)
+    private Long userRoleId;
 
     /**
      * 用户id
@@ -33,4 +33,5 @@ public class SysUserRole {
      */
     @TableField("role_id")
     private Long roleId;
+
 }

@@ -3,24 +3,22 @@ package cn.stylefeng.roses.kernel.system.modular.organization.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.PositionExceptionEnum;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
-import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysEmployee;
+import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.exception.enums.PositionExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysPosition;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.SysPositionMapper;
-import cn.stylefeng.roses.kernel.system.modular.organization.service.SysEmployeeService;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.SysPositionService;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysEmployeeRequest;
 import cn.stylefeng.roses.kernel.system.pojo.organization.SysPositionRequest;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +36,7 @@ import java.util.stream.Collectors;
 public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPosition> implements SysPositionService {
 
     @Resource
-    private SysEmployeeService sysEmployeeService;
+    private UserOrgServiceApi userOrgServiceApi;
 
     @Override
     public void add(SysPositionRequest sysPositionRequest) {
@@ -70,12 +68,9 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
         SysPosition sysPosition = this.querySysPosition(sysPositionRequest);
 
         // 该职位下是否有员工
-        SysEmployeeRequest sysEmployeeRequest = new SysEmployeeRequest();
-        sysEmployeeRequest.setPositionId(sysPosition.getId());
-        List<SysEmployee> haveEmployee = sysEmployeeService.list(sysEmployeeRequest);
-
         // 职位有绑定员工，不能删除
-        if (!haveEmployee.isEmpty()) {
+        Boolean userOrgFlag = userOrgServiceApi.getUserOrgFlag(null, sysPosition.getId());
+        if (userOrgFlag) {
             throw new SystemModularException(PositionExceptionEnum.CANT_DELETE_POSITION);
         }
 

@@ -170,17 +170,17 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public List<ResourceDefinition> getResourceListByIds(List<String> resourceIds) {
+    public List<ResourceDefinition> getResourceListByIds(List<String> resourceCodes) {
 
         ArrayList<ResourceDefinition> resourceDefinitions = new ArrayList<>();
 
-        if (resourceIds == null || resourceIds.isEmpty()) {
+        if (resourceCodes == null || resourceCodes.isEmpty()) {
             return resourceDefinitions;
         }
 
         // 拼接in条件
         LambdaQueryWrapper<SysResource> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysResource::getResourceId, resourceIds);
+        queryWrapper.in(SysResource::getResourceCode, resourceCodes);
 
         // 获取资源详情
         List<SysResource> list = this.list(queryWrapper);

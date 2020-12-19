@@ -49,7 +49,7 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
     @Transactional(rollbackFor = Exception.class)
     public void grantResource(SysRoleRequest sysRoleRequest) {
 
-        Long roleId = sysRoleRequest.getId();
+        Long roleId = sysRoleRequest.getRoleId();
 
         // 删除所拥有角色关联的资源
         LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
@@ -64,7 +64,7 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
         for (String resourceId : grantResourceList) {
             SysRoleResource sysRoleMenu = new SysRoleResource();
             sysRoleMenu.setRoleId(roleId);
-            sysRoleMenu.setResourceId(resourceId);
+            sysRoleMenu.setResourceCode(resourceId);
             sysRoleResources.add(sysRoleMenu);
         }
         this.saveBatch(sysRoleResources);
@@ -74,7 +74,7 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
     @Transactional(rollbackFor = Exception.class)
     public void deleteRoleResourceListByResourceIds(List<Long> resourceIds) {
         LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysRoleResource::getResourceId, resourceIds);
+        queryWrapper.in(SysRoleResource::getResourceCode, resourceIds);
         this.remove(queryWrapper);
     }
 

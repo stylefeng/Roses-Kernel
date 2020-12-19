@@ -26,12 +26,12 @@ package cn.stylefeng.roses.kernel.role.modular.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleDataScope;
 import cn.stylefeng.roses.kernel.role.modular.mapper.SysRoleDataScopeMapper;
 import cn.stylefeng.roses.kernel.role.modular.service.SysRoleDataScopeService;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +49,7 @@ public class SysRoleDataScopeServiceImpl extends ServiceImpl<SysRoleDataScopeMap
 
     @Override
     public void grantDataScope(SysRoleRequest sysRoleParam) {
-        Long roleId = sysRoleParam.getId();
+        Long roleId = sysRoleParam.getRoleId();
 
         LambdaQueryWrapper<SysRoleDataScope> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysRoleDataScope::getRoleId, roleId);

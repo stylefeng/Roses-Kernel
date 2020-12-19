@@ -24,11 +24,11 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.roses.kernel.role.modular.entity;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -47,18 +47,19 @@ public class SysRoleDataScope extends BaseEntity {
      * 主键
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @TableField("id")
-    private Long id;
+    @TableField("role_data_scope_id")
+    private Long roleDataScopeId;
 
     /**
      * 角色id
      */
-    @TableField("roleId")
+    @TableField("role_id")
     private Long roleId;
 
     /**
      * 机构id
      */
-    @TableField("organizationId")
+    @TableField("organization_id")
     private Long organizationId;
+
 }

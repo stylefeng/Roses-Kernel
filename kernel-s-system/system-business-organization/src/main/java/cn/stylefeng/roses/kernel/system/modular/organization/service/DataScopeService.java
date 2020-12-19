@@ -3,15 +3,15 @@ package cn.stylefeng.roses.kernel.system.modular.organization.service;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
-import cn.stylefeng.roses.kernel.system.exception.DataScopeException;
-import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysEmployeeResponse;
 import cn.stylefeng.roses.kernel.system.DataScopeApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
-import cn.stylefeng.roses.kernel.system.SysEmployeeApi;
+import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
+import cn.stylefeng.roses.kernel.system.exception.DataScopeException;
+import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,7 +36,7 @@ public class DataScopeService implements DataScopeApi {
     private RoleServiceApi roleServiceApi;
 
     @Resource
-    private SysEmployeeApi sysEmployeeApi;
+    private UserOrgServiceApi userOrgServiceApi;
 
     @Resource
     private DbOperatorApi dbOperatorApi;
@@ -78,19 +78,19 @@ public class DataScopeService implements DataScopeApi {
         if (dataScopeTypeEnums.contains(DataScopeTypeEnum.DEFINE)) {
 
             // 获取角色对应的组织机构范围
-            List<Long> roleIds = sysRoles.stream().map(SysRoleResponse::getId).collect(Collectors.toList());
+            List<Long> roleIds = sysRoles.stream().map(SysRoleResponse::getRoleId).collect(Collectors.toList());
             List<Long> orgIds = roleServiceApi.getRoleDataScopes(roleIds);
             organizationIds.addAll(orgIds);
         }
 
         // 获取用户的主要部门信息
-        SysEmployeeResponse userMainEmployee = sysEmployeeApi.getUserMainEmployee(userId);
+        SysUserOrgResponse sysUserOrgResponse = userOrgServiceApi.getUserOrgInfo(userId);
 
         // 本部门和本部门以下，查出用户的主要部门，并且查询该部门本部门及以下的组织机构id列表
         if (dataScopeTypeEnums.contains(DataScopeTypeEnum.DEPT_WITH_CHILD)) {
 
             // 获取部门及以下部门的id列表
-            Long organizationId = userMainEmployee.getOrganizationId();
+            Long organizationId = sysUserOrgResponse.getOrgId();
             Set<Long> subOrgIds = dbOperatorApi.findSubListByParentId("sys_organization", "pids", "id", organizationId);
             organizationIds.add(organizationId);
             organizationIds.addAll(subOrgIds);
@@ -100,7 +100,7 @@ public class DataScopeService implements DataScopeApi {
         if (dataScopeTypeEnums.contains(DataScopeTypeEnum.DEPT)) {
 
             // 获取本部门的id
-            Long organizationId = userMainEmployee.getOrganizationId();
+            Long organizationId = sysUserOrgResponse.getOrgId();
             organizationIds.add(organizationId);
         }
 

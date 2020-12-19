@@ -24,8 +24,8 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.roses.kernel.role.modular.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -46,35 +46,35 @@ public class SysRole extends BaseEntity {
      * 主键
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @TableField("id")
-    private Long id;
+    @TableField("role_id")
+    private Long roleId;
 
     /**
-     * 名称
+     * 角色名称
      */
-    @TableField("name")
-    private String name;
+    @TableField("role_name")
+    private String roleName;
 
     /**
-     * 编码
+     * 角色编码
      */
-    @TableField("code")
-    private String code;
+    @TableField("role_code")
+    private String roleCode;
 
     /**
      * 排序
      */
-    @TableField("sort")
-    private BigDecimal sort;
+    @TableField("role_sort")
+    private BigDecimal roleSort;
 
     /**
-     * 数据范围类型（枚举 10全部数据 20本部门及以下数据 30本部门数据 40仅本人数据 50自定义数据）
+     * 数据范围类型：10-全部数据，20-本部门及以下数据，30-本部门数据，40-仅本人数据，50-自定义数据
      */
     @TableField("data_scope_type")
     private Integer dataScopeType;
 
     /**
-     * 状态（1-启用，2-禁用）
+     * 状态：1-启用，2-禁用
      */
     @TableField("status_flag")
     private Integer statusFlag;

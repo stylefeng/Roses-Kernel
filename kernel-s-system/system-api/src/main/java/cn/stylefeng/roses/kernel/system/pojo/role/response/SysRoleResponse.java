@@ -16,25 +16,25 @@ public class SysRoleResponse extends BaseRequest {
     /**
      * 主键
      */
-    private Long id;
+    private Long roleId;
 
     /**
      * 名称
      */
-    private String name;
+    private String roleName;
 
     /**
      * 编码
      */
-    private String code;
+    private String roleCode;
 
     /**
      * 排序
      */
-    private Integer sort;
+    private Integer roleSort;
 
     /**
-     * 数据范围类型（枚举 10全部数据 20本部门及以下数据 30本部门数据 40仅本人数据 50自定义数据）
+     * 数据范围类型：10-全部数据，20-本部门及以下数据，30-本部门数据，40-仅本人数据，50-自定义数据
      */
     private Integer dataScopeType;
 
@@ -49,7 +49,8 @@ public class SysRoleResponse extends BaseRequest {
     private String remark;
 
     /**
-     * 状态（字典 1正常 2停用）
+     * 状态：1-启用，2-禁用
      */
     private Integer statusFlag;
+
 }

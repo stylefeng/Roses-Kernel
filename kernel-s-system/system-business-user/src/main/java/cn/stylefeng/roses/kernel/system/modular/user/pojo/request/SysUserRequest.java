@@ -1,17 +1,12 @@
 package cn.stylefeng.roses.kernel.system.modular.user.pojo.request;
 
-import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
-import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.EmployeeExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysEmployeeRequest;
 import cn.stylefeng.roses.kernel.validator.validators.date.DateValue;
 import cn.stylefeng.roses.kernel.validator.validators.status.StatusValue;
 import cn.stylefeng.roses.kernel.validator.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -116,11 +111,17 @@ public class SysUserRequest extends BaseRequest {
     @NotNull(message = "授权数据不能为空，请检查grantOrgIdList参数", groups = {grantData.class})
     private List<Long> grantOrgIdList;
 
-    /*==============员工相关信息==========*/
+    /**
+     * 用户所属机构
+     */
+    @NotNull(message = "用户所属机构不能为空", groups = {add.class, edit.class})
+    private Long orgId;
 
-    @NotNull(message = "员工信息不能为空，请检查sysEmpParam参数", groups = {add.class, edit.class})
-    @Valid
-    private List<SysEmployeeRequest> sysEmployeeRequest;
+    /**
+     * 用户所属机构的职务
+     */
+    @NotNull(message = "用户职务不能为空", groups = {add.class, edit.class})
+    private Long positionId;
 
     /**
      * 状态（字典 1正常 2冻结）
@@ -128,55 +129,6 @@ public class SysUserRequest extends BaseRequest {
     @NotNull(message = "状态不能为空，请检查statusFlag参数", groups = updateStatus.class)
     @StatusValue(message = "状态不正确，请检查状态值是否正确", groups = updateStatus.class)
     private Integer statusFlag;
-
-    /**
-     * 机构id，这个参数用来查询用户时候传
-     */
-    private Long organizationId;
-
-    /**
-     * 校验用户主部门是否设置，并且是否设置了多个
-     * <p>
-     * 如果不满足，则会抛出异常
-     *
-     * @author fengshuonan
-     * @date 2020/11/21 12:52
-     */
-    public void validateUserMainEmployee() {
-        int i = 0;
-
-        for (SysEmployeeRequest employeeRequest : sysEmployeeRequest) {
-            if (YesOrNotEnum.Y.getCode().equals(employeeRequest.getMainDeptFlag())) {
-                i++;
-            }
-        }
-
-        // 如果有多个主部门，报错
-        if (i == 0 || i > 1) {
-            throw new SystemModularException(EmployeeExceptionEnum.EMPLOYEE_NOT_OR_MANY);
-        }
-    }
-
-    /**
-     * 获取用户的主部门信息
-     *
-     * @author fengshuonan
-     * @date 2020/11/21 12:43
-     */
-    public SysEmployeeRequest getUserMainEmployee() {
-
-        // 校验数据正确性
-        this.validateUserMainEmployee();
-
-        // 查找用户主部门
-        for (SysEmployeeRequest employeeRequest : sysEmployeeRequest) {
-            if (YesOrNotEnum.Y.getCode().equals(employeeRequest.getMainDeptFlag())) {
-                return employeeRequest;
-            }
-        }
-
-        return null;
-    }
 
     /**
      * 参数校验分组：修改密码
