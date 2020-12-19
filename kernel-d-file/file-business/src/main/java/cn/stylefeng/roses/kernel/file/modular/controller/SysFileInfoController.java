@@ -2,14 +2,14 @@ package cn.stylefeng.roses.kernel.file.modular.controller;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
-import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.file.exception.FileException;
 import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
+import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import org.springframework.validation.annotation.Validated;
@@ -89,7 +89,7 @@ public class SysFileInfoController {
         }
 
         // 文件id不为空，则根据文件id预览
-        if (ObjectUtil.isNotEmpty(sysFileInfoRequest.getId())) {
+        if (ObjectUtil.isNotEmpty(sysFileInfoRequest.getFileId())) {
             sysFileInfoService.previewByFileId(sysFileInfoRequest, response);
         }
 

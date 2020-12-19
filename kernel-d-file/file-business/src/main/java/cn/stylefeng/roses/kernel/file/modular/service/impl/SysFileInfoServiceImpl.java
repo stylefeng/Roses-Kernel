@@ -2,7 +2,6 @@ package cn.stylefeng.roses.kernel.file.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -22,7 +21,9 @@ import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
 import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.util.DownloadUtil;
 import cn.stylefeng.roses.kernel.file.util.PicFileTypeUtil;
+import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -87,19 +88,15 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         long fileSizeKb = Convert.toLong(NumberUtil.div(new BigDecimal(file.getSize()), BigDecimal.valueOf(1024))
                 .setScale(0, BigDecimal.ROUND_HALF_UP));
 
-        //计算文件大小信息
-        String fileSizeInfo = FileUtil.readableFileSize(file.getSize());
-
         // 存储文件信息
         SysFileInfo sysFileInfo = new SysFileInfo();
-        sysFileInfo.setId(fileId);
+        sysFileInfo.setFileId(fileId);
         sysFileInfo.setFileLocation(FileLocationEnum.LOCAL.getCode());
         sysFileInfo.setFileBucket(DEFAULT_BUCKET_NAME);
         sysFileInfo.setFileObjectName(finalFileName);
         sysFileInfo.setFileOriginName(originalFilename);
         sysFileInfo.setFileSuffix(fileSuffix);
         sysFileInfo.setFileSizeKb(fileSizeKb);
-        sysFileInfo.setFileSizeInfo(fileSizeInfo);
         this.save(sysFileInfo);
 
         // 返回文件id
@@ -108,7 +105,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
     @Override
     public void download(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
-        SysFileInfoResponse sysFileInfoResult = this.getFileInfoResult(sysFileInfoRequest.getId());
+        SysFileInfoResponse sysFileInfoResult = this.getFileInfoResult(sysFileInfoRequest.getFileId());
         String fileName = sysFileInfoResult.getFileOriginName();
         byte[] fileBytes = sysFileInfoResult.getFileBytes();
         DownloadUtil.download(fileName, fileBytes, response);
@@ -117,15 +114,11 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(SysFileInfoRequest sysFileInfoRequest) {
-
-        // 查询文件的信息
-        SysFileInfo sysFileInfo = this.getById(sysFileInfoRequest.getId());
-
-        // 删除文件记录
-        this.removeById(sysFileInfoRequest.getId());
-
-        // 删除具体文件
-        this.fileOperatorApi.deleteFile(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName());
+        // 逻辑删除
+        LambdaUpdateWrapper<SysFileInfo> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.set(SysFileInfo::getDelFlag, YesOrNotEnum.Y.getCode());
+        lambdaUpdateWrapper.eq(SysFileInfo::getFileId, sysFileInfoRequest.getFileId());
+        this.update(lambdaUpdateWrapper);
     }
 
     @Override
@@ -134,7 +127,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         byte[] fileBytes;
 
         // 根据文件id获取文件信息结果集
-        SysFileInfoResponse sysFileInfoResult = this.getFileInfoResult(sysFileInfoRequest.getId());
+        SysFileInfoResponse sysFileInfoResult = this.getFileInfoResult(sysFileInfoRequest.getFileId());
 
         // 获取文件后缀
         String fileSuffix = sysFileInfoResult.getFileSuffix().toLowerCase();
@@ -187,6 +180,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     @Override
     public List<SysFileInfo> list(SysFileInfoRequest sysFileInfoRequest) {
         LambdaQueryWrapper<SysFileInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysFileInfo::getDelFlag, YesOrNotEnum.N.getCode());
         return this.list(queryWrapper);
     }
 
@@ -197,7 +191,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
         // 查询库中文件信息
         SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
-        sysFileInfoRequest.setId(fileId);
+        sysFileInfoRequest.setFileId(fileId);
         SysFileInfo sysFileInfo = this.querySysFileInfo(sysFileInfoRequest);
 
         // 获取文件字节码
@@ -220,7 +214,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     public SysFileInfoResponse getFileInfoWithoutContent(Long fileId) {
 
         SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
-        sysFileInfoRequest.setId(fileId);
+        sysFileInfoRequest.setFileId(fileId);
 
         // 获取文件的基本信息
         SysFileInfo sysFileInfo = querySysFileInfo(sysFileInfoRequest);
@@ -239,9 +233,9 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
      * @date 2020/11/29 13:40
      */
     private SysFileInfo querySysFileInfo(SysFileInfoRequest sysFileInfoRequest) {
-        SysFileInfo sysFileInfo = this.getById(sysFileInfoRequest.getId());
-        if (ObjectUtil.isEmpty(sysFileInfo)) {
-            String userTip = StrUtil.format(FileExceptionEnum.NOT_EXISTED.getUserTip(), sysFileInfoRequest.getId());
+        SysFileInfo sysFileInfo = this.getById(sysFileInfoRequest.getFileId());
+        if (ObjectUtil.isEmpty(sysFileInfo) || sysFileInfo.getDelFlag().equals(YesOrNotEnum.Y.getCode())) {
+            String userTip = StrUtil.format(FileExceptionEnum.NOT_EXISTED.getUserTip(), sysFileInfoRequest.getFileId());
             throw new FileException(FileExceptionEnum.NOT_EXISTED, userTip);
         }
         return sysFileInfo;
@@ -276,8 +270,10 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             if (ObjectUtil.isNotEmpty(sysFileInfoRequest.getFileObjectName())) {
                 queryWrapper.like(SysFileInfo::getFileObjectName, sysFileInfoRequest.getFileObjectName());
             }
-
         }
+
+        // 查询没被删除的
+        queryWrapper.eq(SysFileInfo::getDelFlag, YesOrNotEnum.N.getCode());
 
         return queryWrapper;
     }

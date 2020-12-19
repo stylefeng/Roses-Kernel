@@ -21,21 +21,26 @@ public class SysFileInfoRequest extends BaseRequest {
     /**
      * 主键id
      */
-    @NotNull(message = "id不能为空，请检查id参数", groups = {delete.class, detail.class})
-    private Long id;
+    @NotNull(message = "fileId不能为空", groups = {delete.class, detail.class})
+    private Long fileId;
 
     /**
-     * 文件存储位置（1:阿里云，2:腾讯云，3:minio，4:本地）
+     * 文件编码，解决一个文件多个版本问题，多次上传文件编码不变
+     */
+    private Long fileCode;
+
+    /**
+     * 文件存储位置：1-阿里云，2-腾讯云，3-minio，4-本地
      */
     private Integer fileLocation;
 
     /**
-     * 文件仓库
+     * 文件仓库（文件夹）
      */
     private String fileBucket;
 
     /**
-     * 文件名称（上传时候的文件名）
+     * 文件名称（上传时候的文件全名）
      */
     private String fileOriginName;
 
@@ -50,7 +55,7 @@ public class SysFileInfoRequest extends BaseRequest {
     private Long fileSizeKb;
 
     /**
-     * 存储到bucket的名称（文件唯一标识id）
+     * 存储到bucket中的名称，主键id+.后缀
      */
     private String fileObjectName;
 
