@@ -3,25 +3,26 @@ package cn.stylefeng.roses.kernel.config.modular.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.config.modular.mapper.SysConfigMapper;
-import cn.stylefeng.roses.kernel.config.modular.service.SysConfigService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
-import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
 import cn.stylefeng.roses.kernel.config.modular.entity.SysConfig;
+import cn.stylefeng.roses.kernel.config.modular.mapper.SysConfigMapper;
 import cn.stylefeng.roses.kernel.config.modular.param.SysConfigParam;
+import cn.stylefeng.roses.kernel.config.modular.service.SysConfigService;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum.CONFIG_NOT_EXIST;
 import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum.CONFIG_SYS_CAN_NOT_DELETE;
 
 
@@ -33,6 +34,71 @@ import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExcepti
  */
 @Service
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig> implements SysConfigService {
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void add(SysConfigParam sysConfigParam) {
+
+        // 1.构造实体
+        SysConfig sysConfig = new SysConfig();
+        BeanUtil.copyProperties(sysConfigParam, sysConfig);
+        sysConfig.setStatusFlag(StatusEnum.ENABLE.getCode());
+
+        // 2.保存到库中
+        this.save(sysConfig);
+
+        // 3.添加对应context
+        ConfigContext.me().putConfig(sysConfigParam.getConfigCode(), sysConfigParam.getConfigValue());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(SysConfigParam sysConfigParam) {
+
+        // 1.根据id获取常量信息
+        SysConfig sysConfig = this.querySysConfig(sysConfigParam);
+
+        // 2.请求参数转化为实体
+        BeanUtil.copyProperties(sysConfigParam, sysConfig);
+        // 不能修改状态，用修改状态接口修改状态
+        sysConfig.setStatusFlag(null);
+
+        // 3.更新记录
+        this.updateById(sysConfig);
+
+        // 4.更新对应常量context
+        ConfigContext.me().putConfig(sysConfigParam.getConfigCode(), sysConfigParam.getConfigValue());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(SysConfigParam sysConfigParam) {
+
+        // 1.根据id获取常量
+        SysConfig sysConfig = this.querySysConfig(sysConfigParam);
+        if (sysConfig == null) {
+            String userTip = StrUtil.format(CONFIG_NOT_EXIST.getUserTip(), "id: " + sysConfigParam.getConfigId());
+            throw new ConfigException(CONFIG_NOT_EXIST, userTip);
+        }
+
+        // 2.不能删除系统参数
+        if (YesOrNotEnum.Y.getCode().equals(sysConfig.getSysFlag())) {
+            throw new ConfigException(CONFIG_SYS_CAN_NOT_DELETE);
+        }
+
+        // 3.设置状态为已删除
+        sysConfig.setStatusFlag(StatusEnum.DISABLE.getCode());
+        sysConfig.setDelFlag(YesOrNotEnum.Y.getCode());
+        this.updateById(sysConfig);
+
+        // 4.删除对应context
+        ConfigContext.me().deleteConfig(sysConfigParam.getConfigCode());
+    }
+
+    @Override
+    public SysConfig detail(SysConfigParam sysConfigParam) {
+        return this.querySysConfig(sysConfigParam);
+    }
 
     @Override
     public PageResult<SysConfig> page(SysConfigParam sysConfigParam) {
@@ -47,63 +113,6 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         return this.list(wrapper);
     }
 
-    @Override
-    public SysConfig detail(SysConfigParam sysConfigParam) {
-        return this.querySysConfig(sysConfigParam);
-    }
-
-    @Override
-    public void add(SysConfigParam sysConfigParam) {
-
-        // 1.构造实体
-        SysConfig sysConfig = new SysConfig();
-        BeanUtil.copyProperties(sysConfigParam, sysConfig);
-        sysConfig.setStatus(StatusEnum.ENABLE.getCode());
-
-        // 2.保存到库中
-        this.save(sysConfig);
-
-        // 3.添加对应context
-        ConfigContext.me().putConfig(sysConfigParam.getCode(), sysConfigParam.getValue());
-    }
-
-    @Override
-    public void delete(SysConfigParam sysConfigParam) {
-
-        // 1.根据id获取常量
-        SysConfig sysConfig = this.querySysConfig(sysConfigParam);
-
-        // 2.不能删除系统参数
-        if (YesOrNotEnum.Y.getCode().equals(sysConfig.getSysFlag())) {
-            throw new ConfigException(CONFIG_SYS_CAN_NOT_DELETE);
-        }
-
-        // 3.设置状态为已删除
-        sysConfig.setStatus(StatusEnum.DISABLE.getCode());
-        this.updateById(sysConfig);
-
-        // 4.删除对应context
-        ConfigContext.me().deleteConfig(sysConfigParam.getCode());
-    }
-
-    @Override
-    public void edit(SysConfigParam sysConfigParam) {
-
-        // 1.根据id获取常量信息
-        SysConfig sysConfig = this.querySysConfig(sysConfigParam);
-
-        // 2.请求参数转化为实体
-        BeanUtil.copyProperties(sysConfigParam, sysConfig);
-        // 不能修改状态，用修改状态接口修改状态
-        sysConfig.setStatus(null);
-
-        // 3.更新记录
-        this.updateById(sysConfig);
-
-        // 4.更新对应常量context
-        ConfigContext.me().putConfig(sysConfigParam.getCode(), sysConfigParam.getValue());
-    }
-
     /**
      * 获取系统参数配置
      *
@@ -111,10 +120,10 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      * @date 2020/4/14 11:19
      */
     private SysConfig querySysConfig(SysConfigParam sysConfigParam) {
-        SysConfig sysConfig = this.getById(sysConfigParam.getId());
-        if (ObjectUtil.isEmpty(sysConfig)) {
-            String userTip = StrUtil.format(ConfigExceptionEnum.CONFIG_NOT_EXIST.getUserTip(), "id: " + sysConfigParam.getId());
-            throw new ConfigException(ConfigExceptionEnum.CONFIG_NOT_EXIST, userTip);
+        SysConfig sysConfig = this.getById(sysConfigParam.getConfigId());
+        if (ObjectUtil.isEmpty(sysConfig) || sysConfig.getDelFlag().equals(YesOrNotEnum.Y.getCode())) {
+            String userTip = StrUtil.format(CONFIG_NOT_EXIST.getUserTip(), "id: " + sysConfigParam.getConfigId());
+            throw new ConfigException(CONFIG_NOT_EXIST, userTip);
         }
         return sysConfig;
     }
@@ -130,13 +139,13 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
         if (ObjectUtil.isNotNull(sysConfigParam)) {
             // 如果名称不为空，则带上名称搜素搜条件
-            if (ObjectUtil.isNotEmpty(sysConfigParam.getName())) {
-                queryWrapper.like(SysConfig::getName, sysConfigParam.getName());
+            if (ObjectUtil.isNotEmpty(sysConfigParam.getConfigName())) {
+                queryWrapper.like(SysConfig::getConfigName, sysConfigParam.getConfigName());
             }
 
             // 如果常量编码不为空，则带上常量编码搜素搜条件
-            if (ObjectUtil.isNotEmpty(sysConfigParam.getCode())) {
-                queryWrapper.like(SysConfig::getCode, sysConfigParam.getCode());
+            if (ObjectUtil.isNotEmpty(sysConfigParam.getConfigCode())) {
+                queryWrapper.like(SysConfig::getConfigCode, sysConfigParam.getConfigCode());
             }
 
             // 如果分类编码不为空，则带上分类编码

@@ -24,11 +24,11 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.roses.kernel.config.modular.entity;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -48,29 +48,29 @@ public class SysConfig extends BaseEntity {
     /**
      * 主键
      */
-    @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "config_id", type = IdType.ASSIGN_ID)
+    private Long configId;
 
     /**
      * 名称
      */
-    @TableField("name")
-    private String name;
+    @TableField("config_name")
+    private String configName;
 
     /**
      * 编码
      */
-    @TableField("code")
-    private String code;
+    @TableField("config_code")
+    private String configCode;
 
     /**
      * 属性值
      */
-    @TableField("value")
-    private String value;
+    @TableField("config_value")
+    private String configValue;
 
     /**
-     * 是否是系统参数（Y-是，N-否）
+     * 是否是系统参数：Y-是，N-否
      */
     @TableField("sys_flag")
     private String sysFlag;
@@ -82,10 +82,10 @@ public class SysConfig extends BaseEntity {
     private String remark;
 
     /**
-     * 状态（字典 1正常 2停用）
+     * 状态：1-正常，2停用
      */
-    @TableField("status")
-    private Integer status;
+    @TableField("status_flag")
+    private Integer statusFlag;
 
     /**
      * 常量所属分类的编码，来自于“常量的分类”字典
@@ -94,7 +94,7 @@ public class SysConfig extends BaseEntity {
     private String groupCode;
 
     /**
-     * 是否删除（Y-已删除，N-未删除）
+     * 是否删除：Y-被删除，N-未删除
      */
     @TableField("del_flag")
     private String delFlag;

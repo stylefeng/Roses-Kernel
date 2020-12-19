@@ -24,10 +24,10 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.roses.kernel.config.modular.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import cn.stylefeng.roses.kernel.config.modular.entity.SysConfig;
 import cn.stylefeng.roses.kernel.config.modular.param.SysConfigParam;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -38,6 +38,43 @@ import java.util.List;
  * @date 2020/4/14 11:14
  */
 public interface SysConfigService extends IService<SysConfig> {
+
+    /**
+     * 添加系统参数配置
+     *
+     * @param sysConfigParam 添加参数
+     * @author fengshuonan
+     * @date 2020/4/14 11:14
+     */
+    void add(SysConfigParam sysConfigParam);
+
+    /**
+     * 编辑系统参数配置
+     *
+     * @param sysConfigParam 编辑参数
+     * @author fengshuonan
+     * @date 2020/4/14 11:15
+     */
+    void edit(SysConfigParam sysConfigParam);
+
+    /**
+     * 删除系统参数配置
+     *
+     * @param sysConfigParam 删除参数
+     * @author fengshuonan
+     * @date 2020/4/14 11:15
+     */
+    void delete(SysConfigParam sysConfigParam);
+
+    /**
+     * 查看系统参数配置
+     *
+     * @param sysConfigParam 查看参数
+     * @return 系统参数配置
+     * @author fengshuonan
+     * @date 2020/4/14 11:15
+     */
+    SysConfig detail(SysConfigParam sysConfigParam);
 
     /**
      * 查询系统参数配置
@@ -58,42 +95,5 @@ public interface SysConfigService extends IService<SysConfig> {
      * @date 2020/4/14 11:14
      */
     List<SysConfig> list(SysConfigParam sysConfigParam);
-
-    /**
-     * 查看系统参数配置
-     *
-     * @param sysConfigParam 查看参数
-     * @return 系统参数配置
-     * @author fengshuonan
-     * @date 2020/4/14 11:15
-     */
-    SysConfig detail(SysConfigParam sysConfigParam);
-
-    /**
-     * 添加系统参数配置
-     *
-     * @param sysConfigParam 添加参数
-     * @author fengshuonan
-     * @date 2020/4/14 11:14
-     */
-    void add(SysConfigParam sysConfigParam);
-
-    /**
-     * 删除系统参数配置
-     *
-     * @param sysConfigParam 删除参数
-     * @author fengshuonan
-     * @date 2020/4/14 11:15
-     */
-    void delete(SysConfigParam sysConfigParam);
-
-    /**
-     * 编辑系统参数配置
-     *
-     * @param sysConfigParam 编辑参数
-     * @author fengshuonan
-     * @date 2020/4/14 11:15
-     */
-    void edit(SysConfigParam sysConfigParam);
 
 }
