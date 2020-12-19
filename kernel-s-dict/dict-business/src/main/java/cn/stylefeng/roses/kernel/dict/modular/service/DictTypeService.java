@@ -1,11 +1,11 @@
 package cn.stylefeng.roses.kernel.dict.modular.service;
 
 
-import cn.stylefeng.roses.kernel.dict.modular.entity.DictType;
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
+import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/10/29 18:54
  */
-public interface DictTypeService extends IService<DictType> {
+public interface DictTypeService extends IService<SysDictType> {
 
     /**
      * 添加字典类型
@@ -61,7 +61,7 @@ public interface DictTypeService extends IService<DictType> {
      * @author fengshuonan
      * @date 2020/10/29 18:55
      */
-    List<DictType> getDictTypeList(DictTypeRequest dictTypeRequest);
+    List<SysDictType> getDictTypeList(DictTypeRequest dictTypeRequest);
 
     /**
      * 获取字典类型列表（带分页）
@@ -72,7 +72,7 @@ public interface DictTypeService extends IService<DictType> {
      * @author fengshuonan
      * @date 2020/10/29 18:55
      */
-    PageResult<DictType> getDictTypePageList(Page<DictType> page, DictTypeRequest dictTypeRequest);
+    PageResult<SysDictType> getDictTypePageList(Page<SysDictType> page, DictTypeRequest dictTypeRequest);
 
     /**
      * code校验重复

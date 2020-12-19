@@ -1,9 +1,8 @@
 package cn.stylefeng.roses.kernel.dict.modular.controller;
 
-import cn.stylefeng.roses.kernel.dict.modular.entity.DictType;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictTypeService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
@@ -11,6 +10,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -88,8 +88,8 @@ public class DictTypeController {
      */
     @PostResource(name = "获取字典类型列表", path = "/dictType/getDictTypeList", requiredPermission = false)
     public ResponseData getDictTypeList(@RequestBody DictTypeRequest dictTypeRequest) {
-        List<DictType> dictTypeList = dictTypeService.getDictTypeList(dictTypeRequest);
-        return new SuccessResponseData(dictTypeList);
+        List<SysDictType> sysDictTypeList = dictTypeService.getDictTypeList(dictTypeRequest);
+        return new SuccessResponseData(sysDictTypeList);
     }
 
     /**
@@ -100,8 +100,8 @@ public class DictTypeController {
      */
     @PostResource(name = "获取字典类型列表(分页)", path = "/dictType/getDictTypePageList", requiredPermission = false)
     public ResponseData getDictTypePageList(@RequestBody DictTypeRequest dictTypeRequest) {
-        Page<DictType> page = PageFactory.defaultPage();
-        PageResult<DictType> dictTypePageList = dictTypeService.getDictTypePageList(page, dictTypeRequest);
+        Page<SysDictType> page = PageFactory.defaultPage();
+        PageResult<SysDictType> dictTypePageList = dictTypeService.getDictTypePageList(page, dictTypeRequest);
         return new SuccessResponseData(dictTypePageList);
     }
 

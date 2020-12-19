@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.dict.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.dict.modular.entity.Dict;
+import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.TreeDictInfo;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictService;
@@ -87,7 +87,7 @@ public class DictController {
      */
     @GetResource(name = "获取字典详情", path = "/dict/getDictDetail", requiredPermission = false)
     public ResponseData getDictDetail(@RequestBody @Validated(DictRequest.detail.class) DictRequest dictRequest) {
-        Dict detail = this.dictService.findDetail(dictRequest);
+        SysDict detail = this.dictService.findDetail(dictRequest);
         return new SuccessResponseData(detail);
     }
 
@@ -99,7 +99,7 @@ public class DictController {
      */
     @PostResource(name = "获取字典列表", path = "/dict/getDictList", requiredPermission = false)
     public ResponseData getDictList(@RequestBody DictRequest dictRequest) {
-        List<Dict> dictList = this.dictService.findList(dictRequest);
+        List<SysDict> dictList = this.dictService.findList(dictRequest);
         return new SuccessResponseData(dictList);
     }
 
@@ -111,7 +111,7 @@ public class DictController {
      */
     @PostResource(name = "获取字典列表", path = "/dict/getDictListPage", requiredPermission = false)
     public ResponseData getDictListPage(@RequestBody DictRequest dictRequest) {
-        PageResult<Dict> page = this.dictService.findPageList(dictRequest);
+        PageResult<SysDict> page = this.dictService.findPageList(dictRequest);
         return new SuccessResponseData(page);
     }
 

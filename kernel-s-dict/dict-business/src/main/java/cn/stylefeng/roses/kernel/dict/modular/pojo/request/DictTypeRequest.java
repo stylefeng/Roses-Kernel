@@ -1,11 +1,13 @@
 package cn.stylefeng.roses.kernel.dict.modular.pojo.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import cn.stylefeng.roses.kernel.validator.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * 字典类型，请求参数封装
@@ -20,8 +22,8 @@ public class DictTypeRequest extends BaseRequest {
     /**
      * 字典类型id
      */
-    @NotNull(message = "id不能为空，请检查id参数", groups = {edit.class, delete.class, detail.class, updateStatus.class})
-    private Long id;
+    @NotNull(message = "dictTypeId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class})
+    private Long dictTypeId;
 
     /**
      * 字典类型： 1-业务类型，2-系统类型，参考 DictTypeClassEnum
@@ -33,12 +35,22 @@ public class DictTypeRequest extends BaseRequest {
      * 字典类型编码
      */
     @NotBlank(message = "字典类型编码不能为空", groups = {add.class, edit.class})
+    @TableUniqueValue(
+            message = "字典类型编码存在重复",
+            groups = {add.class, edit.class},
+            tableName = "sys_dict_type",
+            columnName = "dict_type_code")
     private String dictTypeCode;
 
     /**
      * 字典类型名称
      */
     @NotBlank(message = "字典类型名称不能为空", groups = {add.class, edit.class})
+    @TableUniqueValue(
+            message = "字典类型名称存在重复",
+            groups = {add.class, edit.class},
+            tableName = "sys_dict_type",
+            columnName = "dict_type_name")
     private String dictTypeName;
 
     /**
@@ -47,9 +59,14 @@ public class DictTypeRequest extends BaseRequest {
     private String dictTypeDesc;
 
     /**
+     * 排序，带小数点
+     */
+    private BigDecimal dictTypeSort;
+
+    /**
      * 字典类型的状态：1-启用，2-禁用，参考 StatusEnum
      */
     @NotNull(message = "状态不能为空", groups = {updateStatus.class})
-    private Integer dictTypeStatus;
+    private Integer statusFlag;
 
 }

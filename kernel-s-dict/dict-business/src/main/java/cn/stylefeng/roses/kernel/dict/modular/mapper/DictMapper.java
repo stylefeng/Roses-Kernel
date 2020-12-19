@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.dict.modular.mapper;
 
+import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
+import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import cn.stylefeng.roses.kernel.dict.modular.entity.Dict;
-import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/10/29 17:20
  */
-public interface DictMapper extends BaseMapper<Dict> {
+public interface DictMapper extends BaseMapper<SysDict> {
 
     /**
      * 获取分页字典列表
@@ -24,7 +24,7 @@ public interface DictMapper extends BaseMapper<Dict> {
      * @author fengshuonan
      * @date 2020/10/29 17:21
      */
-    Dict findDetail(@Param("dictRequest") DictRequest dictRequest);
+    SysDict findDetail(@Param("dictRequest") DictRequest dictRequest);
 
     /**
      * 获取分页字典列表
@@ -35,6 +35,6 @@ public interface DictMapper extends BaseMapper<Dict> {
      * @author fengshuonan
      * @date 2020/10/29 17:21
      */
-    List<Dict> findList(Page<Dict> page, @Param("dictRequest") DictRequest dictRequest);
+    List<SysDict> findList(Page<SysDict> page, @Param("dictRequest") DictRequest dictRequest);
 
 }

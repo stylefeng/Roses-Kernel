@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.dict.modular.entity;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,13 +19,13 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("sys_dict_type")
-public class DictType extends BaseEntity {
+public class SysDictType extends BaseEntity {
 
     /**
      * 字典类型id
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private String id;
+    @TableId(value = "dict_type_id", type = IdType.ASSIGN_ID)
+    private String dictTypeId;
 
     /**
      * 字典类型： 1-业务类型，2-系统类型，参考 DictTypeClassEnum
@@ -52,21 +52,21 @@ public class DictType extends BaseEntity {
     private String dictTypeDesc;
 
     /**
-     * 字典类型的状态：1-启用，2-禁用，参考 StatusEnum
-     */
-    @TableField("dict_type_status")
-    private Integer dictTypeStatus;
-
-    /**
-     * 删除标记 Y-已删除，N-未删除，参考 YesOrNotEnum
-     */
-    @TableField("del_flag")
-    private String delFlag;
-
-    /**
      * 排序，带小数点
      */
     @TableField(value = "dict_type_sort")
     private BigDecimal dictTypeSort;
+
+    /**
+     * 字典类型的状态：1-启用，2-禁用，参考 StatusEnum
+     */
+    @TableField("status_flag")
+    private Integer statusFlag;
+
+    /**
+     * 是否删除：Y-被删除，N-未删除
+     */
+    @TableField("del_flag")
+    private String delFlag;
 
 }

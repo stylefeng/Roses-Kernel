@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.dict.modular.service;
 
-import cn.stylefeng.roses.kernel.dict.modular.entity.Dict;
-import cn.stylefeng.roses.kernel.dict.modular.pojo.TreeDictInfo;
-import com.baomidou.mybatisplus.extension.service.IService;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
+import cn.stylefeng.roses.kernel.dict.modular.pojo.TreeDictInfo;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/10/29 17:43
  */
-public interface DictService extends IService<Dict> {
+public interface DictService extends IService<SysDict> {
 
     /**
      * 新增字典
@@ -60,7 +60,7 @@ public interface DictService extends IService<Dict> {
      * @author fengshuonan
      * @date 2020/10/30 16:15
      */
-    Dict findDetail(DictRequest dictRequest);
+    SysDict findDetail(DictRequest dictRequest);
 
     /**
      * 获取字典列表
@@ -70,7 +70,7 @@ public interface DictService extends IService<Dict> {
      * @author fengshuonan
      * @date 2020/10/29 18:48
      */
-    List<Dict> findList(DictRequest dictRequest);
+    List<SysDict> findList(DictRequest dictRequest);
 
     /**
      * 获取字典列表（带分页）
@@ -80,7 +80,7 @@ public interface DictService extends IService<Dict> {
      * @author fengshuonan
      * @date 2020/10/29 18:48
      */
-    PageResult<Dict> findPageList(DictRequest dictRequest);
+    PageResult<SysDict> findPageList(DictRequest dictRequest);
 
     /**
      * 获取树形字典列表

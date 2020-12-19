@@ -2,66 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.dict.modular.mapper.DictMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="cn.stylefeng.roses.kernel.dict.modular.entity.Dict">
-        <id column="dict_id" property="id"/>
-        <result column="dict_code" property="dictCode"/>
-        <result column="dict_name" property="dictName"/>
-        <result column="dict_type_code" property="dictTypeCode"/>
-        <result column="dict_short_name" property="dictShortName"/>
-        <result column="dict_short_code" property="dictShortCode"/>
-        <result column="parent_dict_id" property="parentDictId"/>
-        <result column="dict_status" property="dictStatus"/>
-        <result column="create_time" property="createTime"/>
-        <result column="create_user" property="createUser"/>
-        <result column="update_time" property="updateTime"/>
-        <result column="update_user" property="updateUser"/>
-        <result column="del_flag" property="delFlag"/>
-        <result column="dict_sort" property="dictSort"/>
-    </resultMap>
-
-    <select id="findDetail" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.Dict">
+    <select id="findDetail" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict">
         SELECT
-        dict.id AS id,
-        dict.dict_code AS dictCode,
-        type.dict_name as dictName,
+        dict.dict_id AS dictId,
         dict.dict_type_code AS dictTypeCode,
+        dict.dict_name as dictName,
+        dict.dict_code AS dictCode,
         dict.dict_short_name AS dictShortName,
         dict.dict_short_code AS dictShortCode,
         dict.parent_dict_id AS parentDictId,
-        dict.dict_status AS dictStatus,
-        dict.create_time AS createTime
+        dict.dict_sort as dictSort,
+        dict.status_flag AS statusFlag,
+        dict.create_time AS createTime,
+        type.dict_type_name as dictTypeName
         FROM
         sys_dict dict
         INNER JOIN sys_dict_type type ON dict.dict_type_code = type.dict_type_code
         WHERE dict.del_flag = 'N'
-        <if test="dictRequest.dictTypeCode != null and dictRequest.dictTypeCode != ''">
-            AND dict.dict_type_code = #{dictRequest.dictTypeCode}
+        <if test="dictRequest.dictId != null and dictRequest.dictId != ''">
+            AND dict.dict_id = #{dictRequest.dictId}
         </if>
         <if test="dictRequest.dictCode != null and dictRequest.dictCode != ''">
             AND dict.dict_code = #{dictRequest.dictCode}
         </if>
-        <if test="dictRequest.dictName != null and dictRequest.dictName != ''">
-            AND dict.dict_name = #{dictRequest.dictName}
-        </if>
         ORDER BY dict_sort
     </select>
 
-    <select id="findList" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.Dict">
+    <select id="findList" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict">
         SELECT
-        type.dict_type_name as dictTypeName,
-        dict.id AS id,
-        dict.dict_code AS dictCode,
-        type.dict_name as dictName,
+        dict.dict_id AS dictId,
         dict.dict_type_code AS dictTypeCode,
+        dict.dict_name as dictName,
+        dict.dict_code AS dictCode,
         dict.dict_short_name AS dictShortName,
         dict.dict_short_code AS dictShortCode,
         dict.parent_dict_id AS parentDictId,
-        dict.dict_status AS dictStatus,
-        dict.create_time AS createTime
+        dict.dict_sort as dictSort,
+        dict.status_flag AS statusFlag,
+        dict.create_time AS createTime,
+        type.dict_type_name as dictTypeName
         FROM
-        cbd_sys_dict dict
-        INNER JOIN cbd_sys_dict_type type ON dict.dict_type_code = type.dict_type_code
+        sys_dict dict
+        INNER JOIN sys_dict_type type ON dict.dict_type_code = type.dict_type_code
         WHERE dict.del_flag = 'N'
         <if test="dictRequest.dictTypeCode != null and dictRequest.dictTypeCode != ''">
             AND dict.dict_type_code = #{dictRequest.dictTypeCode}
@@ -75,8 +57,8 @@
         <if test="dictRequest.parentDictId != null and dictRequest.parentDictId != ''">
             AND dict.parent_dict_id = #{dictRequest.parentDictId}
         </if>
-        <if test="dictRequest.dictStatus != null and dictRequest.dictStatus !=''">
-            AND dict.dict_status = #{dictRequest.dictStatus}
+        <if test="dictRequest.statusFlag != null and dictRequest.statusFlag !=''">
+            AND dict.status_flag = #{dictRequest.statusFlag}
         </if>
         <if test="dictRequest.parentDictId != null and dictRequest.parentDictId != ''">
             and dict.parent_dict_id = #{dictRequest.parentDictId}

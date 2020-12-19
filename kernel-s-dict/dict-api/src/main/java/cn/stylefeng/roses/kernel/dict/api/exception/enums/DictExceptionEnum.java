@@ -27,7 +27,7 @@ public enum DictExceptionEnum implements AbstractExceptionEnum {
     /**
      * 父级id不存在，输入的父级id不合理
      */
-    PARENT_DICT_NOT_EXISTED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + DictConstants.DICT_EXCEPTION_STEP_CODE + "03", "父级id不存在，输入的父级id不合理，父级id：{}"),
+    PARENT_DICT_NOT_EXISTED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + DictConstants.DICT_EXCEPTION_STEP_CODE + "03", "父级字典id不存在，输入的父级id不合理，父级id：{}"),
 
     /**
      * 字典不存在

@@ -2,34 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.dict.modular.mapper.DictTypeMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="cn.stylefeng.roses.kernel.dict.modular.entity.DictType">
-        <id column="id" property="id"/>
-        <result column="dict_type_class" property="dictTypeClass"/>
-        <result column="dict_type_code" property="dictTypeCode"/>
-        <result column="dict_type_name" property="dictTypeName"/>
-        <result column="dict_type_desc" property="dictTypeDesc"/>
-        <result column="dict_type_status" property="dictTypeStatus"/>
-        <result column="create_time" property="createTime"/>
-        <result column="create_user" property="createUser"/>
-        <result column="update_time" property="updateTime"/>
-        <result column="update_user" property="updateUser"/>
-        <result column="del_flag" property="delFlag"/>
-        <result column="dict_type_sort" property="dictTypeSort"/>
-    </resultMap>
-
     <!--查询字典类型列表-->
-    <select id="findList" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.DictType">
+    <select id="findList" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType">
         SELECT
         dict_type_id AS dictTypeId,
         dict_type_class AS dictTypeClass,
         dict_type_code AS dictTypeCode,
         dict_type_name AS dictTypeName,
         dict_type_desc AS dictTypeDesc,
-        dict_type_status AS dictTypeStatus,
-        dict_type_sort AS dictTypeSort
+        dict_type_sort AS dictTypeSort,
+        status_flag AS statusFlag
         FROM
-        cbd_sys_dict_type
+        sys_dict_type
         where del_flag = 'N'
         <if test="dictTypeRequest.dictTypeName != null and dictTypeRequest.dictTypeName !=''">
             AND dict_type_name like CONCAT('%',#{dictTypeRequest.dictTypeName},'%')
@@ -40,11 +24,10 @@
         <if test="dictTypeRequest.dictTypeCode != null and dictTypeRequest.dictTypeCode !=''">
             AND dict_type_code like CONCAT('%',#{dictTypeRequest.dictTypeCode},'%')
         </if>
-        <if test="dictTypeRequest.dictTypeStatus != null and dictTypeRequest.dictTypeStatus !=''">
-            AND dict_type_status = #{dictTypeRequest.dictTypeStatus}
+        <if test="dictTypeRequest.statusFlag != null and dictTypeRequest.statusFlag !=''">
+            AND status_flag = #{dictTypeRequest.statusFlag}
         </if>
-        ORDER BY
-        dict_type_sort
+        ORDER BY dict_type_sort
     </select>
 
 </mapper>

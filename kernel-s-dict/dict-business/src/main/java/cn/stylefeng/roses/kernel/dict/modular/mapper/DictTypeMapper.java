@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.dict.modular.mapper;
 
+import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
+import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import cn.stylefeng.roses.kernel.dict.modular.entity.DictType;
-import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/10/30 21:04
  */
-public interface DictTypeMapper extends BaseMapper<DictType> {
+public interface DictTypeMapper extends BaseMapper<SysDictType> {
 
     /**
      * 获取字典类型列表
@@ -25,6 +25,6 @@ public interface DictTypeMapper extends BaseMapper<DictType> {
      * @author fengshuonan
      * @date 2020/10/29 17:41
      */
-    List<DictType> findList(Page<DictType> page, @Param("dictTypeRequest") DictTypeRequest dictTypeRequest);
+    List<SysDictType> findList(Page<SysDictType> page, @Param("dictTypeRequest") DictTypeRequest dictTypeRequest);
 
 }
