@@ -17,17 +17,17 @@ public class SysAppResponse implements Serializable {
     /**
      * 主键id
      */
-    private Long id;
+    private Long appId;
 
     /**
      * 应用名称
      */
-    private String name;
+    private String appName;
 
     /**
      * 编码
      */
-    private String code;
+    private String appCode;
 
     /**
      * 是否默认激活（Y-是，N-否）

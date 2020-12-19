@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.auth.session;
 
-import com.alibaba.fastjson.parser.ParserConfig;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import com.alibaba.fastjson.parser.ParserConfig;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.HashSet;
@@ -57,7 +57,7 @@ public class RedisSessionManager implements SessionManagerApi {
         loginUserRedisTemplate.opsForValue().set(getTokenKey(token), loginUser, sessionExpiredSeconds, TimeUnit.SECONDS);
 
         // 装配用户token的缓存
-        String userIdKey = getUserIdKey(loginUser.getId());
+        String userIdKey = getUserIdKey(loginUser.getUserId());
         Set<String> theUserTokens = loginTokenRedisTemplate.opsForValue().get(userIdKey);
         if (theUserTokens == null) {
             HashSet<String> tempUserTokens = new HashSet<>();
@@ -82,7 +82,7 @@ public class RedisSessionManager implements SessionManagerApi {
 
         // 删除用户id对应token的缓存
         if (loginUser != null) {
-            Long userId = loginUser.getId();
+            Long userId = loginUser.getUserId();
             Set<String> userTokens = loginTokenRedisTemplate.opsForValue().get(getUserIdKey(userId));
             if (userTokens != null) {
                 userTokens.remove(token);
@@ -110,7 +110,7 @@ public class RedisSessionManager implements SessionManagerApi {
         }
 
         // 获取用户id
-        Long userId = session.getId();
+        Long userId = session.getUserId();
 
         // 设置用户id对应的token列表为参数token
         HashSet<String> tokenSet = new HashSet<>();

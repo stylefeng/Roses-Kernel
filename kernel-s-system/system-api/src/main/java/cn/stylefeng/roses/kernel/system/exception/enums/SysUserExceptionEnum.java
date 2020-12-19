@@ -81,7 +81,12 @@ public enum SysUserExceptionEnum implements AbstractExceptionEnum {
     /**
      * 更新用户状态错误
      */
-    UPDATE_USER_STATUS_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "59", "更新用户状态错误，更新生效数量0");;
+    UPDATE_USER_STATUS_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "59", "更新用户状态错误，更新生效数量0"),
+
+    /**
+     * 当前用户未分配菜单
+     */
+    USER_NOT_HAVE_MENUS(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "60", "当前用户未分配菜单");
 
     /**
      * 错误编码

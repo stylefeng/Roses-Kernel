@@ -23,17 +23,17 @@ public class LoginUser implements Serializable {
     /**
      * 用户主键id
      */
-    private Long id;
+    private Long userId;
+
+    /**
+     * 姓名
+     */
+    private String realName;
 
     /**
      * 账号
      */
     private String account;
-
-    /**
-     * 姓名
-     */
-    private String name;
 
     /**
      * 公司/组织id

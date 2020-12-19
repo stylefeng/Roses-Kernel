@@ -3,10 +3,6 @@ package cn.stylefeng.roses.kernel.app.modular.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.app.modular.entity.SysApp;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.app.modular.mapper.SysAppMapper;
 import cn.stylefeng.roses.kernel.app.modular.service.SysAppService;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
@@ -20,6 +16,10 @@ import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.enums.AppExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.app.request.SysAppRequest;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,7 +73,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @Override
     public void delete(SysAppRequest sysAppRequest) {
         SysApp sysApp = this.querySysApp(sysAppRequest);
-        String code = sysApp.getCode();
+        String code = sysApp.getAppCode();
 
         // 该应用下有菜单，则不能删除
         boolean hasMenu = menuApi.hasMenu(code);
@@ -126,15 +126,15 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         HashSet<SimpleDict> simpleDicts = new HashSet<>();
 
         LambdaQueryWrapper<SysApp> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysApp::getCode, appCodes);
-        queryWrapper.select(SysApp::getCode, SysApp::getId, SysApp::getName);
+        queryWrapper.in(SysApp::getAppCode, appCodes);
+        queryWrapper.select(SysApp::getAppCode, SysApp::getAppId, SysApp::getAppName);
 
         List<SysApp> list = this.list(queryWrapper);
         for (SysApp sysApp : list) {
             SimpleDict simpleDict = new SimpleDict();
-            simpleDict.setId(sysApp.getId());
-            simpleDict.setCode(sysApp.getCode());
-            simpleDict.setName(sysApp.getName());
+            simpleDict.setId(sysApp.getAppId());
+            simpleDict.setCode(sysApp.getAppCode());
+            simpleDict.setName(sysApp.getAppName());
             simpleDicts.add(simpleDict);
         }
 
@@ -148,7 +148,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
      * @date 2020/3/26 9:56
      */
     private SysApp querySysApp(SysAppRequest sysAppRequest) {
-        SysApp sysApp = this.getById(sysAppRequest.getId());
+        SysApp sysApp = this.getById(sysAppRequest.getAppId());
         if (ObjectUtil.isNull(sysApp)) {
             throw new ServiceException(AppExceptionEnum.APP_NOT_EXIST);
         }
@@ -170,7 +170,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
 
         // 排除自己
         if (excludeSelf) {
-            appQueryWrapperByActive.ne(SysApp::getId, sysAppRequest.getId());
+            appQueryWrapperByActive.ne(SysApp::getAppId, sysAppRequest.getAppId());
         }
 
         int countByActive = this.count(appQueryWrapperByActive);
@@ -191,18 +191,18 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         LambdaQueryWrapper<SysApp> queryWrapper = new LambdaQueryWrapper<>();
         if (ObjectUtil.isNotNull(sysAppRequest)) {
             // 根据id查询
-            if (ObjectUtil.isNotEmpty(sysAppRequest.getId())) {
-                queryWrapper.eq(SysApp::getId, sysAppRequest.getId());
+            if (ObjectUtil.isNotEmpty(sysAppRequest.getAppId())) {
+                queryWrapper.eq(SysApp::getAppId, sysAppRequest.getAppId());
             }
 
             // 根据名称模糊查询
-            if (ObjectUtil.isNotEmpty(sysAppRequest.getName())) {
-                queryWrapper.like(SysApp::getName, sysAppRequest.getName());
+            if (ObjectUtil.isNotEmpty(sysAppRequest.getAppName())) {
+                queryWrapper.like(SysApp::getAppName, sysAppRequest.getAppName());
             }
 
             // 根据编码模糊查询
-            if (ObjectUtil.isNotEmpty(sysAppRequest.getCode())) {
-                queryWrapper.like(SysApp::getCode, sysAppRequest.getCode());
+            if (ObjectUtil.isNotEmpty(sysAppRequest.getAppCode())) {
+                queryWrapper.like(SysApp::getAppCode, sysAppRequest.getAppCode());
             }
         }
 

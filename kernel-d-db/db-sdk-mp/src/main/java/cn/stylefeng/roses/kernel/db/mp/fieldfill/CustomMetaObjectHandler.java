@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.db.mp.fieldfill;
 
-import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.ReflectionException;
@@ -64,7 +64,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     private Long getUserUniqueId() {
 
         try {
-            return LoginContext.me().getLoginUser().getId();
+            return LoginContext.me().getLoginUser().getUserId();
         } catch (Exception e) {
             //如果获取不到就返回-1
             return -1L;

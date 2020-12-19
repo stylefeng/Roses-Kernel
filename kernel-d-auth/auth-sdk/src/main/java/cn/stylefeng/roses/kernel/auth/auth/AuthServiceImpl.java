@@ -158,7 +158,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         LoginUser loginUser = userValidateInfo.getLoginUser();
 
         // 6.生成用户的token
-        DefaultJwtPayload defaultJwtPayload = new DefaultJwtPayload(loginUser.getId(), loginUser.getAccount(), loginRequest.getRememberMe());
+        DefaultJwtPayload defaultJwtPayload = new DefaultJwtPayload(loginUser.getUserId(), loginUser.getAccount(), loginRequest.getRememberMe());
         String jwtToken = JwtContext.me().generateTokenDefaultPayload(defaultJwtPayload);
 
         synchronized (SESSION_OPERATE_LOCK) {
@@ -175,7 +175,7 @@ public class AuthServiceImpl implements AuthServiceApi {
 
         // 9.更新用户登录时间和ip
         String ip = HttpServletUtil.getRequestClientIp(HttpServletUtil.getRequest());
-        userServiceApi.updateUserLoginInfo(loginUser.getId(), new Date(), ip);
+        userServiceApi.updateUserLoginInfo(loginUser.getUserId(), new Date(), ip);
 
         // 10.组装返回结果
         return new LoginResponse(loginUser, jwtToken);

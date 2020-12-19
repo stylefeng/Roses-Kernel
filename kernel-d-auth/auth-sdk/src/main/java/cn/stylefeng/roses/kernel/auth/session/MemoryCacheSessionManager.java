@@ -50,7 +50,7 @@ public class MemoryCacheSessionManager implements SessionManagerApi {
         loginUserCache.put(getTokenKey(token), loginUser);
 
         // 装配用户token的缓存
-        String userIdKey = getUserIdKey(loginUser.getId());
+        String userIdKey = getUserIdKey(loginUser.getUserId());
         Set<String> theUserTokens = loginTokenCache.get(userIdKey);
         if (theUserTokens == null) {
             HashSet<String> tempUserTokens = new HashSet<>();
@@ -74,7 +74,7 @@ public class MemoryCacheSessionManager implements SessionManagerApi {
 
         // 删除用户id对应token的缓存
         if (loginUser != null) {
-            Long userId = loginUser.getId();
+            Long userId = loginUser.getUserId();
             Set<String> userTokens = loginTokenCache.get(getUserIdKey(userId));
             if (userTokens != null) {
                 userTokens.remove(token);
@@ -102,7 +102,7 @@ public class MemoryCacheSessionManager implements SessionManagerApi {
         }
 
         // 获取用户id
-        Long userId = session.getId();
+        Long userId = session.getUserId();
 
         // 设置用户id对应的token列表为参数token
         HashSet<String> tokenSet = new HashSet<>();

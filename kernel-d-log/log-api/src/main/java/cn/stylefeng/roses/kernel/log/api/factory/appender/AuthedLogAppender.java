@@ -29,7 +29,7 @@ public class AuthedLogAppender {
 
             // 填充登录用户的userId
             LoginUser loginUser = LoginContext.me().getLoginUser();
-            logRecordDTO.setUserId(loginUser.getId());
+            logRecordDTO.setUserId(loginUser.getUserId());
         } catch (Exception ignored) {
             // 获取不到用户登录信息，就不填充
         }

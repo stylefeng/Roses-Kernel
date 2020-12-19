@@ -43,7 +43,9 @@ import cn.stylefeng.roses.kernel.system.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.constants.SymbolConstant;
 import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuExceptionEnum;
+import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.tree.LoginMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.tree.MenuBaseTreeNode;
@@ -149,6 +151,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<LoginMenuTreeNode> getAppMenusAntDesign(String appCode) {
 
         List<Long> menuIdList = getCurrentUserMenuIds();
+
+        // 当前用户没有菜单
+        if (menuIdList.isEmpty()) {
+            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_HAVE_MENUS);
+        }
 
         // 获取菜单列表
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
