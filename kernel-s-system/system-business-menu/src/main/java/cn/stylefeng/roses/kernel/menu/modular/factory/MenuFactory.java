@@ -25,11 +25,11 @@ public class MenuFactory {
      */
     public static MenuBaseTreeNode parseMenuBaseTreeNode(SysMenu sysMenu) {
         MenuBaseTreeNode menuTreeNode = new MenuBaseTreeNode();
-        menuTreeNode.setId(sysMenu.getId());
-        menuTreeNode.setParentId(sysMenu.getPid());
-        menuTreeNode.setValue(String.valueOf(sysMenu.getId()));
-        menuTreeNode.setTitle(sysMenu.getName());
-        menuTreeNode.setWeight(sysMenu.getSort());
+        menuTreeNode.setId(sysMenu.getMenuId());
+        menuTreeNode.setParentId(sysMenu.getMenuParentId());
+        menuTreeNode.setValue(String.valueOf(sysMenu.getMenuId()));
+        menuTreeNode.setTitle(sysMenu.getMenuName());
+        menuTreeNode.setWeight(sysMenu.getMenuSort());
         return menuTreeNode;
     }
 
@@ -44,13 +44,13 @@ public class MenuFactory {
         sysMenuList.forEach(sysMenu -> {
             LoginMenuTreeNode loginMenuTreeNode = new LoginMenuTreeNode();
             loginMenuTreeNode.setComponent(sysMenu.getComponent());
-            loginMenuTreeNode.setId(sysMenu.getId());
-            loginMenuTreeNode.setName(sysMenu.getCode());
+            loginMenuTreeNode.setId(sysMenu.getMenuId());
+            loginMenuTreeNode.setName(sysMenu.getMenuCode());
             loginMenuTreeNode.setPath(sysMenu.getRouter());
-            loginMenuTreeNode.setPid(sysMenu.getPid());
+            loginMenuTreeNode.setPid(sysMenu.getMenuParentId());
             LoginMenuTreeNode.Meta mateItem = new LoginMenuTreeNode().new Meta();
             mateItem.setIcon(sysMenu.getIcon());
-            mateItem.setTitle(sysMenu.getName());
+            mateItem.setTitle(sysMenu.getMenuName());
             mateItem.setLink(sysMenu.getLinkUrl());
 
             // 是否可见

@@ -24,44 +24,55 @@ public class SysMenuRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "id不能为空，请检查id参数", groups = {edit.class, delete.class, detail.class})
-    private Long id;
+    @NotNull(message = "menuId不能为空", groups = {edit.class, delete.class, detail.class})
+    private Long menuId;
 
     /**
      * 父id
      */
-    @NotNull(message = "pid不能为空，请检查pid参数", groups = {add.class, edit.class})
-    private Long pid;
+    @NotNull(message = "menuParentId不能为空", groups = {add.class, edit.class})
+    private Long menuParentId;
 
     /**
-     * 名称
+     * 菜单名称
      */
-    @NotBlank(message = "名称不能为空，请检查name参数", groups = {add.class, edit.class})
+    @NotBlank(message = "菜单名称不能为空", groups = {add.class, edit.class})
     @TableUniqueValue(
-            message = "名称存在重复，请检查name参数",
+            message = "菜单名称存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_menu",
-            columnName = "name")
-    private String name;
+            columnName = "menu_name")
+    private String menuName;
 
     /**
-     * 编码
+     * 菜单的编码
      */
-    @NotBlank(message = "编码不能为空，请检查code参数", groups = {add.class, edit.class})
+    @NotBlank(message = "菜单的编码不能为空", groups = {add.class, edit.class})
     @TableUniqueValue(
-            message = "编码存在重复，请检查code参数",
+            message = "菜单的编码不能为空",
             groups = {add.class, edit.class},
             tableName = "sys_menu",
-            columnName = "code")
-    private String code;
+            columnName = "menu_code")
+    private String menuCode;
 
     /**
-     * 菜单类型（字典 0目录 1菜单 2按钮）
+     * 应用分类（应用编码）
      */
-    @NotNull(message = "菜单类型不能为空，请检查type参数", groups = {add.class, edit.class})
-    @Min(value = 0, message = "菜单类型格式错误，请检查type参数", groups = {add.class, edit.class})
-    @Max(value = 2, message = "菜单类型格式错误，请检查type参数", groups = {add.class, edit.class})
-    private Integer type;
+    @NotBlank(message = "应用分类不能为空", groups = {add.class, edit.class, getAppMenus.class})
+    private String appCode;
+
+    /**
+     * 是否可见（Y-是，N-否）
+     */
+    @NotBlank(message = "是否可见不能为空", groups = {add.class, edit.class})
+    @FlagValue(message = "是否可见格式错误，正确格式应该Y或者N，请检查visible参数", groups = {add.class, edit.class})
+    private String visible;
+
+    /**
+     * 排序
+     */
+    @NotNull(message = "排序不能为空", groups = {add.class, edit.class})
+    private Integer menuSort;
 
     /**
      * 图标
@@ -79,54 +90,16 @@ public class SysMenuRequest extends BaseRequest {
     private String component;
 
     /**
-     * 权限标识
+     * 外部链接打开方式：1-内置外链，2-新页面外链
      */
-    private String permission;
+    @Min(value = 1, message = "打开方式格式错误，请检查openType参数", groups = {add.class, edit.class})
+    @Max(value = 2, message = "打开方式格式错误，请检查openType参数", groups = {add.class, edit.class})
+    private Integer linkOpenType;
 
     /**
-     * 应用分类（应用编码）
+     * 外部链接地址
      */
-    @NotBlank(message = "应用分类不能为空，请检查appCode参数", groups = {add.class, edit.class, getAppMenus.class})
-    private String appCode;
-
-    /**
-     * 打开方式（字典 0无 1组件 2内链 3外链）
-     */
-    @NotNull(message = "打开方式不能为空，请检查openType参数", groups = {add.class, edit.class})
-    @Min(value = 0, message = "打开方式格式错误，请检查openType参数", groups = {add.class, edit.class})
-    @Max(value = 3, message = "打开方式格式错误，请检查openType参数", groups = {add.class, edit.class})
-    private Integer openType;
-
-    /**
-     * 是否可见（Y-是，N-否）
-     */
-    @NotBlank(message = "是否可见不能为空，请检查visible参数", groups = {add.class, edit.class})
-    @FlagValue(message = "是否可见格式错误，正确格式应该Y或者N，请检查visible参数", groups = {add.class, edit.class})
-    private String visible;
-
-    /**
-     * 内链地址
-     */
-    private String link;
-
-    /**
-     * 重定向地址
-     */
-    private String redirect;
-
-    /**
-     * 权重（字典 1系统权重 2业务权重）
-     */
-    @NotNull(message = "权重不能为空，请检查weight参数", groups = {add.class, edit.class})
-    @Min(value = 0, message = "权重格式错误，请检查weight参数", groups = {add.class, edit.class})
-    @Max(value = 2, message = "权重格式错误，请检查weight参数", groups = {add.class, edit.class})
-    private Integer weight;
-
-    /**
-     * 排序
-     */
-    @NotNull(message = "排序不能为空，请检查sort参数", groups = {add.class, edit.class})
-    private Integer sort;
+    private String linkUrl;
 
     /**
      * 备注

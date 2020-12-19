@@ -27,14 +27,11 @@ package cn.stylefeng.roses.kernel.menu.modular.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
-import cn.stylefeng.roses.kernel.menu.modular.factory.MenuFactory;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
+import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
+import cn.stylefeng.roses.kernel.menu.modular.factory.MenuFactory;
 import cn.stylefeng.roses.kernel.menu.modular.mapper.SysMenuMapper;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
@@ -50,11 +47,13 @@ import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.tree.LoginMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.tree.MenuBaseTreeNode;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -81,8 +80,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         BeanUtil.copyProperties(sysMenuRequest, sysMenu);
 
         // 组装pids
-        String newPids = createPids(sysMenuRequest.getPid());
-        sysMenu.setPids(newPids);
+        String newPids = createPids(sysMenuRequest.getMenuParentId());
+        sysMenu.setMenuPids(newPids);
 
         // 设置启用状态
         sysMenu.setStatusFlag(StatusEnum.ENABLE.getCode());
@@ -103,7 +102,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         BeanUtil.copyProperties(sysMenuRequest, oldMenu);
 
         // 设置新的pids
-        oldMenu.setPids(newPids);
+        oldMenu.setMenuPids(newPids);
 
         // 不能修改状态，用修改状态接口修改状态
         oldMenu.setStatusFlag(null);
@@ -115,7 +114,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public void delete(SysMenuRequest sysMenuRequest) {
 
-        Long id = sysMenuRequest.getId();
+        Long id = sysMenuRequest.getMenuId();
 
         // 获取所有子级的节点id
         Set<Long> childIdList = this.dbOperatorApi.findSubListByParentId(
@@ -125,7 +124,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 逻辑删除，设置删除标识
         LambdaUpdateWrapper<SysMenu> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
-                .in(SysMenu::getId, childIdList)
+                .in(SysMenu::getMenuId, childIdList)
                 .set(SysMenu::getDelFlag, YesOrNotEnum.Y.getCode());
         this.update(updateWrapper);
     }
@@ -153,11 +152,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 获取菜单列表
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysMenu::getId, menuIdList)
+        queryWrapper.in(SysMenu::getMenuId, menuIdList)
                 .eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode())
                 .eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode())
                 .eq(SysMenu::getAppCode, appCode)
-                .orderByAsc(SysMenu::getSort);
+                .orderByAsc(SysMenu::getMenuSort);
         List<SysMenu> sysMenuList = this.list(queryWrapper);
 
         // 转换成登录菜单格式
@@ -188,7 +187,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (!LoginContext.me().getSuperAdminFlag()) {
             List<Long> menuIdList = getCurrentUserMenuIds();
             if (!menuIdList.isEmpty()) {
-                wrapper.in(SysMenu::getId, menuIdList);
+                wrapper.in(SysMenu::getMenuId, menuIdList);
             }
         }
 
@@ -210,28 +209,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return !list.isEmpty();
     }
 
-    @Override
-    public List<Long> getMenuIdsByResourceCodes(List<String> resourceCodes) {
-
-        if (ObjectUtil.isEmpty(resourceCodes)) {
-            return new ArrayList<>();
-        }
-
-        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-
-        // 根据资源编码集合查询
-        queryWrapper.in(SysMenu::getResourceCode, resourceCodes);
-
-        // 查询未删除状态的
-        queryWrapper.eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode());
-
-        // 只查询菜单id
-        queryWrapper.select(SysMenu::getId);
-
-        List<SysMenu> list = this.list(queryWrapper);
-        return list.stream().map(SysMenu::getId).collect(Collectors.toList());
-    }
-
     /**
      * 获取系统菜单
      *
@@ -239,7 +216,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @date 2020/3/27 9:13
      */
     private SysMenu querySysMenu(SysMenuRequest sysMenuRequest) {
-        SysMenu sysMenu = this.getById(sysMenuRequest.getId());
+        SysMenu sysMenu = this.getById(sysMenuRequest.getMenuId());
         if (ObjectUtil.isNull(sysMenu)) {
             throw new ServiceException(SysMenuExceptionEnum.MENU_NOT_EXIST);
         }
@@ -263,7 +240,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         } else {
             //获取父菜单
             SysMenu parentMenu = this.getById(pid);
-            return parentMenu.getPids()
+            return parentMenu.getMenuPids()
                     + SymbolConstant.LEFT_SQUARE_BRACKETS + pid + SymbolConstant.RIGHT_SQUARE_BRACKETS
                     + SymbolConstant.COMMA;
         }
@@ -285,8 +262,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             }
 
             // 根据菜单名称模糊查询
-            if (ObjectUtil.isNotEmpty(sysMenuRequest.getName())) {
-                queryWrapper.like(SysMenu::getName, sysMenuRequest.getName());
+            if (ObjectUtil.isNotEmpty(sysMenuRequest.getMenuName())) {
+                queryWrapper.like(SysMenu::getMenuName, sysMenuRequest.getMenuName());
             }
         }
 
@@ -294,7 +271,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         queryWrapper.eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode());
 
         // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(SysMenu::getSort);
+        queryWrapper.orderByAsc(SysMenu::getMenuSort);
 
         return queryWrapper;
     }
@@ -334,12 +311,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     private String updateChildrenAppAndLevel(SysMenuRequest sysMenuRequest, SysMenu oldMenu) {
 
         // 本菜单旧的pids
-        Long oldPid = oldMenu.getPid();
-        String oldPids = oldMenu.getPids();
+        Long oldPid = oldMenu.getMenuParentId();
+        String oldPids = oldMenu.getMenuPids();
 
         // 生成新的pid和pids
-        Long newPid = sysMenuRequest.getPid();
-        String newPids = this.createPids(sysMenuRequest.getPid());
+        Long newPid = sysMenuRequest.getMenuParentId();
+        String newPids = this.createPids(sysMenuRequest.getMenuParentId());
 
         // 是否更新子应用的标识
         boolean updateSubAppsFlag = false;
@@ -365,7 +342,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
             // 查找所有叶子节点，包含子节点的子节点
             LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.like(SysMenu::getPids, oldMenu.getId());
+            queryWrapper.like(SysMenu::getMenuPids, oldMenu.getMenuId());
             List<SysMenu> list = this.list(queryWrapper);
 
             // 更新所有子节点的应用为当前菜单的应用
@@ -380,12 +357,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 if (updateSubPidsFlag) {
                     list.forEach(child -> {
                         // 子节点pids组成 = 当前菜单新pids + 当前菜单id + 子节点自己的pids后缀
-                        String oldParentCodesPrefix = oldPids + SymbolConstant.LEFT_SQUARE_BRACKETS + oldMenu.getId()
+                        String oldParentCodesPrefix = oldPids + SymbolConstant.LEFT_SQUARE_BRACKETS + oldMenu.getMenuId()
                                 + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
-                        String oldParentCodesSuffix = child.getPids().substring(oldParentCodesPrefix.length());
-                        String menuParentCodes = newPids + SymbolConstant.LEFT_SQUARE_BRACKETS + oldMenu.getId()
+                        String oldParentCodesSuffix = child.getMenuPids().substring(oldParentCodesPrefix.length());
+                        String menuParentCodes = newPids + SymbolConstant.LEFT_SQUARE_BRACKETS + oldMenu.getMenuId()
                                 + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA + oldParentCodesSuffix;
-                        child.setPids(menuParentCodes);
+                        child.setMenuPids(menuParentCodes);
                     });
                 }
 

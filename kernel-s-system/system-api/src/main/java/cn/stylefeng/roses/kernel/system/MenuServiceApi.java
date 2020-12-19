@@ -1,7 +1,5 @@
 package cn.stylefeng.roses.kernel.system;
 
-import java.util.List;
-
 /**
  * 菜单api
  *
@@ -19,15 +17,5 @@ public interface MenuServiceApi {
      * @date 2020/11/24 21:37
      */
     boolean hasMenu(String appCode);
-
-    /**
-     * 通过资源编码集合，获取菜单的id集合
-     *
-     * @param resourceCodes 资源编码集合
-     * @return 菜单id的集合
-     * @author fengshuonan
-     * @date 2020/11/26 21:27
-     */
-    List<Long> getMenuIdsByResourceCodes(List<String> resourceCodes);
 
 }

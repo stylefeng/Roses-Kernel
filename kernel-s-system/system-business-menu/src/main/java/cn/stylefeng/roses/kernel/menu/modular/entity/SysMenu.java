@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.menu.modular.entity;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,41 +25,41 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     /**
      * 主键
      */
-    @TableId("id")
-    private Long id;
+    @TableId("menu_id")
+    private Long menuId;
 
     /**
      * 父id，顶级节点的父id是0
      */
-    @TableField("pid")
-    private Long pid;
+    @TableField("menu_parent_id")
+    private Long menuParentId;
 
     /**
      * 父id集合，中括号包住，逗号分隔
      */
-    @TableField("pids")
-    private String pids;
+    @TableField("menu_pids")
+    private String menuPids;
 
     /**
-     * 名称
+     * 菜单的名称
      */
-    @TableField("name")
-    private String name;
+    @TableField("menu_name")
+    private String menuName;
 
     /**
      * 菜单的编码
      */
-    @TableField("code")
-    private String code;
+    @TableField("menu_code")
+    private String menuCode;
 
     /**
-     * 应用分类（应用编码）
+     * 应用编码
      */
     @TableField("app_code")
     private String appCode;
 
     /**
-     * 是否可见（Y-是，N-否）
+     * 是否可见：Y-是，N-否
      */
     @TableField("visible")
     private String visible;
@@ -67,20 +67,14 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     /**
      * 排序
      */
-    @TableField("sort")
-    private BigDecimal sort;
+    @TableField("menu_sort")
+    private BigDecimal menuSort;
 
     /**
-     * 状态（1-启用，2-禁用）
+     * 状态：1-启用，2-禁用
      */
     @TableField("status_flag")
     private Integer statusFlag;
-
-    /**
-     * 关联的资源的编码
-     */
-    @TableField("resource_code")
-    private String resourceCode;
 
     /**
      * 图标
@@ -101,7 +95,7 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     private String component;
 
     /**
-     * 外部链接打开方式（1内置外链 2新页面外链）
+     * 外部链接打开方式：1-内置外链，2-新页面外链
      */
     @TableField("link_open_type")
     private Integer linkOpenType;
@@ -119,7 +113,7 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     private String remark;
 
     /**
-     * 是否删除，Y-被删除，N-未删除
+     * 是否删除：Y-被删除，N-未删除
      */
     @TableField("del_flag")
     private String delFlag;
@@ -132,12 +126,12 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
 
     @Override
     public String getNodeId() {
-        return id.toString();
+        return menuId.toString();
     }
 
     @Override
     public String getNodeParentId() {
-        return pid.toString();
+        return menuParentId.toString();
     }
 
     @Override

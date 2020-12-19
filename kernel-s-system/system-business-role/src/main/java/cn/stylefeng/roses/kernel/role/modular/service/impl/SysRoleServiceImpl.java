@@ -27,9 +27,6 @@ package cn.stylefeng.roses.kernel.role.modular.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
@@ -39,9 +36,11 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.role.modular.entity.SysRole;
 import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleDataScope;
+import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleMenu;
 import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleResource;
 import cn.stylefeng.roses.kernel.role.modular.mapper.SysRoleMapper;
 import cn.stylefeng.roses.kernel.role.modular.service.SysRoleDataScopeService;
+import cn.stylefeng.roses.kernel.role.modular.service.SysRoleMenuService;
 import cn.stylefeng.roses.kernel.role.modular.service.SysRoleResourceService;
 import cn.stylefeng.roses.kernel.role.modular.service.SysRoleService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
@@ -56,6 +55,9 @@ import cn.stylefeng.roses.kernel.system.exception.enums.SysRoleExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,6 +87,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private MenuServiceApi menuServiceApi;
+
+    @Resource
+    private SysRoleMenuService roleMenuService;
 
     @Override
     public void add(SysRoleRequest sysRoleRequest) {
@@ -324,11 +329,21 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<Long> getMenuIdsByRoleIds(List<Long> roleIds) {
 
-        // 获取角色绑定的资源
-        List<String> roleResourceIdList = this.getRoleResourceList(roleIds);
+        if (roleIds == null || roleIds.isEmpty()) {
+            return new ArrayList<>();
+        }
 
-        // 获取资源对应的菜单
-        return this.menuServiceApi.getMenuIdsByResourceCodes(roleResourceIdList);
+        // 获取角色绑定的菜单
+        LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(SysRoleMenu::getRoleId, roleIds);
+        queryWrapper.select(SysRoleMenu::getMenuId);
+
+        List<SysRoleMenu> roleMenus = this.roleMenuService.list(queryWrapper);
+        if (roleMenus == null || roleMenus.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return roleMenus.stream().map(SysRoleMenu::getMenuId).collect(Collectors.toList());
     }
 
     @Override
