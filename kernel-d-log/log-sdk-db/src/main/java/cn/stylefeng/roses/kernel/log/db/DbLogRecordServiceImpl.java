@@ -87,8 +87,8 @@ public class DbLogRecordServiceImpl implements LogRecordApi {
             BeanUtil.copyProperties(logRecordDTO, sysLog);
 
             // 日志名称为空的话则获取默认日志名称
-            if (StrUtil.isEmpty(sysLog.getName())) {
-                sysLog.setName(LogConstants.LOG_DEFAULT_NAME);
+            if (StrUtil.isEmpty(sysLog.getLogName())) {
+                sysLog.setLogName(LogConstants.LOG_DEFAULT_NAME);
             }
 
             // 服务名称为空的话则获取默认服务名称
@@ -97,9 +97,10 @@ public class DbLogRecordServiceImpl implements LogRecordApi {
             }
 
             // 如果操作时间为空的话插入当前时间
-            if (sysLog.getDateTime() == null) {
-                sysLog.setDateTime(new Date());
+            if (sysLog.getCreateTime() == null) {
+                sysLog.setCreateTime(new Date());
             }
+
             return sysLog;
         }).collect(Collectors.toList());
 

@@ -34,19 +34,9 @@ public class LogManagerParam extends BaseRequest {
     private String endDateTime;
 
     /**
-     * 第几页，从1开始
-     */
-    private Integer pageNo;
-
-    /**
-     * 每页大小
-     */
-    private Integer pageSize;
-
-    /**
      * 日志的名称，一般为业务名称
      */
-    private String name;
+    private String logName;
 
     /**
      * 服务名称，一般为spring.application.name
@@ -58,11 +48,6 @@ public class LogManagerParam extends BaseRequest {
      * 当前服务器的ip
      */
     private String serverIp;
-
-    /**
-     * 客户端请求的token
-     */
-    private String token;
 
     /**
      * 客户端请求的用户id
@@ -77,6 +62,6 @@ public class LogManagerParam extends BaseRequest {
     /**
      * 当前用户请求的url
      */
-    private String url;
+    private String requestUrl;
 
 }

@@ -5,15 +5,15 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.log.db.entity.SysLog;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerParam;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
+import cn.stylefeng.roses.kernel.log.db.entity.SysLog;
 import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,14 +103,15 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
      * @date 2020/11/3 11:22
      */
     private void createQueryCondition(LogManagerParam logManagerParam, LambdaQueryWrapper<SysLog> sysLogLambdaQueryWrapper) {
+
         // 设置查询条件的起始时间和结束时间
-        sysLogLambdaQueryWrapper.between(SysLog::getDateTime, logManagerParam.getBeginDateTime(), logManagerParam.getEndDateTime());
+        sysLogLambdaQueryWrapper.between(SysLog::getCreateTime, logManagerParam.getBeginDateTime(), logManagerParam.getEndDateTime());
 
         // 根据日志名称查询
-        String name = logManagerParam.getName();
+        String name = logManagerParam.getLogName();
         if (StrUtil.isNotEmpty(name)) {
             sysLogLambdaQueryWrapper.and(q -> {
-                q.eq(SysLog::getName, name);
+                q.eq(SysLog::getLogName, name);
             });
         }
 
@@ -127,14 +128,6 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
         if (StrUtil.isNotEmpty(serverIp)) {
             sysLogLambdaQueryWrapper.and(q -> {
                 q.eq(SysLog::getServerIp, serverIp);
-            });
-        }
-
-        // 根据客户端请求的token查询
-        String token = logManagerParam.getToken();
-        if (StrUtil.isNotEmpty(token)) {
-            sysLogLambdaQueryWrapper.and(q -> {
-                q.eq(SysLog::getToken, token);
             });
         }
 
@@ -155,15 +148,15 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
         }
 
         // 根据当前用户请求的url查询
-        String url = logManagerParam.getUrl();
+        String url = logManagerParam.getRequestUrl();
         if (StrUtil.isNotEmpty(clientIp)) {
             sysLogLambdaQueryWrapper.and(q -> {
-                q.like(SysLog::getUrl, url);
+                q.like(SysLog::getRequestUrl, url);
             });
         }
 
         // 根据时间倒序排序
-        sysLogLambdaQueryWrapper.orderByDesc(SysLog::getDateTime);
+        sysLogLambdaQueryWrapper.orderByDesc(SysLog::getCreateTime);
     }
 
     /**
