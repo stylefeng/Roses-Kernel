@@ -10,6 +10,7 @@ import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
 import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
+import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
 import org.springframework.context.ApplicationListener;
@@ -37,7 +38,7 @@ import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExcepti
 @Slf4j
 public class ConfigInitListener implements ApplicationListener<ApplicationContextInitializedEvent>, Ordered {
 
-    private static final String CONFIG_LIST_SQL = "select code,value from sys_config where status = ?";
+    private static final String CONFIG_LIST_SQL = "select config_code, config_value from sys_config where status_flag = ? and del_flag = ?";
 
     @Override
     public int getOrder() {
@@ -75,11 +76,11 @@ public class ConfigInitListener implements ApplicationListener<ApplicationContex
             conn = DriverManager.getConnection(dataSourceUrl, dataSourceUsername, dataSourcePassword);
 
             // 获取sys_config表的数据
-            List<Entity> entityList = SqlExecutor.query(conn, CONFIG_LIST_SQL, new EntityListHandler(), StatusEnum.ENABLE.getCode());
+            List<Entity> entityList = SqlExecutor.query(conn, CONFIG_LIST_SQL, new EntityListHandler(), StatusEnum.ENABLE.getCode(), YesOrNotEnum.N.getCode());
 
             // 将查询到的参数配置添加到缓存
             if (ObjectUtil.isNotEmpty(entityList)) {
-                entityList.forEach(sysConfig -> ConfigContext.me().putConfig(sysConfig.getStr("code"), sysConfig.getStr("value")));
+                entityList.forEach(sysConfig -> ConfigContext.me().putConfig(sysConfig.getStr("config_code"), sysConfig.getStr("config_value")));
             }
         } catch (ClassNotFoundException e) {
             log.error(">>> 初始化系统配置表失败，找不到com.mysql.cj.jdbc.Driver类", e);
