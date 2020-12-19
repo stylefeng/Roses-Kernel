@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.db.api.factory;
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.druid.pool.DruidDataSource;
 import cn.stylefeng.roses.kernel.db.api.enums.DbTypeEnum;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
+import com.alibaba.druid.pool.DruidDataSource;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @date 2020/10/16 15:59
  */
 @Slf4j
-public class DruidFactory {
+public class DruidDatasourceFactory {
 
     /**
      * 创建druid连接池

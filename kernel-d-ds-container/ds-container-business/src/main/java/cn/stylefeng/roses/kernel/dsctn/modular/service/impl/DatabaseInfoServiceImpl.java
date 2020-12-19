@@ -3,21 +3,24 @@ package cn.stylefeng.roses.kernel.dsctn.modular.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
-import cn.stylefeng.roses.kernel.dsctn.modular.factory.DruidFactory;
-import com.alibaba.druid.pool.DruidDataSource;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import cn.stylefeng.roses.kernel.db.api.factory.DruidDatasourceFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
 import cn.stylefeng.roses.kernel.dsctn.context.DataSourceContext;
+import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
+import cn.stylefeng.roses.kernel.dsctn.modular.factory.DruidPropertiesFactory;
 import cn.stylefeng.roses.kernel.dsctn.modular.mapper.DatabaseInfoMapper;
 import cn.stylefeng.roses.kernel.dsctn.modular.pojo.DatabaseInfoParam;
 import cn.stylefeng.roses.kernel.dsctn.modular.service.DatabaseInfoService;
+import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import com.alibaba.druid.pool.DruidDataSource;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,35 +54,17 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         DatabaseInfo entity = parseEntity(databaseInfoParam);
         this.save(entity);
 
-        // 先判断context中是否有了这个数据源
-        DataSource dataSource = DataSourceContext.getDataSources().get(databaseInfoParam.getDbName());
-        if (dataSource != null) {
-            String userTip = StrUtil.format(DATASOURCE_NAME_REPEAT.getUserTip(), databaseInfoParam.getDbName());
-            throw new DatasourceContainerException(DATASOURCE_NAME_REPEAT, userTip);
-        }
-
-        // 往上下文中添加数据源
-        DruidProperties druidProperties = DruidFactory.createDruidProperties(entity);
-        DruidDataSource druidDataSource = cn.stylefeng.roses.kernel.db.api.factory.DruidFactory.createDruidDataSource(druidProperties);
-        DataSourceContext.addDataSource(databaseInfoParam.getDbName(), druidDataSource, druidProperties);
-
-        // 初始化数据源
-        try {
-            druidDataSource.init();
-        } catch (SQLException exception) {
-            log.error("初始化数据源异常！", exception);
-            String userTip = StrUtil.format(INIT_DATASOURCE_ERROR.getUserTip(), exception.getMessage());
-            throw new DatasourceContainerException(INIT_DATASOURCE_ERROR, userTip);
-        }
+        // 往数据源容器文中添加数据源
+        addDataSourceToContext(entity, false);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(DatabaseInfoParam databaseInfoParam) {
 
-        DatabaseInfo oldEntity = this.getById(databaseInfoParam.getId());
+        DatabaseInfo oldEntity = this.getById(databaseInfoParam.getDbId());
         if (oldEntity == null) {
-            String userTip = StrUtil.format(EDIT_DATASOURCE_ERROR.getUserTip(), databaseInfoParam.getId());
+            String userTip = StrUtil.format(EDIT_DATASOURCE_ERROR.getUserTip(), databaseInfoParam.getDbId());
             throw new DatasourceContainerException(EDIT_DATASOURCE_ERROR, userTip);
         }
 
@@ -96,32 +81,17 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         BeanUtil.copyProperties(databaseInfoParam, oldEntity);
         this.updateById(oldEntity);
 
-        // 删除容器中的数据源记录
-        DataSourceContext.removeDataSource(oldEntity.getDbName());
-
-        // 往上下文中添加数据源
-        DruidProperties druidProperties = DruidFactory.createDruidProperties(oldEntity);
-        DruidDataSource druidDataSource = cn.stylefeng.roses.kernel.db.api.factory.DruidFactory.createDruidDataSource(druidProperties);
-        DataSourceContext.addDataSource(databaseInfoParam.getDbName(), druidDataSource, druidProperties);
-
-        // 初始化数据源
-        try {
-            druidDataSource.init();
-        } catch (SQLException exception) {
-            log.error("初始化数据源异常！", exception);
-            String userTip = StrUtil.format(INIT_DATASOURCE_ERROR.getUserTip(), exception.getMessage());
-            throw new DatasourceContainerException(INIT_DATASOURCE_ERROR, userTip);
-        }
-
+        // 往数据源容器文中添加数据源
+        addDataSourceToContext(oldEntity, true);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(DatabaseInfoParam param) {
+    public void delete(DatabaseInfoParam databaseInfoParam) {
 
-        DatabaseInfo databaseInfo = this.getById(param.getId());
+        DatabaseInfo databaseInfo = this.getById(databaseInfoParam.getDbId());
         if (databaseInfo == null) {
-            String userTip = StrUtil.format(DELETE_DATASOURCE_NOT_EXISTED_ERROR.getUserTip(), param.getId());
+            String userTip = StrUtil.format(DELETE_DATASOURCE_NOT_EXISTED_ERROR.getUserTip(), databaseInfoParam.getDbId());
             throw new DatasourceContainerException(DELETE_DATASOURCE_NOT_EXISTED_ERROR, userTip);
         }
 
@@ -136,7 +106,10 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         }
 
         // 删除库中的数据源记录
-        this.removeById(param.getId());
+        LambdaUpdateWrapper<DatabaseInfo> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(DatabaseInfo::getDelFlag, YesOrNotEnum.Y.getCode());
+        updateWrapper.eq(DatabaseInfo::getDbId, databaseInfoParam.getDbId());
+        this.update(updateWrapper);
 
         // 删除容器中的数据源记录
         DataSourceContext.removeDataSource(databaseInfo.getDbName());
@@ -150,6 +123,9 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         if (ObjectUtil.isNotNull(databaseInfoParam) && ObjectUtil.isNotEmpty(databaseInfoParam.getDbName())) {
             queryWrapper.like(DatabaseInfo::getDbName, databaseInfoParam.getDbName());
         }
+
+        // 查询没被删除的
+        queryWrapper.eq(DatabaseInfo::getDelFlag, YesOrNotEnum.N);
 
         // 查询分页结果
         Page<DatabaseInfo> result = this.page(PageFactory.defaultPage(), queryWrapper);
@@ -198,6 +174,42 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         DatabaseInfo entity = new DatabaseInfo();
         BeanUtil.copyProperties(param, entity);
         return entity;
+    }
+
+    /**
+     * 往数据源容器文中添加数据源
+     *
+     * @param databaseInfo 数据库信息实体
+     * @author fengshuonan
+     * @date 2020/12/19 16:16
+     */
+    private void addDataSourceToContext(DatabaseInfo databaseInfo, Boolean removeOldDatasource) {
+
+        // 删除容器中的数据源记录
+        if (removeOldDatasource) {
+            DataSourceContext.removeDataSource(databaseInfo.getDbName());
+        } else {
+            // 先判断context中是否有了这个数据源
+            DataSource dataSource = DataSourceContext.getDataSources().get(databaseInfo.getDbName());
+            if (dataSource != null) {
+                String userTip = StrUtil.format(DATASOURCE_NAME_REPEAT.getUserTip(), databaseInfo.getDbName());
+                throw new DatasourceContainerException(DATASOURCE_NAME_REPEAT, userTip);
+            }
+        }
+
+        // 往数据源容器文中添加数据源
+        DruidProperties druidProperties = DruidPropertiesFactory.createDruidProperties(databaseInfo);
+        DruidDataSource druidDataSource = DruidDatasourceFactory.createDruidDataSource(druidProperties);
+        DataSourceContext.addDataSource(databaseInfo.getDbName(), druidDataSource, druidProperties);
+
+        // 初始化数据源
+        try {
+            druidDataSource.init();
+        } catch (SQLException exception) {
+            log.error("初始化数据源异常！", exception);
+            String userTip = StrUtil.format(INIT_DATASOURCE_ERROR.getUserTip(), exception.getMessage());
+            throw new DatasourceContainerException(INIT_DATASOURCE_ERROR, userTip);
+        }
     }
 
 }

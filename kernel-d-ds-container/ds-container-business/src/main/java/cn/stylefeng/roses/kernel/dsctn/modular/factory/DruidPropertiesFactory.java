@@ -9,7 +9,7 @@ import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
  * @author fengshuonan
  * @date 2020/11/1 21:44
  */
-public class DruidFactory {
+public class DruidPropertiesFactory {
 
     /**
      * 创建druid配置
@@ -20,7 +20,7 @@ public class DruidFactory {
     public static DruidProperties createDruidProperties(DatabaseInfo databaseInfo) {
         DruidProperties druidProperties = new DruidProperties();
         druidProperties.setDriverClassName(databaseInfo.getJdbcDriver());
-        druidProperties.setUsername(databaseInfo.getUserName());
+        druidProperties.setUsername(databaseInfo.getUsername());
         druidProperties.setPassword(databaseInfo.getPassword());
         druidProperties.setUrl(databaseInfo.getJdbcUrl());
         return druidProperties;

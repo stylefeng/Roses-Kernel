@@ -2,11 +2,11 @@ package cn.stylefeng.roses.kernel.dsctn.listener;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.dsctn.context.DataSourceContext;
-import com.alibaba.druid.pool.DruidDataSource;
-import cn.stylefeng.roses.kernel.db.api.factory.DruidFactory;
+import cn.stylefeng.roses.kernel.db.api.factory.DruidDatasourceFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
+import cn.stylefeng.roses.kernel.dsctn.context.DataSourceContext;
+import com.alibaba.druid.pool.DruidDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
 import org.springframework.context.ApplicationListener;
@@ -64,7 +64,7 @@ public class DataSourceInitListener implements ApplicationListener<ApplicationCo
         druidProperties.setPassword(dataSourcePassword);
 
         // 创建主数据源
-        DruidDataSource druidDataSource = DruidFactory.createDruidDataSource(druidProperties);
+        DruidDataSource druidDataSource = DruidDatasourceFactory.createDruidDataSource(druidProperties);
 
         // 初始化数据源容器
         try {

@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.dsctn.context;
 
 
+import cn.stylefeng.roses.kernel.db.api.factory.DruidDatasourceFactory;
+import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import cn.stylefeng.roses.kernel.dsctn.persist.DataBaseInfoPersistence;
 import com.alibaba.druid.pool.DruidDataSource;
-import cn.stylefeng.roses.kernel.db.api.factory.DruidFactory;
-import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -136,7 +136,7 @@ public class DataSourceContext {
         //添加到全局配置里
         DATA_SOURCES_CONF.put(dataSourceName, druidProperties);
 
-        return DruidFactory.createDruidDataSource(druidProperties);
+        return DruidDatasourceFactory.createDruidDataSource(druidProperties);
     }
 
 }

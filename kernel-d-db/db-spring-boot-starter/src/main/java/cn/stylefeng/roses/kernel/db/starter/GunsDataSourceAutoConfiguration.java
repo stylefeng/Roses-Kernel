@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.db.starter;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import cn.stylefeng.roses.kernel.db.api.factory.DruidFactory;
+import cn.stylefeng.roses.kernel.db.api.factory.DruidDatasourceFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
+import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -32,7 +32,7 @@ public class GunsDataSourceAutoConfiguration {
     @Bean(initMethod = "init")
     @ConditionalOnMissingBean(DataSource.class)
     public DruidDataSource druidDataSource(DruidProperties druidProperties) {
-        return DruidFactory.createDruidDataSource(druidProperties);
+        return DruidDatasourceFactory.createDruidDataSource(druidProperties);
     }
 
 }

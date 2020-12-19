@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.dsctn.modular.entity;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,8 +24,8 @@ public class DatabaseInfo extends BaseEntity {
     /**
      * 主键id
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "db_id", type = IdType.ASSIGN_ID)
+    private Long dbId;
 
     /**
      * 数据库名称（英文名称）
@@ -40,10 +40,16 @@ public class DatabaseInfo extends BaseEntity {
     private String jdbcDriver;
 
     /**
+     * jdbc的url
+     */
+    @TableField("jdbc_url")
+    private String jdbcUrl;
+
+    /**
      * 数据库连接的账号
      */
-    @TableField("user_name")
-    private String userName;
+    @TableField("username")
+    private String username;
 
     /**
      * 数据库连接密码
@@ -52,15 +58,15 @@ public class DatabaseInfo extends BaseEntity {
     private String password;
 
     /**
-     * jdbc的url
-     */
-    @TableField("jdbc_url")
-    private String jdbcUrl;
-
-    /**
      * 备注，摘要
      */
     @TableField("remarks")
     private String remarks;
+
+    /**
+     * 是否删除，Y-被删除，N-未删除
+     */
+    @TableField("del_flag")
+    private String delFlag;
 
 }
