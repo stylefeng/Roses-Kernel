@@ -6,8 +6,8 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.timer.modular.service.SysTimersService;
 import cn.stylefeng.roses.kernel.timer.modular.param.SysTimersParam;
+import cn.stylefeng.roses.kernel.timer.modular.service.SysTimersService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,39 +29,6 @@ public class SysTimersController {
     private SysTimersService sysTimersService;
 
     /**
-     * 分页查询定时任务
-     *
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    @GetResource(name = "分页查询定时任务", path = "/sysTimers/page")
-    public ResponseData page(SysTimersParam sysTimersParam) {
-        return new SuccessResponseData(sysTimersService.page(sysTimersParam));
-    }
-
-    /**
-     * 获取全部定时任务
-     *
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    @GetResource(name = "获取全部定时任务", path = "/sysTimers/list")
-    public ResponseData list(SysTimersParam sysTimersParam) {
-        return new SuccessResponseData(sysTimersService.list(sysTimersParam));
-    }
-
-    /**
-     * 查看详情定时任务
-     *
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    @GetResource(name = "查看详情定时任务", path = "/sysTimers/detail")
-    public ResponseData detail(@Validated(SysTimersParam.detail.class) SysTimersParam sysTimersParam) {
-        return new SuccessResponseData(sysTimersService.detail(sysTimersParam));
-    }
-
-    /**
      * 添加定时任务
      *
      * @author stylefeng
@@ -70,18 +37,6 @@ public class SysTimersController {
     @PostResource(name = "添加定时任务", path = "/sysTimers/add")
     public ResponseData add(@RequestBody @Validated(SysTimersParam.add.class) SysTimersParam sysTimersParam) {
         sysTimersService.add(sysTimersParam);
-        return new SuccessResponseData();
-    }
-
-    /**
-     * 删除定时任务
-     *
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    @PostResource(name = "删除定时任务", path = "/sysTimers/delete")
-    public ResponseData delete(@RequestBody @Validated(SysTimersParam.delete.class) SysTimersParam sysTimersParam) {
-        sysTimersService.delete(sysTimersParam);
         return new SuccessResponseData();
     }
 
@@ -98,15 +53,15 @@ public class SysTimersController {
     }
 
     /**
-     * 获取系统的所有任务列表
+     * 删除定时任务
      *
      * @author stylefeng
-     * @date 2020/7/1 14:34
+     * @date 2020/6/30 18:26
      */
-    @PostResource(name = "获取系统的所有任务列表", path = "/sysTimers/getActionClasses")
-    public ResponseData getActionClasses() {
-        List<String> actionClasses = sysTimersService.getActionClasses();
-        return new SuccessResponseData(actionClasses);
+    @PostResource(name = "删除定时任务", path = "/sysTimers/delete")
+    public ResponseData delete(@RequestBody @Validated(SysTimersParam.delete.class) SysTimersParam sysTimersParam) {
+        sysTimersService.delete(sysTimersParam);
+        return new SuccessResponseData();
     }
 
     /**
@@ -131,6 +86,51 @@ public class SysTimersController {
     public ResponseData stop(@RequestBody @Validated(BaseRequest.groupOne.class) SysTimersParam sysTimersParam) {
         sysTimersService.stop(sysTimersParam);
         return new SuccessResponseData();
+    }
+
+    /**
+     * 查看详情定时任务
+     *
+     * @author stylefeng
+     * @date 2020/6/30 18:26
+     */
+    @GetResource(name = "查看详情定时任务", path = "/sysTimers/detail")
+    public ResponseData detail(@Validated(SysTimersParam.detail.class) SysTimersParam sysTimersParam) {
+        return new SuccessResponseData(sysTimersService.detail(sysTimersParam));
+    }
+
+    /**
+     * 分页查询定时任务
+     *
+     * @author stylefeng
+     * @date 2020/6/30 18:26
+     */
+    @GetResource(name = "分页查询定时任务", path = "/sysTimers/page")
+    public ResponseData page(SysTimersParam sysTimersParam) {
+        return new SuccessResponseData(sysTimersService.page(sysTimersParam));
+    }
+
+    /**
+     * 获取全部定时任务
+     *
+     * @author stylefeng
+     * @date 2020/6/30 18:26
+     */
+    @GetResource(name = "获取全部定时任务", path = "/sysTimers/list")
+    public ResponseData list(SysTimersParam sysTimersParam) {
+        return new SuccessResponseData(sysTimersService.list(sysTimersParam));
+    }
+
+    /**
+     * 获取系统的所有任务列表
+     *
+     * @author stylefeng
+     * @date 2020/7/1 14:34
+     */
+    @PostResource(name = "获取系统的所有任务列表", path = "/sysTimers/getActionClasses")
+    public ResponseData getActionClasses() {
+        List<String> actionClasses = sysTimersService.getActionClasses();
+        return new SuccessResponseData(actionClasses);
     }
 
 }

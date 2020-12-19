@@ -20,25 +20,25 @@ public class SysTimersParam extends BaseRequest {
     /**
      * 定时器id
      */
-    @NotNull(message = "主键id不能为空，请检查id字段", groups = {edit.class, detail.class, delete.class, groupOne.class})
-    private Long id;
+    @NotNull(message = "主键timerId不能为空", groups = {edit.class, detail.class, delete.class, groupOne.class})
+    private Long timerId;
 
     /**
      * 任务名称
      */
-    @NotBlank(message = "任务名称不能为空，请检查timerName字段", groups = {add.class, edit.class})
+    @NotBlank(message = "任务名称不能为空", groups = {add.class, edit.class})
     private String timerName;
 
     /**
      * 执行任务的class的类名（实现了TimerTaskRunner接口的类的全称）
      */
-    @NotBlank(message = "任务的class的类名不能为空，请检查actionClass字段", groups = {add.class, edit.class})
+    @NotBlank(message = "任务的class的类名不能为空", groups = {add.class, edit.class})
     private String actionClass;
 
     /**
      * 定时任务表达式
      */
-    @NotBlank(message = "定时任务表达式不能为空，请检查cron字段", groups = {add.class, edit.class})
+    @NotBlank(message = "定时任务表达式不能为空", groups = {add.class, edit.class})
     private String cron;
 
     /**

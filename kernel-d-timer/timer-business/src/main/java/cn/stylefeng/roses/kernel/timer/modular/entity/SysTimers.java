@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.timer.modular.entity;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,8 +22,8 @@ public class SysTimers extends BaseEntity {
     /**
      * 定时器id
      */
-    @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "timer_id", type = IdType.ASSIGN_ID)
+    private Long timerId;
 
     /**
      * 任务名称
@@ -32,7 +32,7 @@ public class SysTimers extends BaseEntity {
     private String timerName;
 
     /**
-     * 执行任务的class的类名（实现了TimerTaskRunner接口的类的全称）
+     * 执行任务的class的类名（实现了TimerAction接口的类的全称）
      */
     @TableField("action_class")
     private String actionClass;
@@ -44,7 +44,7 @@ public class SysTimers extends BaseEntity {
     private String cron;
 
     /**
-     * 状态（字典 1运行  2停止）
+     * 状态：1-运行，2-停止
      */
     @TableField("job_status")
     private Integer jobStatus;
@@ -54,5 +54,11 @@ public class SysTimers extends BaseEntity {
      */
     @TableField("remark")
     private String remark;
+
+    /**
+     * 是否删除：Y-被删除，N-未删除
+     */
+    @TableField("del_flag")
+    private String delFlag;
 
 }

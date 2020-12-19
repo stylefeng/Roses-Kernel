@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.timer.modular.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.timer.modular.entity.SysTimers;
 import cn.stylefeng.roses.kernel.timer.modular.param.SysTimersParam;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -14,6 +14,61 @@ import java.util.List;
  * @date 2020/6/30 18:26
  */
 public interface SysTimersService extends IService<SysTimers> {
+
+    /**
+     * 添加定时任务
+     *
+     * @param sysTimersParam 添加参数
+     * @author stylefeng
+     * @date 2020/6/30 18:26
+     */
+    void add(SysTimersParam sysTimersParam);
+
+    /**
+     * 编辑定时任务
+     *
+     * @param sysTimersParam 编辑参数
+     * @author stylefeng
+     * @date 2020/6/30 18:26
+     */
+    void edit(SysTimersParam sysTimersParam);
+
+    /**
+     * 删除定时任务
+     *
+     * @param sysTimersParam 删除参数
+     * @author stylefeng
+     * @date 2020/6/30 18:26
+     */
+    void delete(SysTimersParam sysTimersParam);
+
+    /**
+     * 启动任务
+     *
+     * @param sysTimersParam 启动参数
+     * @author stylefeng
+     * @date 2020/7/1 14:36
+     */
+    void start(SysTimersParam sysTimersParam);
+
+    /**
+     * 停止任务
+     *
+     * @param sysTimersParam 停止参数
+     * @author stylefeng
+     * @date 2020/7/1 14:36
+     */
+    void stop(SysTimersParam sysTimersParam);
+
+    /**
+     * 查看详情定时任务
+     *
+     * @param sysTimersParam 查看参数
+     * @return 定时任务
+     * @author stylefeng
+     * @date 2020/6/30 18:26
+     */
+    SysTimers detail(SysTimersParam sysTimersParam);
 
     /**
      * 分页查询定时任务
@@ -34,61 +89,6 @@ public interface SysTimersService extends IService<SysTimers> {
      * @date 2020/6/30 18:26
      */
     List<SysTimers> list(SysTimersParam sysTimersParam);
-
-    /**
-     * 添加定时任务
-     *
-     * @param sysTimersParam 添加参数
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    void add(SysTimersParam sysTimersParam);
-
-    /**
-     * 删除定时任务
-     *
-     * @param sysTimersParam 删除参数
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    void delete(SysTimersParam sysTimersParam);
-
-    /**
-     * 编辑定时任务
-     *
-     * @param sysTimersParam 编辑参数
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    void edit(SysTimersParam sysTimersParam);
-
-    /**
-     * 查看详情定时任务
-     *
-     * @param sysTimersParam 查看参数
-     * @return 定时任务
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    SysTimers detail(SysTimersParam sysTimersParam);
-
-    /**
-     * 启动任务
-     *
-     * @param sysTimersParam 启动参数
-     * @author stylefeng
-     * @date 2020/7/1 14:36
-     */
-    void start(SysTimersParam sysTimersParam);
-
-    /**
-     * 停止任务
-     *
-     * @param sysTimersParam 停止参数
-     * @author stylefeng
-     * @date 2020/7/1 14:36
-     */
-    void stop(SysTimersParam sysTimersParam);
 
     /**
      * 获取所有可执行的任务列表
