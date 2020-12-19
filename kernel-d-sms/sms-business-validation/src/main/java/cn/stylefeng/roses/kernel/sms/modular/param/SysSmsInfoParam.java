@@ -19,12 +19,12 @@ public class SysSmsInfoParam extends BaseRequest {
     /**
      * 主键
      */
-    private Long id;
+    private Long smsId;
 
     /**
      * 手机号
      */
-    private String phoneNumbers;
+    private String phoneNumber;
 
     /**
      * 短信验证码
@@ -32,27 +32,28 @@ public class SysSmsInfoParam extends BaseRequest {
     private String validateCode;
 
     /**
-     * 短信模板ID
+     * 短信模板编号
      */
     private String templateCode;
 
     /**
-     * 回执id，可根据该id查询具体的发送状态
+     * 业务id
      */
     private String bizId;
 
     /**
-     * 发送状态（字典 0 未发送，1 发送成功，2 发送失败，3 失效）
+     * 发送状态：1-未发送，2-发送成功，3-发送失败，4-失效
      */
-    private Integer status;
+    private Integer statusFlag;
 
     /**
-     * 来源（字典 1 app， 2 pc， 3 其他）
+     * 来源：1-app，2-pc，3-其他
      */
     private Integer source;
 
     /**
-     * 失效时间
+     * 短信失效截止时间
      */
     private Date invalidTime;
+
 }

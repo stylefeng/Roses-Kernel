@@ -20,7 +20,7 @@ public class SysSmsSendParam {
      * 手机号
      */
     @NotBlank(message = "手机号码为空，请检查phoneNumbers参数")
-    private String phoneNumbers;
+    private String phoneNumber;
 
     /**
      * 模板号

@@ -3,14 +3,6 @@ package cn.stylefeng.roses.kernel.sms.modular.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.stylefeng.roses.kernel.sms.modular.enums.SmsTypeEnum;
-import cn.stylefeng.roses.kernel.sms.modular.mapper.SysSmsMapper;
-import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsInfoParam;
-import cn.stylefeng.roses.kernel.sms.modular.service.SysSmsInfoService;
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -19,8 +11,16 @@ import cn.stylefeng.roses.kernel.sms.api.exception.SmsException;
 import cn.stylefeng.roses.kernel.sms.api.expander.SmsConfigExpander;
 import cn.stylefeng.roses.kernel.sms.modular.entity.SysSms;
 import cn.stylefeng.roses.kernel.sms.modular.enums.SmsSendStatusEnum;
+import cn.stylefeng.roses.kernel.sms.modular.enums.SmsTypeEnum;
+import cn.stylefeng.roses.kernel.sms.modular.mapper.SysSmsMapper;
+import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsInfoParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsSendParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsVerifyParam;
+import cn.stylefeng.roses.kernel.sms.modular.service.SysSmsInfoService;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +54,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
         // 1. 如果是纯消息发送，直接发送，校验类短信要把验证码存库
         if (SmsTypeEnum.MESSAGE.equals(sysSmsSendParam.getSmsTypeEnum())) {
-            smsSenderApi.sendSms(sysSmsSendParam.getPhoneNumbers(), sysSmsSendParam.getTemplateCode(), params);
+            smsSenderApi.sendSms(sysSmsSendParam.getPhoneNumber(), sysSmsSendParam.getTemplateCode(), params);
         }
 
         // 2. 如果参数中有code参数，则获取参数param中的code值
@@ -75,10 +75,10 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         // 4. 存储短信到数据库
         Long smsId = this.saveSmsInfo(sysSmsSendParam, validateCode);
 
-        log.info(">>> 开始发送短信：发送的电话号码= " + sysSmsSendParam.getPhoneNumbers() + ",发送的模板号=" + sysSmsSendParam.getTemplateCode() + "，发送的参数是：" + JSON.toJSONString(params));
+        log.info(">>> 开始发送短信：发送的电话号码= " + sysSmsSendParam.getPhoneNumber() + ",发送的模板号=" + sysSmsSendParam.getTemplateCode() + "，发送的参数是：" + JSON.toJSONString(params));
 
         // 5. 发送短信
-        smsSenderApi.sendSms(sysSmsSendParam.getPhoneNumbers(), sysSmsSendParam.getTemplateCode(), params);
+        smsSenderApi.sendSms(sysSmsSendParam.getPhoneNumber(), sysSmsSendParam.getTemplateCode(), params);
 
         // 6. 更新短信发送状态
         this.updateSmsInfo(smsId, SmsSendStatusEnum.SUCCESS);
@@ -100,8 +100,8 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         SysSms sysSms = new SysSms();
         sysSms.setCreateTime(nowDate);
         sysSms.setInvalidTime(invalidate);
-        sysSms.setPhoneNumbers(sysSmsSendParam.getPhoneNumbers());
-        sysSms.setStatus(SmsSendStatusEnum.WAITING.getCode());
+        sysSms.setPhoneNumber(sysSmsSendParam.getPhoneNumber());
+        sysSms.setStatusFlag(SmsSendStatusEnum.WAITING.getCode());
         sysSms.setSource(sysSmsSendParam.getSmsSendSourceEnum().getCode());
         sysSms.setTemplateCode(sysSmsSendParam.getTemplateCode());
         sysSms.setValidateCode(validateCode);
@@ -110,13 +110,13 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
         log.info(">>> 发送短信，存储短信到数据库，数据为：" + JSON.toJSONString(sysSms));
 
-        return sysSms.getId();
+        return sysSms.getSmsId();
     }
 
     @Override
     public void updateSmsInfo(Long smsId, SmsSendStatusEnum smsSendStatusEnum) {
         SysSms sysSms = this.getById(smsId);
-        sysSms.setStatus(smsSendStatusEnum.getCode());
+        sysSms.setStatusFlag(smsSendStatusEnum.getCode());
         this.updateById(sysSms);
     }
 
@@ -126,7 +126,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
         // 查询有没有这条记录
         LambdaQueryWrapper<SysSms> smsQueryWrapper = new LambdaQueryWrapper<>();
-        smsQueryWrapper.eq(SysSms::getPhoneNumbers, sysSmsVerifyParam.getPhoneNumbers())
+        smsQueryWrapper.eq(SysSms::getPhoneNumber, sysSmsVerifyParam.getPhoneNumber())
                 .and(f -> f.eq(SysSms::getSource, sysSmsVerifyParam.getSmsSendSourceEnum().getCode()))
                 .and(f -> f.eq(SysSms::getTemplateCode, sysSmsVerifyParam.getTemplateCode()));
         smsQueryWrapper.orderByDesc(SysSms::getCreateTime);
@@ -144,7 +144,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         SysSms sysSms = sysSmsList.get(0);
 
         // 先判断状态是不是失效的状态
-        if (SmsSendStatusEnum.INVALID.getCode().equals(sysSms.getStatus())) {
+        if (SmsSendStatusEnum.INVALID.getCode().equals(sysSms.getStatusFlag())) {
             throw new SmsException(SMS_VALIDATE_ERROR_INVALIDATE_STATUS);
         }
 
@@ -160,7 +160,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         }
 
         // 验证成功把短信设置成失效
-        sysSms.setStatus(SmsSendStatusEnum.INVALID.getCode());
+        sysSms.setStatusFlag(SmsSendStatusEnum.INVALID.getCode());
         this.updateById(sysSms);
     }
 
@@ -171,13 +171,13 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         if (ObjectUtil.isNotNull(sysSmsInfoParam)) {
 
             // 根据手机号模糊查询
-            if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getPhoneNumbers())) {
-                queryWrapper.like(SysSms::getPhoneNumbers, sysSmsInfoParam.getPhoneNumbers());
+            if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getPhoneNumber())) {
+                queryWrapper.like(SysSms::getPhoneNumber, sysSmsInfoParam.getPhoneNumber());
             }
 
             // 根据发送状态查询（字典 0 未发送，1 发送成功，2 发送失败，3 失效）
-            if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getStatus())) {
-                queryWrapper.eq(SysSms::getStatus, sysSmsInfoParam.getStatus());
+            if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getStatusFlag())) {
+                queryWrapper.eq(SysSms::getStatusFlag, sysSmsInfoParam.getStatusFlag());
             }
 
             // 根据来源查询（字典 1 app， 2 pc， 3 其他）
