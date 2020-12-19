@@ -21,6 +21,16 @@ public class ResourceDefinition implements Serializable {
     private String appCode;
 
     /**
+     * 资源的标识
+     */
+    private String resourceCode;
+
+    /**
+     * 资源名称
+     */
+    private String resourceName;
+
+    /**
      * 项目编码（如果您不设置的话，默认使用spring.application.name填充）
      * <p>
      * 修复一个项目启动的时候会误删别的项目资源的问题
@@ -50,14 +60,9 @@ public class ResourceDefinition implements Serializable {
     private String modularName;
 
     /**
-     * 资源的标识
+     * 初始化资源的机器的ip地址
      */
-    private String code;
-
-    /**
-     * 资源名称
-     */
-    private String name;
+    private String ipAddress;
 
     /**
      * 资源的请求路径
@@ -70,29 +75,14 @@ public class ResourceDefinition implements Serializable {
     private String httpMethod;
 
     /**
-     * 是否是菜单（true-是，false-否）
-     */
-    private Boolean menuFlag;
-
-    /**
      * 是否需要登录
      */
-    private Boolean requiredLogin;
+    private Boolean requiredLoginFlag;
 
     /**
      * 是否需要鉴权
      */
-    private Boolean requiredPermission;
-
-    /**
-     * 资源添加日期
-     */
-    private Date createTime;
-
-    /**
-     * 初始化资源的机器的ip地址
-     */
-    private String ipAddress;
+    private Boolean requiredPermissionFlag;
 
     /**
      * 需要进行参数校验的分组
@@ -102,11 +92,16 @@ public class ResourceDefinition implements Serializable {
     /**
      * 接口参数的字段描述
      */
-    private Set<FieldMetadata> paramFieldMetadata;
+    private Set<FieldMetadata> paramFieldDescriptions;
 
     /**
      * 接口返回结果的字段描述
      */
-    private Set<FieldMetadata> responseFieldMetadata;
+    private Set<FieldMetadata> responseFieldDescriptions;
+
+    /**
+     * 资源添加日期
+     */
+    private Date createTime;
 
 }

@@ -39,25 +39,25 @@ public class DefaultResourceCollector implements ResourceCollectorApi {
     public void collectResources(List<ResourceDefinition> apiResource) {
         if (apiResource != null && apiResource.size() > 0) {
             for (ResourceDefinition resourceDefinition : apiResource) {
-                ResourceDefinition alreadyFlag = resourceDefinitions.get(resourceDefinition.getCode());
+                ResourceDefinition alreadyFlag = resourceDefinitions.get(resourceDefinition.getResourceCode());
                 if (alreadyFlag != null) {
                     throw new RuntimeException("资源扫描过程中存在重复资源！\n已存在资源：" + alreadyFlag + "\n新资源为： " + resourceDefinition);
                 }
-                resourceDefinitions.put(resourceDefinition.getCode(), resourceDefinition);
+                resourceDefinitions.put(resourceDefinition.getResourceCode(), resourceDefinition);
                 urlDefineResources.put(resourceDefinition.getUrl(), resourceDefinition);
 
                 // 存储模块资源
                 Map<String, ResourceDefinition> modularResources = modularResourceDefinitions.get(StrUtil.toUnderlineCase(resourceDefinition.getModularCode()));
                 if (modularResources == null) {
                     modularResources = new HashMap<>();
-                    modularResources.put(resourceDefinition.getCode(), resourceDefinition);
+                    modularResources.put(resourceDefinition.getResourceCode(), resourceDefinition);
                     modularResourceDefinitions.put(StrUtil.toUnderlineCase(resourceDefinition.getModularCode()), modularResources);
                 } else {
-                    modularResources.put(resourceDefinition.getCode(), resourceDefinition);
+                    modularResources.put(resourceDefinition.getResourceCode(), resourceDefinition);
                 }
 
                 // 添加资源code-中文名称字典
-                this.bindResourceName(resourceDefinition.getCode(), resourceDefinition.getName());
+                this.bindResourceName(resourceDefinition.getResourceCode(), resourceDefinition.getResourceName());
             }
         }
     }

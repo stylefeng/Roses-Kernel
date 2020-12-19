@@ -60,18 +60,15 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
         LambdaQueryWrapper<SysResource> wrapper = createWrapper(resourceRequest);
 
-        // 查询为菜单的
-        wrapper.eq(SysResource::getMenuFlag, YesOrNotEnum.Y.getCode());
-
         // 只查询code和name
-        wrapper.select(SysResource::getCode, SysResource::getName);
+        wrapper.select(SysResource::getResourceCode, SysResource::getResourceName);
 
         List<SysResource> menuResourceList = this.list(wrapper);
 
         // 增加返回虚拟菜单的情况
         SysResource sysResource = new SysResource();
-        sysResource.setCode("");
-        sysResource.setName("虚拟目录(空)");
+        sysResource.setResourceCode("");
+        sysResource.setResourceName("虚拟目录(空)");
         menuResourceList.add(0, sysResource);
 
         return menuResourceList;
@@ -89,7 +86,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
         // 1. 获取所有的资源
         LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysResourceLambdaQueryWrapper.select(SysResource::getAppCode, SysResource::getModularCode, SysResource::getModularName, SysResource::getCode, SysResource::getUrl, SysResource::getName);
+        sysResourceLambdaQueryWrapper.select(SysResource::getAppCode, SysResource::getModularCode, SysResource::getModularName, SysResource::getResourceCode, SysResource::getUrl, SysResource::getResourceName);
         List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
 
         // 2. 按应用和模块编码设置map
@@ -102,7 +99,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Override
     public ResourceDefinition getResourceDetail(ResourceRequest resourceRequest) {
         LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysResourceLambdaQueryWrapper.eq(SysResource::getCode, resourceRequest.getResourceCode());
+        sysResourceLambdaQueryWrapper.eq(SysResource::getResourceCode, resourceRequest.getResourceCode());
         SysResource sysResource = this.getOne(sysResourceLambdaQueryWrapper);
         if (sysResource != null) {
             return ResourceFactory.createResourceDefinition(sysResource);
@@ -161,15 +158,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
                 // 获取是否需要登录的标记, 判断是否需要登录，如果是则设置为true,否则为false
                 String requiredLoginFlag = resource.getRequiredLoginFlag();
-                resourceDefinition.setRequiredLogin(YesOrNotEnum.Y.name().equals(requiredLoginFlag));
+                resourceDefinition.setRequiredLoginFlag(YesOrNotEnum.Y.name().equals(requiredLoginFlag));
 
                 // 获取请求权限的标记，判断是否有权限，如果有则设置为true,否则为false
                 String requiredPermissionFlag = resource.getRequiredPermissionFlag();
-                resourceDefinition.setRequiredPermission(YesOrNotEnum.Y.name().equals(requiredPermissionFlag));
-
-                // 获取是否是菜单的flag，如果是则设置为true,否则为false
-                String menuFlag = resource.getMenuFlag();
-                resourceDefinition.setMenuFlag(YesOrNotEnum.Y.name().equals(menuFlag));
+                resourceDefinition.setRequiredPermissionFlag(YesOrNotEnum.Y.name().equals(requiredPermissionFlag));
 
                 return resourceDefinition;
             }
@@ -187,7 +180,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
         // 拼接in条件
         LambdaQueryWrapper<SysResource> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysResource::getId, resourceIds);
+        queryWrapper.in(SysResource::getResourceId, resourceIds);
 
         // 获取资源详情
         List<SysResource> list = this.list(queryWrapper);
@@ -210,7 +203,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
         // 拼接in条件
         LambdaQueryWrapper<SysResource> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysResource::getId, resourceIds);
+        queryWrapper.in(SysResource::getResourceId, resourceIds);
         queryWrapper.select(SysResource::getUrl);
 
         // 获取资源详情
@@ -235,12 +228,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
             // 根据资源名称
             if (ObjectUtil.isNotEmpty(resourceRequest.getResourceName())) {
-                queryWrapper.like(SysResource::getName, resourceRequest.getResourceName());
-            }
-
-            // 根据是否是菜单查询
-            if (ObjectUtil.isNotEmpty(resourceRequest.getMenuFlag())) {
-                queryWrapper.like(SysResource::getMenuFlag, resourceRequest.getMenuFlag());
+                queryWrapper.like(SysResource::getResourceName, resourceRequest.getResourceName());
             }
         }
 
@@ -276,8 +264,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             // 将当前资源放入资源集合
             ResourceTreeNode resourceTreeNode = new ResourceTreeNode();
             resourceTreeNode.setResourceFlag(true);
-            resourceTreeNode.setNodeName(sysResource.getUrl() + "(" + sysResource.getName() + ")");
-            resourceTreeNode.setCode(sysResource.getCode());
+            resourceTreeNode.setNodeName(sysResource.getUrl() + "(" + sysResource.getResourceName() + ")");
+            resourceTreeNode.setCode(sysResource.getResourceCode());
             resourceTreeNode.setParentCode(sysResource.getModularCode());
             resourceTreeNodes.add(resourceTreeNode);
 

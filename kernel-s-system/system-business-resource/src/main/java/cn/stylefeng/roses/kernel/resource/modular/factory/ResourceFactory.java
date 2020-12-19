@@ -30,21 +30,15 @@ public class ResourceFactory {
     public static SysResource createResource(ResourceDefinition resourceDefinition) {
         SysResource resource = new SysResource();
         BeanUtils.copyProperties(resourceDefinition, resource);
-        resource.setId(resourceDefinition.getCode());
+        resource.setResourceCode(resourceDefinition.getResourceCode());
 
-        if (resourceDefinition.getMenuFlag()) {
-            resource.setMenuFlag(YesOrNotEnum.Y.name());
-        } else {
-            resource.setMenuFlag(YesOrNotEnum.N.name());
-        }
-
-        if (resourceDefinition.getRequiredLogin()) {
+        if (resourceDefinition.getRequiredLoginFlag()) {
             resource.setRequiredLoginFlag(YesOrNotEnum.Y.name());
         } else {
             resource.setRequiredLoginFlag(YesOrNotEnum.N.name());
         }
 
-        if (resourceDefinition.getRequiredPermission()) {
+        if (resourceDefinition.getRequiredPermissionFlag()) {
             resource.setRequiredPermissionFlag(YesOrNotEnum.Y.name());
         } else {
             resource.setRequiredPermissionFlag(YesOrNotEnum.N.name());
@@ -56,13 +50,13 @@ public class ResourceFactory {
         }
 
         // 转化接口参数的字段描述
-        if (ObjectUtil.isNotEmpty(resourceDefinition.getParamFieldMetadata())) {
-            resource.setParamFieldDescriptions(JSON.toJSONString(resourceDefinition.getParamFieldMetadata(), SerializerFeature.WriteClassName));
+        if (ObjectUtil.isNotEmpty(resourceDefinition.getParamFieldDescriptions())) {
+            resource.setParamFieldDescriptions(JSON.toJSONString(resourceDefinition.getParamFieldDescriptions(), SerializerFeature.WriteClassName));
         }
 
         // 转化接口返回结果的字段描述
-        if (ObjectUtil.isNotEmpty(resourceDefinition.getResponseFieldMetadata())) {
-            resource.setResponseFieldDescriptions(JSON.toJSONString(resourceDefinition.getResponseFieldMetadata(), SerializerFeature.WriteClassName));
+        if (ObjectUtil.isNotEmpty(resourceDefinition.getResponseFieldDescriptions())) {
+            resource.setResponseFieldDescriptions(JSON.toJSONString(resourceDefinition.getResponseFieldDescriptions(), SerializerFeature.WriteClassName));
         }
 
         return resource;
@@ -82,10 +76,10 @@ public class ResourceFactory {
         BeanUtil.copyProperties(sysResource, resourceDefinition, CopyOptions.create().ignoreError());
 
         // 设置是否需要登录标识，Y为需要登录
-        resourceDefinition.setRequiredLogin(YesOrNotEnum.Y.name().equals(sysResource.getRequiredLoginFlag()));
+        resourceDefinition.setRequiredLoginFlag(YesOrNotEnum.Y.name().equals(sysResource.getRequiredLoginFlag()));
 
         // 设置是否需要权限认证标识，Y为需要权限认证
-        resourceDefinition.setRequiredPermission(YesOrNotEnum.Y.name().equals(sysResource.getRequiredPermissionFlag()));
+        resourceDefinition.setRequiredPermissionFlag(YesOrNotEnum.Y.name().equals(sysResource.getRequiredPermissionFlag()));
 
         // 转化校验组
         if (ObjectUtil.isNotEmpty(sysResource.getValidateGroups())) {
@@ -94,12 +88,12 @@ public class ResourceFactory {
 
         // 转化接口参数的字段描述
         if (ObjectUtil.isNotEmpty(sysResource.getParamFieldDescriptions())) {
-            resourceDefinition.setParamFieldMetadata(JSON.parseObject(sysResource.getParamFieldDescriptions(), Set.class, Feature.SupportAutoType));
+            resourceDefinition.setParamFieldDescriptions(JSON.parseObject(sysResource.getParamFieldDescriptions(), Set.class, Feature.SupportAutoType));
         }
 
         // 转化接口返回结果的字段描述
         if (ObjectUtil.isNotEmpty(sysResource.getResponseFieldDescriptions())) {
-            resourceDefinition.setResponseFieldMetadata(JSON.parseObject(sysResource.getResponseFieldDescriptions(), Set.class, Feature.SupportAutoType));
+            resourceDefinition.setResponseFieldDescriptions(JSON.parseObject(sysResource.getResponseFieldDescriptions(), Set.class, Feature.SupportAutoType));
         }
 
         return resourceDefinition;

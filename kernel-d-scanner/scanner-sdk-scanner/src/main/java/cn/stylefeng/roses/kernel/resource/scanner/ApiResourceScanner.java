@@ -206,9 +206,9 @@ public class ApiResourceScanner implements BeanPostProcessor {
         // 如果没有填写code则用"模块名称_方法名称"为默认的标识
         String code = invokeAnnotationMethod(apiResource, "code", String.class);
         if (StrUtil.isEmpty(code)) {
-            resourceDefinition.setCode(resourceDefinition.getAppCode() + scannerProperties.getLinkSymbol() + StrUtil.toUnderlineCase(modular) + scannerProperties.getLinkSymbol() + StrUtil.toUnderlineCase(method.getName()));
+            resourceDefinition.setResourceCode(resourceDefinition.getAppCode() + scannerProperties.getLinkSymbol() + StrUtil.toUnderlineCase(modular) + scannerProperties.getLinkSymbol() + StrUtil.toUnderlineCase(method.getName()));
         } else {
-            resourceDefinition.setCode(resourceDefinition.getAppCode() + scannerProperties.getLinkSymbol() + StrUtil.toUnderlineCase(modular) + scannerProperties.getLinkSymbol() + StrUtil.toUnderlineCase(code));
+            resourceDefinition.setResourceCode(resourceDefinition.getAppCode() + scannerProperties.getLinkSymbol() + StrUtil.toUnderlineCase(modular) + scannerProperties.getLinkSymbol() + StrUtil.toUnderlineCase(code));
         }
 
         // 填充其他属性
@@ -219,10 +219,9 @@ public class ApiResourceScanner implements BeanPostProcessor {
         Boolean requiredLogin = invokeAnnotationMethod(apiResource, "requiredLogin", Boolean.class);
         Boolean requiredPermission = invokeAnnotationMethod(apiResource, "requiredPermission", Boolean.class);
 
-        resourceDefinition.setRequiredLogin(requiredLogin);
-        resourceDefinition.setRequiredPermission(requiredPermission);
-        resourceDefinition.setMenuFlag(menuFlag);
-        resourceDefinition.setName(name);
+        resourceDefinition.setRequiredLoginFlag(requiredLogin);
+        resourceDefinition.setRequiredPermissionFlag(requiredPermission);
+        resourceDefinition.setResourceName(name);
         resourceDefinition.setUrl(getControllerClassRequestPath(clazz, path[0]));
         StringBuilder methodNames = new StringBuilder();
         for (RequestMethod requestMethod : requestMethods) {
@@ -257,15 +256,15 @@ public class ApiResourceScanner implements BeanPostProcessor {
         // @ApiResource注解上标识了responseClass属性，则用responseClass的值为准，否则按真实方法的返回值class
         Class<?> responseClass = invokeAnnotationMethod(apiResource, "responseClass", Class.class);
         if (!Void.class.equals(responseClass)) {
-            resourceDefinition.setResponseFieldMetadata(ClassReflectUtil.getClassFieldDescription(responseClass));
+            resourceDefinition.setResponseFieldDescriptions(ClassReflectUtil.getClassFieldDescription(responseClass));
         } else {
             Class<?> methodReturnClass = MethodReflectUtil.getMethodReturnClass(method);
-            resourceDefinition.setResponseFieldMetadata(ClassReflectUtil.getClassFieldDescription(methodReturnClass));
+            resourceDefinition.setResponseFieldDescriptions(ClassReflectUtil.getClassFieldDescription(methodReturnClass));
         }
 
         // 填充方法的请求参数字段的详细信息
         Class<?> firstParamClass = MethodReflectUtil.getMethodFirstParamClass(method);
-        resourceDefinition.setParamFieldMetadata(ClassReflectUtil.getClassFieldDescription(firstParamClass));
+        resourceDefinition.setParamFieldDescriptions(ClassReflectUtil.getClassFieldDescription(firstParamClass));
 
         return resourceDefinition;
     }

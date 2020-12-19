@@ -21,8 +21,8 @@ public class SysResource extends BaseEntity {
     /**
      * 资源id
      */
-    @TableId("id")
-    private String id;
+    @TableId("resource_id")
+    private Long resourceId;
 
     /**
      * 应用编码
@@ -33,14 +33,14 @@ public class SysResource extends BaseEntity {
     /**
      * 资源编码
      */
-    @TableField("code")
-    private String code;
+    @TableField("resource_code")
+    private String resourceCode;
 
     /**
      * 资源名称
      */
-    @TableField("name")
-    private String name;
+    @TableField("resource_name")
+    private String resourceName;
 
     /**
      * 项目编码
@@ -91,19 +91,13 @@ public class SysResource extends BaseEntity {
     private String httpMethod;
 
     /**
-     * 是否是方法(Y-页面，N-API接口)
-     */
-    @TableField("menu_flag")
-    private String menuFlag;
-
-    /**
-     * 是否需要登录(Y-是，N-否)
+     * 是否需要登录：Y-是，N-否
      */
     @TableField("required_login_flag")
     private String requiredLoginFlag;
 
     /**
-     * 是否需要鉴权(Y-是，N-否)
+     * 是否需要鉴权：Y-是，N-否
      */
     @TableField("required_permission_flag")
     private String requiredPermissionFlag;
