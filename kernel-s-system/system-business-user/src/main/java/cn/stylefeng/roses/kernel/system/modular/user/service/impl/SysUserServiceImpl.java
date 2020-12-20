@@ -330,6 +330,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return this.getOne(queryWrapper);
     }
 
+    /**
+     * 根据用户ID获取用户
+     *
+     * @param userId
+     * @return java.lang.String
+     * @author wangle
+     * @date 2020/12/17 18:11
+     */
+    @Override
+    public String getNameByUserId(Long userId) {
+        SysUser sysUser = this.getById(userId);
+        if (ObjectUtil.isNull(sysUser)) {
+            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST);
+        }
+        return sysUser.getRealName();
+    }
+
     @Override
     public UserLoginInfoDTO getUserLoginInfo(String account) {
         UserLoginInfoDTO userLoginInfoDTO = new UserLoginInfoDTO();

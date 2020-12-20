@@ -37,6 +37,11 @@
             <artifactId>log-sdk-db</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>log-sdk-file</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
     </dependencies>
 
