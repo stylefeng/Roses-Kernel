@@ -39,6 +39,11 @@ public @interface TableUniqueValue {
     String columnName();
 
     /**
+     * 主键id的字段名，默认为字段名为：id
+     */
+    String idFieldName() default "id";
+
+    /**
      * 是否开启逻辑删除校验，默认是关闭的
      * <p>
      * 关于为何开启逻辑删除校验：

@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2020/12/1 21:44
  */
 @Configuration
-public class GunsValidatorAutoConfiguration {
+public class ValidatorAutoConfiguration {
 
     /**
      * 黑名单校验

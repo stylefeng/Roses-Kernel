@@ -1,11 +1,12 @@
 package cn.stylefeng.roses.kernel.validator.validators.unique;
 
+import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
-import cn.stylefeng.roses.kernel.validator.validators.unique.service.TableUniqueValueService;
 import cn.stylefeng.roses.kernel.validator.context.RequestGroupContext;
-import cn.stylefeng.roses.kernel.validator.context.RequestParamIdContext;
+import cn.stylefeng.roses.kernel.validator.context.RequestParamContext;
 import cn.stylefeng.roses.kernel.validator.pojo.UniqueValidateParam;
+import cn.stylefeng.roses.kernel.validator.validators.unique.service.TableUniqueValueService;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -27,6 +28,11 @@ public class TableUniqueValueValidator implements ConstraintValidator<TableUniqu
      * 列名称，例如 user_code
      */
     private String columnName;
+
+    /**
+     * id字段的名称
+     */
+    private String idFieldName;
 
     /**
      * 是否开启逻辑删除校验，默认是关闭的
@@ -54,6 +60,7 @@ public class TableUniqueValueValidator implements ConstraintValidator<TableUniqu
         this.excludeLogicDeleteItems = constraintAnnotation.excludeLogicDeleteItems();
         this.logicDeleteFieldName = constraintAnnotation.logicDeleteFieldName();
         this.logicDeleteValue = constraintAnnotation.logicDeleteValue();
+        this.idFieldName = constraintAnnotation.idFieldName();
     }
 
     @Override
@@ -65,16 +72,16 @@ public class TableUniqueValueValidator implements ConstraintValidator<TableUniqu
 
         Class<?> validateGroupClass = RequestGroupContext.get();
 
-        // 如果属于add group，则校验库中所有行
-        if (BaseRequest.add.class.equals(validateGroupClass)) {
-            UniqueValidateParam addParam = createAddParam(fieldValue);
-            return TableUniqueValueService.getFiledUniqueFlag(addParam);
-        }
-
         // 如果属于edit group，校验时需要排除当前修改的这条记录
         if (BaseRequest.edit.class.equals(validateGroupClass)) {
             UniqueValidateParam editParam = createEditParam(fieldValue);
             return TableUniqueValueService.getFiledUniqueFlag(editParam);
+        }
+
+        // 如果属于add group，则校验库中所有行
+        if (BaseRequest.add.class.equals(validateGroupClass)) {
+            UniqueValidateParam addParam = createAddParam(fieldValue);
+            return TableUniqueValueService.getFiledUniqueFlag(addParam);
         }
 
         // 默认校验所有的行
@@ -106,12 +113,17 @@ public class TableUniqueValueValidator implements ConstraintValidator<TableUniqu
      * @date 2020/8/17 21:56
      */
     private UniqueValidateParam createEditParam(String fieldValue) {
+
+        // 获取请求字段中id的值
+        Dict requestParam = RequestParamContext.get();
+
         return UniqueValidateParam.builder()
                 .tableName(tableName)
                 .columnName(columnName)
                 .value(fieldValue)
+                .idFieldName(idFieldName)
                 .excludeCurrentRecord(Boolean.TRUE)
-                .id(RequestParamIdContext.get())
+                .id(requestParam.getLong(idFieldName))
                 .excludeLogicDeleteItems(excludeLogicDeleteItems)
                 .logicDeleteFieldName(logicDeleteFieldName)
                 .logicDeleteValue(logicDeleteValue).build();

@@ -34,6 +34,11 @@ public class UniqueValidateParam {
     Boolean excludeCurrentRecord;
 
     /**
+     * 主键id的字段名
+     */
+    String idFieldName;
+
+    /**
      * 当前记录的主键id
      */
     Long id;

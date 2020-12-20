@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.stylefeng.roses.kernel.validator.starter.GunsValidatorAutoConfiguration
+cn.stylefeng.roses.kernel.validator.starter.ValidatorAutoConfiguration,\
+cn.stylefeng.roses.kernel.validator.starter.resolver.MethodArgumentResolver

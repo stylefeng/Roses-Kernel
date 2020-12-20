@@ -34,21 +34,22 @@ public class TableUniqueValueService {
         // 不排除当前记录，不排除逻辑删除的内容
         if (!uniqueValidateParam.getExcludeCurrentRecord()
                 && !uniqueValidateParam.getExcludeLogicDeleteItems()) {
-            resultCount = dbOperatorApi.selectCount(
-                    "select count(*) from " + uniqueValidateParam.getTableName() + " where " + uniqueValidateParam.getColumnName() + " = {0}",
-                    uniqueValidateParam.getValue());
+            String sqlTemplate = "select count(*) from {} where {} = {0}";
+            String finalSql = StrUtil.format(sqlTemplate, uniqueValidateParam.getTableName(), uniqueValidateParam.getColumnName());
+            resultCount = dbOperatorApi.selectCount(finalSql, uniqueValidateParam.getValue());
         }
 
         // 不排除当前记录，排除逻辑删除的内容
         if (!uniqueValidateParam.getExcludeCurrentRecord()
                 && uniqueValidateParam.getExcludeLogicDeleteItems()) {
-            resultCount = dbOperatorApi.selectCount(
-                    "select count(*) from " + uniqueValidateParam.getTableName()
-                            + " where " + uniqueValidateParam.getColumnName() + " = {0} "
-                            + " and "
-                            + "(" + uniqueValidateParam.getLogicDeleteFieldName() + " is null || "
-                            + uniqueValidateParam.getLogicDeleteFieldName() + " <> " + uniqueValidateParam.getLogicDeleteValue() + ")",
-                    uniqueValidateParam.getValue());
+            String sqlTemplate = "select count(*) from {} where {} = {0}  and ({} is null || {} <> {})";
+            String finalSql = StrUtil.format(sqlTemplate,
+                    uniqueValidateParam.getTableName(),
+                    uniqueValidateParam.getColumnName(),
+                    uniqueValidateParam.getLogicDeleteFieldName(),
+                    uniqueValidateParam.getLogicDeleteFieldName(),
+                    uniqueValidateParam.getLogicDeleteValue());
+            resultCount = dbOperatorApi.selectCount(finalSql, uniqueValidateParam.getValue());
         }
 
         // 排除当前记录，不排除逻辑删除的内容
@@ -58,11 +59,9 @@ public class TableUniqueValueService {
             // id判空
             paramIdValidate(uniqueValidateParam);
 
-            resultCount = dbOperatorApi.selectCount(
-                    "select count(*) from " + uniqueValidateParam.getTableName()
-                            + " where " + uniqueValidateParam.getColumnName() + " = {0} "
-                            + " and id <> {1}",
-                    uniqueValidateParam.getValue(), uniqueValidateParam.getId());
+            String sqlTemplate = "select count(*) from {} where {} = {0} and {} <> {1}";
+            String finalSql = StrUtil.format(sqlTemplate, uniqueValidateParam.getTableName(), uniqueValidateParam.getColumnName(), uniqueValidateParam.getIdFieldName());
+            resultCount = dbOperatorApi.selectCount(finalSql, uniqueValidateParam.getValue(), uniqueValidateParam.getId());
         }
 
         // 排除当前记录，排除逻辑删除的内容
@@ -72,14 +71,15 @@ public class TableUniqueValueService {
             // id判空
             paramIdValidate(uniqueValidateParam);
 
-            resultCount = dbOperatorApi.selectCount(
-                    "select count(*) from " + uniqueValidateParam.getTableName()
-                            + " where " + uniqueValidateParam.getColumnName() + " = {0} "
-                            + " and id <> {1} "
-                            + " and "
-                            + "(" + uniqueValidateParam.getLogicDeleteFieldName() + " is null || "
-                            + uniqueValidateParam.getLogicDeleteFieldName() + " <> " + uniqueValidateParam.getLogicDeleteValue() + ")",
-                    uniqueValidateParam.getValue(), uniqueValidateParam.getId());
+            String sqlTemplate = "select count(*) from {} where {} = {0} and {} <> {1} and ({} is null || {} <> {})";
+            String finalSql = StrUtil.format(sqlTemplate,
+                    uniqueValidateParam.getTableName(),
+                    uniqueValidateParam.getColumnName(),
+                    uniqueValidateParam.getIdFieldName(),
+                    uniqueValidateParam.getLogicDeleteFieldName(),
+                    uniqueValidateParam.getLogicDeleteFieldName(),
+                    uniqueValidateParam.getLogicDeleteValue());
+            resultCount = dbOperatorApi.selectCount(finalSql, uniqueValidateParam.getValue(), uniqueValidateParam.getId());
         }
 
         // 如果大于0，代表不是唯一的当前校验的值
