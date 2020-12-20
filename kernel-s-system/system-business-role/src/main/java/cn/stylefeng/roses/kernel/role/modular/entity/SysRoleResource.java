@@ -24,6 +24,7 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.roses.kernel.role.modular.entity;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -38,7 +39,7 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_role_resource")
-public class SysRoleResource {
+public class SysRoleResource extends BaseEntity {
 
     /**
      * 主键

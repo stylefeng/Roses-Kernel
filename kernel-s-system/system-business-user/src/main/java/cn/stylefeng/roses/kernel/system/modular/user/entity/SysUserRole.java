@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.system.modular.user.entity;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -14,7 +15,7 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_user_role")
-public class SysUserRole {
+public class SysUserRole extends BaseEntity {
 
     /**
      * 主键
