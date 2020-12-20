@@ -24,35 +24,35 @@ public class SysPositionRequest extends BaseRequest {
      * 主键
      */
     @NotNull(message = "主键不能为空", groups = {edit.class, detail.class, delete.class})
-    private Long id;
+    private Long positionId;
 
     /**
      * 职位名称
      */
     @NotBlank(message = "职位名称不能为空", groups = {add.class, edit.class})
-    private String name;
+    private String positionName;
 
     /**
      * 职位编码
      */
     @NotBlank(message = "职位编码不能为空", groups = {add.class, edit.class})
     @TableUniqueValue(
-            message = "职位编码存在重复，请检查code参数",
+            message = "职位编码存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_position",
-            columnName = "code")
-    private String code;
+            columnName = "position_code")
+    private String positionCode;
 
     /**
      * 排序
      */
     @NotNull(message = "排序不能为空", groups = {add.class, edit.class})
-    private BigDecimal sort;
+    private BigDecimal positionSort;
 
     /**
-     * 状态（1-启用，2-禁用）
+     * 状态：1-启用，2-禁用
      */
-    @NotNull(message = "状态（1-启用，2-禁用）不能为空", groups = {updateStatus.class})
+    @NotNull(message = "状态不能为空", groups = {updateStatus.class})
     @StatusValue(groups = updateStatus.class)
     private Integer statusFlag;
 

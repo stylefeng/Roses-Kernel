@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.entity;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,41 +23,41 @@ public class SysOrganization extends BaseEntity {
     /**
      * 主键
      */
-    @TableId("id")
-    private Long id;
+    @TableId("org_id")
+    private Long orgId;
 
     /**
-     * 父id，顶级节点父id是0
+     * 父id，一级节点父id是0
      */
-    @TableField("pid")
-    private Long pid;
+    @TableField("org_parent_id")
+    private Long orgParentId;
 
     /**
      * 父ids
      */
-    @TableField("pids")
-    private String pids;
+    @TableField("org_pids")
+    private String orgPids;
 
     /**
      * 组织名称
      */
-    @TableField("name")
-    private String name;
+    @TableField("org_name")
+    private String orgName;
 
     /**
      * 组织编码
      */
-    @TableField("code")
-    private String code;
+    @TableField("org_code")
+    private String orgCode;
 
     /**
      * 排序
      */
-    @TableField("sort")
-    private BigDecimal sort;
+    @TableField("org_sort")
+    private BigDecimal orgSort;
 
     /**
-     * 状态（1-启用，2-禁用）
+     * 状态：1-启用，2-禁用
      */
     @TableField("status_flag")
     private Integer statusFlag;

@@ -24,25 +24,25 @@ public class SysOrganizationRequest extends BaseRequest {
      * 主键
      */
     @NotNull(message = "主键不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class})
-    private Long id;
+    private Long orgId;
 
     /**
      * 父id
      */
     @NotNull(message = "父id不能为空", groups = {add.class, edit.class})
-    private Long pid;
+    private Long orgParentId;
 
     /**
      * 父ids
      */
     @NotBlank(message = "父ids不能为空", groups = {add.class, edit.class})
-    private String pids;
+    private String orgPids;
 
     /**
      * 组织名称
      */
     @NotBlank(message = "组织名称不能为空", groups = {add.class, edit.class})
-    private String name;
+    private String orgName;
 
     /**
      * 组织编码
@@ -52,19 +52,19 @@ public class SysOrganizationRequest extends BaseRequest {
             message = "组织编码存在重复，请检查code参数",
             groups = {add.class, edit.class},
             tableName = "sys_organization",
-            columnName = "code")
-    private String code;
+            columnName = "org_code")
+    private String orgCode;
 
     /**
      * 排序
      */
     @NotNull(message = "排序不能为空", groups = {add.class, edit.class})
-    private BigDecimal sort;
+    private BigDecimal orgSort;
 
     /**
-     * 状态（1-启用，2-禁用）
+     * 状态：1-启用，2-禁用
      */
-    @NotNull(message = "状态（1-启用，2-禁用）不能为空", groups = {updateStatus.class})
+    @NotNull(message = "状态不能为空", groups = {updateStatus.class})
     @StatusValue(groups = updateStatus.class)
     private Integer statusFlag;
 

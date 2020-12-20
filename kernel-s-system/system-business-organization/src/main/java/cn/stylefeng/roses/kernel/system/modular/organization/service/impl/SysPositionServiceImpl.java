@@ -69,7 +69,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
 
         // 该职位下是否有员工
         // 职位有绑定员工，不能删除
-        Boolean userOrgFlag = userOrgServiceApi.getUserOrgFlag(null, sysPosition.getId());
+        Boolean userOrgFlag = userOrgServiceApi.getUserOrgFlag(null, sysPosition.getPositionId());
         if (userOrgFlag) {
             throw new SystemModularException(PositionExceptionEnum.CANT_DELETE_POSITION);
         }
@@ -83,7 +83,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     @Override
     public void updateStatus(SysPositionRequest sysPositionRequest) {
         LambdaUpdateWrapper<SysPosition> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysPosition::getId, sysPositionRequest.getId());
+        updateWrapper.eq(SysPosition::getPositionId, sysPositionRequest.getPositionId());
         updateWrapper.set(SysPosition::getStatusFlag, sysPositionRequest.getStatusFlag());
 
         this.update(updateWrapper);
@@ -113,14 +113,14 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
 
         // 拼接查询条件
         LambdaQueryWrapper<SysPosition> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysPosition::getId, positionIds);
-        queryWrapper.select(SysPosition::getName);
+        queryWrapper.in(SysPosition::getPositionId, positionIds);
+        queryWrapper.select(SysPosition::getPositionName);
 
         // 查询结果
         List<SysPosition> sysPositions = this.list(queryWrapper);
 
         // 把name组装起来
-        return sysPositions.stream().map(SysPosition::getName).collect(Collectors.toList());
+        return sysPositions.stream().map(SysPosition::getPositionName).collect(Collectors.toList());
     }
 
     /**
@@ -134,22 +134,21 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
         if (ObjectUtil.isNotNull(sysPositionRequest)) {
 
             // 拼接职位名称条件
-            if (ObjectUtil.isNotEmpty(sysPositionRequest.getName())) {
-                queryWrapper.like(SysPosition::getName, sysPositionRequest.getName());
+            if (ObjectUtil.isNotEmpty(sysPositionRequest.getPositionName())) {
+                queryWrapper.like(SysPosition::getPositionName, sysPositionRequest.getPositionName());
             }
 
             // 拼接职位编码条件
-            if (ObjectUtil.isNotEmpty(sysPositionRequest.getCode())) {
-                queryWrapper.eq(SysPosition::getCode, sysPositionRequest.getCode());
+            if (ObjectUtil.isNotEmpty(sysPositionRequest.getPositionCode())) {
+                queryWrapper.eq(SysPosition::getPositionCode, sysPositionRequest.getPositionCode());
             }
-
         }
 
         // 查询未删除状态的
         queryWrapper.eq(SysPosition::getDelFlag, YesOrNotEnum.N.getCode());
 
         // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(SysPosition::getSort);
+        queryWrapper.orderByAsc(SysPosition::getPositionSort);
 
         return queryWrapper;
     }
@@ -161,9 +160,9 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
      * @date 2020/11/18 22:59
      */
     private SysPosition querySysPosition(SysPositionRequest sysPositionRequest) {
-        SysPosition sysposition = this.getById(sysPositionRequest.getId());
+        SysPosition sysposition = this.getById(sysPositionRequest.getPositionId());
         if (ObjectUtil.isEmpty(sysposition)) {
-            String userTip = StrUtil.format(PositionExceptionEnum.CANT_FIND_POSITION.getUserTip(), sysposition.getId());
+            String userTip = StrUtil.format(PositionExceptionEnum.CANT_FIND_POSITION.getUserTip(), sysposition.getPositionId());
             throw new SystemModularException(PositionExceptionEnum.CANT_FIND_POSITION, userTip);
         }
         return sysposition;
