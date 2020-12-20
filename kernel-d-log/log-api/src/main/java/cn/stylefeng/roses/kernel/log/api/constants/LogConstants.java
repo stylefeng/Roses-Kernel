@@ -28,4 +28,14 @@ public interface LogConstants {
      */
     String LOG_DEFAULT_APP_NAME = "none-app-name";
 
+    /**
+     * 默认查询日志分页
+     */
+    Integer DEFAULT_BEGIN_PAGE_NO = 1;
+
+    /**
+     * 默认查询日志分页大小
+     */
+    Integer DEFAULT_PAGE_SIZE = 10;
+
 }

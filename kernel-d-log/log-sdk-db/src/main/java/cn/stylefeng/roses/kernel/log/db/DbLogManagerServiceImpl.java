@@ -15,7 +15,6 @@ import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -28,7 +27,6 @@ import java.util.List;
  * @date 2020/11/2 17:40
  */
 @Slf4j
-@Service
 public class DbLogManagerServiceImpl implements LogManagerApi {
 
     /**
@@ -167,14 +165,15 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
      * @date 2020/11/3 11:20
      */
     private void createDefaultLogManagerParam(LogManagerParam logManagerParam) {
+
         // 默认从第一页开始
         if (logManagerParam.getPageNo() == null) {
-            logManagerParam.setPageNo(1);
+            logManagerParam.setPageNo(DEFAULT_BEGIN_PAGE_NO);
         }
 
         // 默认每页10条
         if (logManagerParam.getPageSize() == null) {
-            logManagerParam.setPageSize(10);
+            logManagerParam.setPageSize(DEFAULT_PAGE_SIZE);
         }
 
         // 开始时间为空则用当天时间开始时间

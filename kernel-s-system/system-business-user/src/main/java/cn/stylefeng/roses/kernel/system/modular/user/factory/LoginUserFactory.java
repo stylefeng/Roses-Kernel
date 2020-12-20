@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.factory;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Dict;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
@@ -107,6 +108,9 @@ public class LoginUserFactory {
         Set<SimpleDict> appsByAppCodes = appServiceApi.getAppsByAppCodes(appCodes);
         // 填充应用信息
         loginUser.setApps(appsByAppCodes);
+
+        // 日志系统问题  默认初始化其他信息 dict
+        loginUser.setOtherInfos(new Dict());
 
         return loginUser;
     }

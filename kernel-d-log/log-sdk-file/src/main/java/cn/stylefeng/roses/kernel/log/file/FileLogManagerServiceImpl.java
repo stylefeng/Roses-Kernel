@@ -3,13 +3,13 @@ package cn.stylefeng.roses.kernel.log.file;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSON;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.exception.LogException;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerParam;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -21,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static cn.stylefeng.roses.kernel.log.api.constants.LogConstants.DEFAULT_BEGIN_PAGE_NO;
+import static cn.stylefeng.roses.kernel.log.api.constants.LogConstants.DEFAULT_PAGE_SIZE;
 import static cn.stylefeng.roses.kernel.log.api.constants.LogFileConstants.FILE_CONTRACT_SYMBOL;
 import static cn.stylefeng.roses.kernel.log.api.constants.LogFileConstants.FILE_SUFFIX;
 import static cn.stylefeng.roses.kernel.log.api.exception.enums.LogExceptionEnum.*;
@@ -70,13 +72,19 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
 
         // 文件当前指针
         long filePointer = 0L;
-
-        // 如果页数不等于1,则根据当前登陆用户信息取出上次读取文件的位置
-        if (!logManagerParam.getPageNo().equals(1)) {
-            Object pointer = LoginContext.me().getLoginUser().getOtherInfos().get("filePointer");
-            if (ObjectUtil.isNotEmpty(pointer)) {
-                filePointer = (long) pointer;
+        if (logManagerParam.getPageNo() == null) {
+            logManagerParam.setPageNo(DEFAULT_BEGIN_PAGE_NO);
+        } else {
+            // 如果页数不等于1,则根据当前登陆用户信息取出上次读取文件的位置
+            if (!DEFAULT_BEGIN_PAGE_NO.equals(logManagerParam.getPageNo())) {
+                Object pointer = LoginContext.me().getLoginUser().getOtherInfos().get("filePointer");
+                if (ObjectUtil.isNotEmpty(pointer)) {
+                    filePointer = (long) pointer;
+                }
             }
+        }
+        if (logManagerParam.getPageSize() == null) {
+            logManagerParam.setPageSize(DEFAULT_PAGE_SIZE);
         }
         // 返回分页结果
         PageResult<LogRecordDTO> pageResult = new PageResult<>();
