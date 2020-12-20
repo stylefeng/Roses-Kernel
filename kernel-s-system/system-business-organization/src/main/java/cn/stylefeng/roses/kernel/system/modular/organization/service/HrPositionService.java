@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysPositionRequest;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrPositionRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -13,73 +13,73 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/11/04 11:07
  */
-public interface SysPositionService extends IService<HrPosition> {
+public interface HrPositionService extends IService<HrPosition> {
 
     /**
      * 添加职位
      *
-     * @param sysPositionRequest 请求参数
+     * @param hrPositionRequest 请求参数
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    void add(SysPositionRequest sysPositionRequest);
+    void add(HrPositionRequest hrPositionRequest);
 
     /**
      * 编辑职位
      *
-     * @param sysPositionRequest 请求参数
+     * @param hrPositionRequest 请求参数
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    void edit(SysPositionRequest sysPositionRequest);
+    void edit(HrPositionRequest hrPositionRequest);
 
     /**
      * 删除职位
      *
-     * @param sysPositionRequest 请求参数
+     * @param hrPositionRequest 请求参数
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    void delete(SysPositionRequest sysPositionRequest);
+    void delete(HrPositionRequest hrPositionRequest);
 
     /**
      * 更新装填
      *
-     * @param sysPositionRequest 请求参数
+     * @param hrPositionRequest 请求参数
      * @author fengshuonan
      * @date 2020/11/18 23:00
      */
-    void updateStatus(SysPositionRequest sysPositionRequest);
+    void updateStatus(HrPositionRequest hrPositionRequest);
 
     /**
      * 查看详情职位
      *
-     * @param sysPositionRequest 请求参数
+     * @param hrPositionRequest 请求参数
      * @return 职位详情
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    HrPosition detail(SysPositionRequest sysPositionRequest);
+    HrPosition detail(HrPositionRequest hrPositionRequest);
 
     /**
      * 分页查询职位
      *
-     * @param sysPositionRequest 请求参数
+     * @param hrPositionRequest 请求参数
      * @return 职位详情分页列表
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    PageResult<HrPosition> page(SysPositionRequest sysPositionRequest);
+    PageResult<HrPosition> page(HrPositionRequest hrPositionRequest);
 
     /**
      * 查询所有职位
      *
-     * @param sysPositionRequest 请求参数
+     * @param hrPositionRequest 请求参数
      * @return 职位详情列表
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    List<HrPosition> list(SysPositionRequest sysPositionRequest);
+    List<HrPosition> list(HrPositionRequest hrPositionRequest);
 
     /**
      * 通过职位id列表，获取对应的名称列表

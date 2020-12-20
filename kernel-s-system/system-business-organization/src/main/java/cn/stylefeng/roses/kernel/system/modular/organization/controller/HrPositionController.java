@@ -6,8 +6,8 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.modular.organization.service.SysPositionService;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysPositionRequest;
+import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrPositionRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,10 +22,10 @@ import javax.annotation.Resource;
  */
 @RestController
 @ApiResource(name = "系统职位管理")
-public class SysPositionController {
+public class HrPositionController {
 
     @Resource
-    private SysPositionService syspositionService;
+    private HrPositionService syspositionService;
 
     /**
      * 添加系统职位
@@ -34,8 +34,8 @@ public class SysPositionController {
      * @date 2020/11/04 11:07
      */
     @PostResource(name = "添加系统职位", path = "/sysPosition/add")
-    public ResponseData add(@RequestBody @Validated(SysPositionRequest.add.class) SysPositionRequest sysPositionRequest) {
-        syspositionService.add(sysPositionRequest);
+    public ResponseData add(@RequestBody @Validated(HrPositionRequest.add.class) HrPositionRequest hrPositionRequest) {
+        syspositionService.add(hrPositionRequest);
         return new SuccessResponseData();
     }
 
@@ -46,8 +46,8 @@ public class SysPositionController {
      * @date 2020/11/04 11:07
      */
     @PostResource(name = "编辑系统职位", path = "/sysPosition/edit")
-    public ResponseData edit(@RequestBody @Validated(SysPositionRequest.edit.class) SysPositionRequest sysPositionRequest) {
-        syspositionService.edit(sysPositionRequest);
+    public ResponseData edit(@RequestBody @Validated(HrPositionRequest.edit.class) HrPositionRequest hrPositionRequest) {
+        syspositionService.edit(hrPositionRequest);
         return new SuccessResponseData();
     }
 
@@ -58,8 +58,8 @@ public class SysPositionController {
      * @date 2020/11/04 11:07
      */
     @PostResource(name = "删除系统职位", path = "/sysPosition/delete")
-    public ResponseData delete(@RequestBody @Validated(SysPositionRequest.delete.class) SysPositionRequest sysPositionRequest) {
-        syspositionService.delete(sysPositionRequest);
+    public ResponseData delete(@RequestBody @Validated(HrPositionRequest.delete.class) HrPositionRequest hrPositionRequest) {
+        syspositionService.delete(hrPositionRequest);
         return new SuccessResponseData();
     }
 
@@ -70,8 +70,8 @@ public class SysPositionController {
      * @date 2020/11/04 11:07
      */
     @PostResource(name = "更新职位状态", path = "/sysPosition/updateStatus")
-    public ResponseData updateStatus(@RequestBody @Validated(BaseRequest.updateStatus.class) SysPositionRequest sysPositionRequest) {
-        syspositionService.updateStatus(sysPositionRequest);
+    public ResponseData updateStatus(@RequestBody @Validated(BaseRequest.updateStatus.class) HrPositionRequest hrPositionRequest) {
+        syspositionService.updateStatus(hrPositionRequest);
         return new SuccessResponseData();
     }
 
@@ -82,8 +82,8 @@ public class SysPositionController {
      * @date 2020/11/04 11:07
      */
     @GetResource(name = "查看详情系统职位", path = "/sysPosition/detail")
-    public ResponseData detail(@Validated(SysPositionRequest.detail.class) SysPositionRequest sysPositionRequest) {
-        return new SuccessResponseData(syspositionService.detail(sysPositionRequest));
+    public ResponseData detail(@Validated(HrPositionRequest.detail.class) HrPositionRequest hrPositionRequest) {
+        return new SuccessResponseData(syspositionService.detail(hrPositionRequest));
     }
 
     /**
@@ -93,8 +93,8 @@ public class SysPositionController {
      * @date 2020/11/04 11:07
      */
     @GetResource(name = "分页查询系统职位", path = "/sysPosition/page")
-    public ResponseData page(SysPositionRequest sysPositionRequest) {
-        return new SuccessResponseData(syspositionService.page(sysPositionRequest));
+    public ResponseData page(HrPositionRequest hrPositionRequest) {
+        return new SuccessResponseData(syspositionService.page(hrPositionRequest));
     }
 
     /**
@@ -104,8 +104,8 @@ public class SysPositionController {
      * @date 2020/11/04 11:07
      */
     @GetResource(name = "获取全部系统职位", path = "/sysPosition/list")
-    public ResponseData list(SysPositionRequest sysPositionRequest) {
-        return new SuccessResponseData(syspositionService.list(sysPositionRequest));
+    public ResponseData list(HrPositionRequest hrPositionRequest) {
+        return new SuccessResponseData(syspositionService.list(hrPositionRequest));
     }
 
 }

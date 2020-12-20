@@ -9,6 +9,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author fengshuonan
  * @date 2020/11/04 11:07
  */
-public interface SysPositionMapper extends BaseMapper<HrPosition> {
+public interface HrPositionMapper extends BaseMapper<HrPosition> {
 
 }

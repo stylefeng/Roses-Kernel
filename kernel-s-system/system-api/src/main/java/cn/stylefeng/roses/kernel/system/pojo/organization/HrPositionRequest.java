@@ -18,7 +18,7 @@ import java.math.BigDecimal;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SysPositionRequest extends BaseRequest {
+public class HrPositionRequest extends BaseRequest {
 
     /**
      * 主键

@@ -9,6 +9,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author fengshuonan
  * @date 2020/11/04 11:05
  */
-public interface SysOrganizationMapper extends BaseMapper<HrOrganization> {
+public interface HrOrganizationMapper extends BaseMapper<HrOrganization> {
 
 }

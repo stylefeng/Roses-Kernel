@@ -3,7 +3,7 @@ package cn.stylefeng.roses.kernel.system.modular.organization.service;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysOrganizationRequest;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -15,83 +15,83 @@ import java.util.Set;
  * @author fengshuonan
  * @date 2020/11/04 11:05
  */
-public interface SysOrganizationService extends IService<HrOrganization> {
+public interface HrOrganizationService extends IService<HrOrganization> {
 
     /**
      * 添加系统组织机构
      *
-     * @param sysOrganizationRequest 组织机构请求参数
+     * @param hrOrganizationRequest 组织机构请求参数
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    void add(SysOrganizationRequest sysOrganizationRequest);
+    void add(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 编辑系统组织机构
      *
-     * @param sysOrganizationRequest 组织机构请求参数
+     * @param hrOrganizationRequest 组织机构请求参数
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    void edit(SysOrganizationRequest sysOrganizationRequest);
+    void edit(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 删除系统组织机构
      *
-     * @param sysOrganizationRequest 组织机构请求参数
+     * @param hrOrganizationRequest 组织机构请求参数
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    void delete(SysOrganizationRequest sysOrganizationRequest);
+    void delete(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 修改组织机构状态
      *
-     * @param sysOrganizationRequest 请求参数
+     * @param hrOrganizationRequest 请求参数
      * @author fengshuonan
      * @date 2020/11/18 22:38
      */
-    void updateStatus(SysOrganizationRequest sysOrganizationRequest);
+    void updateStatus(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 查看详情系统组织机构
      *
-     * @param sysOrganizationRequest 组织机构请求参数
+     * @param hrOrganizationRequest 组织机构请求参数
      * @return 组织机构详情
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    HrOrganization detail(SysOrganizationRequest sysOrganizationRequest);
+    HrOrganization detail(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 分页查询系统组织机构
      *
-     * @param sysOrganizationRequest 组织机构请求参数
+     * @param hrOrganizationRequest 组织机构请求参数
      * @return 组织机构详情分页列表
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    PageResult<HrOrganization> page(SysOrganizationRequest sysOrganizationRequest);
+    PageResult<HrOrganization> page(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 查询所有系统组织机构
      *
-     * @param sysOrganizationRequest 组织机构请求参数
+     * @param hrOrganizationRequest 组织机构请求参数
      * @return 组织机构详情列表
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    List<HrOrganization> list(SysOrganizationRequest sysOrganizationRequest);
+    List<HrOrganization> list(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 获取组织架构树
      *
-     * @param sysOrganizationRequest 查询参数
+     * @param hrOrganizationRequest 查询参数
      * @return 系统组织机构树
      * @author fengshuonan
      * @date 2020/11/6 13:41
      */
-    List<DefaultTreeNode> tree(SysOrganizationRequest sysOrganizationRequest);
+    List<DefaultTreeNode> tree(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 查询所有参数组织架构id集合的所有层级的父id，包含父级的父级等
