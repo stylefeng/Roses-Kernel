@@ -73,6 +73,6 @@ public class HrOrganizationRequest extends BaseRequest {
     /**
      * 描述
      */
-    private String remark;
+    private String orgRemark;
 
 }

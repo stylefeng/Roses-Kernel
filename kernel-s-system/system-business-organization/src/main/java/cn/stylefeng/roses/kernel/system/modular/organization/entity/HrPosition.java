@@ -53,8 +53,8 @@ public class HrPosition extends BaseEntity {
     /**
      * 备注
      */
-    @TableField("remark")
-    private String remark;
+    @TableField("org_remark")
+    private String orgRemark;
 
     /**
      * 删除标记：Y-已删除，N-未删除

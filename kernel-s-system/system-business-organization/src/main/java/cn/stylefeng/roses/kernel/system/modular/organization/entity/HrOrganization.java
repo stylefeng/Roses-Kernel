@@ -65,8 +65,8 @@ public class HrOrganization extends BaseEntity {
     /**
      * 描述
      */
-    @TableField("remark")
-    private String remark;
+    @TableField("org_remark")
+    private String orgRemark;
 
     /**
      * 删除标记（Y-已删除，N-未删除）
