@@ -35,7 +35,9 @@ public class LogRecordFactory {
         // 设置appName
         String applicationName = null;
         try {
-            applicationName = SpringUtil.getApplicationContext().getApplicationName();
+            // 修改直接从上下文环境中获取spring.application.name
+            // 解决获取applicationName为空问题
+            applicationName = SpringUtil.getApplicationContext().getEnvironment().getProperty("spring.application.name");
         } catch (Exception e) {
             applicationName = LogConstants.LOG_DEFAULT_APP_NAME;
         }

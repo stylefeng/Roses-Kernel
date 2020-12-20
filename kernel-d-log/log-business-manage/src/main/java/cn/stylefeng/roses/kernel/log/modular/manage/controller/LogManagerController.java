@@ -5,6 +5,7 @@ import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerParam;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
@@ -35,7 +36,7 @@ public class LogManagerController {
      * @author luojie
      * @date 2020/11/3 12:58
      */
-    @PostResource(name = "查询日志列表", path = "/logManager/list")
+    @GetResource(name = "查询日志列表", path = "/logManager/list")
     public ResponseData list(@RequestBody LogManagerParam logManagerParam) {
         PageResult<LogRecordDTO> logRecordDtoPageResult = logManagerApi.queryLogListPage(logManagerParam);
         return new SuccessResponseData(logRecordDtoPageResult);
