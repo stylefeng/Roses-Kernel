@@ -23,4 +23,9 @@ public interface ScannerConstants {
      */
     String RESOURCE_CACHE_KEY = "GUNS_RESOURCE_CACHES";
 
+    /**
+     * 资源汇报的监听器的顺序
+     */
+    Integer REPORT_RESOURCE_LISTENER_SORT = 200;
+
 }

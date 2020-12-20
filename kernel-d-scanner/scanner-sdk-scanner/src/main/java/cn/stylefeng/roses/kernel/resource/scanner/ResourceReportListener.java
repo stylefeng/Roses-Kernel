@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.resource.scanner;
 
 import cn.stylefeng.roses.kernel.resource.api.ResourceCollectorApi;
 import cn.stylefeng.roses.kernel.resource.api.ResourceReportApi;
+import cn.stylefeng.roses.kernel.resource.api.constants.ScannerConstants;
 import cn.stylefeng.roses.kernel.resource.api.holder.InitScanFlagHolder;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ReportResourceParam;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
@@ -11,6 +12,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.Ordered;
 
 import java.util.Map;
 
@@ -21,7 +23,7 @@ import java.util.Map;
  * @date 2020/10/19 22:27
  */
 @Slf4j
-public class ResourceReportListener implements ApplicationListener<ApplicationReadyEvent> {
+public class ResourceReportListener implements ApplicationListener<ApplicationReadyEvent>, Ordered {
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -53,6 +55,11 @@ public class ResourceReportListener implements ApplicationListener<ApplicationRe
             InitScanFlagHolder.setFlag();
         }
 
+    }
+
+    @Override
+    public int getOrder() {
+        return ScannerConstants.REPORT_RESOURCE_LISTENER_SORT;
     }
 
 }
