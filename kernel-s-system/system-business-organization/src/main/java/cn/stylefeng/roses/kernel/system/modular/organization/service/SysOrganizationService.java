@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
-import cn.stylefeng.roses.kernel.system.pojo.organization.SysOrganizationRequest;
-import com.baomidou.mybatisplus.extension.service.IService;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
-import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysOrganization;
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
+import cn.stylefeng.roses.kernel.system.pojo.organization.SysOrganizationRequest;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +15,7 @@ import java.util.Set;
  * @author fengshuonan
  * @date 2020/11/04 11:05
  */
-public interface SysOrganizationService extends IService<SysOrganization> {
+public interface SysOrganizationService extends IService<HrOrganization> {
 
     /**
      * 添加系统组织机构
@@ -61,7 +61,7 @@ public interface SysOrganizationService extends IService<SysOrganization> {
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    SysOrganization detail(SysOrganizationRequest sysOrganizationRequest);
+    HrOrganization detail(SysOrganizationRequest sysOrganizationRequest);
 
     /**
      * 分页查询系统组织机构
@@ -71,7 +71,7 @@ public interface SysOrganizationService extends IService<SysOrganization> {
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    PageResult<SysOrganization> page(SysOrganizationRequest sysOrganizationRequest);
+    PageResult<HrOrganization> page(SysOrganizationRequest sysOrganizationRequest);
 
     /**
      * 查询所有系统组织机构
@@ -81,7 +81,7 @@ public interface SysOrganizationService extends IService<SysOrganization> {
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    List<SysOrganization> list(SysOrganizationRequest sysOrganizationRequest);
+    List<HrOrganization> list(SysOrganizationRequest sysOrganizationRequest);
 
     /**
      * 获取组织架构树

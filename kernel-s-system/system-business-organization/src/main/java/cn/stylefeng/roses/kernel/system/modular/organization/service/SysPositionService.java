@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import cn.stylefeng.roses.kernel.system.pojo.organization.SysPositionRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
-import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysPosition;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/11/04 11:07
  */
-public interface SysPositionService extends IService<SysPosition> {
+public interface SysPositionService extends IService<HrPosition> {
 
     /**
      * 添加职位
@@ -59,7 +59,7 @@ public interface SysPositionService extends IService<SysPosition> {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    SysPosition detail(SysPositionRequest sysPositionRequest);
+    HrPosition detail(SysPositionRequest sysPositionRequest);
 
     /**
      * 分页查询职位
@@ -69,7 +69,7 @@ public interface SysPositionService extends IService<SysPosition> {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    PageResult<SysPosition> page(SysPositionRequest sysPositionRequest);
+    PageResult<HrPosition> page(SysPositionRequest sysPositionRequest);
 
     /**
      * 查询所有职位
@@ -79,7 +79,7 @@ public interface SysPositionService extends IService<SysPosition> {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    List<SysPosition> list(SysPositionRequest sysPositionRequest);
+    List<HrPosition> list(SysPositionRequest sysPositionRequest);
 
     /**
      * 通过职位id列表，获取对应的名称列表

@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.mapper;
 
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysPosition;
 
 /**
  * 系统职位表 Mapper 接口
@@ -9,6 +9,6 @@ import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysPosition;
  * @author fengshuonan
  * @date 2020/11/04 11:07
  */
-public interface SysPositionMapper extends BaseMapper<SysPosition> {
+public interface SysPositionMapper extends BaseMapper<HrPosition> {
 
 }

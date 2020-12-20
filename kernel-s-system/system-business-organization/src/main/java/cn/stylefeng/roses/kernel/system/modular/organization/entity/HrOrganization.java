@@ -10,39 +10,51 @@ import lombok.EqualsAndHashCode;
 import java.math.BigDecimal;
 
 /**
- * 系统职位表
+ * 系统组织机构表
  *
  * @author fengshuonan
- * @date 2020/11/04 11:07
+ * @date 2020/11/04 11:05
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("sys_position")
-public class SysPosition extends BaseEntity {
+@TableName("hr_organization")
+public class HrOrganization extends BaseEntity {
 
     /**
      * 主键
      */
-    @TableId("position_id")
-    private Long positionId;
+    @TableId("org_id")
+    private Long orgId;
 
     /**
-     * 职位名称
+     * 父id，一级节点父id是0
      */
-    @TableField("position_name")
-    private String positionName;
+    @TableField("org_parent_id")
+    private Long orgParentId;
 
     /**
-     * 职位编码
+     * 父ids
      */
-    @TableField("position_code")
-    private String positionCode;
+    @TableField("org_pids")
+    private String orgPids;
+
+    /**
+     * 组织名称
+     */
+    @TableField("org_name")
+    private String orgName;
+
+    /**
+     * 组织编码
+     */
+    @TableField("org_code")
+    private String orgCode;
 
     /**
      * 排序
      */
-    @TableField("position_sort")
-    private BigDecimal positionSort;
+    @TableField("org_sort")
+    private BigDecimal orgSort;
 
     /**
      * 状态：1-启用，2-禁用
@@ -51,13 +63,13 @@ public class SysPosition extends BaseEntity {
     private Integer statusFlag;
 
     /**
-     * 备注
+     * 描述
      */
     @TableField("remark")
     private String remark;
 
     /**
-     * 删除标记：Y-已删除，N-未删除
+     * 删除标记（Y-已删除，N-未删除）
      */
     @TableField("del_flag")
     private String delFlag;

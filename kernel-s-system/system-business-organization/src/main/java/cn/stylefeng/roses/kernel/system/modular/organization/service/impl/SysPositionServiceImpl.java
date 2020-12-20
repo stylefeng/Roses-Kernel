@@ -11,7 +11,7 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.PositionExceptionEnum;
-import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysPosition;
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.SysPositionMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.SysPositionService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.SysPositionRequest;
@@ -33,14 +33,14 @@ import java.util.stream.Collectors;
  * @date 2020/11/04 11:07
  */
 @Service
-public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPosition> implements SysPositionService {
+public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, HrPosition> implements SysPositionService {
 
     @Resource
     private UserOrgServiceApi userOrgServiceApi;
 
     @Override
     public void add(SysPositionRequest sysPositionRequest) {
-        SysPosition sysPosition = new SysPosition();
+        HrPosition sysPosition = new HrPosition();
         BeanUtil.copyProperties(sysPositionRequest, sysPosition);
 
         // 设置状态为启用
@@ -52,7 +52,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     @Override
     public void edit(SysPositionRequest sysPositionRequest) {
 
-        SysPosition sysPosition = this.querySysPosition(sysPositionRequest);
+        HrPosition sysPosition = this.querySysPosition(sysPositionRequest);
         BeanUtil.copyProperties(sysPositionRequest, sysPosition);
 
         // 不能修改状态，用修改状态接口修改状态
@@ -65,7 +65,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     @Transactional(rollbackFor = Exception.class)
     public void delete(SysPositionRequest sysPositionRequest) {
 
-        SysPosition sysPosition = this.querySysPosition(sysPositionRequest);
+        HrPosition sysPosition = this.querySysPosition(sysPositionRequest);
 
         // 该职位下是否有员工
         // 职位有绑定员工，不能删除
@@ -82,29 +82,29 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
 
     @Override
     public void updateStatus(SysPositionRequest sysPositionRequest) {
-        LambdaUpdateWrapper<SysPosition> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysPosition::getPositionId, sysPositionRequest.getPositionId());
-        updateWrapper.set(SysPosition::getStatusFlag, sysPositionRequest.getStatusFlag());
+        LambdaUpdateWrapper<HrPosition> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(HrPosition::getPositionId, sysPositionRequest.getPositionId());
+        updateWrapper.set(HrPosition::getStatusFlag, sysPositionRequest.getStatusFlag());
 
         this.update(updateWrapper);
     }
 
     @Override
-    public SysPosition detail(SysPositionRequest sysPositionRequest) {
+    public HrPosition detail(SysPositionRequest sysPositionRequest) {
         return this.querySysPosition(sysPositionRequest);
     }
 
     @Override
-    public PageResult<SysPosition> page(SysPositionRequest sysPositionRequest) {
-        LambdaQueryWrapper<SysPosition> wrapper = createWrapper(sysPositionRequest);
+    public PageResult<HrPosition> page(SysPositionRequest sysPositionRequest) {
+        LambdaQueryWrapper<HrPosition> wrapper = createWrapper(sysPositionRequest);
 
-        Page<SysPosition> page = this.page(PageFactory.defaultPage(), wrapper);
+        Page<HrPosition> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
     }
 
     @Override
-    public List<SysPosition> list(SysPositionRequest sysPositionRequest) {
-        LambdaQueryWrapper<SysPosition> wrapper = createWrapper(sysPositionRequest);
+    public List<HrPosition> list(SysPositionRequest sysPositionRequest) {
+        LambdaQueryWrapper<HrPosition> wrapper = createWrapper(sysPositionRequest);
         return this.list(wrapper);
     }
 
@@ -112,15 +112,15 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     public List<String> getPositionNamesByPositionIds(List<Long> positionIds) {
 
         // 拼接查询条件
-        LambdaQueryWrapper<SysPosition> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysPosition::getPositionId, positionIds);
-        queryWrapper.select(SysPosition::getPositionName);
+        LambdaQueryWrapper<HrPosition> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(HrPosition::getPositionId, positionIds);
+        queryWrapper.select(HrPosition::getPositionName);
 
         // 查询结果
-        List<SysPosition> sysPositions = this.list(queryWrapper);
+        List<HrPosition> sysPositions = this.list(queryWrapper);
 
         // 把name组装起来
-        return sysPositions.stream().map(SysPosition::getPositionName).collect(Collectors.toList());
+        return sysPositions.stream().map(HrPosition::getPositionName).collect(Collectors.toList());
     }
 
     /**
@@ -129,26 +129,26 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
      * @author fengshuonan
      * @date 2020/11/6 18:35
      */
-    private LambdaQueryWrapper<SysPosition> createWrapper(SysPositionRequest sysPositionRequest) {
-        LambdaQueryWrapper<SysPosition> queryWrapper = new LambdaQueryWrapper<>();
+    private LambdaQueryWrapper<HrPosition> createWrapper(SysPositionRequest sysPositionRequest) {
+        LambdaQueryWrapper<HrPosition> queryWrapper = new LambdaQueryWrapper<>();
         if (ObjectUtil.isNotNull(sysPositionRequest)) {
 
             // 拼接职位名称条件
             if (ObjectUtil.isNotEmpty(sysPositionRequest.getPositionName())) {
-                queryWrapper.like(SysPosition::getPositionName, sysPositionRequest.getPositionName());
+                queryWrapper.like(HrPosition::getPositionName, sysPositionRequest.getPositionName());
             }
 
             // 拼接职位编码条件
             if (ObjectUtil.isNotEmpty(sysPositionRequest.getPositionCode())) {
-                queryWrapper.eq(SysPosition::getPositionCode, sysPositionRequest.getPositionCode());
+                queryWrapper.eq(HrPosition::getPositionCode, sysPositionRequest.getPositionCode());
             }
         }
 
         // 查询未删除状态的
-        queryWrapper.eq(SysPosition::getDelFlag, YesOrNotEnum.N.getCode());
+        queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
 
         // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(SysPosition::getPositionSort);
+        queryWrapper.orderByAsc(HrPosition::getPositionSort);
 
         return queryWrapper;
     }
@@ -159,8 +159,8 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
      * @author fengshuonan
      * @date 2020/11/18 22:59
      */
-    private SysPosition querySysPosition(SysPositionRequest sysPositionRequest) {
-        SysPosition sysposition = this.getById(sysPositionRequest.getPositionId());
+    private HrPosition querySysPosition(SysPositionRequest sysPositionRequest) {
+        HrPosition sysposition = this.getById(sysPositionRequest.getPositionId());
         if (ObjectUtil.isEmpty(sysposition)) {
             String userTip = StrUtil.format(PositionExceptionEnum.CANT_FIND_POSITION.getUserTip(), sysposition.getPositionId());
             throw new SystemModularException(PositionExceptionEnum.CANT_FIND_POSITION, userTip);

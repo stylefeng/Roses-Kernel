@@ -22,7 +22,7 @@ import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.exception.enums.OrganizationExceptionEnum;
-import cn.stylefeng.roses.kernel.system.modular.organization.entity.SysOrganization;
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.SysOrganizationMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.SysOrganizationService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.SysOrganizationRequest;
@@ -46,7 +46,7 @@ import java.util.Set;
  * @date 2020/11/04 11:05
  */
 @Service
-public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMapper, SysOrganization> implements SysOrganizationService {
+public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMapper, HrOrganization> implements SysOrganizationService {
 
     @Resource
     private UserOrgServiceApi userOrgServiceApi;
@@ -69,7 +69,7 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
             throw new SystemModularException(DataScopeExceptionEnum.DATA_SCOPE_ERROR, userTip);
         }
 
-        SysOrganization sysOrganization = new SysOrganization();
+        HrOrganization sysOrganization = new HrOrganization();
         BeanUtil.copyProperties(sysOrganizationRequest, sysOrganization);
 
         // 填充parentIds
@@ -84,7 +84,7 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
     @Override
     public void edit(SysOrganizationRequest sysOrganizationRequest) {
 
-        SysOrganization sysOrganization = this.querySysOrganization(sysOrganizationRequest);
+        HrOrganization sysOrganization = this.querySysOrganization(sysOrganizationRequest);
         Long id = sysOrganization.getOrgId();
 
         // 校验数据范围
@@ -109,7 +109,7 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
     @Transactional(rollbackFor = Exception.class)
     public void delete(SysOrganizationRequest sysOrganizationRequest) {
 
-        SysOrganization sysOrganization = this.querySysOrganization(sysOrganizationRequest);
+        HrOrganization sysOrganization = this.querySysOrganization(sysOrganizationRequest);
         Long organizationId = sysOrganization.getOrgId();
 
         // 校验数据范围
@@ -127,9 +127,9 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
         // 级联删除子节点，逻辑删除
         Set<Long> childIdList = DbOperatorContext.me().findSubListByParentId("sys_organization", "pids", "id", organizationId);
         childIdList.add(organizationId);
-        LambdaUpdateWrapper<SysOrganization> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.in(SysOrganization::getOrgId, childIdList)
-                .set(SysOrganization::getDelFlag, YesOrNotEnum.Y.getCode());
+        LambdaUpdateWrapper<HrOrganization> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.in(HrOrganization::getOrgId, childIdList)
+                .set(HrOrganization::getDelFlag, YesOrNotEnum.Y.getCode());
         this.update(updateWrapper);
 
         // 删除角色对应的组织架构数据范围
@@ -142,36 +142,36 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
     @Override
     public void updateStatus(SysOrganizationRequest sysOrganizationRequest) {
 
-        LambdaUpdateWrapper<SysOrganization> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysOrganization::getOrgId, sysOrganizationRequest.getOrgId());
-        updateWrapper.set(SysOrganization::getStatusFlag, sysOrganizationRequest.getStatusFlag());
+        LambdaUpdateWrapper<HrOrganization> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(HrOrganization::getOrgId, sysOrganizationRequest.getOrgId());
+        updateWrapper.set(HrOrganization::getStatusFlag, sysOrganizationRequest.getStatusFlag());
 
         this.update(updateWrapper);
     }
 
     @Override
-    public SysOrganization detail(SysOrganizationRequest sysOrganizationRequest) {
+    public HrOrganization detail(SysOrganizationRequest sysOrganizationRequest) {
         return this.querySysOrganization(sysOrganizationRequest);
     }
 
     @Override
-    public PageResult<SysOrganization> page(SysOrganizationRequest sysOrganizationRequest) {
+    public PageResult<HrOrganization> page(SysOrganizationRequest sysOrganizationRequest) {
 
         // 构造条件
-        LambdaQueryWrapper<SysOrganization> wrapper = createWrapper(sysOrganizationRequest);
+        LambdaQueryWrapper<HrOrganization> wrapper = createWrapper(sysOrganizationRequest);
 
         // 获取分页参数
-        Page<SysOrganization> page = PageFactory.defaultPage();
+        Page<HrOrganization> page = PageFactory.defaultPage();
 
         // 返回分页结果
         return PageResultFactory.createPageResult(this.page(page, wrapper));
     }
 
     @Override
-    public List<SysOrganization> list(SysOrganizationRequest sysOrganizationRequest) {
+    public List<HrOrganization> list(SysOrganizationRequest sysOrganizationRequest) {
 
         // 构造条件
-        LambdaQueryWrapper<SysOrganization> wrapper = createWrapper(sysOrganizationRequest);
+        LambdaQueryWrapper<HrOrganization> wrapper = createWrapper(sysOrganizationRequest);
 
         return this.list(wrapper);
     }
@@ -182,7 +182,7 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
         // 定义返回结果
         List<DefaultTreeNode> treeNodeList = CollectionUtil.newArrayList();
 
-        LambdaQueryWrapper<SysOrganization> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
 
         // 如果是超级管理员 或 数据范围是所有，则不过滤数据范围
         boolean needToDataScope = true;
@@ -206,18 +206,18 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
             Set<Long> allLevelParentIdsByOrganizations = this.findAllLevelParentIdsByOrganizations(dataScope);
 
             // 拼接查询条件
-            queryWrapper.in(SysOrganization::getOrgId, allLevelParentIdsByOrganizations);
+            queryWrapper.in(HrOrganization::getOrgId, allLevelParentIdsByOrganizations);
         }
 
         // 只查询未删除的
-        queryWrapper.eq(SysOrganization::getDelFlag, YesOrNotEnum.N.getCode());
+        queryWrapper.eq(HrOrganization::getDelFlag, YesOrNotEnum.N.getCode());
 
         // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(SysOrganization::getOrgSort);
+        queryWrapper.orderByAsc(HrOrganization::getOrgSort);
 
         // 组装节点
-        List<SysOrganization> list = this.list(queryWrapper);
-        for (SysOrganization sysOrganization : list) {
+        List<HrOrganization> list = this.list(queryWrapper);
+        for (HrOrganization sysOrganization : list) {
             DefaultTreeNode orgTreeNode = new DefaultTreeNode();
             orgTreeNode.setId(String.valueOf(sysOrganization.getOrgId()));
             orgTreeNode.setPId(String.valueOf(sysOrganization.getOrgParentId()));
@@ -237,17 +237,17 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
         Set<Long> allLevelParentIds = new HashSet<>(organizationIds);
 
         // 查询出这些节点的pids字段
-        LambdaQueryWrapper<SysOrganization> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysOrganization::getOrgId, organizationIds);
-        queryWrapper.select(SysOrganization::getOrgPids);
+        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(HrOrganization::getOrgId, organizationIds);
+        queryWrapper.select(HrOrganization::getOrgPids);
 
-        List<SysOrganization> organizationList = this.list(queryWrapper);
+        List<HrOrganization> organizationList = this.list(queryWrapper);
         if (organizationList == null || organizationList.isEmpty()) {
             return allLevelParentIds;
         }
 
         // 把所有的pids分割，并放入到set中
-        for (SysOrganization sysOrganization : organizationList) {
+        for (HrOrganization sysOrganization : organizationList) {
 
             // 获取pids值
             String pids = sysOrganization.getOrgPids();
@@ -276,34 +276,34 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
      * @author fengshuonan
      * @date 2020/11/6 10:16
      */
-    private LambdaQueryWrapper<SysOrganization> createWrapper(SysOrganizationRequest sysOrganizationRequest) {
-        LambdaQueryWrapper<SysOrganization> queryWrapper = new LambdaQueryWrapper<>();
+    private LambdaQueryWrapper<HrOrganization> createWrapper(SysOrganizationRequest sysOrganizationRequest) {
+        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
         if (ObjectUtil.isNotNull(sysOrganizationRequest)) {
 
             // 拼接机构名称查询条件
             if (ObjectUtil.isNotEmpty(sysOrganizationRequest.getOrgName())) {
-                queryWrapper.like(SysOrganization::getOrgName, sysOrganizationRequest.getOrgName());
+                queryWrapper.like(HrOrganization::getOrgName, sysOrganizationRequest.getOrgName());
             }
 
             // 拼接机构id查询条件
             if (ObjectUtil.isNotEmpty(sysOrganizationRequest.getOrgId())) {
-                queryWrapper.eq(SysOrganization::getOrgId, sysOrganizationRequest.getOrgId());
+                queryWrapper.eq(HrOrganization::getOrgId, sysOrganizationRequest.getOrgId());
             }
 
             // 拼接父机构id查询条件
             if (ObjectUtil.isNotEmpty(sysOrganizationRequest.getOrgParentId())) {
                 queryWrapper
-                        .eq(SysOrganization::getOrgId, sysOrganizationRequest.getOrgParentId())
+                        .eq(HrOrganization::getOrgId, sysOrganizationRequest.getOrgParentId())
                         .or()
-                        .like(SysOrganization::getOrgPids, sysOrganizationRequest.getOrgParentId());
+                        .like(HrOrganization::getOrgPids, sysOrganizationRequest.getOrgParentId());
             }
         }
 
         // 查询未删除状态的
-        queryWrapper.eq(SysOrganization::getDelFlag, YesOrNotEnum.N.getCode());
+        queryWrapper.eq(HrOrganization::getDelFlag, YesOrNotEnum.N.getCode());
 
         // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(SysOrganization::getOrgSort);
+        queryWrapper.orderByAsc(HrOrganization::getOrgSort);
 
         return queryWrapper;
     }
@@ -315,8 +315,8 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    private SysOrganization querySysOrganization(SysOrganizationRequest sysOrganizationRequest) {
-        SysOrganization sysorganization = this.getById(sysOrganizationRequest.getOrgId());
+    private HrOrganization querySysOrganization(SysOrganizationRequest sysOrganizationRequest) {
+        HrOrganization sysorganization = this.getById(sysOrganizationRequest.getOrgId());
         if (ObjectUtil.isEmpty(sysorganization)) {
             throw new SystemModularException(OrganizationExceptionEnum.CANT_FIND_ORG);
         }
@@ -329,7 +329,7 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
      * @author fengshuonan
      * @date 2020/11/5 13:45
      */
-    private void fillParentIds(SysOrganization sysOrganization) {
+    private void fillParentIds(HrOrganization sysOrganization) {
 
         // 如果是一级节点（一级节点的pid是0）
         if (sysOrganization.getOrgParentId().equals(SystemConstants.DEFAULT_PARENT_ID)) {
@@ -337,7 +337,7 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
             sysOrganization.setOrgPids(SystemConstants.PID_LEFT_DIVIDE_SYMBOL + SystemConstants.DEFAULT_PARENT_ID + SystemConstants.PID_RIGHT_DIVIDE_SYMBOL + ",");
         } else {
             // 获取父组织机构
-            SysOrganization parentSysOrganization = this.getById(sysOrganization.getOrgParentId());
+            HrOrganization parentSysOrganization = this.getById(sysOrganization.getOrgParentId());
 
             // 设置本节点的父ids为 (上一个节点的pids + (上级节点的id) )
             sysOrganization.setOrgPids(
