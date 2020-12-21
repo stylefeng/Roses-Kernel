@@ -1,6 +1,8 @@
 package cn.stylefeng.roses.kernel.resource.api.util;
 
 import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.TypeUtil;
 import cn.stylefeng.roses.kernel.resource.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.FieldMetadata;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
@@ -9,10 +11,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 类的反射工具
@@ -32,10 +31,10 @@ public class ClassReflectUtil {
      */
     public static Set<FieldMetadata> getClassFieldDescription(Class<?> clazz) {
 
-        HashSet<FieldMetadata> metadataHashSet = new HashSet<>();
+        HashSet<FieldMetadata> fieldDescriptions = new HashSet<>();
 
         if (clazz == null) {
-            return metadataHashSet;
+            return fieldDescriptions;
         }
 
         // 获取类中的所有字段
@@ -43,19 +42,30 @@ public class ClassReflectUtil {
 
         for (Field declaredField : declaredFields) {
 
-            FieldMetadata fieldMetadata = new FieldMetadata();
+            FieldMetadata fieldDescription = new FieldMetadata();
+
+            // 生成uuid，给前端用
+            fieldDescription.setMetadataId(IdUtil.fastSimpleUUID());
 
             // 获取字段的名称
             String name = declaredField.getName();
-            fieldMetadata.setFieldName(name);
+            fieldDescription.setFieldName(name);
 
             // 获取字段的类型
             Class<?> declaredFieldType = declaredField.getType();
-            fieldMetadata.setFieldClassType(declaredFieldType.getSimpleName());
+            fieldDescription.setFieldClassType(declaredFieldType.getSimpleName());
 
             // 如果字段类型是Object类型，则遍历Object类型里的字段
             if (BaseRequest.class.isAssignableFrom(declaredFieldType)) {
-                fieldMetadata.setGenericFieldMetadata(getClassFieldDescription(declaredFieldType));
+                fieldDescription.setGenericFieldMetadata(getClassFieldDescription(declaredFieldType));
+            }
+
+            // 如果是泛型类型，遍历泛泛型的class类型里的字段
+            if (Collection.class.isAssignableFrom(declaredFieldType)) {
+                Class<?> genericClass = TypeUtil.getClass(TypeUtil.getTypeArgument(TypeUtil.getType(declaredField)));
+                if (BaseRequest.class.isAssignableFrom(genericClass)) {
+                    fieldDescription.setGenericFieldMetadata(getClassFieldDescription(genericClass));
+                }
             }
 
             // 获取字段的所有注解
@@ -63,7 +73,7 @@ public class ClassReflectUtil {
             if (annotations != null && annotations.length > 0) {
 
                 // 设置字段的所有注解
-                fieldMetadata.setAnnotations(annotationsToStrings(annotations));
+                fieldDescription.setAnnotations(annotationsToStrings(annotations));
 
                 // 遍历字段上的所有注解，找到带groups属性的，按group分类组装注解
                 Map<String, Set<String>> groupAnnotations = new HashMap<>();
@@ -76,19 +86,19 @@ public class ClassReflectUtil {
                     }
                 }
                 // 设置分组注解
-                fieldMetadata.setGroupAnnotations(groupAnnotations);
+                fieldDescription.setGroupAnnotations(groupAnnotations);
 
                 // 填充字段的中文名称
                 ChineseDescription chineseDescription = declaredField.getAnnotation(ChineseDescription.class);
                 if (chineseDescription != null) {
-                    fieldMetadata.setChineseName(chineseDescription.value());
+                    fieldDescription.setChineseName(chineseDescription.value());
                 }
             }
 
-            metadataHashSet.add(fieldMetadata);
+            fieldDescriptions.add(fieldDescription);
         }
 
-        return metadataHashSet;
+        return fieldDescriptions;
     }
 
     /**

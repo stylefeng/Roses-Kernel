@@ -15,6 +15,13 @@ import java.util.Set;
 public class FieldMetadata {
 
     /**
+     * 生成给前端用
+     * <p>
+     * uuid，标识一个字段的唯一性
+     */
+    private String metadataId;
+
+    /**
      * 字段中文名称，例如：创建用户
      */
     private String chineseName;
