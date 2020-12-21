@@ -282,7 +282,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public List<Long> getUserRoles(SysUserRequest sysUserRequest) {
-        return this.getUserRoleIdList(sysUserRequest.getId());
+        return this.getUserRoleIdList(sysUserRequest.getUserId());
     }
 
     @Override
@@ -411,7 +411,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @date 2020/3/26 9:54
      */
     private SysUser querySysUser(SysUserRequest sysUserRequest) {
-        SysUser sysUser = this.getById(sysUserRequest.getId());
+        SysUser sysUser = this.getById(sysUserRequest.getUserId());
         if (ObjectUtil.isNull(sysUser)) {
             throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST);
         }
@@ -434,8 +434,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
 
             // 组装用户姓名的查询条件
-            if (ObjectUtil.isNotEmpty(sysUserRequest.getName())) {
-                queryWrapper.eq(SysUser::getRealName, sysUserRequest.getName());
+            if (ObjectUtil.isNotEmpty(sysUserRequest.getRealName())) {
+                queryWrapper.eq(SysUser::getRealName, sysUserRequest.getRealName());
             }
         }
 

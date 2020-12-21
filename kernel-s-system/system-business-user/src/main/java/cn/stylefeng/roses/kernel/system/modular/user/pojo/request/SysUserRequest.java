@@ -26,8 +26,8 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "id不能为空，请检查id参数", groups = {edit.class, delete.class, detail.class, start.class, stop.class, grantRole.class, grantData.class, updateInfo.class, updatePwd.class, resetPwd.class, changeStatus.class, updateAvatar.class})
-    private Long id;
+    @NotNull(message = "userId不能为空", groups = {edit.class, delete.class, detail.class, start.class, stop.class, grantRole.class, grantData.class, updateInfo.class, updatePwd.class, resetPwd.class, changeStatus.class, updateAvatar.class})
+    private Long userId;
 
     /**
      * 账号
@@ -62,8 +62,8 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 姓名
      */
-    @NotBlank(message = "姓名不能为空，请检查name参数", groups = {add.class, edit.class})
-    private String name;
+    @NotBlank(message = "姓名不能为空", groups = {add.class, edit.class})
+    private String realName;
 
     /**
      * 头像

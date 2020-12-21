@@ -6,8 +6,8 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
+import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -194,7 +194,7 @@ public class SysUserController {
      */
     @GetResource(name = "系统用户_获取用户数据范围列表", path = "/sysUser/getUserDataScope")
     public ResponseData ownData(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
-        List<Long> userBindDataScope = userServiceApi.getUserBindDataScope(sysUserRequest.getId());
+        List<Long> userBindDataScope = userServiceApi.getUserBindDataScope(sysUserRequest.getUserId());
         return new SuccessResponseData(userBindDataScope);
     }
 

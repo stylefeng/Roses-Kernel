@@ -1,13 +1,13 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
+import cn.stylefeng.roses.kernel.system.DataScopeApi;
+import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserRoleMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.stylefeng.roses.kernel.system.DataScopeApi;
-import cn.stylefeng.roses.kernel.system.RoleServiceApi;
-import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +35,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     public void grantRole(SysUserRequest sysUserRequest) {
 
         // 获取用户id
-        Long userId = sysUserRequest.getId();
+        Long userId = sysUserRequest.getUserId();
 
         // 删除该用户的所有角色
         LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<>();

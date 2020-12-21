@@ -25,7 +25,7 @@ public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMap
     public void grantData(SysUserRequest sysUserRequest) {
 
         // 获取用户id
-        Long userId = sysUserRequest.getId();
+        Long userId = sysUserRequest.getUserId();
 
         // 删除该用户的数据范围集合，sys_user_data_scope表中
         LambdaQueryWrapper<SysUserDataScope> queryWrapper = new LambdaQueryWrapper<>();
