@@ -33,7 +33,7 @@ public class HrPositionController {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    @PostResource(name = "添加系统职位", path = "/sysPosition/add")
+    @PostResource(name = "添加系统职位", path = "/hrPosition/add")
     public ResponseData add(@RequestBody @Validated(HrPositionRequest.add.class) HrPositionRequest hrPositionRequest) {
         syspositionService.add(hrPositionRequest);
         return new SuccessResponseData();
@@ -45,7 +45,7 @@ public class HrPositionController {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    @PostResource(name = "编辑系统职位", path = "/sysPosition/edit")
+    @PostResource(name = "编辑系统职位", path = "/hrPosition/edit")
     public ResponseData edit(@RequestBody @Validated(HrPositionRequest.edit.class) HrPositionRequest hrPositionRequest) {
         syspositionService.edit(hrPositionRequest);
         return new SuccessResponseData();
@@ -57,7 +57,7 @@ public class HrPositionController {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    @PostResource(name = "删除系统职位", path = "/sysPosition/delete")
+    @PostResource(name = "删除系统职位", path = "/hrPosition/delete")
     public ResponseData delete(@RequestBody @Validated(HrPositionRequest.delete.class) HrPositionRequest hrPositionRequest) {
         syspositionService.delete(hrPositionRequest);
         return new SuccessResponseData();
@@ -69,7 +69,7 @@ public class HrPositionController {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    @PostResource(name = "更新职位状态", path = "/sysPosition/updateStatus")
+    @PostResource(name = "更新职位状态", path = "/hrPosition/updateStatus")
     public ResponseData updateStatus(@RequestBody @Validated(BaseRequest.updateStatus.class) HrPositionRequest hrPositionRequest) {
         syspositionService.updateStatus(hrPositionRequest);
         return new SuccessResponseData();
@@ -81,7 +81,7 @@ public class HrPositionController {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    @GetResource(name = "查看详情系统职位", path = "/sysPosition/detail")
+    @GetResource(name = "查看详情系统职位", path = "/hrPosition/detail")
     public ResponseData detail(@Validated(HrPositionRequest.detail.class) HrPositionRequest hrPositionRequest) {
         return new SuccessResponseData(syspositionService.detail(hrPositionRequest));
     }
@@ -92,7 +92,7 @@ public class HrPositionController {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    @GetResource(name = "分页查询系统职位", path = "/sysPosition/page")
+    @GetResource(name = "分页查询系统职位", path = "/hrPosition/page")
     public ResponseData page(HrPositionRequest hrPositionRequest) {
         return new SuccessResponseData(syspositionService.page(hrPositionRequest));
     }
@@ -103,7 +103,7 @@ public class HrPositionController {
      * @author fengshuonan
      * @date 2020/11/04 11:07
      */
-    @GetResource(name = "获取全部系统职位", path = "/sysPosition/list")
+    @GetResource(name = "获取全部系统职位", path = "/hrPosition/list")
     public ResponseData list(HrPositionRequest hrPositionRequest) {
         return new SuccessResponseData(syspositionService.list(hrPositionRequest));
     }
