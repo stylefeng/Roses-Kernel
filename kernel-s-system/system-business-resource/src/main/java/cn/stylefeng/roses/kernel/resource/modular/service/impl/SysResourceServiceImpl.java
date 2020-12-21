@@ -92,8 +92,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         // 2. 按应用和模块编码设置map
         Map<String, Map<String, List<ResourceTreeNode>>> appModularResources = divideResources(allResource);
 
-        // 3. 根据map组装资源树
-        return createResourceTree(appModularResources);
+        // 3. 创建模块code和模块name的映射
+        Map<String, String> modularCodeName = createModularCodeName(allResource);
+
+        // 4. 根据map组装资源树
+        return createResourceTree(appModularResources, modularCodeName);
     }
 
     @Override
@@ -276,12 +279,26 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     /**
+     * 创建模块code和name的映射
+     *
+     * @author fengshuonan
+     * @date 2020/12/21 11:23
+     */
+    private Map<String, String> createModularCodeName(List<SysResource> resources) {
+        HashMap<String, String> modularCodeName = new HashMap<>();
+        for (SysResource resource : resources) {
+            modularCodeName.put(resource.getModularCode(), resource.getModularName());
+        }
+        return modularCodeName;
+    }
+
+    /**
      * 根据归好类的资源，创建资源树
      *
      * @author fengshuonan
      * @date 2020/12/18 15:45
      */
-    private List<ResourceTreeNode> createResourceTree(Map<String, Map<String, List<ResourceTreeNode>>> appModularResources) {
+    private List<ResourceTreeNode> createResourceTree(Map<String, Map<String, List<ResourceTreeNode>>> appModularResources, Map<String, String> modularCodeName) {
 
         List<ResourceTreeNode> finalTree = new ArrayList<>();
 
@@ -300,13 +317,13 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
             // 创建模块节点
             ArrayList<ResourceTreeNode> modularNodes = new ArrayList<>();
-            for (String modularName : modularResources.keySet()) {
+            for (String modularCode : modularResources.keySet()) {
                 ResourceTreeNode modularNode = new ResourceTreeNode();
-                modularNode.setCode(modularName);
-                modularNode.setNodeName(modularName);
+                modularNode.setCode(modularCode);
+                modularNode.setNodeName(modularCodeName.get(modularCode));
                 modularNode.setResourceFlag(false);
                 modularNode.setParentCode(appName);
-                modularNode.setChildren(modularResources.get(modularName));
+                modularNode.setChildren(modularResources.get(modularCode));
                 modularNodes.add(modularNode);
             }
 
