@@ -82,8 +82,9 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
 
     @Override
     public void updateStatus(HrPositionRequest hrPositionRequest) {
+        HrPosition sysPosition = this.querySysPosition(hrPositionRequest);
         LambdaUpdateWrapper<HrPosition> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(HrPosition::getPositionId, hrPositionRequest.getPositionId());
+        updateWrapper.eq(HrPosition::getPositionId, sysPosition.getPositionId());
         updateWrapper.set(HrPosition::getStatusFlag, hrPositionRequest.getStatusFlag());
 
         this.update(updateWrapper);
@@ -162,7 +163,7 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
     private HrPosition querySysPosition(HrPositionRequest hrPositionRequest) {
         HrPosition sysposition = this.getById(hrPositionRequest.getPositionId());
         if (ObjectUtil.isEmpty(sysposition)) {
-            String userTip = StrUtil.format(PositionExceptionEnum.CANT_FIND_POSITION.getUserTip(), sysposition.getPositionId());
+            String userTip = StrUtil.format(PositionExceptionEnum.CANT_FIND_POSITION.getUserTip(), hrPositionRequest.getPositionId());
             throw new SystemModularException(PositionExceptionEnum.CANT_FIND_POSITION, userTip);
         }
         return sysposition;
