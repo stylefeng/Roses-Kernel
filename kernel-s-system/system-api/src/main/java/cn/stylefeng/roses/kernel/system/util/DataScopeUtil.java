@@ -1,10 +1,13 @@
 package cn.stylefeng.roses.kernel.system.util;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
 
 import java.util.Set;
 
@@ -116,6 +119,21 @@ public class DataScopeUtil {
 
         // 剩下的情况，就判断数据范围里有没有包含 organizationId
         return organizationDataScope.contains(organizationId);
+    }
+
+    /**
+     * 快速校验用户是否有该组织机构的数据范围，如果没有就抛出异常直接
+     *
+     * @param organizationId 被校验的组织机构id
+     * @author fengshuonan
+     * @date 2020/11/5 15:31
+     */
+    public static void quickValidateDataScope(Long organizationId) {
+        boolean validateResult = validateDataScopeByOrganizationId(organizationId);
+        if (!validateResult) {
+            String userTip = StrUtil.format(DataScopeExceptionEnum.DATA_SCOPE_ERROR.getUserTip(), DataScopeUtil.getDataScopeTip());
+            throw new SystemModularException(DataScopeExceptionEnum.DATA_SCOPE_ERROR, userTip);
+        }
     }
 
 }

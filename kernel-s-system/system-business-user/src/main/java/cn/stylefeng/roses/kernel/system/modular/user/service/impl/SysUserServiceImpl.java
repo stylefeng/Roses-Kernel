@@ -2,7 +2,6 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
@@ -16,7 +15,6 @@ import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserDataScope;
@@ -80,10 +78,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long organizationId = sysUserRequest.getOrgId();
 
         // 获取用户有无该企业的数据权限
-        if (DataScopeUtil.validateDataScopeByOrganizationId(organizationId)) {
-            String userTip = StrUtil.format(DataScopeExceptionEnum.DATA_SCOPE_ERROR.getUserTip(), DataScopeUtil.getDataScopeTip());
-            throw new SystemModularException(DataScopeExceptionEnum.DATA_SCOPE_ERROR, userTip);
-        }
+        DataScopeUtil.quickValidateDataScope(organizationId);
 
         // 请求bean转为实体，填充一些基本属性
         SysUser sysUser = new SysUser();
@@ -105,10 +100,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long organizationId = sysUserRequest.getOrgId();
 
         // 获取用户有无该企业的数据权限
-        if (DataScopeUtil.validateDataScopeByOrganizationId(organizationId)) {
-            String userTip = StrUtil.format(DataScopeExceptionEnum.DATA_SCOPE_ERROR.getUserTip(), DataScopeUtil.getDataScopeTip());
-            throw new SystemModularException(DataScopeExceptionEnum.DATA_SCOPE_ERROR, userTip);
-        }
+        DataScopeUtil.quickValidateDataScope(organizationId);
 
         // 转化为实体
         SysUser sysUser = this.querySysUser(sysUserRequest);
@@ -209,7 +201,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long organizationId = userOrgInfo.getOrgId();
 
         // 判断当前用户有无该用户的权限
-        DataScopeUtil.validateDataScopeByOrganizationId(organizationId);
+        DataScopeUtil.quickValidateDataScope(organizationId);
 
         // 给用户授权角色
         sysUserRoleService.grantRole(sysUserRequest);
@@ -225,7 +217,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long organizationId = userOrgInfo.getOrgId();
 
         // 判断当前用户有无该用户的权限
-        DataScopeUtil.validateDataScopeByOrganizationId(organizationId);
+        DataScopeUtil.quickValidateDataScope(organizationId);
 
         sysUserDataScopeService.grantData(sysUserRequest);
     }
@@ -245,7 +237,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long organizationId = userOrgInfo.getOrgId();
 
         // 判断当前用户有无该用户的权限
-        DataScopeUtil.validateDataScopeByOrganizationId(organizationId);
+        DataScopeUtil.quickValidateDataScope(organizationId);
 
         // 逻辑删除，设置标识位Y
         sysUser.setDelFlag(YesOrNotEnum.Y.getCode());

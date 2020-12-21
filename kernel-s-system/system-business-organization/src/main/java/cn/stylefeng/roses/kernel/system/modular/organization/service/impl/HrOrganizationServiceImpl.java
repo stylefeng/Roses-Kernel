@@ -20,7 +20,6 @@ import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.exception.enums.OrganizationExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrOrganizationMapper;
@@ -64,10 +63,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         Long pid = hrOrganizationRequest.getOrgParentId();
 
         // 校验数据范围
-        if (DataScopeUtil.validateDataScopeByOrganizationId(pid)) {
-            String userTip = StrUtil.format(DataScopeExceptionEnum.DATA_SCOPE_ERROR.getUserTip(), DataScopeUtil.getDataScopeTip());
-            throw new SystemModularException(DataScopeExceptionEnum.DATA_SCOPE_ERROR, userTip);
-        }
+        DataScopeUtil.quickValidateDataScope(pid);
 
         HrOrganization hrOrganization = new HrOrganization();
         BeanUtil.copyProperties(hrOrganizationRequest, hrOrganization);
@@ -88,10 +84,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         Long id = hrOrganization.getOrgId();
 
         // 校验数据范围
-        if (DataScopeUtil.validateDataScopeByOrganizationId(id)) {
-            String userTip = StrUtil.format(DataScopeExceptionEnum.DATA_SCOPE_ERROR.getUserTip(), DataScopeUtil.getDataScopeTip());
-            throw new SystemModularException(DataScopeExceptionEnum.DATA_SCOPE_ERROR, userTip);
-        }
+        DataScopeUtil.quickValidateDataScope(id);
 
         BeanUtil.copyProperties(hrOrganizationRequest, hrOrganization);
 
@@ -113,10 +106,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         Long organizationId = hrOrganization.getOrgId();
 
         // 校验数据范围
-        if (DataScopeUtil.validateDataScopeByOrganizationId(organizationId)) {
-            String userTip = StrUtil.format(DataScopeExceptionEnum.DATA_SCOPE_ERROR.getUserTip(), DataScopeUtil.getDataScopeTip());
-            throw new SystemModularException(DataScopeExceptionEnum.DATA_SCOPE_ERROR, userTip);
-        }
+        DataScopeUtil.quickValidateDataScope(organizationId);
 
         // 该机构下有员工，则不能删
         Boolean userOrgFlag = userOrgServiceApi.getUserOrgFlag(organizationId, null);

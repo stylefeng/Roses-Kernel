@@ -154,7 +154,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             // 数据范围类型为自定义，则判断当前用户有没有该公司的权限
             if (DataScopeTypeEnum.DEFINE.getCode().equals(dataScopeType)) {
                 for (Long orgId : sysRoleRequest.getGrantOrgIdList()) {
-                    DataScopeUtil.validateDataScopeByOrganizationId(orgId);
+                    DataScopeUtil.quickValidateDataScope(orgId);
                 }
             }
         }
