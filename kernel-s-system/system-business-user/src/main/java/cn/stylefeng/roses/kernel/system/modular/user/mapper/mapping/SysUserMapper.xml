@@ -4,14 +4,25 @@
 
     <!--获取用户分页列表-->
     <select id="findUserPage" resultType="cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse">
-        select sys_user.*,
-        sys_employee.employeeNo,
-        sys_employee.organization_id,
-        from sys_user
-        left join sys_employee on sys_user.id = sys_employee.user_id
+        select
+        suser.user_id as userId,
+        suser.account as account,
+        suser.nick_name as nickName,
+        suser.real_name as realName,
+        suser.avatar as avatar,
+        suser.birthday as birthday,
+        suser.sex as sex,
+        suser.email as email,
+        suser.phone as phone,
+        suser.tel as tel,
+        suser.status_flag as statusFlag,
+        suorg.org_id as orgId,
+        suorg.position_id as positionId
+        from sys_user suser
+        left join sys_user_org suorg on suser.user_id = suorg.user_id
         <where>
-            <if test="sysUserRequest.name != null and sysUserRequest.name != ''">
-                and sys_user.name like concat('%',#{sysUserRequest.name},'%')
+            <if test="sysUserRequest.realName != null and sysUserRequest.realName != ''">
+                and sys_user.real_name like concat('%',#{sysUserRequest.realName},'%')
             </if>
             <if test="sysUserRequest.account != null and sysUserRequest.account != ''">
                 and sys_user.account like concat('%',#{sysUserRequest.account},'%')
@@ -19,11 +30,11 @@
             <if test="sysUserRequest.statusFlag != null and sysUserRequest.statusFlag != ''">
                 and sys_user.status_flag like concat('%',#{sysUserRequest.statusFlag},'%')
             </if>
-            <if test="sysUserRequest.organizationId != null and sysUserRequest.organizationId != ''">
-                and sys_user.organization_id like concat('%',#{sysUserRequest.organizationId},'%')
+            <if test="sysUserRequest.orgId != null and sysUserRequest.orgId != ''">
+                and suorg.org_id = #{sysUserRequest.orgId}
             </if>
-            and sys_user.del_flag = 'N'
-            order by create_time desc
+            and suser.del_flag = 'N'
+            order by suser.create_time desc
         </where>
 
     </select>
