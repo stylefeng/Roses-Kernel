@@ -39,7 +39,7 @@ public class HrPositionRequest extends BaseRequest {
     @TableUniqueValue(
             message = "职位编码存在重复",
             groups = {add.class, edit.class},
-            tableName = "sys_position",
+            tableName = "hr_position",
             columnName = "position_code")
     private String positionCode;
 
