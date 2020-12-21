@@ -51,7 +51,7 @@ public class HrOrganizationRequest extends BaseRequest {
     @TableUniqueValue(
             message = "组织编码存在重复，请检查code参数",
             groups = {add.class, edit.class},
-            tableName = "sys_organization",
+            tableName = "hr_organization",
             columnName = "org_code")
     private String orgCode;
 

@@ -115,7 +115,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         }
 
         // 级联删除子节点，逻辑删除
-        Set<Long> childIdList = DbOperatorContext.me().findSubListByParentId("sys_organization", "pids", "id", organizationId);
+        Set<Long> childIdList = DbOperatorContext.me().findSubListByParentId("hr_organization", "org_pids", "org_id", organizationId);
         childIdList.add(organizationId);
         LambdaUpdateWrapper<HrOrganization> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.in(HrOrganization::getOrgId, childIdList)
@@ -308,7 +308,8 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     private HrOrganization queryOrganization(HrOrganizationRequest hrOrganizationRequest) {
         HrOrganization hrOrganization = this.getById(hrOrganizationRequest.getOrgId());
         if (ObjectUtil.isEmpty(hrOrganization)) {
-            throw new SystemModularException(OrganizationExceptionEnum.CANT_FIND_ORG);
+            String userTip = StrUtil.format(OrganizationExceptionEnum.CANT_FIND_ORG.getUserTip(), hrOrganizationRequest.getOrgId());
+            throw new SystemModularException(OrganizationExceptionEnum.CANT_FIND_ORG, userTip);
         }
         return hrOrganization;
     }

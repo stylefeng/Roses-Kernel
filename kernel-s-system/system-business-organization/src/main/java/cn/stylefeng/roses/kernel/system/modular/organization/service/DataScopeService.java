@@ -91,7 +91,7 @@ public class DataScopeService implements DataScopeApi {
 
             // 获取部门及以下部门的id列表
             Long organizationId = sysUserOrgResponse.getOrgId();
-            Set<Long> subOrgIds = dbOperatorApi.findSubListByParentId("sys_organization", "pids", "id", organizationId);
+            Set<Long> subOrgIds = dbOperatorApi.findSubListByParentId("hr_organization", "org_pids", "org_id", organizationId);
             organizationIds.add(organizationId);
             organizationIds.addAll(subOrgIds);
         }

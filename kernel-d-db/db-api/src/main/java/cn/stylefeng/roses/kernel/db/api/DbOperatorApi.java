@@ -22,7 +22,7 @@ public interface DbOperatorApi {
     int selectCount(String sql, Object... args);
 
     /**
-     * 获取某个表，某条数据的所有子列表 TODO 测试
+     * 获取某个表，某条数据的所有子列表
      * <p>
      * 本方法用在带有层级关系的表，并且有 "pids" 类似的字段
      * <p>
