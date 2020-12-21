@@ -65,7 +65,9 @@ public class SysRoleRequest extends BaseRequest {
             message = "角色编码存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_role",
-            columnName = "role_code")
+            columnName = "role_code",
+            idFieldName = "role_id",
+            excludeLogicDeleteItems = true)
     private String roleCode;
 
     /**

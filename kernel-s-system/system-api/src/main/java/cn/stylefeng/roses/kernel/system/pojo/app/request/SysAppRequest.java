@@ -33,7 +33,9 @@ public class SysAppRequest extends BaseRequest {
             message = "名称存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_app",
-            columnName = "app_name")
+            columnName = "app_name",
+            idFieldName = "app_id",
+            excludeLogicDeleteItems = true)
     private String appName;
 
     /**
@@ -44,7 +46,9 @@ public class SysAppRequest extends BaseRequest {
             message = "编码存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_app",
-            columnName = "app_code")
+            columnName = "app_code",
+            idFieldName = "app_id",
+            excludeLogicDeleteItems = true)
     private String appCode;
 
     /**

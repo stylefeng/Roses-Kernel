@@ -34,7 +34,9 @@ public class DatabaseInfoParam extends BaseRequest {
             message = "数据库名称存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_database_info",
-            columnName = "db_name")
+            columnName = "db_name",
+            idFieldName = "db_id",
+            excludeLogicDeleteItems = true)
     private String dbName;
 
     /**

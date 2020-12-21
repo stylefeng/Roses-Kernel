@@ -52,7 +52,9 @@ public class HrOrganizationRequest extends BaseRequest {
             message = "组织编码存在重复，请检查code参数",
             groups = {add.class, edit.class},
             tableName = "hr_organization",
-            columnName = "org_code")
+            columnName = "org_code",
+            idFieldName = "org_id",
+            excludeLogicDeleteItems = true)
     private String orgCode;
 
     /**

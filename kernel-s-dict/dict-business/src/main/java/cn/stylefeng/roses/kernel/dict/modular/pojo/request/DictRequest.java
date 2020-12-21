@@ -39,7 +39,9 @@ public class DictRequest extends BaseRequest {
             message = "字典名称存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_dict",
-            columnName = "dict_name")
+            columnName = "dict_name",
+            idFieldName = "dict_id",
+            excludeLogicDeleteItems = true)
     private String dictName;
 
     /**
@@ -50,7 +52,9 @@ public class DictRequest extends BaseRequest {
             message = "字典编码存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_dict",
-            columnName = "dict_code")
+            columnName = "dict_code",
+            idFieldName = "dict_id",
+            excludeLogicDeleteItems = true)
     private String dictCode;
 
     /**

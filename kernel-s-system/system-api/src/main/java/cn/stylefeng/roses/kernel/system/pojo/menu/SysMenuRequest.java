@@ -41,7 +41,9 @@ public class SysMenuRequest extends BaseRequest {
             message = "菜单名称存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_menu",
-            columnName = "menu_name")
+            columnName = "menu_name",
+            idFieldName = "menu_id",
+            excludeLogicDeleteItems = true)
     private String menuName;
 
     /**
@@ -52,7 +54,9 @@ public class SysMenuRequest extends BaseRequest {
             message = "菜单的编码不能为空",
             groups = {add.class, edit.class},
             tableName = "sys_menu",
-            columnName = "menu_code")
+            columnName = "menu_code",
+            idFieldName = "menu_id",
+            excludeLogicDeleteItems = true)
     private String menuCode;
 
     /**

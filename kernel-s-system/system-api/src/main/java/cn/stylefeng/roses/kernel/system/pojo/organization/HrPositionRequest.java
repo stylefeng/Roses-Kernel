@@ -40,7 +40,9 @@ public class HrPositionRequest extends BaseRequest {
             message = "职位编码存在重复",
             groups = {add.class, edit.class},
             tableName = "hr_position",
-            columnName = "position_code")
+            columnName = "position_code",
+            idFieldName = "position_id",
+            excludeLogicDeleteItems = true)
     private String positionCode;
 
     /**

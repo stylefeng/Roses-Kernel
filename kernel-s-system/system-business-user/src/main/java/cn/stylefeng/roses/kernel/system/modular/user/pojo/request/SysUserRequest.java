@@ -37,7 +37,9 @@ public class SysUserRequest extends BaseRequest {
             message = "账号存在重复，请检查account参数",
             groups = {add.class, edit.class},
             tableName = "sys_user",
-            columnName = "account")
+            columnName = "account",
+            idFieldName = "user_id",
+            excludeLogicDeleteItems = true)
     private String account;
 
     /**
