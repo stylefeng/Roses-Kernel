@@ -35,7 +35,7 @@ public class HttpLogAppender {
         logRecordDTO.setClientIp(HttpServletUtil.getRequestClientIp(request));
 
         // 设置请求的url
-        logRecordDTO.setUrl(request.getServletPath());
+        logRecordDTO.setRequestUrl(request.getServletPath());
 
         // 设置http的请求方法
         logRecordDTO.setHttpMethod(request.getMethod());
@@ -49,12 +49,12 @@ public class HttpLogAppender {
 
         // 设置浏览器标识
         if (ObjectUtil.isNotEmpty(userAgent.getBrowser())) {
-            logRecordDTO.setBrowser(userAgent.getBrowser().getName());
+            logRecordDTO.setClientBrowser(userAgent.getBrowser().getName());
         }
 
         // 设置浏览器操作系统
         if (ObjectUtil.isNotEmpty(userAgent.getOs())) {
-            logRecordDTO.setOs(userAgent.getOs().getName());
+            logRecordDTO.setClientOs(userAgent.getOs().getName());
         }
 
     }

@@ -16,12 +16,12 @@ public class LogRecordDTO {
     /**
      * 日志的名称，一般为业务名称
      */
-    private String name;
+    private String logName;
 
     /**
      * 日志记录的内容
      */
-    private Object content;
+    private Object logContent;
 
     /**
      * 服务名称，一般为spring.application.name
@@ -70,11 +70,11 @@ public class LogRecordDTO {
     private String clientIp;
 
     /**
-     * 当前用户请求的url
+     * 当前用户请求的requestUrl
      * <p>
      * 如果是http请求，可以带这项
      */
-    private String url;
+    private String requestUrl;
 
     /**
      * 请求方式（GET POST PUT DELETE)
@@ -88,13 +88,13 @@ public class LogRecordDTO {
      * <p>
      * 如果是http请求，可以带这项
      */
-    private String browser;
+    private String clientBrowser;
 
     /**
      * 操作系统
      * <p>
      * 如果是http请求，可以带这项
      */
-    private String os;
+    private String clientOs;
 
 }

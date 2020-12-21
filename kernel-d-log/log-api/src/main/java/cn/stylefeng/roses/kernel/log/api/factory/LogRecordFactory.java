@@ -27,10 +27,10 @@ public class LogRecordFactory {
         LogRecordDTO logRecordDTO = new LogRecordDTO();
 
         // 设置日志名称
-        logRecordDTO.setName(name);
+        logRecordDTO.setLogName(name);
 
         // 设置日志内容
-        logRecordDTO.setContent(content);
+        logRecordDTO.setLogContent(content);
 
         // 设置appName
         String applicationName = null;
