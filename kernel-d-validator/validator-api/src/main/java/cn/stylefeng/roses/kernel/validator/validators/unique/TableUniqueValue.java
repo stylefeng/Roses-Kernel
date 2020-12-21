@@ -39,7 +39,7 @@ public @interface TableUniqueValue {
     String columnName();
 
     /**
-     * 主键id的字段名，默认为字段名为：id
+     * 数据库主键id的字段名，例如 user_id
      */
     String idFieldName() default "id";
 

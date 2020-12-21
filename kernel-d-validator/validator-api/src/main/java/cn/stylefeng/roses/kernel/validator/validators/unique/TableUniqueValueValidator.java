@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.validator.validators.unique;
 
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.context.RequestGroupContext;
 import cn.stylefeng.roses.kernel.validator.context.RequestParamContext;
@@ -117,13 +118,16 @@ public class TableUniqueValueValidator implements ConstraintValidator<TableUniqu
         // 获取请求字段中id的值
         Dict requestParam = RequestParamContext.get();
 
+        // 获取id字段的驼峰命名法
+        String camelCaseIdFieldName = StrUtil.toCamelCase(idFieldName);
+
         return UniqueValidateParam.builder()
                 .tableName(tableName)
                 .columnName(columnName)
                 .value(fieldValue)
                 .idFieldName(idFieldName)
                 .excludeCurrentRecord(Boolean.TRUE)
-                .id(requestParam.getLong(idFieldName))
+                .id(requestParam.getLong(camelCaseIdFieldName))
                 .excludeLogicDeleteItems(excludeLogicDeleteItems)
                 .logicDeleteFieldName(logicDeleteFieldName)
                 .logicDeleteValue(logicDeleteValue).build();

@@ -42,7 +42,7 @@ public class TableUniqueValueService {
         // 不排除当前记录，排除逻辑删除的内容
         if (!uniqueValidateParam.getExcludeCurrentRecord()
                 && uniqueValidateParam.getExcludeLogicDeleteItems()) {
-            String sqlTemplate = "select count(*) from {} where {} = {0}  and ({} is null || {} <> {})";
+            String sqlTemplate = "select count(*) from {} where {} = {0}  and ({} is null || {} <> '{}')";
             String finalSql = StrUtil.format(sqlTemplate,
                     uniqueValidateParam.getTableName(),
                     uniqueValidateParam.getColumnName(),
@@ -71,7 +71,7 @@ public class TableUniqueValueService {
             // id判空
             paramIdValidate(uniqueValidateParam);
 
-            String sqlTemplate = "select count(*) from {} where {} = {0} and {} <> {1} and ({} is null || {} <> {})";
+            String sqlTemplate = "select count(*) from {} where {} = {0} and {} <> {1} and ({} is null || {} <> '{}')";
             String finalSql = StrUtil.format(sqlTemplate,
                     uniqueValidateParam.getTableName(),
                     uniqueValidateParam.getColumnName(),
