@@ -1,14 +1,14 @@
 package cn.stylefeng.roses.kernel.auth.auth;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.digest.BCrypt;
 import cn.stylefeng.roses.kernel.auth.api.AuthServiceApi;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
+import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
+import cn.stylefeng.roses.kernel.auth.api.password.PasswordTransferEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
@@ -16,7 +16,6 @@ import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
 import cn.stylefeng.roses.kernel.jwt.api.exception.JwtException;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
-import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
@@ -46,7 +45,10 @@ public class AuthServiceImpl implements AuthServiceApi {
     private SessionManagerApi sessionManagerApi;
 
     @Resource
-    private ResourceServiceApi resourceServiceApi;
+    private PasswordStoredEncryptApi passwordStoredEncryptApi;
+
+    @Resource
+    private PasswordTransferEncryptApi passwordTransferEncryptApi;
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
@@ -138,46 +140,49 @@ public class AuthServiceImpl implements AuthServiceApi {
             }
         }
 
-        // 2.获取用户密码的加密值和用户的状态
+        // 2. 解密密码的密文
+        String decryptPassword = passwordTransferEncryptApi.decrypt(loginRequest.getPassword());
+
+        // 3. 获取用户密码的加密值和用户的状态
         UserLoginInfoDTO userValidateInfo = userServiceApi.getUserLoginInfo(loginRequest.getAccount());
 
-        // 3.校验用户密码是否正确(BCrypt算法)
+        // 4. 校验用户密码是否正确(BCrypt算法)
         if (validatePassword) {
-            if (ObjectUtil.isEmpty(userValidateInfo.getUserPasswordHexed()) || !BCrypt.checkpw(loginRequest.getPassword(), userValidateInfo.getUserPasswordHexed())) {
+            Boolean checkResult = passwordStoredEncryptApi.checkPassword(decryptPassword, userValidateInfo.getUserPasswordHexed());
+            if (!checkResult) {
                 throw new AuthException(AuthExceptionEnum.USERNAME_PASSWORD_ERROR);
             }
         }
 
-        // 4.校验用户是否异常（不是正常状态）
+        // 5. 校验用户是否异常（不是正常状态）
         if (!UserStatusEnum.ENABLE.getCode().equals(userValidateInfo.getUserStatus())) {
             String userTip = StrUtil.format(AuthExceptionEnum.USER_STATUS_ERROR.getErrorCode(), UserStatusEnum.getCodeMessage(userValidateInfo.getUserStatus()));
             throw new AuthException(AuthExceptionEnum.USER_STATUS_ERROR.getErrorCode(), userTip);
         }
 
-        // 5.获取LoginUser，用于用户的缓存
+        // 6. 获取LoginUser，用于用户的缓存
         LoginUser loginUser = userValidateInfo.getLoginUser();
 
-        // 6.生成用户的token
+        // 7. 生成用户的token
         DefaultJwtPayload defaultJwtPayload = new DefaultJwtPayload(loginUser.getUserId(), loginUser.getAccount(), loginRequest.getRememberMe());
         String jwtToken = JwtContext.me().generateTokenDefaultPayload(defaultJwtPayload);
 
         synchronized (SESSION_OPERATE_LOCK) {
 
-            // 7.缓存用户信息，创建会话
+            // 8. 缓存用户信息，创建会话
             sessionManagerApi.createSession(jwtToken, loginUser);
 
-            // 8.如果开启了单账号单端在线，则踢掉已经上线的该用户
+            // 9. 如果开启了单账号单端在线，则踢掉已经上线的该用户
             if (AuthConfigExpander.getSingleAccountLoginFlag()) {
                 sessionManagerApi.removeSessionExcludeToken(jwtToken);
             }
-
         }
 
-        // 9.更新用户登录时间和ip
+        // 10. 更新用户登录时间和ip
         String ip = HttpServletUtil.getRequestClientIp(HttpServletUtil.getRequest());
         userServiceApi.updateUserLoginInfo(loginUser.getUserId(), new Date(), ip);
 
-        // 10.组装返回结果
+        // 11. 组装返回结果
         return new LoginResponse(loginUser, jwtToken);
     }
 
