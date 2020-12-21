@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.app.modular.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -51,7 +52,7 @@ public class SysApp extends BaseEntity {
     /**
      * 是否删除：Y-已删除，N-未删除
      */
-    @TableField("del_flag")
+    @TableField(value = "del_flag", fill = FieldFill.INSERT)
     private String delFlag;
 
 }
