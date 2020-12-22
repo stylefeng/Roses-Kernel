@@ -24,6 +24,14 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--资源api模块-->
+        <!--aop获取注解属性-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>scanner-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- web -->
         <!-- 用于本模块中对controller的拦截器 -->
         <dependency>

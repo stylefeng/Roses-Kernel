@@ -8,11 +8,14 @@ import cn.stylefeng.roses.kernel.log.api.factory.appender.AuthedLogAppender;
 import cn.stylefeng.roses.kernel.log.api.factory.appender.HttpLogAppender;
 import cn.stylefeng.roses.kernel.log.api.factory.appender.ParamsLogAppender;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
+import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
+import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.Ordered;
 import org.springframework.core.ParameterNameDiscoverer;
@@ -51,7 +54,53 @@ public class RequestApiLogRecordAop implements Ordered {
     }
 
     @Around("cutService()")
-    public Object around(ProceedingJoinPoint point) throws Throwable {
+    public Object aroundPost(ProceedingJoinPoint point) throws Throwable {
+        Object result = point.proceed();
+
+        try {
+            Map<String, Object> annoProps = getAnnotationProp(point);
+
+            Map<String, Object> args = getFieldsName(point);
+            recordLog(args, result, annoProps);
+        } catch (Exception e) {
+            log.error("日志记录没有记录成功！", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * AOP获取PostResource和GetResource 属性信息
+     *
+     * @param joinPoint joinPoint对象
+     * @return 返回K, V格式的参数，key是参数名称，v是参数值
+     * @author liuhanqing
+     * @date 2020/12/22 21:18
+     */
+    private Map<String, Object> getAnnotationProp(ProceedingJoinPoint joinPoint) {
+        MethodSignature ms = (MethodSignature) joinPoint.getSignature();
+        Method method = ms.getMethod();
+        // 通过map封装参数和参数值，key参数名，value是参数值
+        Map<String, Object> propMap = new HashMap<>(2);
+        PostResource postResource = method.getAnnotation(PostResource.class);
+        if (postResource == null) {
+            GetResource getResource = method.getAnnotation(GetResource.class);
+            if (getResource != null) {
+                propMap.put("name", getResource.name());
+                propMap.put("requiredLogin", getResource.requiredLogin());
+            }
+        } else {
+            propMap.put("name", postResource.name());
+            propMap.put("requiredLogin", postResource.requiredLogin());
+        }
+
+        return propMap;
+    }
+
+/*
+    第二种注解实现方式 获取注解属性
+    @Around("cutService()&&(@annotation(postResource))")
+    public Object aroundPost(ProceedingJoinPoint point, PostResource postResource) throws Throwable {
         Object result = point.proceed();
 
         try {
@@ -64,18 +113,33 @@ public class RequestApiLogRecordAop implements Ordered {
         return result;
     }
 
+    @Around("cutService()&&(@annotation(getResource))")
+    public Object aroundGet(ProceedingJoinPoint point, GetResource getResource) throws Throwable {
+        Object result = point.proceed();
+
+        try {
+            Map<String, Object> args = getFieldsName(point);
+            recordLog(args, result);
+        } catch (Exception e) {
+            log.error("日志记录没有记录成功！", e);
+        }
+
+        return result;
+    }*/
+
     /**
      * 将请求方法记录日志的过程
      *
-     * @param params AOP拦截方法的参数封装，key是参数名称，v是参数值
-     * @param result AOP拦截方法的返回值
+     * @param params    AOP拦截方法的参数封装，key是参数名称，v是参数值
+     * @param result    AOP拦截方法的返回值
+     * @param annoProps AOP拦截注解属性
      * @author fengshuonan
      * @date 2020/10/28 17:38
      */
-    private void recordLog(Map<String, Object> params, Object result) {
-
+    private void recordLog(Map<String, Object> params, Object result, Map<String, Object> annoProps) {
+        Object actionName = annoProps.get("name");
         // 创建日志对象
-        LogRecordDTO logRecordDTO = LogRecordFactory.createLogRecord(LogConstants.LOG_DEFAULT_NAME, null);
+        LogRecordDTO logRecordDTO = LogRecordFactory.createLogRecord(LogConstants.LOG_DEFAULT_NAME, actionName);
 
         // 填充用户登录信息
         AuthedLogAppender.appendAuthedHttpLog(logRecordDTO);
