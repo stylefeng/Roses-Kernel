@@ -61,6 +61,6 @@ public class HrPositionRequest extends BaseRequest {
     /**
      * 备注
      */
-    private String orgRemark;
+    private String positionRemark;
 
 }

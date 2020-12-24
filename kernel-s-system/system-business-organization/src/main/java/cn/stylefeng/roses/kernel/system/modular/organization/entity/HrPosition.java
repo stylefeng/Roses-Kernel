@@ -51,10 +51,10 @@ public class HrPosition extends BaseEntity {
     private Integer statusFlag;
 
     /**
-     * 备注
+     * 职位备注
      */
-    @TableField("org_remark")
-    private String orgRemark;
+    @TableField("position_remark")
+    private String positionRemark;
 
     /**
      * 删除标记：Y-已删除，N-未删除

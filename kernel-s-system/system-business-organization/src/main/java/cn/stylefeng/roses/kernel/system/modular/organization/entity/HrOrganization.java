@@ -63,7 +63,7 @@ public class HrOrganization extends BaseEntity {
     private Integer statusFlag;
 
     /**
-     * 描述
+     * 组织机构描述
      */
     @TableField("org_remark")
     private String orgRemark;
