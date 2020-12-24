@@ -12,7 +12,10 @@ import cn.stylefeng.roses.kernel.log.db.entity.SysLog;
 import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -88,11 +91,6 @@ public class DbLogRecordServiceImpl implements LogRecordApi {
             // 服务名称为空的话则获取默认服务名称
             if (StrUtil.isEmpty(sysLog.getAppName())) {
                 sysLog.setAppName(LogConstants.LOG_DEFAULT_APP_NAME);
-            }
-
-            // 如果操作时间为空的话插入当前时间
-            if (sysLog.getCreateTime() == null) {
-                sysLog.setCreateTime(new Date());
             }
 
             return sysLog;
