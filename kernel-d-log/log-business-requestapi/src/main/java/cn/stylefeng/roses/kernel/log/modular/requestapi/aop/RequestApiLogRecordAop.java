@@ -8,6 +8,7 @@ import cn.stylefeng.roses.kernel.log.api.factory.appender.AuthedLogAppender;
 import cn.stylefeng.roses.kernel.log.api.factory.appender.HttpLogAppender;
 import cn.stylefeng.roses.kernel.log.api.factory.appender.ParamsLogAppender;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
+import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,6 @@ public class RequestApiLogRecordAop implements Ordered {
      */
     @Pointcut("execution(* *..controller.*.*(..))")
     public void cutService() {
-
     }
 
     @Around("cutService()")
@@ -58,10 +58,15 @@ public class RequestApiLogRecordAop implements Ordered {
         Object result = point.proceed();
 
         try {
-            Map<String, Object> annoProps = getAnnotationProp(point);
 
+            // 获取接口上@PostResource或者@GetResource的name属性和requiredLogin属性
+            Map<String, Object> annotationProp = getAnnotationProp(point);
+
+            // 获取字段的名
             Map<String, Object> args = getFieldsName(point);
-            recordLog(args, result, annoProps);
+
+            // 记录日志
+            recordLog(args, result, annotationProp);
         } catch (Exception e) {
             log.error("日志记录没有记录成功！", e);
         }
@@ -70,7 +75,7 @@ public class RequestApiLogRecordAop implements Ordered {
     }
 
     /**
-     * AOP获取PostResource和GetResource 属性信息
+     * AOP获取 @PostResource 和 @GetResource 属性信息
      *
      * @param joinPoint joinPoint对象
      * @return 返回K, V格式的参数，key是参数名称，v是参数值
@@ -78,18 +83,30 @@ public class RequestApiLogRecordAop implements Ordered {
      * @date 2020/12/22 21:18
      */
     private Map<String, Object> getAnnotationProp(ProceedingJoinPoint joinPoint) {
-        MethodSignature ms = (MethodSignature) joinPoint.getSignature();
-        Method method = ms.getMethod();
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+
         // 通过map封装参数和参数值，key参数名，value是参数值
         Map<String, Object> propMap = new HashMap<>(2);
+        String name = null;
+        String requiredLogin = null;
+
+        // 获取接口上的@PostResource或者@GetResource的name属性和requiredLogin属性，填充到map
+        ApiResource apiResource = method.getAnnotation(ApiResource.class);
+        GetResource getResource = method.getAnnotation(GetResource.class);
         PostResource postResource = method.getAnnotation(PostResource.class);
-        if (postResource == null) {
-            GetResource getResource = method.getAnnotation(GetResource.class);
-            if (getResource != null) {
-                propMap.put("name", getResource.name());
-                propMap.put("requiredLogin", getResource.requiredLogin());
-            }
-        } else {
+
+        if (apiResource != null) {
+            propMap.put("name", apiResource.name());
+            propMap.put("requiredLogin", apiResource.requiredLogin());
+        }
+
+        if (getResource != null) {
+            propMap.put("name", getResource.name());
+            propMap.put("requiredLogin", getResource.requiredLogin());
+        }
+
+        if (postResource != null) {
             propMap.put("name", postResource.name());
             propMap.put("requiredLogin", postResource.requiredLogin());
         }
@@ -97,47 +114,19 @@ public class RequestApiLogRecordAop implements Ordered {
         return propMap;
     }
 
-/*
-    第二种注解实现方式 获取注解属性
-    @Around("cutService()&&(@annotation(postResource))")
-    public Object aroundPost(ProceedingJoinPoint point, PostResource postResource) throws Throwable {
-        Object result = point.proceed();
-
-        try {
-            Map<String, Object> args = getFieldsName(point);
-            recordLog(args, result);
-        } catch (Exception e) {
-            log.error("日志记录没有记录成功！", e);
-        }
-
-        return result;
-    }
-
-    @Around("cutService()&&(@annotation(getResource))")
-    public Object aroundGet(ProceedingJoinPoint point, GetResource getResource) throws Throwable {
-        Object result = point.proceed();
-
-        try {
-            Map<String, Object> args = getFieldsName(point);
-            recordLog(args, result);
-        } catch (Exception e) {
-            log.error("日志记录没有记录成功！", e);
-        }
-
-        return result;
-    }*/
-
     /**
      * 将请求方法记录日志的过程
      *
-     * @param params    AOP拦截方法的参数封装，key是参数名称，v是参数值
-     * @param result    AOP拦截方法的返回值
-     * @param annoProps AOP拦截注解属性
+     * @param params         AOP拦截方法的参数封装，key是参数名称，v是参数值
+     * @param result         AOP拦截方法的返回值
+     * @param annotationProp AOP拦截注解属性
      * @author fengshuonan
      * @date 2020/10/28 17:38
      */
-    private void recordLog(Map<String, Object> params, Object result, Map<String, Object> annoProps) {
-        Object actionName = annoProps.get("name");
+    private void recordLog(Map<String, Object> params, Object result, Map<String, Object> annotationProp) {
+
+        Object actionName = annotationProp.get("name");
+
         // 创建日志对象
         LogRecordDTO logRecordDTO = LogRecordFactory.createLogRecord(LogConstants.LOG_DEFAULT_NAME, actionName);
 
