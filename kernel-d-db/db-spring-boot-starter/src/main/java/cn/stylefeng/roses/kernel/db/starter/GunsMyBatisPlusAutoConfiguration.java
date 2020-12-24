@@ -22,12 +22,17 @@ public class GunsMyBatisPlusAutoConfiguration {
 
     /**
      * 新的分页插件
+     *
+     * @author fengshuonan
+     * @date 2020/12/24 13:13
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+
         // 使用分页插插件
         interceptor.addInnerInterceptor(paginationInterceptor());
+
         return interceptor;
     }
 
