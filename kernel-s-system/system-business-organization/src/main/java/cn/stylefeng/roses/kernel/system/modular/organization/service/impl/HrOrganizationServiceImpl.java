@@ -131,7 +131,10 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
     @Override
     public void updateStatus(HrOrganizationRequest hrOrganizationRequest) {
+
+        // 先查询有没有这条记录再更新
         HrOrganization hrOrganization = this.queryOrganization(hrOrganizationRequest);
+
         LambdaUpdateWrapper<HrOrganization> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(HrOrganization::getOrgId, hrOrganization.getOrgId());
         updateWrapper.set(HrOrganization::getStatusFlag, hrOrganizationRequest.getStatusFlag());

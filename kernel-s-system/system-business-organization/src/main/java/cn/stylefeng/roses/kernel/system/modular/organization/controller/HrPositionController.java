@@ -25,7 +25,7 @@ import javax.annotation.Resource;
 public class HrPositionController {
 
     @Resource
-    private HrPositionService syspositionService;
+    private HrPositionService hrPositionService;
 
     /**
      * 添加系统职位
@@ -35,7 +35,7 @@ public class HrPositionController {
      */
     @PostResource(name = "添加系统职位", path = "/hrPosition/add")
     public ResponseData add(@RequestBody @Validated(HrPositionRequest.add.class) HrPositionRequest hrPositionRequest) {
-        syspositionService.add(hrPositionRequest);
+        hrPositionService.add(hrPositionRequest);
         return new SuccessResponseData();
     }
 
@@ -47,7 +47,7 @@ public class HrPositionController {
      */
     @PostResource(name = "编辑系统职位", path = "/hrPosition/edit")
     public ResponseData edit(@RequestBody @Validated(HrPositionRequest.edit.class) HrPositionRequest hrPositionRequest) {
-        syspositionService.edit(hrPositionRequest);
+        hrPositionService.edit(hrPositionRequest);
         return new SuccessResponseData();
     }
 
@@ -59,7 +59,7 @@ public class HrPositionController {
      */
     @PostResource(name = "删除系统职位", path = "/hrPosition/delete")
     public ResponseData delete(@RequestBody @Validated(HrPositionRequest.delete.class) HrPositionRequest hrPositionRequest) {
-        syspositionService.delete(hrPositionRequest);
+        hrPositionService.delete(hrPositionRequest);
         return new SuccessResponseData();
     }
 
@@ -71,7 +71,7 @@ public class HrPositionController {
      */
     @PostResource(name = "更新职位状态", path = "/hrPosition/updateStatus")
     public ResponseData updateStatus(@RequestBody @Validated(BaseRequest.updateStatus.class) HrPositionRequest hrPositionRequest) {
-        syspositionService.updateStatus(hrPositionRequest);
+        hrPositionService.updateStatus(hrPositionRequest);
         return new SuccessResponseData();
     }
 
@@ -83,7 +83,7 @@ public class HrPositionController {
      */
     @GetResource(name = "查看详情系统职位", path = "/hrPosition/detail")
     public ResponseData detail(@Validated(HrPositionRequest.detail.class) HrPositionRequest hrPositionRequest) {
-        return new SuccessResponseData(syspositionService.detail(hrPositionRequest));
+        return new SuccessResponseData(hrPositionService.detail(hrPositionRequest));
     }
 
     /**
@@ -94,7 +94,7 @@ public class HrPositionController {
      */
     @GetResource(name = "分页查询系统职位", path = "/hrPosition/page")
     public ResponseData page(HrPositionRequest hrPositionRequest) {
-        return new SuccessResponseData(syspositionService.page(hrPositionRequest));
+        return new SuccessResponseData(hrPositionService.page(hrPositionRequest));
     }
 
     /**
@@ -105,7 +105,7 @@ public class HrPositionController {
      */
     @GetResource(name = "获取全部系统职位", path = "/hrPosition/list")
     public ResponseData list(HrPositionRequest hrPositionRequest) {
-        return new SuccessResponseData(syspositionService.list(hrPositionRequest));
+        return new SuccessResponseData(hrPositionService.list(hrPositionRequest));
     }
 
 }
