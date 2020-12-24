@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static cn.stylefeng.roses.kernel.log.api.constants.LogConstants.DEFAULT_BEGIN_PAGE_NO;
+import static cn.stylefeng.roses.kernel.log.api.constants.LogConstants.DEFAULT_PAGE_SIZE;
+
 /**
  * 日志管理，数据库实现
  *
