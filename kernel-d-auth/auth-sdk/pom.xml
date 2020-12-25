@@ -59,12 +59,24 @@
             <artifactId>spring-web</artifactId>
         </dependency>
 
-        <!--redis的依赖-->
+        <!--缓存的依赖-->
         <!--session manager可以用redis，可以用内存的-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <optional>true</optional>
+            <groupId>com.sedinbj.kernel</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sedinbj.kernel</groupId>
+            <artifactId>cache-sdk-memory</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sedinbj.kernel</groupId>
+            <artifactId>cache-sdk-redis</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
