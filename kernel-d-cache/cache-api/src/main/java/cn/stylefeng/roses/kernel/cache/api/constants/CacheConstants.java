@@ -23,4 +23,9 @@ public interface CacheConstants {
      */
     String CACHE_DELIMITER = ":";
 
+    /**
+     * 给hutool缓存用的无限过期时间
+     */
+    Long NONE_EXPIRED_TIME = 1000L * 3600 * 24 * 999;
+
 }

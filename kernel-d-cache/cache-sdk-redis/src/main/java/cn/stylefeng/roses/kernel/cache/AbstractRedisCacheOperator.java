@@ -47,6 +47,11 @@ public abstract class AbstractRedisCacheOperator<T> implements CacheOperatorApi<
     }
 
     @Override
+    public void expire(String key, Long expiredSeconds) {
+        redisTemplate.boundValueOps(getCommonKeyPrefix() + key).expire(expiredSeconds, TimeUnit.SECONDS);
+    }
+
+    @Override
     public boolean contains(String key) {
         T value = redisTemplate.boundValueOps(getCommonKeyPrefix() + key).get();
         return value != null;

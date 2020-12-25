@@ -15,6 +15,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants.NONE_EXPIRED_TIME;
+
 /**
  * 校验器自动配置
  *
@@ -33,7 +35,7 @@ public class ValidatorAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(BlackListApi.class)
     public BlackListApi blackListApi() {
-        TimedCache<String, String> timedCache = CacheUtil.newTimedCache(1000L * 3600 * 24 * 999);
+        TimedCache<String, String> timedCache = CacheUtil.newTimedCache(NONE_EXPIRED_TIME);
         BlackListMemoryCache blackListMemoryCache = new BlackListMemoryCache(timedCache);
         return new BlackListService(blackListMemoryCache);
     }
@@ -47,7 +49,7 @@ public class ValidatorAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CountValidatorApi.class)
     public CountValidatorApi countValidatorApi() {
-        TimedCache<String, Long> timedCache = CacheUtil.newTimedCache(1000L * 3600 * 24 * 999);
+        TimedCache<String, Long> timedCache = CacheUtil.newTimedCache(NONE_EXPIRED_TIME);
         DefaultCountValidateCache defaultCountValidateCache = new DefaultCountValidateCache(timedCache);
         return new DefaultCountValidator(defaultCountValidateCache);
     }
@@ -61,7 +63,7 @@ public class ValidatorAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(WhiteListApi.class)
     public WhiteListApi whiteListApi() {
-        TimedCache<String, String> timedCache = CacheUtil.newTimedCache(1000L * 3600 * 24 * 999);
+        TimedCache<String, String> timedCache = CacheUtil.newTimedCache(NONE_EXPIRED_TIME);
         WhiteListMemoryCache whiteListMemoryCache = new WhiteListMemoryCache(timedCache);
         return new WhiteListService(whiteListMemoryCache);
     }

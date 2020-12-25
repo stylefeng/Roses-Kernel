@@ -54,6 +54,15 @@ public interface CacheOperatorApi<T> {
     void remove(String... key);
 
     /**
+     * 删除缓存
+     *
+     * @param key 键，多个
+     * @author stylefeng
+     * @date 2020/7/8 22:09
+     */
+    void expire(String key, Long expiredSeconds);
+
+    /**
      * 判断某个key值是否存在于缓存
      *
      * @param key 缓存的键

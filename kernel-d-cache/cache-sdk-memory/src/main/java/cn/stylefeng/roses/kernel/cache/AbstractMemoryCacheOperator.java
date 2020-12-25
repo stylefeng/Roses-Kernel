@@ -48,6 +48,12 @@ public abstract class AbstractMemoryCacheOperator<T> implements CacheOperatorApi
     }
 
     @Override
+    public void expire(String key, Long expiredSeconds) {
+        T value = this.get(getCommonKeyPrefix() + key);
+        timedCache.put(getCommonKeyPrefix() + key, value, expiredSeconds * 1000);
+    }
+
+    @Override
     public boolean contains(String key) {
         return timedCache.containsKey(key);
     }
