@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.auth.session;
 
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import com.sedinbj.kernel.cache.api.CacheOperatorApi;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -12,13 +12,13 @@ import cn.stylefeng.roses.kernel.auth.password.RsaPasswordTransferEncrypt;
 import cn.stylefeng.roses.kernel.auth.session.DefaultSessionManager;
 import cn.stylefeng.roses.kernel.auth.session.cache.logintoken.MemoryLoginTokenCache;
 import cn.stylefeng.roses.kernel.auth.session.cache.loginuser.MemoryLoginUserCache;
+import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Set;
 
-import static com.sedinbj.kernel.cache.api.constants.CacheConstants.NONE_EXPIRED_TIME;
 
 /**
  * 认证和鉴权模块的自动配置
@@ -67,7 +67,7 @@ public class GunsAuthAutoConfiguration {
         Long sessionExpiredSeconds = AuthConfigExpander.getSessionExpiredSeconds();
 
         TimedCache<String, LoginUser> loginUsers = CacheUtil.newTimedCache(1000L * sessionExpiredSeconds);
-        TimedCache<String, Set<String>> loginTokens = CacheUtil.newTimedCache(NONE_EXPIRED_TIME);
+        TimedCache<String, Set<String>> loginTokens = CacheUtil.newTimedCache(CacheConstants.NONE_EXPIRED_TIME);
 
         MemoryLoginUserCache memoryLoginUserCache = new MemoryLoginUserCache(loginUsers);
         MemoryLoginTokenCache memoryLoginTokenCache = new MemoryLoginTokenCache(loginTokens);

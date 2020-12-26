@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.auth.session.cache.logintoken;
 
 import cn.hutool.cache.impl.TimedCache;
-import com.sedinbj.kernel.cache.AbstractMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.cache.AbstractMemoryCacheOperator;
 
 import java.util.Set;
 

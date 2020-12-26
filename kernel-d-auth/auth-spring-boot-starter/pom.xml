@@ -26,7 +26,7 @@
 
         <!--默认使用内存-->
         <dependency>
-            <groupId>com.sedinbj.kernel</groupId>
+            <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-memory</artifactId>
             <version>1.0.0</version>
         </dependency>
