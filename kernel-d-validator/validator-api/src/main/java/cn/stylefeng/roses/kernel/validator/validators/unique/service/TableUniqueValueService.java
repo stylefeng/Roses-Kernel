@@ -4,9 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
 import cn.stylefeng.roses.kernel.db.api.context.DbOperatorContext;
 import cn.stylefeng.roses.kernel.validator.exception.ParamValidateException;
+import cn.stylefeng.roses.kernel.validator.exception.enums.ValidatorExceptionEnum;
 import cn.stylefeng.roses.kernel.validator.pojo.UniqueValidateParam;
-
-import static cn.stylefeng.roses.kernel.validator.exception.enums.ValidatorExceptionEnum.TABLE_UNIQUE_VALIDATE_ERROR;
 
 /**
  * 判断表中字段是否是唯一值的业务封装
@@ -96,16 +95,13 @@ public class TableUniqueValueService {
      */
     private static void paramValidate(UniqueValidateParam uniqueValidateParam) {
         if (StrUtil.isBlank(uniqueValidateParam.getTableName())) {
-            String userTip = StrUtil.format(TABLE_UNIQUE_VALIDATE_ERROR.getUserTip(), "tableName表名");
-            throw new ParamValidateException(TABLE_UNIQUE_VALIDATE_ERROR, userTip);
+            throw new ParamValidateException(ValidatorExceptionEnum.TABLE_UNIQUE_VALIDATE_ERROR, "@TableUniqueValue注解上tableName属性为空");
         }
         if (StrUtil.isBlank(uniqueValidateParam.getColumnName())) {
-            String userTip = StrUtil.format(TABLE_UNIQUE_VALIDATE_ERROR.getUserTip(), "columnName字段名");
-            throw new ParamValidateException(TABLE_UNIQUE_VALIDATE_ERROR, userTip);
+            throw new ParamValidateException(ValidatorExceptionEnum.TABLE_UNIQUE_VALIDATE_ERROR, "@TableUniqueValue注解上columnName属性为空");
         }
         if (StrUtil.isBlank(uniqueValidateParam.getValue())) {
-            String userTip = StrUtil.format(TABLE_UNIQUE_VALIDATE_ERROR.getUserTip(), "字段值");
-            throw new ParamValidateException(TABLE_UNIQUE_VALIDATE_ERROR, userTip);
+            throw new ParamValidateException(ValidatorExceptionEnum.TABLE_UNIQUE_VALIDATE_ERROR, "@TableUniqueValue被校验属性的值为空");
         }
     }
 
@@ -117,8 +113,7 @@ public class TableUniqueValueService {
      */
     private static void paramIdValidate(UniqueValidateParam uniqueValidateParam) {
         if (uniqueValidateParam.getId() == null) {
-            String userTip = StrUtil.format(TABLE_UNIQUE_VALIDATE_ERROR.getUserTip(), "id为空");
-            throw new ParamValidateException(TABLE_UNIQUE_VALIDATE_ERROR, userTip);
+            throw new ParamValidateException(ValidatorExceptionEnum.TABLE_UNIQUE_VALIDATE_ERROR, StrUtil.toCamelCase(uniqueValidateParam.getIdFieldName()) + "参数值为空");
         }
     }
 

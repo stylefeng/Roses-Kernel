@@ -15,19 +15,41 @@ import lombok.Getter;
 public enum ValidatorExceptionEnum implements AbstractExceptionEnum {
 
     /**
-     * 参数错误
+     * Parameter传参，请求参数缺失异常
      */
-    PARAM_VALIDATE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "01", "参数校验失败，请检查参数的传值是否正确，具体信息：{}"),
+    MISSING_SERVLET_REQUEST_PARAMETER_EXCEPTION(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "01", "Parameter传参，请求参数缺失异常，参数名：{}，类型为：{}"),
 
     /**
-     * 中断执行
+     * 请求数据经过httpMessageConverter出错
      */
-    INTERRUPT_EXECUTION(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "02", "满足自定义策略要求,程序已中断执行!"),
+    HTTP_MESSAGE_CONVERTER_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "02", "请求Json数据格式错误或Json字段格式转化问题"),
+
+    /**
+     * 不受支持的媒体类型
+     */
+    HTTP_MEDIA_TYPE_NOT_SUPPORT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "03", "请求的http media type不合法"),
+
+    /**
+     * 不受支持的http请求方法
+     */
+    HTTP_METHOD_NOT_SUPPORT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "04", "当前接口不支持{}方式请求"),
+
+    /**
+     * 404找不到资源
+     */
+    NOT_FOUND(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "05", "404：找不到请求的资源"),
+
+    /**
+     * 参数校验失败
+     * <p>
+     * 拦截@Valid和@Validated校验失败返回的错误提示
+     */
+    VALIDATED_RESULT_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "06", "参数校验失败，请检查参数的传值是否正确，具体信息：{}"),
 
     /**
      * 数据库字段值唯一性校验出错，参数不完整
      */
-    TABLE_UNIQUE_VALIDATE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "03", "数据库字段值唯一性校验出错，参数不完整，字段存在空值：{}");
+    TABLE_UNIQUE_VALIDATE_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "07", "数据库字段值唯一性校验出错，具体信息：{}");
 
     /**
      * 错误编码

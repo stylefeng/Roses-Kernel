@@ -63,7 +63,7 @@ public class ValidatorUtil {
     public static void validateThrowMessage(Object object, Class<?>... groups) {
         String errorMessage = validateGetMessage(object, groups);
         if (errorMessage != null) {
-            throw new ParamValidateException(ValidatorExceptionEnum.PARAM_VALIDATE_ERROR, errorMessage);
+            throw new ParamValidateException(ValidatorExceptionEnum.VALIDATED_RESULT_ERROR, errorMessage);
         }
     }
 
@@ -88,7 +88,7 @@ public class ValidatorUtil {
                     errorMessage.append(", ");
                 }
             }
-            return StrUtil.format(ValidatorExceptionEnum.PARAM_VALIDATE_ERROR.getUserTip(), errorMessage);
+            return StrUtil.format(ValidatorExceptionEnum.VALIDATED_RESULT_ERROR.getUserTip(), errorMessage);
         }
         return null;
     }
