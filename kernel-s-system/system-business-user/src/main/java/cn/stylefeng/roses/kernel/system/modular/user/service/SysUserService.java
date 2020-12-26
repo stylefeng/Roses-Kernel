@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
+import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
@@ -16,7 +17,7 @@ import java.util.List;
  * @author luojie
  * @date 2020/11/6 10:28
  */
-public interface SysUserService extends IService<SysUser> {
+public interface SysUserService extends IService<SysUser>, UserServiceApi {
 
     /**
      * 增加用户
@@ -122,24 +123,11 @@ public interface SysUserService extends IService<SysUser> {
      * 查询系统用户
      *
      * @param sysUserRequest 查询参数
-     *                       searchValue     关键字
-     *                       organizationId  机构id
-     *                       statusFlag      用户状态
      * @return 查询分页结果
      * @author fengshuonan
      * @date 2020/11/21 15:24
      */
     PageResult<SysUserResponse> page(SysUserRequest sysUserRequest);
-
-    /**
-     * 获取用户所有角色
-     *
-     * @param sysUserRequest 查询参数
-     * @return 角色id集合
-     * @author luojie
-     * @date 2020/11/6 13:47
-     */
-    List<Long> getUserRoles(SysUserRequest sysUserRequest);
 
     /**
      * 用户下拉列表选择
@@ -168,6 +156,6 @@ public interface SysUserService extends IService<SysUser> {
      * @author luojie
      * @date 2020/11/6 15:09
      */
-    SysUser getUserByCount(String account);
+    SysUser getUserByAccount(String account);
 
 }

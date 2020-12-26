@@ -1,7 +1,6 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserOrgMapper;
@@ -24,7 +23,7 @@ import static cn.stylefeng.roses.kernel.system.exception.enums.SysUserOrgExcepti
  * @date 2020/12/19 22:17
  */
 @Service
-public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, SysUserOrg> implements SysUserOrgService, UserOrgServiceApi {
+public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, SysUserOrg> implements SysUserOrgService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)

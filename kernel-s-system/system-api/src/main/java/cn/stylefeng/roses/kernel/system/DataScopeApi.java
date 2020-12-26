@@ -1,6 +1,9 @@
 package cn.stylefeng.roses.kernel.system;
 
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+
+import java.util.List;
 
 /**
  * 数据范围的获取接口
@@ -17,11 +20,12 @@ public interface DataScopeApi {
      * <p>
      * 此方法用在非超级管理员用户的获取数据范围
      *
-     * @param userId 用户id
+     * @param userId   用户id
+     * @param sysRoles 角色信息
      * @return 数据范围内容
      * @author majianguo
      * @date 2020/11/5 上午11:44
      */
-    DataScopeResponse getDataScope(Long userId);
+    DataScopeResponse getDataScope(Long userId, List<SysRoleResponse> sysRoles);
 
 }

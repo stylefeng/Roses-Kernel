@@ -4,6 +4,7 @@ import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceUrlParam;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 资源服务相关接口
@@ -24,23 +25,13 @@ public interface ResourceServiceApi {
     ResourceDefinition getResourceByUrl(ResourceUrlParam resourceUrlReq);
 
     /**
-     * 获取资源详情，根据资源id集合
+     * 获取资源的url列表，根据资源code集合查询
      *
-     * @param resourceCodes 资源code集合
-     * @return 资源详情列表
-     * @author fengshuonan
-     * @date 2020/11/29 19:49
-     */
-    List<ResourceDefinition> getResourceListByIds(List<String> resourceCodes);
-
-    /**
-     * 获取资源的url列表，根据资源ids查询
-     *
-     * @param resourceIds 资源id集合
+     * @param resourceCodes 资源编码集合
      * @return 资源url列表
      * @author fengshuonan
      * @date 2020/11/29 19:49
      */
-    List<String> getResourceUrlsListByIds(List<String> resourceIds);
+    Set<String> getResourceUrlsListByCodes(List<String> resourceCodes);
 
 }

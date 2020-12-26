@@ -62,7 +62,7 @@ public class SysMenuRequest extends BaseRequest {
     /**
      * 应用分类（应用编码）
      */
-    @NotBlank(message = "应用分类不能为空", groups = {add.class, edit.class, getAppMenus.class})
+    @NotBlank(message = "appCode不能为空", groups = {add.class, edit.class, getAppMenus.class})
     private String appCode;
 
     /**

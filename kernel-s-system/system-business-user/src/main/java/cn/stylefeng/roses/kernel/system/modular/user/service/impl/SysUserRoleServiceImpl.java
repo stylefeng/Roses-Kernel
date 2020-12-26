@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
-import cn.stylefeng.roses.kernel.system.DataScopeApi;
-import cn.stylefeng.roses.kernel.system.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserRoleMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +23,19 @@ import java.util.List;
 @Service
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements SysUserRoleService {
 
-    @Resource
-    private RoleServiceApi roleServiceApi;
+    @Override
+    public List<SysUserRole> getUserRoles(Long userId) {
+        LambdaQueryWrapper<SysUserRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUserRole::getUserId, userId);
+        List<SysUserRole> list = this.list(wrapper);
 
-    @Resource
-    private DataScopeApi dataScopeApi;
+        // 账号下没有绑定角色
+        if (list.isEmpty()) {
+            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_BIND_ROLE);
+        }
+
+        return list;
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

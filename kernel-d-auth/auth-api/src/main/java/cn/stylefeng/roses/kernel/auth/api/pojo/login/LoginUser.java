@@ -2,11 +2,12 @@ package cn.stylefeng.roses.kernel.auth.api.pojo.login;
 
 import cn.hutool.core.lang.Dict;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
-import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,49 +27,9 @@ public class LoginUser implements Serializable {
     private Long userId;
 
     /**
-     * 姓名
-     */
-    private String realName;
-
-    /**
      * 账号
      */
     private String account;
-
-    /**
-     * 公司/组织id
-     */
-    private Long organizationId;
-
-    /**
-     * 头像（图片最终访问的url）
-     */
-    private String avatar;
-
-    /**
-     * 生日
-     */
-    private Date birthday;
-
-    /**
-     * 性别（具体SexEnum枚举类）（M-男，F-女）
-     */
-    private String sex;
-
-    /**
-     * 邮箱
-     */
-    private String email;
-
-    /**
-     * 手机
-     */
-    private String mobilePhone;
-
-    /**
-     * 固定电话
-     */
-    private String tel;
 
     /**
      * 超级管理员标识，true-是超级管理员
@@ -76,33 +37,31 @@ public class LoginUser implements Serializable {
     private Boolean superAdmin;
 
     /**
-     * 用户数据范围类型的集合
+     * 用户基本信息
      */
-    private Set<DataScopeTypeEnum> dataScopeTypes;
+    private SimpleUserInfo simpleUserInfo;
 
     /**
-     * 用户数据范围（userId的集合）
-     * <p>
-     * 用户能看哪些用户数据的权限
+     * 用户角色信息
      */
-    private Set<Long> userIdDataScope;
+    private List<SimpleRoleInfo> simpleRoleInfoList;
 
     /**
-     * 组织机构数据范围（组织架构id的集合）
-     * <p>
-     * 用户能看哪些组织机构数据的信息
+     * 公司/组织id
      */
-    private Set<Long> organizationIdDataScope;
+    private Long organizationId;
 
     /**
-     * 具备应用信息
+     * 职务信息
      */
-    private Set<SimpleDict> apps;
+    private Long positionId;
 
     /**
-     * 角色信息
+     * 用户数据范围信息
      */
-    private Set<SimpleDict> roles;
+    private Set<DataScopeTypeEnum> dataScopeTypeEnums;
+    private Set<Long> dataScopeUserIds;
+    private Set<Long> dataScopeOrganizationIds;
 
     /**
      * 可用资源集合

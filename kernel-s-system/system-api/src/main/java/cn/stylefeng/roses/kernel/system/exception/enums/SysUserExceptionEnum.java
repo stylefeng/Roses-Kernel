@@ -41,7 +41,7 @@ public enum SysUserExceptionEnum implements AbstractExceptionEnum {
     /**
      * 用户不存在
      */
-    USER_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "51", "用户不存在"),
+    USER_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "51", "用户不存在，用户id或账号为：{}"),
 
     /**
      * 账号已存在
@@ -86,7 +86,17 @@ public enum SysUserExceptionEnum implements AbstractExceptionEnum {
     /**
      * 当前用户未分配菜单
      */
-    USER_NOT_HAVE_MENUS(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "60", "当前用户未分配菜单");
+    USER_NOT_HAVE_MENUS(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "60", "当前用户未分配菜单"),
+
+    /**
+     * 用户未绑定角色
+     */
+    USER_NOT_BIND_ROLE(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "61", "用户未绑定角色"),
+
+    /**
+     * 系统错误，账号存在多个
+     */
+    ACCOUNT_HAVE_MANY(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "62", "系统错误，账号存在多个，账号为：{}");
 
     /**
      * 错误编码

@@ -53,13 +53,13 @@ public interface RoleServiceApi {
     List<Long> getMenuIdsByRoleIds(List<Long> roleIds);
 
     /**
-     * 获取角色的资源id集合
+     * 获取角色的资源code集合
      *
      * @param roleIdList 角色id集合
-     * @return 资源id集合
+     * @return 资源code集合
      * @author majianguo
      * @date 2020/11/5 上午11:17
      */
-    List<String> getRoleResourceList(List<Long> roleIdList);
+    List<String> getRoleResourceCodeList(List<Long> roleIdList);
 
 }

@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static cn.stylefeng.roses.kernel.system.constants.SystemConstants.DEFAULT_PARENT_ID;
@@ -173,45 +170,20 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public List<ResourceDefinition> getResourceListByIds(List<String> resourceCodes) {
-
-        ArrayList<ResourceDefinition> resourceDefinitions = new ArrayList<>();
+    public Set<String> getResourceUrlsListByCodes(List<String> resourceCodes) {
 
         if (resourceCodes == null || resourceCodes.isEmpty()) {
-            return resourceDefinitions;
+            return new HashSet<>();
         }
 
         // 拼接in条件
         LambdaQueryWrapper<SysResource> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(SysResource::getResourceCode, resourceCodes);
-
-        // 获取资源详情
-        List<SysResource> list = this.list(queryWrapper);
-        for (SysResource sysResource : list) {
-            ResourceDefinition resourceDefinition = ResourceFactory.createResourceDefinition(sysResource);
-            resourceDefinitions.add(resourceDefinition);
-        }
-
-        return resourceDefinitions;
-    }
-
-    @Override
-    public List<String> getResourceUrlsListByIds(List<String> resourceIds) {
-
-        ArrayList<String> resourceUrls = new ArrayList<>();
-
-        if (resourceIds == null || resourceIds.isEmpty()) {
-            return resourceUrls;
-        }
-
-        // 拼接in条件
-        LambdaQueryWrapper<SysResource> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysResource::getResourceId, resourceIds);
         queryWrapper.select(SysResource::getUrl);
 
         // 获取资源详情
         List<SysResource> list = this.list(queryWrapper);
-        return list.stream().map(SysResource::getUrl).collect(Collectors.toList());
+        return list.stream().map(SysResource::getUrl).collect(Collectors.toSet());
     }
 
     /**

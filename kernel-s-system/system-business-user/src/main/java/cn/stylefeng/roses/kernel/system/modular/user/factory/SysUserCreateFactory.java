@@ -16,7 +16,7 @@ import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest
  * @author fengshuonan
  * @date 2020/11/21 12:55
  */
-public class SysUserFactory {
+public class SysUserCreateFactory {
 
     /**
      * 新增用户时候的用户信息填充

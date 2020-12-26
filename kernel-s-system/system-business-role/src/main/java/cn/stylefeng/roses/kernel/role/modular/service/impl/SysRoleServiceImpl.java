@@ -31,6 +31,7 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -194,10 +195,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (!LoginContext.me().getSuperAdminFlag()) {
 
             // 查询自己拥有的
-            Set<SimpleDict> roles = LoginContext.me().getLoginUser().getRoles();
+            List<SimpleRoleInfo> roles = LoginContext.me().getLoginUser().getSimpleRoleInfoList();
 
             // 取出所有角色id
-            Set<Long> loginUserRoleIds = roles.stream().map(SimpleDict::getId).collect(Collectors.toSet());
+            Set<Long> loginUserRoleIds = roles.stream().map(SimpleRoleInfo::getRoleId).collect(Collectors.toSet());
             if (ObjectUtil.isEmpty(loginUserRoleIds)) {
                 return dictList;
             }
@@ -221,30 +222,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public List<Long> getRoleDataScope(SysRoleRequest sysRoleRequest) {
         SysRole sysRole = this.querySysRole(sysRoleRequest);
         return sysRoleDataScopeService.getRoleDataScopeIdList(CollectionUtil.newArrayList(sysRole.getRoleId()));
-    }
-
-    @Override
-    public List<SimpleDict> getLoginRoles(Long userId) {
-        List<SimpleDict> dictList = CollectionUtil.newArrayList();
-
-        // 获取用户角色id集合
-        List<Long> roleIdList = userServiceApi.getUserRoleIdList(userId);
-        if (ObjectUtil.isNotEmpty(roleIdList)) {
-            LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.in(SysRole::getRoleId, roleIdList)
-                    .eq(SysRole::getStatusFlag, StatusEnum.ENABLE.getCode())
-                    .ne(SysRole::getDelFlag, YesOrNotEnum.N.getCode());
-
-            // 根据角色id集合查询并返回结果
-            this.list(queryWrapper).forEach(sysRole -> {
-                SimpleDict simpleDict = new SimpleDict();
-                simpleDict.setId(sysRole.getRoleId());
-                simpleDict.setCode(sysRole.getRoleCode());
-                simpleDict.setName(sysRole.getRoleName());
-                dictList.add(simpleDict);
-            });
-        }
-        return dictList;
     }
 
     @Override
@@ -344,12 +321,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public List<String> getRoleResourceList(List<Long> roleIdList) {
-        List<String> resourceList = CollectionUtil.newArrayList();
+    public List<String> getRoleResourceCodeList(List<Long> roleIdList) {
         LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(SysRoleResource::getRoleId, roleIdList);
-        sysRoleResourceService.list(queryWrapper).forEach(sysRoleResource -> resourceList.add(sysRoleResource.getResourceCode()));
-        return resourceList;
+        List<SysRoleResource> sysRoleResources = sysRoleResourceService.list(queryWrapper);
+        return sysRoleResources.stream().map(SysRoleResource::getResourceCode).collect(Collectors.toList());
     }
 
     /**

@@ -1,10 +1,8 @@
 package cn.stylefeng.roses.kernel.system.pojo.organization;
 
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,10 +28,5 @@ public class DataScopeResponse {
      * 组织架构id数据范围集合
      */
     private Set<Long> organizationIds;
-
-    /**
-     * 角色信息
-     */
-    private List<SysRoleResponse> sysRoleResponses;
 
 }

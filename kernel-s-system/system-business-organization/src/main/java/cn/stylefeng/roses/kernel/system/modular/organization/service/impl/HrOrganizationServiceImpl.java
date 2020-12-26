@@ -179,7 +179,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         // 如果是超级管理员 或 数据范围是所有，则不过滤数据范围
         boolean needToDataScope = true;
         if (LoginContext.me().getSuperAdminFlag()) {
-            Set<DataScopeTypeEnum> dataScopeTypes = LoginContext.me().getLoginUser().getDataScopeTypes();
+            Set<DataScopeTypeEnum> dataScopeTypes = LoginContext.me().getLoginUser().getDataScopeTypeEnums();
             if (dataScopeTypes != null && dataScopeTypes.contains(DataScopeTypeEnum.ALL)) {
                 needToDataScope = false;
             }
@@ -187,7 +187,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
         // 如果需要数据范围过滤，则获取用户的数据范围，拼接查询条件
         if (needToDataScope) {
-            Set<Long> dataScope = LoginContext.me().getLoginUser().getOrganizationIdDataScope();
+            Set<Long> dataScope = LoginContext.me().getLoginUser().getDataScopeOrganizationIds();
 
             // 数据范围没有，直接返回空
             if (ObjectUtil.isEmpty(dataScope)) {

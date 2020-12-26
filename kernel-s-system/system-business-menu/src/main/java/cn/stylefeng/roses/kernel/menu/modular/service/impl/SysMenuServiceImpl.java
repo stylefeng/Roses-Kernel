@@ -29,6 +29,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.menu.modular.factory.MenuFactory;
@@ -38,7 +39,6 @@ import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
-import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.constants.SymbolConstant;
@@ -293,7 +293,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 获取当前用户的角色id集合
         LoginUser loginUser = LoginContext.me().getLoginUser();
-        List<Long> roleIdList = loginUser.getRoles().stream().map(SimpleDict::getId).collect(Collectors.toList());
+        List<Long> roleIdList = loginUser.getSimpleRoleInfoList().stream().map(SimpleRoleInfo::getRoleId).collect(Collectors.toList());
 
         // 当前用户角色为空，则没菜单
         if (ObjectUtil.isEmpty(roleIdList)) {

@@ -54,33 +54,4 @@ public interface LoginUserApi {
      */
     boolean getSuperAdminFlag();
 
-    /**
-     * 判断当前用户是否登录
-     *
-     * @return 是否登录，true是，false否
-     * @author fengshuonan
-     * @date 2020/10/17 11:02
-     */
-    boolean hasLogin();
-
-    /**
-     * 判断当前登录用户是否有某资源的访问权限
-     *
-     * @param requestUri 请求的url，例如: /userInfo/list
-     * @return 是否有访问权限，true是，false否
-     * @author fengshuonan
-     * @date 2020/10/17 11:03
-     */
-    boolean hasPermission(String requestUri);
-
-    /**
-     * 判断当前登录用户是否包含某个角色
-     *
-     * @param roleCode 角色编码
-     * @return 是否包含该角色，true是，false否
-     * @author fengshuonan
-     * @date 2020/10/17 11:04
-     */
-    boolean hasRole(String roleCode);
-
 }

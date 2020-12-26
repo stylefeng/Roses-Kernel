@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
-import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -12,15 +11,17 @@ import cn.stylefeng.roses.kernel.office.api.OfficeExcelApi;
 import cn.stylefeng.roses.kernel.office.api.pojo.report.ExcelExportParam;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
-import cn.stylefeng.roses.kernel.system.UserServiceApi;
+import cn.stylefeng.roses.kernel.system.DataScopeApi;
+import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
+import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserDataScope;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
-import cn.stylefeng.roses.kernel.system.modular.user.factory.LoginUserFactory;
-import cn.stylefeng.roses.kernel.system.modular.user.factory.SysUserFactory;
+import cn.stylefeng.roses.kernel.system.modular.user.factory.SysUserCreateFactory;
+import cn.stylefeng.roses.kernel.system.modular.user.factory.UserLoginInfoFactory;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
@@ -28,6 +29,8 @@ import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeSer
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
+import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
@@ -56,7 +59,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService, UserServiceApi {
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     @Resource
     private SysUserOrgService sysUserOrgService;
@@ -69,6 +72,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private OfficeExcelApi officeExcelApi;
+
+    @Resource
+    private DataScopeApi dataScopeApi;
+
+    @Resource
+    private RoleServiceApi roleServiceApi;
+
+    @Resource
+    private ResourceServiceApi resourceServiceApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -83,7 +95,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 请求bean转为实体，填充一些基本属性
         SysUser sysUser = new SysUser();
         BeanUtil.copyProperties(sysUserRequest, sysUser);
-        SysUserFactory.fillAddSysUser(sysUser);
+        SysUserCreateFactory.fillAddSysUser(sysUser);
 
         // 保存用户
         this.save(sysUser);
@@ -107,7 +119,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         BeanUtil.copyProperties(sysUserRequest, sysUser);
 
         // 填充基础参数
-        SysUserFactory.fillEditSysUser(sysUser);
+        SysUserCreateFactory.fillEditSysUser(sysUser);
         this.updateById(sysUser);
 
         Long sysUserId = sysUser.getUserId();
@@ -121,7 +133,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.querySysUser(sysUserRequest);
 
         // 填充更新用户的信息
-        SysUserFactory.fillUpdateInfo(sysUserRequest, sysUser);
+        SysUserCreateFactory.fillUpdateInfo(sysUserRequest, sysUser);
 
         this.updateById(sysUser);
     }
@@ -281,11 +293,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public List<Long> getUserRoles(SysUserRequest sysUserRequest) {
-        return this.getUserRoleIdList(sysUserRequest.getUserId());
-    }
-
-    @Override
     public List<SimpleDict> selector(SysUserRequest sysUserRequest) {
 
         LambdaQueryWrapper<SysUser> wrapper = createWrapper(sysUserRequest);
@@ -323,31 +330,50 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public SysUser getUserByCount(String account) {
+    public SysUser getUserByAccount(String account) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysUser::getAccount, account);
         queryWrapper.ne(SysUser::getDelFlag, YesOrNotEnum.Y.getCode());
-        return this.getOne(queryWrapper);
+
+        List<SysUser> list = this.list(queryWrapper);
+
+        // 用户不存在
+        if (list.isEmpty()) {
+            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST, account);
+        }
+
+        // 账号存在多个
+        if (list.size() > 1) {
+            throw new SystemModularException(SysUserExceptionEnum.ACCOUNT_HAVE_MANY, account);
+        }
+
+        return list.get(0);
     }
 
     @Override
     public UserLoginInfoDTO getUserLoginInfo(String account) {
-        UserLoginInfoDTO userLoginInfoDTO = new UserLoginInfoDTO();
 
-        // 根据账号获取系统用户表中的信息
-        SysUser sysUser = getUserByCount(account);
-        LoginUser loginUser = LoginUserFactory.createLoginUser(sysUser);
+        // 1. 获取用户和账号信息
+        SysUser sysUser = this.getUserByAccount(account);
+        Long userId = sysUser.getUserId();
 
-        // 获取用户加密的密码，用于登录校验
-        userLoginInfoDTO.setUserPasswordHexed(sysUser.getPassword());
+        // 2. 获取用户角色信息
+        List<SysUserRole> userRoles = sysUserRoleService.getUserRoles(userId);
+        List<Long> roleIds = userRoles.stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
+        List<SysRoleResponse> roleResponseList = roleServiceApi.getRolesByIds(roleIds);
 
-        // 填充用户状态
-        userLoginInfoDTO.setUserStatus(sysUser.getStatusFlag());
+        // 3. 获取用户的数据范围
+        DataScopeResponse dataScopeResponse = dataScopeApi.getDataScope(userId, roleResponseList);
 
-        // 设置用户登录详情信息
-        userLoginInfoDTO.setLoginUser(loginUser);
+        // 4. 获取用户的组织机构和职位信息
+        SysUserOrgResponse userOrgInfo = sysUserOrgService.getUserOrgInfo(userId);
 
-        return userLoginInfoDTO;
+        // 5. 获取用户的所有资源url
+        List<String> resourceCodeList = roleServiceApi.getRoleResourceCodeList(roleIds);
+        Set<String> resourceUrlsListByCodes = resourceServiceApi.getResourceUrlsListByCodes(resourceCodeList);
+
+        // 5. 组装响应结果
+        return UserLoginInfoFactory.userLoginInfoDTO(sysUser, roleResponseList, dataScopeResponse, userOrgInfo, resourceUrlsListByCodes);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -413,7 +439,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysUser querySysUser(SysUserRequest sysUserRequest) {
         SysUser sysUser = this.getById(sysUserRequest.getUserId());
         if (ObjectUtil.isNull(sysUser)) {
-            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST);
+            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST, sysUserRequest.getUserId());
         }
         return sysUser;
     }

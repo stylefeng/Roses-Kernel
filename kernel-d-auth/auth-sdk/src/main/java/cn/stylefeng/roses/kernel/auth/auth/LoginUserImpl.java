@@ -6,13 +6,11 @@ import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Set;
 
 import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.TOKEN_GET_ERROR;
 
@@ -89,54 +87,6 @@ public class LoginUserImpl implements LoginUserApi {
     public boolean getSuperAdminFlag() {
         LoginUser loginUser = getLoginUser();
         return loginUser.getSuperAdmin();
-    }
-
-    @Override
-    public boolean hasLogin() {
-
-        // 获取用户的token
-        String token = null;
-        try {
-            token = getToken();
-        } catch (Exception e) {
-            return false;
-        }
-
-        // 获取是否在会话中有
-        return sessionManagerApi.haveSession(token);
-    }
-
-    @Override
-    public boolean hasPermission(String requestUri) {
-
-        LoginUser loginUser = getLoginUser();
-
-        Set<String> resourceUrls = loginUser.getResourceUrls();
-
-        if (resourceUrls != null && resourceUrls.size() > 0) {
-            return resourceUrls.contains(requestUri);
-        } else {
-            return false;
-        }
-
-    }
-
-    @Override
-    public boolean hasRole(String roleCode) {
-
-        LoginUser loginUser = getLoginUser();
-
-        Set<SimpleDict> roles = loginUser.getRoles();
-
-        if (roles != null && roles.size() > 0) {
-            for (SimpleDict role : roles) {
-                if (role.getCode().equals(roleCode)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
 }

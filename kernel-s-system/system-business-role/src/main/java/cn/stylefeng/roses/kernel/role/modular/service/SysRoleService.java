@@ -24,12 +24,12 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.roses.kernel.role.modular.service;
 
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRole;
-import com.baomidou.mybatisplus.extension.service.IService;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.role.modular.entity.SysRole;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -115,16 +115,6 @@ public interface SysRoleService extends IService<SysRole> {
      * @date 2020/11/5 上午11:15
      */
     List<Long> getRoleDataScope(SysRoleRequest sysRoleRequest);
-
-    /**
-     * 获取用户角色相关信息
-     *
-     * @param userId 用户id
-     * @return 增强版hashMap，格式：[{"id":456, "code":"zjl", "name":"总经理"}]
-     * @author majianguo
-     * @date 2020/11/5 上午11:12
-     */
-    List<SimpleDict> getLoginRoles(Long userId);
 
     /**
      * 根据角色名模糊搜索系统角色列表

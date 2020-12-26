@@ -42,7 +42,7 @@ public class DataScopeService implements DataScopeApi {
     private DbOperatorApi dbOperatorApi;
 
     @Override
-    public DataScopeResponse getDataScope(Long userId) {
+    public DataScopeResponse getDataScope(Long userId, List<SysRoleResponse> sysRoles) {
 
         // 初始化返回结果
         DataScopeResponse dataScopeResponse = new DataScopeResponse();
@@ -54,27 +54,20 @@ public class DataScopeService implements DataScopeApi {
             throw new DataScopeException(DataScopeExceptionEnum.USER_ID_EMPTY_ERROR, userTip);
         }
 
-        // 获取用户的所有角色
-        List<Long> userRoleIdList = userServiceApi.getUserRoleIdList(userId);
-        if (userRoleIdList.isEmpty()) {
-            String userTip = StrUtil.format(DataScopeExceptionEnum.ROLE_EMPTY_ERROR.getUserTip(), userId);
-            throw new DataScopeException(DataScopeExceptionEnum.ROLE_EMPTY_ERROR, userTip);
-        }
-
-        // 获取角色信息详情
-        List<SysRoleResponse> sysRoles = roleServiceApi.getRolesByIds(userRoleIdList);
-        dataScopeResponse.setSysRoleResponses(sysRoles);
+        // 获取用户的主要部门信息
+        SysUserOrgResponse sysUserOrgResponse = userOrgServiceApi.getUserOrgInfo(userId);
 
         // 获取角色中的数据范围类型
         Set<DataScopeTypeEnum> dataScopeTypeEnums = sysRoles.stream().map(SysRoleResponse::getDataScopeTypeEnum).collect(Collectors.toSet());
         dataScopeResponse.setDataScopeTypeEnums(dataScopeTypeEnums);
 
-        // 包含全部数据类型的，直接不用设置组织机构，直接放开
+        // 1.根据数据范围类型的不同，填充角色拥有的 organizationIds 和 userIds 范围
+        // 1.1 包含全部数据类型的，直接不用设置组织机构，直接放开
         if (dataScopeTypeEnums.contains(DataScopeTypeEnum.ALL)) {
             return dataScopeResponse;
         }
 
-        // 包含指定部门数据，将指定数据范围增加到Set中
+        // 1.2 包含指定部门数据，将指定数据范围增加到Set中
         if (dataScopeTypeEnums.contains(DataScopeTypeEnum.DEFINE)) {
 
             // 获取角色对应的组织机构范围
@@ -83,10 +76,7 @@ public class DataScopeService implements DataScopeApi {
             organizationIds.addAll(orgIds);
         }
 
-        // 获取用户的主要部门信息
-        SysUserOrgResponse sysUserOrgResponse = userOrgServiceApi.getUserOrgInfo(userId);
-
-        // 本部门和本部门以下，查出用户的主要部门，并且查询该部门本部门及以下的组织机构id列表
+        // 1.3 本部门和本部门以下，查出用户的主要部门，并且查询该部门本部门及以下的组织机构id列表
         if (dataScopeTypeEnums.contains(DataScopeTypeEnum.DEPT_WITH_CHILD)) {
 
             // 获取部门及以下部门的id列表
@@ -96,7 +86,7 @@ public class DataScopeService implements DataScopeApi {
             organizationIds.addAll(subOrgIds);
         }
 
-        // 如果是本部门，则查出本部门并添加到组织机构列表
+        // 1.4 如果是本部门，则查出本部门并添加到组织机构列表
         if (dataScopeTypeEnums.contains(DataScopeTypeEnum.DEPT)) {
 
             // 获取本部门的id
@@ -104,15 +94,16 @@ public class DataScopeService implements DataScopeApi {
             organizationIds.add(organizationId);
         }
 
-        // 如果只是本用户数据，将用户本身装进userId数据范围
+        // 1.5 如果只是本用户数据，将用户本身装进userId数据范围
         if (dataScopeTypeEnums.contains(DataScopeTypeEnum.SELF)) {
             userIds.add(userId);
         }
 
-        // 获取用户单独绑定的组织机构id
+        // 2. 获取用户单独绑定的组织机构id
         List<Long> userBindDataScope = userServiceApi.getUserBindDataScope(userId);
         organizationIds.addAll(userBindDataScope);
 
+        // 3. 组装返回结果
         dataScopeResponse.setUserIds(userIds);
         dataScopeResponse.setOrganizationIds(organizationIds);
 

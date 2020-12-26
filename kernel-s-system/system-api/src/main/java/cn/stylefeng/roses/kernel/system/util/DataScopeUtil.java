@@ -37,7 +37,7 @@ public class DataScopeUtil {
             return tips.append("空：获取不到当前用户").toString();
         }
 
-        Set<DataScopeTypeEnum> dataScopeTypes = loginUser.getDataScopeTypes();
+        Set<DataScopeTypeEnum> dataScopeTypes = loginUser.getDataScopeTypeEnums();
         if (dataScopeTypes == null) {
             return tips.append("空：数据范围为空").toString();
         }
@@ -49,7 +49,7 @@ public class DataScopeUtil {
             }
         }
 
-        Set<Long> userDataScope = loginUser.getUserIdDataScope();
+        Set<Long> userDataScope = loginUser.getDataScopeUserIds();
         tips.append("用户userId数据范围：");
         if (userDataScope != null && !userDataScope.isEmpty()) {
             for (Long id : userDataScope) {
@@ -57,7 +57,7 @@ public class DataScopeUtil {
             }
         }
 
-        Set<Long> organizationDataScope = loginUser.getOrganizationIdDataScope();
+        Set<Long> organizationDataScope = loginUser.getDataScopeOrganizationIds();
         tips.append("用户organizationId数据范围：");
         if (organizationDataScope != null && !organizationDataScope.isEmpty()) {
             for (Long id : organizationDataScope) {
@@ -91,8 +91,8 @@ public class DataScopeUtil {
         }
 
         // 获取用户的数据范围类型，user数据范围，组织机构数据范围
-        Set<DataScopeTypeEnum> dataScopeTypes = loginUser.getDataScopeTypes();
-        Set<Long> organizationDataScope = loginUser.getOrganizationIdDataScope();
+        Set<DataScopeTypeEnum> dataScopeTypes = loginUser.getDataScopeTypeEnums();
+        Set<Long> organizationDataScope = loginUser.getDataScopeOrganizationIds();
 
         // 如果数据范围类型为空，则返回没权限
         if (dataScopeTypes == null || dataScopeTypes.isEmpty()) {
