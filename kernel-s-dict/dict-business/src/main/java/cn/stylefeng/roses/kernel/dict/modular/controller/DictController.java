@@ -14,6 +14,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class DictController {
      * @date 2020/10/29 16:35
      */
     @PostResource(name = "添加字典", path = "/dict/addDict", requiredPermission = false)
-    public ResponseData addDictType(@RequestBody @Validated(DictRequest.add.class) DictRequest dictRequest) {
+    public ResponseData addDict(@RequestBody @Validated(DictRequest.add.class) DictRequest dictRequest) {
         this.dictService.addDict(dictRequest);
         return new SuccessResponseData();
     }
@@ -86,8 +87,8 @@ public class DictController {
      * @date 2020/10/29 16:35
      */
     @GetResource(name = "获取字典详情", path = "/dict/getDictDetail", requiredPermission = false)
-    public ResponseData getDictDetail(@RequestBody @Validated(DictRequest.detail.class) DictRequest dictRequest) {
-        SysDict detail = this.dictService.findDetail(dictRequest);
+    public ResponseData getDictDetail(@RequestParam("dictId") Long dictId) {
+        SysDict detail = this.dictService.findDetail(dictId);
         return new SuccessResponseData(detail);
     }
 
@@ -97,10 +98,24 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:35
      */
-    @PostResource(name = "获取字典列表", path = "/dict/getDictList", requiredPermission = false)
-    public ResponseData getDictList(@RequestBody DictRequest dictRequest) {
-        List<SysDict> dictList = this.dictService.findList(dictRequest);
-        return new SuccessResponseData(dictList);
+    @GetResource(name = "获取字典列表", path = "/dict/getDictList", requiredPermission = false)
+    public ResponseData getDictList(DictRequest dictRequest) {
+        List<SysDict> sysDictList = this.dictService.findList(dictRequest);
+        return new SuccessResponseData(sysDictList);
+    }
+
+    /**
+     * 获取字典下拉列表，用在新增和修改字典，选择字典的父级
+     * <p>
+     * 当传参数dictId是，查询结果会排除参数dictId字典的所有子级和dictId字典本身
+     *
+     * @author fengshuonan
+     * @date 2020/12/11 16:35
+     */
+    @GetResource(name = "获取字典列表(排除下级)", path = "/dict/getDictListExcludeSub", requiredPermission = false)
+    public ResponseData getDictListExcludeSub(@RequestParam(value = "dictId", required = false) Long dictId) {
+        List<SysDict> sysDictList = this.dictService.getDictListExcludeSub(dictId);
+        return new SuccessResponseData(sysDictList);
     }
 
     /**
@@ -109,8 +124,8 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:35
      */
-    @PostResource(name = "获取字典列表", path = "/dict/getDictListPage", requiredPermission = false)
-    public ResponseData getDictListPage(@RequestBody DictRequest dictRequest) {
+    @GetResource(name = "获取字典列表", path = "/dict/getDictListPage", requiredPermission = false)
+    public ResponseData getDictListPage(DictRequest dictRequest) {
         PageResult<SysDict> page = this.dictService.findPageList(dictRequest);
         return new SuccessResponseData(page);
     }
@@ -121,8 +136,8 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:36
      */
-    @PostResource(name = "获取树形字典列表", path = "/dict/getDictTreeList", requiredPermission = false)
-    public ResponseData getDictTreeList(@RequestBody @Validated(DictRequest.treeList.class) DictRequest dictRequest) {
+    @GetResource(name = "获取树形字典列表", path = "/dict/getDictTreeList", requiredPermission = false)
+    public ResponseData getDictTreeList(@Validated(DictRequest.treeList.class) DictRequest dictRequest) {
         List<TreeDictInfo> treeDictList = this.dictService.getTreeDictList(dictRequest);
         return new SuccessResponseData(treeDictList);
     }
@@ -133,8 +148,8 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:36
      */
-    @PostResource(name = "code校验", path = "/dict/validateCodeAvailable", requiredPermission = false)
-    public ResponseData validateCodeAvailable(@RequestBody @Validated(DictRequest.treeList.class) DictRequest dictRequest) {
+    @GetResource(name = "code校验", path = "/dict/validateCodeAvailable", requiredPermission = false)
+    public ResponseData validateCodeAvailable(@Validated(DictRequest.validateAvailable.class) DictRequest dictRequest) {
         boolean flag = this.dictService.validateCodeAvailable(dictRequest);
         return new SuccessResponseData(flag);
     }

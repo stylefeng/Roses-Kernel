@@ -6,31 +6,31 @@
 
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>roses-kernel</artifactId>
+        <artifactId>kernel-d-db</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>kernel-d-db</artifactId>
+    <artifactId>db-sdk-init</artifactId>
 
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>db-api</module>
-        <module>db-sdk-init</module>
-        <module>db-sdk-mp</module>
-        <module>db-spring-boot-starter</module>
-    </modules>
+    <packaging>jar</packaging>
 
     <dependencies>
 
-        <!-- 开发规则 -->
+        <!--db操作的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>kernel-a-rule</artifactId>
+            <artifactId>db-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--auth鉴权模块的api-->
+        <!--需要用auth模块的LoginContext获取当前登录用户，然后填充到create_user这类字段里-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>auth-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
     </dependencies>
-
 </project>

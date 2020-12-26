@@ -8,4 +8,12 @@ package cn.stylefeng.roses.kernel.dict.api;
  */
 public interface DictApi {
 
+    /**
+     * 获取字典名称通过id
+     *
+     * @author fengshuonan
+     * @date 2020/12/25 14:14
+     */
+    String getDictNameByDictCode(String dictCode);
+
 }

@@ -2,49 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.dict.modular.mapper.DictMapper">
 
-    <select id="findDetail" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict">
-        SELECT
-        dict.dict_id AS dictId,
-        dict.dict_type_code AS dictTypeCode,
-        dict.dict_name as dictName,
-        dict.dict_code AS dictCode,
-        dict.dict_short_name AS dictShortName,
-        dict.dict_short_code AS dictShortCode,
-        dict.parent_dict_id AS parentDictId,
-        dict.dict_sort as dictSort,
-        dict.status_flag AS statusFlag,
-        dict.create_time AS createTime,
-        type.dict_type_name as dictTypeName
-        FROM
-        sys_dict dict
-        INNER JOIN sys_dict_type type ON dict.dict_type_code = type.dict_type_code
+    <select id="findDetail" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict" parameterType="long">
+        SELECT dict.dict_id         AS dictId,
+               dict.dict_code       AS dictCode,
+               dict.dict_name       as dictName,
+               dict.dict_encode     as dictEncode,
+               dict.dict_sort       as dictSort,
+               dict.dict_type_code  AS dictTypeCode,
+               dict.dict_short_name AS dictShortName,
+               dict.dict_short_code AS dictShortCode,
+               dict.dict_parent_id  AS dictParentId,
+               dict.status_flag     AS statusFlag,
+               dict.create_time     AS createTime,
+               type.dict_type_name  AS dictTypeName
+        FROM sys_dict dict
+                 INNER JOIN sys_dict_type type ON dict.dict_type_code = type.dict_type_code
         WHERE dict.del_flag = 'N'
-        <if test="dictRequest.dictId != null and dictRequest.dictId != ''">
-            AND dict.dict_id = #{dictRequest.dictId}
-        </if>
-        <if test="dictRequest.dictCode != null and dictRequest.dictCode != ''">
-            AND dict.dict_code = #{dictRequest.dictCode}
-        </if>
-        ORDER BY dict_sort
+          AND dict.dict_id = #{dictId}
     </select>
 
     <select id="findList" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict">
-        SELECT
-        dict.dict_id AS dictId,
-        dict.dict_type_code AS dictTypeCode,
-        dict.dict_name as dictName,
-        dict.dict_code AS dictCode,
-        dict.dict_short_name AS dictShortName,
-        dict.dict_short_code AS dictShortCode,
-        dict.parent_dict_id AS parentDictId,
-        dict.dict_sort as dictSort,
-        dict.status_flag AS statusFlag,
-        dict.create_time AS createTime,
-        type.dict_type_name as dictTypeName
-        FROM
-        sys_dict dict
-        INNER JOIN sys_dict_type type ON dict.dict_type_code = type.dict_type_code
+        SELECT type.dict_type_name  as dictTypeName,
+               dict.dict_id         AS dictId,
+               dict.dict_code       AS dictCode,
+               dict.dict_encode     as dictEncode,
+               dict.dict_sort       as dictSort,
+               dict.dict_name       as dictName,
+               dict.dict_type_code  AS dictTypeCode,
+               dict.dict_short_name AS dictShortName,
+               dict.dict_short_code AS dictShortCode,
+               dict.dict_parent_id  AS dictParentId,
+               dict.status_flag     AS statusFlag,
+               dict.create_time     AS createTime,
+               pDict.dict_name      AS parentName
+        FROM sys_dict dict
+                 INNER JOIN sys_dict_type type ON dict.dict_type_code = type.dict_type_code
+                 LEFT JOIN sys_dict pDict ON pDict.dict_id = dict.dict_parent_id
         WHERE dict.del_flag = 'N'
+        <if test="dictRequest.statusFlag != null and dictRequest.statusFlag != ''">
+            AND dict.status_flag = #{dictRequest.statusFlag}
+        </if>
         <if test="dictRequest.dictTypeCode != null and dictRequest.dictTypeCode != ''">
             AND dict.dict_type_code = #{dictRequest.dictTypeCode}
         </if>
@@ -52,18 +49,45 @@
             AND dict.dict_code LIKE CONCAT('%',#{dictRequest.dictCode},'%')
         </if>
         <if test="dictRequest.dictName != null and dictRequest.dictName != ''">
-            AND dict.dict_name LIKE CONCAT('%',#{dictRequest.dictName},'%')
+            AND
+            (
+            dict.dict_name LIKE CONCAT('%',#{dictRequest.dictName},'%')
+            OR
+            dict.dict_name_pinyin LIKE CONCAT('%',#{dictRequest.dictName},'%')
+            )
         </if>
-        <if test="dictRequest.parentDictId != null and dictRequest.parentDictId != ''">
-            AND dict.parent_dict_id = #{dictRequest.parentDictId}
+        <if test="dictRequest.dictParentId != null and dictRequest.dictParentId != ''">
+            AND dict.dict_parent_id = #{dictRequest.dictParentId}
         </if>
-        <if test="dictRequest.statusFlag != null and dictRequest.statusFlag !=''">
-            AND dict.status_flag = #{dictRequest.statusFlag}
-        </if>
-        <if test="dictRequest.parentDictId != null and dictRequest.parentDictId != ''">
-            and dict.parent_dict_id = #{dictRequest.parentDictId}
-        </if>
+        ORDER BY dict.dict_sort
+    </select>
+
+    <select id="getDictListExcludeSub" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict" parameterType="long">
+        SELECT *
+        FROM sys_dict
+        WHERE del_flag = 'N'
+          AND dict_pids NOT LIKE CONCAT('%', #{dictId}, '%')
+        <![CDATA[
+          AND dict_id <> #{dictId}
+            ]]>
         ORDER BY dict_sort
     </select>
+
+    <update id="updateSubPids" parameterType="cn.stylefeng.roses.kernel.dict.api.pojo.dict.request.ParentIdsUpdateRequest">
+        UPDATE
+            sys_dict
+        SET dict_pids         = replace(dict_pids, #{paramCondition.oldParentIds}, #{paramCondition.newParentIds}),
+            update_time       = #{paramCondition.updateTime},
+            update_account_id = #{paramCondition.updateUser}
+        WHERE dict_pids LIKE CONCAT('%', #{paramCondition.oldParentIds}, '%')
+    </update>
+
+    <update id="deleteSub" parameterType="long">
+        UPDATE
+            sys_dict
+        SET del_flag = 'Y'
+        WHERE dict_id = #{dictId}
+           OR dict_pids LIKE CONCAT('%', #{dictId}, '%')
+    </update>
 
 </mapper>

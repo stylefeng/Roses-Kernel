@@ -4,7 +4,6 @@ package cn.stylefeng.roses.kernel.dict.modular.service;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -66,13 +65,12 @@ public interface DictTypeService extends IService<SysDictType> {
     /**
      * 获取字典类型列表（带分页）
      *
-     * @param page            分页参数
      * @param dictTypeRequest 字典类型请求
      * @return 字典类型列表
      * @author fengshuonan
      * @date 2020/10/29 18:55
      */
-    PageResult<SysDictType> getDictTypePageList(Page<SysDictType> page, DictTypeRequest dictTypeRequest);
+    PageResult<SysDictType> getDictTypePageList(DictTypeRequest dictTypeRequest);
 
     /**
      * code校验重复

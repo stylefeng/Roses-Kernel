@@ -41,10 +41,26 @@
         </dependency>
 
         <!--数据库sdk-->
+        <!--数据库初始化-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>db-sdk-init</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--数据库sdk-->
         <!--数据库dao框架-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>db-sdk-mp</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--中文转首字母转化-->
+        <!--用户名称的首字母转换等-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>pinyin-sdk-pinyin4j</artifactId>
             <version>1.0.0</version>
         </dependency>
 

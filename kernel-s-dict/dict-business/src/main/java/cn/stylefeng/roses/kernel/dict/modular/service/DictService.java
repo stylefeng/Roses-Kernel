@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.dict.modular.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dict.api.DictApi;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.TreeDictInfo;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/10/29 17:43
  */
-public interface DictService extends IService<SysDict> {
+public interface DictService extends IService<SysDict>, DictApi {
 
     /**
      * 新增字典
@@ -55,12 +56,12 @@ public interface DictService extends IService<SysDict> {
     /**
      * 查询字典详情
      *
-     * @param dictRequest 字典对象
+     * @param dictId 字典id
      * @return 字典的详情
      * @author fengshuonan
      * @date 2020/10/30 16:15
      */
-    SysDict findDetail(DictRequest dictRequest);
+    SysDict findDetail(Long dictId);
 
     /**
      * 获取字典列表
@@ -101,5 +102,15 @@ public interface DictService extends IService<SysDict> {
      * @date 2020/10/29 18:50
      */
     boolean validateCodeAvailable(DictRequest dictRequest);
+
+    /**
+     * 获取字典下拉列表，用在新增和修改字典，选择字典的父级
+     * <p>
+     * 当传参数dictId是，查询结果会排除参数dictId字典的所有子级和dictId字典本身
+     *
+     * @author fengshuonan
+     * @date 2020/12/11 16:35
+     */
+    List<SysDict> getDictListExcludeSub(Long dictId);
 
 }

@@ -2,16 +2,20 @@ package cn.stylefeng.roses.kernel.dict.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dict.api.enums.DictTypeClassEnum;
 import cn.stylefeng.roses.kernel.dict.api.exception.DictException;
 import cn.stylefeng.roses.kernel.dict.api.exception.enums.DictExceptionEnum;
+import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.mapper.DictTypeMapper;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
+import cn.stylefeng.roses.kernel.dict.modular.service.DictService;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictTypeService;
+import cn.stylefeng.roses.kernel.pinyin.api.PinYinApi;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -19,22 +23,31 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
-
 
 /**
  * 字典类型表 服务实现类
  *
- * @author majianguo
- * @version 1.0
- * @date 2020/10/28 上午9:58
+ * @author fengshuonan
+ * @date 2020/12/26 22:36
  */
 @Service
 public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType> implements DictTypeService {
 
+    @Resource
+    private DictService dictService;
+
+    @Resource
+    private PinYinApi pinYinApi;
+
     @Override
     public void addDictType(DictTypeRequest dictTypeRequest) {
+
+        // 如果是系统级字典，只允许管理员操作
+        validateSystemTypeClassOperate(dictTypeRequest);
 
         // 模型转化
         SysDictType sysDictType = new SysDictType();
@@ -42,18 +55,23 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
 
         // 设置初始状态
         sysDictType.setStatusFlag(StatusEnum.ENABLE.getCode());
+        sysDictType.setDelFlag(YesOrNotEnum.N.getCode());
 
+        // 设置首字母拼音
+        sysDictType.setDictTypeNamePinyin(pinYinApi.parseEveryPinyinFirstLetter(sysDictType.getDictTypeName()));
         this.baseMapper.insert(sysDictType);
     }
 
     @Override
     public void updateDictType(DictTypeRequest dictTypeRequest) {
 
+        // 如果是系统级字典，只允许管理员操作
+        validateSystemTypeClassOperate(dictTypeRequest);
+
         // 获取字典类型是否存在
         SysDictType oldSysDictType = this.baseMapper.selectById(dictTypeRequest.getDictTypeId());
         if (oldSysDictType == null) {
-            String userTip = StrUtil.format(DictExceptionEnum.DICT_TYPE_NOT_EXISTED.getUserTip(), dictTypeRequest.getDictTypeId());
-            throw new DictException(DictExceptionEnum.DICT_TYPE_NOT_EXISTED, userTip);
+            throw new DictException(DictExceptionEnum.DICT_TYPE_NOT_EXISTED, dictTypeRequest.getDictTypeId());
         }
 
         // 模型转化
@@ -62,38 +80,60 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
         // 不能修改字典编码
         oldSysDictType.setDictTypeCode(null);
 
+        // 设置首字母拼音
+        oldSysDictType.setDictTypeNamePinyin(pinYinApi.parseEveryPinyinFirstLetter(oldSysDictType.getDictTypeName()));
         this.updateById(oldSysDictType);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateDictTypeStatus(DictTypeRequest dictTypeRequest) {
+
+        // 如果是系统级字典，只允许管理员操作
+        validateSystemTypeClassOperate(dictTypeRequest);
 
         // 获取字典类型是否存在
         SysDictType oldSysDictType = this.baseMapper.selectById(dictTypeRequest.getDictTypeId());
         if (oldSysDictType == null) {
-            String userTip = StrUtil.format(DictExceptionEnum.DICT_TYPE_NOT_EXISTED.getUserTip(), dictTypeRequest.getDictTypeId());
-            throw new DictException(DictExceptionEnum.DICT_TYPE_NOT_EXISTED, userTip);
-        }
-
-        // 判断状态是否正确
-        StatusEnum statusEnum = StatusEnum.codeToEnum(dictTypeRequest.getStatusFlag());
-        if (statusEnum == null) {
-            String userTip = StrUtil.format(DictExceptionEnum.WRONG_DICT_STATUS.getUserTip(), dictTypeRequest.getStatusFlag());
-            throw new DictException(DictExceptionEnum.WRONG_DICT_STATUS, userTip);
+            throw new DictException(DictExceptionEnum.DICT_TYPE_NOT_EXISTED, dictTypeRequest.getDictTypeId());
         }
 
         // 修改状态
         oldSysDictType.setStatusFlag(dictTypeRequest.getStatusFlag());
 
+        // 修改所有本类型下的字典状态
+        LambdaUpdateWrapper<SysDict> lambdaQueryWrapper = new LambdaUpdateWrapper<>();
+        lambdaQueryWrapper.eq(SysDict::getDictTypeCode, oldSysDictType.getDictTypeCode());
+        lambdaQueryWrapper.eq(SysDict::getDelFlag, YesOrNotEnum.N.getCode());
+        lambdaQueryWrapper.set(SysDict::getStatusFlag, dictTypeRequest.getStatusFlag());
+        dictService.update(lambdaQueryWrapper);
+
+        // 更新字典类型
         this.updateById(oldSysDictType);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteDictType(DictTypeRequest dictTypeRequest) {
-        LambdaUpdateWrapper<SysDictType> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.set(SysDictType::getDelFlag, YesOrNotEnum.Y.getCode());
-        updateWrapper.eq(SysDictType::getDictTypeId, dictTypeRequest.getDictTypeId());
-        this.update(updateWrapper);
+
+        // 如果是系统级字典，只允许管理员操作
+        validateSystemTypeClassOperate(dictTypeRequest);
+
+        // 获取字典类型是否存在
+        SysDictType sysDictType = this.baseMapper.selectById(dictTypeRequest.getDictTypeId());
+        if (sysDictType == null) {
+            throw new DictException(DictExceptionEnum.DICT_TYPE_NOT_EXISTED, dictTypeRequest.getDictTypeId());
+        }
+
+        // 字典类型删除
+        sysDictType.setDelFlag(YesOrNotEnum.Y.getCode());
+        this.baseMapper.updateById(sysDictType);
+
+        // 逻辑删除所有改类型下的字典
+        LambdaUpdateWrapper<SysDict> lambdaQueryWrapper = new LambdaUpdateWrapper<>();
+        lambdaQueryWrapper.eq(SysDict::getDictTypeCode, sysDictType.getDictTypeCode());
+        lambdaQueryWrapper.set(SysDict::getDelFlag, YesOrNotEnum.Y.getCode());
+        dictService.update(lambdaQueryWrapper);
     }
 
     @Override
@@ -102,18 +142,17 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
     }
 
     @Override
-    public PageResult<SysDictType> getDictTypePageList(Page<SysDictType> page, DictTypeRequest dictTypeRequest) {
-        if (page == null) {
-            page = PageFactory.defaultPage();
-        }
+    public PageResult<SysDictType> getDictTypePageList(DictTypeRequest dictTypeRequest) {
+
+        Page<SysDictType> page = PageFactory.defaultPage();
 
         if (dictTypeRequest == null) {
             dictTypeRequest = new DictTypeRequest();
         }
 
-        this.baseMapper.findList(page, dictTypeRequest);
+        List<SysDictType> list = this.baseMapper.findList(page, dictTypeRequest);
 
-        return PageResultFactory.createPageResult(page);
+        return PageResultFactory.createPageResult(page.setRecords(list));
     }
 
     @Override
@@ -128,8 +167,21 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
         }
 
         Integer selectCount = this.baseMapper.selectCount(wrapper);
-
         return selectCount <= 0;
+    }
+
+    /**
+     * 校验dictTypeClass是否是系统字典，如果是系统字典只能超级管理员操作
+     *
+     * @author fengshuonan
+     * @date 2020/12/25 15:57
+     */
+    private void validateSystemTypeClassOperate(DictTypeRequest dictTypeRequest) {
+        if (DictTypeClassEnum.SYSTEM_TYPE.getCode().equals(dictTypeRequest.getDictTypeClass())) {
+            if (!LoginContext.me().getSuperAdminFlag()) {
+                throw new DictException(DictExceptionEnum.SYSTEM_DICT_NOT_ALLOW_OPERATION);
+            }
+        }
     }
 
 }

@@ -34,7 +34,7 @@ public class TreeDictInfo implements AbstractTreeNode {
     /**
      * 上级字典id
      */
-    private Long parentDictId;
+    private Long dictParentId;
 
     /**
      * tree子节点
@@ -52,10 +52,10 @@ public class TreeDictInfo implements AbstractTreeNode {
 
     @Override
     public String getNodeParentId() {
-        if (this.parentDictId == null) {
+        if (this.dictParentId == null) {
             return null;
         } else {
-            return this.parentDictId.toString();
+            return this.dictParentId.toString();
         }
     }
 

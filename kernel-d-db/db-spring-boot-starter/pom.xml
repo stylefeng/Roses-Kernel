@@ -24,6 +24,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--数据库初始化模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>db-sdk-init</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

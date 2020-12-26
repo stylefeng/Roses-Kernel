@@ -27,7 +27,7 @@ public enum DictExceptionEnum implements AbstractExceptionEnum {
     /**
      * 父级id不存在，输入的父级id不合理
      */
-    PARENT_DICT_NOT_EXISTED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + DictConstants.DICT_EXCEPTION_STEP_CODE + "03", "父级字典id不存在，输入的父级id不合理，父级id：{}"),
+    PARENT_DICT_NOT_EXISTED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + DictConstants.DICT_EXCEPTION_STEP_CODE + "03", "父级id不存在，输入的父级id不合理，父级id：{}"),
 
     /**
      * 字典不存在
@@ -45,9 +45,14 @@ public enum DictExceptionEnum implements AbstractExceptionEnum {
     DICT_TYPE_CODE_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + DictConstants.DICT_EXCEPTION_STEP_CODE + "06", "字典类型编码重复，字典类型编码：{}"),
 
     /**
+     * 系统字典不允许操作
+     */
+    SYSTEM_DICT_NOT_ALLOW_OPERATION(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + DictConstants.DICT_EXCEPTION_STEP_CODE + "07", "系统字典不允许操作，如需操作请联系超级管理员！"),
+
+    /**
      * 字典类型不存在
      */
-    DICT_TYPE_NOT_EXISTED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + DictConstants.DICT_EXCEPTION_STEP_CODE + "07", "字典类型不存在，字典类型id：{}");
+    DICT_TYPE_NOT_EXISTED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + DictConstants.DICT_EXCEPTION_STEP_CODE + "08", "字典类型不存在，字典类型id：{}");
 
     /**
      * 错误编码

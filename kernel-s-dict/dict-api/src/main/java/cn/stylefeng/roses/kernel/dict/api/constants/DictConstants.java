@@ -21,6 +21,6 @@ public interface DictConstants {
     /**
      * 默认字典根节点的id
      */
-    Long DEFAULT_DICT_PARENT_ID = 0L;
+    Long DEFAULT_DICT_PARENT_ID = -1L;
 
 }

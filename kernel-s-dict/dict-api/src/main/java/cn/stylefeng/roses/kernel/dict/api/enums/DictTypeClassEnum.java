@@ -12,12 +12,12 @@ import lombok.Getter;
 public enum DictTypeClassEnum {
 
     /**
-     * 字典类型为业务类型
+     * 业务类型
      */
     BUSINESS_TYPE(1),
 
     /**
-     * 字典类型为系统类型
+     * 系统类型
      */
     SYSTEM_TYPE(2);
 

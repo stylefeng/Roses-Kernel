@@ -48,5 +48,9 @@ public interface RuleConstants {
      */
     String RULE_EXCEPTION_STEP_CODE = "01";
 
+    /**
+     *  一级公司的父级id
+     */
+    Long TREE_ROOT_ID = -1L;
 
 }

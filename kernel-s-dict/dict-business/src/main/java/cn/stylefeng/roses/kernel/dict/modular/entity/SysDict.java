@@ -14,12 +14,14 @@ import java.math.BigDecimal;
  * 字典实体
  *
  * @author fengshuonan
- * @date 2020/10/30 9:54
+ * @date 2020/12/26 22:37
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
 @TableName("sys_dict")
+@Data
 public class SysDict extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 字典id
@@ -28,10 +30,10 @@ public class SysDict extends BaseEntity {
     private Long dictId;
 
     /**
-     * 字典类型的编码
+     * 字典编码
      */
-    @TableField("dict_type_code")
-    private String dictTypeCode;
+    @TableField("dict_code")
+    private String dictCode;
 
     /**
      * 字典名称
@@ -40,10 +42,22 @@ public class SysDict extends BaseEntity {
     private String dictName;
 
     /**
-     * 字典编码，字典编码的前缀会添加字典类型编码+下划线
+     * 字典名称首字母
      */
-    @TableField("dict_code")
-    private String dictCode;
+    @TableField("dict_name_pinyin")
+    private String dictNamePinyin;
+
+    /**
+     * 字典编码
+     */
+    @TableField("dict_encode")
+    private String dictEncode;
+
+    /**
+     * 字典类型的编码
+     */
+    @TableField("dict_type_code")
+    private String dictTypeCode;
 
     /**
      * 字典简称
@@ -58,25 +72,31 @@ public class SysDict extends BaseEntity {
     private String dictShortCode;
 
     /**
-     * 上级字典的id(如果没有上级字典id，则为0)
+     * 上级字典的id(如果没有上级字典id，则为-1)
      */
-    @TableField("parent_dict_id")
-    private Long parentDictId;
+    @TableField("dict_parent_id")
+    private Long dictParentId;
 
     /**
-     * 排序，带小数点
-     */
-    @TableField(value = "dict_sort")
-    private BigDecimal dictSort;
-
-    /**
-     * 状态：1-启用，2-禁用，参考 StatusEnum
+     * 状态：(1-启用,2-禁用),参考 StatusEnum
      */
     @TableField("status_flag")
     private Integer statusFlag;
 
     /**
-     * 是否删除：Y-被删除，N-未删除
+     * 排序，带小数点
+     */
+    @TableField("dict_sort")
+    private BigDecimal dictSort;
+
+    /**
+     * 父id集合
+     */
+    @TableField("dict_pids")
+    private String dictPids;
+
+    /**
+     * 是否删除，Y-被删除，N-未删除
      */
     @TableField("del_flag")
     private String delFlag;
@@ -85,5 +105,10 @@ public class SysDict extends BaseEntity {
      * 字典类型的名称
      */
     private transient String dictTypeName;
+
+    /**
+     * 字典类型的名称
+     */
+    private transient String parentName;
 
 }

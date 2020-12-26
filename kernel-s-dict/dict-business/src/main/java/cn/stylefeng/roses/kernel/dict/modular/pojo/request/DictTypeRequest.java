@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.dict.modular.pojo.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import cn.stylefeng.roses.kernel.validator.validators.status.StatusValue;
 import cn.stylefeng.roses.kernel.validator.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +23,7 @@ public class DictTypeRequest extends BaseRequest {
     /**
      * 字典类型id
      */
-    @NotNull(message = "dictTypeId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class})
+    @NotNull(message = "id不能为空，请检查id参数", groups = {edit.class, delete.class, detail.class, updateStatus.class})
     private Long dictTypeId;
 
     /**
@@ -32,9 +33,14 @@ public class DictTypeRequest extends BaseRequest {
     private Integer dictTypeClass;
 
     /**
+     * 字典类型业务编码
+     */
+    private String dictTypeBusCode;
+
+    /**
      * 字典类型编码
      */
-    @NotBlank(message = "字典类型编码不能为空", groups = {add.class, edit.class})
+    @NotBlank(message = "字典类型编码不能为空", groups = {add.class, edit.class, validateCode.class})
     @TableUniqueValue(
             message = "字典类型编码存在重复",
             groups = {add.class, edit.class},
@@ -48,14 +54,12 @@ public class DictTypeRequest extends BaseRequest {
      * 字典类型名称
      */
     @NotBlank(message = "字典类型名称不能为空", groups = {add.class, edit.class})
-    @TableUniqueValue(
-            message = "字典类型名称存在重复",
-            groups = {add.class, edit.class},
-            tableName = "sys_dict_type",
-            columnName = "dict_type_name",
-            idFieldName = "dict_type_id",
-            excludeLogicDeleteItems = true)
     private String dictTypeName;
+
+    /**
+     * 字典类型名词拼音
+     */
+    private String dictTypeNamePinYin;
 
     /**
      * 字典类型描述
@@ -63,14 +67,23 @@ public class DictTypeRequest extends BaseRequest {
     private String dictTypeDesc;
 
     /**
-     * 排序，带小数点
-     */
-    private BigDecimal dictTypeSort;
-
-    /**
      * 字典类型的状态：1-启用，2-禁用，参考 StatusEnum
      */
     @NotNull(message = "状态不能为空", groups = {updateStatus.class})
+    @StatusValue(groups = updateStatus.class)
     private Integer statusFlag;
+
+    /**
+     * 排序，带小数
+     */
+    @NotNull(message = "排序不能为空", groups = {add.class, edit.class})
+    private BigDecimal dictTypeSort;
+
+    /**
+     * 参数校验分组：校验code是否可用
+     */
+    public @interface validateCode {
+
+    }
 
 }
