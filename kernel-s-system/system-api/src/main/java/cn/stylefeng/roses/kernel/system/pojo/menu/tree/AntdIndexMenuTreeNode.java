@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2020/4/17 17:35
  */
 @Data
-public class LoginMenuTreeNode {
+public class AntdIndexMenuTreeNode {
 
     /**
      * id

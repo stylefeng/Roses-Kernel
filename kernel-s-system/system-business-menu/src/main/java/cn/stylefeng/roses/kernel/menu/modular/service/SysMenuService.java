@@ -26,8 +26,8 @@ package cn.stylefeng.roses.kernel.menu.modular.service;
 
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
-import cn.stylefeng.roses.kernel.system.pojo.menu.tree.LoginMenuTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.tree.MenuBaseTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.tree.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.tree.MenuSelectTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -112,7 +112,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @author fengshuonan
      * @date 2020/4/17 17:48
      */
-    List<LoginMenuTreeNode> getAppMenusAntDesign(String appCode);
+    List<AntdIndexMenuTreeNode> getAppMenusAntDesign(String appCode);
 
     /**
      * 获取系统菜单树，用于新增，编辑时选择上级节点
@@ -122,7 +122,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @author fengshuonan
      * @date 2020/3/27 15:56
      */
-    List<MenuBaseTreeNode> tree(SysMenuRequest sysMenuRequest);
+    List<MenuSelectTreeNode> tree(SysMenuRequest sysMenuRequest);
 
     /**
      * 获取系统菜单树，用于给角色授权时选择
@@ -132,6 +132,6 @@ public interface SysMenuService extends IService<SysMenu> {
      * @author fengshuonan
      * @date 2020/4/5 15:01
      */
-    List<MenuBaseTreeNode> treeForGrant(SysMenuRequest sysMenuRequest);
+    List<MenuSelectTreeNode> treeForGrant(SysMenuRequest sysMenuRequest);
 
 }

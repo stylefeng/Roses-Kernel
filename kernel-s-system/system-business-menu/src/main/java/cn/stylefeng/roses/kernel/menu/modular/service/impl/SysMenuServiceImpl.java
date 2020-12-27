@@ -48,8 +48,8 @@ import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuExceptionEnum;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
-import cn.stylefeng.roses.kernel.system.pojo.menu.tree.LoginMenuTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.tree.MenuBaseTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.tree.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.tree.MenuSelectTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -180,7 +180,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<LoginMenuTreeNode> getAppMenusAntDesign(String appCode) {
+    public List<AntdIndexMenuTreeNode> getAppMenusAntDesign(String appCode) {
 
         // 获取当前用户的所有菜单
         List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCode);
@@ -190,21 +190,21 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<MenuBaseTreeNode> tree(SysMenuRequest sysMenuRequest) {
-        List<MenuBaseTreeNode> menuTreeNodeList = CollectionUtil.newArrayList();
+    public List<MenuSelectTreeNode> tree(SysMenuRequest sysMenuRequest) {
+        List<MenuSelectTreeNode> menuTreeNodeList = CollectionUtil.newArrayList();
 
         LambdaQueryWrapper<SysMenu> wrapper = createWrapper(sysMenuRequest);
         this.list(wrapper).forEach(sysMenu -> {
-            MenuBaseTreeNode menuTreeNode = MenuFactory.parseMenuBaseTreeNode(sysMenu);
+            MenuSelectTreeNode menuTreeNode = MenuFactory.parseMenuBaseTreeNode(sysMenu);
             menuTreeNodeList.add(menuTreeNode);
         });
 
-        return new DefaultTreeBuildFactory<MenuBaseTreeNode>().doTreeBuild(menuTreeNodeList);
+        return new DefaultTreeBuildFactory<MenuSelectTreeNode>().doTreeBuild(menuTreeNodeList);
     }
 
     @Override
-    public List<MenuBaseTreeNode> treeForGrant(SysMenuRequest sysMenuRequest) {
-        List<MenuBaseTreeNode> menuTreeNodeList = CollectionUtil.newArrayList();
+    public List<MenuSelectTreeNode> treeForGrant(SysMenuRequest sysMenuRequest) {
+        List<MenuSelectTreeNode> menuTreeNodeList = CollectionUtil.newArrayList();
 
         LambdaQueryWrapper<SysMenu> wrapper = createWrapper(sysMenuRequest);
         wrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode());
@@ -218,11 +218,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
 
         this.list(wrapper).forEach(sysMenu -> {
-            MenuBaseTreeNode menuTreeNode = MenuFactory.parseMenuBaseTreeNode(sysMenu);
+            MenuSelectTreeNode menuTreeNode = MenuFactory.parseMenuBaseTreeNode(sysMenu);
             menuTreeNodeList.add(menuTreeNode);
         });
 
-        return new DefaultTreeBuildFactory<MenuBaseTreeNode>().doTreeBuild(menuTreeNodeList);
+        return new DefaultTreeBuildFactory<MenuSelectTreeNode>().doTreeBuild(menuTreeNodeList);
     }
 
     @Override
