@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.file.local;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.SystemUtil;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.file.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.constants.FileConstants;
 import cn.stylefeng.roses.kernel.file.enums.BucketAuthEnum;
@@ -10,12 +11,9 @@ import cn.stylefeng.roses.kernel.file.exception.FileException;
 import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.expander.FileConfigExpander;
 import cn.stylefeng.roses.kernel.file.pojo.props.LocalFileProperties;
-import cn.stylefeng.roses.kernel.jwt.JwtTokenOperator;
-import cn.stylefeng.roses.kernel.jwt.api.pojo.config.JwtConfig;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.HashMap;
 
 /**
  * 本地文件的操作
@@ -150,17 +148,11 @@ public class LocalFileOperator implements FileOperatorApi {
     @Override
     public String getFileAuthUrl(String bucketName, String key, Long timeoutMillis) {
 
-        // 初始化jwt token的生成工具
-        JwtConfig jwtConfig = new JwtConfig();
-        jwtConfig.setJwtSecret(FileConfigExpander.getFileAuthJwtSecret());
-        jwtConfig.setExpiredSeconds(timeoutMillis / 1000);
-        JwtTokenOperator jwtTokenOperator = new JwtTokenOperator(jwtConfig);
-
-        // 生成token
-        String token = jwtTokenOperator.generateToken(new HashMap<>());
+        // 获取登录用户的token
+        String token = LoginContext.me().getToken();
 
         // 拼接url = “host” + “预览图片的url” + “?token=xxx”
-        return FileConfigExpander.getServerDeployHost() + FileConstants.FILE_PREVIEW_URL + "?token=" + token;
+        return FileConfigExpander.getServerDeployHost() + FileConstants.FILE_PREVIEW_URL + "?fileBucket=" + bucketName + "&fileObjectName=" + key + "&token=" + token;
     }
 
     @Override
