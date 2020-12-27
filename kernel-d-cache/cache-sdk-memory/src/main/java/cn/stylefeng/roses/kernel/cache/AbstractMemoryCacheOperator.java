@@ -55,7 +55,7 @@ public abstract class AbstractMemoryCacheOperator<T> implements CacheOperatorApi
 
     @Override
     public boolean contains(String key) {
-        return timedCache.containsKey(key);
+        return timedCache.containsKey(getCommonKeyPrefix() + key);
     }
 
     @Override

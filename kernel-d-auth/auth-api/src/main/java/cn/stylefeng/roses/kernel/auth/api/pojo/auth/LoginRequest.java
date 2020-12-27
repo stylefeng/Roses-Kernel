@@ -29,8 +29,8 @@ public class LoginRequest extends BaseRequest {
     private String password;
 
     /**
-     * 记住我
+     * 记住我，不传就是false
      */
-    private Boolean rememberMe;
+    private Boolean rememberMe = false;
 
 }
