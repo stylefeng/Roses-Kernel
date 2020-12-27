@@ -69,7 +69,7 @@ public class AuthConfigExpander {
     }
 
     /**
-     * 获取携带token的header头的名称
+     * 获取携带token的param传参的名称
      *
      * @author fengshuonan
      * @date 2020/10/22 14:11
@@ -86,6 +86,34 @@ public class AuthConfigExpander {
      */
     public static String getDefaultPassWord() {
         return ConfigContext.me().getSysConfigValueWithDefault("SYS_DEFAULT_PASSWORD", String.class, DEFAULT_PASSWORD);
+    }
+
+    /**
+     * 会话信息是否增加保存在 cookie 中
+     * <p>
+     * 如果开启此开关，会发生两件事：
+     * <p>
+     * 1.则登录过程中创建会话时，会HttpServletResponse对象进行addCookie()操作
+     * <p>
+     * 2.获取当前用户token会多一个从cookie中获取token这个方式
+     * <p>
+     * 一般这个开关的开启，用在单体不分离的版本中
+     *
+     * @author fengshuonan
+     * @date 2020/12/27 13:15
+     */
+    public static Boolean getSessionAddToCookie() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_SESSION_ADD_TO_COOKIE", Boolean.class, Boolean.FALSE);
+    }
+
+    /**
+     * 会话保存在cookie中时，cooke的name
+     *
+     * @author fengshuonan
+     * @date 2020/12/27 13:18
+     */
+    public static String getSessionCookieName() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_SESSION_COOKIE_NAME", String.class, DEFAULT_AUTH_HEADER_NAME);
     }
 
 }

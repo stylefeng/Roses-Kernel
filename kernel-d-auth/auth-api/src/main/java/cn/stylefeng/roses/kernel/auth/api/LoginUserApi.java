@@ -54,4 +54,13 @@ public interface LoginUserApi {
      */
     boolean getSuperAdminFlag();
 
+    /**
+     * 判断当前用户是否登录
+     *
+     * @return 是否登录，true是，false否
+     * @author fengshuonan
+     * @date 2020/10/17 11:02
+     */
+    boolean hasLogin();
+
 }

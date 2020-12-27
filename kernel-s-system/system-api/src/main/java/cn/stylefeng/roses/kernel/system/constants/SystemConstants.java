@@ -33,4 +33,19 @@ public interface SystemConstants {
      */
     String PID_RIGHT_DIVIDE_SYMBOL = "]";
 
+    /**
+     * 默认的系统版本号
+     */
+    String DEFAULT_SYSTEM_VERSION = "20210101";
+
+    /**
+     * 默认多租户的开关：关闭
+     */
+    Boolean DEFAULT_TENANT_OPEN = false;
+
+    /**
+     * 默认验证码的开关：关闭
+     */
+    Boolean DEFAULT_CAPTCHA_OPEN = false;
+
 }

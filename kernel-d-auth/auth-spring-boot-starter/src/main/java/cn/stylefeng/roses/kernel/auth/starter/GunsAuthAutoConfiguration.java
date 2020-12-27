@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.auth.starter;
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
+import cn.stylefeng.roses.kernel.auth.api.cookie.SessionCookieCreator;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordTransferEncryptApi;
@@ -12,6 +13,7 @@ import cn.stylefeng.roses.kernel.auth.password.RsaPasswordTransferEncrypt;
 import cn.stylefeng.roses.kernel.auth.session.DefaultSessionManager;
 import cn.stylefeng.roses.kernel.auth.session.cache.logintoken.MemoryLoginTokenCache;
 import cn.stylefeng.roses.kernel.auth.session.cache.loginuser.MemoryLoginUserCache;
+import cn.stylefeng.roses.kernel.auth.session.cookie.DefaultSessionCookieCreator;
 import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -54,6 +56,17 @@ public class GunsAuthAutoConfiguration {
     }
 
     /**
+     * session cookie的创建
+     *
+     * @author fengshuonan
+     * @date 2020/12/27 15:48
+     */
+    @Bean
+    public SessionCookieCreator sessionCookieCreator() {
+        return new DefaultSessionCookieCreator();
+    }
+
+    /**
      * 默认的session缓存为内存缓存，方便启动
      * <p>
      * 如需替换请在项目中增加一个SessionManagerApi Bean即可
@@ -72,7 +85,7 @@ public class GunsAuthAutoConfiguration {
         MemoryLoginUserCache memoryLoginUserCache = new MemoryLoginUserCache(loginUsers);
         MemoryLoginTokenCache memoryLoginTokenCache = new MemoryLoginTokenCache(loginTokens);
 
-        return new DefaultSessionManager(memoryLoginUserCache, memoryLoginTokenCache, sessionExpiredSeconds);
+        return new DefaultSessionManager(memoryLoginUserCache, memoryLoginTokenCache, sessionExpiredSeconds, sessionCookieCreator());
     }
 
 }

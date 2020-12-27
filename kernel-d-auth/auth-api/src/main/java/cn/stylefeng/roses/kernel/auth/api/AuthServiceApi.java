@@ -69,13 +69,7 @@ public interface AuthServiceApi {
     boolean getTokenFlag(String token);
 
     /**
-     * 校验用户访问的url是否认证通过
-     * <p>
-     * 校验会进行两方面：
-     * <p>
-     * 第一，校验用户的token是否过期
-     * <p>
-     * 第二，校验用户的session是否失效，但是记住我的session失效后会自动创建session，直到jwt失效后
+     * 校验用户是否认证通过，认证是校验token的过程，校验失败会抛出异常
      *
      * @param token      用户登陆的token
      * @param requestUrl 被校验的url

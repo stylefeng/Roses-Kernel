@@ -13,7 +13,7 @@ public interface PermissionServiceApi {
     /**
      * 校验当前用户是否有某个接口的权限
      * <p>
-     * 只要认证不通过，则会抛出异常
+     * 只要权限校验不通过，则会抛出异常
      *
      * @param token      用户登陆的token
      * @param requestUrl 被校验的url

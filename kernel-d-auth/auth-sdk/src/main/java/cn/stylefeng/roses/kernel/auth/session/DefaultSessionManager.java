@@ -1,9 +1,15 @@
 package cn.stylefeng.roses.kernel.auth.session;
 
+import cn.hutool.core.convert.Convert;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
+import cn.stylefeng.roses.kernel.auth.api.cookie.SessionCookieCreator;
+import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
+import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,10 +44,19 @@ public class DefaultSessionManager implements SessionManagerApi {
      */
     private final Long sessionExpiredSeconds;
 
-    public DefaultSessionManager(CacheOperatorApi<LoginUser> loginUserCache, CacheOperatorApi<Set<String>> allPlaceLoginTokenCache, Long sessionExpiredSeconds) {
+    /**
+     * cookie的创建器，用在session创建时，给response添加cookie
+     */
+    private final SessionCookieCreator sessionCookieCreator;
+
+    public DefaultSessionManager(CacheOperatorApi<LoginUser> loginUserCache,
+                                 CacheOperatorApi<Set<String>> allPlaceLoginTokenCache,
+                                 Long sessionExpiredSeconds,
+                                 SessionCookieCreator sessionCookieCreator) {
         this.loginUserCache = loginUserCache;
         this.allPlaceLoginTokenCache = allPlaceLoginTokenCache;
         this.sessionExpiredSeconds = sessionExpiredSeconds;
+        this.sessionCookieCreator = sessionCookieCreator;
     }
 
     @Override
@@ -57,6 +72,15 @@ public class DefaultSessionManager implements SessionManagerApi {
         }
         theUserTokens.add(token);
         allPlaceLoginTokenCache.put(loginUser.getUserId().toString(), theUserTokens);
+
+        // 如果开启了cookie存储会话信息，则需要给HttpServletResponse添加一个cookie
+        if (AuthConfigExpander.getSessionAddToCookie()) {
+            String sessionCookieName = AuthConfigExpander.getSessionCookieName();
+            Cookie cookie = sessionCookieCreator.createCookie(sessionCookieName, token, Convert.toInt(sessionExpiredSeconds));
+            HttpServletResponse response = HttpServletUtil.getResponse();
+            response.addCookie(cookie);
+        }
+
     }
 
     @Override
@@ -77,7 +101,10 @@ public class DefaultSessionManager implements SessionManagerApi {
             Long userId = loginUser.getUserId();
             Set<String> userTokens = allPlaceLoginTokenCache.get(userId.toString());
             if (userTokens != null) {
+
+                // 清除对应的token的信息
                 userTokens.remove(token);
+                allPlaceLoginTokenCache.put(userId.toString(), userTokens);
 
                 // 如果删除后size为0，则把整个key删掉
                 if (userTokens.size() == 0) {
@@ -100,6 +127,14 @@ public class DefaultSessionManager implements SessionManagerApi {
 
         // 获取用户id
         Long userId = session.getUserId();
+
+        // 获取这个用户多余的几个登录信息
+        Set<String> thisUserTokens = allPlaceLoginTokenCache.get(userId.toString());
+        for (String thisUserToken : thisUserTokens) {
+            if (!thisUserToken.equals(token)) {
+                loginUserCache.remove(thisUserToken);
+            }
+        }
 
         // 设置用户id对应的token列表为参数token
         HashSet<String> tokenSet = new HashSet<>();
