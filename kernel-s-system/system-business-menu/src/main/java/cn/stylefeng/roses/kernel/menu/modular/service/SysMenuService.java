@@ -25,10 +25,10 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 package cn.stylefeng.roses.kernel.menu.modular.service;
 
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
-import com.baomidou.mybatisplus.extension.service.IService;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.tree.LoginMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.tree.MenuBaseTreeNode;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -86,6 +86,23 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2020/3/26 10:19
      */
     List<SysMenu> list(SysMenuRequest sysMenuRequest);
+
+    /**
+     * 获取当前用户的所有菜单
+     *
+     * @author fengshuonan
+     * @date 2020/12/27 18:11
+     */
+    List<SysMenu> getCurrentUserMenus();
+
+    /**
+     * 获取当前用户的某个应用下的菜单
+     *
+     * @param appCode 应用编码
+     * @author fengshuonan
+     * @date 2020/12/27 18:11
+     */
+    List<SysMenu> getCurrentUserMenus(String appCode);
 
     /**
      * 获取某个应用的菜单，用于系统顶部切换菜单（AntDesign前端框架）

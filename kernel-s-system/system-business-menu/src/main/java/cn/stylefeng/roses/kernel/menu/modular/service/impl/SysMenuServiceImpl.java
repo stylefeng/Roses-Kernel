@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.menu.modular.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
@@ -148,8 +149,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<LoginMenuTreeNode> getAppMenusAntDesign(String appCode) {
+    public List<SysMenu> getCurrentUserMenus() {
+        return getCurrentUserMenus(null);
+    }
 
+    @Override
+    public List<SysMenu> getCurrentUserMenus(String appCode) {
+
+        // 获取当前用户所有的菜单id
         List<Long> menuIdList = getCurrentUserMenuIds();
 
         // 当前用户没有菜单
@@ -162,12 +169,24 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         queryWrapper.in(SysMenu::getMenuId, menuIdList)
                 .eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode())
                 .eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode())
-                .eq(SysMenu::getAppCode, appCode)
                 .orderByAsc(SysMenu::getMenuSort);
-        List<SysMenu> sysMenuList = this.list(queryWrapper);
+
+        // 如果应用编码不为空，则拼接应用编码
+        if (StrUtil.isNotBlank(appCode)) {
+            queryWrapper.eq(SysMenu::getAppCode, appCode);
+        }
+
+        return this.list(queryWrapper);
+    }
+
+    @Override
+    public List<LoginMenuTreeNode> getAppMenusAntDesign(String appCode) {
+
+        // 获取当前用户的所有菜单
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCode);
 
         // 转换成登录菜单格式
-        return MenuFactory.convertSysMenuToLoginMenu(sysMenuList);
+        return MenuFactory.convertSysMenuToLoginMenu(currentUserMenus);
     }
 
     @Override
