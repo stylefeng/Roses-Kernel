@@ -33,7 +33,8 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
-import cn.stylefeng.roses.kernel.menu.modular.factory.MenuFactory;
+import cn.stylefeng.roses.kernel.menu.modular.factory.AntdMenusFactory;
+import cn.stylefeng.roses.kernel.menu.modular.factory.LayuiMenusFactory;
 import cn.stylefeng.roses.kernel.menu.modular.mapper.SysMenuMapper;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
@@ -49,6 +50,7 @@ import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuExceptionEnum;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -180,13 +182,23 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
+    public List<LayuiAppIndexMenus> getLayuiIndexMenus() {
+
+        // 获取当前用户所有菜单
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus();
+
+        // 组装每个应用的菜单树
+        return LayuiMenusFactory.createLayuiAppIndexMenus(currentUserMenus);
+    }
+
+    @Override
     public List<AntdIndexMenuTreeNode> getAppMenusAntDesign(String appCode) {
 
         // 获取当前用户的所有菜单
         List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCode);
 
         // 转换成登录菜单格式
-        return MenuFactory.convertSysMenuToLoginMenu(currentUserMenus);
+        return AntdMenusFactory.convertSysMenuToLoginMenu(currentUserMenus);
     }
 
     @Override
@@ -195,7 +207,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         LambdaQueryWrapper<SysMenu> wrapper = createWrapper(sysMenuRequest);
         this.list(wrapper).forEach(sysMenu -> {
-            MenuSelectTreeNode menuTreeNode = MenuFactory.parseMenuBaseTreeNode(sysMenu);
+            MenuSelectTreeNode menuTreeNode = AntdMenusFactory.parseMenuBaseTreeNode(sysMenu);
             menuTreeNodeList.add(menuTreeNode);
         });
 
@@ -218,7 +230,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
 
         this.list(wrapper).forEach(sysMenu -> {
-            MenuSelectTreeNode menuTreeNode = MenuFactory.parseMenuBaseTreeNode(sysMenu);
+            MenuSelectTreeNode menuTreeNode = AntdMenusFactory.parseMenuBaseTreeNode(sysMenu);
             menuTreeNodeList.add(menuTreeNode);
         });
 

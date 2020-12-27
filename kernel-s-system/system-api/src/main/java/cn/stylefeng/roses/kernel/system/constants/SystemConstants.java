@@ -48,4 +48,9 @@ public interface SystemConstants {
      */
     Boolean DEFAULT_CAPTCHA_OPEN = false;
 
+    /**
+     * 默认的系统的名称
+     */
+    String DEFAULT_SYSTEM_NAME = "Guns快速开发平台";
+
 }

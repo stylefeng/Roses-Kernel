@@ -158,4 +158,13 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      */
     SysUser getUserByAccount(String account);
 
+    /**
+     * 获取用户头像的url
+     *
+     * @param fileId 文件id
+     * @author fengshuonan
+     * @date 2020/12/27 19:13
+     */
+    String getUserAvatarUrl(Long fileId);
+
 }

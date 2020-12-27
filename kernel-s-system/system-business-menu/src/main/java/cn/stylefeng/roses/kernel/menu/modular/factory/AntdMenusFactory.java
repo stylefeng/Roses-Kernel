@@ -10,12 +10,12 @@ import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
 import java.util.List;
 
 /**
- * 菜单pojo的组装
+ * 针对于antd前端的菜单的组装
  *
  * @author fengshuonan
  * @date 2020/11/23 21:58
  */
-public class MenuFactory {
+public class AntdMenusFactory {
 
     /**
      * menu实体转化为菜单树节点

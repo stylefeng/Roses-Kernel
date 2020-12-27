@@ -41,4 +41,14 @@ public class SystemConfigExpander {
         return ConfigContext.me().getSysConfigValueWithDefault("SYS_CAPTCHA_OPEN", Boolean.class, SystemConstants.DEFAULT_CAPTCHA_OPEN);
     }
 
+    /**
+     * 获取系统名称
+     *
+     * @author fengshuonan
+     * @date 2020/12/27 17:22
+     */
+    public static String getSystemName() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_SYSTEM_NAME", String.class, SystemConstants.DEFAULT_SYSTEM_NAME);
+    }
+
 }

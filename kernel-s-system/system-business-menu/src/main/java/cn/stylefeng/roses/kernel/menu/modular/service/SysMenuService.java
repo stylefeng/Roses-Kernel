@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.menu.modular.service;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -103,6 +104,14 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2020/12/27 18:11
      */
     List<SysMenu> getCurrentUserMenus(String appCode);
+
+    /**
+     * 获取当前用户首页所有菜单（对应Layui前端的）
+     *
+     * @author fengshuonan
+     * @date 2020/12/27 18:48
+     */
+    List<LayuiAppIndexMenus> getLayuiIndexMenus();
 
     /**
      * 获取某个应用的菜单，用于系统顶部切换菜单（AntDesign前端框架）
