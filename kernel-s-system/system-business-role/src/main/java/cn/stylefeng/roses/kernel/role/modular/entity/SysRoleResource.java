@@ -44,8 +44,7 @@ public class SysRoleResource extends BaseEntity {
     /**
      * 主键
      */
-    @TableId(type = IdType.ASSIGN_ID)
-    @TableField("role_resource_id")
+    @TableId(value = "role_resource_id", type = IdType.ASSIGN_ID)
     private Long roleResourceId;
 
     /**

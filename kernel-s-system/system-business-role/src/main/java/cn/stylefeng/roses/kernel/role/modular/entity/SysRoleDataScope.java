@@ -46,8 +46,7 @@ public class SysRoleDataScope extends BaseEntity {
     /**
      * 主键
      */
-    @TableId(type = IdType.ASSIGN_ID)
-    @TableField("role_data_scope_id")
+    @TableId(value = "role_data_scope_id", type = IdType.ASSIGN_ID)
     private Long roleDataScopeId;
 
     /**
