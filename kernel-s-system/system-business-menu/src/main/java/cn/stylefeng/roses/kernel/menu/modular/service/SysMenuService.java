@@ -26,8 +26,8 @@ package cn.stylefeng.roses.kernel.menu.modular.service;
 
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
-import cn.stylefeng.roses.kernel.system.pojo.menu.tree.AntdIndexMenuTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.tree.MenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

@@ -4,8 +4,8 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.enums.LinkOpenTypeEnum;
-import cn.stylefeng.roses.kernel.system.pojo.menu.tree.AntdIndexMenuTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.tree.MenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.pojo.menu.tree;
+package cn.stylefeng.roses.kernel.system.pojo.menu.antd;
 
 import lombok.Data;
 
