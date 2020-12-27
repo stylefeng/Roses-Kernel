@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.log.modular.requestapi.aop;
 
 import cn.stylefeng.roses.kernel.log.api.LogRecordApi;
 import cn.stylefeng.roses.kernel.log.api.constants.LogConstants;
-import cn.stylefeng.roses.kernel.log.api.expander.LogConfigExpander;
+import cn.stylefeng.roses.kernel.log.api.constants.LogFileConstants;
 import cn.stylefeng.roses.kernel.log.api.factory.LogRecordFactory;
 import cn.stylefeng.roses.kernel.log.api.factory.appender.AuthedLogAppender;
 import cn.stylefeng.roses.kernel.log.api.factory.appender.HttpLogAppender;
@@ -145,7 +145,7 @@ public class RequestApiLogRecordAop implements Ordered {
 
     @Override
     public int getOrder() {
-        return LogConfigExpander.getRequestApiLogAopSort();
+        return LogFileConstants.DEFAULT_API_LOG_AOP_SORT;
     }
 
     /**

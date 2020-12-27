@@ -35,14 +35,4 @@ public class LogConfigExpander {
         return ConfigContext.me().getSysConfigValueWithDefault("SYS_LOG_FILE_SAVE_PATH_LINUX", String.class, LogFileConstants.DEFAULT_FILE_SAVE_PATH_LINUX);
     }
 
-    /**
-     * 获取接口api的aop日志记录的aop的顺序
-     *
-     * @author fengshuonan
-     * @date 2020/10/28 17:19
-     */
-    public static Integer getRequestApiLogAopSort() {
-        return ConfigContext.me().getSysConfigValueWithDefault("SYS_REQUEST_API_LOG_AOP_SORT", Integer.class, LogFileConstants.DEFAULT_API_LOG_AOP_SORT);
-    }
-
 }
