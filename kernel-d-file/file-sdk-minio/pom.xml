@@ -24,11 +24,11 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!--jwt模块-->
-        <!--用来给生成带鉴权的url用-->
+        <!--auth模块的api-->
+        <!--用来获取当前登录用户的token，生成file的url-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>jwt-sdk</artifactId>
+            <artifactId>auth-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 

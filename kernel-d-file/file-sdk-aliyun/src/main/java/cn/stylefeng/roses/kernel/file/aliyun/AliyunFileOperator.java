@@ -181,7 +181,7 @@ public class AliyunFileOperator implements FileOperatorApi {
     @Override
     public String getFileAuthUrl(String bucketName, String key, Long timeoutMillis) {
         try {
-            Date expiration = new Date(new Date().getTime() + timeoutMillis);
+            Date expiration = new Date(System.currentTimeMillis() + timeoutMillis);
             URL url = ossClient.generatePresignedUrl(bucketName, key, expiration);
             return url.toString();
         } catch (OSSException | ClientException e) {
