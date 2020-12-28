@@ -9,10 +9,13 @@ import cn.stylefeng.roses.kernel.log.api.pojo.log.SysLogProperties;
 import cn.stylefeng.roses.kernel.log.api.threadpool.LogManagerThreadPool;
 import cn.stylefeng.roses.kernel.log.db.DbLogManagerServiceImpl;
 import cn.stylefeng.roses.kernel.log.db.DbLogRecordServiceImpl;
+import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
 import cn.stylefeng.roses.kernel.log.db.service.impl.SysLogServiceImpl;
 import cn.stylefeng.roses.kernel.log.file.FileLogManagerServiceImpl;
 import cn.stylefeng.roses.kernel.log.file.FileLogRecordServiceImpl;
 import cn.stylefeng.roses.kernel.log.modular.requestapi.aop.RequestApiLogRecordAop;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +33,21 @@ public class GunsLogAutoConfiguration {
      * 日志配置的前缀
      */
     public static final String SYS_LOG_PREFIX = "sys-log";
+
+
+    /**
+     * 系统日志service
+     *
+     * @return sysLogService
+     * @author liuhanqing
+     * @date 2020/12/28 22:09
+     */
+    @Bean
+    @ConditionalOnMissingBean(SysLogServiceImpl.class)
+    @ConditionalOnProperty(prefix = SYS_LOG_PREFIX, name = "type", havingValue = "db")
+    public SysLogService sysLogService() {
+        return new SysLogServiceImpl();
+    }
 
     /**
      * 系统日志的的配置
@@ -49,11 +67,12 @@ public class GunsLogAutoConfiguration {
      * 日志存储类型：db-数据库，file-文件，默认存储在数据库中
      *
      * @param sysLogProperties 系统日志配置文件
+     * @param sysLogService 系统日志service
      * @author liuhanqing
      * @date 2020/12/20 13:02
      */
     @Bean
-    public RequestApiLogRecordAop requestApiLogRecordAop(SysLogProperties sysLogProperties) {
+    public RequestApiLogRecordAop requestApiLogRecordAop(SysLogProperties sysLogProperties, SysLogServiceImpl sysLogService) {
 
         // 如果类型是文件
         if (StrUtil.isNotBlank(sysLogProperties.getType())
@@ -71,7 +90,7 @@ public class GunsLogAutoConfiguration {
         }
 
         // 其他情况用数据库存储日志
-        return new RequestApiLogRecordAop(new DbLogRecordServiceImpl(new LogManagerThreadPool(), new SysLogServiceImpl()));
+        return new RequestApiLogRecordAop(new DbLogRecordServiceImpl(new LogManagerThreadPool(), sysLogService));
     }
 
     /**
