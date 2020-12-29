@@ -20,6 +20,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.Ordered;
 import org.springframework.core.ParameterNameDiscoverer;
+import org.springframework.ui.Model;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -170,7 +171,12 @@ public class RequestApiLogRecordAop implements Ordered {
             // 处理基本类型
             Class<?>[] classes = new Class[args.length];
             for (int k = 0; k < args.length; k++) {
-                classes[k] = args[k].getClass();
+                if(args[k] instanceof Model){
+                    classes[k] = Model.class;
+                }else{
+                    classes[k] = args[k].getClass();
+                }
+
             }
 
             ParameterNameDiscoverer defaultParameterNameDiscoverer = new DefaultParameterNameDiscoverer();
