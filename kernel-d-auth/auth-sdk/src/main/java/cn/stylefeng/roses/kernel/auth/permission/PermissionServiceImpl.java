@@ -6,7 +6,6 @@ import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,9 +22,6 @@ import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEn
  */
 @Service
 public class PermissionServiceImpl implements PermissionServiceApi {
-
-    @Resource
-    private ResourceServiceApi resourceServiceApi;
 
     @Resource
     private SessionManagerApi sessionManagerApi;
