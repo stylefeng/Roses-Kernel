@@ -1,11 +1,14 @@
 package cn.stylefeng.roses.kernel.file.modular.controller;
 
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.file.exception.FileException;
 import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.expander.FileConfigExpander;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
 import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
+import cn.stylefeng.roses.kernel.file.util.DownloadUtil;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import static cn.stylefeng.roses.kernel.file.constants.FileConstants.DEFAULT_AVATAR_FILE_OBJ_NAME;
 import static cn.stylefeng.roses.kernel.file.constants.FileConstants.FILE_PREVIEW_URL;
 
 /**
@@ -88,14 +92,22 @@ public class SysFileInfoController {
             throw new FileException(FileExceptionEnum.PREVIEW_EMPTY_ERROR, userTip);
         }
 
+        // 文件是-1则返回系统默认头像
+        if (DEFAULT_AVATAR_FILE_OBJ_NAME.equals(sysFileInfoRequest.getFileObjectName())) {
+            DownloadUtil.renderPreviewFile(response, Base64.decode(FileConfigExpander.getDefaultAvatarBase64()));
+            return;
+        }
+
         // 文件id不为空，则根据文件id预览
         if (ObjectUtil.isNotEmpty(sysFileInfoRequest.getFileId())) {
             sysFileInfoService.previewByFileId(sysFileInfoRequest, response);
+            return;
         }
 
         // 文件bucketName和objectName不为空，则根据bucket预览
         if (ObjectUtil.isAllNotEmpty(sysFileInfoRequest.getFileBucket(), sysFileInfoRequest.getFileObjectName())) {
             sysFileInfoService.previewByBucketAndObjName(sysFileInfoRequest, response);
+            return;
         }
 
         // 提示用户信息不全

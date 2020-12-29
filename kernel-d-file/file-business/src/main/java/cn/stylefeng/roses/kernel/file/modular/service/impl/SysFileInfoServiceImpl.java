@@ -2,7 +2,6 @@ package cn.stylefeng.roses.kernel.file.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -28,13 +27,11 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -137,7 +134,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
         // 如果是图片类型，则直接输出
         if (PicFileTypeUtil.getFileImgTypeFlag(fileSuffix)) {
-            renderPreviewFile(response, fileBytes);
+            DownloadUtil.renderPreviewFile(response, fileBytes);
         } else {
             // 不支持别的文件预览
             throw new FileException(FileExceptionEnum.PREVIEW_ERROR_NOT_SUPPORT);
@@ -158,7 +155,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
         // 如果是图片类型，则直接输出
         if (PicFileTypeUtil.getFileImgTypeFlag(sysFileInfoRequest.getFileObjectName())) {
-            renderPreviewFile(response, fileBytes);
+            DownloadUtil.renderPreviewFile(response, fileBytes);
         } else {
             // 不支持别的文件预览
             throw new FileException(FileExceptionEnum.PREVIEW_ERROR_NOT_SUPPORT);
@@ -276,28 +273,6 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         queryWrapper.eq(SysFileInfo::getDelFlag, YesOrNotEnum.N.getCode());
 
         return queryWrapper;
-    }
-
-    /**
-     * 渲染被预览的文件到servlet的response流中
-     *
-     * @author fengshuonan
-     * @date 2020/11/29 17:13
-     */
-    private void renderPreviewFile(HttpServletResponse response, byte[] fileBytes) {
-        try {
-            // 设置contentType
-            response.setContentType(MediaType.IMAGE_PNG_VALUE);
-
-            // 获取outputStream
-            ServletOutputStream outputStream = response.getOutputStream();
-
-            // 输出字节流
-            IoUtil.write(outputStream, true, fileBytes);
-        } catch (IOException e) {
-            String userTip = StrUtil.format(FileExceptionEnum.WRITE_BYTES_ERROR.getUserTip(), e.getMessage());
-            throw new FileException(FileExceptionEnum.WRITE_BYTES_ERROR, userTip);
-        }
     }
 
 }

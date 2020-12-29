@@ -9,6 +9,7 @@ import cn.stylefeng.roses.kernel.file.exception.FileException;
 import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +72,28 @@ public class DownloadUtil {
 
         //下载文件
         download(fileName, fileBytes, response);
+    }
+
+    /**
+     * 渲染被预览的文件到servlet的response流中
+     *
+     * @author fengshuonan
+     * @date 2020/11/29 17:13
+     */
+    public static void renderPreviewFile(HttpServletResponse response, byte[] fileBytes) {
+        try {
+            // 设置contentType
+            response.setContentType("image/png");
+
+            // 获取outputStream
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            // 输出字节流
+            IoUtil.write(outputStream, true, fileBytes);
+        } catch (IOException e) {
+            String userTip = StrUtil.format(FileExceptionEnum.WRITE_BYTES_ERROR.getUserTip(), e.getMessage());
+            throw new FileException(FileExceptionEnum.WRITE_BYTES_ERROR, userTip);
+        }
     }
 
 }

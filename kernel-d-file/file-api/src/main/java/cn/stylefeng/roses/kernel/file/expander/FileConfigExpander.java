@@ -72,4 +72,14 @@ public class FileConfigExpander {
         return ConfigContext.me().getSysConfigValueWithDefault("SYS_LOCAL_FILE_SAVE_PATH_WINDOWS", String.class, new LocalFileProperties().getLocalFileSavePathWin());
     }
 
+    /**
+     * 默认的系统头像，base64编码的
+     *
+     * @author fengshuonan
+     * @date 2020/12/29 20:10
+     */
+    public static String getDefaultAvatarBase64() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_DEFAULT_AVATAR_BASE64", String.class, FileConstants.DEFAULT_BASE_64_AVATAR);
+    }
+
 }
