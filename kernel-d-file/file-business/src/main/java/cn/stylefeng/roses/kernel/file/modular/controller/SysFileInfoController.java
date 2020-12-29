@@ -15,6 +15,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -84,7 +85,8 @@ public class SysFileInfoController {
      * @date 2020/11/29 11:29
      */
     @GetResource(name = "文件预览", path = FILE_PREVIEW_URL)
-    public void preview(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
+    public void preview(SysFileInfoRequest sysFileInfoRequest) {
+        HttpServletResponse response = HttpServletUtil.getResponse();
 
         // 请求参数不能为空
         if (sysFileInfoRequest == null) {
