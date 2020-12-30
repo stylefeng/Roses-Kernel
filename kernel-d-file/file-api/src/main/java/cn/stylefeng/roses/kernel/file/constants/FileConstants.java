@@ -39,9 +39,19 @@ public interface FileConstants {
     Long DEFAULT_FILE_TIMEOUT_SECONDS = 7200L;
 
     /**
-     * Guns中文件预览的接口
+     * 默认文件上传方式
      */
-    String FILE_PREVIEW_URL = "/sysFileInfo/preview";
+    String DEFAULT_ATTACHMENT_UPLOAD_METHOD = "local_file_config";
+
+    /**
+     * 文件预览的接口（需要带token，一般用在机密文件）
+     */
+    String FILE_PRIVATE_PREVIEW_URL = "/sysFileInfo/private/preview";
+
+    /**
+     * Guns中公共文件预览的接口（不用带token，一般用在首页背景，首页banner等地方）
+     */
+    String FILE_PUBLIC_PREVIEW_URL = "/sysFileInfo/public/preview";
 
     /**
      * 系统默认头像的文件object名称

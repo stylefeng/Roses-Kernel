@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import static cn.stylefeng.roses.kernel.file.constants.FileConstants.DEFAULT_AVATAR_FILE_OBJ_NAME;
-import static cn.stylefeng.roses.kernel.file.constants.FileConstants.FILE_PREVIEW_URL;
+import static cn.stylefeng.roses.kernel.file.constants.FileConstants.FILE_PRIVATE_PREVIEW_URL;
 
 /**
  * 文件信息管理
@@ -84,7 +84,7 @@ public class SysFileInfoController {
      * @author fengshuonan
      * @date 2020/11/29 11:29
      */
-    @GetResource(name = "文件预览", path = FILE_PREVIEW_URL)
+    @GetResource(name = "文件预览", path = FILE_PRIVATE_PREVIEW_URL)
     public void preview(SysFileInfoRequest sysFileInfoRequest) {
         HttpServletResponse response = HttpServletUtil.getResponse();
 

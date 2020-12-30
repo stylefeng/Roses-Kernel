@@ -152,7 +152,7 @@ public class LocalFileOperator implements FileOperatorApi {
         String token = LoginContext.me().getToken();
 
         // 拼接url = “host” + “预览图片的url” + “?token=xxx”
-        return FileConfigExpander.getServerDeployHost() + FileConstants.FILE_PREVIEW_URL + "?fileBucket=" + bucketName + "&fileObjectName=" + key + "&token=" + token;
+        return FileConfigExpander.getServerDeployHost() + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileBucket=" + bucketName + "&fileObjectName=" + key + "&token=" + token;
     }
 
     @Override
