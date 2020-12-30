@@ -62,7 +62,7 @@ public class SysMenuRequest extends BaseRequest {
     /**
      * 应用分类（应用编码）
      */
-    @NotBlank(message = "appCode不能为空", groups = {add.class, edit.class, getAppMenus.class})
+    @NotBlank(message = "appCode不能为空", groups = {add.class, edit.class, getAppMenusAntdVue.class})
     private String appCode;
 
     /**
@@ -111,9 +111,9 @@ public class SysMenuRequest extends BaseRequest {
     private String remark;
 
     /**
-     * 获取某个应用的左侧菜单树
+     * 获取主页左侧菜单列表（适配Antd Vue的版本）
      */
-    public @interface getAppMenus {
+    public @interface getAppMenusAntdVue {
     }
 
 }

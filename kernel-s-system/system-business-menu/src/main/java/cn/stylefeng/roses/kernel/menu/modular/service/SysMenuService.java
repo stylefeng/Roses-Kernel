@@ -121,7 +121,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @author fengshuonan
      * @date 2020/4/17 17:48
      */
-    List<AntdIndexMenuTreeNode> getAppMenusAntDesign(String appCode);
+    List<AntdIndexMenuTreeNode> getAntDVueIndexMenus(String appCode);
 
     /**
      * 获取系统菜单树，用于新增，编辑时选择上级节点

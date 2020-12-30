@@ -85,17 +85,6 @@ public class SysMenuController {
     }
 
     /**
-     * 获取某个应用的菜单，用于系统顶部切换菜单
-     *
-     * @author fengshuonan
-     * @date 2020/4/19 15:50
-     */
-    @GetResource(name = "获取某个应用的菜单", path = "/sysMenu/getAppMenus", requiredPermission = false)
-    public ResponseData getAppMenus(@Validated(SysMenuRequest.getAppMenus.class) SysMenuRequest sysMenuRequest) {
-        return new SuccessResponseData(sysMenuService.getAppMenusAntDesign(sysMenuRequest.getAppCode()));
-    }
-
-    /**
      * 获取系统菜单树，用于新增，编辑时选择上级节点
      *
      * @author fengshuonan
@@ -115,6 +104,17 @@ public class SysMenuController {
     @GetResource(name = "获取系统菜单树，用于给角色授权时选择", path = "/sysMenu/treeForGrant")
     public ResponseData treeForGrant(SysMenuRequest sysMenuRequest) {
         return new SuccessResponseData(sysMenuService.treeForGrant(sysMenuRequest));
+    }
+
+    /**
+     * 获取主页左侧菜单列表（适配Antd Vue的版本）
+     *
+     * @author fengshuonan
+     * @date 2020/4/19 15:50
+     */
+    @GetResource(name = "获取主页左侧菜单列表（Antd Vue）", path = "/sysMenu/getIndexMenuAntdVue", requiredPermission = false)
+    public ResponseData getAppMenus(@Validated(SysMenuRequest.getAppMenusAntdVue.class) SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData(sysMenuService.getAntDVueIndexMenus(sysMenuRequest.getAppCode()));
     }
 
 }

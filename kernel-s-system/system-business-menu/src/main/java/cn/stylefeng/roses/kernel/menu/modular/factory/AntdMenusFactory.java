@@ -1,74 +1,76 @@
 package cn.stylefeng.roses.kernel.menu.modular.factory;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
-import cn.stylefeng.roses.kernel.system.enums.LinkOpenTypeEnum;
+import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 针对于antd前端的菜单的组装
+ * 针对于antd vue版本的前端菜单的组装
  *
  * @author fengshuonan
- * @date 2020/11/23 21:58
+ * @date 2020/12/30 20:11
  */
 public class AntdMenusFactory {
 
     /**
-     * menu实体转化为菜单树节点
+     * 将数据库表的菜单，转化为vue antd admin识别的菜单路由格式
      *
      * @author fengshuonan
-     * @date 2020/11/23 21:54
+     * @date 2020/12/30 20:28
      */
-    public static MenuSelectTreeNode parseMenuBaseTreeNode(SysMenu sysMenu) {
-        MenuSelectTreeNode menuTreeNode = new MenuSelectTreeNode();
-        menuTreeNode.setId(sysMenu.getMenuId());
-        menuTreeNode.setParentId(sysMenu.getMenuParentId());
-        menuTreeNode.setValue(String.valueOf(sysMenu.getMenuId()));
-        menuTreeNode.setTitle(sysMenu.getMenuName());
-        menuTreeNode.setWeight(sysMenu.getMenuSort());
-        return menuTreeNode;
+    public static List<AntdIndexMenuTreeNode> convertSysMenuToLoginMenu(List<SysMenu> sysMenuList) {
+        List<AntdIndexMenuTreeNode> antDesignMenuTreeNodeList = new ArrayList<>(sysMenuList.size());
+
+        // 添加根节点
+        antDesignMenuTreeNodeList.add(createRootMenuNode());
+
+        for (SysMenu sysMenu : sysMenuList) {
+            AntdIndexMenuTreeNode antdIndexMenuTreeNode = new AntdIndexMenuTreeNode();
+
+            // 设置菜单id
+            antdIndexMenuTreeNode.setId(sysMenu.getMenuId());
+
+            // 设置父级id
+            antdIndexMenuTreeNode.setPid(sysMenu.getMenuParentId());
+
+            // 菜单名称
+            antdIndexMenuTreeNode.setName(sysMenu.getMenuName());
+
+            // 菜单路由地址
+            antdIndexMenuTreeNode.setPath(sysMenu.getRouter());
+
+            AntdIndexMenuTreeNode.Meta mateItem = new AntdIndexMenuTreeNode.Meta();
+
+            // 菜单图标
+            mateItem.setIcon(sysMenu.getIcon());
+
+            // 设置是否隐藏，true就是隐藏
+            mateItem.setInvisible(YesOrNotEnum.N.getCode().equals(sysMenu.getVisible()));
+            antdIndexMenuTreeNode.setMeta(mateItem);
+
+            antDesignMenuTreeNodeList.add(antdIndexMenuTreeNode);
+        }
+
+        return antDesignMenuTreeNodeList;
     }
 
     /**
-     * 将SysMenu格式菜单转换为LoginMenuTreeNode菜单
+     * 创建虚拟的根节点信息
      *
      * @author fengshuonan
-     * @date 2020/4/17 17:53
+     * @date 2020/12/30 20:38
      */
-    public static List<AntdIndexMenuTreeNode> convertSysMenuToLoginMenu(List<SysMenu> sysMenuList) {
-        List<AntdIndexMenuTreeNode> antDesignMenuTreeNodeList = CollectionUtil.newArrayList();
-        sysMenuList.forEach(sysMenu -> {
-            AntdIndexMenuTreeNode antdIndexMenuTreeNode = new AntdIndexMenuTreeNode();
-            antdIndexMenuTreeNode.setComponent(sysMenu.getComponent());
-            antdIndexMenuTreeNode.setId(sysMenu.getMenuId());
-            antdIndexMenuTreeNode.setName(sysMenu.getMenuCode());
-            antdIndexMenuTreeNode.setPath(sysMenu.getRouter());
-            antdIndexMenuTreeNode.setPid(sysMenu.getMenuParentId());
-            AntdIndexMenuTreeNode.Meta mateItem = new AntdIndexMenuTreeNode().new Meta();
-            mateItem.setIcon(sysMenu.getIcon());
-            mateItem.setTitle(sysMenu.getMenuName());
-            mateItem.setLink(sysMenu.getLinkUrl());
-
-            // 是否可见
-            mateItem.setShow(YesOrNotEnum.Y.getCode().equals(sysMenu.getVisible()));
-
-            // 是否是外链
-            if (LinkOpenTypeEnum.INNER.getCode().equals(sysMenu.getLinkOpenType())) {
-
-                // 打开外链
-                mateItem.setTarget("_blank");
-                antdIndexMenuTreeNode.setPath(sysMenu.getLinkUrl());
-                antdIndexMenuTreeNode.setRedirect(sysMenu.getLinkUrl());
-
-            }
-            antdIndexMenuTreeNode.setMeta(mateItem);
-            antDesignMenuTreeNodeList.add(antdIndexMenuTreeNode);
-        });
-        return antDesignMenuTreeNodeList;
+    private static AntdIndexMenuTreeNode createRootMenuNode() {
+        AntdIndexMenuTreeNode antdIndexMenuTreeNode = new AntdIndexMenuTreeNode();
+        antdIndexMenuTreeNode.setId(SystemConstants.DEFAULT_PARENT_ID);
+        antdIndexMenuTreeNode.setPid(SystemConstants.VIRTUAL_ROOT_PARENT_ID);
+        antdIndexMenuTreeNode.setName("根虚拟节点");
+        antdIndexMenuTreeNode.setPath("/");
+        return antdIndexMenuTreeNode;
     }
 
 }

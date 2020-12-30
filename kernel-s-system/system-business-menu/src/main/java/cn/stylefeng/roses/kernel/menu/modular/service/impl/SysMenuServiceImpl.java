@@ -35,6 +35,7 @@ import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.menu.modular.factory.AntdMenusFactory;
 import cn.stylefeng.roses.kernel.menu.modular.factory.LayuiMenusFactory;
+import cn.stylefeng.roses.kernel.menu.modular.factory.common.CommonMenusFactory;
 import cn.stylefeng.roses.kernel.menu.modular.mapper.SysMenuMapper;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
@@ -192,13 +193,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<AntdIndexMenuTreeNode> getAppMenusAntDesign(String appCode) {
+    public List<AntdIndexMenuTreeNode> getAntDVueIndexMenus(String appCode) {
 
         // 获取当前用户的所有菜单
         List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCode);
 
         // 转换成登录菜单格式
-        return AntdMenusFactory.convertSysMenuToLoginMenu(currentUserMenus);
+        List<AntdIndexMenuTreeNode> antdIndexMenuTreeNodes = AntdMenusFactory.convertSysMenuToLoginMenu(currentUserMenus);
+
+        // 转化成树结构
+        return new DefaultTreeBuildFactory<AntdIndexMenuTreeNode>(SystemConstants.VIRTUAL_ROOT_PARENT_ID.toString()).doTreeBuild(antdIndexMenuTreeNodes);
     }
 
     @Override
@@ -207,7 +211,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         LambdaQueryWrapper<SysMenu> wrapper = createWrapper(sysMenuRequest);
         this.list(wrapper).forEach(sysMenu -> {
-            MenuSelectTreeNode menuTreeNode = AntdMenusFactory.parseMenuBaseTreeNode(sysMenu);
+            MenuSelectTreeNode menuTreeNode = CommonMenusFactory.parseMenuBaseTreeNode(sysMenu);
             menuTreeNodeList.add(menuTreeNode);
         });
 
@@ -230,7 +234,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
 
         this.list(wrapper).forEach(sysMenu -> {
-            MenuSelectTreeNode menuTreeNode = AntdMenusFactory.parseMenuBaseTreeNode(sysMenu);
+            MenuSelectTreeNode menuTreeNode = CommonMenusFactory.parseMenuBaseTreeNode(sysMenu);
             menuTreeNodeList.add(menuTreeNode);
         });
 

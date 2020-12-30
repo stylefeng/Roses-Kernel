@@ -14,6 +14,7 @@ import cn.stylefeng.roses.kernel.resource.modular.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.resource.modular.service.SysResourceService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
+import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -27,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static cn.stylefeng.roses.kernel.system.constants.SystemConstants.DEFAULT_PARENT_ID;
 
 /**
  * 资源表 服务实现类
@@ -282,7 +281,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             appNode.setCode(appName);
             appNode.setNodeName(appName);
             appNode.setResourceFlag(false);
-            appNode.setParentCode(DEFAULT_PARENT_ID.toString());
+            appNode.setParentCode(SystemConstants.DEFAULT_PARENT_ID.toString());
 
             // 遍历当前应用下的模块资源
             Map<String, List<ResourceTreeNode>> modularResources = appModularResources.get(appName);

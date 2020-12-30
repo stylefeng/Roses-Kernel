@@ -1,6 +1,9 @@
 package cn.stylefeng.roses.kernel.system.pojo.menu.antd;
 
+import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 登录菜单
@@ -9,7 +12,7 @@ import lombok.Data;
  * @date 2020/4/17 17:35
  */
 @Data
-public class AntdIndexMenuTreeNode {
+public class AntdIndexMenuTreeNode implements AbstractTreeNode {
 
     /**
      * id
@@ -22,19 +25,14 @@ public class AntdIndexMenuTreeNode {
     private Long pid;
 
     /**
-     * 路由名称, 必须设置,且不能重名
+     * 菜单标题
      */
     private String name;
 
     /**
-     * 组件
+     * 菜单路由
      */
-    private String component;
-
-    /**
-     * 重定向地址, 访问这个路由时, 自定进行重定向
-     */
-    private String redirect;
+    private String path;
 
     /**
      * 路由元信息（路由附带扩展信息）
@@ -42,46 +40,41 @@ public class AntdIndexMenuTreeNode {
     private Meta meta;
 
     /**
-     * 路径
+     * 子级节点
      */
-    private String path;
-
-    /**
-     * 控制路由和子路由是否显示在 sidebar
-     */
-    private boolean hidden;
+    private List<AntdIndexMenuTreeNode> children;
 
     /**
      * 路由元信息内部类
      */
     @Data
-    public class Meta {
+    public static class Meta {
 
         /**
-         * 路由标题, 用于显示面包屑, 页面标题 *推荐设置
-         */
-        public String title;
-
-        /**
-         * 图标
+         * 菜单图标
          */
         public String icon;
 
         /**
-         * 是否可见
+         * 是否隐藏此菜单项, 默认 false，不隐藏
          */
-        public boolean show;
+        public Boolean invisible = false;
 
-        /**
-         * 如需外部打开，增加：_blank
-         */
-        public String target;
+    }
 
-        /**
-         * 内链打开http链接
-         */
-        public String link;
+    @Override
+    public String getNodeId() {
+        return this.id.toString();
+    }
 
+    @Override
+    public String getNodeParentId() {
+        return this.pid.toString();
+    }
+
+    @Override
+    public void setChildrenNodes(List childrenNodes) {
+        this.children = childrenNodes;
     }
 
 }
