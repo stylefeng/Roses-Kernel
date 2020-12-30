@@ -28,10 +28,24 @@ public class SysFileInfo extends BaseEntity {
     private Long fileId;
 
     /**
-     * 文件编码，解决一个文件多个版本问题，多次上传文件编码不变
+     * 文件编码,本号升级的依据
+     * <p>
+     * 解决一个文件多个版本问题，多次上传文件编码不变
      */
-    @TableField(value = "file_code")
+    @TableField("file_code")
     private Long fileCode;
+
+    /**
+     * 文件版本，从1开始
+     */
+    @TableField("file_version")
+    private Integer fileVersion;
+
+    /**
+     * 当前状态：0-历史版，1-最新版
+     */
+    @TableField("file_status")
+    private String fileStatus;
 
     /**
      * 文件存储位置：1-阿里云，2-腾讯云，3-minio，4-本地
@@ -64,6 +78,12 @@ public class SysFileInfo extends BaseEntity {
     private Long fileSizeKb;
 
     /**
+     * 文件大小信息，计算后的
+     */
+    @TableField("file_size_info")
+    private String fileSizeInfo;
+
+    /**
      * 存储到bucket中的名称，主键id+.后缀
      */
     @TableField("file_object_name")
@@ -74,6 +94,12 @@ public class SysFileInfo extends BaseEntity {
      */
     @TableField("file_path")
     private String filePath;
+
+    /**
+     * 是否为机密文件
+     */
+    @TableField("secret_flag")
+    private String secretFlag;
 
     /**
      * 是否删除：Y-被删除，N-未删除

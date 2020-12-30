@@ -1,8 +1,9 @@
 package cn.stylefeng.roses.kernel.file.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
@@ -10,15 +11,18 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.FileOperatorApi;
-import cn.stylefeng.roses.kernel.file.enums.FileLocationEnum;
+import cn.stylefeng.roses.kernel.file.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.exception.FileException;
 import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
+import cn.stylefeng.roses.kernel.file.modular.factory.FileInfoFactory;
 import cn.stylefeng.roses.kernel.file.modular.mapper.SysFileInfoMapper;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
 import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
+import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoListResponse;
 import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.util.DownloadUtil;
+import cn.stylefeng.roses.kernel.file.util.PdfFileTypeUtil;
 import cn.stylefeng.roses.kernel.file.util.PicFileTypeUtil;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -27,18 +31,25 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static cn.stylefeng.roses.kernel.file.constants.FileConstants.DEFAULT_BUCKET_NAME;
 import static cn.stylefeng.roses.kernel.file.constants.FileConstants.FILE_POSTFIX_SEPARATOR;
+import static cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum.FILE_NOT_FOUND;
 
 /**
  * 文件信息表 服务实现类
@@ -54,137 +65,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     private FileOperatorApi fileOperatorApi;
 
     @Override
-    public Long uploadFile(MultipartFile file) {
-
-        // 生成文件的唯一id
-        Long fileId = IdWorker.getId();
-
-        // 获取文件原始名称
-        String originalFilename = file.getOriginalFilename();
-
-        // 获取文件后缀，不包含点
-        String fileSuffix = null;
-        if (ObjectUtil.isNotEmpty(originalFilename)) {
-            fileSuffix = StrUtil.subAfter(originalFilename, FILE_POSTFIX_SEPARATOR, true);
-        }
-
-        // 生成文件的最终名称
-        String finalFileName = fileId + FILE_POSTFIX_SEPARATOR + fileSuffix;
-
-        // 存储文件
-        byte[] bytes;
-        try {
-            bytes = file.getBytes();
-            fileOperatorApi.storageFile(DEFAULT_BUCKET_NAME, finalFileName, bytes);
-        } catch (IOException e) {
-            String userTip = StrUtil.format(FileExceptionEnum.ERROR_FILE.getUserTip(), e.getMessage());
-            throw new FileException(FileExceptionEnum.ERROR_FILE, userTip);
-        }
-
-        // 计算文件大小kb
-        long fileSizeKb = Convert.toLong(NumberUtil.div(new BigDecimal(file.getSize()), BigDecimal.valueOf(1024))
-                .setScale(0, BigDecimal.ROUND_HALF_UP));
-
-        // 存储文件信息
-        SysFileInfo sysFileInfo = new SysFileInfo();
-        sysFileInfo.setFileId(fileId);
-        sysFileInfo.setFileLocation(FileLocationEnum.LOCAL.getCode());
-        sysFileInfo.setFileBucket(DEFAULT_BUCKET_NAME);
-        sysFileInfo.setFileObjectName(finalFileName);
-        sysFileInfo.setFileOriginName(originalFilename);
-        sysFileInfo.setFileSuffix(fileSuffix);
-        sysFileInfo.setFileSizeKb(fileSizeKb);
-        this.save(sysFileInfo);
-
-        // 返回文件id
-        return fileId;
-    }
-
-    @Override
-    public void download(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
-        SysFileInfoResponse sysFileInfoResult = this.getFileInfoResult(sysFileInfoRequest.getFileId());
-        String fileName = sysFileInfoResult.getFileOriginName();
-        byte[] fileBytes = sysFileInfoResult.getFileBytes();
-        DownloadUtil.download(fileName, fileBytes, response);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void delete(SysFileInfoRequest sysFileInfoRequest) {
-        // 逻辑删除
-        LambdaUpdateWrapper<SysFileInfo> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        lambdaUpdateWrapper.set(SysFileInfo::getDelFlag, YesOrNotEnum.Y.getCode());
-        lambdaUpdateWrapper.eq(SysFileInfo::getFileId, sysFileInfoRequest.getFileId());
-        this.update(lambdaUpdateWrapper);
-    }
-
-    @Override
-    public void previewByFileId(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
-
-        byte[] fileBytes;
-
-        // 根据文件id获取文件信息结果集
-        SysFileInfoResponse sysFileInfoResult = this.getFileInfoResult(sysFileInfoRequest.getFileId());
-
-        // 获取文件后缀
-        String fileSuffix = sysFileInfoResult.getFileSuffix().toLowerCase();
-
-        // 获取文件字节码
-        fileBytes = sysFileInfoResult.getFileBytes();
-
-        // 如果是图片类型，则直接输出
-        if (PicFileTypeUtil.getFileImgTypeFlag(fileSuffix)) {
-            DownloadUtil.renderPreviewFile(response, fileBytes);
-        } else {
-            // 不支持别的文件预览
-            throw new FileException(FileExceptionEnum.PREVIEW_ERROR_NOT_SUPPORT);
-        }
-    }
-
-    @Override
-    public void previewByBucketAndObjName(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
-
-        // 获取文件字节码
-        byte[] fileBytes;
-        try {
-            fileBytes = fileOperatorApi.getFileBytes(sysFileInfoRequest.getFileBucket(), sysFileInfoRequest.getFileObjectName());
-        } catch (Exception e) {
-            log.error(">>> 获取文件流异常，具体信息为：{}", e.getMessage());
-            throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR);
-        }
-
-        // 如果是图片类型，则直接输出
-        if (PicFileTypeUtil.getFileImgTypeFlag(sysFileInfoRequest.getFileObjectName())) {
-            DownloadUtil.renderPreviewFile(response, fileBytes);
-        } else {
-            // 不支持别的文件预览
-            throw new FileException(FileExceptionEnum.PREVIEW_ERROR_NOT_SUPPORT);
-        }
-    }
-
-    @Override
-    public SysFileInfo detail(SysFileInfoRequest sysFileInfoRequest) {
-        return this.querySysFileInfo(sysFileInfoRequest);
-    }
-
-    @Override
-    public PageResult<SysFileInfo> page(SysFileInfoRequest sysFileInfoRequest) {
-        LambdaQueryWrapper<SysFileInfo> queryWrapper = createWrapper(sysFileInfoRequest);
-        Page<SysFileInfo> page = this.page(PageFactory.defaultPage(), queryWrapper);
-        return PageResultFactory.createPageResult(page);
-    }
-
-    @Override
-    public List<SysFileInfo> list(SysFileInfoRequest sysFileInfoRequest) {
-        LambdaQueryWrapper<SysFileInfo> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysFileInfo::getDelFlag, YesOrNotEnum.N.getCode());
-        return this.list(queryWrapper);
-    }
-
-    @Override
     public SysFileInfoResponse getFileInfoResult(Long fileId) {
-
-        SysFileInfoResponse sysFileInfoResult = new SysFileInfoResponse();
 
         // 查询库中文件信息
         SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
@@ -201,10 +82,255 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         }
 
         // 设置文件字节码
+        SysFileInfoResponse sysFileInfoResult = new SysFileInfoResponse();
         BeanUtil.copyProperties(sysFileInfo, sysFileInfoResult);
         sysFileInfoResult.setFileBytes(fileBytes);
 
         return sysFileInfoResult;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public SysFileInfoResponse uploadFile(MultipartFile file, SysFileInfoRequest sysFileInfoRequest) {
+
+        // 文件请求转换存入数据库的附件信息
+        SysFileInfo sysFileInfo = FileInfoFactory.createSysFileInfo(file, sysFileInfoRequest);
+
+        // 默认版本号从1开始
+        sysFileInfo.setFileVersion(1);
+
+        // 文件编码生成
+        sysFileInfo.setFileCode(IdWorker.getId());
+
+        // 保存附件到附件信息表
+        this.save(sysFileInfo);
+
+        // 返回文件信息体
+        SysFileInfoResponse fileUploadInfoResult = new SysFileInfoResponse();
+        BeanUtil.copyProperties(sysFileInfo, fileUploadInfoResult);
+        return fileUploadInfoResult;
+    }
+
+    @Override
+    public SysFileInfoResponse updateFile(MultipartFile file, SysFileInfoRequest sysFileInfoRequest) {
+
+        Long fileCode = sysFileInfoRequest.getFileCode();
+
+        // 转换存入数据库的附件信息
+        SysFileInfo sysFileInfo = FileInfoFactory.createSysFileInfo(file, sysFileInfoRequest);
+        sysFileInfo.setDelFlag(YesOrNotEnum.Y.getCode());
+        sysFileInfo.setFileCode(fileCode);
+
+        // 查询该code下的最新版本号附件信息
+        LambdaQueryWrapper<SysFileInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysFileInfo::getFileCode, fileCode);
+        queryWrapper.eq(SysFileInfo::getDelFlag, YesOrNotEnum.N.getCode());
+        queryWrapper.eq(SysFileInfo::getFileStatus, FileStatusEnum.NEW.getCode());
+        SysFileInfo fileInfo = this.getOne(queryWrapper);
+        if (ObjectUtil.isEmpty(fileInfo)) {
+            throw new FileException(FileExceptionEnum.NOT_EXISTED);
+        }
+
+        // 设置版本号在原本的基础上加一
+        sysFileInfo.setFileVersion(fileInfo.getFileVersion() + 1);
+
+        // 存储新版本文件信息
+        this.save(sysFileInfo);
+
+        // 返回文件信息体
+        SysFileInfoResponse fileUploadInfoResult = new SysFileInfoResponse();
+        BeanUtil.copyProperties(sysFileInfo, fileUploadInfoResult);
+        return fileUploadInfoResult;
+    }
+
+    @Override
+    public void download(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
+
+        // 根据文件id获取文件信息结果集
+        SysFileInfoResponse sysFileInfoResponse = this.getFileInfoResult(sysFileInfoRequest.getFileId());
+
+        // 如果文件加密等级不符合，文件不允许被访问
+        if (!sysFileInfoRequest.getSecretFlag().equals(sysFileInfoResponse.getSecretFlag())) {
+            throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+        }
+
+        DownloadUtil.download(sysFileInfoResponse.getFileOriginName(), sysFileInfoResponse.getFileBytes(), response);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteReally(SysFileInfoRequest sysFileInfoRequest) {
+
+        // 查询该Code的所有历史版本
+        LambdaQueryWrapper<SysFileInfo> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(SysFileInfo::getFileCode, sysFileInfoRequest.getFileCode());
+        List<SysFileInfo> fileInfos = this.list(lqw);
+
+        // 批量删除
+        this.removeByIds(fileInfos.stream().map(SysFileInfo::getFileId).collect(Collectors.toList()));
+
+        // 删除具体文件
+        for (SysFileInfo fileInfo : fileInfos) {
+            this.fileOperatorApi.deleteFile(fileInfo.getFileBucket(), fileInfo.getFileObjectName());
+        }
+    }
+
+    @Override
+    public PageResult<SysFileInfoListResponse> fileInfoListPage(SysFileInfoRequest sysFileInfoRequest) {
+        Page<SysFileInfoListResponse> page = PageFactory.defaultPage();
+        List<SysFileInfoListResponse> list = this.baseMapper.fileInfoList(page, sysFileInfoRequest);
+        return PageResultFactory.createPageResult(page.setRecords(list));
+    }
+
+    @Override
+    public void packagingDownload(String fileIds, String secretFlag, HttpServletResponse response) {
+
+        // 获取文件信息
+        List<Long> fileIdList = Arrays.stream(fileIds.split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        List<SysFileInfoResponse> fileInfoResponseList = this.baseMapper.getFileInfoListByFileIds(fileIdList);
+
+        // 输出流等信息
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(bos);
+
+        try {
+            for (int i = 0; i < fileInfoResponseList.size(); i++) {
+                SysFileInfoResponse sysFileInfoResponse = fileInfoResponseList.get(i);
+                if (ObjectUtil.isNotEmpty(sysFileInfoResponse)) {
+                    String fileOriginName = sysFileInfoResponse.getFileOriginName();
+                    // 判断公有文件下载时是否包含私有文件
+                    if (secretFlag.equals(YesOrNotEnum.N.getCode()) && !secretFlag.equals(sysFileInfoResponse.getSecretFlag())) {
+                        String userTip = StrUtil.format(FileExceptionEnum.SECRET_FLAG_INFO_ERROR.getUserTip(), fileOriginName);
+                        throw new FileException(FileExceptionEnum.SECRET_FLAG_INFO_ERROR, userTip);
+                    }
+
+                    byte[] fileBytes = fileOperatorApi.getFileBytes(DEFAULT_BUCKET_NAME, sysFileInfoResponse.getFileObjectName());
+                    ZipEntry entry = new ZipEntry(i + 1 + "." + fileOriginName);
+                    entry.setSize(fileBytes.length);
+                    zip.putNextEntry(entry);
+                    zip.write(fileBytes);
+                }
+            }
+            zip.finish();
+
+            // 下载文件
+            DownloadUtil.download(DateUtil.now() + "-打包下载" + FILE_POSTFIX_SEPARATOR + "zip", bos.toByteArray(), response);
+        } catch (Exception e) {
+            log.error(">>> 获取文件流异常，具体信息为：{}", e.getMessage());
+            throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR);
+        } finally {
+            try {
+                zip.closeEntry();
+                zip.close();
+                bos.close();
+            } catch (IOException e) {
+                log.error(">>> 关闭数据流失败，具体信息为：{}", e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public List<SysFileInfoResponse> getFileInfoListByFileIds(String fileIds) {
+        List<Long> fileIdList = Arrays.stream(fileIds.split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        return this.baseMapper.getFileInfoListByFileIds(fileIdList);
+    }
+
+    @Override
+    public void preview(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
+
+        // 根据文件id获取文件信息结果集
+        SysFileInfoResponse sysFileInfoResponse = this.getFileInfoResult(sysFileInfoRequest.getFileId());
+
+        // 如果文件加密等级不符合，文件不允许被访问
+        if (!sysFileInfoRequest.getSecretFlag().equals(sysFileInfoResponse.getSecretFlag())) {
+            throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+        }
+
+        // 获取文件后缀
+        String fileSuffix = sysFileInfoResponse.getFileSuffix().toLowerCase();
+
+        // 获取文件字节码
+        byte[] fileBytes = sysFileInfoResponse.getFileBytes();
+
+        // 附件预览
+        this.renderPreviewFile(response, fileSuffix, fileBytes);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void confirmReplaceFile(List<Long> fileIdList) {
+
+        // 获取所有附件信息的code集合
+        if (fileIdList == null || fileIdList.size() == 0) {
+            throw new FileException(FileExceptionEnum.FILE_IDS_EMPTY);
+        }
+        List<Long> fileCodeList = this.baseMapper.getFileCodeByFileIds(fileIdList);
+        if (fileCodeList == null || fileCodeList.size() == 0) {
+            return;
+        }
+
+        // 修改该codes下所有附件删除状态为Y
+        this.baseMapper.updateDelFlagByFileCodes(fileCodeList, YesOrNotEnum.Y.getCode());
+
+        // 修改当前fileIds下所有附件删除状态为N
+        this.baseMapper.updateDelFlagByFileIds(fileIdList, YesOrNotEnum.N.getCode());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public SysFileInfoResponse versionBack(SysFileInfoRequest sysFileInfoRequest) {
+
+        LambdaQueryWrapper<SysFileInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysFileInfo::getFileId, sysFileInfoRequest.getFileId());
+        SysFileInfo fileInfo = this.getOne(queryWrapper);
+
+        // 判断有没有这个文件
+        if (ObjectUtil.isEmpty(fileInfo)) {
+            String userTip = FileExceptionEnum.FILE_NOT_FOUND.getUserTip();
+            String errorMessage = StrUtil.format(userTip, "文件:" + fileInfo.getFileId() + "未找到！");
+            throw new FileException(FILE_NOT_FOUND.getErrorCode(), errorMessage);
+        }
+
+        // 把之前的文件刷回
+        LambdaUpdateWrapper<SysFileInfo> oldFileInfoLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        oldFileInfoLambdaUpdateWrapper.eq(SysFileInfo::getFileCode, fileInfo.getFileCode());
+        oldFileInfoLambdaUpdateWrapper.eq(SysFileInfo::getFileStatus, FileStatusEnum.NEW.getCode());
+        oldFileInfoLambdaUpdateWrapper.set(SysFileInfo::getFileStatus, FileStatusEnum.OLD.getCode());
+        this.update(oldFileInfoLambdaUpdateWrapper);
+
+        // 修改文件状态
+        LambdaUpdateWrapper<SysFileInfo> newFileInfoLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        newFileInfoLambdaUpdateWrapper.eq(SysFileInfo::getFileId, sysFileInfoRequest.getFileId());
+        newFileInfoLambdaUpdateWrapper.set(SysFileInfo::getFileStatus, FileStatusEnum.NEW.getCode());
+        newFileInfoLambdaUpdateWrapper.set(SysFileInfo::getDelFlag, YesOrNotEnum.N.getCode());
+        this.update(newFileInfoLambdaUpdateWrapper);
+
+        // 返回
+        return BeanUtil.toBean(fileInfo, SysFileInfoResponse.class);
+    }
+
+    @Override
+    public void previewByBucketAndObjName(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
+
+        // 获取文件字节码
+        byte[] fileBytes;
+        try {
+            fileBytes = fileOperatorApi.getFileBytes(sysFileInfoRequest.getFileBucket(), sysFileInfoRequest.getFileObjectName());
+        } catch (Exception e) {
+            log.error(">>> 获取文件流异常，具体信息为：{}", e.getMessage());
+            throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR);
+        }
+
+        // 获取文件后缀
+        String fileSuffix = FileUtil.getSuffix(sysFileInfoRequest.getFileObjectName());
+
+        // 附件预览
+        this.renderPreviewFile(response, fileSuffix, fileBytes);
+    }
+
+    @Override
+    public SysFileInfo detail(SysFileInfoRequest sysFileInfoRequest) {
+        return this.querySysFileInfo(sysFileInfoRequest);
     }
 
     @Override
@@ -224,6 +350,39 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     }
 
     /**
+     * 渲染被预览的文件到servlet的response流中
+     *
+     * @author fengshuonan
+     * @date 2020/11/29 17:13
+     */
+    private void renderPreviewFile(HttpServletResponse response, String fileSuffix, byte[] fileBytes) {
+
+        // 如果文件后缀是图片或者pdf，则直接输出流
+        if (PicFileTypeUtil.getFileImgTypeFlag(fileSuffix) || PdfFileTypeUtil.getFilePdfTypeFlag(fileSuffix)) {
+            try {
+                // 设置contentType
+                if (PicFileTypeUtil.getFileImgTypeFlag(fileSuffix)) {
+                    response.setContentType(MediaType.IMAGE_PNG_VALUE);
+                } else if (PdfFileTypeUtil.getFilePdfTypeFlag(fileSuffix)) {
+                    response.setContentType(MediaType.APPLICATION_PDF_VALUE);
+                }
+
+                // 获取outputStream
+                ServletOutputStream outputStream = response.getOutputStream();
+
+                // 输出字节流
+                IoUtil.write(outputStream, true, fileBytes);
+            } catch (IOException e) {
+                String userTip = StrUtil.format(FileExceptionEnum.WRITE_BYTES_ERROR.getUserTip(), e.getMessage());
+                throw new FileException(FileExceptionEnum.WRITE_BYTES_ERROR, userTip);
+            }
+        } else {
+            // 不支持别的文件预览
+            throw new FileException(FileExceptionEnum.PREVIEW_ERROR_NOT_SUPPORT);
+        }
+    }
+
+    /**
      * 获取文件信息表
      *
      * @author fengshuonan
@@ -236,43 +395,6 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             throw new FileException(FileExceptionEnum.NOT_EXISTED, userTip);
         }
         return sysFileInfo;
-    }
-
-    /**
-     * 创建组织架构的通用条件查询wrapper
-     *
-     * @author fengshuonan
-     * @date 2020/11/6 10:16
-     */
-    private LambdaQueryWrapper<SysFileInfo> createWrapper(SysFileInfoRequest sysFileInfoRequest) {
-        LambdaQueryWrapper<SysFileInfo> queryWrapper = new LambdaQueryWrapper<>();
-        if (ObjectUtil.isNotNull(sysFileInfoRequest)) {
-
-            // 拼接文件存储位置条件
-            if (ObjectUtil.isNotEmpty(sysFileInfoRequest.getFileLocation())) {
-                queryWrapper.like(SysFileInfo::getFileLocation, sysFileInfoRequest.getFileLocation());
-            }
-
-            // 拼接文件仓库条件
-            if (ObjectUtil.isNotEmpty(sysFileInfoRequest.getFileBucket())) {
-                queryWrapper.like(SysFileInfo::getFileBucket, sysFileInfoRequest.getFileBucket());
-            }
-
-            // 拼接文件名称（上传时候的文件名）
-            if (ObjectUtil.isNotEmpty(sysFileInfoRequest.getFileOriginName())) {
-                queryWrapper.like(SysFileInfo::getFileOriginName, sysFileInfoRequest.getFileOriginName());
-            }
-
-            // 拼接文件名称（存储到系统的文件名）
-            if (ObjectUtil.isNotEmpty(sysFileInfoRequest.getFileObjectName())) {
-                queryWrapper.like(SysFileInfo::getFileObjectName, sysFileInfoRequest.getFileObjectName());
-            }
-        }
-
-        // 查询没被删除的
-        queryWrapper.eq(SysFileInfo::getDelFlag, YesOrNotEnum.N.getCode());
-
-        return queryWrapper;
     }
 
 }
