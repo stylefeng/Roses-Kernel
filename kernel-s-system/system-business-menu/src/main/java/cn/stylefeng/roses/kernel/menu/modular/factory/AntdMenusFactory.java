@@ -42,6 +42,7 @@ public class AntdMenusFactory {
 
             // 菜单路由地址
             antdIndexMenuTreeNode.setPath(sysMenu.getRouter());
+            antdIndexMenuTreeNode.setRouter(sysMenu.getRouter());
 
             AntdIndexMenuTreeNode.Meta mateItem = new AntdIndexMenuTreeNode.Meta();
 

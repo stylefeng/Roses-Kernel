@@ -35,6 +35,11 @@ public class AntdIndexMenuTreeNode implements AbstractTreeNode {
     private String path;
 
     /**
+     * 菜单路由
+     */
+    private String router;
+
+    /**
      * 路由元信息（路由附带扩展信息）
      */
     private Meta meta;
