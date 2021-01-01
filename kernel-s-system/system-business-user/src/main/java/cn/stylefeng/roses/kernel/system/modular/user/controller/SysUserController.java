@@ -60,12 +60,12 @@ public class SysUserController {
     }
 
     /**
-     * 更新信息
+     * 更新用户个人信息
      *
      * @author luojie
      * @date 2020/11/6 13:50
      */
-    @PostResource(name = "系统用户_更新信息", path = "/sysUser/updateInfo")
+    @PostResource(name = "更新用户个人信息", path = "/sysUser/updateInfo")
     public ResponseData updateInfo(@RequestBody @Validated(SysUserRequest.updateInfo.class) SysUserRequest sysUserRequest) {
         sysUserService.updateInfo(sysUserRequest);
         return new SuccessResponseData();

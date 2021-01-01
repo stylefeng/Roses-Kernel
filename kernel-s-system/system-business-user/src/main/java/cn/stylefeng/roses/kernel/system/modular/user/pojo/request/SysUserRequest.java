@@ -62,7 +62,7 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 姓名
      */
-    @NotBlank(message = "姓名不能为空", groups = {add.class, edit.class})
+    @NotBlank(message = "姓名不能为空", groups = {add.class, edit.class, updateInfo.class})
     private String realName;
 
     /**
@@ -74,7 +74,7 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 生日
      */
-    @DateValue(message = "生日格式不正确，请检查birthday参数", groups = {add.class, edit.class, updateInfo.class})
+    @DateValue(message = "生日格式不正确，请检查birthday参数", groups = {add.class, edit.class})
     private String birthday;
 
     /**
@@ -92,8 +92,8 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 手机
      */
-    @NotNull(message = "手机号码不能为空，请检查phone参数", groups = {add.class, edit.class, updateInfo.class})
-    @Size(min = 11, max = 11, message = "手机号码格式错误，请检查手机是否是11位", groups = {add.class, edit.class, updateInfo.class})
+    @NotNull(message = "手机号码不能为空，请检查phone参数", groups = {add.class, edit.class})
+    @Size(min = 11, max = 11, message = "手机号码格式错误，请检查手机是否是11位", groups = {add.class, edit.class})
     private String phone;
 
     /**

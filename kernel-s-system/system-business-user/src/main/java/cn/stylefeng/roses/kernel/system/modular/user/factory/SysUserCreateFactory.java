@@ -76,21 +76,20 @@ public class SysUserCreateFactory {
      */
     public static void fillUpdateInfo(SysUserRequest sysUserRequest, SysUser sysUser) {
 
-        // 填充头像
-        sysUser.setAvatar(sysUserRequest.getAvatar());
-
-        // 生日
-        sysUser.setBirthday(DateUtil.parse(sysUserRequest.getBirthday()));
-
         // 性别（M-男，F-女）
         sysUser.setSex(sysUserRequest.getSex());
 
         // 邮箱
         sysUser.setEmail(sysUserRequest.getEmail());
 
+        // 姓名
+        sysUser.setRealName(sysUserRequest.getRealName());
+
+        // 生日
+        sysUser.setBirthday(DateUtil.parse(sysUserRequest.getBirthday()));
+
         // 手机
         sysUser.setPhone(sysUserRequest.getPhone());
-
     }
 
 }
