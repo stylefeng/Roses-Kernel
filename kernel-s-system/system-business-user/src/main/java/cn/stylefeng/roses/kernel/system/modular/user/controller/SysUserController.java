@@ -1,5 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.controller;
 
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
@@ -221,6 +223,21 @@ public class SysUserController {
     @GetResource(name = "系统用户_导出", path = "/sysUser/export")
     public void export(HttpServletResponse response) {
         sysUserService.export(response);
+    }
+
+    /**
+     * 获取当前登录用户的信息
+     *
+     * @author fengshuonan
+     * @date 2021/1/1 19:01
+     */
+    @GetResource(name = "获取当前登录用户的信息", path = "/sysUser/currentUserInfo", requiredPermission = false)
+    public ResponseData currentUserInfo() {
+        LoginUser loginUser = LoginContext.me().getLoginUser();
+
+        SysUserRequest sysUserRequest = new SysUserRequest();
+        sysUserRequest.setUserId(loginUser.getUserId());
+        return new SuccessResponseData(sysUserService.detail(sysUserRequest));
     }
 
 }
