@@ -39,11 +39,6 @@ public interface FileConstants {
     Long DEFAULT_FILE_TIMEOUT_SECONDS = 7200L;
 
     /**
-     * 默认文件上传方式
-     */
-    String DEFAULT_ATTACHMENT_UPLOAD_METHOD = "local_file_config";
-
-    /**
      * 文件预览的接口（需要带token，一般用在机密文件）
      */
     String FILE_PRIVATE_PREVIEW_URL = "/sysFileInfo/private/preview";
@@ -54,9 +49,14 @@ public interface FileConstants {
     String FILE_PUBLIC_PREVIEW_URL = "/sysFileInfo/public/preview";
 
     /**
-     * 系统默认头像的文件object名称
+     * 通用文件预览，通过object名称和bucket名称
      */
-    String DEFAULT_AVATAR_FILE_OBJ_NAME = "10000.png";
+    String FILE_PREVIEW_BY_OBJECT_NAME = "/sysFileInfo/previewByObjectName";
+
+    /**
+     * 系统默认头像的文件id
+     */
+    Long DEFAULT_AVATAR_FILE_ID = 10000L;
 
     /**
      * 系统默认的头像

@@ -62,6 +62,7 @@ public class SysFileInfoRequest extends BaseRequest {
     /**
      * 文件仓库（文件夹）
      */
+    @NotBlank(message = "fileBucket不能为空", groups = {previewByObjectName.class})
     private String fileBucket;
 
     /**
@@ -77,6 +78,7 @@ public class SysFileInfoRequest extends BaseRequest {
     /**
      * 存储到bucket中的名称，主键id+.后缀
      */
+    @NotBlank(message = "fileObjectName不能为空", groups = {previewByObjectName.class})
     private String fileObjectName;
 
     /**
@@ -88,6 +90,12 @@ public class SysFileInfoRequest extends BaseRequest {
      * 版本回退
      */
     public @interface versionBack {
+    }
+
+    /**
+     * 通过object名称预览文件
+     */
+    public @interface previewByObjectName {
     }
 
 }

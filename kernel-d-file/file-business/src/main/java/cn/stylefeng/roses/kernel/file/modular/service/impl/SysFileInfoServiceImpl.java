@@ -1,19 +1,23 @@
 package cn.stylefeng.roses.kernel.file.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.FileOperatorApi;
+import cn.stylefeng.roses.kernel.file.constants.FileConstants;
 import cn.stylefeng.roses.kernel.file.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.exception.FileException;
 import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.expander.FileConfigExpander;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
 import cn.stylefeng.roses.kernel.file.modular.factory.FileInfoFactory;
 import cn.stylefeng.roses.kernel.file.modular.mapper.SysFileInfoMapper;
@@ -238,6 +242,12 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     @Override
     public void preview(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
 
+        // 如果是默认头像
+        if (FileConstants.DEFAULT_AVATAR_FILE_ID.equals(sysFileInfoRequest.getFileId())) {
+            DownloadUtil.renderPreviewFile(response, Base64.decode(FileConfigExpander.getDefaultAvatarBase64()));
+            return;
+        }
+
         // 根据文件id获取文件信息结果集
         SysFileInfoResponse sysFileInfoResponse = this.getFileInfoResult(sysFileInfoRequest.getFileId());
 
@@ -347,6 +357,15 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         BeanUtil.copyProperties(sysFileInfo, sysFileInfoResponse);
 
         return sysFileInfoResponse;
+    }
+
+    @Override
+    public String getFileAuthUrl(Long fileId) {
+
+        // 获取登录用户的token
+        String token = LoginContext.me().getToken();
+
+        return FileConfigExpander.getServerDeployHost() + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
     }
 
     /**

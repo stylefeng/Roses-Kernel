@@ -20,4 +20,14 @@ public interface FileInfoApi {
      */
     SysFileInfoResponse getFileInfoWithoutContent(Long fileId);
 
+    /**
+     * 获取文件的下载地址（带鉴权的），生成外网地址
+     *
+     * @param fileId 文件id
+     * @return 外部系统可以直接访问的url
+     * @author fengshuonan
+     * @date 2020/10/26 10:40
+     */
+    String getFileAuthUrl(Long fileId);
+
 }

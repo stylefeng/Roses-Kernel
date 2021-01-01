@@ -8,9 +8,6 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.FileInfoApi;
-import cn.stylefeng.roses.kernel.file.FileOperatorApi;
-import cn.stylefeng.roses.kernel.file.expander.FileConfigExpander;
-import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.office.api.OfficeExcelApi;
 import cn.stylefeng.roses.kernel.office.api.pojo.report.ExcelExportParam;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
@@ -88,9 +85,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private FileInfoApi fileInfoApi;
-
-    @Resource
-    private FileOperatorApi fileOperatorApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -363,14 +357,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public String getUserAvatarUrl(Long fileId) {
 
-        // 获取头像文件详细信息
-        SysFileInfoResponse fileInfoWithoutContent = fileInfoApi.getFileInfoWithoutContent(fileId);
-
         // 获取头像的访问地址
-        return fileOperatorApi.getFileAuthUrl(
-                fileInfoWithoutContent.getFileBucket(),
-                fileInfoWithoutContent.getFileObjectName(),
-                FileConfigExpander.getDefaultFileTimeoutSeconds() * 1000);
+        return fileInfoApi.getFileAuthUrl(fileId);
     }
 
     @Override

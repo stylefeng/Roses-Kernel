@@ -195,7 +195,6 @@ public class MinIoFileOperator implements FileOperatorApi {
         // 获取登录用户的token
         String token = LoginContext.me().getToken();
 
-        // 拼接url = “host” + “预览图片的url” + “?token=xxx”
         return FileConfigExpander.getServerDeployHost() + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileBucket=" + bucketName + "&fileObjectName=" + key + "&token=" + token;
 
     }

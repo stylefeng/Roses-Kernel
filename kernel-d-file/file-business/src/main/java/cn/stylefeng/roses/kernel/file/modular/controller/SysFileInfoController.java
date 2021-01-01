@@ -9,6 +9,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,8 +21,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static cn.stylefeng.roses.kernel.file.constants.FileConstants.FILE_PRIVATE_PREVIEW_URL;
-import static cn.stylefeng.roses.kernel.file.constants.FileConstants.FILE_PUBLIC_PREVIEW_URL;
+import static cn.stylefeng.roses.kernel.file.constants.FileConstants.*;
 
 /**
  * 文件信息管理
@@ -60,6 +60,70 @@ public class SysFileInfoController {
     }
 
     /**
+     * 私有文件预览
+     *
+     * @author fengshuonan
+     * @date 2020/11/29 11:29
+     */
+    @GetResource(name = "私有文件预览", path = FILE_PRIVATE_PREVIEW_URL)
+    public void privatePreview(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
+        HttpServletResponse response = HttpServletUtil.getResponse();
+        sysFileInfoRequest.setSecretFlag(YesOrNotEnum.Y.getCode());
+        this.sysFileInfoService.preview(sysFileInfoRequest, response);
+    }
+
+    /**
+     * 公有文件预览
+     *
+     * @author majianguo
+     * @date 2020/12/27 13:17
+     */
+    @GetResource(name = "公有文件预览", path = FILE_PUBLIC_PREVIEW_URL, requiredPermission = false, requiredLogin = false)
+    public void publicPreview(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
+        HttpServletResponse response = HttpServletUtil.getResponse();
+        sysFileInfoRequest.setSecretFlag(YesOrNotEnum.N.getCode());
+        this.sysFileInfoService.preview(sysFileInfoRequest, response);
+    }
+
+    /**
+     * 通用文件预览，通过传bucket名称和object名称
+     *
+     * @author fengshuonan
+     * @date 2020/11/29 11:29
+     */
+    @GetResource(name = "文件预览，通过bucketName和objectName", path = FILE_PREVIEW_BY_OBJECT_NAME, requiredPermission = false)
+    public void previewByBucketNameObjectName(@Validated(SysFileInfoRequest.previewByObjectName.class) SysFileInfoRequest sysFileInfoRequest) {
+        HttpServletResponse response = HttpServletUtil.getResponse();
+        sysFileInfoService.previewByBucketAndObjName(sysFileInfoRequest, response);
+    }
+
+    /**
+     * 私有文件下载
+     *
+     * @author majianguo
+     * @date 2020/12/27 13:17
+     */
+    @GetResource(name = "私有文件下载", path = "/sysFileInfo/privateDownload")
+    public void privateDownload(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
+        HttpServletResponse response = HttpServletUtil.getResponse();
+        sysFileInfoRequest.setSecretFlag(YesOrNotEnum.Y.getCode());
+        this.sysFileInfoService.download(sysFileInfoRequest, response);
+    }
+
+    /**
+     * 公有文件下载
+     *
+     * @author majianguo
+     * @date 2020/12/27 13:17
+     */
+    @GetResource(name = "公有文件下载", path = "/sysFileInfo/publicDownload", requiredLogin = false, requiredPermission = false)
+    public void publicDownload(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
+        HttpServletResponse response = HttpServletUtil.getResponse();
+        sysFileInfoRequest.setSecretFlag(YesOrNotEnum.N.getCode());
+        this.sysFileInfoService.download(sysFileInfoRequest, response);
+    }
+
+    /**
      * 替换文件
      * <p>
      * 注意：调用本接口之后还需要调用确认接口，本次替换操作才会生效
@@ -86,54 +150,6 @@ public class SysFileInfoController {
     }
 
     /**
-     * 私有文件预览
-     *
-     * @author fengshuonan
-     * @date 2020/11/29 11:29
-     */
-    @GetResource(name = "私有文件预览", path = FILE_PRIVATE_PREVIEW_URL)
-    public void priPreview(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
-        sysFileInfoRequest.setSecretFlag(YesOrNotEnum.Y.getCode());
-        this.sysFileInfoService.preview(sysFileInfoRequest, response);
-    }
-
-    /**
-     * 公有文件预览
-     *
-     * @author majianguo
-     * @date 2020/12/27 13:17
-     */
-    @GetResource(name = "公有文件预览", path = FILE_PUBLIC_PREVIEW_URL, requiredPermission = false, requiredLogin = false)
-    public void pubPreview(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
-        sysFileInfoRequest.setSecretFlag(YesOrNotEnum.N.getCode());
-        this.sysFileInfoService.preview(sysFileInfoRequest, response);
-    }
-
-    /**
-     * 私有文件下载
-     *
-     * @author majianguo
-     * @date 2020/12/27 13:17
-     */
-    @GetResource(name = "私有文件下载", path = "/sysFileInfo/privateDownload")
-    public void privateDownload(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
-        sysFileInfoRequest.setSecretFlag(YesOrNotEnum.Y.getCode());
-        this.sysFileInfoService.download(sysFileInfoRequest, response);
-    }
-
-    /**
-     * 公有文件下载
-     *
-     * @author majianguo
-     * @date 2020/12/27 13:17
-     */
-    @GetResource(name = "公有文件下载", path = "/sysFileInfo/publicDownload", requiredLogin = false, requiredPermission = false)
-    public void publicDownload(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
-        sysFileInfoRequest.setSecretFlag(YesOrNotEnum.N.getCode());
-        this.sysFileInfoService.download(sysFileInfoRequest, response);
-    }
-
-    /**
      * 根据附件IDS查询附件信息
      *
      * @param fileIds 附件IDS
@@ -154,7 +170,8 @@ public class SysFileInfoController {
      * @date 2020/12/27 13:17
      */
     @GetResource(name = "公有打包下载文件", path = "/sysFileInfo/publicPackagingDownload", requiredPermission = false, requiredLogin = false)
-    public void publicPackagingDownload(@RequestParam(value = "fileIds") String fileIds, HttpServletResponse response) {
+    public void publicPackagingDownload(@RequestParam(value = "fileIds") String fileIds) {
+        HttpServletResponse response = HttpServletUtil.getResponse();
         this.sysFileInfoService.packagingDownload(fileIds, YesOrNotEnum.N.getCode(), response);
     }
 
@@ -165,7 +182,8 @@ public class SysFileInfoController {
      * @date 2020/12/27 13:18
      */
     @GetResource(name = "私有打包下载文件", path = "/sysFileInfo/privatePackagingDownload")
-    public void privatePackagingDownload(@RequestParam(value = "fileIds") String fileIds, HttpServletResponse response) {
+    public void privatePackagingDownload(@RequestParam(value = "fileIds") String fileIds) {
+        HttpServletResponse response = HttpServletUtil.getResponse();
         this.sysFileInfoService.packagingDownload(fileIds, YesOrNotEnum.Y.getCode(), response);
     }
 
@@ -216,47 +234,5 @@ public class SysFileInfoController {
     public ResponseData detail(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
         return new SuccessResponseData(sysFileInfoService.detail(sysFileInfoRequest));
     }
-
-
-//    /**
-//     * 文件预览
-//     * <p>
-//     * 支持通过文件id预览，也支持直接通过bucket和obj名称预览
-//     *
-//     * @author fengshuonan
-//     * @date 2020/11/29 11:29
-//     */
-//    @GetResource(name = "文件预览", path = FILE_PRIVATE_PREVIEW_URL)
-//    public void preview(SysFileInfoRequest sysFileInfoRequest) {
-//        HttpServletResponse response = HttpServletUtil.getResponse();
-//
-//        // 请求参数不能为空
-//        if (sysFileInfoRequest == null) {
-//            String userTip = StrUtil.format(FileExceptionEnum.PREVIEW_EMPTY_ERROR.getUserTip(), "");
-//            throw new FileException(FileExceptionEnum.PREVIEW_EMPTY_ERROR, userTip);
-//        }
-//
-//        // 文件是-1则返回系统默认头像
-//        if (DEFAULT_AVATAR_FILE_OBJ_NAME.equals(sysFileInfoRequest.getFileObjectName())) {
-//            DownloadUtil.renderPreviewFile(response, Base64.decode(FileConfigExpander.getDefaultAvatarBase64()));
-//            return;
-//        }
-//
-//        // 文件id不为空，则根据文件id预览
-//        if (ObjectUtil.isNotEmpty(sysFileInfoRequest.getFileId())) {
-//            sysFileInfoService.previewByFileId(sysFileInfoRequest, response);
-//            return;
-//        }
-//
-//        // 文件bucketName和objectName不为空，则根据bucket预览
-//        if (ObjectUtil.isAllNotEmpty(sysFileInfoRequest.getFileBucket(), sysFileInfoRequest.getFileObjectName())) {
-//            sysFileInfoService.previewByBucketAndObjName(sysFileInfoRequest, response);
-//            return;
-//        }
-//
-//        // 提示用户信息不全
-//        String userTip = StrUtil.format(FileExceptionEnum.PREVIEW_EMPTY_ERROR.getUserTip(), sysFileInfoRequest);
-//        throw new FileException(FileExceptionEnum.PREVIEW_EMPTY_ERROR, userTip);
-//    }
 
 }
