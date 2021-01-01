@@ -3,7 +3,6 @@ package cn.stylefeng.roses.kernel.timer.modular.controller;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
-import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.timer.modular.param.SysTimersParam;
@@ -71,7 +70,7 @@ public class SysTimersController {
      * @date 2020/7/1 14:34
      */
     @PostResource(name = "启动定时任务", path = "/sysTimers/start")
-    public ResponseData start(@RequestBody @Validated(BaseRequest.groupOne.class) SysTimersParam sysTimersParam) {
+    public ResponseData start(@RequestBody @Validated(SysTimersParam.startTimer.class) SysTimersParam sysTimersParam) {
         sysTimersService.start(sysTimersParam);
         return new SuccessResponseData();
     }
@@ -83,7 +82,7 @@ public class SysTimersController {
      * @date 2020/7/1 14:34
      */
     @PostResource(name = "停止定时任务", path = "/sysTimers/stop")
-    public ResponseData stop(@RequestBody @Validated(BaseRequest.groupOne.class) SysTimersParam sysTimersParam) {
+    public ResponseData stop(@RequestBody @Validated(SysTimersParam.stopTimer.class) SysTimersParam sysTimersParam) {
         sysTimersService.stop(sysTimersParam);
         return new SuccessResponseData();
     }

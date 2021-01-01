@@ -26,7 +26,7 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "userId不能为空", groups = {edit.class, delete.class, detail.class, start.class, stop.class, grantRole.class, grantData.class, updateInfo.class, updatePwd.class, resetPwd.class, changeStatus.class, updateAvatar.class})
+    @NotNull(message = "userId不能为空", groups = {edit.class, delete.class, detail.class, grantRole.class, grantData.class, updateInfo.class, updatePwd.class, resetPwd.class, changeStatus.class, updateAvatar.class})
     private Long userId;
 
     /**
@@ -136,63 +136,54 @@ public class SysUserRequest extends BaseRequest {
      * 参数校验分组：修改密码
      */
     public @interface updatePwd {
-
     }
 
     /**
      * 参数校验分组：重置密码
      */
     public @interface resetPwd {
-
     }
 
     /**
      * 参数校验分组：修改头像
      */
     public @interface updateAvatar {
-
     }
 
     /**
      * 参数校验分组：停用
      */
     public @interface stop {
-
     }
 
     /**
      * 参数校验分组：启用
      */
     public @interface start {
-
     }
 
     /**
      * 参数校验分组：更新信息
      */
     public @interface updateInfo {
-
     }
 
     /**
      * 参数校验分组：授权角色
      */
     public @interface grantRole {
-
     }
 
     /**
      * 参数校验分组：授权数据
      */
     public @interface grantData {
-
     }
 
     /**
      * 参数校验分组：修改状态
      */
     public @interface changeStatus {
-
     }
 
 }
