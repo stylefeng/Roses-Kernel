@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -59,7 +60,7 @@ public class HrPosition extends BaseEntity {
     /**
      * 删除标记：Y-已删除，N-未删除
      */
-    @TableField("del_flag")
+    @TableField(value = "del_flag",fill = FieldFill.INSERT)
     private String delFlag;
 
 }
