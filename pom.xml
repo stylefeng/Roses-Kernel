@@ -73,6 +73,9 @@
         <!--字典业务模块-->
         <module>kernel-s-dict</module>
 
+        <!--系统消息模块-->
+        <module>kernel-d-message</module>
+
         <!--系统管理基础业务-->
         <module>kernel-s-system</module>
     </modules>
