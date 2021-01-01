@@ -1,8 +1,12 @@
 package cn.stylefeng.roses.kernel.menu.modular.factory;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
+import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiIndexMenuTreeNode;
 
@@ -40,7 +44,6 @@ public class LayuiMenusFactory {
         // 找出每个应用下的所有菜单
         for (String appCode : appCodes) {
 
-
             // 找出这个应用下的菜单
             List<SysMenu> appMenus = sysMenuList.stream()
                     .filter(i -> i.getAppCode().equals(appCode))
@@ -60,11 +63,23 @@ public class LayuiMenusFactory {
             // 将appCode和对应的树包装为实体
             LayuiAppIndexMenus layuiAppIndexMenus = new LayuiAppIndexMenus();
             layuiAppIndexMenus.setAppCode(appCode);
+            layuiAppIndexMenus.setAppName(getAppNameByAppCode(appCode));
             layuiAppIndexMenus.setLayuiIndexMenuTreeNodes(layuiIndexMenuTreeNodeList);
             resultList.add(layuiAppIndexMenus);
         }
 
         return resultList;
+    }
+
+    /**
+     * 获取应用名称通过应用编码
+     *
+     * @author fengshuonan
+     * @date 2021/1/1 18:09
+     */
+    private static String getAppNameByAppCode(String appCode) {
+        AppServiceApi appServiceApi = SpringUtil.getBean(AppServiceApi.class);
+        return appServiceApi.getAppNameByAppCode(appCode);
     }
 
 }

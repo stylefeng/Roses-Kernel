@@ -19,6 +19,11 @@ public class LayuiAppIndexMenus {
     private String appCode;
 
     /**
+     * 应用的中文名称
+     */
+    private String appName;
+
+    /**
      * 该应用对应的菜单树
      */
     private List<LayuiIndexMenuTreeNode> layuiIndexMenuTreeNodes;

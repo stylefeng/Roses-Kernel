@@ -22,4 +22,14 @@ public interface AppServiceApi {
      */
     Set<SimpleDict> getAppsByAppCodes(Set<String> appCodes);
 
+    /**
+     * 通过app编码获取app的中文名
+     *
+     * @param appCode 应用的编码
+     * @return 应用的中文名
+     * @author fengshuonan
+     * @date 2020/11/29 20:06
+     */
+    String getAppNameByAppCode(String appCode);
+
 }

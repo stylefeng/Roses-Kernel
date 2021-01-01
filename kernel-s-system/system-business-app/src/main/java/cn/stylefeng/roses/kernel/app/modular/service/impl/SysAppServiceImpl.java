@@ -141,6 +141,27 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         return simpleDicts;
     }
 
+    @Override
+    public String getAppNameByAppCode(String appCode) {
+
+        String emptyName = "空应用";
+
+        if (ObjectUtil.isEmpty(appCode)) {
+            return emptyName;
+        }
+
+        LambdaQueryWrapper<SysApp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(SysApp::getAppCode, appCode);
+        lambdaQueryWrapper.select(SysApp::getAppName);
+        SysApp sysApp = this.getOne(lambdaQueryWrapper);
+
+        if (sysApp == null || ObjectUtil.isEmpty(sysApp.getAppName())) {
+            return emptyName;
+        } else {
+            return sysApp.getAppName();
+        }
+    }
+
     /**
      * 获取系统应用
      *
