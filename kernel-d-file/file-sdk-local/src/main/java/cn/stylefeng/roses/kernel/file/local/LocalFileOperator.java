@@ -11,6 +11,7 @@ import cn.stylefeng.roses.kernel.file.exception.FileException;
 import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.expander.FileConfigExpander;
 import cn.stylefeng.roses.kernel.file.pojo.props.LocalFileProperties;
+import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -151,7 +152,10 @@ public class LocalFileOperator implements FileOperatorApi {
         // 获取登录用户的token
         String token = LoginContext.me().getToken();
 
-        return FileConfigExpander.getServerDeployHost() + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileBucket=" + bucketName + "&fileObjectName=" + key + "&token=" + token;
+        // 获取context-path
+        String contextPath = HttpServletUtil.getRequest().getContextPath();
+
+        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileBucket=" + bucketName + "&fileObjectName=" + key + "&token=" + token;
     }
 
     @Override
