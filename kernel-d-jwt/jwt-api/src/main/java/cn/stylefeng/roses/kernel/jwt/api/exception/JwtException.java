@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.jwt.api.exception;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.jwt.api.constants.JwtConstants;
 import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
@@ -12,8 +13,8 @@ import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
  */
 public class JwtException extends ServiceException {
 
-    public JwtException(AbstractExceptionEnum exception, String userTip) {
-        super(JwtConstants.JWT_MODULE_NAME, exception.getErrorCode(), userTip);
+    public JwtException(AbstractExceptionEnum exception, Object... params) {
+        super(JwtConstants.JWT_MODULE_NAME, exception.getErrorCode(), StrUtil.format(exception.getUserTip(), params));
     }
 
     public JwtException(AbstractExceptionEnum exception) {

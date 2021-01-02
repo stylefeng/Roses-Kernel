@@ -17,7 +17,12 @@ public enum JwtExceptionEnum implements AbstractExceptionEnum {
     /**
      * jwt解析异常
      */
-    JWT_PARSE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + JwtConstants.JWT_EXCEPTION_STEP_CODE + "01", "jwt解析错误！jwt为：{}");
+    JWT_PARSE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + JwtConstants.JWT_EXCEPTION_STEP_CODE + "01", "jwt解析错误！jwt为：{}"),
+
+    /**
+     * jwt过期了
+     */
+    JWT_EXPIRED_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + JwtConstants.JWT_EXCEPTION_STEP_CODE + "02", "jwt过期了！jwt为：{}");
 
     /**
      * 错误编码
