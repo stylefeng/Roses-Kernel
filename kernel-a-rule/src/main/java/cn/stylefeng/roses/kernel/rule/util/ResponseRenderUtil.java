@@ -24,6 +24,23 @@ public class ResponseRenderUtil {
      * @author fengshuonan
      * @date 2020/12/15 21:40
      */
+    public static void renderJsonResponse(HttpServletResponse response, Object responseData) {
+        response.setCharacterEncoding(CharsetUtil.UTF_8);
+        response.setContentType(ContentType.JSON.toString());
+        String errorResponseJsonData = JSON.toJSONString(responseData);
+        try {
+            response.getWriter().write(errorResponseJsonData);
+        } catch (IOException e) {
+            log.error("渲染http json信息错误！", e);
+        }
+    }
+
+    /**
+     * 渲染接口json信息
+     *
+     * @author fengshuonan
+     * @date 2020/12/15 21:40
+     */
     public static void renderErrorResponse(HttpServletResponse response,
                                            String code, String message, String exceptionClazz) {
         response.setCharacterEncoding(CharsetUtil.UTF_8);
