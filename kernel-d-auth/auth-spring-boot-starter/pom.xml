@@ -31,6 +31,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--jwt的sdk-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>jwt-sdk</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

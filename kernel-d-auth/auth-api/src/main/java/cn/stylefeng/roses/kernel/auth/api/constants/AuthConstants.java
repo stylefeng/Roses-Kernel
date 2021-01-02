@@ -43,4 +43,9 @@ public interface AuthConstants {
      */
     String DEFAULT_PASSWORD = "123456";
 
+    /**
+     * auth模块，jwt的失效时间，默认7天
+     */
+    Long DEFAULT_AUTH_JWT_TIMEOUT_SECONDS = 3600L * 24 * 7;
+
 }

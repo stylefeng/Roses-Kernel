@@ -1,5 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.controller;
 
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
@@ -58,12 +60,12 @@ public class SysUserController {
     }
 
     /**
-     * 更新信息
+     * 更新用户个人信息
      *
      * @author luojie
      * @date 2020/11/6 13:50
      */
-    @PostResource(name = "系统用户_更新信息", path = "/sysUser/updateInfo")
+    @PostResource(name = "系统用户_更新个人信息", path = "/sysUser/updateInfo")
     public ResponseData updateInfo(@RequestBody @Validated(SysUserRequest.updateInfo.class) SysUserRequest sysUserRequest) {
         sysUserService.updateInfo(sysUserRequest);
         return new SuccessResponseData();
@@ -87,9 +89,9 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:50
      */
-    @PostResource(name = "系统用户_修改密码", path = "/sysUser/updatePwd")
+    @PostResource(name = "系统用户_修改密码", path = "/sysUser/updatePassword")
     public ResponseData updatePwd(@RequestBody @Validated(SysUserRequest.updatePwd.class) SysUserRequest sysUserRequest) {
-        sysUserService.updatePwd(sysUserRequest);
+        sysUserService.updatePassword(sysUserRequest);
         return new SuccessResponseData();
     }
 
@@ -101,7 +103,7 @@ public class SysUserController {
      */
     @PostResource(name = "系统用户_重置密码", path = "/sysUser/resetPwd")
     public ResponseData resetPwd(@RequestBody @Validated(SysUserRequest.resetPwd.class) SysUserRequest sysUserRequest) {
-        sysUserService.resetPwd(sysUserRequest);
+        sysUserService.resetPassword(sysUserRequest);
         return new SuccessResponseData();
     }
 
@@ -221,6 +223,21 @@ public class SysUserController {
     @GetResource(name = "系统用户_导出", path = "/sysUser/export")
     public void export(HttpServletResponse response) {
         sysUserService.export(response);
+    }
+
+    /**
+     * 获取当前登录用户的信息
+     *
+     * @author fengshuonan
+     * @date 2021/1/1 19:01
+     */
+    @GetResource(name = "获取当前登录用户的信息", path = "/sysUser/currentUserInfo", requiredPermission = false)
+    public ResponseData currentUserInfo() {
+        LoginUser loginUser = LoginContext.me().getLoginUser();
+
+        SysUserRequest sysUserRequest = new SysUserRequest();
+        sysUserRequest.setUserId(loginUser.getUserId());
+        return new SuccessResponseData(sysUserService.detail(sysUserRequest));
     }
 
 }

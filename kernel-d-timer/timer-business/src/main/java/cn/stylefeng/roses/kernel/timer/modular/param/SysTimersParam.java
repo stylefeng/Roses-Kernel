@@ -20,7 +20,7 @@ public class SysTimersParam extends BaseRequest {
     /**
      * 定时器id
      */
-    @NotNull(message = "主键timerId不能为空", groups = {edit.class, detail.class, delete.class, groupOne.class})
+    @NotNull(message = "主键timerId不能为空", groups = {edit.class, detail.class, delete.class, startTimer.class, stopTimer.class})
     private Long timerId;
 
     /**
@@ -50,5 +50,17 @@ public class SysTimersParam extends BaseRequest {
      * 备注信息
      */
     private String remark;
+
+    /**
+     * 启用定时任务
+     */
+    public @interface startTimer {
+    }
+
+    /**
+     * 停止定时任务
+     */
+    public @interface stopTimer {
+    }
 
 }

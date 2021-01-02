@@ -2,8 +2,10 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.crypto.digest.BCrypt;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
+import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -85,6 +87,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private FileInfoApi fileInfoApi;
+
+    @Resource
+    private PasswordStoredEncryptApi passwordStoredEncryptApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -172,7 +177,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void updatePwd(SysUserRequest sysUserRequest) {
+    public void updatePassword(SysUserRequest sysUserRequest) {
+
+        // 获取当前用户的userId
+        LoginUser loginUser = LoginContext.me().getLoginUser();
+        sysUserRequest.setUserId(loginUser.getUserId());
+
         SysUser sysUser = this.querySysUser(sysUserRequest);
 
         // 新密码与原密码相同
@@ -181,21 +191,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         // 原密码错误
-        if (!BCrypt.checkpw(sysUserRequest.getPassword(), sysUser.getPassword())) {
+        if (!passwordStoredEncryptApi.checkPassword(sysUserRequest.getPassword(), sysUser.getPassword())) {
             throw new SystemModularException(SysUserExceptionEnum.USER_PWD_ERROR);
         }
 
-        sysUser.setPassword(BCrypt.hashpw(sysUserRequest.getNewPassword(), BCrypt.gensalt()));
+        sysUser.setPassword(passwordStoredEncryptApi.encrypt(sysUserRequest.getNewPassword()));
         this.updateById(sysUser);
     }
 
     @Override
-    public void resetPwd(SysUserRequest sysUserRequest) {
+    public void resetPassword(SysUserRequest sysUserRequest) {
         SysUser sysUser = this.querySysUser(sysUserRequest);
 
         // 获取系统配置的默认密码
         String password = AuthConfigExpander.getDefaultPassWord();
-        sysUser.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+        sysUser.setPassword(passwordStoredEncryptApi.encrypt(password));
 
         this.updateById(sysUser);
     }

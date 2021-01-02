@@ -99,34 +99,4 @@ public class BaseRequest implements Serializable {
     public @interface updateStatus {
     }
 
-    /**
-     * 预留组1，用来给特殊业务的参数校验用
-     */
-    public @interface groupOne {
-    }
-
-    /**
-     * 预留组2，用来给特殊业务的参数校验用
-     */
-    public @interface groupTwo {
-    }
-
-    /**
-     * 预留组3，用来给特殊业务的参数校验用
-     */
-    public @interface groupThree {
-    }
-
-    /**
-     * 预留组4，用来给特殊业务的参数校验用
-     */
-    public @interface groupFour {
-    }
-
-    /**
-     * 预留组5，用来给特殊业务的参数校验用
-     */
-    public @interface groupFive {
-    }
-
 }
