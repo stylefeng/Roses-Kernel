@@ -11,7 +11,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>kernel-d-message</artifactId>
+    <artifactId>kernel-s-message</artifactId>
 
     <packaging>pom</packaging>
 

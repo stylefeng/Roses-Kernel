@@ -1,26 +1,22 @@
-package cn.stylefeng.roses.kernel.message.api.pojo.manage;
+package cn.stylefeng.roses.kernel.message.api.pojo;
 
-import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 系统消息的查询参数
  *
  * @author liuhanqing
- * @date 2021/1/1 20:23
+ * @date 2021/1/2 21:23
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class MessageParam extends BaseRequest {
+public class MessageResponse implements Serializable {
 
     /**
      * 消息id
      */
-    @NotNull(message = "messageId不能为空", groups = {edit.class, delete.class, detail.class})
     private Long messageId;
 
     /**
