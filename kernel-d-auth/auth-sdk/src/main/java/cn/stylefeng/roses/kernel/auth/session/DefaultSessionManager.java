@@ -76,7 +76,7 @@ public class DefaultSessionManager implements SessionManagerApi {
         // 如果开启了cookie存储会话信息，则需要给HttpServletResponse添加一个cookie
         if (AuthConfigExpander.getSessionAddToCookie()) {
             String sessionCookieName = AuthConfigExpander.getSessionCookieName();
-            Cookie cookie = sessionCookieCreator.createCookie(sessionCookieName, token, Convert.toInt(sessionExpiredSeconds));
+            Cookie cookie = sessionCookieCreator.createCookie(sessionCookieName, token, Convert.toInt(AuthConfigExpander.getAuthJwtTimeoutSeconds()));
             HttpServletResponse response = HttpServletUtil.getResponse();
             response.addCookie(cookie);
         }
@@ -152,6 +152,17 @@ public class DefaultSessionManager implements SessionManagerApi {
         LoginUser loginUser = loginUserCache.get(token);
         if (loginUser != null) {
             loginUserCache.expire(token, sessionExpiredSeconds);
+        }
+    }
+
+    @Override
+    public void destroySessionCookie() {
+        // 如果开启了cookie存储会话信息，则需要给HttpServletResponse添加一个cookie
+        if (AuthConfigExpander.getSessionAddToCookie()) {
+            String sessionCookieName = AuthConfigExpander.getSessionCookieName();
+            Cookie cookie = sessionCookieCreator.createCookie(sessionCookieName, null, 0);
+            HttpServletResponse response = HttpServletUtil.getResponse();
+            response.addCookie(cookie);
         }
     }
 

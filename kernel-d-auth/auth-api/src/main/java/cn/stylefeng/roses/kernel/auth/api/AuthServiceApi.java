@@ -49,7 +49,9 @@ public interface AuthServiceApi {
     void logoutWithToken(String token);
 
     /**
-     * 校验token
+     * 校验jwt token的正确性，调用jwt工具类相关方法校验
+     * <p>
+     * 结果有三种，第一是jwt过期了，第二是用户随便写的错误token，第三种是token正确，token正确不会抛出异常
      *
      * @param token 某个用户的登录token
      * @throws AuthException 认证异常，如果token错误或过期，会有相关的异常抛出
@@ -57,16 +59,6 @@ public interface AuthServiceApi {
      * @date 2020/10/19 14:16
      */
     void validateToken(String token) throws AuthException;
-
-    /**
-     * 获取token是否正确
-     *
-     * @param token 某个用户的登录token
-     * @return true-token正确，false-token错误
-     * @author fengshuonan
-     * @date 2020/10/19 14:16
-     */
-    boolean getTokenFlag(String token);
 
     /**
      * 校验用户是否认证通过，认证是校验token的过程，校验失败会抛出异常

@@ -73,4 +73,14 @@ public interface SessionManagerApi {
      */
     void refreshSession(String token);
 
+    /**
+     * 销毁当前用户对应的会话cookie
+     * <p>
+     * 一般用在单体不分离版本中
+     *
+     * @author fengshuonan
+     * @date 2021/1/2 20:25
+     */
+    void destroySessionCookie();
+
 }
