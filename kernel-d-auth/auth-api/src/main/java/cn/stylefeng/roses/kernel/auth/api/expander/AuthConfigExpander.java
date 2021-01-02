@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.auth.api.expander;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 
@@ -32,11 +33,42 @@ public class AuthConfigExpander {
     }
 
     /**
+     * 用于auth校验的jwt的秘钥
+     *
+     * @author fengshuonan
+     * @date 2021/1/2 18:52
+     */
+    public static String getAuthJwtSecret() {
+        String sysJwtSecret = ConfigContext.me().getConfigValueNullable("SYS_AUTH_JWT_SECRET", String.class);
+
+        // 没配置就返回一个随机密码
+        if (sysJwtSecret == null) {
+            return RandomUtil.randomString(20);
+        } else {
+            return sysJwtSecret;
+        }
+    }
+
+    /**
+     * 用于auth模块权限校验的jwt失效时间
+     * <p>
+     * 这个时间也是“记住我”功能的过期时间，默认为7天
+     * <p>
+     * 如果登录的时候开启了“记住我”，则用户7天内免登录
+     *
+     * @author fengshuonan
+     * @date 2021/1/2 18:53
+     */
+    public static Long getAuthJwtTimeoutSeconds() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_AUTH_JWT_TIMEOUT_SECONDS", Long.class, DEFAULT_AUTH_JWT_TIMEOUT_SECONDS);
+    }
+
+    /**
      * 获取session过期时间，默认3600秒
      * <p>
      * 在这个时段内不操作，会将用户踢下线，从新登陆
      * <p>
-     * 关于记住我功能，如果开启了记住我功能，这个参数
+     * 如果开启了记住我功能，在session过期后会从新创建session
      *
      * @author fengshuonan
      * @date 2020/10/20 9:32

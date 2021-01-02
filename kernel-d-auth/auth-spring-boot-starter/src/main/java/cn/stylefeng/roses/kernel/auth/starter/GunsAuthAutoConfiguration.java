@@ -15,6 +15,9 @@ import cn.stylefeng.roses.kernel.auth.session.cache.logintoken.MemoryLoginTokenC
 import cn.stylefeng.roses.kernel.auth.session.cache.loginuser.MemoryLoginUserCache;
 import cn.stylefeng.roses.kernel.auth.session.cookie.DefaultSessionCookieCreator;
 import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
+import cn.stylefeng.roses.kernel.jwt.JwtTokenOperator;
+import cn.stylefeng.roses.kernel.jwt.api.JwtApi;
+import cn.stylefeng.roses.kernel.jwt.api.pojo.config.JwtConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,12 +35,32 @@ import java.util.Set;
 public class GunsAuthAutoConfiguration {
 
     /**
+     * jwt操作工具类的配置
+     *
+     * @author fengshuonan
+     * @date 2020/12/1 14:40
+     */
+    @Bean
+    @ConditionalOnMissingBean(SessionManagerApi.class)
+    public JwtApi jwtApi() {
+
+        JwtConfig jwtConfig = new JwtConfig();
+
+        // 从系统配置表中读取配置
+        jwtConfig.setJwtSecret(AuthConfigExpander.getAuthJwtSecret());
+        jwtConfig.setExpiredSeconds(AuthConfigExpander.getAuthJwtTimeoutSeconds());
+
+        return new JwtTokenOperator(jwtConfig);
+    }
+
+    /**
      * Bcrypt方式的密码加密
      *
      * @author fengshuonan
      * @date 2020/12/21 17:45
      */
     @Bean
+    @ConditionalOnMissingBean(SessionManagerApi.class)
     public PasswordStoredEncryptApi passwordStoredEncryptApi() {
         return new BcryptPasswordStoredEncrypt();
     }
@@ -49,6 +72,7 @@ public class GunsAuthAutoConfiguration {
      * @date 2020/12/21 17:45
      */
     @Bean
+    @ConditionalOnMissingBean(SessionManagerApi.class)
     public PasswordTransferEncryptApi passwordTransferEncryptApi() {
         String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCytSVn3ff7eBJckAFYwgJjqE9Zq2uAL4g+hkfQqGALdT8NJKALFxNzeSD/xTBLAJrtALWbN1dvyktoVNPAuuzCZO1BxYZNaAU3IKFaj73OSPzca5SGY0ibMw0KvEPkC3sZQeqBqx+VqYAqan90BeG/r9p36Eb0wrshj5XmsFeo6QIDAQAB";
         String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALK1JWfd9/t4ElyQAVjCAmOoT1mra4AviD6GR9CoYAt1Pw0koAsXE3N5IP/FMEsAmu0AtZs3V2/KS2hU08C67MJk7UHFhk1oBTcgoVqPvc5I/NxrlIZjSJszDQq8Q+QLexlB6oGrH5WpgCpqf3QF4b+v2nfoRvTCuyGPleawV6jpAgMBAAECgYBS9fUfetQcUWl0vwVhBu/FA+WSYxnMsEQ3gm7kVsX/i7Zxi4cgnt3QxXKkSg5ZQzaov6OPIuncY7UOAhMrbZtq/Hh8atdTVC/Ng/X9Bomodplq/+KTe/vIfWW5rlQAnMNFVaidxhCVRlRHNusapmj2vYwsiyI9kXUJNHryxtFC4QJBANtQuh3dtd79t3MVaC3TUD/EsGBe9TB3Eykbgv0muannC2Oq8Ci4vIp0NSA+FNCoB8ctgfKJUdBS8RLVnYyu3RcCQQDQmY+AuAXEpO9SgcYeRnQSOU2OSuC1wLt1MRVpPTdvE3bfRnkVxMrK0n3YilQWkQzfkERSG4kRFLIw605xPWn/AkEAiw3vQ9p8Yyu5MiXDjTKrchMyxZfPnHATXQANmJcCJ0DQDtymMxuWp66wtIXIStgPPnGTMAVzM0Qzh/6bS0Tf9wJAWj+1yFjVlghNyoJ+9qZAnYnRNhjLM5dZAxDjVI65pwLi0SKqTHLB0hJThBYE32aODUNba7KiEJPFrEiBvZh2fQJARbboHuHT0PqD1UTJGgodHlaw48kreBU+twext/9/jIqvwmFF88BmQgssHGW/tn4E6Qy3+rCCNWreEReY0gATYw==";
@@ -62,6 +86,7 @@ public class GunsAuthAutoConfiguration {
      * @date 2020/12/27 15:48
      */
     @Bean
+    @ConditionalOnMissingBean(SessionManagerApi.class)
     public SessionCookieCreator sessionCookieCreator() {
         return new DefaultSessionCookieCreator();
     }
