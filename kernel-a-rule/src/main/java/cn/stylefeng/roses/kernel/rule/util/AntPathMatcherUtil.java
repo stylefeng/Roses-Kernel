@@ -22,10 +22,10 @@ public class AntPathMatcherUtil {
      * @author fengshuonan
      * @date 2020/12/15 22:31
      */
-    public static Boolean getAntMatchFLag(String requestURI, List<String> antPatterns) {
+    public static Boolean getAntMatchFLag(String requestURI, String contextPath, List<String> antPatterns) {
         AntPathMatcher antPathMatcher = new AntPathMatcher();
         for (String notAuthResourcePattern : antPatterns) {
-            if (antPathMatcher.match(notAuthResourcePattern, requestURI)) {
+            if (antPathMatcher.match(contextPath + notAuthResourcePattern, requestURI)) {
                 return true;
             }
         }

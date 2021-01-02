@@ -1,11 +1,10 @@
 package cn.stylefeng.roses.kernel.menu.modular.factory;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
-import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiIndexMenuTreeNode;
@@ -32,6 +31,8 @@ public class LayuiMenusFactory {
      */
     public static List<LayuiAppIndexMenus> createLayuiAppIndexMenus(List<SysMenu> sysMenuList) {
 
+        String contextPath = HttpServletUtil.getRequest().getContextPath();
+
         ArrayList<LayuiAppIndexMenus> resultList = new ArrayList<>();
 
         // 找出用户有多少个应用的菜单
@@ -54,6 +55,10 @@ public class LayuiMenusFactory {
             for (SysMenu appMenu : appMenus) {
                 LayuiIndexMenuTreeNode layuiIndexMenuTreeNode = new LayuiIndexMenuTreeNode();
                 BeanUtil.copyProperties(appMenu, layuiIndexMenuTreeNode);
+
+                // 每个节点的url要加上context-path
+                layuiIndexMenuTreeNode.setRouter(contextPath + layuiIndexMenuTreeNode.getRouter());
+
                 layuiIndexMenuTreeNodes.add(layuiIndexMenuTreeNode);
             }
 
