@@ -97,7 +97,7 @@ public class AuthServiceImpl implements AuthServiceApi {
                 // 其他情况为返回jwt解析错误
                 throw new AuthException(TOKEN_PARSE_ERROR);
             }
-        } catch (Exception jwtSelfException) {
+        } catch (io.jsonwebtoken.JwtException jwtSelfException) {
             // 其他jwt解析错误
             throw new AuthException(TOKEN_PARSE_ERROR);
         }
