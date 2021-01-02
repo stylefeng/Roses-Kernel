@@ -62,7 +62,7 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @author fengshuonan
      * @date 2020/11/21 14:26
      */
-    void updatePwd(SysUserRequest sysUserRequest);
+    void updatePassword(SysUserRequest sysUserRequest);
 
     /**
      * 重置密码
@@ -71,7 +71,7 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @author luojie
      * @date 2020/11/6 13:47
      */
-    void resetPwd(SysUserRequest sysUserRequest);
+    void resetPassword(SysUserRequest sysUserRequest);
 
     /**
      * 修改头像

@@ -51,12 +51,12 @@ public enum SysUserExceptionEnum implements AbstractExceptionEnum {
     /**
      * 原密码错误
      */
-    USER_PWD_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "53", "原密码错误，请检查password参数"),
+    USER_PWD_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "53", "原密码错误，请重新输入"),
 
     /**
      * 新密码与原密码相同
      */
-    USER_PWD_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "54", "新密码与原密码相同，请检查newPassword参数"),
+    USER_PWD_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "54", "新密码与原密码相同，请更换新密码"),
 
     /**
      * 不能删除超级管理员

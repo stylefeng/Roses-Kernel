@@ -146,7 +146,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         // 3. 获取用户密码的加密值和用户的状态
         UserLoginInfoDTO userValidateInfo = userServiceApi.getUserLoginInfo(loginRequest.getAccount());
 
-        // 4. 校验用户密码是否正确(BCrypt算法)
+        // 4. 校验用户密码是否正确
         if (validatePassword) {
             Boolean checkResult = passwordStoredEncryptApi.checkPassword(loginRequest.getPassword(), userValidateInfo.getUserPasswordHexed());
             if (!checkResult) {

@@ -43,7 +43,7 @@ public class GunsAuthAutoConfiguration {
     }
 
     /**
-     * Bcrypt方式的密码加密
+     * RSA方式密码加密传输
      *
      * @author fengshuonan
      * @date 2020/12/21 17:45

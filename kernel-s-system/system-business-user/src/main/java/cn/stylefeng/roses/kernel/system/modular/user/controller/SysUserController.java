@@ -65,7 +65,7 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:50
      */
-    @PostResource(name = "更新用户个人信息", path = "/sysUser/updateInfo")
+    @PostResource(name = "系统用户_更新个人信息", path = "/sysUser/updateInfo")
     public ResponseData updateInfo(@RequestBody @Validated(SysUserRequest.updateInfo.class) SysUserRequest sysUserRequest) {
         sysUserService.updateInfo(sysUserRequest);
         return new SuccessResponseData();
@@ -89,9 +89,9 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:50
      */
-    @PostResource(name = "系统用户_修改密码", path = "/sysUser/updatePwd")
+    @PostResource(name = "系统用户_修改密码", path = "/sysUser/updatePassword")
     public ResponseData updatePwd(@RequestBody @Validated(SysUserRequest.updatePwd.class) SysUserRequest sysUserRequest) {
-        sysUserService.updatePwd(sysUserRequest);
+        sysUserService.updatePassword(sysUserRequest);
         return new SuccessResponseData();
     }
 
@@ -103,7 +103,7 @@ public class SysUserController {
      */
     @PostResource(name = "系统用户_重置密码", path = "/sysUser/resetPwd")
     public ResponseData resetPwd(@RequestBody @Validated(SysUserRequest.resetPwd.class) SysUserRequest sysUserRequest) {
-        sysUserService.resetPwd(sysUserRequest);
+        sysUserService.resetPassword(sysUserRequest);
         return new SuccessResponseData();
     }
 
