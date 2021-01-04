@@ -16,7 +16,6 @@ import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrPositionMa
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrPositionRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -86,11 +85,9 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
         // 先查询有没有这条记录，再更新
         HrPosition sysPosition = this.querySysPosition(hrPositionRequest);
 
-        LambdaUpdateWrapper<HrPosition> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(HrPosition::getPositionId, sysPosition.getPositionId());
-        updateWrapper.set(HrPosition::getStatusFlag, hrPositionRequest.getStatusFlag());
+        sysPosition.setStatusFlag(hrPositionRequest.getStatusFlag());
 
-        this.update(updateWrapper);
+        this.updateById(sysPosition);
     }
 
     @Override
