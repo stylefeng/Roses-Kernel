@@ -3,7 +3,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
 import org.apache.ibatis.annotations.Param;
 

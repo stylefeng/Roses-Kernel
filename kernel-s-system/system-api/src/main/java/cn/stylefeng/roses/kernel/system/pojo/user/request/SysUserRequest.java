@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.modular.user.pojo.request;
+package cn.stylefeng.roses.kernel.system.pojo.user.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.validators.date.DateValue;

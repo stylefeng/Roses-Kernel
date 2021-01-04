@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.message.api;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import cn.stylefeng.roses.kernel.message.api.pojo.MessageResponse;
 import cn.stylefeng.roses.kernel.message.api.pojo.MessageSendParam;
 import cn.stylefeng.roses.kernel.message.api.pojo.MessageParam;
@@ -37,6 +38,14 @@ public interface MessageApi {
     void updateReadFlag(MessageParam messageParam);
 
     /**
+     * 批量更新阅读状态
+     *
+     * @param messageIds 消息id字符串，多个用逗号分隔
+     * @author liuhanqing
+     * @date 2021/1/4 21:21
+     */
+    void batchReadFlagByMessageIds(String messageIds, MessageReadFlagEnum flagEnum);
+    /**
      * 删除系统消息
      *
      * @param messageId 消息id
@@ -52,7 +61,7 @@ public interface MessageApi {
      * @author liuhanqing
      * @date 2021/1/2 21:21
      */
-    void batchDeleteByMessageId(String messageIds);
+    void batchDeleteByMessageIds(String messageIds);
 
     /**
      * 查看系统消息

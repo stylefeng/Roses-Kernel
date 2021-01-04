@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserDataScope;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserDataScopeMapper;
-import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

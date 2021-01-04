@@ -55,6 +55,12 @@ public class SysMessage extends BaseEntity {
     private String messageType;
 
     /**
+     * 消息优先级
+     */
+    @TableField(value = "priority_level")
+    private String priorityLevel;
+
+    /**
      * 消息发送时间
      */
     @TableField(value = "message_send_time")

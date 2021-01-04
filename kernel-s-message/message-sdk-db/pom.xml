@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>kernel-d-message</artifactId>
+        <artifactId>kernel-s-message</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -28,6 +28,12 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>db-sdk-mp</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!--发送消息需要用到用户相关的接口-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 

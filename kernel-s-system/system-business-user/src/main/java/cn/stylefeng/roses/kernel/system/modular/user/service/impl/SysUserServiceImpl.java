@@ -26,7 +26,8 @@ import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
 import cn.stylefeng.roses.kernel.system.modular.user.factory.SysUserCreateFactory;
 import cn.stylefeng.roses.kernel.system.modular.user.factory.UserLoginInfoFactory;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserMapper;
-import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
@@ -52,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -449,6 +451,58 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public List<Long> getUserBindDataScope(Long userId) {
         return sysUserDataScopeService.getUserDataScopeIdList(userId);
+    }
+
+
+    @Override
+    public List<Long> queryAllUserIdList(SysUserRequest sysUserRequest) {
+
+        LambdaQueryWrapper<SysUser> wrapper = createWrapper(sysUserRequest);
+
+        // 排除超级管理员
+        wrapper.ne(SysUser::getSuperAdminFlag, YesOrNotEnum.Y.getCode());
+
+        // 只查询id
+        wrapper.select(SysUser::getUserId);
+        // 查询全部用户ID
+        Function<Object, Long> mapper = id -> Long.valueOf(id.toString());
+        List<Long> userIds = this.listObjs(wrapper, mapper);
+
+        return userIds;
+    }
+
+    /**
+     * 获取系统用户信息
+     *
+     * @author liuhanqing
+     * @date 2021/1/4 22:54
+     */
+    @Override
+    public SysUserDTO getUserInfo(Long userId) {
+        SysUser sysUser = this.getById(userId);
+        if (ObjectUtil.isNull(sysUser)) {
+            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST, userId);
+        }
+        SysUserDTO userDTO = new SysUserDTO();
+        BeanUtil.copyProperties(sysUser, userDTO);
+        return userDTO;
+    }
+
+    @Override
+    public Boolean userExist(Long userId) {
+        SysUserRequest userRequest = new SysUserRequest();
+        userRequest.setUserId(userId);
+        LambdaQueryWrapper<SysUser> wrapper = createWrapper(userRequest);
+
+        // 只查询id
+        wrapper.select(SysUser::getUserId);
+        // 查询用户
+        SysUser sysUser = this.getOne(wrapper);
+        if (sysUser == null || sysUser.getUserId() == null) {
+            return Boolean.FALSE;
+        }
+
+        return Boolean.TRUE;
     }
 
     /**

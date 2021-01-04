@@ -11,7 +11,7 @@ public interface MessageConstants {
     /**
      * 消息模块的名称
      */
-    String MESSAGE_MODULE_NAME = "kernel-d-message";
+    String MESSAGE_MODULE_NAME = "kernel-s-message";
 
     /**
      * 异常枚举的步进值

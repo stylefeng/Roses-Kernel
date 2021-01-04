@@ -39,6 +39,11 @@ public class MessageSendParam extends BaseRequest {
     private String messageType;
 
     /**
+     * 消息优先级
+     */
+    private String priorityLevel;
+
+    /**
      * 业务id
      */
     @NotBlank(message = "业务id不能为空", groups = {add.class, edit.class})

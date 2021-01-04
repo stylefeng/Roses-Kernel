@@ -40,6 +40,11 @@ public class MessageResponse implements Serializable {
     private String messageContent;
 
     /**
+     * 消息优先级
+     */
+    private String priorityLevel;
+
+    /**
      * 消息类型
      */
     private String messageType;

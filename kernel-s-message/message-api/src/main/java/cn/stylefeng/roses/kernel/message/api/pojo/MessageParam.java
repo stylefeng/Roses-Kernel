@@ -49,6 +49,11 @@ public class MessageParam extends BaseRequest {
     private String messageType;
 
     /**
+     * 消息优先级
+     */
+    private String priorityLevel;
+
+    /**
      * 消息发送时间
      */
     private Date messageSendTime;
