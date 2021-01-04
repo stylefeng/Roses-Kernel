@@ -55,6 +55,13 @@ public interface JwtApi {
 
     /**
      * 校验jwt token是否正确
+     * <p>
+     * 不正确的token有两种：
+     * <p>
+     * 1. 第一种是jwt token过期了
+     * 2. 第二种是jwt本身是错误的
+     * <p>
+     * 本方法只会响应正确还是错误
      *
      * @param token jwt的token
      * @return true-token正确，false-token错误或失效
@@ -64,7 +71,12 @@ public interface JwtApi {
     boolean validateToken(String token);
 
     /**
-     * 校验jwt token是否正确，如果jwt异常，或者jwt过期，则直接抛出异常
+     * 校验jwt token是否正确，如果参数token是错误的会抛出对应异常
+     * <p>
+     * 不正确的token有两种：
+     * <p>
+     * 1. 第一种是jwt token过期了
+     * 2. 第二种是jwt本身是错误的
      *
      * @param token jwt的token
      * @throws JwtException Jwt相关的业务异常
@@ -74,13 +86,13 @@ public interface JwtApi {
     void validateTokenWithException(String token) throws JwtException;
 
     /**
-     * 获取 token 的失效时间
+     * 校验jwt token是否失效了
      *
      * @param token jwt token
      * @return true-token失效，false-token没失效
      * @author fengshuonan
      * @date 2020/10/21 11:56
      */
-    boolean getTokenExpiredFlag(String token);
+    boolean validateTokenIsExpired(String token);
 
 }

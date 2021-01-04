@@ -4,9 +4,9 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.jwt.api.JwtApi;
 import cn.stylefeng.roses.kernel.jwt.api.exception.JwtException;
+import cn.stylefeng.roses.kernel.jwt.api.exception.enums.JwtExceptionEnum;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.config.JwtConfig;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import io.jsonwebtoken.Claims;
@@ -90,16 +90,23 @@ public class JwtTokenOperator implements JwtApi {
 
     @Override
     public void validateTokenWithException(String token) throws JwtException {
+
+        // 1.先判断是否是token过期了
+        boolean tokenIsExpired = this.validateTokenIsExpired(token);
+        if (tokenIsExpired) {
+            throw new JwtException(JwtExceptionEnum.JWT_EXPIRED_ERROR, token);
+        }
+
+        // 2.判断是否是jwt本身的错误
         try {
             getJwtPayloadClaims(token);
         } catch (io.jsonwebtoken.JwtException jwtException) {
-            String userTip = StrUtil.format(JWT_PARSE_ERROR.getUserTip(), token);
-            throw new JwtException(JWT_PARSE_ERROR, userTip);
+            throw new JwtException(JWT_PARSE_ERROR, token);
         }
     }
 
     @Override
-    public boolean getTokenExpiredFlag(String token) {
+    public boolean validateTokenIsExpired(String token) {
         try {
             Claims claims = getJwtPayloadClaims(token);
             final Date expiration = claims.getExpiration();

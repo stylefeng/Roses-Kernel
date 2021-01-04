@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.file.util.DownloadUtil;
 import cn.stylefeng.roses.kernel.file.util.PdfFileTypeUtil;
 import cn.stylefeng.roses.kernel.file.util.PicFileTypeUtil;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -365,7 +366,10 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         // 获取登录用户的token
         String token = LoginContext.me().getToken();
 
-        return FileConfigExpander.getServerDeployHost() + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
+        // 获取context-path
+        String contextPath = HttpServletUtil.getRequest().getContextPath();
+
+        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
     }
 
     /**

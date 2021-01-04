@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Set;
 
+import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.AUTH_EXPIRED_ERROR;
 import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.PERMISSION_RES_VALIDATE_ERROR;
-import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.TOKEN_ERROR;
 
 /**
  * 权限相关的service
@@ -37,7 +37,7 @@ public class PermissionServiceImpl implements PermissionServiceApi {
         // 2. 获取token对应的用户信息
         LoginUser session = sessionManagerApi.getSession(token);
         if (session == null) {
-            throw new AuthException(TOKEN_ERROR);
+            throw new AuthException(AUTH_EXPIRED_ERROR);
         }
 
         // 3. 验证用户有没有当前url的权限

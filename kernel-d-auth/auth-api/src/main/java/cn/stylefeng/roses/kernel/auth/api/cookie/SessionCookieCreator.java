@@ -1,7 +1,5 @@
 package cn.stylefeng.roses.kernel.auth.api.cookie;
 
-import cn.hutool.core.convert.Convert;
-
 import javax.servlet.http.Cookie;
 
 /**
@@ -27,7 +25,7 @@ public abstract class SessionCookieCreator {
      */
     public Cookie createCookie(String cookieName, String cookieValue, Integer sessionExpiredSeconds) {
         Cookie cookie = new Cookie(cookieName, cookieValue);
-        cookie.setMaxAge(Convert.toInt(sessionExpiredSeconds));
+        cookie.setMaxAge(sessionExpiredSeconds);
         this.expandCookieProp(cookie);
         return cookie;
     }

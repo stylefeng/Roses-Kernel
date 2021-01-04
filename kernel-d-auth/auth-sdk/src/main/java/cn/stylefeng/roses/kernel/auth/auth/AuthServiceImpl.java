@@ -14,6 +14,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
 import cn.stylefeng.roses.kernel.jwt.api.exception.JwtException;
+import cn.stylefeng.roses.kernel.jwt.api.exception.enums.JwtExceptionEnum;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
@@ -23,6 +24,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+
+import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.AUTH_EXPIRED_ERROR;
+import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.TOKEN_PARSE_ERROR;
 
 /**
  * 认证服务的实现
@@ -77,15 +81,26 @@ public class AuthServiceImpl implements AuthServiceApi {
     @Override
     public void validateToken(String token) throws AuthException {
         try {
+            // 1. 先校验jwt token本身是否有问题
             JwtContext.me().validateTokenWithException(token);
-        } catch (JwtException e) {
-            throw new AuthException(e.getErrorCode(), e.getUserTip());
-        }
-    }
 
-    @Override
-    public boolean getTokenFlag(String token) {
-        return JwtContext.me().validateToken(token);
+            // 2. 判断session里是否有这个token
+            LoginUser session = sessionManagerApi.getSession(token);
+            if (session == null) {
+                throw new AuthException(AUTH_EXPIRED_ERROR);
+            }
+        } catch (JwtException jwtException) {
+            // jwt token本身过期的话，返回 AUTH_EXPIRED_ERROR
+            if (JwtExceptionEnum.JWT_EXPIRED_ERROR.getErrorCode().equals(jwtException.getErrorCode())) {
+                throw new AuthException(AUTH_EXPIRED_ERROR);
+            } else {
+                // 其他情况为返回jwt解析错误
+                throw new AuthException(TOKEN_PARSE_ERROR);
+            }
+        } catch (io.jsonwebtoken.JwtException jwtSelfException) {
+            // 其他jwt解析错误
+            throw new AuthException(TOKEN_PARSE_ERROR);
+        }
     }
 
     @Override
@@ -114,7 +129,7 @@ public class AuthServiceImpl implements AuthServiceApi {
 
         // 6. 如果会话信息为空，则判定此次校验失败
         if (loginUser == null) {
-            throw new AuthException(AuthExceptionEnum.AUTH_ERROR);
+            throw new AuthException(AUTH_EXPIRED_ERROR);
         }
 
     }
