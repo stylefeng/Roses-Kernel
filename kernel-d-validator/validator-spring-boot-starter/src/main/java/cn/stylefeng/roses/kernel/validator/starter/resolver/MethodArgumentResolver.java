@@ -2,6 +2,8 @@ package cn.stylefeng.roses.kernel.validator.starter.resolver;
 
 import cn.stylefeng.roses.kernel.validator.starter.web.GunsValidator;
 import cn.stylefeng.roses.kernel.validator.starter.web.ValidatorRequestResponseBodyMethodProcessor;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -20,6 +22,7 @@ import java.util.Objects;
  * @date 2020/8/21 21:09
  */
 @Configuration
+@AutoConfigureBefore(ValidationAutoConfiguration.class)
 public class MethodArgumentResolver {
 
     @Resource
