@@ -9,7 +9,6 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Set;
 
@@ -29,7 +28,7 @@ public class ResourceFactory {
      */
     public static SysResource createResource(ResourceDefinition resourceDefinition) {
         SysResource resource = new SysResource();
-        BeanUtils.copyProperties(resourceDefinition, resource);
+        BeanUtil.copyProperties(resourceDefinition, resource, CopyOptions.create().ignoreError());
         resource.setResourceCode(resourceDefinition.getResourceCode());
 
         if (resourceDefinition.getRequiredLoginFlag()) {
@@ -42,6 +41,12 @@ public class ResourceFactory {
             resource.setRequiredPermissionFlag(YesOrNotEnum.Y.name());
         } else {
             resource.setRequiredPermissionFlag(YesOrNotEnum.N.name());
+        }
+
+        if (resourceDefinition.getViewFlag()) {
+            resource.setViewFlag(YesOrNotEnum.Y.name());
+        } else {
+            resource.setViewFlag(YesOrNotEnum.N.name());
         }
 
         // 转化校验组
@@ -80,6 +85,9 @@ public class ResourceFactory {
 
         // 设置是否需要权限认证标识，Y为需要权限认证
         resourceDefinition.setRequiredPermissionFlag(YesOrNotEnum.Y.name().equals(sysResource.getRequiredPermissionFlag()));
+
+        // 设置是否是视图类型
+        resourceDefinition.setViewFlag(YesOrNotEnum.Y.name().equals(sysResource.getViewFlag()));
 
         // 转化校验组
         if (ObjectUtil.isNotEmpty(sysResource.getValidateGroups())) {
