@@ -41,13 +41,13 @@ public class AntdMenusFactory {
             antdIndexMenuTreeNode.setName(sysMenu.getMenuName());
 
             // 菜单路由地址
-            antdIndexMenuTreeNode.setPath(sysMenu.getRouter());
-            antdIndexMenuTreeNode.setRouter(sysMenu.getRouter());
+            antdIndexMenuTreeNode.setPath(sysMenu.getAntdvRouter());
+            antdIndexMenuTreeNode.setRouter(sysMenu.getAntdvRouter());
 
             AntdIndexMenuTreeNode.Meta mateItem = new AntdIndexMenuTreeNode.Meta();
 
             // 菜单图标
-            mateItem.setIcon(sysMenu.getIcon());
+            mateItem.setIcon(sysMenu.getAntdvIcon());
 
             // 设置是否隐藏，true就是隐藏
             mateItem.setInvisible(YesOrNotEnum.N.getCode().equals(sysMenu.getVisible()));

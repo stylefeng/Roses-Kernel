@@ -37,12 +37,12 @@ public class LayuiIndexMenuTreeNode implements AbstractTreeNode {
     /**
      * 节点的url
      */
-    private String router;
+    private String layuiPath;
 
     /**
      * 节点图标
      */
-    private String icon;
+    private String layuiIcon;
 
     /**
      * 子节点的集合

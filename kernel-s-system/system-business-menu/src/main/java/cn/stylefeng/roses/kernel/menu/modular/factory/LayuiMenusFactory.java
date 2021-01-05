@@ -57,7 +57,7 @@ public class LayuiMenusFactory {
                 BeanUtil.copyProperties(appMenu, layuiIndexMenuTreeNode);
 
                 // 每个节点的url要加上context-path
-                layuiIndexMenuTreeNode.setRouter(contextPath + layuiIndexMenuTreeNode.getRouter());
+                layuiIndexMenuTreeNode.setLayuiPath(contextPath + appMenu.getLayuiPath());
 
                 layuiIndexMenuTreeNodes.add(layuiIndexMenuTreeNode);
             }
