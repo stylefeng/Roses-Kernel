@@ -22,9 +22,11 @@ import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.OrganizationExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
+import cn.stylefeng.roses.kernel.system.modular.organization.factory.OrganizationFactory;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrOrganizationMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
+import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -131,14 +133,10 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
     @Override
     public void updateStatus(HrOrganizationRequest hrOrganizationRequest) {
-
-        // 先查询有没有这条记录再更新
+        // 先查询有没有这条记录，再更新
         HrOrganization hrOrganization = this.queryOrganization(hrOrganizationRequest);
-
-        LambdaUpdateWrapper<HrOrganization> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(HrOrganization::getOrgId, hrOrganization.getOrgId());
-        updateWrapper.set(HrOrganization::getStatusFlag, hrOrganizationRequest.getStatusFlag());
-        this.update(updateWrapper);
+        hrOrganization.setStatusFlag(hrOrganizationRequest.getStatusFlag());
+        this.updateById(hrOrganization);
     }
 
     @Override
@@ -220,6 +218,51 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
         // 构建树并返回
         return new DefaultTreeBuildFactory<DefaultTreeNode>().doTreeBuild(treeNodeList);
+    }
+
+    @Override
+    public List<LayuiOrganizationTreeNode> treeLayui(HrOrganizationRequest hrOrganizationRequest) {
+        // 定义返回结果
+        List<LayuiOrganizationTreeNode> treeNodeList = CollectionUtil.newArrayList();
+        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
+
+        // 如果是超级管理员 或 数据范围是所有，则不过滤数据范围
+        boolean needToDataScope = true;
+        if (LoginContext.me().getSuperAdminFlag()) {
+            Set<DataScopeTypeEnum> dataScopeTypes = LoginContext.me().getLoginUser().getDataScopeTypeEnums();
+            if (dataScopeTypes != null && dataScopeTypes.contains(DataScopeTypeEnum.ALL)) {
+                needToDataScope = false;
+            }
+        }
+
+        // 如果需要数据范围过滤，则获取用户的数据范围，拼接查询条件
+        if (needToDataScope) {
+            Set<Long> dataScope = LoginContext.me().getLoginUser().getDataScopeOrganizationIds();
+
+            // 数据范围没有，直接返回空
+            if (ObjectUtil.isEmpty(dataScope)) {
+                return treeNodeList;
+            }
+
+            // 根据组织机构数据范围的上级组织，用于展示完整的树形结构
+            Set<Long> allLevelParentIdsByOrganizations = this.findAllLevelParentIdsByOrganizations(dataScope);
+
+            // 拼接查询条件
+            queryWrapper.in(HrOrganization::getOrgId, allLevelParentIdsByOrganizations);
+        }
+
+        // 只查询未删除的
+        queryWrapper.eq(HrOrganization::getDelFlag, YesOrNotEnum.N.getCode());
+
+        // 根据排序升序排列，序号越小越在前
+        queryWrapper.orderByAsc(HrOrganization::getOrgSort);
+        // 组装节点
+        List<HrOrganization> hrOrganizationList = this.list(queryWrapper);
+        hrOrganizationList.forEach(hrOrganization -> {
+            LayuiOrganizationTreeNode treeNode = OrganizationFactory.parseOrganizationTreeNode(hrOrganization);
+            treeNodeList.add(treeNode);
+        });
+        return new DefaultTreeBuildFactory<LayuiOrganizationTreeNode>().doTreeBuild(treeNodeList);
     }
 
     @Override

@@ -4,6 +4,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
+import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -92,6 +93,16 @@ public interface HrOrganizationService extends IService<HrOrganization> {
      * @date 2020/11/6 13:41
      */
     List<DefaultTreeNode> tree(HrOrganizationRequest hrOrganizationRequest);
+
+    /**
+     * 获取组织架构树
+     *
+     * @param hrOrganizationRequest 查询参数
+     * @return 系统组织机构树
+     * @author chenjinlong
+     * @date 2020/11/6 13:41
+     */
+    List<LayuiOrganizationTreeNode> treeLayui(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 查询所有参数组织架构id集合的所有层级的父id，包含父级的父级等

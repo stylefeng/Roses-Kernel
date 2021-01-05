@@ -107,5 +107,27 @@ public class HrOrganizationController {
         return new SuccessResponseData(hrOrganizationService.list(hrOrganizationRequest));
     }
 
+    /**
+     * 获取全部系统组织机构树，用于新增，编辑时选择上级节点
+     *
+     * @author chenjinlong
+     * @date 2021/01/05 15:55
+     */
+    @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/tree")
+    public ResponseData tree(HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData(hrOrganizationService.tree(hrOrganizationRequest));
+    }
+
+
+    /**
+     * 获取全部系统组织机构树，用于新增，编辑时选择上级节点
+     *
+     * @author chenjinlong
+     * @date 2021/01/05 15:55
+     */
+    @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/treeLayui")
+    public ResponseData treeLayui(HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData(hrOrganizationService.treeLayui(hrOrganizationRequest));
+    }
 
 }
