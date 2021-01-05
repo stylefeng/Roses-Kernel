@@ -480,21 +480,21 @@ INSERT INTO `sys_resource` VALUES (1346375639627776004, 'guns', 'guns$dict$get_d
 -- Table structure for sys_role
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
-CREATE TABLE `sys_role`  (
+CREATE TABLE `sys_role` (
   `role_id` bigint(20) NOT NULL COMMENT '主键id',
-  `role_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色名称',
-  `role_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色编码',
-  `role_sort` decimal(10, 2) NOT NULL COMMENT '序号',
-  `data_scope_type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '数据范围类型：10-全部数据，20-本部门及以下数据，30-本部门数据，40-仅本人数据，50-自定义数据',
-  `status_flag` tinyint(4) NOT NULL DEFAULT 0 COMMENT '状态：1-启用，2-禁用',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-已删除，N-未删除',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `create_user` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `update_user` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+  `role_name` varchar(100) NOT NULL COMMENT '角色名称',
+  `role_code` varchar(100) NOT NULL COMMENT '角色编码',
+  `role_sort` decimal(10,2) NOT NULL COMMENT '序号',
+  `data_scope_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '数据范围类型：10-仅本人数据，20-本部门数据，30-本部门及以下数据，40-指定部门数据，50-全部数据',
+  `status_flag` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：1-启用，2-禁用',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `del_flag` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-已删除，N-未删除',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `update_user` bigint(20) DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='系统角色表';
 
 -- ----------------------------
 -- Records of sys_role
