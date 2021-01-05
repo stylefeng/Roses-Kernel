@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.system;
 
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 
 import java.util.Date;
@@ -72,5 +73,11 @@ public interface UserServiceApi {
      * @date 2020/11/21 12:15
      */
     List<Long> getUserBindDataScope(Long userId);
+
+    /**
+     * 获取在线用户列表
+     * @return
+     */
+    List<LoginUser> onlineUserList();
 
 }

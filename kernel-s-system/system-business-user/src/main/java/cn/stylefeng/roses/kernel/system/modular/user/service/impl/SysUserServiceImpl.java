@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
@@ -90,6 +91,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private PasswordStoredEncryptApi passwordStoredEncryptApi;
+
+    @Resource
+    private SessionManagerApi sessionManagerApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -449,6 +453,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public List<Long> getUserBindDataScope(Long userId) {
         return sysUserDataScopeService.getUserDataScopeIdList(userId);
+    }
+
+    @Override
+    public List<LoginUser> onlineUserList() {
+        return sessionManagerApi.onlineUserList();
     }
 
     /**

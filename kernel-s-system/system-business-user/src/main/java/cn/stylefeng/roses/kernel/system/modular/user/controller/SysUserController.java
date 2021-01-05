@@ -240,4 +240,15 @@ public class SysUserController {
         return new SuccessResponseData(sysUserService.detail(sysUserRequest));
     }
 
+    /**
+     * 当前在线用户列表
+     *
+     * @author fengshuonan
+     * @date 2021/1/1 19:01
+     */
+    @GetResource(name = "当前在线用户列表", path = "/sysUser/onlineUserList", requiredPermission = false)
+    public ResponseData onlineUserList() {
+        return new SuccessResponseData(sysUserService.onlineUserList());
+    }
+
 }
