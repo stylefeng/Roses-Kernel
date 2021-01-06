@@ -51,7 +51,12 @@ public enum AppExceptionEnum implements AbstractExceptionEnum {
     /**
      * 该应用下有菜单
      */
-    APP_CANNOT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "75", "该应用下有菜单，无法删除");
+    APP_CANNOT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "75", "该应用下有菜单，无法删除"),
+
+    /**
+     * 激活的应用不能被禁用
+     */
+    CANT_DISABLE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "76", "激活的应用不能被禁用");
 
     /**
      * 错误编码

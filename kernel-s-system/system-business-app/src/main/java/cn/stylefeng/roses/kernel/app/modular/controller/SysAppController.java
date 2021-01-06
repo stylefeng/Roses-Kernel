@@ -51,6 +51,30 @@ public class SysAppController {
     }
 
     /**
+     * 将应用设为默认应用，用户进入系统会默认进这个应用的菜单
+     *
+     * @author fengshuonan
+     * @date 2020/6/29 16:49
+     */
+    @PostResource(name = "设为默认应用", path = "/sysApp/updateActiveFlag")
+    public ResponseData setAsDefault(@RequestBody @Validated(SysAppRequest.updateActiveFlag.class) SysAppRequest sysAppParam) {
+        sysAppService.updateActiveFlag(sysAppParam);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 修改应用状态
+     *
+     * @author fengshuonan
+     * @date 2020/6/29 16:49
+     */
+    @PostResource(name = "修改应用状态", path = "/sysApp/updateStatus")
+    public ResponseData updateStatus(@RequestBody @Validated(SysAppRequest.updateStatus.class) SysAppRequest sysAppParam) {
+        sysAppService.updateStatus(sysAppParam);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 删除系统应用
      *
      * @author fengshuonan
@@ -93,18 +117,6 @@ public class SysAppController {
     @GetResource(name = "系统应用列表", path = "/sysApp/list")
     public ResponseData list(SysAppRequest sysAppParam) {
         return new SuccessResponseData(sysAppService.list(sysAppParam));
-    }
-
-    /**
-     * 设为默认应用
-     *
-     * @author fengshuonan
-     * @date 2020/6/29 16:49
-     */
-    @PostResource(name = "设为默认应用", path = "/sysApp/setAsDefault")
-    public ResponseData setAsDefault(@RequestBody @Validated(SysAppRequest.detail.class) SysAppRequest sysAppParam) {
-        sysAppService.setAsDefault(sysAppParam);
-        return new SuccessResponseData();
     }
 
 }

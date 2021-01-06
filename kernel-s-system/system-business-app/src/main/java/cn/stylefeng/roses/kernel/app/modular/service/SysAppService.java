@@ -25,9 +25,9 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 package cn.stylefeng.roses.kernel.app.modular.service;
 
 import cn.stylefeng.roses.kernel.app.modular.entity.SysApp;
-import com.baomidou.mybatisplus.extension.service.IService;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.system.pojo.app.request.SysAppRequest;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -56,6 +56,24 @@ public interface SysAppService extends IService<SysApp> {
      * @date 2020/3/25 14:58
      */
     void edit(SysAppRequest sysAppParam);
+
+    /**
+     * 将应用设为默认应用，用户进入系统会默认进这个应用的菜单
+     *
+     * @param sysAppParam 设为默认应用参数
+     * @author fengshuonan
+     * @date 2020/6/29 16:49
+     */
+    void updateActiveFlag(SysAppRequest sysAppParam);
+
+    /**
+     * 更新状态
+     *
+     * @param sysAppParam 请求参数
+     * @author fengshuonan
+     * @date 2021/1/6 14:30
+     */
+    void updateStatus(SysAppRequest sysAppParam);
 
     /**
      * 删除系统应用
@@ -95,14 +113,5 @@ public interface SysAppService extends IService<SysApp> {
      * @date 2020/4/19 14:56
      */
     List<SysApp> list(SysAppRequest sysAppParam);
-
-    /**
-     * 设为默认应用
-     *
-     * @param sysAppParam 设为默认应用参数
-     * @author fengshuonan
-     * @date 2020/6/29 16:49
-     */
-    void setAsDefault(SysAppRequest sysAppParam);
 
 }

@@ -14,6 +14,7 @@ import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.MenuServiceApi;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.AppExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.app.request.SysAppRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -43,11 +44,14 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @Override
     public void add(SysAppRequest sysAppRequest) {
 
-        // 检测是否有已经激活的应用，激活了就不能再设置激活了
-        checkParamHaveActive(sysAppRequest, false);
-
         SysApp sysApp = new SysApp();
-        BeanUtil.copyProperties(sysAppRequest, sysApp);
+
+        // 设置名称和编码
+        sysApp.setAppName(sysAppRequest.getAppName());
+        sysApp.setAppCode(sysAppRequest.getAppCode());
+
+        // 默认不激活
+        sysApp.setActiveFlag(YesOrNotEnum.N.getCode());
 
         // 设为启用
         sysApp.setStatusFlag(StatusEnum.ENABLE.getCode());
@@ -58,16 +62,49 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @Override
     public void edit(SysAppRequest sysAppRequest) {
 
-        // 检测是否有已经激活的应用，激活了就不能再设置激活了
-        checkParamHaveActive(sysAppRequest, true);
-
         SysApp sysApp = this.querySysApp(sysAppRequest);
         BeanUtil.copyProperties(sysAppRequest, sysApp);
 
-        //不能修改状态，用修改状态接口修改状态
+        // 不能修改编码
+        sysApp.setAppCode(null);
+
+        // 不能修改状态，修改状态接口修改状态
         sysApp.setStatusFlag(null);
 
+        // 不能修改激活，激活接口激活应用
+        sysApp.setActiveFlag(null);
+
         this.updateById(sysApp);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateActiveFlag(SysAppRequest sysAppRequest) {
+        SysApp currentApp = this.querySysApp(sysAppRequest);
+
+        // 所有已激活的改为未激活
+        LambdaUpdateWrapper<SysApp> sysAppLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        sysAppLambdaUpdateWrapper.set(SysApp::getActiveFlag, YesOrNotEnum.N.getCode());
+        sysAppLambdaUpdateWrapper.eq(SysApp::getActiveFlag, YesOrNotEnum.Y.getCode());
+        this.update(sysAppLambdaUpdateWrapper);
+
+        // 当前的设置为已激活
+        currentApp.setActiveFlag(YesOrNotEnum.Y.getCode());
+        this.updateById(currentApp);
+    }
+
+    @Override
+    public void updateStatus(SysAppRequest sysAppParam) {
+        SysApp currentApp = this.querySysApp(sysAppParam);
+
+        // 激活状态的不能被禁用
+        if (YesOrNotEnum.Y.getCode().equals(currentApp.getActiveFlag())
+                && StatusEnum.DISABLE.getCode().equals(sysAppParam.getStatusFlag())) {
+            throw new SystemModularException(AppExceptionEnum.CANT_DISABLE);
+        }
+
+        currentApp.setStatusFlag(sysAppParam.getStatusFlag());
+        this.updateById(currentApp);
     }
 
     @Override
@@ -103,22 +140,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     public List<SysApp> list(SysAppRequest sysAppRequest) {
         LambdaQueryWrapper<SysApp> wrapper = createWrapper(sysAppRequest);
         return this.list(wrapper);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void setAsDefault(SysAppRequest sysAppRequest) {
-        SysApp currentApp = this.querySysApp(sysAppRequest);
-
-        // 所有已激活的改为未激活
-        LambdaUpdateWrapper<SysApp> sysAppLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        sysAppLambdaUpdateWrapper.set(SysApp::getActiveFlag, YesOrNotEnum.N.getCode());
-        sysAppLambdaUpdateWrapper.eq(SysApp::getActiveFlag, YesOrNotEnum.Y.getCode());
-        this.update(sysAppLambdaUpdateWrapper);
-
-        // 当前的设置为已激活
-        currentApp.setActiveFlag(YesOrNotEnum.Y.getCode());
-        this.updateById(currentApp);
     }
 
     @Override
@@ -174,32 +195,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
             throw new ServiceException(AppExceptionEnum.APP_NOT_EXIST);
         }
         return sysApp;
-    }
-
-    /**
-     * 检测是否有已经激活的应用，激活了就不能再设置激活了
-     *
-     * @author fengshuonan
-     * @date 2020/11/24 21:29
-     */
-    private void checkParamHaveActive(SysAppRequest sysAppRequest, boolean excludeSelf) {
-
-        // 查询激活状态有无已经有Y的
-        LambdaQueryWrapper<SysApp> appQueryWrapperByActive = new LambdaQueryWrapper<>();
-        appQueryWrapperByActive.eq(SysApp::getActiveFlag, YesOrNotEnum.Y.getCode())
-                .eq(SysApp::getDelFlag, YesOrNotEnum.N.getCode());
-
-        // 排除自己
-        if (excludeSelf) {
-            appQueryWrapperByActive.ne(SysApp::getAppId, sysAppRequest.getAppId());
-        }
-
-        int countByActive = this.count(appQueryWrapperByActive);
-
-        // 只判断激活状态为Y时候数量是否大于1了
-        if (countByActive >= 1 && YesOrNotEnum.Y.getCode().equals(sysAppRequest.getActiveFlag())) {
-            throw new ServiceException(AppExceptionEnum.APP_ACTIVE_REPEAT);
-        }
     }
 
     /**
