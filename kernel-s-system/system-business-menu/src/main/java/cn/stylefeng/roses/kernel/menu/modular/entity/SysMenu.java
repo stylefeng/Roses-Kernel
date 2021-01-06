@@ -136,6 +136,12 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     @TableField(exist = false)
     private List children;
 
+    /**
+     * 应用名称
+     */
+    @TableField(exist = false)
+    private String appName;
+
     @Override
     public String getNodeId() {
         return menuId.toString();

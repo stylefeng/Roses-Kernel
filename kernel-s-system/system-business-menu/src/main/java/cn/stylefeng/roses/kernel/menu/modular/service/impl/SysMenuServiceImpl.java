@@ -42,6 +42,7 @@ import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.constants.SymbolConstant;
@@ -60,6 +61,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -78,6 +80,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Resource
     private RoleServiceApi roleServiceApi;
+
+    @Resource
+    private AppServiceApi appServiceApi;
 
     @Override
     public void add(SysMenuRequest sysMenuRequest) {
@@ -145,7 +150,22 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         LambdaQueryWrapper<SysMenu> wrapper = createWrapper(sysMenuRequest);
 
-        return this.list(wrapper);
+        List<SysMenu> list = this.list(wrapper);
+
+        // 应用编码转化为应用名称
+        HashMap<String, String> appCodeName = new HashMap<>();
+        Set<String> appCodeSet = list.stream().map(SysMenu::getAppCode).collect(Collectors.toSet());
+        for (String appCode : appCodeSet) {
+            String appName = appServiceApi.getAppNameByAppCode(appCode);
+            appCodeName.put(appCode, appName);
+        }
+
+        // 查询对应菜单的应用名称
+        for (SysMenu sysMenu : list) {
+            sysMenu.setAppName(appCodeName.get(sysMenu.getAppCode()));
+        }
+
+        return list;
     }
 
     @Override
@@ -314,6 +334,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             // 根据菜单名称模糊查询
             if (ObjectUtil.isNotEmpty(sysMenuRequest.getMenuName())) {
                 queryWrapper.like(SysMenu::getMenuName, sysMenuRequest.getMenuName());
+            }
+
+            // 根据菜单编码模糊查询
+            if (ObjectUtil.isNotEmpty(sysMenuRequest.getMenuCode())) {
+                queryWrapper.like(SysMenu::getMenuCode, sysMenuRequest.getMenuCode());
             }
         }
 
