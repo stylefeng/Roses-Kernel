@@ -54,6 +54,7 @@ import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -61,6 +62,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -166,6 +168,24 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
 
         return list;
+    }
+
+    @Override
+    public List<ZTreeNode> layuiSelectParentMenuTreeList() {
+
+        ArrayList<ZTreeNode> zTreeNodes = new ArrayList<>();
+
+        List<SysMenu> allMenus = this.list();
+        for (SysMenu sysMenu : allMenus) {
+            ZTreeNode zTreeNode = new ZTreeNode();
+            zTreeNode.setId(sysMenu.getMenuId());
+            zTreeNode.setpId(sysMenu.getMenuParentId());
+            zTreeNode.setName(sysMenu.getMenuName());
+            zTreeNode.setOpen(false);
+            zTreeNodes.add(zTreeNode);
+        }
+
+        return zTreeNodes;
     }
 
     @Override

@@ -7,11 +7,13 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
+import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 系统菜单控制器
@@ -82,6 +84,17 @@ public class SysMenuController {
     @GetResource(name = "获取菜单列表（layui版本）", path = "/sysMenu/layuiList")
     public ResponseData layuiList(SysMenuRequest sysMenuRequest) {
         return new SuccessResponseData(sysMenuService.layuiList(sysMenuRequest));
+    }
+
+    /**
+     * 获取菜单的树形列表（用于选择上级菜单）（layui版本）
+     *
+     * @author fengshuonan
+     * @date 2021/1/6 17:09
+     */
+    @GetResource(name = "获取菜单的树形列表（用于选择上级菜单）（layui版本）", path = "/sysMenu/layuiSelectParentMenuTreeList")
+    public List<ZTreeNode> layuiSelectParentMenuTreeList() {
+        return sysMenuService.layuiSelectParentMenuTreeList();
     }
 
     /**
