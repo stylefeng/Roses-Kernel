@@ -118,7 +118,6 @@ public class HrOrganizationController {
         return new SuccessResponseData(hrOrganizationService.tree(hrOrganizationRequest));
     }
 
-
     /**
      * 获取全部系统组织机构树，用于新增，编辑时选择上级节点
      *

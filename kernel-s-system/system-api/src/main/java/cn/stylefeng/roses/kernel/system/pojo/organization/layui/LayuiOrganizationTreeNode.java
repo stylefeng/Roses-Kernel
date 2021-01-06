@@ -14,7 +14,6 @@ import java.util.List;
 @Data
 public class LayuiOrganizationTreeNode implements AbstractTreeNode {
 
-
     /**
      * 父id，一级节点父id是0
      */
@@ -34,7 +33,6 @@ public class LayuiOrganizationTreeNode implements AbstractTreeNode {
      * 是否展开状态 不展开-false 展开-true
      */
     private boolean spread = true;
-
 
     /**
      * 子节点的集合
