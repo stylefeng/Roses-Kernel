@@ -1,5 +1,7 @@
 package cn.stylefeng.roses.kernel.system.pojo.ztree;
 
+import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
+
 /**
  * jquery ztree 插件的节点封装
  *
@@ -47,10 +49,10 @@ public class ZTreeNode {
     public static ZTreeNode createParent() {
         ZTreeNode zTreeNode = new ZTreeNode();
         zTreeNode.setChecked(true);
-        zTreeNode.setId(0L);
+        zTreeNode.setId(SystemConstants.DEFAULT_PARENT_ID);
         zTreeNode.setName("顶级");
         zTreeNode.setOpen(true);
-        zTreeNode.setpId(0L);
+        zTreeNode.setpId(SystemConstants.VIRTUAL_ROOT_PARENT_ID);
         return zTreeNode;
     }
 

@@ -110,6 +110,16 @@ public class SysMenuRequest extends BaseRequest {
     private String remark;
 
     /**
+     * 菜单的路径，适用于layui-beetl版本
+     */
+    private String layuiPath;
+
+    /**
+     * 菜单的图标，适用于layui-beetl版本
+     */
+    private String layuiIcon;
+
+    /**
      * 获取主页左侧菜单列表（适配Antd Vue的版本）
      */
     public @interface getAppMenusAntdVue {

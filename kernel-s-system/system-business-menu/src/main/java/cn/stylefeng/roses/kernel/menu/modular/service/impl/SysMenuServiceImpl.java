@@ -185,6 +185,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             zTreeNodes.add(zTreeNode);
         }
 
+        // 创建顶级节点
+        zTreeNodes.add(ZTreeNode.createParent());
+
         return zTreeNodes;
     }
 
