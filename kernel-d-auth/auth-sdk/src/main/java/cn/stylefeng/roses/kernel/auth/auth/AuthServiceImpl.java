@@ -70,6 +70,7 @@ public class AuthServiceImpl implements AuthServiceApi {
     public void logout() {
         String token = LoginContext.me().getToken();
         logoutWithToken(token);
+        sessionManagerApi.destroySessionCookie();
     }
 
     @Override
