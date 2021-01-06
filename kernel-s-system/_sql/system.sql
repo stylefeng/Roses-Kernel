@@ -11,7 +11,7 @@
  Target Server Version : 50732
  File Encoding         : 65001
 
- Date: 05/01/2021 16:44:54
+ Date: 06/01/2021 18:00:12
 */
 
 SET NAMES utf8mb4;
@@ -278,7 +278,7 @@ CREATE TABLE `sys_log`  (
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu`  (
   `menu_id` bigint(20) NOT NULL COMMENT '主键',
-  `menu_parent_id` bigint(20) NOT NULL COMMENT '父id，顶级节点的父id是0',
+  `menu_parent_id` bigint(20) NOT NULL COMMENT '父id，顶级节点的父id是-1',
   `menu_pids` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '父id集合，中括号包住，逗号分隔',
   `menu_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单的名称',
   `menu_code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单的编码',
@@ -313,10 +313,10 @@ INSERT INTO `sys_menu` VALUES (1339550467939639305, 1339550467939639304, '[-1],[
 INSERT INTO `sys_menu` VALUES (1339550467939639306, 1339550467939639304, '[-1],[1339550467939639304],', '机构管理', 'org_main', 'system', 'Y', 20.20, 1, NULL, '/organization', NULL, '/organization', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1339550467939639307, 1339550467939639304, '[-1],[1339550467939639304],', '职位管理', 'org_position', 'system', 'Y', 20.30, 1, NULL, '/position', NULL, '/position', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1339550467939639308, -1, '[-1],', '权限管理', 'auth', 'system', 'Y', 30.00, 1, NULL, NULL, NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1339550467939639309, 1339550467939639308, '[-1],[1339550467939639308],', '应用管理', 'auth_app', 'system', 'Y', 30.10, 1, NULL, NULL, NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1339550467939639310, 1339550467939639308, '[-1],[1339550467939639308],', '菜单管理', 'auth_menu', 'system', 'Y', 30.20, 1, NULL, NULL, NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1339550467939639311, 1339550467939639308, '[-1],[1339550467939639308],', '角色管理', 'auth_role', 'system', 'Y', 30.30, 1, NULL, NULL, NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1339550467939639312, 1339550467939639308, '[-1],[1339550467939639308],', '资源管理', 'auth_resource', 'system', 'Y', 30.40, 1, NULL, NULL, NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1339550467939639309, 1339550467939639308, '[-1],[1339550467939639308],', '应用管理', 'auth_app', 'system', 'Y', 30.10, 1, NULL, '/view/app', NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1339550467939639310, 1339550467939639308, '[-1],[1339550467939639308],', '菜单管理', 'auth_menu', 'system', 'Y', 30.20, 1, NULL, '/view/menu', NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1339550467939639311, 1339550467939639308, '[-1],[1339550467939639308],', '角色管理', 'auth_role', 'system', 'Y', 30.30, 1, NULL, '/view/role', NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1339550467939639312, 1339550467939639308, '[-1],[1339550467939639308],', '资源管理', 'auth_resource', 'system', 'Y', 30.40, 1, NULL, '/view/resource', NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1339550467939639313, -1, '[-1],', '基础数据', 'base', 'system', 'Y', 40.00, 1, NULL, NULL, NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1339550467939639314, 1339550467939639313, '[-1],[1339550467939639313],', '系统配置', 'base_sysconfig', 'system', 'Y', 40.10, 1, NULL, NULL, NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1339550467939639315, 1339550467939639313, '[-1],[1339550467939639313],', '字典管理', 'base_dict', 'system', 'Y', 40.20, 1, NULL, NULL, NULL, '*', NULL, 'icon-default', NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
@@ -480,21 +480,21 @@ INSERT INTO `sys_resource` VALUES (1346375639627776004, 'guns', 'guns$dict$get_d
 -- Table structure for sys_role
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
-CREATE TABLE `sys_role` (
+CREATE TABLE `sys_role`  (
   `role_id` bigint(20) NOT NULL COMMENT '主键id',
-  `role_name` varchar(100) NOT NULL COMMENT '角色名称',
-  `role_code` varchar(100) NOT NULL COMMENT '角色编码',
-  `role_sort` decimal(10,2) NOT NULL COMMENT '序号',
-  `data_scope_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '数据范围类型：10-仅本人数据，20-本部门数据，30-本部门及以下数据，40-指定部门数据，50-全部数据',
-  `status_flag` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：1-启用，2-禁用',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `del_flag` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-已删除，N-未删除',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `create_user` bigint(20) DEFAULT NULL COMMENT '创建人',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `update_user` bigint(20) DEFAULT NULL COMMENT '更新人',
+  `role_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色名称',
+  `role_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色编码',
+  `role_sort` decimal(10, 2) NOT NULL COMMENT '序号',
+  `data_scope_type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '数据范围类型：10-仅本人数据，20-本部门数据，30-本部门及以下数据，40-指定部门数据，50-全部数据',
+  `status_flag` tinyint(4) NOT NULL DEFAULT 0 COMMENT '状态：1-启用，2-禁用',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-已删除，N-未删除',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_user` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_user` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='系统角色表';
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
