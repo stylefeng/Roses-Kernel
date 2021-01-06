@@ -29,7 +29,7 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     private Long menuId;
 
     /**
-     * 父id，顶级节点的父id是0
+     * 父id，顶级节点的父id是-1
      */
     @TableField("menu_parent_id")
     private Long menuParentId;
@@ -150,5 +150,5 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     public void setChildrenNodes(List childrenNodes) {
         this.children = childrenNodes;
     }
-    
+
 }

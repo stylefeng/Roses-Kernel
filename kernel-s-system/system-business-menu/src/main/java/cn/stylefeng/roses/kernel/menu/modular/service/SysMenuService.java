@@ -79,6 +79,14 @@ public interface SysMenuService extends IService<SysMenu> {
     SysMenu detail(SysMenuRequest sysMenuRequest);
 
     /**
+     * 获取菜单列表（layui版本）
+     *
+     * @author fengshuonan
+     * @date 2021/1/6 17:10
+     */
+    List<SysMenu> layuiList(SysMenuRequest sysMenuRequest);
+
+    /**
      * 系统菜单列表，树形结构，用于菜单管理界面的列表展示
      *
      * @param sysMenuRequest 查询参数

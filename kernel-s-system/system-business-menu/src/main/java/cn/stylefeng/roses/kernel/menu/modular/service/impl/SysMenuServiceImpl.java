@@ -124,7 +124,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 获取所有子级的节点id
         Set<Long> childIdList = this.dbOperatorApi.findSubListByParentId(
-                "sys_menu", "pids", "id", id);
+                "sys_menu", "menu_pids", "menu_id", id);
         childIdList.add(id);
 
         // 逻辑删除，设置删除标识
@@ -138,6 +138,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public SysMenu detail(SysMenuRequest sysMenuRequest) {
         return this.querySysMenu(sysMenuRequest);
+    }
+
+    @Override
+    public List<SysMenu> layuiList(SysMenuRequest sysMenuRequest) {
+
+        LambdaQueryWrapper<SysMenu> wrapper = createWrapper(sysMenuRequest);
+
+        return this.list(wrapper);
     }
 
     @Override
@@ -313,6 +321,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         queryWrapper.eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode());
 
         // 根据排序升序排列，序号越小越在前
+        queryWrapper.orderByAsc(SysMenu::getAppCode);
         queryWrapper.orderByAsc(SysMenu::getMenuSort);
 
         return queryWrapper;
