@@ -54,6 +54,7 @@ import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.response.SysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -130,15 +131,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         Long id = sysMenuRequest.getMenuId();
 
         // 获取所有子级的节点id
-        Set<Long> childIdList = this.dbOperatorApi.findSubListByParentId(
-                "sys_menu", "menu_pids", "menu_id", id);
+        Set<Long> childIdList = this.dbOperatorApi.findSubListByParentId("sys_menu", "menu_pids", "menu_id", id);
         childIdList.add(id);
 
         // 逻辑删除，设置删除标识
         LambdaUpdateWrapper<SysMenu> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper
-                .in(SysMenu::getMenuId, childIdList)
-                .set(SysMenu::getDelFlag, YesOrNotEnum.Y.getCode());
+        updateWrapper.in(SysMenu::getMenuId, childIdList).set(SysMenu::getDelFlag, YesOrNotEnum.Y.getCode());
         this.update(updateWrapper);
     }
 
@@ -220,10 +218,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 获取菜单列表
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysMenu::getMenuId, menuIdList)
-                .eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode())
-                .eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode())
-                .orderByAsc(SysMenu::getMenuSort);
+        queryWrapper.in(SysMenu::getMenuId, menuIdList).eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode()).eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode()).orderByAsc(SysMenu::getMenuSort);
 
         // 如果应用编码不为空，则拼接应用编码
         if (StrUtil.isNotBlank(appCode)) {
@@ -293,6 +288,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
+    public List<SysMenuResponse> getSystemAllMenus() {
+        List<SysMenuResponse> responses = this.baseMapper.getSystemAllMenus();
+        return new DefaultTreeBuildFactory<SysMenuResponse>().doTreeBuild(responses);
+    }
+
+    @Override
     public boolean hasMenu(String appCode) {
         SysMenuRequest sysMenuRequest = new SysMenuRequest();
         sysMenuRequest.setAppCode(appCode);
@@ -328,14 +329,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     private String createPids(Long pid) {
         if (pid.equals(SystemConstants.DEFAULT_PARENT_ID)) {
-            return SymbolConstant.LEFT_SQUARE_BRACKETS + SystemConstants.DEFAULT_PARENT_ID + SymbolConstant.RIGHT_SQUARE_BRACKETS
-                    + SymbolConstant.COMMA;
+            return SymbolConstant.LEFT_SQUARE_BRACKETS + SystemConstants.DEFAULT_PARENT_ID + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
         } else {
             //获取父菜单
             SysMenu parentMenu = this.getById(pid);
-            return parentMenu.getMenuPids()
-                    + SymbolConstant.LEFT_SQUARE_BRACKETS + pid + SymbolConstant.RIGHT_SQUARE_BRACKETS
-                    + SymbolConstant.COMMA;
+            return parentMenu.getMenuPids() + SymbolConstant.LEFT_SQUARE_BRACKETS + pid + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
         }
     }
 
@@ -456,11 +454,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 if (updateSubPidsFlag) {
                     list.forEach(child -> {
                         // 子节点pids组成 = 当前菜单新pids + 当前菜单id + 子节点自己的pids后缀
-                        String oldParentCodesPrefix = oldPids + SymbolConstant.LEFT_SQUARE_BRACKETS + oldMenu.getMenuId()
-                                + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
+                        String oldParentCodesPrefix = oldPids + SymbolConstant.LEFT_SQUARE_BRACKETS + oldMenu.getMenuId() + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
                         String oldParentCodesSuffix = child.getMenuPids().substring(oldParentCodesPrefix.length());
-                        String menuParentCodes = newPids + SymbolConstant.LEFT_SQUARE_BRACKETS + oldMenu.getMenuId()
-                                + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA + oldParentCodesSuffix;
+                        String menuParentCodes = newPids + SymbolConstant.LEFT_SQUARE_BRACKETS + oldMenu.getMenuId() + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA + oldParentCodesSuffix;
                         child.setMenuPids(menuParentCodes);
                     });
                 }

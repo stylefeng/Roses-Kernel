@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.response.SysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -161,4 +162,11 @@ public interface SysMenuService extends IService<SysMenu> {
      */
     List<MenuSelectTreeNode> treeForGrant(SysMenuRequest sysMenuRequest);
 
+    /**
+     * 获取系统所有菜单
+     *
+     * @author majianguo
+     * @date 2021/1/7 15:24
+     */
+    List<SysMenuResponse> getSystemAllMenus();
 }

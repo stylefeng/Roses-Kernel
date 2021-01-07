@@ -7,6 +7,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
+import cn.stylefeng.roses.kernel.system.pojo.menu.response.SysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -139,6 +140,18 @@ public class SysMenuController {
     @GetResource(name = "获取主页左侧菜单列表（Antd Vue）", path = "/sysMenu/getIndexMenuAntdVue", requiredPermission = false)
     public ResponseData getAppMenus(@Validated(SysMenuRequest.getAppMenusAntdVue.class) SysMenuRequest sysMenuRequest) {
         return new SuccessResponseData(sysMenuService.getAntDVueIndexMenus(sysMenuRequest.getAppCode()));
+    }
+
+    /**
+     * 获取系统所有菜单
+     *
+     * @author majianguo
+     * @date 2021/1/7 15:17
+     */
+    @GetResource(name = "获取菜单列表(包含菜单可以被那些角色访问)", path = "/sysMenu/getSystemAllMenus", requiredPermission = false)
+    public ResponseData getSystemAllMenus() {
+        List<SysMenuResponse> sysMenuResponses = sysMenuService.getSystemAllMenus();
+        return new SuccessResponseData(sysMenuResponses);
     }
 
 }
