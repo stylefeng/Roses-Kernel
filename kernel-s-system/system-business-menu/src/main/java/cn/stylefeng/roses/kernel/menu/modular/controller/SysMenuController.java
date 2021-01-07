@@ -1,5 +1,7 @@
 package cn.stylefeng.roses.kernel.menu.modular.controller;
 
+import cn.stylefeng.roses.kernel.menu.modular.factory.AntdMenusFactory;
+import cn.stylefeng.roses.kernel.menu.modular.pojo.AntdvMenuItem;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
@@ -7,11 +9,14 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
+import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 系统菜单控制器
@@ -74,6 +79,28 @@ public class SysMenuController {
     }
 
     /**
+     * 获取菜单列表（layui版本）
+     *
+     * @author fengshuonan
+     * @date 2021/1/6 17:09
+     */
+    @GetResource(name = "获取菜单列表（layui版本）", path = "/sysMenu/layuiList")
+    public ResponseData layuiList(SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData(sysMenuService.layuiList(sysMenuRequest));
+    }
+
+    /**
+     * 获取菜单的树形列表（用于选择上级菜单）（layui版本）
+     *
+     * @author fengshuonan
+     * @date 2021/1/6 17:09
+     */
+    @GetResource(name = "获取菜单的树形列表（用于选择上级菜单）（layui版本）", path = "/sysMenu/layuiSelectParentMenuTreeList")
+    public List<ZTreeNode> layuiSelectParentMenuTreeList() {
+        return sysMenuService.layuiSelectParentMenuTreeList();
+    }
+
+    /**
      * 系统菜单列表，树形结构，用于菜单管理界面的列表展示
      *
      * @author fengshuonan
@@ -115,6 +142,19 @@ public class SysMenuController {
     @GetResource(name = "获取主页左侧菜单列表（Antd Vue）", path = "/sysMenu/getIndexMenuAntdVue", requiredPermission = false)
     public ResponseData getAppMenus(@Validated(SysMenuRequest.getAppMenusAntdVue.class) SysMenuRequest sysMenuRequest) {
         return new SuccessResponseData(sysMenuService.getAntDVueIndexMenus(sysMenuRequest.getAppCode()));
+    }
+
+    /**
+     * 获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）
+     *
+     * @author majianguo
+     * @date 2021/1/7 15:17
+     */
+    @GetResource(name = "获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）", path = "/sysMenu/getSystemAllMenusAntdv", requiredPermission = false)
+    public ResponseData getSystemAllMenusAntdv() {
+        List<AntdSysMenuResponse> sysMenuResponses = sysMenuService.getSystemAllMenusAntdv();
+        List<AntdvMenuItem> totalMenus = AntdMenusFactory.createTotalMenus(sysMenuResponses);
+        return new SuccessResponseData(totalMenus);
     }
 
 }

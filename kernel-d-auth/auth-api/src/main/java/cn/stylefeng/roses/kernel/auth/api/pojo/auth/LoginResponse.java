@@ -22,9 +22,15 @@ public class LoginResponse {
      */
     private String token;
 
-    public LoginResponse(LoginUser loginUser, String token) {
+    /**
+     * 到期时间
+     */
+    private Long expireAt;
+
+    public LoginResponse(LoginUser loginUser, String token, Long expireAt) {
         this.loginUser = loginUser;
         this.token = token;
+        this.expireAt = expireAt;
     }
 
 }

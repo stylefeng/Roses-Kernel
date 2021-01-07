@@ -79,6 +79,15 @@ public class SysResource extends BaseEntity {
     private String ipAddress;
 
     /**
+     * 是否是视图类型：Y-是，N-否
+     * 如果是视图类型，url需要以 '/view' 开头，
+     * 视图类型的接口会渲染出html界面，而不是json数据，
+     * 视图层一般会在前后端不分离项目出现
+     */
+    @TableField("view_flag")
+    private String viewFlag;
+
+    /**
      * 资源url
      */
     @TableField("url")

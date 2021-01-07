@@ -65,6 +65,14 @@ public class ResourceDefinition implements Serializable {
     private String ipAddress;
 
     /**
+     * 是否是视图类型：true-是，false-否
+     * 如果是视图类型，url需要以 '/view' 开头，
+     * 视图类型的接口会渲染出html界面，而不是json数据，
+     * 视图层一般会在前后端不分离项目出现
+     */
+    private Boolean viewFlag;
+
+    /**
      * 资源的请求路径
      */
     private String url;

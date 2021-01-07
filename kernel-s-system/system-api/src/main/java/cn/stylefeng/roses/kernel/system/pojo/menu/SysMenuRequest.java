@@ -68,8 +68,7 @@ public class SysMenuRequest extends BaseRequest {
     /**
      * 是否可见（Y-是，N-否）
      */
-    @NotBlank(message = "是否可见不能为空", groups = {add.class, edit.class})
-    @FlagValue(message = "是否可见格式错误，正确格式应该Y或者N，请检查visible参数", groups = {add.class, edit.class})
+    @FlagValue(message = "是否可见格式错误，正确格式应该Y或者N，请检查visible参数", groups = {add.class, edit.class}, required = false)
     private String visible;
 
     /**
@@ -109,6 +108,16 @@ public class SysMenuRequest extends BaseRequest {
      * 备注
      */
     private String remark;
+
+    /**
+     * 菜单的路径，适用于layui-beetl版本
+     */
+    private String layuiPath;
+
+    /**
+     * 菜单的图标，适用于layui-beetl版本
+     */
+    private String layuiIcon;
 
     /**
      * 获取主页左侧菜单列表（适配Antd Vue的版本）

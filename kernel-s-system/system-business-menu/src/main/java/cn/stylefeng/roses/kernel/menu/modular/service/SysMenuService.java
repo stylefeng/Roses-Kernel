@@ -27,8 +27,10 @@ package cn.stylefeng.roses.kernel.menu.modular.service;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -77,6 +79,23 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2020/3/27 9:03
      */
     SysMenu detail(SysMenuRequest sysMenuRequest);
+
+    /**
+     * 获取菜单列表（layui版本）
+     *
+     * @author fengshuonan
+     * @date 2021/1/6 17:10
+     */
+    List<SysMenu> layuiList(SysMenuRequest sysMenuRequest);
+
+    /**
+     * 获取菜单的树形列表（用于选择上级菜单）（layui版本）
+     *
+     * @return 菜单树
+     * @author fengshuonan
+     * @date 2021/1/6 21:47
+     */
+    List<ZTreeNode> layuiSelectParentMenuTreeList();
 
     /**
      * 系统菜单列表，树形结构，用于菜单管理界面的列表展示
@@ -142,5 +161,14 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2020/4/5 15:01
      */
     List<MenuSelectTreeNode> treeForGrant(SysMenuRequest sysMenuRequest);
+
+    /**
+     * 获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）
+     *
+     * @return 系统所有菜单信息
+     * @author majianguo
+     * @date 2021/1/7 15:24
+     */
+    List<AntdSysMenuResponse> getSystemAllMenusAntdv();
 
 }

@@ -29,7 +29,7 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     private Long menuId;
 
     /**
-     * 父id，顶级节点的父id是0
+     * 父id，顶级节点的父id是-1
      */
     @TableField("menu_parent_id")
     private Long menuParentId;
@@ -77,40 +77,58 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     private Integer statusFlag;
 
     /**
-     * 图标
-     */
-    @TableField("icon")
-    private String icon;
-
-    /**
-     * 路由地址，浏览器显示的URL，例如/menu
-     */
-    @TableField("router")
-    private String router;
-
-    /**
-     * 前端组件名
-     */
-    @TableField("component")
-    private String component;
-
-    /**
-     * 外部链接打开方式：1-内置外链，2-新页面外链
-     */
-    @TableField("link_open_type")
-    private Integer linkOpenType;
-
-    /**
-     * 外部链接地址
-     */
-    @TableField("link_url")
-    private String linkUrl;
-
-    /**
      * 备注
      */
     @TableField("remark")
     private String remark;
+
+    /**
+     * 菜单的路径，适用于layui-beetl版本
+     */
+    @TableField("layui_path")
+    private String layuiPath;
+
+    /**
+     * 菜单的图标，适用于layui-beetl版本
+     */
+    @TableField("layui_icon")
+    private String layuiIcon;
+
+    /**
+     * 路由地址，浏览器显示的URL，例如/menu，适用于antd vue版本
+     */
+    @TableField("antdv_router")
+    private String antdvRouter;
+
+    /**
+     * 前端用路径，适用于antdvue版本
+     */
+    @TableField("antdv_path")
+    private String antdvPath;
+
+    /**
+     * 图标，适用于antd vue版本
+     */
+    @TableField("antdv_icon")
+    private String antdvIcon;
+
+    /**
+     * 前端组件名，适用于antd vue版本
+     */
+    @TableField("antdv_component")
+    private String antdvComponent;
+
+    /**
+     * 外部链接打开方式：1-内置打开外链，2-新页面外链，适用于antd vue版本
+     */
+    @TableField("antdv_link_open_type")
+    private Integer antdvLinkOpenType;
+
+    /**
+     * 外部链接地址
+     */
+    @TableField("antdv_link_url")
+    private String antdvLinkUrl;
 
     /**
      * 是否删除：Y-被删除，N-未删除
@@ -123,6 +141,12 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
      */
     @TableField(exist = false)
     private List children;
+
+    /**
+     * 应用名称
+     */
+    @TableField(exist = false)
+    private String appName;
 
     @Override
     public String getNodeId() {
@@ -138,4 +162,5 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     public void setChildrenNodes(List childrenNodes) {
         this.children = childrenNodes;
     }
+
 }

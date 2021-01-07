@@ -10,7 +10,10 @@ import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -166,4 +169,8 @@ public class DefaultSessionManager implements SessionManagerApi {
         }
     }
 
+    @Override
+    public List<LoginUser> onlineUserList() {
+        return new ArrayList<>(loginUserCache.getAllValues());
+    }
 }

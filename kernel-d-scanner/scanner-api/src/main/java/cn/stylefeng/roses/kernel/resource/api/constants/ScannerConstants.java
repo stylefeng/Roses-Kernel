@@ -28,4 +28,9 @@ public interface ScannerConstants {
      */
     Integer REPORT_RESOURCE_LISTENER_SORT = 200;
 
+    /**
+     * 视图类型的控制器url路径开头
+     */
+    String VIEW_CONTROLLER_PATH_START_WITH = "/view";
+
 }

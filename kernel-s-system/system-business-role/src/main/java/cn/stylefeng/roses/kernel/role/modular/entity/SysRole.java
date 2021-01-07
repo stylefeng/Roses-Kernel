@@ -67,7 +67,7 @@ public class SysRole extends BaseEntity {
     private BigDecimal roleSort;
 
     /**
-     * 数据范围类型：10-全部数据，20-本部门及以下数据，30-本部门数据，40-仅本人数据，50-自定义数据
+     * 数据范围类型：10-仅本人数据，20-本部门数据，30-本部门及以下数据，40-指定部门数据，50-全部数据
      */
     @TableField("data_scope_type")
     private Integer dataScopeType;

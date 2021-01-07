@@ -2,6 +2,8 @@ package cn.stylefeng.roses.kernel.auth.api;
 
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 
+import java.util.List;
+
 /**
  * 用户会话管理
  * <p>
@@ -82,5 +84,11 @@ public interface SessionManagerApi {
      * @date 2021/1/2 20:25
      */
     void destroySessionCookie();
+
+    /**
+     * 获取在线用户列表
+     * @return
+     */
+    List<LoginUser> onlineUserList();
 
 }

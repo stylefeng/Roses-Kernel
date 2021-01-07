@@ -7,6 +7,7 @@ import cn.stylefeng.roses.kernel.resource.api.ResourceCollectorApi;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.resource.api.constants.ScannerConstants;
 import cn.stylefeng.roses.kernel.resource.api.exception.ScannerException;
 import cn.stylefeng.roses.kernel.resource.api.holder.IpAddrHolder;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
@@ -173,11 +174,11 @@ public class ApiResourceScanner implements BeanPostProcessor {
      * @author fengshuonan
      * @date 2020/12/9 11:22
      */
-    private ResourceDefinition createDefinition(Class<?> clazz, Method method, Annotation apiResource) {
+    private ResourceDefinition createDefinition(Class<?> controllerClass, Method method, Annotation apiResource) {
         ResourceDefinition resourceDefinition = new ResourceDefinition();
 
         // 填充控制器类的名称
-        resourceDefinition.setClassName(clazz.getSimpleName());
+        resourceDefinition.setClassName(controllerClass.getSimpleName());
 
         // 填充方法名称
         resourceDefinition.setMethodName(method.getName());
@@ -186,14 +187,14 @@ public class ApiResourceScanner implements BeanPostProcessor {
         String className = resourceDefinition.getClassName();
         int controllerIndex = className.indexOf("Controller");
         if (controllerIndex == -1) {
-            String userTip = StrUtil.format(ERROR_CONTROLLER_NAME.getUserTip(), clazz.getName());
+            String userTip = StrUtil.format(ERROR_CONTROLLER_NAME.getUserTip(), controllerClass.getName());
             throw new ScannerException(ERROR_CONTROLLER_NAME, userTip);
         }
         String modular = className.substring(0, controllerIndex);
         resourceDefinition.setModularCode(modular);
 
         // 填充模块的中文名称
-        ApiResource classApiAnnotation = clazz.getAnnotation(ApiResource.class);
+        ApiResource classApiAnnotation = controllerClass.getAnnotation(ApiResource.class);
         resourceDefinition.setModularName(classApiAnnotation.name());
 
         // 如果控制器类上标识了appCode则应用标识上的appCode,如果控制器上没标识则用配置文件中的appCode
@@ -213,16 +214,33 @@ public class ApiResourceScanner implements BeanPostProcessor {
 
         // 填充其他属性
         String name = invokeAnnotationMethod(apiResource, "name", String.class);
-        String[] path = invokeAnnotationMethod(apiResource, "path", String[].class);
+        String[] methodPath = invokeAnnotationMethod(apiResource, "path", String[].class);
         RequestMethod[] requestMethods = invokeAnnotationMethod(apiResource, "method", RequestMethod[].class);
-        Boolean menuFlag = invokeAnnotationMethod(apiResource, "menuFlag", Boolean.class);
         Boolean requiredLogin = invokeAnnotationMethod(apiResource, "requiredLogin", Boolean.class);
         Boolean requiredPermission = invokeAnnotationMethod(apiResource, "requiredPermission", Boolean.class);
+        Boolean viewFlag = invokeAnnotationMethod(apiResource, "viewFlag", Boolean.class);
 
         resourceDefinition.setRequiredLoginFlag(requiredLogin);
         resourceDefinition.setRequiredPermissionFlag(requiredPermission);
         resourceDefinition.setResourceName(name);
-        resourceDefinition.setUrl(getControllerClassRequestPath(clazz, path[0]));
+
+        // 根据控制器和控制器方法的path组装最后的url
+        String controllerMethodPath = createControllerPath(controllerClass, methodPath[0]);
+        resourceDefinition.setUrl(createFinalUrl(controllerMethodPath));
+
+        // 如果注解标识是视图类型，则判断该资源是视图类型（优先级最高）
+        if (viewFlag) {
+            resourceDefinition.setViewFlag(true);
+        }
+        // 如果资源url是以/view开头，则是视图类型
+        else if (StrUtil.isNotBlank(controllerMethodPath)) {
+            resourceDefinition.setViewFlag(controllerMethodPath.toLowerCase().startsWith(ScannerConstants.VIEW_CONTROLLER_PATH_START_WITH));
+        }
+        // 其他都是非视图类型
+        else {
+            resourceDefinition.setViewFlag(false);
+        }
+
         StringBuilder methodNames = new StringBuilder();
         for (RequestMethod requestMethod : requestMethods) {
             methodNames.append(requestMethod.name()).append(",");
@@ -272,12 +290,12 @@ public class ApiResourceScanner implements BeanPostProcessor {
     /**
      * 根据控制器类上的RequestMapping注解的映射路径，以及方法上的路径，拼出整个接口的路径
      *
-     * @param clazz 控制器类
-     * @param path  当前被扫描接口的path路径
+     * @param clazz 控制器的类
+     * @param path  控制器方法注解上的路径
      * @author fengshuonan
-     * @date 2020/12/14 22:17
+     * @date 2021/1/5 14:43
      */
-    private String getControllerClassRequestPath(Class<?> clazz, String path) {
+    private String createControllerPath(Class<?> clazz, String path) {
         String controllerPath;
 
         ApiResource controllerRequestMapping = clazz.getDeclaredAnnotation(ApiResource.class);
@@ -291,6 +309,23 @@ public class ApiResourceScanner implements BeanPostProcessor {
                 controllerPath = "";
             }
         }
+
+        // 控制器上的path要以/开头
+        if (!controllerPath.startsWith("/")) {
+            controllerPath = "/" + controllerPath;
+        }
+
+        return controllerPath + path;
+    }
+
+    /**
+     * 根据appCode和contextPath等，拼出整个接口的路径
+     *
+     * @param controllerMethodPath 控制器和控制器方法的path的组合
+     * @author fengshuonan
+     * @date 2020/12/14 22:17
+     */
+    private String createFinalUrl(String controllerMethodPath) {
 
         // 拼接最终url的时候，依据如下规则拼接：/appCode/contextPath/xxx
         // 第一部分是appCode
@@ -306,7 +341,7 @@ public class ApiResourceScanner implements BeanPostProcessor {
         }
 
         // 依据如下规则拼接：/appCode/contextPath/xxx
-        String resultPath = appCode + contextPath + controllerPath + path;
+        String resultPath = appCode + contextPath + controllerMethodPath;
 
         // 前缀多个左斜杠替换为一个
         resultPath = resultPath.replaceAll("/+", "/");

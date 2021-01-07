@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system;
 
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 
@@ -74,6 +75,12 @@ public interface UserServiceApi {
      * @date 2020/11/21 12:15
      */
     List<Long> getUserBindDataScope(Long userId);
+
+    /**
+     * 获取在线用户列表
+     * @return
+     */
+    List<LoginUser> onlineUserList();
 
     /**
      * 查询全部用户ID(剔除管理员，和不允许登录)
