@@ -35,6 +35,11 @@ public class DefaultJwtPayload {
     private Boolean rememberMe;
 
     /**
+     * 过期时间戳
+     */
+    private Long expirationDate;
+
+    /**
      * 其他载体信息
      */
     private Map<String, Object> others;

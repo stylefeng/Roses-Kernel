@@ -54,6 +54,9 @@ public class JwtTokenOperator implements JwtApi {
         // 计算过期时间
         DateTime expirationDate = DateUtil.offsetMillisecond(new Date(), Convert.toInt(jwtConfig.getExpiredSeconds()) * 1000);
 
+        // 设置过期时间
+        defaultJwtPayload.setExpirationDate(expirationDate.getTime());
+
         // 构造jwt token
         return Jwts.builder()
                 .setClaims(BeanUtil.beanToMap(defaultJwtPayload))

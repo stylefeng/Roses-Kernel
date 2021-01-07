@@ -157,7 +157,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         }
 
         // 2. 解密密码的密文
-//        String decryptPassword = passwordTransferEncryptApi.decrypt(loginRequest.getPassword());
+        //        String decryptPassword = passwordTransferEncryptApi.decrypt(loginRequest.getPassword());
 
         // 3. 获取用户密码的加密值和用户的状态
         UserLoginInfoDTO userValidateInfo = userServiceApi.getUserLoginInfo(loginRequest.getAccount());
@@ -199,7 +199,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         userServiceApi.updateUserLoginInfo(loginUser.getUserId(), new Date(), ip);
 
         // 11. 组装返回结果
-        return new LoginResponse(loginUser, jwtToken);
+        return new LoginResponse(loginUser, jwtToken, defaultJwtPayload.getExpirationDate());
     }
 
 }
