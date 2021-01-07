@@ -27,9 +27,9 @@ package cn.stylefeng.roses.kernel.menu.modular.service;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.response.SysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -163,10 +163,12 @@ public interface SysMenuService extends IService<SysMenu> {
     List<MenuSelectTreeNode> treeForGrant(SysMenuRequest sysMenuRequest);
 
     /**
-     * 获取系统所有菜单
+     * 获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）
      *
+     * @return 系统所有菜单信息
      * @author majianguo
      * @date 2021/1/7 15:24
      */
-    List<SysMenuResponse> getSystemAllMenus();
+    List<AntdSysMenuResponse> getSystemAllMenusAntdv();
+
 }

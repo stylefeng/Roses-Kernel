@@ -26,9 +26,4 @@ public class SimpleRoleInfo {
      */
     private String roleCode;
 
-    /**
-     * 数据范围类型：10-仅本人数据，20-本部门数据，30-本部门及以下数据，40-指定部门数据，50-全部数据
-     */
-    private Integer dataScopeType;
-
 }

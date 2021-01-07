@@ -1,9 +1,14 @@
 package cn.stylefeng.roses.kernel.menu.modular.factory;
 
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
+import cn.stylefeng.roses.kernel.menu.modular.pojo.AntdvMenuItem;
+import cn.stylefeng.roses.kernel.menu.modular.pojo.AuthorityItem;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +20,50 @@ import java.util.List;
  * @date 2020/12/30 20:11
  */
 public class AntdMenusFactory {
+
+    /**
+     * 组装antdv用的获取所有菜单列表详情
+     *
+     * @author fengshuonan
+     * @date 2021/1/7 18:17
+     */
+    public static List<AntdvMenuItem> createTotalMenus(List<AntdSysMenuResponse> antdSysMenuResponses) {
+
+        ArrayList<AntdvMenuItem> antdvMenuItems = new ArrayList<>(antdSysMenuResponses.size());
+
+        // 实体转化
+        for (AntdSysMenuResponse antdSysMenuResponse : antdSysMenuResponses) {
+            AntdvMenuItem antdvMenuItem = new AntdvMenuItem();
+
+            // 填充id pid name用于构建树
+            antdvMenuItem.setMenuId(antdSysMenuResponse.getMenuId());
+            antdvMenuItem.setMenuParentId(antdSysMenuResponse.getMenuParentId());
+            antdvMenuItem.setName(antdSysMenuResponse.getMenuName());
+
+            // 填充路由等信息
+            antdvMenuItem.setRouter(antdSysMenuResponse.getAntdvRouter());
+            antdvMenuItem.setIcon(antdSysMenuResponse.getAntdvIcon());
+            antdvMenuItem.setPath(antdSysMenuResponse.getAntdvPath());
+
+            // 填充哪个角色绑定了这个菜单
+            List<SimpleRoleInfo> roles = antdSysMenuResponse.getRoles();
+            AuthorityItem authorityItem = new AuthorityItem();
+            if (roles != null) {
+                ArrayList<String> auths = new ArrayList<>();
+                for (SimpleRoleInfo role : roles) {
+                    auths.add(role.getRoleCode());
+                }
+                authorityItem.setPermission(auths);
+                authorityItem.setRole(auths);
+                antdvMenuItem.setAuthority(authorityItem);
+            }
+
+            antdvMenuItems.add(antdvMenuItem);
+        }
+
+        // 构造菜单树
+        return new DefaultTreeBuildFactory<AntdvMenuItem>().doTreeBuild(antdvMenuItems);
+    }
 
     /**
      * 将数据库表的菜单，转化为vue antd admin识别的菜单路由格式

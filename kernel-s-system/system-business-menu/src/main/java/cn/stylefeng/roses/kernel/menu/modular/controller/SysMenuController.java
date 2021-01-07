@@ -1,5 +1,7 @@
 package cn.stylefeng.roses.kernel.menu.modular.controller;
 
+import cn.stylefeng.roses.kernel.menu.modular.factory.AntdMenusFactory;
+import cn.stylefeng.roses.kernel.menu.modular.pojo.AntdvMenuItem;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
@@ -7,7 +9,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
-import cn.stylefeng.roses.kernel.system.pojo.menu.response.SysMenuResponse;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -143,15 +145,16 @@ public class SysMenuController {
     }
 
     /**
-     * 获取系统所有菜单
+     * 获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）
      *
      * @author majianguo
      * @date 2021/1/7 15:17
      */
-    @GetResource(name = "获取菜单列表(包含菜单可以被那些角色访问)", path = "/sysMenu/getSystemAllMenus", requiredPermission = false)
-    public ResponseData getSystemAllMenus() {
-        List<SysMenuResponse> sysMenuResponses = sysMenuService.getSystemAllMenus();
-        return new SuccessResponseData(sysMenuResponses);
+    @GetResource(name = "获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）", path = "/sysMenu/getSystemAllMenusAntdv", requiredPermission = false)
+    public ResponseData getSystemAllMenusAntdv() {
+        List<AntdSysMenuResponse> sysMenuResponses = sysMenuService.getSystemAllMenusAntdv();
+        List<AntdvMenuItem> totalMenus = AntdMenusFactory.createTotalMenus(sysMenuResponses);
+        return new SuccessResponseData(totalMenus);
     }
 
 }

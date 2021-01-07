@@ -52,9 +52,9 @@ import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuExceptionEnum;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.response.SysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -288,9 +288,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<SysMenuResponse> getSystemAllMenus() {
-        List<SysMenuResponse> responses = this.baseMapper.getSystemAllMenus();
-        return new DefaultTreeBuildFactory<SysMenuResponse>().doTreeBuild(responses);
+    public List<AntdSysMenuResponse> getSystemAllMenusAntdv() {
+        return this.baseMapper.getSystemAllMenus();
     }
 
     @Override

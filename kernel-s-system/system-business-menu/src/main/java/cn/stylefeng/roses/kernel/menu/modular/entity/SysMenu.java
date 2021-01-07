@@ -101,16 +101,22 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     private String antdvRouter;
 
     /**
-     * 前端组件名，适用于antd vue版本
+     * 前端用路径，适用于antdvue版本
      */
-    @TableField("antdv_component")
-    private String antdvComponent;
+    @TableField("antdv_path")
+    private String antdvPath;
 
     /**
      * 图标，适用于antd vue版本
      */
     @TableField("antdv_icon")
     private String antdvIcon;
+
+    /**
+     * 前端组件名，适用于antd vue版本
+     */
+    @TableField("antdv_component")
+    private String antdvComponent;
 
     /**
      * 外部链接打开方式：1-内置打开外链，2-新页面外链，适用于antd vue版本
