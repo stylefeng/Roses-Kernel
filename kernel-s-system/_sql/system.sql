@@ -258,7 +258,7 @@ CREATE TABLE `sys_log`  (
   `app_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '服务名称，一般为spring.application.name',
   `request_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '当前用户请求的url',
   `request_params` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT 'http或方法的请求参数体',
-  `request_result` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT 'http或方法的请求结果',
+  `request_result` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT 'http或方法的请求结果',
   `server_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '当前服务器的ip',
   `client_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '客户端的ip',
   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
@@ -819,5 +819,29 @@ CREATE TABLE `sys_user_role`  (
 -- Records of sys_user_role
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1339554696976781379, 1339550467939639299, 1339550467939639303, '2020-12-17 20:57:31', NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for sys_message
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_message`;
+CREATE TABLE `sys_message`  (
+    `message_id` bigint(0) NOT NULL COMMENT '主键',
+    `receive_user_id` bigint(0) NULL DEFAULT NULL COMMENT '接收用户id',
+    `send_user_id` bigint(0) NULL DEFAULT NULL COMMENT '发送用户id',
+    `message_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '消息标题',
+    `message_content` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '消息内容',
+    `message_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '消息类型',
+    `priority_level` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '优先级',
+    `message_send_time` datetime(0) NULL DEFAULT NULL COMMENT '消息发送时间',
+    `business_id` bigint(0) NULL DEFAULT NULL COMMENT '业务id',
+    `business_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '业务类型(根据业务id和业务类型可以确定业务数据)',
+    `read_flag` tinyint(0) NULL DEFAULT 0 COMMENT '阅读状态：0-未读，1-已读',
+    `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-被删除，N-未删除',
+    `create_user` bigint(0) NULL DEFAULT NULL COMMENT '创建人',
+    `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+    `update_user` bigint(0) NULL DEFAULT NULL COMMENT '修改人',
+    `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+    PRIMARY KEY (`message_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统消息' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
