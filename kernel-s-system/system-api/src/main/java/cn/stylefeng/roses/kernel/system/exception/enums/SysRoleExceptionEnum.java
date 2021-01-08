@@ -51,7 +51,12 @@ public enum SysRoleExceptionEnum implements AbstractExceptionEnum {
     /**
      * 角色名称重复
      */
-    ROLE_NAME_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "43", "角色名称重复，请检查name参数");
+    ROLE_NAME_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "43", "角色名称重复，请检查name参数"),
+
+    /**
+     * 超级管理员不能被删除
+     */
+    SUPER_ADMIN_CANT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "44", "超级管理员不能被删除");
 
     /**
      * 错误编码

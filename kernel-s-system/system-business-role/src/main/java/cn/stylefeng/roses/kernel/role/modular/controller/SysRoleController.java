@@ -113,7 +113,7 @@ public class SysRoleController {
      * @date 2020/11/5 上午10:19
      */
     @GetResource(name = "查询角色", path = "/sysRole/page")
-    public ResponseData page(@RequestBody SysRoleRequest sysRoleRequest) {
+    public ResponseData page(SysRoleRequest sysRoleRequest) {
         return new SuccessResponseData(sysRoleService.page(sysRoleRequest));
     }
 

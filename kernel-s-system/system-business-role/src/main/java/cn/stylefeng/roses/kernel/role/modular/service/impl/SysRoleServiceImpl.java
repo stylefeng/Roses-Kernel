@@ -46,6 +46,7 @@ import cn.stylefeng.roses.kernel.role.modular.service.SysRoleResourceService;
 import cn.stylefeng.roses.kernel.role.modular.service.SysRoleService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
@@ -66,6 +67,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static cn.stylefeng.roses.kernel.system.constants.SystemConstants.SYSTEM_ADMIN_ROLE_CODE;
+import static cn.stylefeng.roses.kernel.system.exception.enums.SysRoleExceptionEnum.SUPER_ADMIN_CANT_DELETE;
 
 /**
  * 系统角色service接口实现类
@@ -114,6 +118,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Transactional(rollbackFor = Exception.class)
     public void delete(SysRoleRequest sysRoleRequest) {
         SysRole sysRole = this.querySysRole(sysRoleRequest);
+
+        // 超级管理员不能删除
+        if (SYSTEM_ADMIN_ROLE_CODE.equals(sysRole.getRoleCode())) {
+            throw new ServiceException(SUPER_ADMIN_CANT_DELETE);
+        }
 
         // 逻辑删除，设为删除标志
         sysRole.setDelFlag(YesOrNotEnum.Y.getCode());
