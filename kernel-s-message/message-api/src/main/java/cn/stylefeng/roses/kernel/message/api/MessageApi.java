@@ -38,6 +38,14 @@ public interface MessageApi {
     void updateReadFlag(MessageParam messageParam);
 
     /**
+     * 全部更新阅读状态
+     *
+     * @author liuhanqing
+     * @date 2021/1/2 22:15
+     */
+    void allMessageReadFlag();
+
+    /**
      * 批量更新阅读状态
      *
      * @param messageIds 消息id字符串，多个用逗号分隔
@@ -74,14 +82,14 @@ public interface MessageApi {
     MessageResponse messageDetail(MessageParam messageParam);
 
     /**
-     * 查询系统消息
+     * 查询分页系统消息
      *
      * @param messageParam 查询参数
      * @return 查询分页结果
      * @author liuhanqing
      * @date 2021/1/2 21:21
      */
-    PageResult<MessageResponse> queryMessagePage(MessageParam messageParam);
+    PageResult<MessageResponse> queryPage(MessageParam messageParam);
 
     /**
      * 查询系统消息
@@ -91,6 +99,26 @@ public interface MessageApi {
      * @author liuhanqing
      * @date 2021/1/2 21:21
      */
-    List<MessageResponse> queryMessageList(MessageParam messageParam);
+    List<MessageResponse> queryList(MessageParam messageParam);
+
+    /**
+     * 查询分页系统消息 当前登录用户
+     *
+     * @param messageParam 查询参数
+     * @return 查询分页结果
+     * @author liuhanqing
+     * @date 2021/1/2 21:21
+     */
+    PageResult<MessageResponse> queryPageCurrentUser(MessageParam messageParam);
+
+    /**
+     * 查询系统消息 当前登录用户
+     *
+     * @param messageParam 查询参数
+     * @return 系统消息列表
+     * @author liuhanqing
+     * @date 2021/1/2 21:21
+     */
+    List<MessageResponse> queryListCurrentUser(MessageParam messageParam);
 
 }

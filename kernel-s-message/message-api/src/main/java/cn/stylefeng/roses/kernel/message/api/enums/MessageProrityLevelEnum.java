@@ -3,38 +3,43 @@ package cn.stylefeng.roses.kernel.message.api.enums;
 import lombok.Getter;
 
 /**
- * 消息阅读状态
+ * 消息优先级
  *
  * @author liuhanqing
- * @date 2021/1/4 22:26
+ * @date 2021/1/8 13:26
  */
 @Getter
-public enum MessageReadFlagEnum {
+public enum MessageProrityLevelEnum {
 
     /**
-     * 未读
+     * 高
      */
-    UNREAD(0, "未读"),
+    HIGH("high", "高"),
 
     /**
-     * 已读
+     * 中
      */
-    READ(1, "已读");
+    MIDDLE("middle", "中"),
 
-    private Integer code;
+    /**
+     * 低
+     */
+    LOW("low", "低");
+
+    private String code;
 
     private String name;
 
-    MessageReadFlagEnum(Integer code, String name) {
+    MessageProrityLevelEnum(String code, String name) {
         this.code = code;
         this.name = name;
     }
 
-    public static String getName(Integer code) {
+    public static String getName(String code) {
         if (code == null) {
             return null;
         }
-        for (MessageReadFlagEnum flagEnum : MessageReadFlagEnum.values()) {
+        for (MessageProrityLevelEnum flagEnum : MessageProrityLevelEnum.values()) {
             if (flagEnum.getCode().equals(code)) {
                 return flagEnum.name;
             }

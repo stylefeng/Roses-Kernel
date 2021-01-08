@@ -20,7 +20,7 @@ public class MessageParam extends BaseRequest {
     /**
      * 消息id
      */
-    @NotNull(message = "messageId不能为空", groups = {edit.class, delete.class, detail.class})
+    @NotNull(message = "messageId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class})
     private Long messageId;
 
     /**
@@ -71,6 +71,7 @@ public class MessageParam extends BaseRequest {
     /**
      * 阅读状态：0-未读，1-已读
      */
+    @NotNull(message = "阅读状态不能为空", groups = {updateStatus.class})
     private Integer readFlag;
 
 }

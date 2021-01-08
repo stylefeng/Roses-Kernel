@@ -43,7 +43,7 @@ public class GunsLogAutoConfiguration {
      * @date 2020/12/28 22:09
      */
     @Bean
-    @ConditionalOnMissingBean(SysLogServiceImpl.class)
+    @ConditionalOnMissingBean(SysLogService.class)
     @ConditionalOnProperty(prefix = SYS_LOG_PREFIX, name = "type", havingValue = "db")
     public SysLogService sysLogService() {
         return new SysLogServiceImpl();
