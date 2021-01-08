@@ -35,11 +35,6 @@ public class AntdvMenuItem implements AbstractTreeNode {
     private String icon;
 
     /**
-     * 路径信息
-     */
-    private String path;
-
-    /**
      * 菜单名称
      */
     private String name;

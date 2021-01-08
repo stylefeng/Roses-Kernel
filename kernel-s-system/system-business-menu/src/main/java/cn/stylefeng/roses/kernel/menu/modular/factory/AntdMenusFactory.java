@@ -43,7 +43,6 @@ public class AntdMenusFactory {
             // 填充路由等信息
             antdvMenuItem.setRouter(antdSysMenuResponse.getAntdvRouter());
             antdvMenuItem.setIcon(antdSysMenuResponse.getAntdvIcon());
-            antdvMenuItem.setPath(antdSysMenuResponse.getAntdvPath());
 
             // 填充哪个角色绑定了这个菜单
             List<SimpleRoleInfo> roles = antdSysMenuResponse.getRoles();
@@ -61,9 +60,31 @@ public class AntdMenusFactory {
             antdvMenuItems.add(antdvMenuItem);
         }
 
+        // 加入根节点
+        antdvMenuItems.add(createAntdVMenuRoot());
+
         // 构造菜单树
-        return new DefaultTreeBuildFactory<AntdvMenuItem>().doTreeBuild(antdvMenuItems);
+        return new DefaultTreeBuildFactory<AntdvMenuItem>(SystemConstants.VIRTUAL_ROOT_PARENT_ID.toString()).doTreeBuild(antdvMenuItems);
     }
+
+    /**
+     * 创建虚拟根节点
+     *
+     * @author fengshuonan
+     * @date 2020/12/30 20:38
+     */
+    private static AntdvMenuItem createAntdVMenuRoot() {
+        AntdvMenuItem antdvMenuItem = new AntdvMenuItem();
+        antdvMenuItem.setRouter("root");
+        antdvMenuItem.setName("根节点");
+        antdvMenuItem.setMenuId(SystemConstants.DEFAULT_PARENT_ID);
+        antdvMenuItem.setMenuParentId(SystemConstants.VIRTUAL_ROOT_PARENT_ID);
+
+        antdvMenuItem.setAuthority(null);
+
+        return antdvMenuItem;
+    }
+
 
     /**
      * 将数据库表的菜单，转化为vue antd admin识别的菜单路由格式
