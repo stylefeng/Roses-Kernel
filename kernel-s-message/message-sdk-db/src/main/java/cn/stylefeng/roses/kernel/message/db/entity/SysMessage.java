@@ -27,13 +27,13 @@ public class SysMessage extends BaseEntity {
     /**
      * 接收用户id
      */
-    @TableId(value = "receive_user_id")
+    @TableField(value = "receive_user_id")
     private Long receiveUserId;
 
     /**
      * 发送用户id
      */
-    @TableId(value = "send_user_id")
+    @TableField(value = "send_user_id")
     private Long sendUserId;
 
     /**

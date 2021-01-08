@@ -18,11 +18,11 @@
     <dependencies>
 
         <!--消息管理-->
-        <!--<dependency>
+        <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-business-manage</artifactId>
+            <artifactId>message-business</artifactId>
             <version>1.0.0</version>
-        </dependency>-->
+        </dependency>
 
 
         <!--消息默认记录到库中-->

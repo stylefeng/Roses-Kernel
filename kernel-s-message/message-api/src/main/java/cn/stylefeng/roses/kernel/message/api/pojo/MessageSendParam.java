@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 发送系统消息的参数
@@ -46,7 +47,7 @@ public class MessageSendParam extends BaseRequest {
     /**
      * 业务id
      */
-    @NotBlank(message = "业务id不能为空", groups = {add.class, edit.class})
+    @NotNull(message = "业务id不能为空", groups = {add.class, edit.class})
     private Long businessId;
 
     /**

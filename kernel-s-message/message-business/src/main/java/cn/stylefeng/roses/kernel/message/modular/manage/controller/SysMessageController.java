@@ -8,7 +8,6 @@ import cn.stylefeng.roses.kernel.message.api.pojo.MessageSendParam;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
-import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 系统消息控制器
@@ -54,7 +52,7 @@ public class SysMessageController {
      * @date 2021/1/8 13:50
      */
     @PostResource(name = "批量更新系统消息状态", path = "/sysMessage/batchUpdateReadFlag")
-    public ResponseData sendMessage(@RequestBody @Validated(MessageParam.updateReadFlag.class) MessageParam messageParam) {
+    public ResponseData batchUpdateReadFlag(@RequestBody @Validated(MessageParam.updateReadFlag.class) MessageParam messageParam) {
         List<Long> messageIdList = messageParam.getMessageIdList();
         messageApi.batchReadFlagByMessageIds(StrUtil.join(",", messageIdList), MessageReadFlagEnum.READ);
         return new SuccessResponseData();

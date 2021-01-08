@@ -62,7 +62,7 @@ public class MessageDbServiceImpl implements MessageApi {
             userIds = Convert.toList(Long.class, userIdArr);
         }
         if (userIds == null || userIds.isEmpty()) {
-            throw new SystemModularException(MessageExceptionEnum.ERROR_RECEIVE_USER_IDS, receiveUserIds);
+            throw new SystemModularException(MessageExceptionEnum.ERROR_RECEIVE_USER_IDS, "传入接收用户id字符串不合法：" + receiveUserIds);
         }
 
         Set<Long> userIdSet = new HashSet<>(userIds);
