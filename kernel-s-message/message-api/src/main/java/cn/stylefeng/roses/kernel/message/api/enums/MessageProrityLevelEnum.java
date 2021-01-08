@@ -26,9 +26,9 @@ public enum MessageProrityLevelEnum {
      */
     LOW("low", "低");
 
-    private String code;
+    private final String code;
 
-    private String name;
+    private final String name;
 
     MessageProrityLevelEnum(String code, String name) {
         this.code = code;

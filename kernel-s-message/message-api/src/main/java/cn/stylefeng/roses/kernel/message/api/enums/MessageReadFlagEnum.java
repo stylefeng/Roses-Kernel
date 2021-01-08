@@ -21,9 +21,9 @@ public enum MessageReadFlagEnum {
      */
     READ(1, "已读");
 
-    private Integer code;
+    private final Integer code;
 
-    private String name;
+    private final String name;
 
     MessageReadFlagEnum(Integer code, String name) {
         this.code = code;

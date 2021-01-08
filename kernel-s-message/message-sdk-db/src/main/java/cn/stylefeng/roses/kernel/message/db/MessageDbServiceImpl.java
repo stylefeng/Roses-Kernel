@@ -9,6 +9,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.message.api.MessageApi;
 import cn.stylefeng.roses.kernel.message.api.constants.MessageConstants;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
+import cn.stylefeng.roses.kernel.message.api.exception.MessageException;
 import cn.stylefeng.roses.kernel.message.api.exception.enums.MessageExceptionEnum;
 import cn.stylefeng.roses.kernel.message.api.pojo.MessageParam;
 import cn.stylefeng.roses.kernel.message.api.pojo.MessageResponse;
@@ -17,7 +18,6 @@ import cn.stylefeng.roses.kernel.message.db.entity.SysMessage;
 import cn.stylefeng.roses.kernel.message.db.service.SysMessageService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
-import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 系统消息，数据库实现
@@ -62,7 +63,7 @@ public class MessageDbServiceImpl implements MessageApi {
             userIds = Convert.toList(Long.class, userIdArr);
         }
         if (userIds == null || userIds.isEmpty()) {
-            throw new SystemModularException(MessageExceptionEnum.ERROR_RECEIVE_USER_IDS, "传入接收用户id字符串不合法：" + receiveUserIds);
+            throw new MessageException(MessageExceptionEnum.ERROR_RECEIVE_USER_IDS);
         }
 
         Set<Long> userIdSet = new HashSet<>(userIds);
@@ -164,8 +165,11 @@ public class MessageDbServiceImpl implements MessageApi {
     @Override
     public List<MessageResponse> queryList(MessageParam messageParam) {
         List<SysMessage> messageList = sysMessageService.list(messageParam);
-        List<MessageResponse> resultList = new ArrayList<>();
-        BeanUtil.copyProperties(messageList, resultList);
+        List<MessageResponse> resultList = messageList.stream().map(msg -> {
+            MessageResponse response =  new MessageResponse();
+            BeanUtil.copyProperties(msg, response);
+            return response;
+        }).collect(Collectors.toList());
         return resultList;
     }
 
