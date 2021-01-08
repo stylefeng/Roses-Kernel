@@ -4,8 +4,10 @@ import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 系统消息的查询参数
@@ -73,5 +75,18 @@ public class MessageParam extends BaseRequest {
      */
     @NotNull(message = "阅读状态不能为空", groups = {updateStatus.class})
     private Integer readFlag;
+
+    /**
+     * 消息id集合
+     */
+    @NotEmpty(message = "消息id集合不能为空，请检查messageIdList参数", groups = {updateReadFlag.class})
+    private List<Long> messageIdList;
+
+
+    /**
+     * 参数校验分组：修改阅读状态
+     */
+    public @interface updateReadFlag {
+    }
 
 }
