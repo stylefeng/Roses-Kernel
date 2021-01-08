@@ -253,7 +253,18 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<SysMenu> currentUserMenus = this.getCurrentUserMenus();
 
         // 组装每个应用的菜单树
-        return LayuiMenusFactory.createLayuiAppIndexMenus(currentUserMenus);
+        List<LayuiAppIndexMenus> layuiAppIndexMenus = LayuiMenusFactory.createLayuiAppIndexMenus(currentUserMenus);
+
+        // 给应用排序，激活的应用放在前边
+        String activeAppCode = appServiceApi.getActiveAppCode();
+        if (activeAppCode != null) {
+            List<LayuiAppIndexMenus> layuiAppIndexMenusArrayList =
+                    layuiAppIndexMenus.stream().filter(i -> activeAppCode.equals(i.getAppCode())).collect(Collectors.toList());
+            layuiAppIndexMenusArrayList.addAll(layuiAppIndexMenus.stream().filter(i -> !activeAppCode.equals(i.getAppCode())).collect(Collectors.toList()));
+            return layuiAppIndexMenusArrayList;
+        }
+
+        return layuiAppIndexMenus;
     }
 
     @Override

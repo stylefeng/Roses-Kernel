@@ -183,6 +183,20 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         }
     }
 
+    @Override
+    public String getActiveAppCode() {
+        LambdaQueryWrapper<SysApp> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(SysApp::getAppCode);
+        queryWrapper.eq(SysApp::getActiveFlag, YesOrNotEnum.Y.getCode());
+        queryWrapper.eq(SysApp::getDelFlag, YesOrNotEnum.N.getCode());
+        List<SysApp> list = this.list(queryWrapper);
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0).getAppCode();
+        }
+    }
+
     /**
      * 获取系统应用
      *
