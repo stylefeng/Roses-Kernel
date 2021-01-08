@@ -142,7 +142,25 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public SysMenu detail(SysMenuRequest sysMenuRequest) {
-        return this.querySysMenu(sysMenuRequest);
+        SysMenu sysMenu = this.querySysMenu(sysMenuRequest);
+
+        // 设置父级菜单名称
+        if (sysMenu != null) {
+            Long menuParentId = sysMenu.getMenuParentId();
+            if (SystemConstants.DEFAULT_PARENT_ID.equals(menuParentId)) {
+                sysMenu.setMenuParentName("顶级");
+            } else {
+                Long parentId = sysMenu.getMenuParentId();
+                SysMenu parentMenu = this.getById(parentId);
+                if (parentMenu == null) {
+                    sysMenu.setMenuParentName("无");
+                } else {
+                    sysMenu.setMenuParentName(parentMenu.getMenuName());
+                }
+            }
+        }
+
+        return sysMenu;
     }
 
     @Override
