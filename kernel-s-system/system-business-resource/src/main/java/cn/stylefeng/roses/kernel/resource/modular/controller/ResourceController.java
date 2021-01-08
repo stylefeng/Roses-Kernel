@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.resource.modular.controller;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
@@ -10,11 +11,10 @@ import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -27,7 +27,7 @@ import java.util.List;
 @ApiResource(name = "资源管理")
 public class ResourceController {
 
-    @Autowired
+    @Resource
     private SysResourceService sysResourceService;
 
     /**
@@ -38,7 +38,7 @@ public class ResourceController {
      */
     @GetResource(name = "获取资源列表", path = "/resource/pageList")
     public ResponseData pageList(ResourceRequest resourceRequest) {
-        Page<SysResource> result = this.sysResourceService.getResourceList(resourceRequest);
+        PageResult<SysResource> result = this.sysResourceService.getResourceList(resourceRequest);
         return new SuccessResponseData(result);
     }
 
