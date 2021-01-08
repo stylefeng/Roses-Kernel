@@ -11,7 +11,7 @@
  Target Server Version : 50732
  File Encoding         : 65001
 
- Date: 08/01/2021 21:20:31
+ Date: 08/01/2021 22:58:52
 */
 
 SET NAMES utf8mb4;
@@ -89,7 +89,7 @@ CREATE TABLE `sys_app`  (
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`app_id`) USING BTREE,
   UNIQUE INDEX `APP_CODE_UNIQUE`(`app_code`) USING BTREE COMMENT 'app编码唯一'
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统应用表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统应用' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_app
@@ -167,7 +167,7 @@ CREATE TABLE `sys_database_info`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`db_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '数据库信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '多数据源信息' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_dict
@@ -192,7 +192,7 @@ CREATE TABLE `sys_dict`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改用户id',
   PRIMARY KEY (`dict_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -214,7 +214,7 @@ CREATE TABLE `sys_dict_type`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改用户id',
   PRIMARY KEY (`dict_type_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典类型表，一个字典类型下有多个字典' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典类型' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_file_info
@@ -240,7 +240,7 @@ CREATE TABLE `sys_file_info`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`file_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '文件信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '文件信息' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_file_info
@@ -300,7 +300,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统菜单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统菜单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -340,6 +340,23 @@ INSERT INTO `sys_menu` VALUES (1339550467939639332, 1339550467939639325, '[-1],[
 INSERT INTO `sys_menu` VALUES (1339550467939639333, 1339550467939639325, '[-1],[1339550467939639325],', '磁盘监控', 'monitor_disk', 'system', 'Y', 70.80, 1, NULL, NULL, NULL, 'disk', 'hdd', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 
 -- ----------------------------
+-- Table structure for sys_menu_button
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_menu_button`;
+CREATE TABLE `sys_menu_button`  (
+  `button_id` bigint(20) NOT NULL COMMENT '主键',
+  `menu_id` bigint(20) NOT NULL COMMENT '菜单id，按钮需要挂在菜单下',
+  `button_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '按钮的名称',
+  `button_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '按钮的编码',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-被删除，N-未删除',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_user` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
+  PRIMARY KEY (`button_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单下的按钮' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for sys_resource
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_resource`;
@@ -367,7 +384,7 @@ CREATE TABLE `sys_resource`  (
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`resource_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '资源表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '资源' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_resource
@@ -528,7 +545,7 @@ CREATE TABLE `sys_role`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统角色' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -549,7 +566,7 @@ CREATE TABLE `sys_role_data_scope`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`role_data_scope_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统角色数据范围表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色数据范围' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -607,6 +624,22 @@ INSERT INTO `sys_role_menu` VALUES (1339550467939639335, 1339550467939639304, 13
 INSERT INTO `sys_role_menu` VALUES (1339550467939639336, 1339550467939639304, 1339550467939639303, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
+-- Table structure for sys_role_menu_button
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_menu_button`;
+CREATE TABLE `sys_role_menu_button`  (
+  `role_button_id` bigint(20) NOT NULL COMMENT '主键',
+  `role_id` bigint(20) NOT NULL COMMENT '角色id',
+  `button_id` bigint(20) NOT NULL COMMENT '按钮id',
+  `button_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '按钮编码',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_user` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
+  PRIMARY KEY (`role_button_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色按钮关联' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for sys_role_resource
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_resource`;
@@ -624,9 +657,6 @@ CREATE TABLE `sys_role_resource`  (
 -- ----------------------------
 -- Records of sys_role_resource
 -- ----------------------------
-INSERT INTO `sys_role_resource` VALUES (1341030488239853569, 1341003321565011970, 'guns$dict$delete_dict', '2020-12-21 22:39:18', 1339550467939639299, NULL, NULL);
-INSERT INTO `sys_role_resource` VALUES (1341030488239853570, 1341003321565011970, 'guns$dict$update_dict_status', '2020-12-21 22:39:18', 1339550467939639299, NULL, NULL);
-INSERT INTO `sys_role_resource` VALUES (1341030488239853571, 1341003321565011970, 'guns$dict$add_dict_type', '2020-12-21 22:39:18', 1339550467939639299, NULL, NULL);
 INSERT INTO `sys_role_resource` VALUES (1347530385273131010, 1339550467939639303, 'guns$dict_type$get_dict_type_page_list', '2021-01-08 21:07:34', -1, NULL, NULL);
 INSERT INTO `sys_role_resource` VALUES (1347530385281519618, 1339550467939639303, 'guns$dict_type$delete_dict_type', '2021-01-08 21:07:34', -1, NULL, NULL);
 INSERT INTO `sys_role_resource` VALUES (1347530385281519619, 1339550467939639303, 'guns$dict_type$update_status', '2021-01-08 21:07:34', -1, NULL, NULL);
@@ -783,7 +813,7 @@ CREATE TABLE `sys_sms`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`sms_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统短信表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '短信发送记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_timers
@@ -830,7 +860,7 @@ CREATE TABLE `sys_user`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
@@ -850,7 +880,7 @@ CREATE TABLE `sys_user_data_scope`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`user_data_scope_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户数据范围表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户数据范围' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_user_org
@@ -866,7 +896,7 @@ CREATE TABLE `sys_user_org`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`user_org_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '企业员工表，用户-组织机构的关联' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户组织机构关联' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user_org
@@ -886,7 +916,7 @@ CREATE TABLE `sys_user_role`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`user_role_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户角色表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色关联' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user_role
