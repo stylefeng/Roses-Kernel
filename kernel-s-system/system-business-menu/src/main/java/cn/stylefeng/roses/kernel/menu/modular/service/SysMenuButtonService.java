@@ -9,6 +9,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author q18idc.com QQ993143799
  * @date 2021/1/9 11:04
  */
-public interface SysMenuMenuService extends IService<SysMenuButton> {
+public interface SysMenuButtonService extends IService<SysMenuButton> {
 
 }
