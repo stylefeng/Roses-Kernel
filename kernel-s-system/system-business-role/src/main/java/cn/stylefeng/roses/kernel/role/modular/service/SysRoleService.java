@@ -136,4 +136,11 @@ public interface SysRoleService extends IService<SysRole> {
      */
     String getNameByRoleId(Long roleId);
 
+    /**
+     * 授权菜单和按钮
+     *
+     * @author majianguo
+     * @date 2021/1/9 18:13
+     */
+    void grantMenuAndButton(SysRoleRequest sysRoleMenuButtonRequest);
 }

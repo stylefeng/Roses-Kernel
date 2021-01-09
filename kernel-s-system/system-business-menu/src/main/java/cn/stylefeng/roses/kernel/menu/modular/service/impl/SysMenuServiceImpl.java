@@ -33,6 +33,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
+import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenuButton;
 import cn.stylefeng.roses.kernel.menu.modular.factory.AntdMenusFactory;
 import cn.stylefeng.roses.kernel.menu.modular.factory.LayuiMenusFactory;
 import cn.stylefeng.roses.kernel.menu.modular.factory.common.CommonMenusFactory;
@@ -55,7 +56,11 @@ import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
+import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuButtonResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -64,10 +69,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -265,8 +267,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 给应用排序，激活的应用放在前边
         String activeAppCode = appServiceApi.getActiveAppCode();
         if (activeAppCode != null) {
-            List<LayuiAppIndexMenus> layuiAppIndexMenusArrayList =
-                    layuiAppIndexMenus.stream().filter(i -> activeAppCode.equals(i.getAppCode())).collect(Collectors.toList());
+            List<LayuiAppIndexMenus> layuiAppIndexMenusArrayList = layuiAppIndexMenus.stream().filter(i -> activeAppCode.equals(i.getAppCode())).collect(Collectors.toList());
             layuiAppIndexMenusArrayList.addAll(layuiAppIndexMenus.stream().filter(i -> !activeAppCode.equals(i.getAppCode())).collect(Collectors.toList()));
             return layuiAppIndexMenusArrayList;
         }
@@ -326,6 +327,106 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<AntdSysMenuResponse> getSystemAllMenusAntdv() {
         return this.baseMapper.getSystemAllMenus();
+    }
+
+    @Override
+    public List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest) {
+        List<LayuiMenuAndButtonTreeResponse> menuTreeNodeList = CollectionUtil.newArrayList();
+
+        LambdaQueryWrapper<SysMenu> munuWrapper = new LambdaQueryWrapper<>();
+        munuWrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode());
+        munuWrapper.eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode());
+        // 非超级管理员则获取自己拥有的菜单，分配给人员，防止越级授权
+        if (!LoginContext.me().getSuperAdminFlag()) {
+            List<Long> menuIdList = getCurrentUserMenuIds();
+            if (!menuIdList.isEmpty()) {
+                munuWrapper.in(SysMenu::getMenuId, menuIdList);
+            }
+        }
+
+        List<SysMenu> sysMenuList = this.list(munuWrapper);
+
+        List<Long> menuList = sysMenuList.parallelStream().map(SysMenu::getMenuId).collect(Collectors.toList());
+
+        // 查询所有的按钮
+        LambdaQueryWrapper<SysMenuButton> buttonWrapper = new LambdaQueryWrapper<>();
+        buttonWrapper.eq(SysMenuButton::getDelFlag, YesOrNotEnum.N.getCode());
+        buttonWrapper.in(SysMenuButton::getMenuId, menuList);
+        List<SysMenuButton> sysMenuButtons = sysMenuButtonService.list(buttonWrapper);
+
+        // 把按钮按照菜单id存起来，方便后续操作
+        Map<Long, List<SysMenuButton>> buttons = new HashMap<>(menuList.size());
+        for (SysMenuButton menuButton : sysMenuButtons) {
+            List<SysMenuButton> buttonList = buttons.get(menuButton.getMenuId());
+            if (ObjectUtil.isEmpty(buttonList)) {
+                buttonList = new ArrayList<>();
+                buttons.put(menuButton.getMenuId(), buttonList);
+            }
+            buttonList.add(menuButton);
+        }
+
+        // 查询所有已有的权限
+        // 所有已有的菜单权限
+        List<SysRoleMenuResponse> roleMenuList = roleServiceApi.getRoleMenuList(Collections.singletonList(sysRoleRequest.getRoleId()));
+        // 转换成map方便后续处理
+        Map<Long, SysRoleMenuResponse> roleMenuMap = new HashMap<>();
+        for (SysRoleMenuResponse sysRoleMenuResponse : roleMenuList) {
+            roleMenuMap.put(sysRoleMenuResponse.getMenuId(), sysRoleMenuResponse);
+        }
+
+        // 所有的按钮权限
+        List<SysRoleMenuButtonResponse> roleMenuButtonList = roleServiceApi.getRoleMenuButtonList(Collections.singletonList(sysRoleRequest.getRoleId()));
+
+        // 转换成map方便后续处理
+        Map<Long, SysRoleMenuButtonResponse> roleMenuButtonMap = new HashMap<>();
+        for (SysRoleMenuButtonResponse buttonResponse : roleMenuButtonList) {
+            roleMenuButtonMap.put(buttonResponse.getButtonId(), buttonResponse);
+        }
+
+        // 组装树结果
+        for (SysMenu sysMenu : sysMenuList) {
+            LayuiMenuAndButtonTreeResponse menuTree = new LayuiMenuAndButtonTreeResponse();
+            menuTree.setId(sysMenu.getMenuId());
+            menuTree.setMenuFlag(true);
+            menuTree.setName(sysMenu.getMenuName());
+            menuTree.setPid(sysMenu.getMenuParentId());
+            // 判断是否已经有了
+            SysRoleMenuResponse roleMenuResponse = roleMenuMap.get(sysMenu.getMenuId());
+            if (ObjectUtil.isEmpty(roleMenuResponse)) {
+                menuTree.setChecked(false);
+            } else {
+                menuTree.setChecked(true);
+            }
+
+            // 处理该菜单的按钮
+            List<SysMenuButton> menuButtons = buttons.get(sysMenu.getMenuId());
+
+            // 不为空就去处理
+            if (ObjectUtil.isNotEmpty(menuButtons)) {
+                for (SysMenuButton menuButton : menuButtons) {
+                    LayuiMenuAndButtonTreeResponse buttonTree = new LayuiMenuAndButtonTreeResponse();
+                    buttonTree.setName(menuButton.getButtonName());
+                    buttonTree.setId(menuButton.getButtonId());
+                    buttonTree.setPid(menuButton.getMenuId());
+                    buttonTree.setButtonCode(menuButton.getButtonCode());
+                    buttonTree.setMenuFlag(false);
+                    // 判断是否已经拥有
+                    SysRoleMenuButtonResponse buttonResponse = roleMenuButtonMap.get(menuButton.getButtonId());
+                    if (ObjectUtil.isNotEmpty(buttonResponse)) {
+                        buttonTree.setChecked(true);
+                        menuTree.setChecked(true);
+                    } else {
+                        buttonTree.setChecked(false);
+                    }
+                    // 记录按钮节点
+                    menuTreeNodeList.add(buttonTree);
+                }
+            }
+            // 记录菜单节点
+            menuTreeNodeList.add(menuTree);
+        }
+
+        return menuTreeNodeList;
     }
 
     @Override

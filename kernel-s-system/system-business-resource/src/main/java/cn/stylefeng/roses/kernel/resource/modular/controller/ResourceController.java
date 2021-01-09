@@ -11,6 +11,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
+import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -64,6 +65,17 @@ public class ResourceController {
     public ResponseData getTree() {
         List<ResourceTreeNode> resourceTree = sysResourceService.getResourceTree();
         return new SuccessResponseData(resourceTree);
+    }
+
+    /**
+     * 获取资源平级树列表，用于分配接口权限
+     *
+     * @author majianguo
+     * @date 2021/1/9 15:07
+     */
+    @GetResource(name = "获取资源平级树列表，用于分配接口权限", path = "/resource/getLateralTree")
+    public List<ResourceTreeNode> getLateralTree(SysRoleRequest sysRoleRequest) {
+        return sysResourceService.getResourceLateralTree(sysRoleRequest.getRoleId());
     }
 
     /**

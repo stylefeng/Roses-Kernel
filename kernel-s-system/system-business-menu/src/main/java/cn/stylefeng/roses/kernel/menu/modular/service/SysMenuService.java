@@ -29,7 +29,9 @@ import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
+import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -171,4 +173,11 @@ public interface SysMenuService extends IService<SysMenu> {
      */
     List<AntdSysMenuResponse> getSystemAllMenusAntdv();
 
+    /**
+     * 获取包含按钮的系统菜单
+     *
+     * @author majianguo
+     * @date 2021/1/9 17:11
+     */
+    List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest);
 }
