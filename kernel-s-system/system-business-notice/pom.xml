@@ -11,59 +11,53 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>system-spring-boot-starter</artifactId>
+    <artifactId>system-business-notice</artifactId>
 
     <packaging>jar</packaging>
 
     <dependencies>
 
-        <!--应用管理的业务-->
+        <!--系统管理api模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-business-app</artifactId>
+            <artifactId>system-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-        <!--菜单管理的业务-->
+        <!--通知api模块-->
+        <!--用在通知控制器，通知扫描上-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-business-menu</artifactId>
+            <artifactId>scanner-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-        <!--组织机构管理的业务-->
+        <!--参数校验模块-->
+        <!--用在控制器，参数校验-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-business-organization</artifactId>
+            <artifactId>validator-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-        <!--资源管理的业务-->
+        <!--数据库sdk-->
+        <!--数据库dao框架-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-business-resource</artifactId>
+            <artifactId>db-sdk-mp</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-        <!--角色管理的业务-->
+        <!--web模块-->
         <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-business-role</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <!--用户管理的业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-business-user</artifactId>
+            <artifactId>message-api</artifactId>
             <version>1.0.0</version>
-        </dependency>
-
-        <!--通知管理的业务-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-business-notice</artifactId>
-            <version>1.0.0</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
