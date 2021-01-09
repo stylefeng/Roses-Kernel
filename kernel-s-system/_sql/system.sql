@@ -11,7 +11,7 @@
  Target Server Version : 50732
  File Encoding         : 65001
 
- Date: 09/01/2021 12:06:32
+ Date: 09/01/2021 12:31:37
 */
 
 SET NAMES utf8mb4;
@@ -200,7 +200,7 @@ CREATE TABLE `sys_dict`  (
 DROP TABLE IF EXISTS `sys_dict_type`;
 CREATE TABLE `sys_dict_type`  (
   `dict_type_id` bigint(20) NOT NULL COMMENT '字典类型id',
-  `dict_type_class` int(2) NULL DEFAULT NULL COMMENT '字典类型： 1-业务类型，2-系统类型，参考 DictTypeClassEnum',
+  `dict_type_class` int(11) NULL DEFAULT NULL COMMENT '字典类型： 1-业务类型，2-系统类型，参考 DictTypeClassEnum',
   `dict_type_bus_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典类型业务编码',
   `dict_type_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典类型编码',
   `dict_type_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典类型名称',
@@ -309,9 +309,9 @@ INSERT INTO `sys_menu` VALUES (1339550467939639301, -1, '[-1],', '主控面板',
 INSERT INTO `sys_menu` VALUES (1339550467939639302, 1339550467939639301, '[-1],[1339550467939639301],', '工作台', 'board_platform', 'system', 'Y', 10.10, 1, NULL, '/view/dashboard/workplace', 'layui-icon-rate-solid', 'workplace', 'shop', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', 1339550467939639299, '2021-01-08 20:52:34', 1339550467939639299);
 INSERT INTO `sys_menu` VALUES (1339550467939639303, 1339550467939639301, '[-1],[1339550467939639301],', '分析页', 'board_analyse', 'system', 'Y', 10.20, 1, NULL, '/view/dashboard/analysis', NULL, 'analysis', 'rocket', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, '2021-01-08 20:52:34', 1339550467939639299);
 INSERT INTO `sys_menu` VALUES (1339550467939639304, -1, '[-1],', '组织架构', 'org', 'system', 'Y', 20.00, 1, NULL, '', 'layui-icon-template-1', 'orginfo', 'apartment', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, '2021-01-08 16:47:06', 1339550467939639299);
-INSERT INTO `sys_menu` VALUES (1339550467939639305, 1339550467939639304, '[-1],[1339550467939639304],', '用户管理', 'org_user', 'system', 'Y', 20.10, 1, NULL, NULL, NULL, 'user', 'user', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1339550467939639306, 1339550467939639304, '[-1],[1339550467939639304],', '机构管理', 'org_main', 'system', 'Y', 20.20, 1, NULL, '/organization', NULL, 'organization', 'table', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1339550467939639307, 1339550467939639304, '[-1],[1339550467939639304],', '职位管理', 'org_position', 'system', 'Y', 20.30, 1, NULL, '/position', NULL, 'position', 'solution', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1339550467939639305, 1339550467939639304, '[-1],[1339550467939639304],', '用户管理', 'org_user', 'system', 'Y', 20.10, 1, NULL, '/view/user', NULL, 'user', 'user', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1339550467939639306, 1339550467939639304, '[-1],[1339550467939639304],', '机构管理', 'org_main', 'system', 'Y', 20.20, 1, NULL, '/view/organization', NULL, 'organization', 'table', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1339550467939639307, 1339550467939639304, '[-1],[1339550467939639304],', '职位管理', 'org_position', 'system', 'Y', 20.30, 1, NULL, '/view/position', NULL, 'position', 'solution', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1339550467939639308, -1, '[-1],', '权限管理', 'auth', 'system', 'Y', 30.00, 1, NULL, '', 'layui-icon-vercode', 'authority', 'build', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, '2021-01-08 17:20:19', 1339550467939639299);
 INSERT INTO `sys_menu` VALUES (1339550467939639309, 1339550467939639308, '[-1],[1339550467939639308],', '应用管理', 'auth_app', 'system', 'Y', 30.10, 1, NULL, '/view/app', NULL, 'application', 'appstore', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, '2021-01-08 16:45:55', 1339550467939639299);
 INSERT INTO `sys_menu` VALUES (1339550467939639310, 1339550467939639308, '[-1],[1339550467939639308],', '菜单管理', 'auth_menu', 'system', 'Y', 30.20, 1, NULL, '/view/menu', NULL, 'menu', 'menu', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, '2021-01-08 16:45:55', 1339550467939639299);
