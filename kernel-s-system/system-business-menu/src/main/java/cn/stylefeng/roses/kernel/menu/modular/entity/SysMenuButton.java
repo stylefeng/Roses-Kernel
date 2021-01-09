@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * 菜单下的按钮(SysMenuButton)表实体类
  *
- * @author q18idc.com QQ993143799
+ * @author luojie
  * @since 2021-01-09 10:59:27
  */
 @Data

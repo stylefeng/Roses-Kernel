@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * 系统菜单按钮service接口实现类
  *
- * @author q18idc.com QQ993143799
+ * @author luojie
  * @date 2021/1/9 11:05
  */
 @Service
@@ -147,7 +147,7 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
      *
      * @param sysMenuButtonRequest 菜单id
      * @return 菜单按钮列表
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:53
      */
     @Override
@@ -181,7 +181,7 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
      * 根据菜单id删除该菜单下的所有按钮
      *
      * @param menuId 菜单id
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 14:45
      */
     @Override
@@ -208,7 +208,7 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
      * 查询菜单是否存在
      *
      * @param menuId 菜单id
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:10
      */
     public void findMenuExist(Long menuId) {
@@ -225,7 +225,7 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
      * 查询菜单按钮code是否存在
      *
      * @param sysMenuButtonRequest 菜单按钮请求参数
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 11:38
      */
     public void findMenuButtonCodeExist(SysMenuButtonRequest sysMenuButtonRequest) {

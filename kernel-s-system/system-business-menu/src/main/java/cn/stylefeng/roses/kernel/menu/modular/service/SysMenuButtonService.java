@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 /**
  * 系统菜单按钮service接口
  *
- * @author q18idc.com QQ993143799
+ * @author luojie
  * @date 2021/1/9 11:04
  */
 public interface SysMenuButtonService extends IService<SysMenuButton> {
@@ -18,7 +18,7 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      * 添加系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮请求参数
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 11:28
      */
     void add(SysMenuButtonRequest sysMenuButtonRequest);
@@ -28,7 +28,7 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      *
      * @param sysMenuButtonRequest 菜单按钮id
      * @return 菜单按钮详情
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 11:53
      */
     SysMenuButtonResponse detail(SysMenuButtonRequest sysMenuButtonRequest);
@@ -37,7 +37,7 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      * 编辑系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮请求参数
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:00
      */
     void edit(SysMenuButtonRequest sysMenuButtonRequest);
@@ -46,7 +46,7 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      * 删除单个系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮id
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:14
      */
     void delete(SysMenuButtonRequest sysMenuButtonRequest);
@@ -55,7 +55,7 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      * 批量删除多个系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮id集合
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:27
      */
     void batchDelete(SysMenuButtonRequest sysMenuButtonRequest);
@@ -65,7 +65,7 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      *
      * @param sysMenuButtonRequest 菜单id
      * @return 菜单按钮列表
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:53
      */
     PageResult<SysMenuButtonResponse> pageList(SysMenuButtonRequest sysMenuButtonRequest);
@@ -74,7 +74,7 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      * 根据菜单id删除该菜单下的所有按钮
      *
      * @param menuId 菜单id
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 14:45
      */
     void deleteMenuButtonByMenuId(Long menuId);
