@@ -7,6 +7,7 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -216,9 +217,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public void updateAvatar(SysUserRequest sysUserRequest) {
+
+        // 新头像文件id
+        Long fileId = sysUserRequest.getAvatar();
+
+        // 从当前用户获取用户id
+        LoginUser loginUser = LoginContext.me().getLoginUser();
+        sysUserRequest.setUserId(loginUser.getUserId());
+
+        // 更新用户头像
         SysUser sysUser = this.querySysUser(sysUserRequest);
-        sysUser.setAvatar(sysUserRequest.getAvatar());
+        sysUser.setAvatar(fileId);
         this.updateById(sysUser);
+
+        // 更新当前用户的session信息
+        SimpleUserInfo simpleUserInfo = loginUser.getSimpleUserInfo();
+        simpleUserInfo.setAvatar(fileId);
+        sessionManagerApi.updateSession(LoginContext.me().getToken(), loginUser);
     }
 
     @Override
