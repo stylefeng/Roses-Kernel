@@ -84,14 +84,14 @@ public class SysRoleController {
     }
 
     /**
-     * 授权数据
+     * 设置角色绑定的数据范围类型和数据范围
      *
      * @author fengshuonan
      * @date 2020/3/28 16:05
      */
-    @PostResource(name = "授权数据", path = "/sysRole/grantData")
-    public ResponseData grantData(@RequestBody @Validated(SysRoleRequest.grantData.class) SysRoleRequest sysRoleParam) {
-        sysRoleService.grantData(sysRoleParam);
+    @PostResource(name = "设置角色绑定的数据范围类型和数据范围", path = "/sysRole/grantDataScope")
+    public ResponseData grantData(@RequestBody @Validated(SysRoleRequest.grantDataScope.class) SysRoleRequest sysRoleParam) {
+        sysRoleService.grantDataScope(sysRoleParam);
         return new SuccessResponseData();
     }
 

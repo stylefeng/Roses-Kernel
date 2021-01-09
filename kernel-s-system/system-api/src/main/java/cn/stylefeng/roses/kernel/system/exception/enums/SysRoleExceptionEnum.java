@@ -56,7 +56,12 @@ public enum SysRoleExceptionEnum implements AbstractExceptionEnum {
     /**
      * 超级管理员不能被删除
      */
-    SUPER_ADMIN_CANT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "44", "超级管理员不能被删除");
+    SUPER_ADMIN_CANT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "44", "超级管理员不能被删除"),
+
+    /**
+     * 必须选择公司范围集合
+     */
+    PLEASE_FILL_DATA_SCOPE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "46", "指定部门类型的数据范围必须选择组织机构");
 
     /**
      * 错误编码

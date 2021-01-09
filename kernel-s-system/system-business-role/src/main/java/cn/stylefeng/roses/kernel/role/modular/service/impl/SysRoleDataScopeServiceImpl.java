@@ -58,12 +58,14 @@ public class SysRoleDataScopeServiceImpl extends ServiceImpl<SysRoleDataScopeMap
         this.remove(queryWrapper);
 
         // 授权该角色数据范围
-        sysRoleParam.getGrantOrgIdList().forEach(orgId -> {
-            SysRoleDataScope sysRoleDataScope = new SysRoleDataScope();
-            sysRoleDataScope.setRoleId(roleId);
-            sysRoleDataScope.setOrganizationId(orgId);
-            this.save(sysRoleDataScope);
-        });
+        if (ObjectUtil.isNotEmpty(sysRoleParam.getGrantOrgIdList())) {
+            sysRoleParam.getGrantOrgIdList().forEach(orgId -> {
+                SysRoleDataScope sysRoleDataScope = new SysRoleDataScope();
+                sysRoleDataScope.setRoleId(roleId);
+                sysRoleDataScope.setOrganizationId(orgId);
+                this.save(sysRoleDataScope);
+            });
+        }
     }
 
     @Override

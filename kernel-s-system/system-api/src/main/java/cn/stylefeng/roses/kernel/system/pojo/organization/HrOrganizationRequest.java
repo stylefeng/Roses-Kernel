@@ -74,4 +74,16 @@ public class HrOrganizationRequest extends BaseRequest {
      */
     private String orgRemark;
 
+    /**
+     * 角色id
+     */
+    @NotNull(message = "角色id不能为空", groups = orgZTree.class)
+    private Long roleId;
+
+    /**
+     * 组织机构树zTree形式
+     */
+    public @interface orgZTree {
+    }
+
 }

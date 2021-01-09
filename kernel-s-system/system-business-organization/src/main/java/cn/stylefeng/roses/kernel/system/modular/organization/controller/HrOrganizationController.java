@@ -7,11 +7,13 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
+import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 系统组织机构控制器
@@ -127,6 +129,17 @@ public class HrOrganizationController {
     @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/treeLayui")
     public ResponseData treeLayui(HrOrganizationRequest hrOrganizationRequest) {
         return new SuccessResponseData(hrOrganizationService.treeLayui(hrOrganizationRequest));
+    }
+
+    /**
+     * 获取zTree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）
+     *
+     * @author fengshuonan
+     * @date 2021/1/9 18:37
+     */
+    @GetResource(name = "获取zTree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）", path = "/hrOrganization/zTree")
+    public List<ZTreeNode> layuiSelectParentMenuTreeList(@Validated(HrOrganizationRequest.orgZTree.class) HrOrganizationRequest hrOrganizationRequest) {
+        return hrOrganizationService.orgZTree(hrOrganizationRequest);
     }
 
 }

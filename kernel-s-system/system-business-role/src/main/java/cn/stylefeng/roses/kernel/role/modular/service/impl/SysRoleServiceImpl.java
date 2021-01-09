@@ -140,7 +140,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void grantData(SysRoleRequest sysRoleRequest) {
+    public void grantDataScope(SysRoleRequest sysRoleRequest) {
         SysRole sysRole = this.querySysRole(sysRoleRequest);
 
         // 获取当前用户是否是超级管理员
@@ -160,6 +160,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
             // 数据范围类型为自定义，则判断当前用户有没有该公司的权限
             if (DataScopeTypeEnum.DEFINE.getCode().equals(dataScopeType)) {
+                if (ObjectUtil.isEmpty(sysRoleRequest.getGrantOrgIdList())) {
+                    throw new SystemModularException(SysRoleExceptionEnum.PLEASE_FILL_DATA_SCOPE);
+                }
                 for (Long orgId : sysRoleRequest.getGrantOrgIdList()) {
                     DataScopeUtil.quickValidateDataScope(orgId);
                 }

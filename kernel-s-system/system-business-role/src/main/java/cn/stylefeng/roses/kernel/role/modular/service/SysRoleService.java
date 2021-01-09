@@ -75,7 +75,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @author majianguo
      * @date 2020/11/5 上午11:14
      */
-    void grantData(SysRoleRequest sysRoleRequest);
+    void grantDataScope(SysRoleRequest sysRoleRequest);
 
     /**
      * 查看系统角色
