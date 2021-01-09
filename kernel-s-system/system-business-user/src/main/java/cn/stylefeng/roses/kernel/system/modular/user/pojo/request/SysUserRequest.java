@@ -26,7 +26,7 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "userId不能为空", groups = {edit.class, delete.class, detail.class, grantRole.class, grantData.class, updateInfo.class, resetPwd.class, changeStatus.class, updateAvatar.class})
+    @NotNull(message = "userId不能为空", groups = {edit.class, delete.class, detail.class, grantRole.class, grantData.class, updateInfo.class, resetPwd.class, changeStatus.class})
     private Long userId;
 
     /**

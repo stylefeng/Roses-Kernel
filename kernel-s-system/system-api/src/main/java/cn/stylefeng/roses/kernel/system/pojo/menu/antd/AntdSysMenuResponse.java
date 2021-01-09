@@ -35,11 +35,6 @@ public class AntdSysMenuResponse {
     private String antdvRouter;
 
     /**
-     * 前端用路径，适用于antdvue版本
-     */
-    private String antdvPath;
-
-    /**
      * 图标，适用于antd vue版本
      */
     private String antdvIcon;

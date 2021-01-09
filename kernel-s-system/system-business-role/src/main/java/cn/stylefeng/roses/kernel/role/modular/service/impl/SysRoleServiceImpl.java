@@ -35,17 +35,12 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRole;
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleDataScope;
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleMenu;
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleResource;
+import cn.stylefeng.roses.kernel.role.modular.entity.*;
 import cn.stylefeng.roses.kernel.role.modular.mapper.SysRoleMapper;
-import cn.stylefeng.roses.kernel.role.modular.service.SysRoleDataScopeService;
-import cn.stylefeng.roses.kernel.role.modular.service.SysRoleMenuService;
-import cn.stylefeng.roses.kernel.role.modular.service.SysRoleResourceService;
-import cn.stylefeng.roses.kernel.role.modular.service.SysRoleService;
+import cn.stylefeng.roses.kernel.role.modular.service.*;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
@@ -67,6 +62,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static cn.stylefeng.roses.kernel.system.constants.SystemConstants.SYSTEM_ADMIN_ROLE_CODE;
+import static cn.stylefeng.roses.kernel.system.exception.enums.SysRoleExceptionEnum.SUPER_ADMIN_CANT_DELETE;
+
 /**
  * 系统角色service接口实现类
  *
@@ -87,6 +85,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private SysRoleMenuService roleMenuService;
+
+    @Resource
+    private SysRoleMenuButtonService sysRoleMenuButtonService;
 
     @Override
     public void add(SysRoleRequest sysRoleRequest) {
@@ -114,6 +115,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Transactional(rollbackFor = Exception.class)
     public void delete(SysRoleRequest sysRoleRequest) {
         SysRole sysRole = this.querySysRole(sysRoleRequest);
+
+        // 超级管理员不能删除
+        if (SYSTEM_ADMIN_ROLE_CODE.equals(sysRole.getRoleCode())) {
+            throw new ServiceException(SUPER_ADMIN_CANT_DELETE);
+        }
 
         // 逻辑删除，设为删除标志
         sysRole.setDelFlag(YesOrNotEnum.Y.getCode());
@@ -326,6 +332,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         queryWrapper.in(SysRoleResource::getRoleId, roleIdList);
         List<SysRoleResource> sysRoleResources = sysRoleResourceService.list(queryWrapper);
         return sysRoleResources.stream().map(SysRoleResource::getResourceCode).collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<String> getRoleButtonCodes(List<Long> roleIdList) {
+        LambdaQueryWrapper<SysRoleMenuButton> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(SysRoleMenuButton::getRoleId, roleIdList);
+        queryWrapper.select(SysRoleMenuButton::getButtonCode);
+        List<SysRoleMenuButton> list = sysRoleMenuButtonService.list(queryWrapper);
+        return list.stream().map(SysRoleMenuButton::getButtonCode).collect(Collectors.toSet());
     }
 
     /**

@@ -10,6 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * 系统菜单参数
@@ -75,7 +76,7 @@ public class SysMenuRequest extends BaseRequest {
      * 排序
      */
     @NotNull(message = "排序不能为空", groups = {add.class, edit.class})
-    private Integer menuSort;
+    private BigDecimal menuSort;
 
     /**
      * 图标

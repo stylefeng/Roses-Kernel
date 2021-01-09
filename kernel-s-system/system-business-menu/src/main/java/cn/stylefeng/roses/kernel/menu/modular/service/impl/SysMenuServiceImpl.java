@@ -142,7 +142,25 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public SysMenu detail(SysMenuRequest sysMenuRequest) {
-        return this.querySysMenu(sysMenuRequest);
+        SysMenu sysMenu = this.querySysMenu(sysMenuRequest);
+
+        // 设置父级菜单名称
+        if (sysMenu != null) {
+            Long menuParentId = sysMenu.getMenuParentId();
+            if (SystemConstants.DEFAULT_PARENT_ID.equals(menuParentId)) {
+                sysMenu.setMenuParentName("顶级");
+            } else {
+                Long parentId = sysMenu.getMenuParentId();
+                SysMenu parentMenu = this.getById(parentId);
+                if (parentMenu == null) {
+                    sysMenu.setMenuParentName("无");
+                } else {
+                    sysMenu.setMenuParentName(parentMenu.getMenuName());
+                }
+            }
+        }
+
+        return sysMenu;
     }
 
     @Override
@@ -235,7 +253,18 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<SysMenu> currentUserMenus = this.getCurrentUserMenus();
 
         // 组装每个应用的菜单树
-        return LayuiMenusFactory.createLayuiAppIndexMenus(currentUserMenus);
+        List<LayuiAppIndexMenus> layuiAppIndexMenus = LayuiMenusFactory.createLayuiAppIndexMenus(currentUserMenus);
+
+        // 给应用排序，激活的应用放在前边
+        String activeAppCode = appServiceApi.getActiveAppCode();
+        if (activeAppCode != null) {
+            List<LayuiAppIndexMenus> layuiAppIndexMenusArrayList =
+                    layuiAppIndexMenus.stream().filter(i -> activeAppCode.equals(i.getAppCode())).collect(Collectors.toList());
+            layuiAppIndexMenusArrayList.addAll(layuiAppIndexMenus.stream().filter(i -> !activeAppCode.equals(i.getAppCode())).collect(Collectors.toList()));
+            return layuiAppIndexMenusArrayList;
+        }
+
+        return layuiAppIndexMenus;
     }
 
     @Override

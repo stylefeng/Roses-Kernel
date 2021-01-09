@@ -11,7 +11,6 @@ import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -84,6 +83,18 @@ public class DefaultSessionManager implements SessionManagerApi {
             response.addCookie(cookie);
         }
 
+    }
+
+    @Override
+    public void updateSession(String token, LoginUser loginUser) {
+        LoginUser session = this.getSession(token);
+
+        // 该用户session为空不能更新
+        if (session == null) {
+            return;
+        }
+
+        loginUserCache.put(token, loginUser, sessionExpiredSeconds);
     }
 
     @Override
@@ -173,4 +184,5 @@ public class DefaultSessionManager implements SessionManagerApi {
     public List<LoginUser> onlineUserList() {
         return new ArrayList<>(loginUserCache.getAllValues());
     }
+
 }

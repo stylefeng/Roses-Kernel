@@ -2,6 +2,8 @@ package cn.stylefeng.roses.kernel.resource.modular.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
+import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.resource.api.ResourceReportApi;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ReportResourceParam;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
@@ -21,11 +23,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,17 +40,17 @@ import java.util.stream.Collectors;
 @Service
 public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysResourceService, ResourceReportApi, ResourceServiceApi {
 
-    @Autowired
+    @Resource
     private SysResourceMapper resourceMapper;
 
-    @Autowired
+    @Resource
     private ResourceCache resourceCache;
 
     @Override
-    public Page<SysResource> getResourceList(ResourceRequest resourceRequest) {
-        Page<SysResource> page = PageFactory.defaultPage();
+    public PageResult<SysResource> getResourceList(ResourceRequest resourceRequest) {
         LambdaQueryWrapper<SysResource> wrapper = createWrapper(resourceRequest);
-        return this.page(page, wrapper);
+        Page<SysResource> page = this.page(PageFactory.defaultPage(), wrapper);
+        return PageResultFactory.createPageResult(page);
     }
 
     @Override
@@ -203,6 +205,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             // 根据资源名称
             if (ObjectUtil.isNotEmpty(resourceRequest.getResourceName())) {
                 queryWrapper.like(SysResource::getResourceName, resourceRequest.getResourceName());
+            }
+
+            // 根据资源url
+            if (ObjectUtil.isNotEmpty(resourceRequest.getUrl())) {
+                queryWrapper.like(SysResource::getUrl, resourceRequest.getUrl());
             }
         }
 

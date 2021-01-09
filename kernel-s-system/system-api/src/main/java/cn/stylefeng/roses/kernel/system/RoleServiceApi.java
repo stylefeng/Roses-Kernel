@@ -62,4 +62,14 @@ public interface RoleServiceApi {
      */
     List<String> getRoleResourceCodeList(List<Long> roleIdList);
 
+    /**
+     * 获取角色对应的按钮编码集合
+     *
+     * @param roleIdList 角色id集合
+     * @return 角色拥有的按钮编码集合
+     * @author fengshuonan
+     * @date 2021/1/9 11:08
+     */
+    Set<String> getRoleButtonCodes(List<Long> roleIdList);
+
 }

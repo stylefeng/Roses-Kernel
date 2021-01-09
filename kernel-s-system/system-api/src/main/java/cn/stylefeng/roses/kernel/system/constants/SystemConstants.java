@@ -58,4 +58,9 @@ public interface SystemConstants {
      */
     String DEFAULT_SYSTEM_NAME = "Guns快速开发平台";
 
+    /**
+     * 超级管理员角色编码
+     */
+    String SYSTEM_ADMIN_ROLE_CODE = "superAdmin";
+
 }

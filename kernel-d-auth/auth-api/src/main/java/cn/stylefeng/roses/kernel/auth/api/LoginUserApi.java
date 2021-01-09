@@ -63,4 +63,14 @@ public interface LoginUserApi {
      */
     boolean hasLogin();
 
+    /**
+     * 是否包含某个按钮的权限
+     *
+     * @param buttonCode 按钮的编码
+     * @return true-有权限，false-没有权限
+     * @author fengshuonan
+     * @date 2021/1/9 11:32
+     */
+    boolean haveButton(String buttonCode);
+
 }

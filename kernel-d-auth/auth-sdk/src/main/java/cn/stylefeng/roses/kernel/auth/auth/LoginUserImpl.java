@@ -121,4 +121,14 @@ public class LoginUserImpl implements LoginUserApi {
         return sessionManagerApi.haveSession(token);
     }
 
+    @Override
+    public boolean haveButton(String buttonCode) {
+        LoginUser loginUser = getLoginUser();
+        if (loginUser.getButtonCodes() == null) {
+            return false;
+        } else {
+            return loginUser.getButtonCodes().contains(buttonCode);
+        }
+    }
+
 }
