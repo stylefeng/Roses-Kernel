@@ -87,7 +87,9 @@ public interface SessionManagerApi {
 
     /**
      * 获取在线用户列表
-     * @return
+     *
+     * @author peihongwei
+     * @date 2021/1/9 10:41
      */
     List<LoginUser> onlineUserList();
 
