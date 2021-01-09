@@ -50,7 +50,7 @@ public class LogManagerController {
      * @date 2021/1/8 17:36
      */
     @GetResource(name = "查询日志列表", path = "/logManager/page")
-    public ResponseData page(@RequestBody LogManagerParam logManagerParam) {
+    public ResponseData page(LogManagerParam logManagerParam) {
         return new SuccessResponseData(logManagerApi.queryLogListPage(logManagerParam));
     }
 
