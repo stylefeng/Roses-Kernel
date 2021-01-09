@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * 系统菜单按钮响应实体
  *
- * @author q18idc.com QQ993143799
+ * @author luojie
  * @date 2021/1/9 11:19
  */
 @Data

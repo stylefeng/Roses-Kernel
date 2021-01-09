@@ -5,6 +5,8 @@ import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 
 /**
+ * 菜单按钮异常枚举
+ *
  * @author luojie
  * @date 2021/1/9 11:32
  */

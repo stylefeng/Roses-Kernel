@@ -18,8 +18,8 @@ import javax.annotation.Resource;
 /**
  * 系统菜单按钮控制器
  *
- * @author fengshuonan
- * @date 2020/3/20 18:54
+ * @author luojie
+ * @date 2021/1/9 16:08
  */
 @RestController
 @ApiResource(name = "菜单按钮管理")
@@ -32,7 +32,7 @@ public class SysMenuButtonController {
      * 添加系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮请求参数
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 11:28
      */
     @PostResource(name = "添加系统菜单按钮", path = "/sysMenuButton/add")
@@ -45,7 +45,7 @@ public class SysMenuButtonController {
      * 获取菜单按钮详情
      *
      * @param sysMenuButtonRequest 菜单按钮id
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 11:53
      */
     @GetResource(name = "获取菜单按钮详情", path = "/sysMenuButton/detail")
@@ -58,7 +58,7 @@ public class SysMenuButtonController {
      * 编辑系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮请求参数
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:00
      */
     @PostResource(name = "编辑系统菜单按钮", path = "/sysMenuButton/edit")
@@ -71,7 +71,7 @@ public class SysMenuButtonController {
      * 删除单个系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮id
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:14
      */
     @PostResource(name = "删除单个系统菜单按钮", path = "/sysMenuButton/delete")
@@ -84,7 +84,7 @@ public class SysMenuButtonController {
      * 批量删除多个系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮id集合
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:27
      */
     @PostResource(name = "批量删除多个系统菜单按钮", path = "/sysMenuButton/batchDelete")
@@ -97,7 +97,7 @@ public class SysMenuButtonController {
      * 获取菜单按钮列表
      *
      * @param sysMenuButtonRequest 菜单id
-     * @author q18idc.com QQ993143799
+     * @author luojie
      * @date 2021/1/9 12:33
      */
     @GetResource(name = "获取菜单按钮列表", path = "/sysMenuButton/pageList")
