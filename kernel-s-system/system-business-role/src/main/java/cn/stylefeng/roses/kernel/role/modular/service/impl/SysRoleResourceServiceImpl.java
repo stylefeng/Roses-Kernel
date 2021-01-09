@@ -24,6 +24,7 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.roses.kernel.role.modular.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleResource;
 import cn.stylefeng.roses.kernel.role.modular.mapper.SysRoleResourceMapper;
 import cn.stylefeng.roses.kernel.role.modular.service.SysRoleResourceService;
@@ -44,6 +45,8 @@ import java.util.List;
  */
 @Service
 public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMapper, SysRoleResource> implements SysRoleResourceService {
+
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -85,4 +88,5 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
         queryWrapper.eq(SysRoleResource::getRoleId, roleId);
         this.remove(queryWrapper);
     }
+
 }

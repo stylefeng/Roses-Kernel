@@ -67,4 +67,11 @@ public interface SysResourceService extends IService<SysResource> {
      */
     ResourceDefinition getResourceDetail(ResourceRequest resourceRequest);
 
+    /**
+     * 获取平级树节点列表
+     *
+     * @author majianguo
+     * @date 2021/1/9 15:08
+     */
+    List<ResourceTreeNode> getResourceLateralTree(Long roleId);
 }

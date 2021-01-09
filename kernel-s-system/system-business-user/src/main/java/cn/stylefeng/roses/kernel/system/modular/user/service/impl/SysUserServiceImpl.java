@@ -170,9 +170,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 更新枚举，更新只能更新未删除状态的
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysUser::getUserId, id)
-                .and(i -> i.ne(SysUser::getDelFlag, YesOrNotEnum.Y.getCode()))
-                .set(SysUser::getStatusFlag, statusFlag);
+        updateWrapper.eq(SysUser::getUserId, id).and(i -> i.ne(SysUser::getDelFlag, YesOrNotEnum.Y.getCode())).set(SysUser::getStatusFlag, statusFlag);
 
         boolean update = this.update(updateWrapper);
         if (!update) {
@@ -319,8 +317,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public PageResult<SysUserResponse> page(SysUserRequest sysUserRequest) {
 
-        Page<SysUserResponse> userPage =
-                this.baseMapper.findUserPage(PageFactory.defaultPage(), sysUserRequest);
+        Page<SysUserResponse> userPage = this.baseMapper.findUserPage(PageFactory.defaultPage(), sysUserRequest);
 
         return PageResultFactory.createPageResult(userPage);
     }
@@ -476,6 +473,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public List<LoginUser> onlineUserList() {
         return sessionManagerApi.onlineUserList();
+    }
+
+    @Override
+    public cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse getUserInfoByUserId(Long userId) {
+        SysUser sysUser = this.getById(userId);
+        if (ObjectUtil.isNotEmpty(sysUser)) {
+            return BeanUtil.copyProperties(sysUser, cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse.class);
+        }
+        return null;
     }
 
     /**

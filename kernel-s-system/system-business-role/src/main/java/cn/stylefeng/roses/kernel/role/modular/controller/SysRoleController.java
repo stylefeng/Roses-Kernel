@@ -84,6 +84,18 @@ public class SysRoleController {
     }
 
     /**
+     * 授权角色授权菜单和按钮
+     *
+     * @author majianguo
+     * @date 2021/1/9 18:04
+     */
+    @PostResource(name = "授权资源", path = "/sysRole/grantMenuAndButton")
+    public ResponseData grantMenuAndButton(@RequestBody @Validated(SysRoleRequest.grantMenuButton.class) SysRoleRequest sysRoleRequest) {
+        sysRoleService.grantMenuAndButton(sysRoleRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 授权数据
      *
      * @author fengshuonan

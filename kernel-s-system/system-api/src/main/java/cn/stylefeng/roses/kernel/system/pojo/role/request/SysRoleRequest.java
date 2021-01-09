@@ -48,7 +48,7 @@ public class SysRoleRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "roleId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class, grantData.class})
+    @NotNull(message = "roleId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class, grantData.class, grantMenuButton.class})
     private Long roleId;
 
     /**
@@ -61,13 +61,7 @@ public class SysRoleRequest extends BaseRequest {
      * 角色编码
      */
     @NotBlank(message = "角色编码不能为空", groups = {add.class, edit.class})
-    @TableUniqueValue(
-            message = "角色编码存在重复",
-            groups = {add.class, edit.class},
-            tableName = "sys_role",
-            columnName = "role_code",
-            idFieldName = "role_id",
-            excludeLogicDeleteItems = true)
+    @TableUniqueValue(message = "角色编码存在重复", groups = {add.class, edit.class}, tableName = "sys_role", columnName = "role_code", idFieldName = "role_id", excludeLogicDeleteItems = true)
     private String roleCode;
 
     /**
@@ -106,15 +100,36 @@ public class SysRoleRequest extends BaseRequest {
     private List<Long> grantOrgIdList;
 
     /**
+     * 授权菜单
+     */
+    @NotNull(message = "授权菜单Id不能为空，请检查grantMenuIdList参数", groups = {grantMenuButton.class})
+    private List<Long> grantMenuIdList;
+
+    /**
+     * 授权菜单按钮
+     */
+    @NotNull(message = "授权菜单按钮Id不能为空，请检查grantMenuButtonIdList参数", groups = {grantMenuButton.class})
+    private List<SysRoleMenuButtonRequest> grantMenuButtonIdList;
+
+    /**
+     * 参数校验分组：授权菜单和按钮
+     */
+    public @interface grantMenuButton {
+
+    }
+
+    /**
      * 参数校验分组：授权资源
      */
     public @interface grantResource {
+
     }
 
     /**
      * 参数校验分组：授权数据
      */
     public @interface grantData {
+
     }
 
 }

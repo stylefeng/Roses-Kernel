@@ -47,7 +47,11 @@ import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.constants.SymbolConstant;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysRoleExceptionEnum;
+import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleMenuButtonRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuButtonResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResourceResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -329,9 +333,18 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<String> getRoleResourceCodeList(List<Long> roleIdList) {
         LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(SysRoleResource::getResourceCode);
         queryWrapper.in(SysRoleResource::getRoleId, roleIdList);
         List<SysRoleResource> sysRoleResources = sysRoleResourceService.list(queryWrapper);
-        return sysRoleResources.stream().map(SysRoleResource::getResourceCode).collect(Collectors.toList());
+        return sysRoleResources.parallelStream().map(SysRoleResource::getResourceCode).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SysRoleResourceResponse> getRoleResourceList(List<Long> roleIdList) {
+        LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(SysRoleResource::getRoleId, roleIdList);
+        List<SysRoleResource> sysRoleResources = sysRoleResourceService.list(queryWrapper);
+        return sysRoleResources.parallelStream().map(item -> BeanUtil.copyProperties(item, SysRoleResourceResponse.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -341,6 +354,66 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         queryWrapper.select(SysRoleMenuButton::getButtonCode);
         List<SysRoleMenuButton> list = sysRoleMenuButtonService.list(queryWrapper);
         return list.stream().map(SysRoleMenuButton::getButtonCode).collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<SysRoleMenuResponse> getRoleMenuList(List<Long> roleIdList) {
+        LambdaQueryWrapper<SysRoleMenu> sysRoleMenuLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysRoleMenuLambdaQueryWrapper.in(SysRoleMenu::getRoleId, roleIdList);
+        List<SysRoleMenu> roleMenus = roleMenuService.list(sysRoleMenuLambdaQueryWrapper);
+        List<SysRoleMenuResponse> sysRoleMenuResponses = roleMenus.parallelStream().map(item -> BeanUtil.copyProperties(item, SysRoleMenuResponse.class)).collect(Collectors.toList());
+        return sysRoleMenuResponses;
+    }
+
+    @Override
+    public List<SysRoleMenuButtonResponse> getRoleMenuButtonList(List<Long> roleIdList) {
+        LambdaQueryWrapper<SysRoleMenuButton> sysRoleMenuButtonLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysRoleMenuButtonLambdaQueryWrapper.in(SysRoleMenuButton::getRoleId, roleIdList);
+        List<SysRoleMenuButton> sysRoleMenuButtons = sysRoleMenuButtonService.list(sysRoleMenuButtonLambdaQueryWrapper);
+        List<SysRoleMenuButtonResponse> sysRoleMenuButtonResponses = sysRoleMenuButtons.parallelStream().map(item -> BeanUtil.copyProperties(item, SysRoleMenuButtonResponse.class)).collect(Collectors.toList());
+        return sysRoleMenuButtonResponses;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void grantMenuAndButton(SysRoleRequest sysRoleMenuButtonRequest) {
+        // 清除该角色之前的菜单
+        LambdaQueryWrapper<SysRoleMenu> sysRoleMenuLqw = new LambdaQueryWrapper<>();
+        sysRoleMenuLqw.eq(SysRoleMenu::getRoleId, sysRoleMenuButtonRequest.getRoleId());
+        roleMenuService.remove(sysRoleMenuLqw);
+
+        // 清除该角色之前的按钮授权
+        LambdaQueryWrapper<SysRoleMenuButton> menuButtonLqw = new LambdaQueryWrapper<>();
+        menuButtonLqw.eq(SysRoleMenuButton::getRoleId, sysRoleMenuButtonRequest.getRoleId());
+        sysRoleMenuButtonService.remove(menuButtonLqw);
+
+        // 新增菜单
+        List<Long> menuIdList = sysRoleMenuButtonRequest.getGrantMenuIdList();
+        if (ObjectUtil.isNotEmpty(menuIdList)) {
+            List<SysRoleMenu> sysRoleMenus = new ArrayList<>();
+            for (Long menuId : menuIdList) {
+                SysRoleMenu item = new SysRoleMenu();
+                item.setRoleId(sysRoleMenuButtonRequest.getRoleId());
+                item.setMenuId(menuId);
+                sysRoleMenus.add(item);
+            }
+            roleMenuService.saveBatch(sysRoleMenus);
+        }
+
+        // 新增按钮
+        List<SysRoleMenuButtonRequest> menuButtonList = sysRoleMenuButtonRequest.getGrantMenuButtonIdList();
+        if (ObjectUtil.isNotEmpty(menuButtonList)) {
+            List<SysRoleMenuButton> sysRoleMenuButtons = new ArrayList<>();
+            for (SysRoleMenuButtonRequest menuButton : menuButtonList) {
+                SysRoleMenuButton item = new SysRoleMenuButton();
+                item.setRoleId(sysRoleMenuButtonRequest.getRoleId());
+                item.setButtonId(menuButton.getButtonId());
+                item.setButtonCode(menuButton.getButtonCode());
+                sysRoleMenuButtons.add(item);
+            }
+            sysRoleMenuButtonService.saveBatch(sysRoleMenuButtons);
+        }
+
     }
 
     /**

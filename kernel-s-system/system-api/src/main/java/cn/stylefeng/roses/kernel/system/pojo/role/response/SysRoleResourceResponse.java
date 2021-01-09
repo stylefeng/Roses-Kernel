@@ -22,47 +22,37 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns-separation
 6.若您的项目无法满足以上几点，可申请商业授权，获取Guns商业授权许可，请在官网购买授权，地址为 https://www.stylefeng.cn
  */
-package cn.stylefeng.roses.kernel.role.modular.service;
+package cn.stylefeng.roses.kernel.system.pojo.role.response;
 
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleResource;
-import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
-import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 /**
- * 系统角色菜单service接口
+ * 角色资源关联
  *
- * @author majianguo
- * @date 2020/11/5 上午11:17
+ * @author fengshuonan
+ * @date 2020/11/5 下午4:30
  */
-public interface SysRoleResourceService extends IService<SysRoleResource> {
+@Data
+public class SysRoleResourceResponse extends BaseEntity {
 
     /**
-     * 授权资源
-     *
-     * @param sysRoleRequest 授权参数
-     * @author majianguo
-     * @date 2020/11/5 上午11:17
+     * 主键
      */
-    void grantResource(SysRoleRequest sysRoleRequest);
+    private Long roleResourceId;
 
     /**
-     * 根据资源id集合删除角色关联的资源
-     *
-     * @param resourceIds 资源id集合
-     * @author majianguo
-     * @date 2020/11/5 上午11:17
+     * 角色id
      */
-    void deleteRoleResourceListByResourceIds(List<Long> resourceIds);
+    private Long roleId;
 
     /**
-     * 根据角色id删除对应的角色资源信息
-     *
-     * @param roleId 角色id
-     * @author majianguo
-     * @date 2020/11/5 上午11:18
+     * 资源编码
      */
-    void deleteRoleResourceListByRoleId(Long roleId);
+    private String resourceCode;
 
 }

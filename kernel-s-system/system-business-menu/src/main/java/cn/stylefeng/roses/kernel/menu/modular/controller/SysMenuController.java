@@ -10,6 +10,8 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
+import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -131,6 +133,17 @@ public class SysMenuController {
     @GetResource(name = "获取系统菜单树，用于给角色授权时选择", path = "/sysMenu/treeForGrant")
     public ResponseData treeForGrant(SysMenuRequest sysMenuRequest) {
         return new SuccessResponseData(sysMenuService.treeForGrant(sysMenuRequest));
+    }
+
+    /**
+     * 获取系统菜单树(包含按钮)，用于给角色授权时选择
+     *
+     * @author majianguo
+     * @date 2021/1/9 17:10
+     */
+    @GetResource(name = "获取系统菜单树(包含按钮)，用于给角色授权时选择", path = "/sysMenu/menuAndButtonTree")
+    public List<LayuiMenuAndButtonTreeResponse> menuAndButtonTree(SysRoleRequest sysRoleRequest) {
+        return sysMenuService.getMenuAndButtonTree(sysRoleRequest);
     }
 
     /**

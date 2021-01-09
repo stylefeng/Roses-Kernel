@@ -112,4 +112,9 @@ public class ResourceDefinition implements Serializable {
      */
     private Date createTime;
 
+    /**
+     * 创建人
+     */
+    private String createUser;
+
 }
