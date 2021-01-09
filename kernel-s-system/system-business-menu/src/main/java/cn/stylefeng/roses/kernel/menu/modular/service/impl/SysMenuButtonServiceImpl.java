@@ -92,15 +92,14 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
         // 根据传过来的菜单id查询是否存在
         findMenuExist(menuId);
 
-        // 查询菜单按钮code是否存在
-        findMenuButtonCodeExist(sysMenuButtonRequest);
-
         SysMenuButton sysMenuButton = new SysMenuButton();
         BeanUtil.copyProperties(sysMenuButtonRequest, sysMenuButton);
         // 不更新删除状态
         sysMenuButton.setDelFlag(null);
         // 不更新所属菜单id
         sysMenuButton.setMenuId(null);
+        // 不更新菜单code
+        sysMenuButton.setButtonCode(null);
 
         this.updateById(sysMenuButton);
     }
