@@ -37,6 +37,7 @@ import cn.stylefeng.roses.kernel.menu.modular.factory.AntdMenusFactory;
 import cn.stylefeng.roses.kernel.menu.modular.factory.LayuiMenusFactory;
 import cn.stylefeng.roses.kernel.menu.modular.factory.common.CommonMenusFactory;
 import cn.stylefeng.roses.kernel.menu.modular.mapper.SysMenuMapper;
+import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuButtonService;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
@@ -86,6 +87,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Resource
     private AppServiceApi appServiceApi;
+
+    @Resource
+    private SysMenuButtonService sysMenuButtonService;
 
     @Override
     public void add(SysMenuRequest sysMenuRequest) {
@@ -138,6 +142,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         LambdaUpdateWrapper<SysMenu> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.in(SysMenu::getMenuId, childIdList).set(SysMenu::getDelFlag, YesOrNotEnum.Y.getCode());
         this.update(updateWrapper);
+
+        // 删除该菜单下的按钮
+        sysMenuButtonService.deleteMenuButtonByMenuId(id);
     }
 
     @Override
