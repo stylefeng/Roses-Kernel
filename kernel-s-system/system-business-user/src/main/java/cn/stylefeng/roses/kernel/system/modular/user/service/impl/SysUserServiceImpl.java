@@ -412,8 +412,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<String> resourceCodeList = roleServiceApi.getRoleResourceCodeList(roleIds);
         Set<String> resourceUrlsListByCodes = resourceServiceApi.getResourceUrlsListByCodes(resourceCodeList);
 
-        // 5. 组装响应结果
-        return UserLoginInfoFactory.userLoginInfoDTO(sysUser, roleResponseList, dataScopeResponse, userOrgInfo, resourceUrlsListByCodes);
+        // 6. 获取用户的所有按钮code集合
+        Set<String> roleButtonCodes = roleServiceApi.getRoleButtonCodes(roleIds);
+
+        // 7. 组装响应结果
+        return UserLoginInfoFactory.userLoginInfoDTO(sysUser, roleResponseList, dataScopeResponse, userOrgInfo, resourceUrlsListByCodes, roleButtonCodes);
     }
 
     @Transactional(rollbackFor = Exception.class)

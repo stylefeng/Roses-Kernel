@@ -34,6 +34,7 @@ public class UserLoginInfoFactory {
      * @param dataScopeResponse       数据范围信息
      * @param userOrgInfo             组织机构信息
      * @param resourceUrlsListByCodes 用户的所有资源url
+     * @param roleButtonCodes
      * @author fengshuonan
      * @date 2020/12/26 17:53
      */
@@ -41,7 +42,8 @@ public class UserLoginInfoFactory {
                                                     List<SysRoleResponse> roleResponseList,
                                                     DataScopeResponse dataScopeResponse,
                                                     SysUserOrgResponse userOrgInfo,
-                                                    Set<String> resourceUrlsListByCodes) {
+                                                    Set<String> resourceUrlsListByCodes,
+                                                    Set<String> roleButtonCodes) {
 
         UserLoginInfoDTO userLoginInfoDTO = new UserLoginInfoDTO();
 
@@ -96,6 +98,9 @@ public class UserLoginInfoFactory {
                 stringLoginUserPropExpanderEntry.getValue().expandAction(loginUser);
             }
         }
+
+        // 填充用户拥有的按钮编码
+        loginUser.setButtonCodes(roleButtonCodes);
 
         // 响应dto
         userLoginInfoDTO.setLoginUser(loginUser);

@@ -35,15 +35,9 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRole;
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleDataScope;
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleMenu;
-import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleResource;
+import cn.stylefeng.roses.kernel.role.modular.entity.*;
 import cn.stylefeng.roses.kernel.role.modular.mapper.SysRoleMapper;
-import cn.stylefeng.roses.kernel.role.modular.service.SysRoleDataScopeService;
-import cn.stylefeng.roses.kernel.role.modular.service.SysRoleMenuService;
-import cn.stylefeng.roses.kernel.role.modular.service.SysRoleResourceService;
-import cn.stylefeng.roses.kernel.role.modular.service.SysRoleService;
+import cn.stylefeng.roses.kernel.role.modular.service.*;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
@@ -91,6 +85,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private SysRoleMenuService roleMenuService;
+
+    @Resource
+    private SysRoleMenuButtonService sysRoleMenuButtonService;
 
     @Override
     public void add(SysRoleRequest sysRoleRequest) {
@@ -335,6 +332,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         queryWrapper.in(SysRoleResource::getRoleId, roleIdList);
         List<SysRoleResource> sysRoleResources = sysRoleResourceService.list(queryWrapper);
         return sysRoleResources.stream().map(SysRoleResource::getResourceCode).collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<String> getRoleButtonCodes(List<Long> roleIdList) {
+        LambdaQueryWrapper<SysRoleMenuButton> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(SysRoleMenuButton::getRoleId, roleIdList);
+        queryWrapper.select(SysRoleMenuButton::getButtonCode);
+        List<SysRoleMenuButton> list = sysRoleMenuButtonService.list(queryWrapper);
+        return list.stream().map(SysRoleMenuButton::getButtonCode).collect(Collectors.toSet());
     }
 
     /**
