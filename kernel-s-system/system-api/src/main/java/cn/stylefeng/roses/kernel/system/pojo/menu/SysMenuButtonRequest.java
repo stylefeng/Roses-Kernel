@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.pojo.menu;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import cn.stylefeng.roses.kernel.validator.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -47,6 +48,13 @@ public class SysMenuButtonRequest extends BaseRequest {
      * 按钮的编码
      */
     @NotBlank(message = "按钮编码不能为空，请检查buttonCode参数", groups = {add.class, edit.class})
+    @TableUniqueValue(
+            message = "按钮编码存在重复",
+            groups = {add.class, edit.class},
+            tableName = "sys_menu_button",
+            columnName = "button_code",
+            idFieldName = "button_id",
+            excludeLogicDeleteItems = true)
     private String buttonCode;
 
     /**

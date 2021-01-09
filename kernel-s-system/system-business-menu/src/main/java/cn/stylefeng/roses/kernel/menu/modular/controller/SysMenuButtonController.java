@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.menu.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenuButton;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuButtonService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
@@ -8,7 +9,6 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuButtonRequest;
-import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuButtonResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +50,7 @@ public class SysMenuButtonController {
      */
     @GetResource(name = "获取菜单按钮详情", path = "/sysMenuButton/detail")
     public ResponseData detail(@Validated(SysMenuButtonRequest.detail.class) SysMenuButtonRequest sysMenuButtonRequest) {
-        SysMenuButtonResponse detail = sysMenuButtonService.detail(sysMenuButtonRequest);
+        SysMenuButton detail = sysMenuButtonService.detail(sysMenuButtonRequest);
         return new SuccessResponseData(detail);
     }
 
@@ -102,7 +102,7 @@ public class SysMenuButtonController {
      */
     @GetResource(name = "获取菜单按钮列表", path = "/sysMenuButton/pageList")
     public ResponseData pageList(@Validated(SysMenuButtonRequest.list.class) SysMenuButtonRequest sysMenuButtonRequest) {
-        PageResult<SysMenuButtonResponse> pageResult = sysMenuButtonService.pageList(sysMenuButtonRequest);
+        PageResult<SysMenuButton> pageResult = sysMenuButtonService.pageList(sysMenuButtonRequest);
         return new SuccessResponseData(pageResult);
     }
 

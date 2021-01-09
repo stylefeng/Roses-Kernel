@@ -346,7 +346,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     private SysMenu querySysMenu(SysMenuRequest sysMenuRequest) {
         SysMenu sysMenu = this.getById(sysMenuRequest.getMenuId());
-        if (ObjectUtil.isNull(sysMenu)) {
+        if (ObjectUtil.isNull(sysMenu) || YesOrNotEnum.Y.getCode().equals(sysMenu.getDelFlag())) {
             throw new ServiceException(SysMenuExceptionEnum.MENU_NOT_EXIST);
         }
         return sysMenu;
