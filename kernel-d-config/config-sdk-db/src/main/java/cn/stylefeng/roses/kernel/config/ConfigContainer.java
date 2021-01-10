@@ -6,13 +6,12 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.config.api.ConfigApi;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
+import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Set;
 
-import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum.CONFIG_NOT_EXIST;
-import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum.CONVERT_ERROR;
 
 /**
  * 系统配置表的实现类
@@ -60,16 +59,16 @@ public class ConfigContainer implements ConfigApi {
     public <T> T getConfigValue(String configCode, Class<T> clazz) throws ConfigException {
         String configValue = CONFIG_CONTAINER.getStr(configCode);
         if (ObjectUtil.isEmpty(configValue)) {
-            String format = StrUtil.format(CONFIG_NOT_EXIST.getUserTip(), configCode);
-            log.error(format);
-            throw new ConfigException(CONFIG_NOT_EXIST.getErrorCode(), format);
+            String format = StrUtil.format(ConfigExceptionEnum.CONFIG_NOT_EXIST.getUserTip(), configCode);
+            log.warn(format);
+            throw new ConfigException(ConfigExceptionEnum.CONFIG_NOT_EXIST.getErrorCode(), format);
         } else {
             try {
                 return Convert.convert(clazz, configValue);
             } catch (Exception e) {
-                String format = StrUtil.format(CONVERT_ERROR.getUserTip(), configCode, configValue, clazz.toString());
-                log.error(format);
-                throw new ConfigException(CONVERT_ERROR.getErrorCode(), format);
+                String format = StrUtil.format(ConfigExceptionEnum.CONVERT_ERROR.getUserTip(), configCode, configValue, clazz.toString());
+                log.warn(format);
+                throw new ConfigException(ConfigExceptionEnum.CONVERT_ERROR.getErrorCode(), format);
             }
         }
     }
@@ -78,15 +77,15 @@ public class ConfigContainer implements ConfigApi {
     public <T> T getConfigValueNullable(String configCode, Class<T> clazz) {
         String configValue = CONFIG_CONTAINER.getStr(configCode);
         if (ObjectUtil.isEmpty(configValue)) {
-            String format = StrUtil.format(CONFIG_NOT_EXIST.getUserTip(), configCode);
-            log.error(format);
+            String format = StrUtil.format(ConfigExceptionEnum.CONFIG_NOT_EXIST.getUserTip(), configCode);
+            log.warn(format);
             return null;
         } else {
             try {
                 return Convert.convert(clazz, configValue);
             } catch (Exception e) {
-                String format = StrUtil.format(CONVERT_ERROR.getUserTip(), configCode, configValue, clazz.toString());
-                log.error(format);
+                String format = StrUtil.format(ConfigExceptionEnum.CONVERT_ERROR.getUserTip(), configCode, configValue, clazz.toString());
+                log.warn(format);
                 return null;
             }
         }

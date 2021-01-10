@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
+import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
 import cn.stylefeng.roses.kernel.config.modular.entity.SysConfig;
 import cn.stylefeng.roses.kernel.config.modular.mapper.SysConfigMapper;
 import cn.stylefeng.roses.kernel.config.modular.param.SysConfigParam;
@@ -21,10 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum.CONFIG_NOT_EXIST;
-import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum.CONFIG_SYS_CAN_NOT_DELETE;
-
 
 /**
  * 系统参数配置service接口实现类
@@ -77,13 +74,13 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         // 1.根据id获取常量
         SysConfig sysConfig = this.querySysConfig(sysConfigParam);
         if (sysConfig == null) {
-            String userTip = StrUtil.format(CONFIG_NOT_EXIST.getUserTip(), "id: " + sysConfigParam.getConfigId());
-            throw new ConfigException(CONFIG_NOT_EXIST, userTip);
+            String userTip = StrUtil.format(ConfigExceptionEnum.CONFIG_NOT_EXIST.getUserTip(), "id: " + sysConfigParam.getConfigId());
+            throw new ConfigException(ConfigExceptionEnum.CONFIG_NOT_EXIST, userTip);
         }
 
         // 2.不能删除系统参数
         if (YesOrNotEnum.Y.getCode().equals(sysConfig.getSysFlag())) {
-            throw new ConfigException(CONFIG_SYS_CAN_NOT_DELETE);
+            throw new ConfigException(ConfigExceptionEnum.CONFIG_SYS_CAN_NOT_DELETE);
         }
 
         // 3.设置状态为已删除
@@ -122,8 +119,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     private SysConfig querySysConfig(SysConfigParam sysConfigParam) {
         SysConfig sysConfig = this.getById(sysConfigParam.getConfigId());
         if (ObjectUtil.isEmpty(sysConfig) || sysConfig.getDelFlag().equals(YesOrNotEnum.Y.getCode())) {
-            String userTip = StrUtil.format(CONFIG_NOT_EXIST.getUserTip(), "id: " + sysConfigParam.getConfigId());
-            throw new ConfigException(CONFIG_NOT_EXIST, userTip);
+            String userTip = StrUtil.format(ConfigExceptionEnum.CONFIG_NOT_EXIST.getUserTip(), "id: " + sysConfigParam.getConfigId());
+            throw new ConfigException(ConfigExceptionEnum.CONFIG_NOT_EXIST, userTip);
         }
         return sysConfig;
     }

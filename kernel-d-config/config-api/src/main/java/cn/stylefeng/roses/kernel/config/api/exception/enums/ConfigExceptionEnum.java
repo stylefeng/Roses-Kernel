@@ -24,7 +24,7 @@ public enum ConfigExceptionEnum implements AbstractExceptionEnum {
      * <p>
      * 使用时候，用StrUtil.format()将配置名称带上
      */
-    CONFIG_NOT_EXIST(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ConfigConstants.CONFIG_EXCEPTION_STEP_CODE + "02", "系统配置表不存在该配置，请检查该配置是否存在，配置名称：{}"),
+    CONFIG_NOT_EXIST(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ConfigConstants.CONFIG_EXCEPTION_STEP_CODE + "02", "系统配置表不存在该配置，配置名称：{}，系统将使用默认配置"),
 
     /**
      * 系统配置表获取值时，强转类型异常

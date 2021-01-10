@@ -38,6 +38,14 @@
             <artifactId>druid</artifactId>
         </dependency>
 
+        <!--config模块的api-->
+        <!--数据源配置要放到容器里-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>config-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>
