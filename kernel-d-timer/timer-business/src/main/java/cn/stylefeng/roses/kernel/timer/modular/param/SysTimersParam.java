@@ -44,6 +44,7 @@ public class SysTimersParam extends BaseRequest {
     /**
      * 状态（字典 1运行  2停止）
      */
+    @NotNull(message = "任务状态不能为空", groups = {edit.class})
     private Integer jobStatus;
 
     /**

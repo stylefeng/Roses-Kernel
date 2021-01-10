@@ -37,6 +37,11 @@ public class ResourceTreeNode {
     private Boolean resourceFlag;
 
     /**
+     * 能否选择
+     */
+    private Boolean checked;
+
+    /**
      * 子节点集合
      */
     private List children;

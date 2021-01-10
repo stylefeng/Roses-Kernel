@@ -27,6 +27,16 @@ public interface SessionManagerApi {
     void createSession(String token, LoginUser loginUser);
 
     /**
+     * 更新当前会话的loginUser对象的内容
+     *
+     * @param token     用户的当前token
+     * @param loginUser 新的登录用户信息
+     * @author fengshuonan
+     * @date 2021/1/9 10:43
+     */
+    void updateSession(String token, LoginUser loginUser);
+
+    /**
      * 通过token获取会话
      *
      * @param token 用户token
@@ -87,7 +97,9 @@ public interface SessionManagerApi {
 
     /**
      * 获取在线用户列表
-     * @return
+     *
+     * @author peihongwei
+     * @date 2021/1/9 10:41
      */
     List<LoginUser> onlineUserList();
 

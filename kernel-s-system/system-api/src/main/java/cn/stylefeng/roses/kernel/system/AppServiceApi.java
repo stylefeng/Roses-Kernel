@@ -32,4 +32,13 @@ public interface AppServiceApi {
      */
     String getAppNameByAppCode(String appCode);
 
+    /**
+     * 获取当前激活的应用编码
+     *
+     * @return 激活的应用编码
+     * @author fengshuonan
+     * @date 2021/1/8 19:01
+     */
+    String getActiveAppCode();
+
 }

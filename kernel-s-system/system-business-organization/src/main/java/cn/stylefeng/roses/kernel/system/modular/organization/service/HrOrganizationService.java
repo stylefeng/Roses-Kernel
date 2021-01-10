@@ -5,6 +5,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
 import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -113,5 +114,15 @@ public interface HrOrganizationService extends IService<HrOrganization> {
      * @date 2020/11/6 14:24
      */
     Set<Long> findAllLevelParentIdsByOrganizations(Set<Long> organizationIds);
+
+    /**
+     * 获取ztree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）
+     *
+     * @param hrOrganizationRequest 请求参数
+     * @return ztree形式的组织机构树
+     * @author fengshuonan
+     * @date 2021/1/9 18:40
+     */
+    List<ZTreeNode> orgZTree(HrOrganizationRequest hrOrganizationRequest);
 
 }

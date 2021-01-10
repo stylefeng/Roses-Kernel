@@ -84,14 +84,26 @@ public class SysRoleController {
     }
 
     /**
-     * 授权数据
+     * 授权角色授权菜单和按钮
+     *
+     * @author majianguo
+     * @date 2021/1/9 18:04
+     */
+    @PostResource(name = "授权资源", path = "/sysRole/grantMenuAndButton")
+    public ResponseData grantMenuAndButton(@RequestBody @Validated(SysRoleRequest.grantMenuButton.class) SysRoleRequest sysRoleRequest) {
+        sysRoleService.grantMenuAndButton(sysRoleRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 设置角色绑定的数据范围类型和数据范围
      *
      * @author fengshuonan
      * @date 2020/3/28 16:05
      */
-    @PostResource(name = "授权数据", path = "/sysRole/grantData")
-    public ResponseData grantData(@RequestBody @Validated(SysRoleRequest.grantData.class) SysRoleRequest sysRoleParam) {
-        sysRoleService.grantData(sysRoleParam);
+    @PostResource(name = "设置角色绑定的数据范围类型和数据范围", path = "/sysRole/grantDataScope")
+    public ResponseData grantData(@RequestBody @Validated(SysRoleRequest.grantDataScope.class) SysRoleRequest sysRoleParam) {
+        sysRoleService.grantDataScope(sysRoleParam);
         return new SuccessResponseData();
     }
 
@@ -113,7 +125,7 @@ public class SysRoleController {
      * @date 2020/11/5 上午10:19
      */
     @GetResource(name = "查询角色", path = "/sysRole/page")
-    public ResponseData page(@RequestBody SysRoleRequest sysRoleRequest) {
+    public ResponseData page(SysRoleRequest sysRoleRequest) {
         return new SuccessResponseData(sysRoleService.page(sysRoleRequest));
     }
 

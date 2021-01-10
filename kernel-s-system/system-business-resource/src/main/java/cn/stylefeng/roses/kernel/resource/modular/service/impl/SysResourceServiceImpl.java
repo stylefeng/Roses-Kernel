@@ -1,7 +1,12 @@
 package cn.stylefeng.roses.kernel.resource.modular.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
+import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.resource.api.ResourceReportApi;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ReportResourceParam;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
@@ -12,20 +17,27 @@ import cn.stylefeng.roses.kernel.resource.modular.factory.ResourceFactory;
 import cn.stylefeng.roses.kernel.resource.modular.mapper.SysResourceMapper;
 import cn.stylefeng.roses.kernel.resource.modular.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.resource.modular.service.SysResourceService;
+import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
+import cn.stylefeng.roses.kernel.system.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
+import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResourceResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,17 +50,23 @@ import java.util.stream.Collectors;
 @Service
 public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysResourceService, ResourceReportApi, ResourceServiceApi {
 
-    @Autowired
+    @Resource
     private SysResourceMapper resourceMapper;
 
-    @Autowired
+    @Resource
     private ResourceCache resourceCache;
 
+    @Resource
+    private RoleServiceApi roleServiceApi;
+
+    @Resource
+    private UserServiceApi userServiceApi;
+
     @Override
-    public Page<SysResource> getResourceList(ResourceRequest resourceRequest) {
-        Page<SysResource> page = PageFactory.defaultPage();
+    public PageResult<SysResource> getResourceList(ResourceRequest resourceRequest) {
         LambdaQueryWrapper<SysResource> wrapper = createWrapper(resourceRequest);
-        return this.page(page, wrapper);
+        Page<SysResource> page = this.page(PageFactory.defaultPage(), wrapper);
+        return PageResultFactory.createPageResult(page);
     }
 
     @Override
@@ -101,10 +119,102 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         sysResourceLambdaQueryWrapper.eq(SysResource::getResourceCode, resourceRequest.getResourceCode());
         SysResource sysResource = this.getOne(sysResourceLambdaQueryWrapper);
         if (sysResource != null) {
-            return ResourceFactory.createResourceDefinition(sysResource);
+            ResourceDefinition definition = ResourceFactory.createResourceDefinition(sysResource);
+
+            // 翻译创建人
+            if (sysResource.getCreateUser().equals(RuleConstants.TREE_ROOT_ID)) {
+                definition.setCreateUser("超级管理员");
+            } else {
+                SysUserResponse userInfo = userServiceApi.getUserInfoByUserId(sysResource.getCreateUser());
+                if (ObjectUtil.isNotEmpty(userInfo)) {
+                    definition.setCreateUser(userInfo.getRealName());
+                }
+            }
+            return definition;
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<ResourceTreeNode> getResourceLateralTree(Long roleId) {
+        // 结果
+        List<ResourceTreeNode> res = new ArrayList<>();
+
+        // 获取所有的资源
+        LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysResourceLambdaQueryWrapper.select(SysResource::getAppCode, SysResource::getModularCode, SysResource::getModularName, SysResource::getResourceCode, SysResource::getUrl, SysResource::getResourceName);
+
+        // 只查询需要授权的接口
+        sysResourceLambdaQueryWrapper.eq(SysResource::getRequiredPermissionFlag, YesOrNotEnum.Y.getCode());
+
+        LoginUserApi loginUserApi = LoginContext.me();
+        if (!loginUserApi.getSuperAdminFlag()) {
+            // 获取权限列表
+            List<Long> roleIds = loginUserApi.getLoginUser().getSimpleRoleInfoList().parallelStream().map(SimpleRoleInfo::getRoleId).collect(Collectors.toList());
+            List<String> resourceCodeList = roleServiceApi.getRoleResourceCodeList(roleIds);
+            if (!resourceCodeList.isEmpty()) {
+                sysResourceLambdaQueryWrapper.in(SysResource::getResourceCode, resourceCodeList);
+            }
+        }
+
+        List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
+
+        // 查询当前角色已有的接口
+        List<SysRoleResourceResponse> resourceList = roleServiceApi.getRoleResourceList(Collections.singletonList(roleId));
+
+        // 该角色已拥有权限
+        Map<String, SysRoleResourceResponse> alreadyHave = new HashMap<>(resourceList.size());
+        for (SysRoleResourceResponse sysRoleResponse : resourceList) {
+            alreadyHave.put(sysRoleResponse.getResourceCode(), sysRoleResponse);
+        }
+
+        // 根据模块名称把资源分类
+        Map<String, List<SysResource>> modularMap = new HashMap<>();
+        for (SysResource sysResource : allResource) {
+            List<SysResource> sysResources = modularMap.get(sysResource.getModularName());
+
+            // 没有就新建一个
+            if (ObjectUtil.isEmpty(sysResources)) {
+                sysResources = new ArrayList<>();
+                modularMap.put(sysResource.getModularName(), sysResources);
+            }
+            // 把自己加入进去
+            sysResources.add(sysResource);
+        }
+
+        // 创建一级节点
+        for (Map.Entry<String, List<SysResource>> entry : modularMap.entrySet()) {
+            ResourceTreeNode item = new ResourceTreeNode();
+            item.setResourceFlag(false);
+            String id = IdWorker.get32UUID();
+            item.setCode(id);
+            item.setParentCode(RuleConstants.TREE_ROOT_ID.toString());
+            item.setNodeName(entry.getKey());
+            item.setChecked(false);
+            //创建二级节点
+            for (SysResource resource : entry.getValue()) {
+                ResourceTreeNode subItem = new ResourceTreeNode();
+                // 判断是否已经拥有
+                SysRoleResourceResponse resourceResponse = alreadyHave.get(resource.getResourceCode());
+                if (ObjectUtil.isEmpty(resourceResponse)) {
+                    subItem.setChecked(false);
+                } else {
+                    // 让父类也选择
+                    item.setChecked(true);
+                    subItem.setChecked(true);
+                }
+                subItem.setResourceFlag(true);
+                subItem.setNodeName(resource.getResourceName());
+                subItem.setCode(resource.getResourceCode());
+                subItem.setParentCode(id);
+                res.add(subItem);
+            }
+            res.add(item);
+        }
+
+        // 根据map组装资源树
+        return res;
     }
 
     @Override
@@ -204,6 +314,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             if (ObjectUtil.isNotEmpty(resourceRequest.getResourceName())) {
                 queryWrapper.like(SysResource::getResourceName, resourceRequest.getResourceName());
             }
+
+            // 根据资源url
+            if (ObjectUtil.isNotEmpty(resourceRequest.getUrl())) {
+                queryWrapper.like(SysResource::getUrl, resourceRequest.getUrl());
+            }
         }
 
         return queryWrapper;
@@ -270,6 +385,51 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
      * @date 2020/12/18 15:45
      */
     private List<ResourceTreeNode> createResourceTree(Map<String, Map<String, List<ResourceTreeNode>>> appModularResources, Map<String, String> modularCodeName) {
+
+        List<ResourceTreeNode> finalTree = new ArrayList<>();
+
+        // 按应用遍历应用模块资源集合
+        for (String appName : appModularResources.keySet()) {
+
+            // 创建当前应用节点
+            ResourceTreeNode appNode = new ResourceTreeNode();
+            appNode.setCode(appName);
+            appNode.setNodeName(appName);
+            appNode.setResourceFlag(false);
+            appNode.setParentCode(SystemConstants.DEFAULT_PARENT_ID.toString());
+
+            // 遍历当前应用下的模块资源
+            Map<String, List<ResourceTreeNode>> modularResources = appModularResources.get(appName);
+
+            // 创建模块节点
+            ArrayList<ResourceTreeNode> modularNodes = new ArrayList<>();
+            for (String modularCode : modularResources.keySet()) {
+                ResourceTreeNode modularNode = new ResourceTreeNode();
+                modularNode.setCode(modularCode);
+                modularNode.setNodeName(modularCodeName.get(modularCode));
+                modularNode.setResourceFlag(false);
+                modularNode.setParentCode(appName);
+                modularNode.setChildren(modularResources.get(modularCode));
+                modularNodes.add(modularNode);
+            }
+
+            // 当前应用下添加模块的资源
+            appNode.setChildren(modularNodes);
+
+            // 添加到最终结果
+            finalTree.add(appNode);
+        }
+
+        return finalTree;
+    }
+
+    /**
+     * 根据归好类的资源，创建资源平级树
+     *
+     * @author majianguo
+     * @date 2021/1/9 15:10
+     */
+    private List<ResourceTreeNode> createResourceLateralTree(Map<String, Map<String, List<ResourceTreeNode>>> appModularResources, Map<String, String> modularCodeName) {
 
         List<ResourceTreeNode> finalTree = new ArrayList<>();
 

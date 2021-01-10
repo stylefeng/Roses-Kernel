@@ -48,7 +48,7 @@ public class SysRoleRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "roleId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class, grantData.class})
+    @NotNull(message = "roleId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class, grantDataScope.class, grantMenuButton.class})
     private Long roleId;
 
     /**
@@ -77,10 +77,10 @@ public class SysRoleRequest extends BaseRequest {
     private BigDecimal roleSort;
 
     /**
-     * 数据范围类型：10-全部数据，20-本部门及以下数据，30-本部门数据，40-仅本人数据，50-自定义数据
+     * 数据范围类型：10-仅本人数据，20-本部门数据，30-本部门及以下数据，40-指定部门数据，50-全部数据
      */
     @Null(message = "数据范围类型应该为空， 请移除dataScopeType参数", groups = {add.class, edit.class})
-    @NotNull(message = "数据范围类型不能为空，请检查dataScopeType参数", groups = {grantData.class})
+    @NotNull(message = "数据范围类型不能为空，请检查dataScopeType参数", groups = {grantDataScope.class})
     private Integer dataScopeType;
 
     /**
@@ -102,19 +102,38 @@ public class SysRoleRequest extends BaseRequest {
     /**
      * 授权数据
      */
-    @NotNull(message = "授权数据不能为空，请检查grantOrgIdList参数", groups = {grantData.class})
     private List<Long> grantOrgIdList;
+
+    /**
+     * 授权菜单
+     */
+    @NotNull(message = "授权菜单Id不能为空，请检查grantMenuIdList参数", groups = {grantMenuButton.class})
+    private List<Long> grantMenuIdList;
+
+    /**
+     * 授权菜单按钮
+     */
+    @NotNull(message = "授权菜单按钮Id不能为空，请检查grantMenuButtonIdList参数", groups = {grantMenuButton.class})
+    private List<SysRoleMenuButtonRequest> grantMenuButtonIdList;
+
+    /**
+     * 参数校验分组：授权菜单和按钮
+     */
+    public @interface grantMenuButton {
+
+    }
 
     /**
      * 参数校验分组：授权资源
      */
     public @interface grantResource {
+
     }
 
     /**
      * 参数校验分组：授权数据
      */
-    public @interface grantData {
+    public @interface grantDataScope {
     }
 
 }

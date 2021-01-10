@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.resource.modular.service;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.resource.modular.entity.SysResource;
 import cn.stylefeng.roses.kernel.resource.modular.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public interface SysResourceService extends IService<SysResource> {
      * @author fengshuonan
      * @date 2020/11/24 20:45
      */
-    Page<SysResource> getResourceList(ResourceRequest resourceRequest);
+    PageResult<SysResource> getResourceList(ResourceRequest resourceRequest);
 
     /**
      * 通过应用code获取获取资源下拉列表
@@ -67,4 +67,11 @@ public interface SysResourceService extends IService<SysResource> {
      */
     ResourceDefinition getResourceDetail(ResourceRequest resourceRequest);
 
+    /**
+     * 获取平级树节点列表
+     *
+     * @author majianguo
+     * @date 2021/1/9 15:08
+     */
+    List<ResourceTreeNode> getResourceLateralTree(Long roleId);
 }

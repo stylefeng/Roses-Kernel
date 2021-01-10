@@ -75,7 +75,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @author majianguo
      * @date 2020/11/5 上午11:14
      */
-    void grantData(SysRoleRequest sysRoleRequest);
+    void grantDataScope(SysRoleRequest sysRoleRequest);
 
     /**
      * 查看系统角色
@@ -136,4 +136,11 @@ public interface SysRoleService extends IService<SysRole> {
      */
     String getNameByRoleId(Long roleId);
 
+    /**
+     * 授权菜单和按钮
+     *
+     * @author majianguo
+     * @date 2021/1/9 18:13
+     */
+    void grantMenuAndButton(SysRoleRequest sysRoleMenuButtonRequest);
 }

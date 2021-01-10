@@ -69,6 +69,11 @@ public class LoginUser implements Serializable {
     private Set<String> resourceUrls;
 
     /**
+     * 用户拥有的按钮编码集合
+     */
+    private Set<String> buttonCodes;
+
+    /**
      * 其他信息，Dict为Map的拓展
      */
     private Dict otherInfos;

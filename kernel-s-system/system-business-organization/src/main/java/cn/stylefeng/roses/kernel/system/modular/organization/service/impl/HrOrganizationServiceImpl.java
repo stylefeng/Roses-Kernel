@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.organization.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -27,6 +28,7 @@ import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrOrganizati
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
 import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -303,6 +305,30 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         }
 
         return allLevelParentIds;
+    }
+
+    @Override
+    public List<ZTreeNode> orgZTree(HrOrganizationRequest hrOrganizationRequest) {
+
+        // 获取角色id
+        Long roleId = hrOrganizationRequest.getRoleId();
+
+        // 获取所有组织机构列表
+        LambdaQueryWrapper<HrOrganization> wrapper = createWrapper(hrOrganizationRequest);
+        List<HrOrganization> list = this.list(wrapper);
+        List<ZTreeNode> zTreeNodes = OrganizationFactory.parseZTree(list);
+
+        // 获取角色目前绑定的组织机构范围
+        List<Long> roleDataScopes = roleServiceApi.getRoleDataScopes(ListUtil.toList(roleId));
+
+        // 设置绑定的组织机构范围为已选则状态
+        for (ZTreeNode zTreeNode : zTreeNodes) {
+            if (roleDataScopes.contains(zTreeNode.getId())) {
+                zTreeNode.setChecked(true);
+            }
+        }
+
+        return zTreeNodes;
     }
 
     /**
