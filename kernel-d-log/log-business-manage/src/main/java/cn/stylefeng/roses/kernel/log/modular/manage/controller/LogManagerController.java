@@ -1,18 +1,17 @@
 package cn.stylefeng.roses.kernel.log.modular.manage.controller;
 
-import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerParam;
-import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * 日志管理控制器
@@ -27,7 +26,7 @@ public class LogManagerController {
     /**
      * 日志管理api
      */
-    @Autowired
+    @Resource
     private LogManagerApi logManagerApi;
 
     /**
@@ -40,13 +39,11 @@ public class LogManagerController {
     public ResponseData list(@RequestBody LogManagerParam logManagerParam) {
         return new SuccessResponseData(logManagerApi.queryLogList(logManagerParam));
     }
-    
+
     /**
      * 查询日志
-     * 
-     * @param 
-     * @return 
-     * @author TSQ
+     *
+     * @author tengshuqi
      * @date 2021/1/8 17:36
      */
     @GetResource(name = "查询日志列表", path = "/logManager/page")

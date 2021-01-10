@@ -78,7 +78,8 @@ public interface UserServiceApi {
     /**
      * 获取在线用户列表
      *
-     * @return
+     * @author fengshuonan
+     * @date 2021/1/10 9:56
      */
     List<LoginUser> onlineUserList();
 
