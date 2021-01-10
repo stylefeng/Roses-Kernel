@@ -865,4 +865,26 @@ CREATE TABLE `sys_message`  (
     PRIMARY KEY (`message_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统消息' ROW_FORMAT = Dynamic;
 
+
+-- ----------------------------
+-- Table structure for sys_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_notice`;
+CREATE TABLE `sys_notice`  (
+                               `notice_id` bigint(0) NOT NULL COMMENT '主键',
+                               `notice_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知标题',
+                               `notice_summary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知摘要',
+                               `notice_content` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知内容',
+                               `priority_level` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '优先级',
+                               `notice_begin_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
+                               `notice_end_time` datetime(0) NULL DEFAULT NULL COMMENT '结束时间',
+                               `notice_scope` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '通知范围（用户id字符串）',
+                               `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-被删除，N-未删除',
+                               `create_user` bigint(0) NULL DEFAULT NULL COMMENT '创建人',
+                               `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+                               `update_user` bigint(0) NULL DEFAULT NULL COMMENT '修改人',
+                               `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+                               PRIMARY KEY (`notice_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '通知管理' ROW_FORMAT = Dynamic;
+
 SET FOREIGN_KEY_CHECKS = 1;
