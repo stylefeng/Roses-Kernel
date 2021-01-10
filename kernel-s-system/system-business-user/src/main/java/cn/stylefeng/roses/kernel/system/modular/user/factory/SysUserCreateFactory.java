@@ -3,11 +3,11 @@ package cn.stylefeng.roses.kernel.system.modular.user.factory;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.rule.enums.SexEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
+import cn.stylefeng.roses.kernel.system.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 
@@ -36,7 +36,7 @@ public class SysUserCreateFactory {
         // 密码为空则设置为默认密码
         PasswordStoredEncryptApi passwordStoredEncryptApi = SpringUtil.getBean(PasswordStoredEncryptApi.class);
         if (ObjectUtil.isEmpty(sysUser.getPassword())) {
-            String defaultPassword = AuthConfigExpander.getDefaultPassWord();
+            String defaultPassword = SystemConfigExpander.getDefaultPassWord();
             sysUser.setPassword(passwordStoredEncryptApi.encrypt(defaultPassword));
         } else {
             // 密码不为空，则将密码加密存储到库中
