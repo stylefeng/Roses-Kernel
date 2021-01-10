@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.dict.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictTypeService;
@@ -13,6 +14,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -77,6 +79,12 @@ public class DictTypeController {
     public ResponseData deleteDictType(@RequestBody @Validated(DictTypeRequest.delete.class) DictTypeRequest dictTypeRequest) {
         this.dictTypeService.deleteDictType(dictTypeRequest);
         return new SuccessResponseData();
+    }
+
+    @GetResource(name = "获取字典类型详情", path = "/dictType/getDictDetail", requiredPermission = false)
+    public ResponseData getDictDetail(@RequestParam("dictTypeId") Long dictTypeId) {
+        SysDictType detail = this.dictTypeService.findDetail(dictTypeId);
+        return new SuccessResponseData(detail);
     }
 
     /**
