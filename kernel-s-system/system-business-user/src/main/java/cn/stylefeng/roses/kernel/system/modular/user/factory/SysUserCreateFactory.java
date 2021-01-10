@@ -9,7 +9,7 @@ import cn.stylefeng.roses.kernel.rule.enums.SexEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 
 /**
  * 用户信息填充，用于创建和修改用户时，添加一些基础信息

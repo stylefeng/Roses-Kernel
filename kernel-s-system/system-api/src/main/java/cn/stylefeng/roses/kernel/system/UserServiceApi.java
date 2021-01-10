@@ -1,8 +1,10 @@
 package cn.stylefeng.roses.kernel.system;
 
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 
 import java.util.Date;
 import java.util.List;
@@ -91,5 +93,38 @@ public interface UserServiceApi {
      * @date 2021/1/9 19:00
      */
     SysUserResponse getUserInfoByUserId(Long userId);
+
+    /**
+     * 查询全部用户ID(剔除管理员，和不允许登录)
+     *
+     * @param sysUserRequest 查询参数
+     * @return List<Long> 用户id 集合
+     * @author liuhanqing
+     * @date 2021/1/4 22:09
+     */
+    List<Long> queryAllUserIdList(SysUserRequest sysUserRequest);
+
+
+
+    /**
+     * 获取用户信息
+     *
+     * @param userId 用户id
+     * @return 用户信息
+     * @author liuhanqing
+     * @date 2021/1/4 22:09
+     */
+    SysUserDTO getUserInfo(Long userId);
+
+
+    /**
+     * 根据用户id 判断用户是否存在
+     *
+     * @param userId 用户id
+     * @return 用户信息
+     * @author liuhanqing
+     * @date 2021/1/4 22:55
+     */
+    Boolean userExist(Long userId);
 
 }

@@ -4,7 +4,7 @@ import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserRoleMapper;
-import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

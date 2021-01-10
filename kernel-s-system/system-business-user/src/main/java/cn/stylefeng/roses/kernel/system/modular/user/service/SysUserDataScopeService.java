@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserDataScope;
-import cn.stylefeng.roses.kernel.system.modular.user.pojo.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

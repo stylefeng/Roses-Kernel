@@ -59,6 +59,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--通知管理的业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-notice</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>
