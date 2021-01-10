@@ -11,7 +11,7 @@
  Target Server Version : 50732
  File Encoding         : 65001
 
- Date: 09/01/2021 12:31:37
+ Date: 10/01/2021 13:53:11
 */
 
 SET NAMES utf8mb4;
@@ -364,6 +364,51 @@ INSERT INTO `sys_menu_button` VALUES (1347753823522807839, 1339550467939639311, 
 INSERT INTO `sys_menu_button` VALUES (1347753823522807840, 1339550467939639311, '角色管理_删除角色', 'BUTTON_ROLE_DELETE', 'N', NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu_button` VALUES (1347753823522807841, 1339550467939639311, '角色管理_分配菜单和按钮', 'BUTTON_ROLE_ASSIGN_MENU_BUTTON', 'N', NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu_button` VALUES (1347753823522807842, 1339550467939639311, '角色管理_分配资源', 'BUTTON_ROLE_ASSIGN_RESOURCE', 'N', NULL, NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for sys_message
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_message`;
+CREATE TABLE `sys_message`  (
+  `message_id` bigint(20) NOT NULL COMMENT '主键',
+  `receive_user_id` bigint(20) NULL DEFAULT NULL COMMENT '接收用户id',
+  `send_user_id` bigint(20) NULL DEFAULT NULL COMMENT '发送用户id',
+  `message_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '消息标题',
+  `message_content` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '消息内容',
+  `message_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '消息类型',
+  `priority_level` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '优先级',
+  `message_send_time` datetime(0) NULL DEFAULT NULL COMMENT '消息发送时间',
+  `business_id` bigint(20) NULL DEFAULT NULL COMMENT '业务id',
+  `business_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '业务类型(根据业务id和业务类型可以确定业务数据)',
+  `read_flag` tinyint(4) NULL DEFAULT 0 COMMENT '阅读状态：0-未读，1-已读',
+  `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-被删除，N-未删除',
+  `create_user` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`message_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统消息' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for sys_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_notice`;
+CREATE TABLE `sys_notice`  (
+  `notice_id` bigint(20) NOT NULL COMMENT '主键',
+  `notice_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知标题',
+  `notice_summary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知摘要',
+  `notice_content` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知内容',
+  `priority_level` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '优先级',
+  `notice_begin_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
+  `notice_end_time` datetime(0) NULL DEFAULT NULL COMMENT '结束时间',
+  `notice_scope` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '通知范围（用户id字符串）',
+  `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-被删除，N-未删除',
+  `create_user` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`notice_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '通知管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_resource
@@ -944,51 +989,5 @@ CREATE TABLE `sys_user_role`  (
 -- Records of sys_user_role
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1339554696976781379, 1339550467939639299, 1339550467939639303, '2020-12-17 20:57:31', NULL, NULL, NULL);
-
--- ----------------------------
--- Table structure for sys_message
--- ----------------------------
-DROP TABLE IF EXISTS `sys_message`;
-CREATE TABLE `sys_message`  (
-    `message_id` bigint(0) NOT NULL COMMENT '主键',
-    `receive_user_id` bigint(0) NULL DEFAULT NULL COMMENT '接收用户id',
-    `send_user_id` bigint(0) NULL DEFAULT NULL COMMENT '发送用户id',
-    `message_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '消息标题',
-    `message_content` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '消息内容',
-    `message_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '消息类型',
-    `priority_level` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '优先级',
-    `message_send_time` datetime(0) NULL DEFAULT NULL COMMENT '消息发送时间',
-    `business_id` bigint(0) NULL DEFAULT NULL COMMENT '业务id',
-    `business_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '业务类型(根据业务id和业务类型可以确定业务数据)',
-    `read_flag` tinyint(0) NULL DEFAULT 0 COMMENT '阅读状态：0-未读，1-已读',
-    `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-被删除，N-未删除',
-    `create_user` bigint(0) NULL DEFAULT NULL COMMENT '创建人',
-    `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-    `update_user` bigint(0) NULL DEFAULT NULL COMMENT '修改人',
-    `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-    PRIMARY KEY (`message_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统消息' ROW_FORMAT = Dynamic;
-
-
--- ----------------------------
--- Table structure for sys_notice
--- ----------------------------
-DROP TABLE IF EXISTS `sys_notice`;
-CREATE TABLE `sys_notice`  (
-                               `notice_id` bigint(0) NOT NULL COMMENT '主键',
-                               `notice_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知标题',
-                               `notice_summary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知摘要',
-                               `notice_content` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '通知内容',
-                               `priority_level` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '优先级',
-                               `notice_begin_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
-                               `notice_end_time` datetime(0) NULL DEFAULT NULL COMMENT '结束时间',
-                               `notice_scope` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '通知范围（用户id字符串）',
-                               `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-被删除，N-未删除',
-                               `create_user` bigint(0) NULL DEFAULT NULL COMMENT '创建人',
-                               `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-                               `update_user` bigint(0) NULL DEFAULT NULL COMMENT '修改人',
-                               `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-                               PRIMARY KEY (`notice_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '通知管理' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
