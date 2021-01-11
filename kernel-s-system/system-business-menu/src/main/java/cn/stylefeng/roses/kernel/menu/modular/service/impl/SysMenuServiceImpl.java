@@ -425,7 +425,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             // 记录菜单节点
             menuTreeNodeList.add(menuTree);
         }
-        
+
         // 返回结果
         if (lateralFlag) {
             return menuTreeNodeList;

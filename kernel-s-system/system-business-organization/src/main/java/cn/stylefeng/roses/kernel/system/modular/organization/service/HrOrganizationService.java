@@ -119,10 +119,11 @@ public interface HrOrganizationService extends IService<HrOrganization> {
      * 获取ztree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）
      *
      * @param hrOrganizationRequest 请求参数
+     * @param buildTree             是否构建成树结构的节点，true-带树结构，false-不带
      * @return ztree形式的组织机构树
      * @author fengshuonan
      * @date 2021/1/9 18:40
      */
-    List<ZTreeNode> orgZTree(HrOrganizationRequest hrOrganizationRequest);
+    List<ZTreeNode> orgZTree(HrOrganizationRequest hrOrganizationRequest, boolean buildTree);
 
 }
