@@ -38,6 +38,12 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
         LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageParam);
         return this.list(wrapper);
     }
+    @Override
+    public Integer count(MessageParam messageParam) {
+        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageParam);
+        return this.count(wrapper);
+    }
+
     /**
      * 创建wrapper
      *

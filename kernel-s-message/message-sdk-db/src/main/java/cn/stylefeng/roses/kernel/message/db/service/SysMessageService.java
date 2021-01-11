@@ -31,4 +31,13 @@ public interface SysMessageService extends IService<SysMessage> {
      * @date 2021/1/8 15:21
      */
     List<SysMessage> list(MessageParam messageParam);
+
+    /**
+     * 数量查询
+     *
+     * @param messageParam 参数
+     * @author liuhanqing
+     * @date 2021/1/11 19:21
+     */
+    Integer count(MessageParam messageParam);
 }
