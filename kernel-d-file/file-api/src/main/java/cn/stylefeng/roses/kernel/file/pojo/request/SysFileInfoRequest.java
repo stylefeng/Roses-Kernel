@@ -87,6 +87,11 @@ public class SysFileInfoRequest extends BaseRequest {
     private String filePath;
 
     /**
+     * 文件应用编码
+     */
+    private String fileAppCode;
+
+    /**
      * 版本回退
      */
     public @interface versionBack {

@@ -107,4 +107,13 @@ public class SysFileInfo extends BaseEntity {
     @TableField("del_flag")
     private String delFlag;
 
+
+
+    /**
+     * 文件应用Code名称
+     */
+    @TableField(value = "file_app_code")
+    private String fileAppCodeName;
+
+
 }
