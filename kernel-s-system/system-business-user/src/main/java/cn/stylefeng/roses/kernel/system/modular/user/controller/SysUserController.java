@@ -8,9 +8,9 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -238,17 +238,6 @@ public class SysUserController {
         SysUserRequest sysUserRequest = new SysUserRequest();
         sysUserRequest.setUserId(loginUser.getUserId());
         return new SuccessResponseData(sysUserService.detail(sysUserRequest));
-    }
-
-    /**
-     * 当前在线用户列表
-     *
-     * @author fengshuonan
-     * @date 2021/1/1 19:01
-     */
-    @GetResource(name = "当前在线用户列表", path = "/sysUser/onlineUserList", requiredPermission = false)
-    public ResponseData onlineUserList() {
-        return new SuccessResponseData(sysUserService.onlineUserList());
     }
 
 }

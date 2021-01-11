@@ -7,6 +7,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -72,6 +73,16 @@ public class LoginUser implements Serializable {
      * 用户拥有的按钮编码集合
      */
     private Set<String> buttonCodes;
+
+    /**
+     * 登录的时间
+     */
+    private Date loginTime;
+
+    /**
+     * 用户的token，当返回用户会话信息时候回带token
+     */
+    private String token;
 
     /**
      * 其他信息，Dict为Map的拓展

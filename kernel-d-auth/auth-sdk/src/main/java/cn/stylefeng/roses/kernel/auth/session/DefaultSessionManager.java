@@ -10,10 +10,7 @@ import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 基于redis的会话管理
@@ -182,7 +179,17 @@ public class DefaultSessionManager implements SessionManagerApi {
 
     @Override
     public List<LoginUser> onlineUserList() {
-        return new ArrayList<>(loginUserCache.getAllValues());
+        Map<String, LoginUser> allKeyValues = loginUserCache.getAllKeyValues();
+
+        ArrayList<LoginUser> loginUsers = new ArrayList<>();
+        for (Map.Entry<String, LoginUser> userEntry : allKeyValues.entrySet()) {
+            String token = userEntry.getKey();
+            LoginUser loginUser = userEntry.getValue();
+            loginUser.setToken(token);
+            loginUsers.add(loginUser);
+        }
+
+        return loginUsers;
     }
 
 }
