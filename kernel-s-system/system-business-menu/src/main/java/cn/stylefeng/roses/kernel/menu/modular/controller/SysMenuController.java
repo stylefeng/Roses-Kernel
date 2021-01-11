@@ -136,14 +136,26 @@ public class SysMenuController {
     }
 
     /**
-     * 获取系统菜单树(包含按钮)，用于给角色授权时选择
+     * 获取系统菜单平级树(包含按钮)，用于给角色授权时选择
      *
      * @author majianguo
      * @date 2021/1/9 17:10
      */
     @GetResource(name = "获取系统菜单树(包含按钮)，用于给角色授权时选择", path = "/sysMenu/menuAndButtonTree")
     public List<LayuiMenuAndButtonTreeResponse> menuAndButtonTree(SysRoleRequest sysRoleRequest) {
-        return sysMenuService.getMenuAndButtonTree(sysRoleRequest);
+        return sysMenuService.getMenuAndButtonTree(sysRoleRequest, true);
+    }
+
+    /**
+     * 获取系统菜单树(包含按钮)，用于给角色授权时选择
+     *
+     * @author majianguo
+     * @date 2021/1/9 17:10
+     */
+    @GetResource(name = "获取系统菜单树(包含按钮)，用于给角色授权时选择", path = "/sysMenu/menuAndButtonTreeChildren")
+    public ResponseData menuAndButtonTreeChildren(SysRoleRequest sysRoleRequest) {
+        List<LayuiMenuAndButtonTreeResponse> treeResponseList = sysMenuService.getMenuAndButtonTree(sysRoleRequest, false);
+        return new SuccessResponseData(treeResponseList);
     }
 
     /**

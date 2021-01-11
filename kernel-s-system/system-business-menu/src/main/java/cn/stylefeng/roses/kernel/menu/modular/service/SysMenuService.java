@@ -179,5 +179,5 @@ public interface SysMenuService extends IService<SysMenu> {
      * @author majianguo
      * @date 2021/1/9 17:11
      */
-    List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest);
+    List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest,Boolean lateralFlag);
 }

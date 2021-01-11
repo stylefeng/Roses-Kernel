@@ -73,5 +73,5 @@ public interface SysResourceService extends IService<SysResource> {
      * @author majianguo
      * @date 2021/1/9 15:08
      */
-    List<ResourceTreeNode> getResourceLateralTree(Long roleId);
+    List<ResourceTreeNode> getResourceTree(Long roleId,Boolean lateralFlag);
 }

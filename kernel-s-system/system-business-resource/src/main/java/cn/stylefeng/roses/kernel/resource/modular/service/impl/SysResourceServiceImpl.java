@@ -19,10 +19,12 @@ import cn.stylefeng.roses.kernel.resource.modular.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.resource.modular.service.SysResourceService;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
+import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResourceResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
@@ -137,7 +139,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public List<ResourceTreeNode> getResourceLateralTree(Long roleId) {
+    public List<ResourceTreeNode> getResourceTree(Long roleId, Boolean lateralFlag) {
         // 结果
         List<ResourceTreeNode> res = new ArrayList<>();
 
@@ -214,7 +216,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         }
 
         // 根据map组装资源树
-        return res;
+        if (lateralFlag) {
+            return res;
+        } else {
+            return new DefaultTreeBuildFactory<ResourceTreeNode>().doTreeBuild(res);
+        }
     }
 
     @Override

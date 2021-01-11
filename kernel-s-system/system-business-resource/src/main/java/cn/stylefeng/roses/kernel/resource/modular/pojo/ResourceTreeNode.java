@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.resource.modular.pojo;
 
+import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
 import lombok.Data;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @date 2020/3/26 14:29
  */
 @Data
-public class ResourceTreeNode {
+public class ResourceTreeNode implements AbstractTreeNode {
 
     /**
      * 资源id
@@ -46,4 +47,18 @@ public class ResourceTreeNode {
      */
     private List children;
 
+    @Override
+    public String getNodeId() {
+        return this.code;
+    }
+
+    @Override
+    public String getNodeParentId() {
+        return this.parentCode;
+    }
+
+    @Override
+    public void setChildrenNodes(List childrenNodes) {
+        this.children = childrenNodes;
+    }
 }
