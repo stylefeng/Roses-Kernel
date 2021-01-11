@@ -68,7 +68,7 @@ public class ResourceController {
     }
 
     /**
-     * 获取资源平级树列表，用于分配接口权限
+     * 获取资源平级树列表，用于分配接口权限（适用于layui版本）
      *
      * @author majianguo
      * @date 2021/1/9 15:07
@@ -79,7 +79,7 @@ public class ResourceController {
     }
 
     /**
-     * 获取资源树列表，用于分配接口权限
+     * 获取资源树列表，用于分配接口权限（适用于antd vue版本）
      *
      * @author majianguo
      * @date 2021/1/9 15:07

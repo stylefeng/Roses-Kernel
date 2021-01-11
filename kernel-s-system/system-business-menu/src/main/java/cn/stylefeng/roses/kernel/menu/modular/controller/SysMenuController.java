@@ -136,7 +136,7 @@ public class SysMenuController {
     }
 
     /**
-     * 获取系统菜单平级树(包含按钮)，用于给角色授权时选择
+     * 获取系统菜单平级树(包含按钮)，用于给角色授权时选择（layui版本使用）
      *
      * @author majianguo
      * @date 2021/1/9 17:10
@@ -147,7 +147,7 @@ public class SysMenuController {
     }
 
     /**
-     * 获取系统菜单树(包含按钮)，用于给角色授权时选择
+     * 获取系统菜单树(包含按钮)，用于给角色授权时选择（antd vue版本使用）
      *
      * @author majianguo
      * @date 2021/1/9 17:10
