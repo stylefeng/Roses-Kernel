@@ -21,6 +21,8 @@ import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
+import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -153,7 +155,15 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
 
     @Override
     public SysDict findDetail(Long dictId) {
-        return this.baseMapper.findDetail(dictId);
+        SysDict dict = this.baseMapper.findDetail(dictId);
+        // 获取父节点字典名称
+        if (dict.getDictParentId().equals(SystemConstants.DEFAULT_PARENT_ID)) {
+            dict.setParentName("顶级");
+        } else {
+            SysDict parentDict = this.getById(dict.getDictParentId());
+            dict.setParentName(ObjectUtil.isNotEmpty(parentDict) ? parentDict.getDictName() : "");
+        }
+        return dict;
     }
 
     @Override
@@ -226,6 +236,38 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
             return dictMapper.getDictListExcludeSub(dictId);
         }
         return baseMapper.findList(null, new DictRequest());
+    }
+
+    @Override
+    public List<ZTreeNode> dictZTree(DictRequest dictRequest) {
+        // 根据字典类型编码获取字典
+        LambdaQueryWrapper<SysDict> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysDict::getDictTypeCode, dictRequest.getDictTypeCode());
+        List<SysDict> dictList = this.list(queryWrapper);
+
+        // 构建ztree
+        ArrayList<ZTreeNode> zTreeNodes = new ArrayList<>();
+        for (SysDict dict : dictList) {
+            ZTreeNode zTreeNode = new ZTreeNode();
+            zTreeNode.setId(dict.getDictId());
+            zTreeNode.setpId(dict.getDictParentId());
+            zTreeNode.setName(dict.getDictName());
+            zTreeNode.setOpen(true);
+            zTreeNodes.add(zTreeNode);
+        }
+
+        // 创建顶级节点
+        zTreeNodes.add(ZTreeNode.createParent());
+
+        // 构建已选中的状态
+        if (ObjectUtil.isNotEmpty(dictRequest.getDictId())) {
+            for (ZTreeNode zTreeNode : zTreeNodes) {
+                if (zTreeNode.getId().equals(dictRequest.getDictId())) {
+                    zTreeNode.setChecked(true);
+                }
+            }
+        }
+        return zTreeNodes;
     }
 
     @Override

@@ -65,7 +65,7 @@ public class DictRequest extends BaseRequest {
     /**
      * 字典类型编码
      */
-    @NotBlank(message = "字典类型编码不能为空", groups = {add.class, edit.class, treeList.class})
+    @NotBlank(message = "字典类型编码不能为空", groups = {add.class, edit.class, treeList.class, dictZTree.class})
     private String dictTypeCode;
 
     /**
@@ -116,6 +116,13 @@ public class DictRequest extends BaseRequest {
      * 校验编码是否重复
      */
     public @interface validateAvailable {
+
+    }
+
+    /**
+     * 校验ztree必备参数
+     */
+    public @interface dictZTree {
 
     }
 
