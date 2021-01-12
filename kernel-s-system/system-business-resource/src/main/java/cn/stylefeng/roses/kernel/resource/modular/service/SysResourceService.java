@@ -70,8 +70,10 @@ public interface SysResourceService extends IService<SysResource> {
     /**
      * 获取平级树节点列表
      *
+     * @param roleId      角色id
+     * @param lateralFlag true-不带树形结构，false-返回带树形结构的
      * @author majianguo
      * @date 2021/1/9 15:08
      */
-    List<ResourceTreeNode> getResourceLateralTree(Long roleId);
+    List<ResourceTreeNode> getResourceTree(Long roleId, Boolean lateralFlag);
 }

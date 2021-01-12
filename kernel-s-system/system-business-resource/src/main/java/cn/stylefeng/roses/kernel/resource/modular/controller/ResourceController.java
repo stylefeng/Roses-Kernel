@@ -68,14 +68,26 @@ public class ResourceController {
     }
 
     /**
-     * 获取资源平级树列表，用于分配接口权限
+     * 获取资源平级树列表，用于分配接口权限（适用于layui版本）
      *
      * @author majianguo
      * @date 2021/1/9 15:07
      */
     @GetResource(name = "获取资源平级树列表，用于分配接口权限", path = "/resource/getLateralTree")
     public List<ResourceTreeNode> getLateralTree(SysRoleRequest sysRoleRequest) {
-        return sysResourceService.getResourceLateralTree(sysRoleRequest.getRoleId());
+        return sysResourceService.getResourceTree(sysRoleRequest.getRoleId(), true);
+    }
+
+    /**
+     * 获取资源树列表，用于分配接口权限（适用于antd vue版本）
+     *
+     * @author majianguo
+     * @date 2021/1/9 15:07
+     */
+    @GetResource(name = "获取资源树列表，用于分配接口权限", path = "/resource/getLateralTreeChildren")
+    public ResponseData getLateralTreeChildren(SysRoleRequest sysRoleRequest) {
+        List<ResourceTreeNode> resourceLateralTree = sysResourceService.getResourceTree(sysRoleRequest.getRoleId(), false);
+        return new SuccessResponseData(resourceLateralTree);
     }
 
     /**

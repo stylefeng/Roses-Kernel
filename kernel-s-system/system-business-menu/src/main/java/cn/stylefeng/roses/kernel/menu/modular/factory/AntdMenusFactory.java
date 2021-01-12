@@ -47,7 +47,7 @@ public class AntdMenusFactory {
             // 填充哪个角色绑定了这个菜单
             List<SimpleRoleInfo> roles = antdSysMenuResponse.getRoles();
             AuthorityItem authorityItem = new AuthorityItem();
-            if (roles != null) {
+            if (roles != null && roles.size() > 0) {
                 ArrayList<String> auths = new ArrayList<>();
                 for (SimpleRoleInfo role : roles) {
                     auths.add(role.getRoleCode());

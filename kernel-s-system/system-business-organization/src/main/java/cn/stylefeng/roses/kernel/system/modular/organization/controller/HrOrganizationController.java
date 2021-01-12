@@ -139,7 +139,20 @@ public class HrOrganizationController {
      */
     @GetResource(name = "获取zTree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）", path = "/hrOrganization/zTree")
     public List<ZTreeNode> layuiSelectParentMenuTreeList(@Validated(HrOrganizationRequest.orgZTree.class) HrOrganizationRequest hrOrganizationRequest) {
-        return hrOrganizationService.orgZTree(hrOrganizationRequest);
+        return hrOrganizationService.orgZTree(hrOrganizationRequest, false);
     }
+
+    /**
+     * 获取zTree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（antd vue版本）
+     *
+     * @author fengshuonan
+     * @date 2021/1/9 18:37
+     */
+    @GetResource(name = "获取zTree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（antd vue版本）", path = "/hrOrganization/treeWithChildren")
+    public ResponseData treeWithChildren(@Validated(HrOrganizationRequest.orgZTree.class) HrOrganizationRequest hrOrganizationRequest) {
+        List<ZTreeNode> zTreeNodes = hrOrganizationService.orgZTree(hrOrganizationRequest, true);
+        return new SuccessResponseData(zTreeNodes);
+    }
+
 
 }
