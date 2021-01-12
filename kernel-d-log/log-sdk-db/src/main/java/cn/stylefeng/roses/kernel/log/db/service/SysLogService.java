@@ -15,8 +15,6 @@ public interface SysLogService extends IService<SysLog> {
     /**
      * 查看日志详情
      *
-     * @param
-     * @return
      * @author TSQ
      * @date 2021/1/11 17:51
      */

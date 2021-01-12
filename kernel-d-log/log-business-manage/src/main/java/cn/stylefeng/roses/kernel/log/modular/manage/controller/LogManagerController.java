@@ -29,6 +29,7 @@ public class LogManagerController {
      */
     @Resource
     private LogManagerApi logManagerApi;
+
     /**
      * 日志管理service
      */
@@ -72,8 +73,6 @@ public class LogManagerController {
     /**
      * 查看日志详情
      *
-     * @param
-     * @return
      * @author TSQ
      * @date 2021/1/11 17:36
      */
