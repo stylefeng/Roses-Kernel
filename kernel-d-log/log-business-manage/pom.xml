@@ -48,6 +48,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--log-sdk-db-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>log-sdk-db</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!--web模块-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
