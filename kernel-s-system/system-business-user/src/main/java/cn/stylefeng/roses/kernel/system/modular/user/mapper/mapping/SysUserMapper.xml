@@ -22,13 +22,13 @@
         left join sys_user_org suorg on suser.user_id = suorg.user_id
         <where>
             <if test="sysUserRequest.realName != null and sysUserRequest.realName != ''">
-                and sys_user.real_name like concat('%',#{sysUserRequest.realName},'%')
+                and suser.real_name like concat('%',#{sysUserRequest.realName},'%')
             </if>
             <if test="sysUserRequest.account != null and sysUserRequest.account != ''">
-                and sys_user.account like concat('%',#{sysUserRequest.account},'%')
+                and suser.account like concat('%',#{sysUserRequest.account},'%')
             </if>
             <if test="sysUserRequest.statusFlag != null and sysUserRequest.statusFlag != ''">
-                and sys_user.status_flag like concat('%',#{sysUserRequest.statusFlag},'%')
+                and suser.status_flag like concat('%',#{sysUserRequest.statusFlag},'%')
             </if>
             <if test="sysUserRequest.orgId != null and sysUserRequest.orgId != ''">
                 and suorg.org_id = #{sysUserRequest.orgId}

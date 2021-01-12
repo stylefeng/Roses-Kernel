@@ -176,8 +176,11 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 获取包含按钮的系统菜单
      *
+     * @param sysRoleRequest 请求参数
+     * @param lateralFlag    true-不带树形结构，false-返回带树形结构的
      * @author majianguo
      * @date 2021/1/9 17:11
      */
-    List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest);
+    List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest, Boolean lateralFlag);
+
 }

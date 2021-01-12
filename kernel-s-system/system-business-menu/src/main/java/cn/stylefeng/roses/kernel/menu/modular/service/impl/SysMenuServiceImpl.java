@@ -330,7 +330,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest) {
+    public List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest, Boolean lateralFlag) {
         List<LayuiMenuAndButtonTreeResponse> menuTreeNodeList = CollectionUtil.newArrayList();
 
         LambdaQueryWrapper<SysMenu> munuWrapper = new LambdaQueryWrapper<>();
@@ -426,7 +426,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             menuTreeNodeList.add(menuTree);
         }
 
-        return menuTreeNodeList;
+        // 返回结果
+        if (lateralFlag) {
+            return menuTreeNodeList;
+        } else {
+            return new DefaultTreeBuildFactory<LayuiMenuAndButtonTreeResponse>().doTreeBuild(menuTreeNodeList);
+        }
     }
 
     @Override

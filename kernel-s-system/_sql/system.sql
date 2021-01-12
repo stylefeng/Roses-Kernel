@@ -41,9 +41,9 @@ CREATE TABLE `hr_organization`  (
 -- ----------------------------
 -- Records of hr_organization
 -- ----------------------------
-INSERT INTO `hr_organization` VALUES (1339554696976781407, 0, '[0],', 'Guns总公司', 'guns_level_one', 1.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
-INSERT INTO `hr_organization` VALUES (1339554696976781408, 1339554696976781407, '[0],[1339554696976781407],', '北京分公司', 'guns_beijing', 2.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
-INSERT INTO `hr_organization` VALUES (1339554696976781409, 1339554696976781408, '[0],[1339554696976781407],[1339554696976781408],', '北京东直门分公司', 'guns_beijing_dongzhimen', 3.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
+INSERT INTO `hr_organization` VALUES (1339554696976781407, -1, '[-1],', 'Guns总公司', 'guns_level_one', 1.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
+INSERT INTO `hr_organization` VALUES (1339554696976781408, 1339554696976781407, '[-1],[1339554696976781407],', '北京分公司', 'guns_beijing', 2.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
+INSERT INTO `hr_organization` VALUES (1339554696976781409, 1339554696976781408, '[-1],[1339554696976781407],[1339554696976781408],', '北京东直门分公司', 'guns_beijing_dongzhimen', 3.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for hr_position
@@ -335,7 +335,7 @@ INSERT INTO `sys_menu` VALUES (1339550467939639316, 1339550467939639313, '[-1],[
 INSERT INTO `sys_menu` VALUES (1339550467939639317, -1, '[-1],', '系统功能', 'sys', 'system', 'Y', 50.00, 1, NULL, '', 'layui-icon-set', 'system', 'thunderbolt', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, '2021-01-08 16:47:49', 1339550467939639299);
 INSERT INTO `sys_menu` VALUES (1339550467939639318, 1339550467939639317, '[-1],[1339550467939639317],', '文件管理', 'sys_file', 'system', 'Y', 50.10, 1, NULL, '/view/file', NULL, 'file', 'tags', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1339550467939639319, 1339550467939639317, '[-1],[1339550467939639317],', '操作日志', 'operate_log', 'system', 'Y', 50.20, 1, NULL, '/view/log', NULL, 'logs', 'global', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1339550467939639320, 1339550467939639317, '[-1],[1339550467939639317],', '在线用户', 'sys_online', 'system', 'Y', 50.30, 1, NULL, '/view/onlieUser', NULL, 'online', 'laptop', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1339550467939639320, 1339550467939639317, '[-1],[1339550467939639317],', '在线用户', 'sys_online', 'system', 'Y', 50.30, 1, NULL, '/view/onlineUser', NULL, 'online', 'laptop', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1339550467939639321, 1339550467939639317, '[-1],[1339550467939639317],', '定时任务', 'sys_timer', 'system', 'Y', 50.40, 1, NULL, '/view/sysTimers', NULL, 'timer', 'inbox', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1339550467939639322, -1, '[-1],', '通知管理', 'notice', 'system', 'Y', 60.00, 1, NULL, '', 'layui-icon-tips', 'notice', 'bell', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, '2021-01-08 16:47:56', 1339550467939639299);
 INSERT INTO `sys_menu` VALUES (1339550467939639323, 1339550467939639322, '[-1],[1339550467939639322],', '通知发布', 'notice_update', 'system', 'Y', 60.10, 1, NULL, '/view/notice', NULL, 'noticePublish', 'cloud', NULL, NULL, NULL, 'N', '2020-12-29 19:51:14', NULL, NULL, NULL);

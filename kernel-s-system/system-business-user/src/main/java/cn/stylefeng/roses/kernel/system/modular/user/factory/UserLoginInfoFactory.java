@@ -13,10 +13,7 @@ import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 组装当前登录用户的信息
@@ -34,7 +31,7 @@ public class UserLoginInfoFactory {
      * @param dataScopeResponse       数据范围信息
      * @param userOrgInfo             组织机构信息
      * @param resourceUrlsListByCodes 用户的所有资源url
-     * @param roleButtonCodes
+     * @param roleButtonCodes         用户的所拥有的按钮编码
      * @author fengshuonan
      * @date 2020/12/26 17:53
      */
@@ -101,6 +98,9 @@ public class UserLoginInfoFactory {
 
         // 填充用户拥有的按钮编码
         loginUser.setButtonCodes(roleButtonCodes);
+
+        // 设置用户的登录时间
+        loginUser.setLoginTime(new Date());
 
         // 响应dto
         userLoginInfoDTO.setLoginUser(loginUser);
