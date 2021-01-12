@@ -577,6 +577,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (ObjectUtil.isNotNull(sysUserRequest)) {
 
             // 组装账号的查询条件
+            if (ObjectUtil.isNotEmpty(sysUserRequest.getUserId())) {
+                queryWrapper.eq(SysUser::getUserId, sysUserRequest.getUserId());
+            }
+
+            // 组装账号的查询条件
             if (ObjectUtil.isNotEmpty(sysUserRequest.getAccount())) {
                 queryWrapper.like(SysUser::getAccount, sysUserRequest.getAccount());
             }
