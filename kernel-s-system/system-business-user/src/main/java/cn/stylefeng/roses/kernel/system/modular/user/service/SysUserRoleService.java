@@ -24,6 +24,16 @@ public interface SysUserRoleService extends IService<SysUserRole> {
     List<SysUserRole> getUserRoles(Long userId);
 
     /**
+     * 获取账号绑定的角色id集合
+     *
+     * @param userId 用户id
+     * @return 角色id集合
+     * @author chenjinlong
+     * @date 2021/1/12 19:42
+     */
+    List<Long> getUserRoleIds(Long userId);
+
+    /**
      * 给某个用户授权角色
      *
      * @param sysUserRequest 用户和角色id集合

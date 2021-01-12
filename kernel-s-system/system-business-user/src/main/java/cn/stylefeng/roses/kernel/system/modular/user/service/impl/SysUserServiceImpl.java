@@ -313,6 +313,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserResponse.setOrgId(userOrgInfo.getOrgId());
         sysUserResponse.setPositionId(userOrgInfo.getPositionId());
 
+        // 获取用户角色信息
+        sysUserResponse.setGrantRoleIdList(sysUserRoleService.getUserRoleIds(sysUser.getUserId()));
+
         return sysUserResponse;
     }
 
