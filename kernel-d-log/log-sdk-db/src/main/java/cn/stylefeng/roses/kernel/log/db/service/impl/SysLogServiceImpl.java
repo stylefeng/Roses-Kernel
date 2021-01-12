@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.log.db.service.impl;
 
+import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerParam;
 import cn.stylefeng.roses.kernel.log.db.entity.SysLog;
 import cn.stylefeng.roses.kernel.log.db.mapper.SysLogMapper;
 import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
@@ -14,5 +15,20 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> implements SysLogService {
+
+    @Override
+    public SysLog detail(LogManagerParam logManagerParam) {
+        return this.querySysLog(logManagerParam);
+    }
+
+    /**
+     * 查询日志详细信息
+     *
+     * @author TSQ
+     * @date 2021/1/11 17:54
+     */
+    private SysLog querySysLog(LogManagerParam logManagerParam) {
+        return this.getById(logManagerParam.getLogId());
+    }
 
 }

@@ -5,7 +5,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
-import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
@@ -23,6 +22,7 @@ import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
+import cn.stylefeng.roses.kernel.system.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserDataScope;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
@@ -39,9 +39,11 @@ import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.OnlineUserRequest;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.alibaba.excel.support.ExcelTypeEnum;
@@ -213,7 +215,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.querySysUser(sysUserRequest);
 
         // 获取系统配置的默认密码
-        String password = AuthConfigExpander.getDefaultPassWord();
+        String password = SystemConfigExpander.getDefaultPassWord();
         sysUser.setPassword(passwordStoredEncryptApi.encrypt(password));
 
         this.updateById(sysUser);
@@ -316,6 +318,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUserOrgResponse userOrgInfo = sysUserOrgService.getUserOrgInfo(sysUser.getUserId());
         sysUserResponse.setOrgId(userOrgInfo.getOrgId());
         sysUserResponse.setPositionId(userOrgInfo.getPositionId());
+
+        // 获取用户角色信息
+        sysUserResponse.setGrantRoleIdList(sysUserRoleService.getUserRoleIds(sysUser.getUserId()));
 
         return sysUserResponse;
     }
@@ -575,6 +580,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private LambdaQueryWrapper<SysUser> createWrapper(SysUserRequest sysUserRequest) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
         if (ObjectUtil.isNotNull(sysUserRequest)) {
+
+            // 组装账号的查询条件
+            if (ObjectUtil.isNotEmpty(sysUserRequest.getUserId())) {
+                queryWrapper.eq(SysUser::getUserId, sysUserRequest.getUserId());
+            }
 
             // 组装账号的查询条件
             if (ObjectUtil.isNotEmpty(sysUserRequest.getAccount())) {

@@ -6,8 +6,6 @@ import cn.stylefeng.roses.kernel.validator.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -79,46 +77,44 @@ public class SysMenuRequest extends BaseRequest {
     private BigDecimal menuSort;
 
     /**
-     * 图标
-     */
-    private String icon;
-
-    /**
-     * 路由地址
-     */
-    private String router;
-
-    /**
-     * 组件地址
-     */
-    private String component;
-
-    /**
-     * 外部链接打开方式：1-内置外链，2-新页面外链
-     */
-    @Min(value = 1, message = "打开方式格式错误，请检查openType参数", groups = {add.class, edit.class})
-    @Max(value = 2, message = "打开方式格式错误，请检查openType参数", groups = {add.class, edit.class})
-    private Integer linkOpenType;
-
-    /**
-     * 外部链接地址
-     */
-    private String linkUrl;
-
-    /**
      * 备注
      */
     private String remark;
 
     /**
-     * 菜单的路径，适用于layui-beetl版本
+     * 菜单的路径（适用于layui-beetl版本）
      */
     private String layuiPath;
 
     /**
-     * 菜单的图标，适用于layui-beetl版本
+     * 菜单的图标（适用于layui-beetl版本）
      */
     private String layuiIcon;
+
+    /**
+     * 路由地址，浏览器显示的URL，例如/menu（适用于antd vue版本）
+     */
+    private String antdvRouter;
+
+    /**
+     * 图标（适用于antd vue版本）
+     */
+    private String antdvIcon;
+
+    /**
+     * 前端组件名（适用于antd vue版本）
+     */
+    private String antdvComponent;
+
+    /**
+     * 外部链接打开方式：1-内置打开外链，2-新页面外链（适用于antd vue版本）
+     */
+    private Integer antdvLinkOpenType;
+
+    /**
+     * 外部链接地址（适用于antd vue版本）
+     */
+    private String antdvLinkUrl;
 
     /**
      * 获取主页左侧菜单列表（适配Antd Vue的版本）

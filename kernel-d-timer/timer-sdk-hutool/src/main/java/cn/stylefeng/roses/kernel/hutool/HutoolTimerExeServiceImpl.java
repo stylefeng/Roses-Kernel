@@ -20,6 +20,20 @@ import lombok.extern.slf4j.Slf4j;
 public class HutoolTimerExeServiceImpl implements TimerExeService {
 
     @Override
+    public void start() {
+        // 设置秒级别的启用
+        CronUtil.setMatchSecond(true);
+
+        // 启动定时器执行器
+        CronUtil.start();
+    }
+
+    @Override
+    public void stop() {
+        CronUtil.stop();
+    }
+
+    @Override
     public void startTimer(String taskId, String cron, String className) {
 
         // 判断任务id是否为空

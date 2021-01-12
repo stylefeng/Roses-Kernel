@@ -111,16 +111,6 @@ public class AuthConfigExpander {
     }
 
     /**
-     * 获取默认密码
-     *
-     * @author luojie
-     * @date 2020/11/6 10:05
-     */
-    public static String getDefaultPassWord() {
-        return ConfigContext.me().getSysConfigValueWithDefault("SYS_DEFAULT_PASSWORD", String.class, DEFAULT_PASSWORD);
-    }
-
-    /**
      * 会话信息是否增加保存在 cookie 中
      * <p>
      * 如果开启此开关，会发生两件事：

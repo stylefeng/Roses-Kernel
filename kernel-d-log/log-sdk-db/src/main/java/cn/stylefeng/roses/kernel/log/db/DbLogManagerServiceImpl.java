@@ -1,8 +1,6 @@
 package cn.stylefeng.roses.kernel.log.db;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
@@ -106,7 +104,9 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
     private void createQueryCondition(LogManagerParam logManagerParam, LambdaQueryWrapper<SysLog> sysLogLambdaQueryWrapper) {
 
         // 设置查询条件的起始时间和结束时间
-        sysLogLambdaQueryWrapper.between(SysLog::getCreateTime, logManagerParam.getBeginDateTime(), logManagerParam.getEndDateTime());
+        if (StrUtil.isNotBlank(logManagerParam.getBeginDateTime()) && StrUtil.isNotBlank(logManagerParam.getEndDateTime())) {
+            sysLogLambdaQueryWrapper.between(SysLog::getCreateTime, logManagerParam.getBeginDateTime(), logManagerParam.getEndDateTime());
+        }
 
         // 根据日志名称查询
         String name = logManagerParam.getLogName();
@@ -179,17 +179,6 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
             logManagerParam.setPageSize(DEFAULT_PAGE_SIZE);
         }
 
-        // 开始时间为空则用当天时间开始时间
-        if (StrUtil.isEmpty(logManagerParam.getBeginDateTime())) {
-            String beginDateTime = DateUtil.beginOfDay(DateUtil.date()).toString(DatePattern.NORM_DATETIME_FORMAT);
-            logManagerParam.setBeginDateTime(beginDateTime);
-        }
-
-        // 结束时间为空则默认用当前时间加一天
-        if (StrUtil.isEmpty(logManagerParam.getEndDateTime())) {
-            String endDateTime = DateUtil.beginOfDay(DateUtil.tomorrow()).toString(DatePattern.NORM_DATETIME_FORMAT);
-            logManagerParam.setEndDateTime(endDateTime);
-        }
     }
 
 }
