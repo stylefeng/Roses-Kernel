@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
@@ -25,11 +26,10 @@ import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserDataScope;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
+import cn.stylefeng.roses.kernel.system.modular.user.factory.OnlineUserCreateFactory;
 import cn.stylefeng.roses.kernel.system.modular.user.factory.SysUserCreateFactory;
 import cn.stylefeng.roses.kernel.system.modular.user.factory.UserLoginInfoFactory;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserMapper;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
-import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
@@ -37,8 +37,12 @@ import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.OnlineUserRequest;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -473,8 +477,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public List<LoginUser> onlineUserList() {
-        return sessionManagerApi.onlineUserList();
+    public List<OnlineUserResponse> onlineUserList(OnlineUserRequest onlineUserRequest) {
+        List<LoginUser> loginUsers = sessionManagerApi.onlineUserList();
+
+        // 对象转化
+        List<OnlineUserResponse> result = loginUsers.stream().map(OnlineUserCreateFactory::createOnlineUser).collect(Collectors.toList());
+
+        // 如果带了条件则根据account筛选结果
+        if (StrUtil.isNotBlank(onlineUserRequest.getAccount())) {
+            return result.stream().filter(i -> i.getAccount().equals(onlineUserRequest.getAccount())).collect(Collectors.toList());
+        } else {
+            return result;
+        }
     }
 
     @Override

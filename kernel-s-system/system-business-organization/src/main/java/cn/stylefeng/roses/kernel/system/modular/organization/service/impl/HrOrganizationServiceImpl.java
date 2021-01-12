@@ -308,7 +308,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     }
 
     @Override
-    public List<ZTreeNode> orgZTree(HrOrganizationRequest hrOrganizationRequest) {
+    public List<ZTreeNode> orgZTree(HrOrganizationRequest hrOrganizationRequest, boolean buildTree) {
 
         // 获取角色id
         Long roleId = hrOrganizationRequest.getRoleId();
@@ -328,7 +328,11 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
             }
         }
 
-        return zTreeNodes;
+        if (buildTree) {
+            return new DefaultTreeBuildFactory<ZTreeNode>().doTreeBuild(zTreeNodes);
+        } else {
+            return zTreeNodes;
+        }
     }
 
     /**

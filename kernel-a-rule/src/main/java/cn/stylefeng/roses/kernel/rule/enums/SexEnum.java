@@ -46,4 +46,22 @@ public enum SexEnum {
         }
         return null;
     }
+
+    /**
+     * 编码转化成中文含义
+     *
+     * @author fengshuonan
+     * @date 2021/1/11 22:34
+     */
+    public static String codeToMessage(String code) {
+        if (null != code) {
+            for (SexEnum e : SexEnum.values()) {
+                if (e.getCode().equals(code)) {
+                    return e.getMessage();
+                }
+            }
+        }
+        return "未知";
+    }
+
 }

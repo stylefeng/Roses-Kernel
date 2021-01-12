@@ -1,6 +1,13 @@
 package cn.stylefeng.roses.kernel.system.pojo.ztree;
 
+import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
 import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.List;
 
 /**
  * jquery ztree 插件的节点封装
@@ -8,11 +15,15 @@ import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
  * @author fengshuonan
  * @date 2021/1/6 21:47
  */
-public class ZTreeNode {
+@ToString
+@EqualsAndHashCode
+public class ZTreeNode implements AbstractTreeNode {
 
     /**
      * 节点id
      */
+    @Getter
+    @Setter
     private Long id;
 
     /**
@@ -23,22 +34,37 @@ public class ZTreeNode {
     /**
      * 节点名称
      */
+    @Getter
+    @Setter
     private String name;
 
     /**
      * 是否打开节点
      */
+    @Getter
+    @Setter
     private Boolean open;
 
     /**
      * 是否被选中
      */
+    @Getter
+    @Setter
     private Boolean checked;
 
     /**
      * 节点图标  single or group
      */
+    @Getter
+    @Setter
     private String iconSkin;
+
+    /**
+     * 子节点集合
+     */
+    @Getter
+    @Setter
+    private List children;
 
     /**
      * 创建ztree的父级节点
@@ -56,51 +82,27 @@ public class ZTreeNode {
         return zTreeNode;
     }
 
-    public Long getId() {
-        return id;
+
+    @Override
+    public String getNodeId() {
+        return id.toString();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public String getNodeParentId() {
+        return pId.toString();
     }
 
-    public Long getpId() {
-        return pId;
+    @Override
+    public void setChildrenNodes(List childrenNodes) {
+        this.children = childrenNodes;
     }
 
     public void setpId(Long pId) {
         this.pId = pId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Boolean getOpen() {
-        return open;
-    }
-
-    public void setOpen(Boolean open) {
-        this.open = open;
-    }
-
-    public Boolean getChecked() {
-        return checked;
-    }
-
-    public void setChecked(Boolean checked) {
-        this.checked = checked;
-    }
-
-    public String getIconSkin() {
-        return iconSkin;
-    }
-
-    public void setIconSkin(String iconSkin) {
-        this.iconSkin = iconSkin;
+    public Long getpId() {
+        return pId;
     }
 }

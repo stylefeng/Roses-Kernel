@@ -1,9 +1,10 @@
 package cn.stylefeng.roses.kernel.system;
 
+import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
-import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 
 import java.util.Date;
@@ -83,7 +84,7 @@ public interface UserServiceApi {
      * @author fengshuonan
      * @date 2021/1/10 9:56
      */
-    List<LoginUser> onlineUserList();
+    List<OnlineUserResponse> onlineUserList(OnlineUserRequest onlineUserRequest);
 
     /**
      * 根据用户ID获取用户信息
@@ -103,8 +104,6 @@ public interface UserServiceApi {
      * @date 2021/1/4 22:09
      */
     List<Long> queryAllUserIdList(SysUserRequest sysUserRequest);
-
-
 
     /**
      * 获取用户信息
