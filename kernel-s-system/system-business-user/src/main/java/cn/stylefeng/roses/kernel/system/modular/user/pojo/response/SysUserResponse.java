@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 系统用户结果
@@ -80,4 +81,8 @@ public class SysUserResponse {
      */
     private Integer statusFlag;
 
+    /**
+     * 用户角色id
+     */
+    private List<Long> grantRoleIdList;
 }

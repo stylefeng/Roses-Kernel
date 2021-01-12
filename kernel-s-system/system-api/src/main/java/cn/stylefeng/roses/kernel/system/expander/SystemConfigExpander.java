@@ -3,6 +3,8 @@ package cn.stylefeng.roses.kernel.system.expander;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 
+import static cn.stylefeng.roses.kernel.auth.api.constants.AuthConstants.DEFAULT_PASSWORD;
+
 /**
  * 系统的一些基础信息
  *
@@ -49,6 +51,16 @@ public class SystemConfigExpander {
      */
     public static String getSystemName() {
         return ConfigContext.me().getSysConfigValueWithDefault("SYS_SYSTEM_NAME", String.class, SystemConstants.DEFAULT_SYSTEM_NAME);
+    }
+
+    /**
+     * 获取默认密码
+     *
+     * @author luojie
+     * @date 2020/11/6 10:05
+     */
+    public static String getDefaultPassWord() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_DEFAULT_PASSWORD", String.class, DEFAULT_PASSWORD);
     }
 
 }
