@@ -9,6 +9,22 @@ package cn.stylefeng.roses.kernel.timer.api;
 public interface TimerExeService {
 
     /**
+     * 开启定时器调度
+     *
+     * @author fengshuonan
+     * @date 2021/1/12 20:33
+     */
+    void start();
+
+    /**
+     * 关闭定时器调度
+     *
+     * @author fengshuonan
+     * @date 2021/1/12 20:33
+     */
+    void stop();
+
+    /**
      * 启动一个定时器
      * <p>
      * 定时任务表达式书写规范：0/2 * * * * *
