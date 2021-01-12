@@ -104,7 +104,9 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
     private void createQueryCondition(LogManagerParam logManagerParam, LambdaQueryWrapper<SysLog> sysLogLambdaQueryWrapper) {
 
         // 设置查询条件的起始时间和结束时间
-        sysLogLambdaQueryWrapper.between(SysLog::getCreateTime, logManagerParam.getBeginDateTime(), logManagerParam.getEndDateTime());
+        if (StrUtil.isNotBlank(logManagerParam.getBeginDateTime()) && StrUtil.isNotBlank(logManagerParam.getEndDateTime())) {
+            sysLogLambdaQueryWrapper.between(SysLog::getCreateTime, logManagerParam.getBeginDateTime(), logManagerParam.getEndDateTime());
+        }
 
         // 根据日志名称查询
         String name = logManagerParam.getLogName();
