@@ -41,9 +41,9 @@ CREATE TABLE `hr_organization`  (
 -- ----------------------------
 -- Records of hr_organization
 -- ----------------------------
-INSERT INTO `hr_organization` VALUES (1339554696976781407, 0, '[0],', 'Guns总公司', 'guns_level_one', 1.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
-INSERT INTO `hr_organization` VALUES (1339554696976781408, 1339554696976781407, '[0],[1339554696976781407],', '北京分公司', 'guns_beijing', 2.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
-INSERT INTO `hr_organization` VALUES (1339554696976781409, 1339554696976781408, '[0],[1339554696976781407],[1339554696976781408],', '北京东直门分公司', 'guns_beijing_dongzhimen', 3.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
+INSERT INTO `hr_organization` VALUES (1339554696976781407, -1, '[-1],', 'Guns总公司', 'guns_level_one', 1.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
+INSERT INTO `hr_organization` VALUES (1339554696976781408, 1339554696976781407, '[-1],[1339554696976781407],', '北京分公司', 'guns_beijing', 2.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
+INSERT INTO `hr_organization` VALUES (1339554696976781409, 1339554696976781408, '[-1],[1339554696976781407],[1339554696976781408],', '北京东直门分公司', 'guns_beijing_dongzhimen', 3.00, 1, NULL, 'N', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for hr_position
