@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.log.modular.manage.controller;
 
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerParam;
+import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
@@ -28,6 +29,11 @@ public class LogManagerController {
      */
     @Resource
     private LogManagerApi logManagerApi;
+    /**
+     * 日志管理service
+     */
+    @Resource
+    private SysLogService sysLogService;
 
     /**
      * 查询日志列表
@@ -61,6 +67,19 @@ public class LogManagerController {
     public ResponseData delete(@RequestBody @Validated(LogManagerParam.delete.class) LogManagerParam logManagerParam) {
         logManagerApi.deleteLogs(logManagerParam);
         return new SuccessResponseData();
+    }
+
+    /**
+     * 查看日志详情
+     *
+     * @param
+     * @return
+     * @author TSQ
+     * @date 2021/1/11 17:36
+     */
+    @GetResource(name = "查看日志详情", path = "/logManager/detail")
+    public ResponseData detail(@Validated(LogManagerParam.detail.class) LogManagerParam logManagerParam) {
+        return new SuccessResponseData(sysLogService.detail(logManagerParam));
     }
 
 }

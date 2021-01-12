@@ -181,7 +181,7 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
 
         // 开始时间为空则用当天时间开始时间
         if (StrUtil.isEmpty(logManagerParam.getBeginDateTime())) {
-            String beginDateTime = DateUtil.beginOfDay(DateUtil.date()).toString(DatePattern.NORM_DATETIME_FORMAT);
+            String beginDateTime = DateUtil.beginOfDay(DateUtil.parse("2021-01-01 00:00:00")).toString(DatePattern.NORM_DATETIME_FORMAT);
             logManagerParam.setBeginDateTime(beginDateTime);
         }
 
