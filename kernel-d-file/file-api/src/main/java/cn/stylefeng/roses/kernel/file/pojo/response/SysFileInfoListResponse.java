@@ -31,6 +31,17 @@ public class SysFileInfoListResponse implements Serializable {
 
 
     /**
+     * 文件仓库（文件夹）
+     */
+    private String fileBucket;
+
+
+    /**
+     * 存储到bucket中的名称，主键id+.后缀
+     */
+    private String fileObjectName;
+
+    /**
      * 是否为机密文件
      */
     private String secretFlag;

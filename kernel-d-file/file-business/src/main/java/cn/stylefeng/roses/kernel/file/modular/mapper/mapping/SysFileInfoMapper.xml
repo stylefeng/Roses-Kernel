@@ -27,10 +27,12 @@
 
     <!--  附件列表  -->
     <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoListResponse">
-        SELECT file.file_id           AS fileId,
+        SELECT file.file_id        AS fileId,
             file.file_code         AS fileCode,
             file.file_app_code     AS fileAppCode,
             file.secret_flag       AS secretFlag,
+            file.file_bucket       AS fileBucket,
+            file.file_object_name AS fileObjectName,
             app.app_name           AS fileAppCodeName,
             file.file_location     AS fileLocation,
             file.file_origin_name  AS fileOriginName,
