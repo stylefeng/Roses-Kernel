@@ -66,6 +66,14 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--登录日志的业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-login-log</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>

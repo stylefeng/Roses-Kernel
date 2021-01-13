@@ -17,6 +17,7 @@ import cn.stylefeng.roses.kernel.jwt.api.exception.JwtException;
 import cn.stylefeng.roses.kernel.jwt.api.exception.enums.JwtExceptionEnum;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
+import cn.stylefeng.roses.kernel.system.LoginLogServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
@@ -54,6 +55,9 @@ public class AuthServiceImpl implements AuthServiceApi {
     @Resource
     private PasswordTransferEncryptApi passwordTransferEncryptApi;
 
+    @Resource
+    private LoginLogServiceApi loginLogServiceApi;
+
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         return loginAction(loginRequest, true);
@@ -69,8 +73,13 @@ public class AuthServiceImpl implements AuthServiceApi {
     @Override
     public void logout() {
         String token = LoginContext.me().getToken();
+        //退出日志
+        if (StrUtil.isNotEmpty(token)) {
+            loginLogServiceApi.loginOutSuccess(LoginContext.me().getLoginUser().getUserId());
+        }
         logoutWithToken(token);
         sessionManagerApi.destroySessionCookie();
+
     }
 
     @Override
@@ -198,7 +207,9 @@ public class AuthServiceImpl implements AuthServiceApi {
         String ip = HttpServletUtil.getRequestClientIp(HttpServletUtil.getRequest());
         userServiceApi.updateUserLoginInfo(loginUser.getUserId(), new Date(), ip);
 
-        // 11. 组装返回结果
+        // 11.登录成功日志
+        loginLogServiceApi.loginSuccess(loginUser.getUserId());
+        // 12. 组装返回结果
         return new LoginResponse(loginUser, jwtToken, defaultJwtPayload.getExpirationDate());
     }
 

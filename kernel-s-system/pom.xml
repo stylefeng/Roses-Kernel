@@ -24,6 +24,7 @@
         <module>system-business-role</module>
         <module>system-business-menu</module>
         <module>system-business-notice</module>
+        <module>system-business-login-log</module>
         <module>system-spring-boot-starter</module>
     </modules>
 

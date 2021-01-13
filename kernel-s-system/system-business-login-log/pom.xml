@@ -11,21 +11,21 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>system-business-notice</artifactId>
+    <artifactId>system-business-login-log</artifactId>
 
     <packaging>jar</packaging>
 
     <dependencies>
 
-        <!--系统管理api模块-->
+        <!--系统管理的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-        <!--通知api模块-->
-        <!--用在通知控制器，通知扫描上-->
+        <!--资源api模块-->
+        <!--用在资源控制器，资源扫描上-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
@@ -52,13 +52,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!--message 模块-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-api</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
     </dependencies>
