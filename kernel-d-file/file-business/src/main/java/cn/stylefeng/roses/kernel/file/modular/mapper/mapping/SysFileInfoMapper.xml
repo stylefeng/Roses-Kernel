@@ -7,7 +7,6 @@
             resultType="cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse">
         SELECT file.file_id          AS fileId,
                file.file_code        AS fileCode,
-               file.file_app_code    AS fileAppCode,
                file.file_version     AS fileVersion,
                file.file_status      AS fileStatus,
                file.file_origin_name AS fileOriginName,
@@ -29,11 +28,9 @@
     <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoListResponse">
         SELECT file.file_id        AS fileId,
             file.file_code         AS fileCode,
-            file.file_app_code     AS fileAppCode,
             file.secret_flag       AS secretFlag,
             file.file_bucket       AS fileBucket,
             file.file_object_name AS fileObjectName,
-            app.app_name           AS fileAppCodeName,
             file.file_location     AS fileLocation,
             file.file_origin_name  AS fileOriginName,
             file.file_suffix       AS fileSuffix,
@@ -43,12 +40,8 @@
             file.create_time       AS createTime,
             file.del_flag          AS delFlag
         FROM sys_file_info file
-        LEFT JOIN sys_app app ON file.file_app_code = app.app_code
         LEFT JOIN sys_user user ON user.user_id = file.create_user
         <where>
-            <if test="sysFileInfoRequest.fileAppCode != null and sysFileInfoRequest.fileAppCode != '' ">
-                AND file.file_app_code = #{sysFileInfoRequest.fileAppCode}
-            </if>
             <if test="sysFileInfoRequest.fileOriginName != null and sysFileInfoRequest.fileOriginName != '' ">
                 AND file.file_origin_name LIKE CONCAT('%',#{sysFileInfoRequest.fileOriginName},'%')
             </if>
