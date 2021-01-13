@@ -17,6 +17,7 @@ public class DefaultSessionCookieCreator extends SessionCookieCreator {
     @Override
     public void expandCookieProp(Cookie cookie) {
         cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         cookie.setPath("/");
     }
 
