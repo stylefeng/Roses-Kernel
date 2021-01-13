@@ -170,6 +170,11 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
         return selectCount <= 0;
     }
 
+    @Override
+    public SysDictType findDetail(Long dictTypeId) {
+        return this.baseMapper.findDetail(dictTypeId);
+    }
+
     /**
      * 校验dictTypeClass是否是系统字典，如果是系统字典只能超级管理员操作
      *
