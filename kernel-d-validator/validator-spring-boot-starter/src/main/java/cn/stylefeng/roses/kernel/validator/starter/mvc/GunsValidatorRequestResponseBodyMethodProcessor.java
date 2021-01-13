@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.validator.starter.web;
+package cn.stylefeng.roses.kernel.validator.starter.mvc;
 
 import cn.stylefeng.roses.kernel.validator.context.RequestParamContext;
 import org.springframework.core.Conventions;
@@ -21,9 +21,9 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/8/21 20:51
  */
-public class ValidatorRequestResponseBodyMethodProcessor extends RequestResponseBodyMethodProcessor {
+public class GunsValidatorRequestResponseBodyMethodProcessor extends RequestResponseBodyMethodProcessor {
 
-    public ValidatorRequestResponseBodyMethodProcessor(List<HttpMessageConverter<?>> converters) {
+    public GunsValidatorRequestResponseBodyMethodProcessor(List<HttpMessageConverter<?>> converters) {
         super(converters);
     }
 

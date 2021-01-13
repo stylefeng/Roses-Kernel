@@ -38,6 +38,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--XSS安全过滤器-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>validator-sdk-xss</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

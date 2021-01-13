@@ -1,7 +1,7 @@
-package cn.stylefeng.roses.kernel.validator.starter.resolver;
+package cn.stylefeng.roses.kernel.validator.starter;
 
-import cn.stylefeng.roses.kernel.validator.starter.web.GunsValidator;
-import cn.stylefeng.roses.kernel.validator.starter.web.ValidatorRequestResponseBodyMethodProcessor;
+import cn.stylefeng.roses.kernel.validator.starter.mvc.GunsValidator;
+import cn.stylefeng.roses.kernel.validator.starter.mvc.GunsValidatorRequestResponseBodyMethodProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 @Configuration
 @AutoConfigureBefore(ValidationAutoConfiguration.class)
-public class MethodArgumentResolver {
+public class MethodArgumentResolverAutoConfiguration {
 
     @Resource
     private RequestMappingHandlerAdapter adapter;
@@ -48,7 +48,7 @@ public class MethodArgumentResolver {
     @PostConstruct
     public void injectSelfMethodArgumentResolver() {
         List<HandlerMethodArgumentResolver> argumentResolvers = new ArrayList<>();
-        argumentResolvers.add(new ValidatorRequestResponseBodyMethodProcessor(adapter.getMessageConverters()));
+        argumentResolvers.add(new GunsValidatorRequestResponseBodyMethodProcessor(adapter.getMessageConverters()));
         argumentResolvers.addAll(Objects.requireNonNull(adapter.getArgumentResolvers()));
         adapter.setArgumentResolvers(argumentResolvers);
     }

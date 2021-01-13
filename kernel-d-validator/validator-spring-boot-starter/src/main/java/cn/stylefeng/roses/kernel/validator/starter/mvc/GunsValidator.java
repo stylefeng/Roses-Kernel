@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.validator.starter.web;
+package cn.stylefeng.roses.kernel.validator.starter.mvc;
 
 import cn.stylefeng.roses.kernel.validator.context.RequestGroupContext;
 import lombok.extern.slf4j.Slf4j;
