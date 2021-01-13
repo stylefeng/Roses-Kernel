@@ -3,18 +3,19 @@
 <mapper namespace="cn.stylefeng.roses.kernel.dict.modular.mapper.DictMapper">
 
     <select id="findDetail" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict" parameterType="long">
-        SELECT dict.dict_id         AS dictId,
-               dict.dict_code       AS dictCode,
-               dict.dict_name       as dictName,
-               dict.dict_encode     as dictEncode,
-               dict.dict_sort       as dictSort,
-               dict.dict_type_code  AS dictTypeCode,
-               dict.dict_short_name AS dictShortName,
-               dict.dict_short_code AS dictShortCode,
-               dict.dict_parent_id  AS dictParentId,
-               dict.status_flag     AS statusFlag,
-               dict.create_time     AS createTime,
-               type.dict_type_name  AS dictTypeName
+        SELECT dict.dict_id          AS dictId,
+               dict.dict_code        AS dictCode,
+               dict.dict_name        as dictName,
+               dict.dict_name_pinyin as dictNamePinyin,
+               dict.dict_encode      as dictEncode,
+               dict.dict_sort        as dictSort,
+               dict.dict_type_code   AS dictTypeCode,
+               dict.dict_short_name  AS dictShortName,
+               dict.dict_short_code  AS dictShortCode,
+               dict.dict_parent_id   AS dictParentId,
+               dict.status_flag      AS statusFlag,
+               dict.create_time      AS createTime,
+               type.dict_type_name   AS dictTypeName
         FROM sys_dict dict
                  INNER JOIN sys_dict_type type ON dict.dict_type_code = type.dict_type_code
         WHERE dict.del_flag = 'N'
@@ -23,18 +24,19 @@
 
     <select id="findList" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict">
         SELECT type.dict_type_name  as dictTypeName,
-               dict.dict_id         AS dictId,
-               dict.dict_code       AS dictCode,
-               dict.dict_encode     as dictEncode,
-               dict.dict_sort       as dictSort,
-               dict.dict_name       as dictName,
-               dict.dict_type_code  AS dictTypeCode,
-               dict.dict_short_name AS dictShortName,
-               dict.dict_short_code AS dictShortCode,
-               dict.dict_parent_id  AS dictParentId,
-               dict.status_flag     AS statusFlag,
-               dict.create_time     AS createTime,
-               pDict.dict_name      AS parentName
+               dict.dict_id          AS dictId,
+               dict.dict_code        AS dictCode,
+               dict.dict_encode      as dictEncode,
+               dict.dict_sort        as dictSort,
+               dict.dict_name        as dictName,
+               dict.dict_name_pinyin as dictNamePinyin,
+               dict.dict_type_code   AS dictTypeCode,
+               dict.dict_short_name  AS dictShortName,
+               dict.dict_short_code  AS dictShortCode,
+               dict.dict_parent_id   AS dictParentId,
+               dict.status_flag      AS statusFlag,
+               dict.create_time      AS createTime,
+               pDict.dict_name       AS parentName
         FROM sys_dict dict
                  INNER JOIN sys_dict_type type ON dict.dict_type_code = type.dict_type_code
                  LEFT JOIN sys_dict pDict ON pDict.dict_id = dict.dict_parent_id
@@ -78,7 +80,7 @@
             sys_dict
         SET dict_pids         = replace(dict_pids, #{paramCondition.oldParentIds}, #{paramCondition.newParentIds}),
             update_time       = #{paramCondition.updateTime},
-            update_account_id = #{paramCondition.updateUser}
+            update_user = #{paramCondition.updateUser}
         WHERE dict_pids LIKE CONCAT('%', #{paramCondition.oldParentIds}, '%')
     </update>
 
