@@ -19,9 +19,9 @@ import cn.stylefeng.roses.kernel.system.pojo.notice.SysNoticeRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -36,15 +36,14 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
 
     private static String NOTICE_SCOPE_ALL = "all";
 
-    @Autowired
-    private SysNoticeMapper noticeMapper;
+
     /**
      * 系统消息api
      */
-    @Autowired
+    @Resource
     private MessageApi messageApi;
 
-    private void sendMessage(SysNotice sysNotice){
+    private void sendMessage(SysNotice sysNotice) {
         MessageSendParam message = new MessageSendParam();
         // 消息标题
         message.setMessageTitle(sysNotice.getNoticeTitle());
@@ -64,12 +63,12 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     public void add(SysNoticeRequest sysNoticeRequest) {
         SysNotice sysNotice = new SysNotice();
         BeanUtil.copyProperties(sysNoticeRequest, sysNotice);
-        if(StrUtil.isBlank(sysNotice.getNoticeScope())){
+        if (StrUtil.isBlank(sysNotice.getNoticeScope())) {
             sysNotice.setNoticeScope(NOTICE_SCOPE_ALL);
         }
 
         // 如果保存成功调用发送消息
-        if(this.save(sysNotice)){
+        if (this.save(sysNotice)) {
             sendMessage(sysNotice);
         }
     }
@@ -79,10 +78,10 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
 
         SysNotice sysNotice = this.querySysNotice(sysNoticeRequest);
         String noticeScope = sysNotice.getNoticeScope();
-        if(StrUtil.isBlank(sysNoticeRequest.getNoticeScope())){
+        if (StrUtil.isBlank(sysNoticeRequest.getNoticeScope())) {
             sysNoticeRequest.setNoticeScope(NOTICE_SCOPE_ALL);
         }
-        if(sysNoticeRequest.equals(sysNotice.getNoticeScope())){
+        if (sysNoticeRequest.equals(sysNotice.getNoticeScope())) {
             throw new ServiceException(NoticeExceptionEnum.NOTICE_SCOPE_NOT_EDIT);
         }
         BeanUtil.copyProperties(sysNoticeRequest, sysNotice);
@@ -90,7 +89,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         // 通知范围不允许修改
         sysNotice.setNoticeScope(noticeScope);
 
-        if(this.updateById(sysNotice)){
+        if (this.updateById(sysNotice)) {
             sendMessage(sysNotice);
         }
     }
