@@ -132,8 +132,6 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
     @Transactional(rollbackFor = Exception.class)
     public void deleteMenuButtonByMenuId(Long menuId) {
         if (ObjectUtil.isNotEmpty(menuId)) {
-            // 查询菜单是否存在
-            findMenuExist(menuId);
 
             // 构建查询条件
             LambdaQueryWrapper<SysMenuButton> queryWrapper = new LambdaQueryWrapper<>();
