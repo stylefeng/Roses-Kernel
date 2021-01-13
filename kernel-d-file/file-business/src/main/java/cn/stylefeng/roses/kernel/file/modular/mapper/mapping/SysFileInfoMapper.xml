@@ -27,28 +27,30 @@
 
     <!--  附件列表  -->
     <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoListResponse">
-        SELECT file.file_id           AS fileId,
-               file.file_app_code     AS fileAppCode,
-               app.app_name           AS fileAppCodeName,
-               file.file_origin_name  AS fileOriginName,
-               file.file_suffix       AS fileSuffix,
-               file.file_size_info    AS fileSizeInfo,
-               file.file_version      AS fileVersion,
-               file.create_account_id AS createAccountId,
-               file.create_dept_id    AS createDeptId,
-               emp.emp_full_name_cn   AS createUserName,
-               file.create_time       AS createTime,
-               file.del_flag          AS delFlag
+        SELECT file.file_id        AS fileId,
+            file.file_code         AS fileCode,
+            file.file_app_code     AS fileAppCode,
+            file.secret_flag       AS secretFlag,
+            file.file_bucket       AS fileBucket,
+            file.file_object_name AS fileObjectName,
+            app.app_name           AS fileAppCodeName,
+            file.file_location     AS fileLocation,
+            file.file_origin_name  AS fileOriginName,
+            file.file_suffix       AS fileSuffix,
+            file.file_size_info    AS fileSizeInfo,
+            file.file_version      AS fileVersion,
+            user.real_name   AS createUserName,
+            file.create_time       AS createTime,
+            file.del_flag          AS delFlag
         FROM sys_file_info file
-                 LEFT JOIN sys_app app ON file.file_app_code = app.app_code
-                 LEFT JOIN sys_account account ON account.account_id = file.create_account_id
-                 LEFT JOIN hr_emp_main emp ON account.emp_main_id = emp.emp_main_id
+        LEFT JOIN sys_app app ON file.file_app_code = app.app_code
+        LEFT JOIN sys_user user ON user.user_id = file.create_user
         <where>
             <if test="sysFileInfoRequest.fileAppCode != null and sysFileInfoRequest.fileAppCode != '' ">
                 AND file.file_app_code = #{sysFileInfoRequest.fileAppCode}
             </if>
             <if test="sysFileInfoRequest.fileOriginName != null and sysFileInfoRequest.fileOriginName != '' ">
-                AND file.file_app_code LIKE CONCAT('%',#{fileOriginName},'%')
+                AND file.file_origin_name LIKE CONCAT('%',#{sysFileInfoRequest.fileOriginName},'%')
             </if>
         </where>
     </select>
