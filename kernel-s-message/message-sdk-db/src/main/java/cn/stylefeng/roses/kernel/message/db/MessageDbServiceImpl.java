@@ -194,4 +194,19 @@ public class MessageDbServiceImpl implements MessageApi {
         messageParam.setReceiveUserId(loginUser.getUserId());
         return this.queryList(messageParam);
     }
+
+    @Override
+    public Integer queryCount(MessageParam messageParam) {
+        return sysMessageService.count(messageParam);
+    }
+    @Override
+    public Integer queryCountCurrentUser(MessageParam messageParam) {
+        if (ObjectUtil.isEmpty(messageParam)) {
+            messageParam = new MessageParam();
+        }
+        // 获取当前登录人
+        LoginUser loginUser = LoginContext.me().getLoginUser();
+        messageParam.setReceiveUserId(loginUser.getUserId());
+        return this.queryCount(messageParam);
+    }
 }

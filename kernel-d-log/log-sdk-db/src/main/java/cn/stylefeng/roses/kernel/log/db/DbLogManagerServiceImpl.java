@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.log.db;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
@@ -17,9 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-
-import static cn.stylefeng.roses.kernel.log.api.constants.LogConstants.DEFAULT_BEGIN_PAGE_NO;
-import static cn.stylefeng.roses.kernel.log.api.constants.LogConstants.DEFAULT_PAGE_SIZE;
 
 /**
  * 日志管理，数据库实现
@@ -48,17 +46,14 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
             return new PageResult<>();
         }
 
-        // 创建默认的请求方法
-        createDefaultLogManagerParam(logManagerParam);
-
         LambdaQueryWrapper<SysLog> sysLogLambdaQueryWrapper = new LambdaQueryWrapper<>();
 
         // 创建查询条件
         createQueryCondition(logManagerParam, sysLogLambdaQueryWrapper);
 
         // 查询分页结果
-        Page<SysLog> sysLogPage = new Page<>(logManagerParam.getPageNo(), logManagerParam.getPageSize());
-        Page<SysLog> page = sysLogService.page(sysLogPage, sysLogLambdaQueryWrapper);
+        Page<SysLog> objectPage = PageFactory.defaultPage();
+        Page<SysLog> page = sysLogService.page(objectPage, sysLogLambdaQueryWrapper);
 
         PageResult<SysLog> pageResult = PageResultFactory.createPageResult(page);
         PageResult<LogRecordDTO> logRecordDtoPageResult = new PageResult<>();
@@ -158,27 +153,6 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
 
         // 根据时间倒序排序
         sysLogLambdaQueryWrapper.orderByDesc(SysLog::getCreateTime);
-    }
-
-    /**
-     * 创建默认的请求方法
-     *
-     * @param logManagerParam 日志管理的查询参数
-     * @author luojie
-     * @date 2020/11/3 11:20
-     */
-    private void createDefaultLogManagerParam(LogManagerParam logManagerParam) {
-
-        // 默认从第一页开始
-        if (logManagerParam.getPageNo() == null) {
-            logManagerParam.setPageNo(DEFAULT_BEGIN_PAGE_NO);
-        }
-
-        // 默认每页10条
-        if (logManagerParam.getPageSize() == null) {
-            logManagerParam.setPageSize(DEFAULT_PAGE_SIZE);
-        }
-
     }
 
 }

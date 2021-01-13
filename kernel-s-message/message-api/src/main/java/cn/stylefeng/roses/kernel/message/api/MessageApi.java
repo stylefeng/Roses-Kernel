@@ -121,4 +121,25 @@ public interface MessageApi {
      */
     List<MessageResponse> queryListCurrentUser(MessageParam messageParam);
 
+    /**
+     * 查询系统消息数量
+     *
+     * @param messageParam 查询参数
+     * @return 系统消息数量
+     * @author liuhanqing
+     * @date 2021/1/11 21:21
+     */
+    Integer queryCount(MessageParam messageParam);
+
+    /**
+     * 查询系统消息数量，当前登录用户
+     *
+     * @param messageParam 查询参数
+     * @return 系统消息数量
+     * @author liuhanqing
+     * @date 2021/1/11 21:21
+     */
+    Integer queryCountCurrentUser(MessageParam messageParam);
+
+
 }

@@ -15,7 +15,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统消息控制器
@@ -114,6 +116,22 @@ public class SysMessageController {
      */
     @GetResource(name = "系统消息列表", path = "/sysMessage/list")
     public ResponseData list(MessageParam messageParam) {
+        return new SuccessResponseData(messageApi.queryListCurrentUser(messageParam));
+    }
+
+
+    /**
+     * 系统消息未读数量
+     *
+     * @author liuhanqing
+     * @date 2021/1/11 19:50
+     */
+    @GetResource(name = "系统消息列表", path = "/sysMessage/unReadCount")
+    public ResponseData msgUnRead(MessageParam messageParam) {
+        messageParam.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());
+        Integer messageCount = messageApi.queryCountCurrentUser(messageParam);
+        Map<String, Object> msgMap = new HashMap<>(1);
+        msgMap.put("msgUnReadCount", messageCount);
         return new SuccessResponseData(messageApi.queryListCurrentUser(messageParam));
     }
 

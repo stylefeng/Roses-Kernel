@@ -1,9 +1,13 @@
 package cn.stylefeng.roses.kernel.message.api.pojo;
 
+import cn.stylefeng.roses.kernel.message.api.enums.MessageProrityLevelEnum;
+import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 系统消息的查询参数
@@ -69,4 +73,29 @@ public class MessageResponse implements Serializable {
      */
     private Integer readFlag;
 
+    /**
+     * 消息优先级
+     */
+    private String priorityLevelValue;
+
+    /**
+     * 阅读状态：0-未读，1-已读
+     */
+    private String readFlagValue;
+
+    public String getPriorityLevelValue(){
+        AtomicReference<String> value = new AtomicReference<>("");
+        Optional.ofNullable(this.priorityLevel).ifPresent(val ->{
+            value.set(MessageProrityLevelEnum.getName(this.priorityLevel));
+        });
+        return value.get();
+    }
+
+    public String getReadFlagValue(){
+        AtomicReference<String> value = new AtomicReference<>("");
+        Optional.ofNullable(this.readFlag).ifPresent(val ->{
+            value.set(MessageReadFlagEnum.getName(this.readFlag));
+        });
+        return value.get();
+    }
 }

@@ -18,11 +18,11 @@ import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictService;
 import cn.stylefeng.roses.kernel.pinyin.api.PinYinApi;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
+import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
-import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
-import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -157,7 +157,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
     public SysDict findDetail(Long dictId) {
         SysDict dict = this.baseMapper.findDetail(dictId);
         // 获取父节点字典名称
-        if (dict.getDictParentId().equals(SystemConstants.DEFAULT_PARENT_ID)) {
+        if (dict.getDictParentId().equals(TreeConstants.DEFAULT_PARENT_ID)) {
             dict.setParentName("顶级");
         } else {
             SysDict parentDict = this.getById(dict.getDictParentId());

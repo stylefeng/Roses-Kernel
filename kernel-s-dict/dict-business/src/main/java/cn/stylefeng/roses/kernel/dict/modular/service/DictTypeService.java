@@ -2,7 +2,6 @@ package cn.stylefeng.roses.kernel.dict.modular.service;
 
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -87,9 +86,9 @@ public interface DictTypeService extends IService<SysDictType> {
      * 获取字典详情
      *
      * @param dictTypeId 类型id
-     * @return
      * @author huangyao
      * @date 2021/1/10 17:27
      */
     SysDictType findDetail(Long dictTypeId);
+
 }

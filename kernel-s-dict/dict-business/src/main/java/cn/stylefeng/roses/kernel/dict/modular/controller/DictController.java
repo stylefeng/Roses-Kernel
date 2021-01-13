@@ -11,14 +11,13 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ import java.util.List;
 @ApiResource(name = "字典详情管理")
 public class DictController {
 
-    @Autowired
+    @Resource
     private DictService dictService;
 
     /**
@@ -159,13 +158,10 @@ public class DictController {
     /**
      * 字典树列表
      *
-     * @param
-     * @return
      * @author huangyao
      * @date 2021/1/10 17:31
      */
     @GetResource(name = "获取zTree形式的字典树（layui版本）", path = "/dict/zTree")
-    @ResponseBody
     public List<ZTreeNode> layuiSelectParentMenuTreeList(@Validated(DictRequest.dictZTree.class) DictRequest dictRequest) {
         return this.dictService.dictZTree(dictRequest);
     }

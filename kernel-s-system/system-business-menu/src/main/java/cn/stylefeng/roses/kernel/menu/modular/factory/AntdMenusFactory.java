@@ -4,9 +4,9 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.menu.modular.pojo.AntdvMenuItem;
 import cn.stylefeng.roses.kernel.menu.modular.pojo.AuthorityItem;
+import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
-import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 
@@ -64,7 +64,7 @@ public class AntdMenusFactory {
         antdvMenuItems.add(createAntdVMenuRoot());
 
         // 构造菜单树
-        return new DefaultTreeBuildFactory<AntdvMenuItem>(SystemConstants.VIRTUAL_ROOT_PARENT_ID.toString()).doTreeBuild(antdvMenuItems);
+        return new DefaultTreeBuildFactory<AntdvMenuItem>(TreeConstants.VIRTUAL_ROOT_PARENT_ID.toString()).doTreeBuild(antdvMenuItems);
     }
 
     /**
@@ -77,8 +77,8 @@ public class AntdMenusFactory {
         AntdvMenuItem antdvMenuItem = new AntdvMenuItem();
         antdvMenuItem.setRouter("root");
         antdvMenuItem.setName("根节点");
-        antdvMenuItem.setMenuId(SystemConstants.DEFAULT_PARENT_ID);
-        antdvMenuItem.setMenuParentId(SystemConstants.VIRTUAL_ROOT_PARENT_ID);
+        antdvMenuItem.setMenuId(TreeConstants.DEFAULT_PARENT_ID);
+        antdvMenuItem.setMenuParentId(TreeConstants.VIRTUAL_ROOT_PARENT_ID);
 
         antdvMenuItem.setAuthority(null);
 
@@ -137,8 +137,8 @@ public class AntdMenusFactory {
      */
     private static AntdIndexMenuTreeNode createRootMenuNode() {
         AntdIndexMenuTreeNode antdIndexMenuTreeNode = new AntdIndexMenuTreeNode();
-        antdIndexMenuTreeNode.setId(SystemConstants.DEFAULT_PARENT_ID);
-        antdIndexMenuTreeNode.setPid(SystemConstants.VIRTUAL_ROOT_PARENT_ID);
+        antdIndexMenuTreeNode.setId(TreeConstants.DEFAULT_PARENT_ID);
+        antdIndexMenuTreeNode.setPid(TreeConstants.VIRTUAL_ROOT_PARENT_ID);
         antdIndexMenuTreeNode.setName("根虚拟节点");
         antdIndexMenuTreeNode.setPath("/");
         return antdIndexMenuTreeNode;

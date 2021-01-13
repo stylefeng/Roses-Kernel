@@ -40,15 +40,16 @@ import cn.stylefeng.roses.kernel.menu.modular.factory.common.CommonMenusFactory;
 import cn.stylefeng.roses.kernel.menu.modular.mapper.SysMenuMapper;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuButtonService;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuService;
+import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.constants.SymbolConstant;
-import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuExceptionEnum;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
@@ -61,7 +62,6 @@ import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuButtonResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuResponse;
-import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -156,7 +156,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 设置父级菜单名称
         if (sysMenu != null) {
             Long menuParentId = sysMenu.getMenuParentId();
-            if (SystemConstants.DEFAULT_PARENT_ID.equals(menuParentId)) {
+            if (TreeConstants.DEFAULT_PARENT_ID.equals(menuParentId)) {
                 sysMenu.setMenuParentName("顶级");
             } else {
                 Long parentId = sysMenu.getMenuParentId();
@@ -285,7 +285,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<AntdIndexMenuTreeNode> antdIndexMenuTreeNodes = AntdMenusFactory.convertSysMenuToLoginMenu(currentUserMenus);
 
         // 转化成树结构
-        return new DefaultTreeBuildFactory<AntdIndexMenuTreeNode>(SystemConstants.VIRTUAL_ROOT_PARENT_ID.toString()).doTreeBuild(antdIndexMenuTreeNodes);
+        return new DefaultTreeBuildFactory<AntdIndexMenuTreeNode>(TreeConstants.VIRTUAL_ROOT_PARENT_ID.toString()).doTreeBuild(antdIndexMenuTreeNodes);
     }
 
     @Override
@@ -469,8 +469,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @date 2020/3/26 11:28
      */
     private String createPids(Long pid) {
-        if (pid.equals(SystemConstants.DEFAULT_PARENT_ID)) {
-            return SymbolConstant.LEFT_SQUARE_BRACKETS + SystemConstants.DEFAULT_PARENT_ID + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
+        if (pid.equals(TreeConstants.DEFAULT_PARENT_ID)) {
+            return SymbolConstant.LEFT_SQUARE_BRACKETS + TreeConstants.DEFAULT_PARENT_ID + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
         } else {
             //获取父菜单
             SysMenu parentMenu = this.getById(pid);
@@ -564,7 +564,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 如果应用有变化，不能把非一级菜单转移应用
         if (!sysMenuRequest.getAppCode().equals(oldMenu.getAppCode())) {
-            if (!oldPid.equals(SystemConstants.DEFAULT_PARENT_ID)) {
+            if (!oldPid.equals(TreeConstants.DEFAULT_PARENT_ID)) {
                 throw new ServiceException(SysMenuExceptionEnum.CANT_MOVE_APP);
             }
             updateSubAppsFlag = true;

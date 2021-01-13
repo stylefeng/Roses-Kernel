@@ -19,16 +19,6 @@ public interface SystemConstants {
     String SYSTEM_EXCEPTION_STEP_CODE = "18";
 
     /**
-     * 一级节点的父节点id
-     */
-    Long DEFAULT_PARENT_ID = -1L;
-
-    /**
-     * 虚拟的根节点的父级id
-     */
-    Long VIRTUAL_ROOT_PARENT_ID = -2L;
-
-    /**
      * pids系列字段，每个id的左分隔符
      */
     String PID_LEFT_DIVIDE_SYMBOL = "[";

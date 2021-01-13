@@ -1,7 +1,7 @@
-package cn.stylefeng.roses.kernel.system.pojo.ztree;
+package cn.stylefeng.roses.kernel.rule.pojo.ztree;
 
 import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
-import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
+import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * jquery ztree 插件的节点封装
+ * jquery zTree 插件的节点封装
  *
  * @author fengshuonan
  * @date 2021/1/6 21:47
@@ -75,10 +75,10 @@ public class ZTreeNode implements AbstractTreeNode {
     public static ZTreeNode createParent() {
         ZTreeNode zTreeNode = new ZTreeNode();
         zTreeNode.setChecked(true);
-        zTreeNode.setId(SystemConstants.DEFAULT_PARENT_ID);
+        zTreeNode.setId(TreeConstants.DEFAULT_PARENT_ID);
         zTreeNode.setName("顶级");
         zTreeNode.setOpen(true);
-        zTreeNode.setpId(SystemConstants.VIRTUAL_ROOT_PARENT_ID);
+        zTreeNode.setpId(TreeConstants.VIRTUAL_ROOT_PARENT_ID);
         return zTreeNode;
     }
 
