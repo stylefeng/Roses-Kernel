@@ -18,16 +18,14 @@ import cn.stylefeng.roses.kernel.resource.modular.mapper.SysResourceMapper;
 import cn.stylefeng.roses.kernel.resource.modular.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.resource.modular.service.SysResourceService;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
+import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
-import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
-import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResourceResponse;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -402,7 +400,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             appNode.setCode(appName);
             appNode.setNodeName(appName);
             appNode.setResourceFlag(false);
-            appNode.setParentCode(SystemConstants.DEFAULT_PARENT_ID.toString());
+            appNode.setParentCode(TreeConstants.DEFAULT_PARENT_ID.toString());
 
             // 遍历当前应用下的模块资源
             Map<String, List<ResourceTreeNode>> modularResources = appModularResources.get(appName);
@@ -447,7 +445,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             appNode.setCode(appName);
             appNode.setNodeName(appName);
             appNode.setResourceFlag(false);
-            appNode.setParentCode(SystemConstants.DEFAULT_PARENT_ID.toString());
+            appNode.setParentCode(TreeConstants.DEFAULT_PARENT_ID.toString());
 
             // 遍历当前应用下的模块资源
             Map<String, List<ResourceTreeNode>> modularResources = appModularResources.get(appName);

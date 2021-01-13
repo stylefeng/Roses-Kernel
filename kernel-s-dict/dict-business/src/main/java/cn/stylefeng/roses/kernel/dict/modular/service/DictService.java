@@ -5,7 +5,7 @@ import cn.stylefeng.roses.kernel.dict.api.DictApi;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.TreeDictInfo;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
-import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -117,10 +117,9 @@ public interface DictService extends IService<SysDict>, DictApi {
     /**
      * 获取字典的ztree列表
      *
-     * @param
-     * @return
      * @author huangyao
      * @date 2021/1/12 14:27
      */
     List<ZTreeNode> dictZTree(DictRequest dictRequest);
+
 }

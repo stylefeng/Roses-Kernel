@@ -1,7 +1,6 @@
 package cn.stylefeng.roses.kernel.dict.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictTypeService;
@@ -11,12 +10,12 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
@@ -30,7 +29,7 @@ import java.util.List;
 @ApiResource(name = "字典类型管理")
 public class DictTypeController {
 
-    @Autowired
+    @Resource
     private DictTypeService dictTypeService;
 
     /**
@@ -81,6 +80,12 @@ public class DictTypeController {
         return new SuccessResponseData();
     }
 
+    /**
+     * 获取字典类型详情
+     *
+     * @author fengshuonan
+     * @date 2021/1/13 11:25
+     */
     @GetResource(name = "获取字典类型详情", path = "/dictType/getDictDetail", requiredPermission = false)
     public ResponseData getDictDetail(@RequestParam("dictTypeId") Long dictTypeId) {
         SysDictType detail = this.dictTypeService.findDetail(dictTypeId);

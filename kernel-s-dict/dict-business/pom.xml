@@ -40,14 +40,6 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!--系统api模块-->
-        <!--用在业务，系统常量-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-api</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
         <!--数据库sdk-->
         <!--数据库初始化-->
         <dependency>

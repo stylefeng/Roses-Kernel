@@ -12,10 +12,12 @@ import cn.stylefeng.roses.kernel.db.api.context.DbOperatorContext;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
+import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
@@ -28,7 +30,6 @@ import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrOrganizati
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
 import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -398,9 +399,9 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     private void fillParentIds(HrOrganization hrOrganization) {
 
         // 如果是一级节点（一级节点的pid是0）
-        if (hrOrganization.getOrgParentId().equals(SystemConstants.DEFAULT_PARENT_ID)) {
+        if (hrOrganization.getOrgParentId().equals(TreeConstants.DEFAULT_PARENT_ID)) {
             // 设置一级节点的pid为[0],
-            hrOrganization.setOrgPids(SystemConstants.PID_LEFT_DIVIDE_SYMBOL + SystemConstants.DEFAULT_PARENT_ID + SystemConstants.PID_RIGHT_DIVIDE_SYMBOL + ",");
+            hrOrganization.setOrgPids(SystemConstants.PID_LEFT_DIVIDE_SYMBOL + TreeConstants.DEFAULT_PARENT_ID + SystemConstants.PID_RIGHT_DIVIDE_SYMBOL + ",");
         } else {
             // 获取父组织机构
             HrOrganization parentOrganization = this.getById(hrOrganization.getOrgParentId());

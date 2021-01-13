@@ -2,10 +2,10 @@ package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
+import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
 import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

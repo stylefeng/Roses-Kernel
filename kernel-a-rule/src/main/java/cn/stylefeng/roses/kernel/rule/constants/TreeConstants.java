@@ -9,13 +9,13 @@ package cn.stylefeng.roses.kernel.rule.constants;
 public interface TreeConstants {
 
     /**
-     * 根节点Id
+     * 一级节点的父节点id
      */
-    String ROOT_TREE_NODE_ID = "-1";
+    Long DEFAULT_PARENT_ID = -1L;
 
     /**
-     * 根节点名称
+     * 虚拟的根节点的父级id
      */
-    String ROOT_TREE_NODE_NAME = "根结点";
+    Long VIRTUAL_ROOT_PARENT_ID = -2L;
 
 }
