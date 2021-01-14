@@ -205,6 +205,12 @@ CREATE TABLE `sys_dict`  (
   PRIMARY KEY (`dict_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典' ROW_FORMAT = Dynamic;
 
+INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619802, 'M', '男', 'n', 'male', 'sex', NULL, NULL, -1, 1, 1.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619803, 'F', '女', 'n', 'female', 'sex', NULL, NULL, -1, 1, 2.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619804, '1', '启用', 'n', 'male', 'user_status', NULL, NULL, -1, 1, 1.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619805, '2', '禁用', 'n', 'female', 'user_status', NULL, NULL, -1, 1, 2.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619806, '3', '冻结', 'n', 'female', 'user_status', NULL, NULL, -1, 1, 2.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+
 -- ----------------------------
 -- Table structure for sys_dict_type
 -- ----------------------------
@@ -226,6 +232,9 @@ CREATE TABLE `sys_dict_type`  (
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改用户id',
   PRIMARY KEY (`dict_type_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典类型' ROW_FORMAT = Dynamic;
+
+INSERT INTO `sys_dict_type`(`dict_type_id`, `dict_type_class`, `dict_type_bus_code`, `dict_type_code`, `dict_type_name`, `dict_type_name_pinyin`, `dict_type_desc`, `status_flag`, `dict_type_sort`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619811, 1, 'base', 'sex', '性别', 'xb', NULL, 1, 1.00, 'N', '2021-01-14 14:47:32', NULL, NULL, NULL);
+INSERT INTO `sys_dict_type`(`dict_type_id`, `dict_type_class`, `dict_type_bus_code`, `dict_type_code`, `dict_type_name`, `dict_type_name_pinyin`, `dict_type_desc`, `status_flag`, `dict_type_sort`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619812, 2, 'system', 'user_status', '用户状态', 'yhzt', NULL, 1, 2.00, 'N', '2021-01-14 14:47:32', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_file_info
