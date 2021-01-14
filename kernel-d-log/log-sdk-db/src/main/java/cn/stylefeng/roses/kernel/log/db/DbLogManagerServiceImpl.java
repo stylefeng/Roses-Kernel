@@ -151,6 +151,20 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
             });
         }
 
+        // 查询特定字段
+        sysLogLambdaQueryWrapper.select(
+                SysLog::getLogId,
+                SysLog::getLogName,
+                SysLog::getLogContent,
+                SysLog::getAppName,
+                SysLog::getRequestUrl,
+                SysLog::getServerIp,
+                SysLog::getClientIp,
+                SysLog::getUserId,
+                SysLog::getHttpMethod,
+                SysLog::getClientBrowser,
+                SysLog::getClientOs);
+
         // 根据时间倒序排序
         sysLogLambdaQueryWrapper.orderByDesc(SysLog::getCreateTime);
     }
