@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerParam;
@@ -163,7 +164,9 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
                 SysLog::getUserId,
                 SysLog::getHttpMethod,
                 SysLog::getClientBrowser,
-                SysLog::getClientOs);
+                SysLog::getClientOs,
+                BaseEntity::getCreateTime,
+                BaseEntity::getUpdateTime);
 
         // 根据时间倒序排序
         sysLogLambdaQueryWrapper.orderByDesc(SysLog::getCreateTime);
