@@ -167,7 +167,7 @@ public class AuthServiceImpl implements AuthServiceApi {
             }
         }
 
-        //开启验证码
+        // 2. 如果开启了验证码校验，则验证当前请求的验证码是否正确
         if (SystemConfigExpander.getCaptchaOpen()) {
 
             String kaptcha = loginRequest.getKaptcha();
@@ -180,13 +180,13 @@ public class AuthServiceImpl implements AuthServiceApi {
             }
         }
 
-        // 2. 解密密码的密文
+        // 3. 解密密码的密文
         //        String decryptPassword = passwordTransferEncryptApi.decrypt(loginRequest.getPassword());
 
-        // 3. 获取用户密码的加密值和用户的状态
+        // 4. 获取用户密码的加密值和用户的状态
         UserLoginInfoDTO userValidateInfo = userServiceApi.getUserLoginInfo(loginRequest.getAccount());
 
-        // 4. 校验用户密码是否正确
+        // 5. 校验用户密码是否正确
         if (validatePassword) {
             Boolean checkResult = passwordStoredEncryptApi.checkPassword(loginRequest.getPassword(), userValidateInfo.getUserPasswordHexed());
             if (!checkResult) {
@@ -194,37 +194,38 @@ public class AuthServiceImpl implements AuthServiceApi {
             }
         }
 
-        // 5. 校验用户是否异常（不是正常状态）
+        // 6. 校验用户是否异常（不是正常状态）
         if (!UserStatusEnum.ENABLE.getCode().equals(userValidateInfo.getUserStatus())) {
             String userTip = StrUtil.format(AuthExceptionEnum.USER_STATUS_ERROR.getErrorCode(), UserStatusEnum.getCodeMessage(userValidateInfo.getUserStatus()));
             throw new AuthException(AuthExceptionEnum.USER_STATUS_ERROR.getErrorCode(), userTip);
         }
 
-        // 6. 获取LoginUser，用于用户的缓存
+        // 7. 获取LoginUser，用于用户的缓存
         LoginUser loginUser = userValidateInfo.getLoginUser();
 
-        // 7. 生成用户的token
+        // 8. 生成用户的token
         DefaultJwtPayload defaultJwtPayload = new DefaultJwtPayload(loginUser.getUserId(), loginUser.getAccount(), loginRequest.getRememberMe());
         String jwtToken = JwtContext.me().generateTokenDefaultPayload(defaultJwtPayload);
 
         synchronized (SESSION_OPERATE_LOCK) {
 
-            // 8. 缓存用户信息，创建会话
+            // 9. 缓存用户信息，创建会话
             sessionManagerApi.createSession(jwtToken, loginUser);
 
-            // 9. 如果开启了单账号单端在线，则踢掉已经上线的该用户
+            // 10. 如果开启了单账号单端在线，则踢掉已经上线的该用户
             if (AuthConfigExpander.getSingleAccountLoginFlag()) {
                 sessionManagerApi.removeSessionExcludeToken(jwtToken);
             }
         }
 
-        // 10. 更新用户登录时间和ip
+        // 11. 更新用户登录时间和ip
         String ip = HttpServletUtil.getRequestClientIp(HttpServletUtil.getRequest());
         userServiceApi.updateUserLoginInfo(loginUser.getUserId(), new Date(), ip);
 
-        // 11.登录成功日志
+        // 12.登录成功日志
         loginLogServiceApi.loginSuccess(loginUser.getUserId());
-        // 12. 组装返回结果
+
+        // 13. 组装返回结果
         return new LoginResponse(loginUser, jwtToken, defaultJwtPayload.getExpirationDate());
     }
 
