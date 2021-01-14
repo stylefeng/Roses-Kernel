@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.message.api.pojo;
 
-import cn.stylefeng.roses.kernel.message.api.enums.MessageProrityLevelEnum;
+import cn.stylefeng.roses.kernel.message.api.enums.MessagePriorityLevelEnum;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import lombok.Data;
 
@@ -86,7 +86,7 @@ public class MessageResponse implements Serializable {
     public String getPriorityLevelValue(){
         AtomicReference<String> value = new AtomicReference<>("");
         Optional.ofNullable(this.priorityLevel).ifPresent(val ->{
-            value.set(MessageProrityLevelEnum.getName(this.priorityLevel));
+            value.set(MessagePriorityLevelEnum.getName(this.priorityLevel));
         });
         return value.get();
     }

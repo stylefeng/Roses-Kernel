@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.notice.modular.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import cn.stylefeng.roses.kernel.message.api.enums.MessagePriorityLevelEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,6 +10,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 通知表
@@ -76,5 +79,12 @@ public class SysNotice extends BaseEntity {
     @TableField(value = "del_flag", fill = FieldFill.INSERT)
     private String delFlag;
 
+    public String getPriorityLevelValue(){
+        AtomicReference<String> value = new AtomicReference<>("");
+        Optional.ofNullable(this.priorityLevel).ifPresent(val ->{
+            value.set(MessagePriorityLevelEnum.getName(this.priorityLevel));
+        });
+        return value.get();
+    }
 
 }

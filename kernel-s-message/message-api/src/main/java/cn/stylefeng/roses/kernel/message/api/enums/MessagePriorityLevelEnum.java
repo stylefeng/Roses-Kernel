@@ -9,7 +9,7 @@ import lombok.Getter;
  * @date 2021/1/8 13:26
  */
 @Getter
-public enum MessageProrityLevelEnum {
+public enum MessagePriorityLevelEnum {
 
     /**
      * 高
@@ -30,7 +30,7 @@ public enum MessageProrityLevelEnum {
 
     private final String name;
 
-    MessageProrityLevelEnum(String code, String name) {
+    MessagePriorityLevelEnum(String code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -39,7 +39,7 @@ public enum MessageProrityLevelEnum {
         if (code == null) {
             return null;
         }
-        for (MessageProrityLevelEnum flagEnum : MessageProrityLevelEnum.values()) {
+        for (MessagePriorityLevelEnum flagEnum : MessagePriorityLevelEnum.values()) {
             if (flagEnum.getCode().equals(code)) {
                 return flagEnum.name;
             }
