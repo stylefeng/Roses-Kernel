@@ -33,4 +33,9 @@ public class LoginRequest extends BaseRequest {
      */
     private Boolean rememberMe = false;
 
+    /**
+     * 验证码
+     */
+    private String kaptcha;
+
 }

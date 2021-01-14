@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.auth.auth;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.AuthServiceApi;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
+import cn.stylefeng.roses.kernel.auth.api.constants.AuthConstants;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
@@ -20,6 +21,7 @@ import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.LoginLogServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
+import cn.stylefeng.roses.kernel.system.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 import org.springframework.stereotype.Service;
 
@@ -162,6 +164,19 @@ public class AuthServiceImpl implements AuthServiceApi {
         } else {
             if (loginRequest == null || StrUtil.hasBlank(loginRequest.getAccount())) {
                 throw new AuthException(AuthExceptionEnum.ACCOUNT_IS_BLANK);
+            }
+        }
+
+        //开启验证码
+        if (SystemConfigExpander.getCaptchaOpen()) {
+
+            String kaptcha = loginRequest.getKaptcha();
+            if (StrUtil.isEmpty(kaptcha)) {
+                throw new AuthException(AuthExceptionEnum.KAPTCHA_EMPTY);
+            }
+            Object sessionKaptcha = (String) HttpServletUtil.getRequest().getSession().getAttribute(AuthConstants.KAPTCHA_SESSION_KEY);
+            if (StrUtil.isEmpty(kaptcha) || !kaptcha.equals(sessionKaptcha)) {
+                throw new AuthException(AuthExceptionEnum.KAPTCHA_ERROR);
             }
         }
 

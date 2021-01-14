@@ -48,4 +48,9 @@ public interface AuthConstants {
      */
     Long DEFAULT_AUTH_JWT_TIMEOUT_SECONDS = 3600L * 24 * 7;
 
+    /**
+     * 验证码 session key
+     */
+    String KAPTCHA_SESSION_KEY = "KAPTCHA_SESSION_KEY";
+
 }
