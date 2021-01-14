@@ -3,16 +3,13 @@ package cn.stylefeng.roses.kernel.resource.modular.controller;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.resource.modular.entity.SysResource;
 import cn.stylefeng.roses.kernel.resource.modular.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.resource.modular.service.SysResourceService;
-import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -56,18 +53,6 @@ public class ResourceController {
     }
 
     /**
-     * 获取资源树列表，用于接口文档页面
-     *
-     * @author fengshuonan
-     * @date 2020/12/18 15:50
-     */
-    @GetResource(name = "获取资源树列表，用于接口文档页面", path = "/resource/getTree", requiredLogin = false, requiredPermission = false)
-    public ResponseData getTree() {
-        List<ResourceTreeNode> resourceTree = sysResourceService.getResourceTree();
-        return new SuccessResponseData(resourceTree);
-    }
-
-    /**
      * 获取资源平级树列表，用于分配接口权限（适用于layui版本）
      *
      * @author majianguo
@@ -88,18 +73,6 @@ public class ResourceController {
     public ResponseData getLateralTreeChildren(SysRoleRequest sysRoleRequest) {
         List<ResourceTreeNode> resourceLateralTree = sysResourceService.getResourceTree(sysRoleRequest.getRoleId(), false);
         return new SuccessResponseData(resourceLateralTree);
-    }
-
-    /**
-     * 获取接口详情
-     *
-     * @author fengshuonan
-     * @date 2020/12/18 15:50
-     */
-    @GetResource(name = "获取接口详情", path = "/resource/getDetail", requiredLogin = false, requiredPermission = false)
-    public ResponseData getResourceDetail(@Validated(BaseRequest.detail.class) ResourceRequest resourceRequest) {
-        ResourceDefinition resourceDetail = sysResourceService.getResourceDetail(resourceRequest);
-        return new SuccessResponseData(resourceDetail);
     }
 
 }

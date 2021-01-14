@@ -24,6 +24,7 @@ import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
+import cn.stylefeng.roses.kernel.system.pojo.resource.LayuiApiResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResourceResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
@@ -96,7 +97,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public List<ResourceTreeNode> getResourceTree() {
+    public List<LayuiApiResourceTreeNode> getResourceTree() {
 
         // 1. 获取所有的资源
         LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -104,7 +105,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
 
         // 2. 按应用和模块编码设置map
-        Map<String, Map<String, List<ResourceTreeNode>>> appModularResources = divideResources(allResource);
+        Map<String, Map<String, List<LayuiApiResourceTreeNode>>> appModularResources = divideResources(allResource);
 
         // 3. 创建模块code和模块name的映射
         Map<String, String> modularCodeName = createModularCodeName(allResource);
@@ -335,13 +336,13 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
      * @author fengshuonan
      * @date 2020/12/18 15:34
      */
-    private Map<String, Map<String, List<ResourceTreeNode>>> divideResources(List<SysResource> sysResources) {
-        HashMap<String, Map<String, List<ResourceTreeNode>>> appModularResources = new HashMap<>();
+    private Map<String, Map<String, List<LayuiApiResourceTreeNode>>> divideResources(List<SysResource> sysResources) {
+        HashMap<String, Map<String, List<LayuiApiResourceTreeNode>>> appModularResources = new HashMap<>();
         for (SysResource sysResource : sysResources) {
 
             // 查询应用下有无资源
             String appCode = sysResource.getAppCode();
-            Map<String, List<ResourceTreeNode>> modularResource = appModularResources.get(appCode);
+            Map<String, List<LayuiApiResourceTreeNode>> modularResource = appModularResources.get(appCode);
 
             // 该应用下没资源就创建一个map
             if (modularResource == null) {
@@ -349,17 +350,18 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             }
 
             // 查询当前资源的模块，有没有在appModularResources存在
-            List<ResourceTreeNode> resourceTreeNodes = modularResource.get(sysResource.getModularCode());
+            List<LayuiApiResourceTreeNode> resourceTreeNodes = modularResource.get(sysResource.getModularCode());
             if (resourceTreeNodes == null) {
                 resourceTreeNodes = new ArrayList<>();
             }
 
             // 将当前资源放入资源集合
-            ResourceTreeNode resourceTreeNode = new ResourceTreeNode();
+            LayuiApiResourceTreeNode resourceTreeNode = new LayuiApiResourceTreeNode();
             resourceTreeNode.setResourceFlag(true);
-            resourceTreeNode.setNodeName(sysResource.getUrl() + "(" + sysResource.getResourceName() + ")");
-            resourceTreeNode.setCode(sysResource.getResourceCode());
-            resourceTreeNode.setParentCode(sysResource.getModularCode());
+            resourceTreeNode.setTitle(sysResource.getResourceName());
+            resourceTreeNode.setId(sysResource.getResourceCode());
+            resourceTreeNode.setParentId(sysResource.getModularCode());
+            resourceTreeNode.setSpread(false);
             resourceTreeNodes.add(resourceTreeNode);
 
             modularResource.put(sysResource.getModularCode(), resourceTreeNodes);
@@ -388,31 +390,33 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
      * @author fengshuonan
      * @date 2020/12/18 15:45
      */
-    private List<ResourceTreeNode> createResourceTree(Map<String, Map<String, List<ResourceTreeNode>>> appModularResources, Map<String, String> modularCodeName) {
+    private List<LayuiApiResourceTreeNode> createResourceTree(Map<String, Map<String, List<LayuiApiResourceTreeNode>>> appModularResources, Map<String, String> modularCodeName) {
 
-        List<ResourceTreeNode> finalTree = new ArrayList<>();
+        List<LayuiApiResourceTreeNode> finalTree = new ArrayList<>();
 
         // 按应用遍历应用模块资源集合
         for (String appName : appModularResources.keySet()) {
 
             // 创建当前应用节点
-            ResourceTreeNode appNode = new ResourceTreeNode();
-            appNode.setCode(appName);
-            appNode.setNodeName(appName);
+            LayuiApiResourceTreeNode appNode = new LayuiApiResourceTreeNode();
+            appNode.setId(appName);
+            appNode.setTitle(appName);
+            appNode.setSpread(true);
             appNode.setResourceFlag(false);
-            appNode.setParentCode(TreeConstants.DEFAULT_PARENT_ID.toString());
+            appNode.setParentId(TreeConstants.DEFAULT_PARENT_ID.toString());
 
             // 遍历当前应用下的模块资源
-            Map<String, List<ResourceTreeNode>> modularResources = appModularResources.get(appName);
+            Map<String, List<LayuiApiResourceTreeNode>> modularResources = appModularResources.get(appName);
 
             // 创建模块节点
-            ArrayList<ResourceTreeNode> modularNodes = new ArrayList<>();
+            ArrayList<LayuiApiResourceTreeNode> modularNodes = new ArrayList<>();
             for (String modularCode : modularResources.keySet()) {
-                ResourceTreeNode modularNode = new ResourceTreeNode();
-                modularNode.setCode(modularCode);
-                modularNode.setNodeName(modularCodeName.get(modularCode));
+                LayuiApiResourceTreeNode modularNode = new LayuiApiResourceTreeNode();
+                modularNode.setId(modularCode);
+                modularNode.setTitle(modularCodeName.get(modularCode));
+                modularNode.setParentId(appName);
+                modularNode.setSpread(false);
                 modularNode.setResourceFlag(false);
-                modularNode.setParentCode(appName);
                 modularNode.setChildren(modularResources.get(modularCode));
                 modularNodes.add(modularNode);
             }
