@@ -11,7 +11,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>sms-business-validation</artifactId>
+    <artifactId>system-business-sms</artifactId>
 
     <packaging>jar</packaging>
 

@@ -19,7 +19,6 @@
         <module>sms-api</module>
         <module>sms-sdk-aliyun</module>
         <module>sms-sdk-tencent</module>
-        <module>sms-business-validation</module>
         <module>sms-spring-boot-starter</module>
     </modules>
 
