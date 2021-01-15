@@ -8,6 +8,8 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -186,7 +189,12 @@ public class SysUserController {
     @GetResource(name = "系统用户_获取用户的角色列表", path = "/sysUser/getUserRoles")
     public ResponseData ownRole(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
         Long userId = sysUserRequest.getUserId();
-        return new SuccessResponseData(sysUserRoleService.getUserRoles(userId));
+        try {
+            List<SysUserRole> userRoles = sysUserRoleService.getUserRoles(userId);
+            return new SuccessResponseData(userRoles);
+        } catch (SystemModularException e) {
+            return new SuccessResponseData(new ArrayList<>());
+        }
     }
 
     /**
