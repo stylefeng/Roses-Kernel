@@ -29,6 +29,16 @@ public class SysSmsSendParam {
     private String templateCode;
 
     /**
+     * 图形验证码
+     */
+    private String verCode;
+
+    /**
+     * 缓存 key
+     */
+    private String verKey;
+
+    /**
      * 模板中的参数
      */
     private Map<String, Object> params;

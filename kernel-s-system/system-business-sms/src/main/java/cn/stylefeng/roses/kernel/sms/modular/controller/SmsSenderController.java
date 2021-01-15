@@ -8,9 +8,9 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsInfoParam;
-import cn.stylefeng.roses.kernel.sms.modular.service.SysSmsInfoService;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsSendParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsVerifyParam;
+import cn.stylefeng.roses.kernel.sms.modular.service.SysSmsInfoService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,8 +48,8 @@ public class SmsSenderController {
      * @author fengshuonan
      * @date 2020/10/26 18:34
      */
-    @PostResource(name = "发送验证码短信", path = "/sms/sendLoginMessage")
-    public ResponseData sendLoginMessage(@RequestBody @Validated SysSmsSendParam sysSmsSendParam) {
+    @PostResource(name = "发送验证码短信", path = "/sms/sendLoginMessage", requiredLogin = false, requiredPermission = false)
+    public ResponseData sendMessage(@RequestBody @Validated SysSmsSendParam sysSmsSendParam) {
 
         // 清空params参数
         sysSmsSendParam.setParams(null);

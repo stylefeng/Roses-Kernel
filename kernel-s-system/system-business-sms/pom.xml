@@ -17,10 +17,10 @@
 
     <dependencies>
 
-        <!--短信发送模块api-->
+        <!--系统管理的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>sms-api</artifactId>
+            <artifactId>system-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
@@ -29,6 +29,13 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--短信发送模块api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>sms-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 

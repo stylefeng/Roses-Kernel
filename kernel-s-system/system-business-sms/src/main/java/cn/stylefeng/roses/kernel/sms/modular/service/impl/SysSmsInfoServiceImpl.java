@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.sms.modular.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -17,6 +18,9 @@ import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsInfoParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsSendParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsVerifyParam;
 import cn.stylefeng.roses.kernel.sms.modular.service.SysSmsInfoService;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.exception.enums.SysSmsExceptionEnum;
+import cn.stylefeng.roses.kernel.validator.CaptchaApi;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -46,10 +50,21 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
     @Resource
     private SmsSenderApi smsSenderApi;
 
+    @Resource
+    private CaptchaApi captchaApi;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean sendShortMessage(SysSmsSendParam sysSmsSendParam) {
-
+        String verCode = sysSmsSendParam.getVerCode();
+        String verKey = sysSmsSendParam.getVerKey();
+        if (StrUtil.isEmpty(verCode) || StrUtil.isEmpty(verKey)) {
+            throw new SystemModularException(SysSmsExceptionEnum.KAPTCHA_EMPTY);
+        }
+        if (!captchaApi.validate(verCode, verKey)) {
+            throw new SystemModularException(SysSmsExceptionEnum.KAPTCHA_ERROR);
+        }
+        
         Map<String, Object> params = sysSmsSendParam.getParams();
 
         // 1. 如果是纯消息发送，直接发送，校验类短信要把验证码存库

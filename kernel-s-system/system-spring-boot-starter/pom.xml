@@ -73,6 +73,12 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!-- 注册短信的业务 -->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-sms</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
     </dependencies>
 
