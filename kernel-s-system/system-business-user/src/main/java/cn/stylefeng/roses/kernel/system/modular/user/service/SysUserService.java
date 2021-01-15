@@ -2,6 +2,8 @@ package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
+import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
+import cn.stylefeng.roses.kernel.rule.pojo.tree.UserSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
@@ -178,4 +180,21 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      */
     String getUserAvatarUrl(Long fileId);
 
+    /**
+     * 用户选择树数据
+     *
+     * @param sysUserRequest 参数
+     * @author liuhanqing
+     * @date 2021/1/15 11:16
+     */
+    List<UserSelectTreeNode> userSelectTree(SysUserRequest sysUserRequest);
+
+    /**
+     * 根据机构id获取用户树节点列表
+     *
+     * @param orgId 机构id
+     * @author liuhanqing
+     * @date 2021/1/15 11:16
+     */
+    List<UserSelectTreeNode> getUserTreeNodeList(Long orgId);
 }

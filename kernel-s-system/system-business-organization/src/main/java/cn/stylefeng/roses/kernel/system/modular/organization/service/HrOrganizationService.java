@@ -3,8 +3,10 @@ package cn.stylefeng.roses.kernel.system.modular.organization.service;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
 import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.system.OrganizationServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationResponse;
 import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,7 +19,7 @@ import java.util.Set;
  * @author fengshuonan
  * @date 2020/11/04 11:05
  */
-public interface HrOrganizationService extends IService<HrOrganization> {
+public interface HrOrganizationService extends IService<HrOrganization>, OrganizationServiceApi {
 
     /**
      * 添加系统组织机构
@@ -84,6 +86,7 @@ public interface HrOrganizationService extends IService<HrOrganization> {
      * @date 2020/11/04 11:05
      */
     List<HrOrganization> list(HrOrganizationRequest hrOrganizationRequest);
+
 
     /**
      * 获取组织架构树

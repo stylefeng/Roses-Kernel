@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.system.modular.organization.factory.Organizatio
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrOrganizationMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationResponse;
 import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -39,9 +40,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 组织架构管理
@@ -167,6 +168,55 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         LambdaQueryWrapper<HrOrganization> wrapper = createWrapper(hrOrganizationRequest);
 
         return this.list(wrapper);
+    }
+
+    @Override
+    public List<HrOrganizationResponse> orgList(){
+
+
+        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
+
+        // 如果是超级管理员 或 数据范围是所有，则不过滤数据范围
+        boolean needToDataScope = true;
+        if (LoginContext.me().getSuperAdminFlag()) {
+            Set<DataScopeTypeEnum> dataScopeTypes = LoginContext.me().getLoginUser().getDataScopeTypeEnums();
+            if (dataScopeTypes != null && dataScopeTypes.contains(DataScopeTypeEnum.ALL)) {
+                needToDataScope = false;
+            }
+        }
+
+        // 如果需要数据范围过滤，则获取用户的数据范围，拼接查询条件
+        if (needToDataScope) {
+            Set<Long> dataScope = LoginContext.me().getLoginUser().getDataScopeOrganizationIds();
+
+            // 数据范围没有，直接返回空
+            if (ObjectUtil.isEmpty(dataScope)) {
+                return new ArrayList<>();
+            }
+
+            // 根据组织机构数据范围的上级组织，用于展示完整的树形结构
+            Set<Long> allLevelParentIdsByOrganizations = this.findAllLevelParentIdsByOrganizations(dataScope);
+
+            // 拼接查询条件
+            queryWrapper.in(HrOrganization::getOrgId, allLevelParentIdsByOrganizations);
+        }
+
+        // 只查询未删除的
+        queryWrapper.eq(HrOrganization::getDelFlag, YesOrNotEnum.N.getCode());
+
+        // 根据排序升序排列，序号越小越在前
+        queryWrapper.orderByAsc(HrOrganization::getOrgSort);
+        // 先实例化出Function接口
+        Function<Object, HrOrganizationResponse> mapper = e -> {
+            HrOrganizationResponse org = new HrOrganizationResponse();
+            HrOrganization hrOrg = (HrOrganization) e;
+            BeanUtil.copyProperties(hrOrg, org);
+            return org;
+        };
+        // 返回数据
+        List<HrOrganization> list = this.list(queryWrapper);
+        List<HrOrganizationResponse> resultList = list.stream().filter(Objects::nonNull).map(mapper).collect(Collectors.toList());
+        return resultList;
     }
 
     @Override

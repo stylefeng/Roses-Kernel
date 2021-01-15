@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
@@ -14,9 +15,14 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.FileInfoApi;
 import cn.stylefeng.roses.kernel.office.api.OfficeExcelApi;
 import cn.stylefeng.roses.kernel.office.api.pojo.report.ExcelExportParam;
+import cn.stylefeng.roses.kernel.rule.enums.TreeNodeEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
+import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
+import cn.stylefeng.roses.kernel.rule.pojo.tree.UserSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.DataScopeApi;
+import cn.stylefeng.roses.kernel.system.OrganizationServiceApi;
 import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
@@ -36,6 +42,7 @@ import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
@@ -46,6 +53,7 @@ import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -101,6 +109,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private SessionManagerApi sessionManagerApi;
+
+    @Resource
+    private OrganizationServiceApi organizationServiceApi;
 
     @Override
     public void register(SysUserRequest sysUserRequest) {
@@ -575,6 +586,51 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST, sysUserRequest.getUserId());
         }
         return sysUser;
+    }
+
+    @Override
+    public List<UserSelectTreeNode> userSelectTree(SysUserRequest sysUserRequest) {
+        // 定义返回结果
+        List<UserSelectTreeNode> treeNodeList = CollectionUtil.newArrayList();
+        List<HrOrganizationResponse> orgList = organizationServiceApi.orgList();
+        UserSelectTreeNode orgTreeNode;
+        for (HrOrganizationResponse hrOrganization : orgList) {
+            orgTreeNode = new UserSelectTreeNode();
+            orgTreeNode.setId(String.valueOf(hrOrganization.getOrgId()));
+            orgTreeNode.setPId(String.valueOf(hrOrganization.getOrgParentId()));
+            orgTreeNode.setName(hrOrganization.getOrgName());
+            orgTreeNode.setNodeType(TreeNodeEnum.ORG.getCode());
+            orgTreeNode.setValue(String.valueOf(hrOrganization.getOrgId()));
+            orgTreeNode.setSort(hrOrganization.getOrgSort());
+            treeNodeList.add(orgTreeNode);
+            List<UserSelectTreeNode> userNodeList = this.getUserTreeNodeList(hrOrganization.getOrgId());
+            if(userNodeList.size()>0){
+                treeNodeList.addAll(userNodeList);
+            }
+        }
+        // 构建树并返回
+        return new DefaultTreeBuildFactory<UserSelectTreeNode>().doTreeBuild(treeNodeList);
+    }
+
+    @Override
+    public List<UserSelectTreeNode> getUserTreeNodeList(Long orgId) {
+        // 定义返回结果
+        List<UserSelectTreeNode> treeNodeList = CollectionUtil.newArrayList();
+        SysUserRequest userRequest = new SysUserRequest();
+        userRequest.setOrgId(orgId);
+        List<SysUserResponse> userList = this.baseMapper.findUserList(userRequest);
+        UserSelectTreeNode userTreeNode;
+        for (SysUserResponse user : userList) {
+            userTreeNode = new UserSelectTreeNode();
+            userTreeNode.setId(String.valueOf(user.getUserId()));
+            userTreeNode.setPId(String.valueOf(user.getOrgId()));
+            userTreeNode.setName(user.getRealName());
+            userTreeNode.setNodeType(TreeNodeEnum.USER.getCode());
+            userTreeNode.setValue(String.valueOf(user.getUserId()));
+//            userTreeNode.setSort(hrOrganization.getOrgSort());
+            treeNodeList.add(userTreeNode);
+        }
+        return treeNodeList;
     }
 
     /**

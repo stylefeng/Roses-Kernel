@@ -15,6 +15,8 @@ import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -261,4 +263,14 @@ public class SysUserController {
         return new SuccessResponseData(sysUserService.detail(sysUserRequest));
     }
 
+    /**
+     * 获取用户选择树数据
+     *
+     * @author liuhanqing
+     * @date 2021/1/15 8:28
+     */
+    @GetResource(name = "获取用户选择树数据", path = "/sysUser/getUserSelectTree")
+    public SuccessResponseData getUserTree() {
+        return new SuccessResponseData(this.sysUserService.userSelectTree(new SysUserRequest()));
+    }
 }
