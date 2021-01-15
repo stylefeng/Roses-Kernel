@@ -6,9 +6,12 @@ import cn.stylefeng.roses.kemel.blackwhite.BlackListService;
 import cn.stylefeng.roses.kemel.blackwhite.WhiteListService;
 import cn.stylefeng.roses.kemel.blackwhite.cache.BlackListMemoryCache;
 import cn.stylefeng.roses.kemel.blackwhite.cache.WhiteListMemoryCache;
+import cn.stylefeng.roses.kemel.captcha.CaptchaService;
+import cn.stylefeng.roses.kemel.captcha.cache.CaptchaMemoryCache;
 import cn.stylefeng.roses.kemel.count.DefaultCountValidator;
 import cn.stylefeng.roses.kemel.count.cache.DefaultCountValidateCache;
 import cn.stylefeng.roses.kernel.validator.BlackListApi;
+import cn.stylefeng.roses.kernel.validator.CaptchaApi;
 import cn.stylefeng.roses.kernel.validator.CountValidatorApi;
 import cn.stylefeng.roses.kernel.validator.WhiteListApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -66,6 +69,20 @@ public class ValidatorAutoConfiguration {
         TimedCache<String, String> timedCache = CacheUtil.newTimedCache(NONE_EXPIRED_TIME);
         WhiteListMemoryCache whiteListMemoryCache = new WhiteListMemoryCache(timedCache);
         return new WhiteListService(whiteListMemoryCache);
+    }
+
+    /**
+     * 图形验证码
+     *
+     * @author chenjinlong
+     * @date 2021/1/15 11:25
+     */
+    @Bean
+    @ConditionalOnMissingBean(CaptchaApi.class)
+    public CaptchaApi captchaApi() {
+        TimedCache<String, String> timedCache = CacheUtil.newTimedCache(NONE_EXPIRED_TIME);
+        CaptchaMemoryCache captchaMemoryCache = new CaptchaMemoryCache(timedCache);
+        return new CaptchaService(captchaMemoryCache);
     }
 
 }

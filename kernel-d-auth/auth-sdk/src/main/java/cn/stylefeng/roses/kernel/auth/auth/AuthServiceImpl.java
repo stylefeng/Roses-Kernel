@@ -3,7 +3,6 @@ package cn.stylefeng.roses.kernel.auth.auth;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.AuthServiceApi;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
-import cn.stylefeng.roses.kernel.auth.api.constants.AuthConstants;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
@@ -23,6 +22,7 @@ import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
+import cn.stylefeng.roses.kernel.validator.CaptchaApi;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -59,6 +59,9 @@ public class AuthServiceImpl implements AuthServiceApi {
 
     @Resource
     private LoginLogServiceApi loginLogServiceApi;
+
+    @Resource
+    private CaptchaApi captchaApi;
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
@@ -169,13 +172,12 @@ public class AuthServiceImpl implements AuthServiceApi {
 
         // 2. 如果开启了验证码校验，则验证当前请求的验证码是否正确
         if (SystemConfigExpander.getCaptchaOpen()) {
-
-            String kaptcha = loginRequest.getKaptcha();
-            if (StrUtil.isEmpty(kaptcha)) {
+            String verCode = loginRequest.getVerCode();
+            String verKey = loginRequest.getVerKey();
+            if (StrUtil.isEmpty(verCode) || StrUtil.isEmpty(verKey)) {
                 throw new AuthException(AuthExceptionEnum.KAPTCHA_EMPTY);
             }
-            Object sessionKaptcha = (String) HttpServletUtil.getRequest().getSession().getAttribute(AuthConstants.KAPTCHA_SESSION_KEY);
-            if (StrUtil.isEmpty(kaptcha) || !kaptcha.equals(sessionKaptcha)) {
+            if (!captchaApi.validate(verCode, verKey)) {
                 throw new AuthException(AuthExceptionEnum.KAPTCHA_ERROR);
             }
         }

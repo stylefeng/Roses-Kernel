@@ -8,50 +8,43 @@
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-validator</artifactId>
         <version>1.0.0</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>validator-spring-boot-starter</artifactId>
-
-    <packaging>jar</packaging>
+    <artifactId>validator-sdk-captcha</artifactId>
 
     <dependencies>
 
-        <!--计数校验器在线管理-->
+        <!--校验模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-business-count</artifactId>
+            <artifactId>validator-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-        <!--黑名单和白名单限制-->
+        <!--web模块-->
         <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-sdk-black-white</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--技术校验器，为了限制某个数据一定时间内的反问频次-->
+        <!--缓存模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-sdk-count</artifactId>
+            <artifactId>cache-api</artifactId>
             <version>1.0.0</version>
         </dependency>
-
-        <!--XSS安全过滤器-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-sdk-xss</artifactId>
+            <artifactId>cache-sdk-memory</artifactId>
             <version>1.0.0</version>
+            <optional>true</optional>
         </dependency>
-
-        <!-- captcha图形验证码 -->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-sdk-captcha</artifactId>
+            <artifactId>cache-sdk-redis</artifactId>
             <version>1.0.0</version>
+            <optional>true</optional>
         </dependency>
 
     </dependencies>
-
 </project>
