@@ -39,11 +39,9 @@ import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.OnlineUserRequest;
-import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.alibaba.excel.support.ExcelTypeEnum;
@@ -103,6 +101,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private SessionManagerApi sessionManagerApi;
+
+    @Override
+    public void register(SysUserRequest sysUserRequest) {
+        SysUser sysUser = new SysUser();
+        BeanUtil.copyProperties(sysUserRequest, sysUser);
+        // 保存用户
+        this.save(sysUser);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

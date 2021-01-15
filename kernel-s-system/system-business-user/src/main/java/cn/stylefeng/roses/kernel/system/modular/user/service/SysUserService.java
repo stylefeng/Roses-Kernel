@@ -4,8 +4,8 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +18,17 @@ import java.util.List;
  * @date 2020/11/6 10:28
  */
 public interface SysUserService extends IService<SysUser>, UserServiceApi {
+
+
+    /**
+     * 新用户注册
+     *
+     * @param sysUserRequest 请求参数
+     * @return
+     * @author chenjinlong
+     * @date 2021/1/15 15:17
+     */
+    void register(SysUserRequest sysUserRequest);
 
     /**
      * 增加用户

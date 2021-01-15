@@ -32,7 +32,7 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 账号
      */
-    @NotBlank(message = "账号不能为空，请检查account参数", groups = {add.class, edit.class})
+    @NotBlank(message = "账号不能为空，请检查account参数", groups = {add.class, edit.class, reg.class})
     @TableUniqueValue(
             message = "账号存在重复，请检查account参数",
             groups = {add.class, edit.class},
@@ -45,13 +45,13 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 原密码
      */
-    @NotBlank(message = "原密码不能为空，请检查password参数", groups = {updatePwd.class})
+    @NotBlank(message = "原密码不能为空，请检查password参数", groups = {updatePwd.class, reg.class})
     private String password;
 
     /**
      * 新密码
      */
-    @NotBlank(message = "新密码不能为空，请检查newPassword参数", groups = {updatePwd.class})
+    @NotBlank(message = "新密码不能为空，请检查newPassword参数", groups = {updatePwd.class, reg.class})
     private String newPassword;
 
     /**
@@ -86,14 +86,14 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 邮箱
      */
-    @Email(message = "邮箱格式错误，请检查email参数", groups = {updateInfo.class})
+    @Email(message = "邮箱格式错误，请检查email参数", groups = {updateInfo.class, reg.class})
     private String email;
 
     /**
      * 手机
      */
-    @NotNull(message = "手机号码不能为空，请检查phone参数", groups = {add.class, edit.class})
-    @Size(min = 11, max = 11, message = "手机号码格式错误，请检查手机是否是11位", groups = {add.class, edit.class})
+    @NotNull(message = "手机号码不能为空，请检查phone参数", groups = {add.class, edit.class, reg.class})
+    @Size(min = 11, max = 11, message = "手机号码格式错误，请检查手机是否是11位", groups = {add.class, edit.class, reg.class})
     private String phone;
 
     /**
@@ -184,6 +184,12 @@ public class SysUserRequest extends BaseRequest {
      * 参数校验分组：修改状态
      */
     public @interface changeStatus {
+    }
+
+    /**
+     * 参数校验分组：注册用户
+     */
+    public @interface reg {
     }
 
 }

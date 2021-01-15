@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * 图形验证码
  *
  * @author chenjinlong
- * @date 2021/1/15 13:48
+ * @date 2021/1/15 15:11
  */
 @RestController
 @ApiResource(name = "用户登录图形验证码")
