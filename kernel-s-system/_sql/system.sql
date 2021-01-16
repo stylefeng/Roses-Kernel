@@ -188,7 +188,7 @@ CREATE TABLE `sys_database_info`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dict`;
 CREATE TABLE `sys_dict`  (
-  `dict_id` bigint(20) NOT NULL COMMENT '字典id',
+  `dict_id` bigint(0) NOT NULL COMMENT '字典id',
   `dict_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典编码',
   `dict_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典名称',
   `dict_name_pinyin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典名称首字母',
@@ -196,48 +196,58 @@ CREATE TABLE `sys_dict`  (
   `dict_type_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典类型的编码',
   `dict_short_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典简称',
   `dict_short_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典简称的编码',
-  `dict_parent_id` bigint(20) NOT NULL COMMENT '上级字典的id(如果没有上级字典id，则为-1)',
-  `status_flag` tinyint(4) NOT NULL COMMENT '状态：(1-启用,2-禁用),参考 StatusEnum',
+  `dict_parent_id` bigint(0) NOT NULL COMMENT '上级字典的id(如果没有上级字典id，则为-1)',
+  `status_flag` tinyint(0) NOT NULL COMMENT '状态：(1-启用,2-禁用),参考 StatusEnum',
   `dict_sort` decimal(10, 2) NULL DEFAULT NULL COMMENT '排序，带小数点',
   `dict_pids` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '父id集合',
   `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'N' COMMENT '是否删除，Y-被删除，N-未删除',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `create_user` bigint(20) NULL DEFAULT NULL COMMENT '创建用户id',
+  `create_user` bigint(0) NULL DEFAULT NULL COMMENT '创建用户id',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改用户id',
-  PRIMARY KEY (`dict_id`) USING BTREE
+  `update_user` bigint(0) NULL DEFAULT NULL COMMENT '修改用户id',
+ PRIMARY KEY (`dict_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典' ROW_FORMAT = Dynamic;
 
-INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619802, 'M', '男', 'n', 'male', 'sex', NULL, NULL, -1, 1, 1.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
-INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619803, 'F', '女', 'n', 'female', 'sex', NULL, NULL, -1, 1, 2.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
-INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619804, '1', '启用', 'n', 'male', 'user_status', NULL, NULL, -1, 1, 1.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
-INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619805, '2', '禁用', 'n', 'female', 'user_status', NULL, NULL, -1, 1, 2.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
-INSERT INTO `sys_dict`(`dict_id`, `dict_code`, `dict_name`, `dict_name_pinyin`, `dict_encode`, `dict_type_code`, `dict_short_name`, `dict_short_code`, `dict_parent_id`, `status_flag`, `dict_sort`, `dict_pids`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619806, '3', '冻结', 'n', 'female', 'user_status', NULL, NULL, -1, 1, 2.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+-- ----------------------------
+-- Records of sys_dict
+-- ----------------------------
+INSERT INTO `sys_dict` VALUES (1348235720908619802, 'M', '男', 'n', 'male', 'sex', NULL, NULL, -1, 1, 1.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+INSERT INTO `sys_dict` VALUES (1348235720908619803, 'F', '女', 'n', 'female', 'sex', NULL, NULL, -1, 1, 2.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+INSERT INTO `sys_dict` VALUES (1348235720908619804, '1', '启用', 'n', 'male', 'user_status', NULL, NULL, -1, 1, 1.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+INSERT INTO `sys_dict` VALUES (1348235720908619805, '2', '禁用', 'n', 'female', 'user_status', NULL, NULL, -1, 1, 2.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+INSERT INTO `sys_dict` VALUES (1348235720908619806, '3', '冻结', 'n', 'female', 'user_status', NULL, NULL, -1, 1, 2.00, '[-1],', 'N', '2021-01-14 14:46:13', NULL, NULL, NULL);
+INSERT INTO `sys_dict` VALUES (1350457799368257537, 'low', '低', 'd', NULL, 'priority_level', '低', '', -1, 1, 1.00, '-1', 'N', '2021-01-16 23:00:04', 1339550467939639299, NULL, NULL);
+INSERT INTO `sys_dict` VALUES (1350457870780477442, 'middle', '中', 'z', NULL, 'priority_level', '中', '', -1, 1, 2.00, '-1', 'N', '2021-01-16 23:00:21', 1339550467939639299, NULL, NULL);
+INSERT INTO `sys_dict` VALUES (1350457950417727489, 'high', '高', 'g', NULL, 'priority_level', '高', '', -1, 1, 3.00, '-1', 'N', '2021-01-16 23:00:40', 1339550467939639299, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_dict_type
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dict_type`;
 CREATE TABLE `sys_dict_type`  (
-  `dict_type_id` bigint(20) NOT NULL COMMENT '字典类型id',
-  `dict_type_class` int(11) NULL DEFAULT NULL COMMENT '字典类型： 1-业务类型，2-系统类型，参考 DictTypeClassEnum',
+  `dict_type_id` bigint(0) NOT NULL COMMENT '字典类型id',
+  `dict_type_class` int(0) NULL DEFAULT NULL COMMENT '字典类型： 1-业务类型，2-系统类型，参考 DictTypeClassEnum',
   `dict_type_bus_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典类型业务编码',
   `dict_type_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典类型编码',
   `dict_type_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典类型名称',
   `dict_type_name_pinyin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典类型名称首字母拼音',
   `dict_type_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '字典类型描述',
-  `status_flag` tinyint(4) NULL DEFAULT NULL COMMENT '字典类型的状态：1-启用，2-禁用，参考 StatusEnum',
+  `status_flag` tinyint(0) NULL DEFAULT NULL COMMENT '字典类型的状态：1-启用，2-禁用，参考 StatusEnum',
   `dict_type_sort` decimal(10, 2) NULL DEFAULT NULL COMMENT '排序，带小数点',
   `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'N' COMMENT '是否删除：Y-被删除，N-未删除',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `create_user` bigint(20) NULL DEFAULT NULL COMMENT '创建用户id',
+  `create_user` bigint(0) NULL DEFAULT NULL COMMENT '创建用户id',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `update_user` bigint(20) NULL DEFAULT NULL COMMENT '修改用户id',
+  `update_user` bigint(0) NULL DEFAULT NULL COMMENT '修改用户id',
   PRIMARY KEY (`dict_type_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典类型' ROW_FORMAT = Dynamic;
 
-INSERT INTO `sys_dict_type`(`dict_type_id`, `dict_type_class`, `dict_type_bus_code`, `dict_type_code`, `dict_type_name`, `dict_type_name_pinyin`, `dict_type_desc`, `status_flag`, `dict_type_sort`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619811, 1, 'base', 'sex', '性别', 'xb', NULL, 1, 1.00, 'N', '2021-01-14 14:47:32', NULL, NULL, NULL);
-INSERT INTO `sys_dict_type`(`dict_type_id`, `dict_type_class`, `dict_type_bus_code`, `dict_type_code`, `dict_type_name`, `dict_type_name_pinyin`, `dict_type_desc`, `status_flag`, `dict_type_sort`, `del_flag`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1348235720908619812, 2, 'system', 'user_status', '用户状态', 'yhzt', NULL, 1, 2.00, 'N', '2021-01-14 14:47:32', NULL, NULL, NULL);
+-- ----------------------------
+-- Records of sys_dict_type
+-- ----------------------------
+INSERT INTO `sys_dict_type` VALUES (1348235720908619811, 1, 'base', 'sex', '性别', 'xb', NULL, 1, 1.00, 'N', '2021-01-14 14:47:32', NULL, NULL, NULL);
+INSERT INTO `sys_dict_type` VALUES (1348235720908619812, 2, 'system', 'user_status', '用户状态', 'yhzt', NULL, 1, 2.00, 'N', '2021-01-14 14:47:32', NULL, NULL, NULL);
+INSERT INTO `sys_dict_type` VALUES (1350457656690618370, 1, 'notice', 'priority_level', '优先级', 'yxj', '', 1, 5.00, 'N', '2021-01-16 22:59:30', 1339550467939639299, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_file_info
