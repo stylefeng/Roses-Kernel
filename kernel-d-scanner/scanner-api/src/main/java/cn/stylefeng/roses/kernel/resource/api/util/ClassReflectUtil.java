@@ -132,7 +132,8 @@ public class ClassReflectUtil {
         if (annotations == null) {
             annotations = new HashSet<>();
         }
-        annotations.add(fieldAnnotation.annotationType().getSimpleName());
+        String messageTip = invokeAnnotationMethodIgnoreError(fieldAnnotation, "message", String.class);
+        annotations.add(messageTip);
         groupAnnotations.put(validateGroupsClass.getSimpleName(), annotations);
     }
 

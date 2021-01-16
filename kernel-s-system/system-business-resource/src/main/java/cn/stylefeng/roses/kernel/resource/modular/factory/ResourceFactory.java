@@ -3,6 +3,8 @@ package cn.stylefeng.roses.kernel.resource.modular.factory;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.resource.api.pojo.resource.FieldMetadata;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.resource.modular.entity.SysResource;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
@@ -10,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -105,6 +108,63 @@ public class ResourceFactory {
         }
 
         return resourceDefinition;
+    }
+
+    /**
+     * ResourceDefinition转化为api界面的详情信息
+     *
+     * @author fengshuonan
+     * @date 2021/1/16 16:09
+     */
+    public static ResourceDefinition fillResourceDetail(ResourceDefinition resourceDefinition) {
+
+        // 这个接口的校验组信息
+        Set<String> validateGroups = resourceDefinition.getValidateGroups();
+
+        // 接口的请求参数信息
+        Set<FieldMetadata> paramFieldDescriptions = resourceDefinition.getParamFieldDescriptions();
+        fillDetailMessage(validateGroups, paramFieldDescriptions);
+
+        // 接口的响应参数信息
+        Set<FieldMetadata> responseFieldDescriptions = resourceDefinition.getResponseFieldDescriptions();
+        fillDetailMessage(validateGroups, responseFieldDescriptions);
+
+        return resourceDefinition;
+    }
+
+    /**
+     * 填充字段里详细的提示信息
+     *
+     * @author fengshuonan
+     * @date 2021/1/16 18:00
+     */
+    public static Set<FieldMetadata> fillDetailMessage(Set<String> validateGroups, Set<FieldMetadata> fieldMetadataSet) {
+        if (validateGroups == null || validateGroups.isEmpty()) {
+            return fieldMetadataSet;
+        }
+
+        if (fieldMetadataSet == null || fieldMetadataSet.isEmpty()) {
+            return fieldMetadataSet;
+        }
+        for (FieldMetadata fieldMetadata : fieldMetadataSet) {
+            StringBuilder finalValidateMessages = new StringBuilder();
+            Map<String, Set<String>> groupAnnotations = fieldMetadata.getGroupAnnotations();
+            if (groupAnnotations != null) {
+                for (String validateGroup : validateGroups) {
+                    Set<String> validateMessage = groupAnnotations.get(validateGroup);
+                    if (validateMessage != null && !validateMessage.isEmpty()) {
+                        finalValidateMessages.append(StrUtil.join(",", validateMessage));
+                    }
+                }
+            }
+            fieldMetadata.setValidationMessages(finalValidateMessages.toString());
+
+            // 递归填充子类型的详细提示信息
+            if (fieldMetadata.getGenericFieldMetadata() != null && !fieldMetadata.getGenericFieldMetadata().isEmpty()) {
+                fillDetailMessage(validateGroups, fieldMetadata.getGenericFieldMetadata());
+            }
+        }
+        return fieldMetadataSet;
     }
 
 }

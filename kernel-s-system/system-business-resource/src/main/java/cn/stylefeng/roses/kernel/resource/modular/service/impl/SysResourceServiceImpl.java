@@ -27,7 +27,6 @@ import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.pojo.resource.LayuiApiResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResourceResponse;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -121,18 +120,12 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         sysResourceLambdaQueryWrapper.eq(SysResource::getResourceCode, resourceRequest.getResourceCode());
         SysResource sysResource = this.getOne(sysResourceLambdaQueryWrapper);
         if (sysResource != null) {
-            ResourceDefinition definition = ResourceFactory.createResourceDefinition(sysResource);
 
-            // 翻译创建人
-            if (sysResource.getCreateUser().equals(RuleConstants.TREE_ROOT_ID)) {
-                definition.setCreateUser("超级管理员");
-            } else {
-                SysUserResponse userInfo = userServiceApi.getUserInfoByUserId(sysResource.getCreateUser());
-                if (ObjectUtil.isNotEmpty(userInfo)) {
-                    definition.setCreateUser(userInfo.getRealName());
-                }
-            }
-            return definition;
+            // 实体转化为ResourceDefinition
+            ResourceDefinition resourceDefinition = ResourceFactory.createResourceDefinition(sysResource);
+
+            // 填充具体的提示信息
+            return ResourceFactory.fillResourceDetail(resourceDefinition);
         } else {
             return null;
         }

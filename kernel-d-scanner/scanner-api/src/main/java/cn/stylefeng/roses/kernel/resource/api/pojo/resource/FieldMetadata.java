@@ -45,9 +45,14 @@ public class FieldMetadata {
      * 按校验组分的注解集合
      * <p>
      * 例如：
-     * key = add, value = [NotBlank,TableUniqueValue]
+     * key = add, value = [不能为空，最大多少位，邮箱类型]
      */
     private Map<String, Set<String>> groupAnnotations;
+
+    /**
+     * 校验信息的提示信息
+     */
+    private String validationMessages;
 
     /**
      * 泛型或object类型的字段的描述
