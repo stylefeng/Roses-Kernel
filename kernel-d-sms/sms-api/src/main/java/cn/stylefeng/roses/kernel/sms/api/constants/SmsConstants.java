@@ -25,4 +25,9 @@ public interface SmsConstants {
      */
     String SMS_CODE_PARAM_NAME = "code";
 
+    /**
+     * 默认短信失效时间（单位：秒）
+     */
+    Integer DEFAULT_SMS_INVALID_SECONDS = 300;
+
 }
