@@ -8,10 +8,10 @@
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-s-system</artifactId>
         <version>1.0.0</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../kernel-s-system/pom.xml</relativePath>
     </parent>
 
-    <artifactId>system-business-sms</artifactId>
+    <artifactId>sms-business-validation</artifactId>
 
     <packaging>jar</packaging>
 
