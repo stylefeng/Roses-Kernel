@@ -45,8 +45,8 @@ public class SysConfigParam extends BaseRequest {
     /**
      * 是否是系统参数：Y-是，N-否
      */
-    @NotBlank(message = "是否是系统参数不能为空，请检查sysFlag参数", groups = {add.class, edit.class})
-    @FlagValue(message = "是否是系统参数格式错误，正确格式应该Y或者N，请检查sysFlag参数", groups = {add.class, edit.class})
+    @NotBlank(message = "是否是系统参数不能为空", groups = {add.class, edit.class})
+    @FlagValue(message = "是否是系统参数格式错误，正确格式应该Y或者N", groups = {add.class, edit.class})
     private String sysFlag;
 
     /**

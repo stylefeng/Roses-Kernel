@@ -79,7 +79,7 @@ public class MessageParam extends BaseRequest {
     /**
      * 消息id集合
      */
-    @NotEmpty(message = "消息id集合不能为空，请检查messageIdList参数", groups = {updateReadFlag.class})
+    @NotEmpty(message = "消息id集合不能为空", groups = {updateReadFlag.class})
     private List<Long> messageIdList;
 
 

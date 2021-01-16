@@ -79,8 +79,8 @@ public class SysRoleRequest extends BaseRequest {
     /**
      * 数据范围类型：10-仅本人数据，20-本部门数据，30-本部门及以下数据，40-指定部门数据，50-全部数据
      */
-    @Null(message = "数据范围类型应该为空， 请移除dataScopeType参数", groups = {add.class, edit.class})
-    @NotNull(message = "数据范围类型不能为空，请检查dataScopeType参数", groups = {grantDataScope.class})
+    @Null(message = "数据范围类型应该为空", groups = {add.class, edit.class})
+    @NotNull(message = "数据范围类型不能为空", groups = {grantDataScope.class})
     private Integer dataScopeType;
 
     /**
@@ -96,7 +96,7 @@ public class SysRoleRequest extends BaseRequest {
     /**
      * 授权资源
      */
-    @NotNull(message = "授权资源不能为空，请检查grantResourceList参数", groups = {grantResource.class})
+    @NotNull(message = "授权资源不能为空", groups = {grantResource.class})
     private List<String> grantResourceList;
 
     /**
@@ -107,13 +107,13 @@ public class SysRoleRequest extends BaseRequest {
     /**
      * 授权菜单
      */
-    @NotNull(message = "授权菜单Id不能为空，请检查grantMenuIdList参数", groups = {grantMenuButton.class})
+    @NotNull(message = "授权菜单Id不能为空", groups = {grantMenuButton.class})
     private List<Long> grantMenuIdList;
 
     /**
      * 授权菜单按钮
      */
-    @NotNull(message = "授权菜单按钮Id不能为空，请检查grantMenuButtonIdList参数", groups = {grantMenuButton.class})
+    @NotNull(message = "授权菜单按钮Id不能为空", groups = {grantMenuButton.class})
     private List<SysRoleMenuButtonRequest> grantMenuButtonIdList;
 
     /**

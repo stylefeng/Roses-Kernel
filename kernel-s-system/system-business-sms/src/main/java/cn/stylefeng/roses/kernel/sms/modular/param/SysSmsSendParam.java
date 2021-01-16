@@ -19,13 +19,13 @@ public class SysSmsSendParam {
     /**
      * 手机号
      */
-    @NotBlank(message = "手机号码为空，请检查phoneNumbers参数")
+    @NotBlank(message = "手机号码为空")
     private String phoneNumber;
 
     /**
      * 模板号
      */
-    @NotBlank(message = "模板号为空，请检查templateCode参数")
+    @NotBlank(message = "模板号为空")
     private String templateCode;
 
     /**

@@ -33,7 +33,7 @@ public class SysFileInfoRequest extends BaseRequest {
      * <p>
      * 版本号升级的依据，code相同id不同视为同一个文件的不同版本
      */
-    @NotNull(message = "fileCode不能为空，请检查fileCode参数", groups = {edit.class, delete.class,})
+    @NotNull(message = "fileCode不能为空", groups = {edit.class, delete.class,})
     private Long fileCode;
 
     /**
@@ -41,7 +41,7 @@ public class SysFileInfoRequest extends BaseRequest {
      * <p>
      * 机密文件为需要鉴权的文件，非机密文件则不需要任何权限（不登录也可以访问）
      */
-    @NotBlank(message = "是否是机密文件不能为空，请检查secretFlag参数", groups = {add.class, edit.class})
+    @NotBlank(message = "是否是机密文件不能为空", groups = {add.class, edit.class})
     private String secretFlag;
 
     /**

@@ -48,19 +48,19 @@ public class DatabaseInfoParam extends BaseRequest {
     /**
      * jdbc的url
      */
-    @NotBlank(message = "jdbc的url，请检查jdbcUrl参数", groups = {add.class, edit.class})
+    @NotBlank(message = "jdbc的url", groups = {add.class, edit.class})
     private String jdbcUrl;
 
     /**
      * 数据库连接的账号
      */
-    @NotBlank(message = "数据库连接的账号，请检查userName参数", groups = {add.class, edit.class})
+    @NotBlank(message = "数据库连接的账号", groups = {add.class, edit.class})
     private String userName;
 
     /**
      * 数据库连接密码
      */
-    @NotBlank(message = "数据库连接密码，请检查password参数", groups = {add.class, edit.class})
+    @NotBlank(message = "数据库连接密码", groups = {add.class, edit.class})
     private String password;
 
     /**

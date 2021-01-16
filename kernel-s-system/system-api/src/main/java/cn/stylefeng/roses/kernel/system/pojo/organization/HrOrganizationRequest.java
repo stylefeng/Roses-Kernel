@@ -48,7 +48,7 @@ public class HrOrganizationRequest extends BaseRequest {
      */
     @NotBlank(message = "组织编码不能为空", groups = {add.class, edit.class})
     @TableUniqueValue(
-            message = "组织编码存在重复，请检查code参数",
+            message = "组织编码存在重复",
             groups = {add.class, edit.class},
             tableName = "hr_organization",
             columnName = "org_code",

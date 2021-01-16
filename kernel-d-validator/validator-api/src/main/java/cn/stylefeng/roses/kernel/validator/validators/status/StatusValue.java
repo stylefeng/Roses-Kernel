@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface StatusValue {
 
-    String message() default "不正确的状态标识，请检查status相关的值";
+    String message() default "不正确的状态标识";
 
     Class[] groups() default {};
 

@@ -24,13 +24,13 @@ public class LogManagerParam extends BaseRequest {
     /**
      * 查询的起始时间
      */
-    @NotBlank(message = "起始时间不能为空，请检查beginDateTime参数", groups = {delete.class})
+    @NotBlank(message = "起始时间不能为空", groups = {delete.class})
     private String beginDateTime;
 
     /**
      * 查询日志的结束时间
      */
-    @NotBlank(message = "结束时间不能为空，请检查endDateTime参数", groups = {delete.class})
+    @NotBlank(message = "结束时间不能为空", groups = {delete.class})
     private String endDateTime;
 
     /**
@@ -41,7 +41,7 @@ public class LogManagerParam extends BaseRequest {
     /**
      * 服务名称，一般为spring.application.name
      */
-    @NotBlank(message = "服务名称不能为空，请检查appName参数", groups = {delete.class})
+    @NotBlank(message = "服务名称不能为空", groups = {delete.class})
     private String appName;
 
     /**

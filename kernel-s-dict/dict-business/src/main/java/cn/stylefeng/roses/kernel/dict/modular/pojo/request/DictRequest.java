@@ -23,7 +23,7 @@ public class DictRequest extends BaseRequest {
     /**
      * 字典id
      */
-    @NotNull(message = "id不能为空，请检查id参数", groups = {edit.class, delete.class, detail.class, updateStatus.class})
+    @NotNull(message = "id不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class})
     private Long dictId;
 
     /**

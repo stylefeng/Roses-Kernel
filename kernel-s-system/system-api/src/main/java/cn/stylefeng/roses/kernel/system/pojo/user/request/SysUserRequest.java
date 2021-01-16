@@ -32,9 +32,9 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 账号
      */
-    @NotBlank(message = "账号不能为空，请检查account参数", groups = {add.class, edit.class, reg.class})
+    @NotBlank(message = "账号不能为空", groups = {add.class, edit.class, reg.class})
     @TableUniqueValue(
-            message = "账号存在重复，请检查account参数",
+            message = "账号存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_user",
             columnName = "account",
@@ -45,13 +45,13 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 原密码
      */
-    @NotBlank(message = "原密码不能为空，请检查password参数", groups = {updatePwd.class, reg.class})
+    @NotBlank(message = "原密码不能为空", groups = {updatePwd.class, reg.class})
     private String password;
 
     /**
      * 新密码
      */
-    @NotBlank(message = "新密码不能为空，请检查newPassword参数", groups = {updatePwd.class, reg.class})
+    @NotBlank(message = "新密码不能为空", groups = {updatePwd.class, reg.class})
     private String newPassword;
 
     /**
@@ -68,32 +68,32 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 头像
      */
-    @NotNull(message = "头像不能为空，请检查avatar参数", groups = {updateAvatar.class})
+    @NotNull(message = "头像不能为空", groups = {updateAvatar.class})
     private Long avatar;
 
     /**
      * 生日
      */
-    @DateValue(message = "生日格式不正确，请检查birthday参数", groups = {add.class, edit.class})
+    @DateValue(message = "生日格式不正确", groups = {add.class, edit.class})
     private String birthday;
 
     /**
      * 性别（M-男，F-女）
      */
-    @NotNull(message = "性别不能为空，请检查sex参数", groups = {updateInfo.class})
+    @NotNull(message = "性别不能为空", groups = {updateInfo.class})
     private String sex;
 
     /**
      * 邮箱
      */
-    @Email(message = "邮箱格式错误，请检查email参数", groups = {updateInfo.class, reg.class})
+    @Email(message = "邮箱格式错误", groups = {updateInfo.class, reg.class})
     private String email;
 
     /**
      * 手机
      */
-    @NotNull(message = "手机号码不能为空，请检查phone参数", groups = {add.class, edit.class, reg.class})
-    @Size(min = 11, max = 11, message = "手机号码格式错误，请检查手机是否是11位", groups = {add.class, edit.class, reg.class})
+    @NotNull(message = "手机号码不能为空", groups = {add.class, edit.class, reg.class})
+    @Size(min = 11, max = 11, message = "手机号码格式错误，不是11位", groups = {add.class, edit.class, reg.class})
     private String phone;
 
     /**
@@ -104,13 +104,13 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 授权角色，角色id集合
      */
-    @NotNull(message = "授权角色不能为空，请检查grantRoleIdList参数", groups = {grantRole.class})
+    @NotNull(message = "授权角色不能为空", groups = {grantRole.class})
     private List<Long> grantRoleIdList;
 
     /**
      * 授权数据范围，组织机构id集合
      */
-    @NotNull(message = "授权数据不能为空，请检查grantOrgIdList参数", groups = {grantData.class})
+    @NotNull(message = "授权数据不能为空", groups = {grantData.class})
     private List<Long> grantOrgIdList;
 
     /**
@@ -128,8 +128,8 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 状态（字典 1正常 2冻结）
      */
-    @NotNull(message = "状态不能为空，请检查statusFlag参数", groups = updateStatus.class)
-    @StatusValue(message = "状态不正确，请检查状态值是否正确", groups = updateStatus.class)
+    @NotNull(message = "状态不能为空", groups = updateStatus.class)
+    @StatusValue(message = "状态不正确", groups = updateStatus.class)
     private Integer statusFlag;
 
     /**

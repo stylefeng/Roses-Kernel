@@ -23,31 +23,31 @@ public class SysMenuButtonRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "按钮id不能为空，请检查buttonId参数", groups = {edit.class, detail.class, delete.class})
+    @NotNull(message = "按钮id不能为空", groups = {edit.class, detail.class, delete.class})
     private Long buttonId;
 
     /**
      * 菜单按钮主键集合
      */
-    @NotEmpty(message = "菜单按钮主键集合不能为空，请检查 buttonIds 参数", groups = {batchDelete.class})
-    private Set<@NotNull(message = "菜单按钮主键集合不能为空，请检查 buttonIds 参数", groups = {batchDelete.class}) Long> buttonIds;
+    @NotEmpty(message = "菜单按钮主键集合不能为空", groups = {batchDelete.class})
+    private Set<@NotNull(message = "菜单按钮主键集合不能为空", groups = {batchDelete.class}) Long> buttonIds;
 
     /**
      * 菜单id，按钮需要挂在菜单下
      */
-    @NotNull(message = "菜单id不能为空，请检查menuId参数", groups = {add.class, edit.class, list.class})
+    @NotNull(message = "菜单id不能为空", groups = {add.class, edit.class, list.class})
     private Long menuId;
 
     /**
      * 按钮的名称
      */
-    @NotBlank(message = "按钮名称不能为空，请检查buttonName参数", groups = {add.class, edit.class})
+    @NotBlank(message = "按钮名称不能为空", groups = {add.class, edit.class})
     private String buttonName;
 
     /**
      * 按钮的编码
      */
-    @NotBlank(message = "按钮编码不能为空，请检查buttonCode参数", groups = {add.class, edit.class})
+    @NotBlank(message = "按钮编码不能为空", groups = {add.class, edit.class})
     @TableUniqueValue(
             message = "按钮编码存在重复",
             groups = {add.class, edit.class},

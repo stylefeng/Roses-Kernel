@@ -67,7 +67,7 @@ public class SysMenuRequest extends BaseRequest {
     /**
      * 是否可见（Y-是，N-否）
      */
-    @FlagValue(message = "是否可见格式错误，正确格式应该Y或者N，请检查visible参数", groups = {add.class, edit.class}, required = false)
+    @FlagValue(message = "是否可见格式错误，正确格式应该Y或者N", groups = {add.class, edit.class}, required = false)
     private String visible;
 
     /**
