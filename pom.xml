@@ -103,6 +103,7 @@
         <aws.sdk.version>1.11.106</aws.sdk.version>
         <minio.version>3.0.10</minio.version>
         <rocketmq.version>4.5.2</rocketmq.version>
+        <easy.captcha>1.6.2</easy.captcha>
     </properties>
 
     <dependencyManagement>
@@ -238,6 +239,13 @@
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
+            </dependency>
+
+            <!-- EasyCaptcha图形验证码 -->
+            <dependency>
+                <groupId>com.github.whvcse</groupId>
+                <artifactId>easy-captcha</artifactId>
+                <version>${easy.captcha}</version>
             </dependency>
 
         </dependencies>

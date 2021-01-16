@@ -34,12 +34,13 @@ public class LoginRequest extends BaseRequest {
     private Boolean rememberMe = false;
 
     /**
-     * 图形验证码
+     * 验证码图形对应的缓存key
+     */
+    private String verKey;
+
+    /**
+     * 用户输入的验证码的值
      */
     private String verCode;
 
-    /**
-     * 缓存 key
-     */
-    private String verKey;
 }

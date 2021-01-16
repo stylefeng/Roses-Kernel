@@ -31,7 +31,7 @@ public class CaptchaService implements CaptchaApi {
     }
 
     @Override
-    public boolean validate(String verCode, String verKey) {
+    public boolean validateCaptcha(String verKey, String verCode) {
         if (StrUtil.isAllEmpty(verKey, verCode)) {
             return false;
         }
@@ -47,6 +47,5 @@ public class CaptchaService implements CaptchaApi {
     public String getVerCode(String verKey) {
         return cacheOperatorApi.get(verKey);
     }
-
 
 }

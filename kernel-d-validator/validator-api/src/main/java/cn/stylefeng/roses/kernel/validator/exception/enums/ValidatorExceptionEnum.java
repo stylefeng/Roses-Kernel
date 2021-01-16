@@ -49,7 +49,17 @@ public enum ValidatorExceptionEnum implements AbstractExceptionEnum {
     /**
      * 数据库字段值唯一性校验出错，参数不完整
      */
-    TABLE_UNIQUE_VALIDATE_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "07", "数据库字段值唯一性校验出错，具体信息：{}");
+    TABLE_UNIQUE_VALIDATE_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "07", "数据库字段值唯一性校验出错，具体信息：{}"),
+
+    /**
+     * 验证码为空
+     */
+    CAPTCHA_EMPTY(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "08", "验证码参数不能为空"),
+
+    /**
+     * 验证码错误
+     */
+    CAPTCHA_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "09", "验证码错误");
 
     /**
      * 错误编码

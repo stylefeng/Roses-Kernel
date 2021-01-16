@@ -22,4 +22,5 @@ public class EasyCaptcha {
      * Base64 图形验证码
      */
     private String verImage;
+
 }

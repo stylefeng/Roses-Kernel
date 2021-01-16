@@ -23,6 +23,7 @@ import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 import cn.stylefeng.roses.kernel.validator.CaptchaApi;
+import cn.stylefeng.roses.kernel.validator.exception.enums.ValidatorExceptionEnum;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -172,13 +173,14 @@ public class AuthServiceImpl implements AuthServiceApi {
 
         // 2. 如果开启了验证码校验，则验证当前请求的验证码是否正确
         if (SystemConfigExpander.getCaptchaOpen()) {
-            String verCode = loginRequest.getVerCode();
             String verKey = loginRequest.getVerKey();
-            if (StrUtil.isEmpty(verCode) || StrUtil.isEmpty(verKey)) {
-                throw new AuthException(AuthExceptionEnum.KAPTCHA_EMPTY);
+            String verCode = loginRequest.getVerCode();
+
+            if (StrUtil.isEmpty(verKey) || StrUtil.isEmpty(verCode)) {
+                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
             }
-            if (!captchaApi.validate(verCode, verKey)) {
-                throw new AuthException(AuthExceptionEnum.KAPTCHA_ERROR);
+            if (captchaApi.validateCaptcha(verKey, verCode)) {
+                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
             }
         }
 

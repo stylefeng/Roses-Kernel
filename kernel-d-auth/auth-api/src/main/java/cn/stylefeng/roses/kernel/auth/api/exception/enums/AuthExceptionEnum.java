@@ -67,18 +67,7 @@ public enum AuthExceptionEnum implements AbstractExceptionEnum {
     /**
      * 权限校验失败，只有超级管理员可以授权所有数据
      */
-    ONLY_SUPER_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "11", "权限校验失败，只有超级管理员可以授权所有数据"),
-
-
-    /**
-     * 验证码为空
-     */
-    KAPTCHA_EMPTY(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "12", "验证码不能为空"),
-    /**
-     * 验证码错误
-     */
-    KAPTCHA_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "13", "验证码错误");
-
+    ONLY_SUPER_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "11", "权限校验失败，只有超级管理员可以授权所有数据");
 
     /**
      * 错误编码

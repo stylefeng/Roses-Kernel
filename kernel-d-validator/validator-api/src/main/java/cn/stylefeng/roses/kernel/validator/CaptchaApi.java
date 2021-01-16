@@ -23,13 +23,13 @@ public interface CaptchaApi {
     /**
      * 校验图形验证码
      *
-     * @param verCode 验证码
      * @param verKey  缓存key值
-     * @return
+     * @param verCode 验证码
+     * @return true-验证码正确，false-验证码错误
      * @author chenjinlong
      * @date 2021/1/15 12:38
      */
-    boolean validate(String verCode, String verKey);
+    boolean validateCaptcha(String verKey, String verCode);
 
     /**
      * 根据key值获取验证码
@@ -39,6 +39,5 @@ public interface CaptchaApi {
      * @date 2021/1/15 12:40
      */
     String getVerCode(String verKey);
-
 
 }

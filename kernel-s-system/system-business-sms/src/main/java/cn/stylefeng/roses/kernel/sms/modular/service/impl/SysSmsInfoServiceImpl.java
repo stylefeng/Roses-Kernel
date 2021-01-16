@@ -19,8 +19,8 @@ import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsSendParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsVerifyParam;
 import cn.stylefeng.roses.kernel.sms.modular.service.SysSmsInfoService;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.SysSmsExceptionEnum;
 import cn.stylefeng.roses.kernel.validator.CaptchaApi;
+import cn.stylefeng.roses.kernel.validator.exception.enums.ValidatorExceptionEnum;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -56,15 +56,15 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean sendShortMessage(SysSmsSendParam sysSmsSendParam) {
-        String verCode = sysSmsSendParam.getVerCode();
         String verKey = sysSmsSendParam.getVerKey();
-        if (StrUtil.isEmpty(verCode) || StrUtil.isEmpty(verKey)) {
-            throw new SystemModularException(SysSmsExceptionEnum.KAPTCHA_EMPTY);
+        String verCode = sysSmsSendParam.getVerCode();
+        if (StrUtil.isEmpty(verKey) || StrUtil.isEmpty(verCode)) {
+            throw new SystemModularException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
         }
-        if (!captchaApi.validate(verCode, verKey)) {
-            throw new SystemModularException(SysSmsExceptionEnum.KAPTCHA_ERROR);
+        if (captchaApi.validateCaptcha(verKey, verCode)) {
+            throw new SystemModularException(ValidatorExceptionEnum.CAPTCHA_ERROR);
         }
-        
+
         Map<String, Object> params = sysSmsSendParam.getParams();
 
         // 1. 如果是纯消息发送，直接发送，校验类短信要把验证码存库
