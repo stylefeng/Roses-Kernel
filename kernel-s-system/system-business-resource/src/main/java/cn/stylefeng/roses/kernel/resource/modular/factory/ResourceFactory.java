@@ -153,7 +153,7 @@ public class ResourceFactory {
                 for (String validateGroup : validateGroups) {
                     Set<String> validateMessage = groupAnnotations.get(validateGroup);
                     if (validateMessage != null && !validateMessage.isEmpty()) {
-                        finalValidateMessages.append(StrUtil.join(",", validateMessage));
+                        finalValidateMessages.append(StrUtil.join("，", validateMessage));
                     }
                 }
             }
