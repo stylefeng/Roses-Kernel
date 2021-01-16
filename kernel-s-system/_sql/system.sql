@@ -159,9 +159,9 @@ INSERT INTO `sys_config` VALUES (40, 'druid web url统计的session名称', 'SYS
 INSERT INTO `sys_config` VALUES (41, 'druid web url统计的session最大监控数', 'SYS_DRUID_WEB_STAT_FILTER_SESSION_STAT_MAX_COUNT', '1000', 'Y', NULL, 1, 'sys_config', 'N', NULL, NULL, NULL, NULL);
 INSERT INTO `sys_config` VALUES (42, 'druid web url统计的cookie名称', 'SYS_DRUID_WEB_STAT_FILTER_PRINCIPAL_COOKIE_NAME', 'Authorization', 'Y', NULL, 1, 'sys_config', 'N', NULL, NULL, NULL, NULL);
 INSERT INTO `sys_config` VALUES (43, 'druid web url统计的是否开启监控单个url调用的sql列表', 'SYS_DRUID_WEB_STAT_FILTER_PROFILE_ENABLE', 'true', 'Y', NULL, 1, 'sys_config', 'N', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_config` VALUES (33, '阿里云短信的accessKeyId', 'SYS_ALIYUN_SMS_ACCESS_KEY_ID', '你的accessKeyId', 'Y', NULL, 1, 'sms_config', 'N', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_config` VALUES (34, '阿里云短信的accessKeySecret', 'SYS_ALIYUN_SMS_ACCESS_KEY_SECRET', '你的secret', 'Y', NULL, 1, 'sms_config', 'N', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_config` VALUES (35, '阿里云短信的签名', 'SYS_ALIYUN_SMS_SIGN_NAME', '签名名称', 'Y', NULL, 1, 'sms_config', 'N', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_config` VALUES (44, '阿里云短信的accessKeyId', 'SYS_ALIYUN_SMS_ACCESS_KEY_ID', '你的accessKeyId', 'Y', NULL, 1, 'sms_config', 'N', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_config` VALUES (45, '阿里云短信的accessKeySecret', 'SYS_ALIYUN_SMS_ACCESS_KEY_SECRET', '你的secret', 'Y', NULL, 1, 'sms_config', 'N', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_config` VALUES (46, '阿里云短信的签名', 'SYS_ALIYUN_SMS_SIGN_NAME', '签名名称', 'Y', NULL, 1, 'sms_config', 'N', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_database_info
