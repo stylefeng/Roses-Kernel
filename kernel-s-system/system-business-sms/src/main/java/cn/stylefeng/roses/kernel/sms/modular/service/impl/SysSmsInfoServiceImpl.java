@@ -61,7 +61,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         if (StrUtil.isEmpty(verKey) || StrUtil.isEmpty(verCode)) {
             throw new SystemModularException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
         }
-        if (captchaApi.validateCaptcha(verKey, verCode)) {
+        if (!captchaApi.validateCaptcha(verKey, verCode)) {
             throw new SystemModularException(ValidatorExceptionEnum.CAPTCHA_ERROR);
         }
 
