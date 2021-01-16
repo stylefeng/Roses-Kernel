@@ -315,7 +315,8 @@ public class ApiResourceScanner implements BeanPostProcessor {
             controllerPath = "/" + controllerPath;
         }
 
-        return controllerPath + path;
+        // 前缀多个左斜杠替换为一个
+        return (controllerPath + path).replaceAll("/+", "/");
     }
 
     /**
