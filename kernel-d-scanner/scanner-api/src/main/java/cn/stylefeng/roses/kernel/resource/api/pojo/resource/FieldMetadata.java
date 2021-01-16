@@ -47,7 +47,7 @@ public class FieldMetadata {
      * 例如：
      * key = add, value = [不能为空，最大多少位，邮箱类型]
      */
-    private Map<String, Set<String>> groupAnnotations;
+    private Map<String, Set<String>> groupValidationMessage;
 
     /**
      * 校验信息的提示信息

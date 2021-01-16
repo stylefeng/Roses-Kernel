@@ -148,7 +148,7 @@ public class ResourceFactory {
         }
         for (FieldMetadata fieldMetadata : fieldMetadataSet) {
             StringBuilder finalValidateMessages = new StringBuilder();
-            Map<String, Set<String>> groupAnnotations = fieldMetadata.getGroupAnnotations();
+            Map<String, Set<String>> groupAnnotations = fieldMetadata.getGroupValidationMessage();
             if (groupAnnotations != null) {
                 for (String validateGroup : validateGroups) {
                     Set<String> validateMessage = groupAnnotations.get(validateGroup);

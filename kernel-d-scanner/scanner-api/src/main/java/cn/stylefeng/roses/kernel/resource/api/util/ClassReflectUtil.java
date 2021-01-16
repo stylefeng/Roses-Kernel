@@ -86,7 +86,7 @@ public class ClassReflectUtil {
                     }
                 }
                 // 设置分组注解
-                fieldDescription.setGroupAnnotations(groupAnnotations);
+                fieldDescription.setGroupValidationMessage(groupAnnotations);
 
                 // 填充字段的中文名称
                 ChineseDescription chineseDescription = declaredField.getAnnotation(ChineseDescription.class);
