@@ -24,13 +24,6 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!--短信校验的业务-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>sms-business-validation</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
     </dependencies>
 
 </project>
