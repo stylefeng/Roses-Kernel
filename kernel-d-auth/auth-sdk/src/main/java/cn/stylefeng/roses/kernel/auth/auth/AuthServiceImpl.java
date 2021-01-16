@@ -180,7 +180,7 @@ public class AuthServiceImpl implements AuthServiceApi {
                 throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
             }
             if (!captchaApi.validateCaptcha(verKey, verCode)) {
-                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
+                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_ERROR);
             }
         }
 
