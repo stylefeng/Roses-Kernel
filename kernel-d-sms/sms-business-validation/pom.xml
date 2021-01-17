@@ -6,9 +6,9 @@
 
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>kernel-s-system</artifactId>
+        <artifactId>kernel-d-sms</artifactId>
         <version>1.0.0</version>
-        <relativePath>../../kernel-s-system/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>sms-business-validation</artifactId>
