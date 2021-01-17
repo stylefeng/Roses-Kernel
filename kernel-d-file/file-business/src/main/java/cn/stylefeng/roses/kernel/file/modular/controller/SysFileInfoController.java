@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.file.modular.controller;
 
+import cn.stylefeng.roses.kernel.file.constants.FileConstants;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
 import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
 import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
@@ -19,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static cn.stylefeng.roses.kernel.file.constants.FileConstants.*;
 
@@ -57,6 +60,25 @@ public class SysFileInfoController {
     public ResponseData upload(@RequestPart("file") MultipartFile file, @Validated(SysFileInfoRequest.add.class) SysFileInfoRequest sysFileInfoRequest) {
         SysFileInfoResponse fileUploadInfoResult = this.sysFileInfoService.uploadFile(file, sysFileInfoRequest);
         return new SuccessResponseData(fileUploadInfoResult);
+    }
+
+
+    /**
+     * 富文本tinymce上传文件
+     * 需要返回格式
+     * //json格式
+     * { "location": "folder/sub-folder/new-location.png" }
+     *
+     * @author liuhanqing
+     * @date 2021/1/17 11:17
+     */
+    @PostResource(name = "上传文件", path = "/sysFileInfo/tinymceUpload")
+    public Map<String, String> tinymceUpload(@RequestPart("file") MultipartFile file, SysFileInfoRequest sysFileInfoRequest) {
+        Map<String, String> resultMap = new HashMap<>(1);
+        sysFileInfoRequest.setSecretFlag(YesOrNotEnum.N.getCode());
+        SysFileInfoResponse fileUploadInfoResult = this.sysFileInfoService.uploadFile(file, sysFileInfoRequest);
+        resultMap.put("location", FileConstants.FILE_PUBLIC_PREVIEW_URL + "?fileId=" + fileUploadInfoResult.getFileId());
+        return resultMap;
     }
 
     /**
