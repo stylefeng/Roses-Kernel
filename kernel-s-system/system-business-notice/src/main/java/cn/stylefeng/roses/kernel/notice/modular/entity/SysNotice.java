@@ -78,13 +78,9 @@ public class SysNotice extends BaseEntity {
     @TableField(value = "del_flag", fill = FieldFill.INSERT)
     private String delFlag;
 
-    /*public String getPriorityLevelValue(){
-        AtomicReference<String> value = new AtomicReference<>("");
-        Optional.ofNullable(this.priorityLevel).ifPresent(val ->{
-            value.set(MessagePriorityLevelEnum.getName(this.priorityLevel));
-        });
-        return value.get();
-    }*/
+    /**
+     * 通知优先级的名称
+     */
     @JsonSerialize(using = DictValueSerializer.class)
     public String getPriorityLevelValue() {
         return "priority_level|" + this.priorityLevel;
