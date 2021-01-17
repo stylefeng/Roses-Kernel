@@ -42,7 +42,7 @@ public class ConfigInitListener implements ApplicationListener<ApplicationContex
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        return Ordered.HIGHEST_PRECEDENCE-100;
     }
 
     @Override
