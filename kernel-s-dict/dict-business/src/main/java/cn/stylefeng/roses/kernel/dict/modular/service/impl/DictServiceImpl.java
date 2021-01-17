@@ -296,6 +296,33 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
             return StrUtil.EMPTY;
         }
     }
+    @Override
+    public String getDictName(String dictTypeCode, String dictCode) {
+        LambdaQueryWrapper<SysDict> sysDictLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysDictLambdaQueryWrapper.eq(SysDict::getDictTypeCode, dictTypeCode);
+        sysDictLambdaQueryWrapper.eq(SysDict::getDictCode, dictCode);
+        sysDictLambdaQueryWrapper.ne(SysDict::getDelFlag, YesOrNotEnum.Y.getCode());
+
+        List<SysDict> list = this.list(sysDictLambdaQueryWrapper);
+
+        // 如果查询不到字典，则返回空串
+        if (list.isEmpty()) {
+            return StrUtil.EMPTY;
+        }
+
+        // 字典code存在多个重复的，返回空串并打印错误日志
+        if (list.size() > 1) {
+            log.error(DICT_CODE_REPEAT.getUserTip(), "", dictCode);
+            return StrUtil.EMPTY;
+        }
+
+        String dictName = list.get(0).getDictName();
+        if (dictName != null) {
+            return dictName;
+        } else {
+            return StrUtil.EMPTY;
+        }
+    }
 
     /**
      * 批量修改pids的请求

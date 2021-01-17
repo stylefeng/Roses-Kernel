@@ -61,6 +61,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--字典模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>dict-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

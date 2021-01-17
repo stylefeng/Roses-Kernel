@@ -53,7 +53,7 @@ public enum TreeNodeEnum {
      * @author liuhanqing
      * @date 2021/1/15 13:36
      */
-    public static String codeToMessage(String code) {
+    public static String codeToName(String code) {
         if (null != code) {
             for (TreeNodeEnum e : TreeNodeEnum.values()) {
                 if (e.getCode().equals(code)) {
