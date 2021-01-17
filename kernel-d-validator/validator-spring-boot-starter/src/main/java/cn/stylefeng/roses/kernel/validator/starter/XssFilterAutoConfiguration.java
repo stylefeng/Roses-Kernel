@@ -47,7 +47,7 @@ public class XssFilterAutoConfiguration {
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer xssJackson2ObjectMapperBuilderCustomizer() {
         return jacksonObjectMapperBuilder ->
-                jacksonObjectMapperBuilder.deserializerByType(String.class, new XssJacksonDeserializer(new XssProperties()));
+                jacksonObjectMapperBuilder.deserializerByType(String.class, new XssJacksonDeserializer(createProperties()));
     }
 
     /**
