@@ -21,6 +21,7 @@ import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.Ordered;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -171,9 +172,11 @@ public class RequestApiLogRecordAop implements Ordered {
             // 处理基本类型
             Class<?>[] classes = new Class[args.length];
             for (int k = 0; k < args.length; k++) {
-                if(args[k] instanceof Model){
+                if (args[k] instanceof Model) {
                     classes[k] = Model.class;
-                }else{
+                } else if (args[k] instanceof  MultipartFile) {
+                    classes[k] = MultipartFile.class;
+                } else {
                     classes[k] = args[k].getClass();
                 }
 
@@ -194,7 +197,14 @@ public class RequestApiLogRecordAop implements Ordered {
 
             // 装载参数名称和参数值
             for (int i = 0; i < parameterNames.length; i++) {
-                paramMap.put(parameterNames[i], args[i]);
+                // 解决上传文件接口aop记录日志报错
+                if (args[i] instanceof MultipartFile && args[i]!=null) {
+                    // 根据参数名只记录文件名
+                    paramMap.put(parameterNames[i], ((MultipartFile) args[i]).getOriginalFilename());
+                }else{
+                    paramMap.put(parameterNames[i], args[i]);
+                }
+
             }
 
         } catch (Exception e) {
@@ -203,11 +213,16 @@ public class RequestApiLogRecordAop implements Ordered {
             if (log.isDebugEnabled()) {
                 e.printStackTrace();
             }
-//            log.error(e.getMessage());
+            log.error(e.getMessage());
 
             // 有异常则不显示参数名称直接返回参数
             for (int i = 0; i < args.length; i++) {
-                paramMap.put("args" + i, args[i]);
+                if (args[i] instanceof MultipartFile && args[i]!=null) {
+                    // 根据参数名只记录文件名
+                    paramMap.put("args" + i, ((MultipartFile) args[i]).getOriginalFilename());
+                }else {
+                    paramMap.put("args" + i, args[i]);
+                }
             }
 
         }
