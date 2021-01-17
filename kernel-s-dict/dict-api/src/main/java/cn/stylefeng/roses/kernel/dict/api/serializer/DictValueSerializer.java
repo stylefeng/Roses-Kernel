@@ -18,23 +18,29 @@ import java.lang.reflect.Type;
 /**
  * jackson 序列化获取字典名称
  * <p>
- * 使用@JsonSerialize(using=DictValueSerializer.class)
+ * 使用注意事项：
+ * <p>
+ * 1.在pojo的字段上加 @JsonSerialize(using=DictValueSerializer.class)
+ * 2.pojo字段的返回值为："字典类型编码|字典的编码"
  *
  * @author liuhanqing
  * @date 2021/1/16 22:21
  */
 @JacksonStdImpl
-public final class DictValueSerializer
-        extends StdScalarSerializer<Object> {
+public final class DictValueSerializer extends StdScalarSerializer<Object> {
+
     private static final long serialVersionUID = 1L;
+
     /**
      * 字典类型编码和字典值的分隔符
      */
     private static final String SEPARATOR = "|";
+
     /**
      * 空值字符串
      */
     private static final String NULL_STR = "null";
+
     /**
      * 字典值之前分隔符
      */
@@ -58,43 +64,55 @@ public final class DictValueSerializer
             return;
         }
 
-        String strVal = value.toString();
-        // 判断需要翻译字典值是否为不空且含有字典标识
-        if (StrUtil.isNotBlank(strVal) && strVal.indexOf(SEPARATOR) > 0) {
-            // 分隔需要序列化的值
-            String[] dictArr = strVal.split("\\|");
-            if (dictArr.length == 2) {
-                // 获取字典编码值
-                String dictCode = dictArr[1];
-                if (StrUtil.isBlank(dictCode) || NULL_STR.equals(dictArr[1])) {
-                    strVal = StrUtil.EMPTY;
-                } else {
-                    // 获取字典名称逻辑，多个名称用逗号分隔
-                    String[] codeArr = dictCode.split(VALUE_SEPARATOR);
-                    if (codeArr.length > 0) {
-                        if (codeArr.length == 1) {
-                            strVal = DictContext.me().getDictName(dictArr[0], codeArr[0]);
-                        } else {
-                            StringBuffer sb = new StringBuffer();
-                            for (String dic : codeArr) {
-                                String dicVal = DictContext.me().getDictName(dictArr[0], dic);
-                                if (StrUtil.isNotBlank(dicVal)) {
-                                    sb.append(dicVal).append(",");
-                                }
-                            }
-                            if (StrUtil.isNotEmpty(sb)) {
-                                strVal = StrUtil.removeSuffix(sb.toString(), ",");
-                            } else {
-                                strVal = dictArr[1];
-                            }
-                        }
-                    }
-                }
-            } else {
-                strVal = StrUtil.EMPTY;
-            }
+        // 被序列化字段的值
+        String fieldValue = value.toString();
+
+        // 如果为空或者没有分隔符返回空串
+        if (StrUtil.isBlank(fieldValue) || !fieldValue.contains(SEPARATOR)) {
+            fieldValue = StrUtil.EMPTY;
+            gen.writeString(fieldValue);
+            return;
         }
-        gen.writeString(strVal);
+
+        // 分隔需要序列化的值
+        String[] dictTypeCodeAndDictCode = fieldValue.split("\\|");
+
+        // 如果分割出来不是2，则格式不正确
+        if (dictTypeCodeAndDictCode.length != 2) {
+            fieldValue = StrUtil.EMPTY;
+            gen.writeString(fieldValue);
+            return;
+        }
+
+        // 获取字典类型编码和字典编码
+        String dictTypeCode = dictTypeCodeAndDictCode[0];
+        String dictCode = dictTypeCodeAndDictCode[1];
+
+        // 字典code为空，返回空串
+        if (StrUtil.isBlank(dictCode) || NULL_STR.equals(dictCode)) {
+            fieldValue = StrUtil.EMPTY;
+            gen.writeString(fieldValue);
+            return;
+        }
+
+        // 字典编码是多个，存在逗号分隔符
+        if (dictCode.contains(VALUE_SEPARATOR)) {
+            String[] dictCodeArray = dictCode.split(VALUE_SEPARATOR);
+            StringBuilder dictNames = new StringBuilder();
+            for (String singleDictCode : dictCodeArray) {
+                String dictName = DictContext.me().getDictName(dictTypeCode, singleDictCode);
+                if (StrUtil.isNotBlank(dictName)) {
+                    dictNames.append(dictName).append(VALUE_SEPARATOR);
+                }
+            }
+            fieldValue = StrUtil.removeSuffix(dictNames.toString(), VALUE_SEPARATOR);
+            gen.writeString(fieldValue);
+            return;
+        }
+
+        // 字典编码是一个
+        fieldValue = DictContext.me().getDictName(dictTypeCode, dictCode);
+        gen.writeString(fieldValue);
     }
 
     @Override
@@ -113,4 +131,5 @@ public final class DictValueSerializer
     public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType typeHint) throws JsonMappingException {
         visitStringFormat(visitor, typeHint);
     }
+
 }

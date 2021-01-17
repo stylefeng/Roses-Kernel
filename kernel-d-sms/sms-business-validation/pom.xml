@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>kernel-s-system</artifactId>
+        <artifactId>kernel-d-sms</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>system-business-sms</artifactId>
+    <artifactId>sms-business-validation</artifactId>
 
     <packaging>jar</packaging>
 
