@@ -3,3 +3,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   cn.stylefeng.roses.kernel.db.starter.GunsDruidPropertiesAutoConfiguration,\
   cn.stylefeng.roses.kernel.db.starter.GunsMyBatisPlusAutoConfiguration,\
   cn.stylefeng.roses.kernel.db.starter.GunsDbInitListenerAutoConfiguration
+org.springframework.context.ApplicationListener=\
+  cn.stylefeng.roses.kernel.db.flyway.FlywayInitListener

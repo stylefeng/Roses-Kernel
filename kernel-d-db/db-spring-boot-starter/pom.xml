@@ -31,6 +31,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--flyway数据同步-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>db-sdk-flyway</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

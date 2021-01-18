@@ -6,32 +6,29 @@
 
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>roses-kernel</artifactId>
+        <artifactId>kernel-d-db</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>kernel-d-db</artifactId>
+    <artifactId>db-sdk-flyway</artifactId>
 
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>db-api</module>
-        <module>db-sdk-flyway</module>
-        <module>db-sdk-init</module>
-        <module>db-sdk-mp</module>
-        <module>db-spring-boot-starter</module>
-    </modules>
+    <packaging>jar</packaging>
 
     <dependencies>
 
-        <!-- 开发规则 -->
+        <!--db操作的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>kernel-a-rule</artifactId>
+            <artifactId>db-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-    </dependencies>
+        <!--数据库版本管理-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
 
+    </dependencies>
 </project>
