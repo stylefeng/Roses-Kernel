@@ -1,0 +1,2 @@
+org.springframework.context.ApplicationListener=\
+  cn.stylefeng.roses.kernel.db.flyway.FlywayInitListener
