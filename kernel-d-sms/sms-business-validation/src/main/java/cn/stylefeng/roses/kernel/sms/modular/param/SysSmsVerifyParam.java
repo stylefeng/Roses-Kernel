@@ -18,7 +18,7 @@ public class SysSmsVerifyParam {
      * 手机号
      */
     @NotBlank(message = "手机号不能为空")
-    private String phoneNumber;
+    private String phone;
 
     /**
      * 验证码

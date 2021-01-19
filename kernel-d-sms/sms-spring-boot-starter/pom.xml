@@ -24,6 +24,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!-- 验证码发送 -->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>sms-business-validation</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

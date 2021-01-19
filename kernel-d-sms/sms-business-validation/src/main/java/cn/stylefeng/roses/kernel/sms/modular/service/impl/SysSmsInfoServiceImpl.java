@@ -69,7 +69,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
         // 1. 如果是纯消息发送，直接发送，校验类短信要把验证码存库
         if (SmsTypeEnum.MESSAGE.equals(sysSmsSendParam.getSmsTypeEnum())) {
-            smsSenderApi.sendSms(sysSmsSendParam.getPhoneNumber(), sysSmsSendParam.getTemplateCode(), params);
+            smsSenderApi.sendSms(sysSmsSendParam.getPhone(), sysSmsSendParam.getTemplateCode(), params);
         }
 
         // 2. 如果参数中有code参数，则获取参数param中的code值
@@ -90,10 +90,10 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         // 4. 存储短信到数据库
         Long smsId = this.saveSmsInfo(sysSmsSendParam, validateCode);
 
-        log.info(">>> 开始发送短信：发送的电话号码= " + sysSmsSendParam.getPhoneNumber() + ",发送的模板号=" + sysSmsSendParam.getTemplateCode() + "，发送的参数是：" + JSON.toJSONString(params));
+        log.info(">>> 开始发送短信：发送的电话号码= " + sysSmsSendParam.getPhone() + ",发送的模板号=" + sysSmsSendParam.getTemplateCode() + "，发送的参数是：" + JSON.toJSONString(params));
 
         // 5. 发送短信
-        smsSenderApi.sendSms(sysSmsSendParam.getPhoneNumber(), sysSmsSendParam.getTemplateCode(), params);
+        smsSenderApi.sendSms(sysSmsSendParam.getPhone(), sysSmsSendParam.getTemplateCode(), params);
 
         // 6. 更新短信发送状态
         this.updateSmsInfo(smsId, SmsSendStatusEnum.SUCCESS);
@@ -115,7 +115,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         SysSms sysSms = new SysSms();
         sysSms.setCreateTime(nowDate);
         sysSms.setInvalidTime(invalidate);
-        sysSms.setPhoneNumber(sysSmsSendParam.getPhoneNumber());
+        sysSms.setPhone(sysSmsSendParam.getPhone());
         sysSms.setStatusFlag(SmsSendStatusEnum.WAITING.getCode());
         sysSms.setSource(sysSmsSendParam.getSmsSendSourceEnum().getCode());
         sysSms.setTemplateCode(sysSmsSendParam.getTemplateCode());
@@ -141,7 +141,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
         // 查询有没有这条记录
         LambdaQueryWrapper<SysSms> smsQueryWrapper = new LambdaQueryWrapper<>();
-        smsQueryWrapper.eq(SysSms::getPhoneNumber, sysSmsVerifyParam.getPhoneNumber())
+        smsQueryWrapper.eq(SysSms::getPhone, sysSmsVerifyParam.getPhone())
                 .and(f -> f.eq(SysSms::getSource, sysSmsVerifyParam.getSmsSendSourceEnum().getCode()))
                 .and(f -> f.eq(SysSms::getTemplateCode, sysSmsVerifyParam.getTemplateCode()));
         smsQueryWrapper.orderByDesc(SysSms::getCreateTime);
@@ -186,8 +186,8 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         if (ObjectUtil.isNotNull(sysSmsInfoParam)) {
 
             // 根据手机号模糊查询
-            if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getPhoneNumber())) {
-                queryWrapper.like(SysSms::getPhoneNumber, sysSmsInfoParam.getPhoneNumber());
+            if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getPhone())) {
+                queryWrapper.like(SysSms::getPhone, sysSmsInfoParam.getPhone());
             }
 
             // 根据发送状态查询（字典 0 未发送，1 发送成功，2 发送失败，3 失效）

@@ -15,8 +15,6 @@ import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -47,7 +45,7 @@ public class SysUserController {
      * @author chenjinlong
      * @date 2021/01/16 13:50
      */
-    @PostResource(name = "系统用户_注册", path = "/sysUser/register")
+    @PostResource(name = "系统用户_注册", path = "/sysUser/register", requiredLogin = false, requiredPermission = false)
     public ResponseData register(@RequestBody @Validated(SysUserRequest.reg.class) SysUserRequest sysUserRequest) {
         sysUserService.register(sysUserRequest);
         return new SuccessResponseData();

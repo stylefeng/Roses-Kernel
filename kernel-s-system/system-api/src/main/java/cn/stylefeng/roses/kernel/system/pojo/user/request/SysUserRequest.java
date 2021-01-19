@@ -35,7 +35,7 @@ public class SysUserRequest extends BaseRequest {
     @NotBlank(message = "账号不能为空", groups = {add.class, edit.class, reg.class})
     @TableUniqueValue(
             message = "账号存在重复",
-            groups = {add.class, edit.class},
+            groups = {add.class, edit.class, reg.class},
             tableName = "sys_user",
             columnName = "account",
             idFieldName = "user_id",
@@ -51,7 +51,7 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 新密码
      */
-    @NotBlank(message = "新密码不能为空", groups = {updatePwd.class, reg.class})
+    @NotBlank(message = "新密码不能为空", groups = {updatePwd.class})
     private String newPassword;
 
     /**

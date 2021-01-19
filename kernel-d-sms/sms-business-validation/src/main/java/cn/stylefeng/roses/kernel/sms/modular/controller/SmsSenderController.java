@@ -68,7 +68,7 @@ public class SmsSenderController {
      * @author fengshuonan
      * @date 2020/10/26 18:35
      */
-    @PostResource(name = "验证短信验证码", path = "/sms/validateMessage")
+    @PostResource(name = "验证短信验证码", path = "/sms/validateMessage", requiredLogin = false, requiredPermission = false)
     public ResponseData validateMessage(@RequestBody @Validated SysSmsVerifyParam sysSmsVerifyParam) {
         sysSmsInfoService.validateSmsInfo(sysSmsVerifyParam);
         return new SuccessResponseData("短信验证成功");

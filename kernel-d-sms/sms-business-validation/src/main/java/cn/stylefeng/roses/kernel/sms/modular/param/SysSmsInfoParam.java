@@ -24,7 +24,7 @@ public class SysSmsInfoParam extends BaseRequest {
     /**
      * 手机号
      */
-    private String phoneNumber;
+    private String phone;
 
     /**
      * 短信验证码
