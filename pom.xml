@@ -34,6 +34,9 @@
         <!--参数校验模块-->
         <module>kernel-d-validator</module>
 
+        <!--wrapper包装模块-->
+        <module>kernel-d-wrapper</module>
+
         <!--jwt模块，用于token校验-->
         <module>kernel-d-jwt</module>
 
