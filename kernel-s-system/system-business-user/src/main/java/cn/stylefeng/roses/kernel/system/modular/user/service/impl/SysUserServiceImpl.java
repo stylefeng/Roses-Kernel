@@ -398,12 +398,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 用户不存在
         if (list.isEmpty()) {
-            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST, account);
+            String userTip = StrUtil.format(SysUserExceptionEnum.USER_NOT_EXIST.getUserTip(), account);
+            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST, userTip);
         }
 
         // 账号存在多个
         if (list.size() > 1) {
-            throw new SystemModularException(SysUserExceptionEnum.ACCOUNT_HAVE_MANY, account);
+            String userTip = StrUtil.format(SysUserExceptionEnum.ACCOUNT_HAVE_MANY.getUserTip(), account);
+            throw new SystemModularException(SysUserExceptionEnum.ACCOUNT_HAVE_MANY, userTip);
         }
 
         return list.get(0);

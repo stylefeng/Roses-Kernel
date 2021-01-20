@@ -41,7 +41,7 @@ public enum SysUserExceptionEnum implements AbstractExceptionEnum {
     /**
      * 用户不存在
      */
-    USER_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "51", "用户不存在，用户id或账号为：{}"),
+    USER_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "51", "{} 用户不存在"),
 
     /**
      * 账号已存在
