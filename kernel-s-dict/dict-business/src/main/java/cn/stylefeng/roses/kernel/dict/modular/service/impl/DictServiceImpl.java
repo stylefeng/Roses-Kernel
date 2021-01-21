@@ -21,6 +21,7 @@ import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -271,6 +272,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
     }
 
     @Override
+    public PageResult<SysDict> page(DictRequest dictRequest) {
+        LambdaQueryWrapper<SysDict> wrapper = createWrapper(dictRequest);
+        Page<SysDict> page = this.page(PageFactory.defaultPage(), wrapper);
+        return PageResultFactory.createPageResult(page);
+    }
+
+    @Override
     public String getDictNameByDictCode(String dictCode) {
         LambdaQueryWrapper<SysDict> sysDictLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysDictLambdaQueryWrapper.eq(SysDict::getDictCode, dictCode);
@@ -296,6 +304,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
             return StrUtil.EMPTY;
         }
     }
+
     @Override
     public String getDictName(String dictTypeCode, String dictCode) {
         LambdaQueryWrapper<SysDict> sysDictLambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -369,6 +378,33 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
                 dictRequest.setDictPids(parentSysDict.getDictPids() + StrUtil.COMMA + dictParentId);
             }
         }
+    }
+
+
+    /**
+     * 获取详细信息
+     *
+     * @author chenjinlong
+     * @date 2021/1/13 10:50
+     */
+    private SysDict querySysDict(DictRequest dictRequest) {
+        SysDict sysDict = this.getById(dictRequest.getDictId());
+        if (ObjectUtil.isNull(sysDict)) {
+            throw new ServiceException(DictExceptionEnum.DICT_TYPE_NOT_EXISTED);
+        }
+        return sysDict;
+    }
+
+    /**
+     * 构建wrapper
+     *
+     * @author chenjinlong
+     * @date 2021/1/13 10:50
+     */
+    private LambdaQueryWrapper<SysDict> createWrapper(DictRequest dictRequest) {
+        LambdaQueryWrapper<SysDict> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(StrUtil.isNotBlank(dictRequest.getDictTypeCode()), SysDict::getDictTypeCode, dictRequest.getDictTypeCode());
+        return queryWrapper;
     }
 
 }

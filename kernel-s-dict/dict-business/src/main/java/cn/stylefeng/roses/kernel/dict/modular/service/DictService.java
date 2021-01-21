@@ -122,4 +122,14 @@ public interface DictService extends IService<SysDict>, DictApi {
      */
     List<ZTreeNode> dictZTree(DictRequest dictRequest);
 
+
+    /**
+     * 分页查询
+     *
+     * @param dictRequest 参数
+     * @author chenjinlong
+     * @date 2021/1/13 10:57
+     */
+    PageResult<SysDict> page(DictRequest dictRequest);
+
 }

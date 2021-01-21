@@ -166,4 +166,15 @@ public class DictController {
         return this.dictService.dictZTree(dictRequest);
     }
 
+    /**
+     * 分页查询字典
+     *
+     * @author chenjinlong
+     * @date 2021/1/13 17:51
+     */
+    @GetResource(name = "分页查询字典", path = "/dict/page")
+    public ResponseData page(DictRequest dictRequest) {
+        return new SuccessResponseData(this.dictService.page(dictRequest));
+    }
+
 }
