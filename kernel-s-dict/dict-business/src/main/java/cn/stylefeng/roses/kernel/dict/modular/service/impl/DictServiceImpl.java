@@ -404,6 +404,10 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
     private LambdaQueryWrapper<SysDict> createWrapper(DictRequest dictRequest) {
         LambdaQueryWrapper<SysDict> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(StrUtil.isNotBlank(dictRequest.getDictTypeCode()), SysDict::getDictTypeCode, dictRequest.getDictTypeCode());
+        queryWrapper.eq(StrUtil.isNotBlank(dictRequest.getDictCode()), SysDict::getDictCode, dictRequest.getDictCode());
+        queryWrapper.like(StrUtil.isNotBlank(dictRequest.getDictName()), SysDict::getDictName, dictRequest.getDictName());
+        queryWrapper.eq(StrUtil.isNotBlank(dictRequest.getDictTypeCode()), SysDict::getDictTypeCode, dictRequest.getDictTypeCode());
+        queryWrapper.ne(SysDict::getDelFlag, YesOrNotEnum.Y.getCode());
         return queryWrapper;
     }
 
