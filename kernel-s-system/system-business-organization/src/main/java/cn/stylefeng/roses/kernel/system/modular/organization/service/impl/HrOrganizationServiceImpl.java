@@ -171,7 +171,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     }
 
     @Override
-    public List<HrOrganizationResponse> orgList(){
+    public List<HrOrganizationResponse> orgList() {
 
 
         LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
@@ -394,33 +394,25 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
      */
     private LambdaQueryWrapper<HrOrganization> createWrapper(HrOrganizationRequest hrOrganizationRequest) {
         LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
-        if (ObjectUtil.isNotNull(hrOrganizationRequest)) {
 
-            // 拼接机构名称查询条件
-            if (ObjectUtil.isNotEmpty(hrOrganizationRequest.getOrgName())) {
-                queryWrapper.like(HrOrganization::getOrgName, hrOrganizationRequest.getOrgName());
-            }
-
-            // 拼接机构id查询条件
-            if (ObjectUtil.isNotEmpty(hrOrganizationRequest.getOrgId())) {
-                queryWrapper.eq(HrOrganization::getOrgId, hrOrganizationRequest.getOrgId());
-            }
-
-            // 拼接父机构id查询条件
-            if (ObjectUtil.isNotEmpty(hrOrganizationRequest.getOrgParentId())) {
-                queryWrapper
-                        .eq(HrOrganization::getOrgId, hrOrganizationRequest.getOrgParentId())
-                        .or()
-                        .like(HrOrganization::getOrgPids, hrOrganizationRequest.getOrgParentId());
-            }
+        String orgName = hrOrganizationRequest.getOrgName();
+        String orgCode = hrOrganizationRequest.getOrgCode();
+        Long orgParentId = hrOrganizationRequest.getOrgParentId();
+        Long orgId = hrOrganizationRequest.getOrgId();
+        queryWrapper.like(ObjectUtil.isNotEmpty(orgName), HrOrganization::getOrgName, orgName);
+        queryWrapper.eq(ObjectUtil.isNotEmpty(orgCode), HrOrganization::getOrgCode, orgCode);
+        // 拼接机构id查询条件
+        queryWrapper.eq(ObjectUtil.isNotEmpty(orgId), HrOrganization::getOrgId, orgId);
+        // 拼接父机构id查询条件
+        if (ObjectUtil.isNotEmpty(orgParentId)) {
+            queryWrapper.and(qw -> {
+                qw.eq(HrOrganization::getOrgId, orgParentId).or().like(HrOrganization::getOrgPids, orgParentId);
+            });
         }
-
         // 查询未删除状态的
         queryWrapper.eq(HrOrganization::getDelFlag, YesOrNotEnum.N.getCode());
-
         // 根据排序升序排列，序号越小越在前
         queryWrapper.orderByAsc(HrOrganization::getOrgSort);
-
         return queryWrapper;
     }
 
