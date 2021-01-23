@@ -55,7 +55,7 @@ public class DatabaseInfoParam extends BaseRequest {
      * 数据库连接的账号
      */
     @NotBlank(message = "数据库连接的账号", groups = {add.class, edit.class})
-    private String userName;
+    private String username;
 
     /**
      * 数据库连接密码

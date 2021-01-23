@@ -13,7 +13,7 @@ public class DatabaseListSql extends AbstractSql {
 
     @Override
     protected String mysql() {
-        return "select db_name,jdbc_driver,jdbc_url,username,password from sys_database_info";
+        return "select db_name, jdbc_driver, jdbc_url, username, password from sys_database_info where del_flag = 'N'";
     }
 
     @Override

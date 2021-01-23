@@ -162,7 +162,7 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         Connection conn = null;
         try {
             Class.forName(param.getJdbcDriver());
-            conn = DriverManager.getConnection(param.getJdbcUrl(), param.getUserName(), param.getPassword());
+            conn = DriverManager.getConnection(param.getJdbcUrl(), param.getUsername(), param.getPassword());
         } catch (Exception e) {
             String userTip = StrUtil.format(VALIDATE_DATASOURCE_ERROR.getUserTip(), param.getJdbcUrl());
             throw new DatasourceContainerException(VALIDATE_DATASOURCE_ERROR, userTip);
