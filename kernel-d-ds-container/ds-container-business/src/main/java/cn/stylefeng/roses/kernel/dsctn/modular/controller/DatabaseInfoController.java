@@ -3,11 +3,11 @@ package cn.stylefeng.roses.kernel.dsctn.modular.controller;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
 import cn.stylefeng.roses.kernel.dsctn.modular.pojo.DatabaseInfoParam;
-import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.dsctn.modular.service.DatabaseInfoService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import org.springframework.validation.annotation.Validated;
@@ -76,6 +76,18 @@ public class DatabaseInfoController {
     public ResponseData page(DatabaseInfoParam databaseInfoParam) {
         PageResult<DatabaseInfo> pageResult = databaseInfoService.page(databaseInfoParam);
         return new SuccessResponseData(pageResult);
+    }
+
+    /**
+     * 查询数据源详情
+     *
+     * @author fengshuonan
+     * @date 2021/1/23 20:29
+     */
+    @GetResource(name = "查询数据源详情", path = "/databaseInfo/detail")
+    public ResponseData detail(@Validated(BaseRequest.detail.class) DatabaseInfoParam databaseInfoParam) {
+        DatabaseInfo databaseInfo = databaseInfoService.detail(databaseInfoParam);
+        return new SuccessResponseData(databaseInfo);
     }
 
 }

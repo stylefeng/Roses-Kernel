@@ -13,7 +13,7 @@ public class AddDatabaseInfoSql extends AbstractSql {
 
     @Override
     protected String mysql() {
-        return "INSERT INTO `sys_database_info`(`id`, `db_name`, `jdbc_driver`, `user_name`, `password`, `jdbc_url`, `remarks`, `create_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO `sys_database_info`(`db_id`, `db_name`, `jdbc_driver`, `jdbc_url`, `username`, `password`, `remarks`, `create_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     }
 
     @Override

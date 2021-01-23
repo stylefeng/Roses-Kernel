@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.dsctn.modular.service;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
 import cn.stylefeng.roses.kernel.dsctn.modular.pojo.DatabaseInfoParam;
 import com.baomidou.mybatisplus.extension.service.IService;
-import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 
 /**
  * 数据库信息表 服务类
@@ -49,4 +49,14 @@ public interface DatabaseInfoService extends IService<DatabaseInfo> {
      * @date 2020/11/1 21:47
      */
     PageResult<DatabaseInfo> page(DatabaseInfoParam databaseInfoParam);
+
+    /**
+     * 查询数据库信息详情
+     *
+     * @param databaseInfoParam 查询参数
+     * @author fengshuonan
+     * @date 2021/1/23 20:30
+     */
+    DatabaseInfo detail(DatabaseInfoParam databaseInfoParam);
+
 }

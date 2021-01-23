@@ -2,12 +2,12 @@ package cn.stylefeng.roses.kernel.dsctn.persist;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
+import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
 import cn.stylefeng.roses.kernel.dsctn.persist.sqls.AddDatabaseInfoSql;
 import cn.stylefeng.roses.kernel.dsctn.persist.sqls.DatabaseListSql;
 import cn.stylefeng.roses.kernel.dsctn.persist.sqls.DeleteDatabaseInfoSql;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
-import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
@@ -82,9 +82,9 @@ public class DataBaseInfoPersistence {
             preparedStatement.setLong(1, IdWorker.getId());
             preparedStatement.setString(2, MASTER_DATASOURCE_NAME);
             preparedStatement.setString(3, druidProperties.getDriverClassName());
-            preparedStatement.setString(4, druidProperties.getUsername());
-            preparedStatement.setString(5, druidProperties.getPassword());
-            preparedStatement.setString(6, druidProperties.getUrl());
+            preparedStatement.setString(4, druidProperties.getUrl());
+            preparedStatement.setString(5, druidProperties.getUsername());
+            preparedStatement.setString(6, druidProperties.getPassword());
             preparedStatement.setString(7, "主数据源，项目启动数据源！");
             preparedStatement.setString(8, DateUtil.formatDateTime(new Date()));
 
@@ -136,7 +136,7 @@ public class DataBaseInfoPersistence {
         try {
             druidProperties.setDriverClassName(resultSet.getString("jdbc_driver"));
             druidProperties.setUrl(resultSet.getString("jdbc_url"));
-            druidProperties.setUsername(resultSet.getString("user_name"));
+            druidProperties.setUsername(resultSet.getString("username"));
             druidProperties.setPassword(resultSet.getString("password"));
         } catch (SQLException exception) {
             log.info(">>> 根据数据库查询结果，创建DruidProperties失败！", exception);

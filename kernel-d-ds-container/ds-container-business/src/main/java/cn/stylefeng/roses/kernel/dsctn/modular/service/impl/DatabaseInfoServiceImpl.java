@@ -139,6 +139,19 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         return PageResultFactory.createPageResult(result);
     }
 
+    @Override
+    public DatabaseInfo detail(DatabaseInfoParam databaseInfoParam) {
+
+        DatabaseInfo oldEntity = this.getById(databaseInfoParam.getDbId());
+        if (oldEntity == null) {
+            String userTip = StrUtil.format(EDIT_DATASOURCE_ERROR.getUserTip(), databaseInfoParam.getDbId());
+            throw new DatasourceContainerException(EDIT_DATASOURCE_ERROR, userTip);
+        }
+
+        oldEntity.setPassword("***");
+        return oldEntity;
+    }
+
     /**
      * 判断数据库连接是否可用
      *

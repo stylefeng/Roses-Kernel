@@ -30,7 +30,7 @@ public class DataSourceInitListener implements ApplicationListener<ApplicationCo
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        return Ordered.HIGHEST_PRECEDENCE + 200;
     }
 
     @Override
