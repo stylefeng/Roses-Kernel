@@ -34,7 +34,7 @@ public class TranslationRequest extends BaseRequest {
     /**
      * 1:中文  2:英语
      */
-    private Integer languages;
+    private Integer language;
 
     /**
      * 翻译的值

@@ -46,4 +46,29 @@ public class TranslationContainer implements TranslationApi {
         return TRAN_DICT_CONTAINER.get(translationLanguages);
     }
 
+    @Override
+    public void addTranslationDict(TranslationDict translationDict) {
+        TranslationEnum translationLanguages = translationDict.getTranslationLanguages();
+
+        Map<String, String> languageDict = TRAN_DICT_CONTAINER.get(translationLanguages);
+        if (languageDict == null) {
+            languageDict = new HashMap<>();
+        }
+        languageDict.put(translationDict.getTranCode(), translationDict.getTranValue());
+
+        TRAN_DICT_CONTAINER.put(translationLanguages, languageDict);
+    }
+
+    @Override
+    public void deleteTranslationDict(TranslationEnum translationLanguages, String tranCode) {
+        Map<String, String> languageDict = TRAN_DICT_CONTAINER.get(translationLanguages);
+
+        if (languageDict == null) {
+            return;
+        }
+        languageDict.remove(tranCode);
+
+        TRAN_DICT_CONTAINER.put(translationLanguages, languageDict);
+    }
+
 }

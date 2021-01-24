@@ -60,16 +60,14 @@ public enum TranslationEnum {
      * @date 2019/10/18 10:33
      */
     public static TranslationEnum valueOf(Integer value) {
-        if (value == null) {
-            return null;
-        } else {
+        if (value != null) {
             for (TranslationEnum translationLanguages : TranslationEnum.values()) {
                 if (translationLanguages.getCode().equals(value)) {
                     return translationLanguages;
                 }
             }
-            return null;
         }
+        return null;
     }
 
 }
