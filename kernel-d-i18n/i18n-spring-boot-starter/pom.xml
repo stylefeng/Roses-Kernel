@@ -17,10 +17,10 @@
 
     <dependencies>
 
-        <!--多语言的sdk-->
+        <!--多语言的业务模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>i18n-sdk</artifactId>
+            <artifactId>i18n-business</artifactId>
             <version>1.0.0</version>
         </dependency>
 

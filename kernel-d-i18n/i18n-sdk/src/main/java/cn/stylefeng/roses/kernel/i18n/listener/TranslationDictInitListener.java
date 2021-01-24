@@ -5,7 +5,7 @@ import cn.stylefeng.roses.kernel.i18n.api.TranslationApi;
 import cn.stylefeng.roses.kernel.i18n.api.TranslationPersistenceApi;
 import cn.stylefeng.roses.kernel.i18n.api.pojo.TranslationDict;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 
 import java.util.List;
@@ -19,10 +19,10 @@ import java.util.List;
  * @date 2021/1/24 19:36
  */
 @Slf4j
-public class TranslationDictInitListener implements ApplicationListener<ApplicationContextInitializedEvent> {
+public class TranslationDictInitListener implements ApplicationListener<ApplicationStartedEvent> {
 
     @Override
-    public void onApplicationEvent(ApplicationContextInitializedEvent applicationContextInitializedEvent) {
+    public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
 
         TranslationPersistenceApi tanTranslationPersistenceApi = SpringUtil.getBean(TranslationPersistenceApi.class);
         TranslationApi translationApi = SpringUtil.getBean(TranslationApi.class);
