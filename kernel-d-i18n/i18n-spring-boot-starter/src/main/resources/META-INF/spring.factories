@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.stylefeng.roses.kernel.i18n.starter.GunsTranslationAutoConfiguration
+org.springframework.context.ApplicationListener=\
+  cn.stylefeng.roses.kernel.i18n.listener.TranslationDictInitListener

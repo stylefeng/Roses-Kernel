@@ -49,6 +49,9 @@
         <!--文件操作模块-->
         <module>kernel-d-file</module>
 
+        <!--文件操作模块-->
+        <module>kernel-d-i18n</module>
+
         <!--sms模块-->
         <module>kernel-d-sms</module>
 
