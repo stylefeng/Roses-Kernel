@@ -4,6 +4,9 @@ import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 /**
  * 多语言请求信息
  *
@@ -19,26 +22,31 @@ public class TranslationRequest extends BaseRequest {
     /**
      * 主键id
      */
+    @NotNull(message = "tranId不能为空", groups = {edit.class, detail.class, delete.class})
     private Long tranId;
 
     /**
      * 编码
      */
+    @NotBlank(message = "tranCode不能为空", groups = {add.class, edit.class})
     private String tranCode;
 
     /**
      * 多语言条例名称
      */
+    @NotBlank(message = "tranName不能为空", groups = {add.class, edit.class})
     private String tranName;
 
     /**
      * 1:中文  2:英语
      */
+    @NotBlank(message = "language不能为空", groups = {add.class, edit.class})
     private Integer language;
 
     /**
      * 翻译的值
      */
+    @NotBlank(message = "tranValue不能为空", groups = {add.class, edit.class})
     private String tranValue;
 
 }

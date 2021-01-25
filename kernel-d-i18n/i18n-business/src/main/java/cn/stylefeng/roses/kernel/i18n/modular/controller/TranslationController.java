@@ -5,9 +5,13 @@ import cn.stylefeng.roses.kernel.i18n.api.pojo.request.TranslationRequest;
 import cn.stylefeng.roses.kernel.i18n.modular.entity.Translation;
 import cn.stylefeng.roses.kernel.i18n.modular.service.TranslationService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -32,7 +36,7 @@ public class TranslationController {
      * @date 2021/1/24 19:17
      */
     @PostResource(name = "新增多语言配置", path = "/i18n/add")
-    public ResponseData addItem(TranslationRequest translationRequest) {
+    public ResponseData addItem(@RequestBody @Validated(TranslationRequest.add.class) TranslationRequest translationRequest) {
         this.translationService.add(translationRequest);
         return new SuccessResponseData();
     }
@@ -44,7 +48,7 @@ public class TranslationController {
      * @date 2021/1/24 19:17
      */
     @PostResource(name = "新增多语言配置", path = "/i18n/edit")
-    public ResponseData editItem(TranslationRequest translationRequest) {
+    public ResponseData editItem(@RequestBody @Validated(BaseRequest.edit.class) TranslationRequest translationRequest) {
         this.translationService.update(translationRequest);
         return new SuccessResponseData();
     }
@@ -56,7 +60,7 @@ public class TranslationController {
      * @date 2021/1/24 19:20
      */
     @PostResource(name = "新增多语言配置", path = "/i18n/delete")
-    public ResponseData delete(TranslationRequest translationRequest) {
+    public ResponseData delete(@RequestBody @Validated(BaseRequest.delete.class) TranslationRequest translationRequest) {
         this.translationService.delete(translationRequest);
         return new SuccessResponseData();
     }
@@ -67,8 +71,8 @@ public class TranslationController {
      * @author fengshuonan
      * @date 2021/1/24 19:20
      */
-    @PostResource(name = "新增多语言配置", path = "/i18n/detail")
-    public ResponseData detail(TranslationRequest translationRequest) {
+    @GetResource(name = "新增多语言配置", path = "/i18n/detail")
+    public ResponseData detail(@Validated(BaseRequest.detail.class) TranslationRequest translationRequest) {
         Translation detail = this.translationService.findDetail(translationRequest);
         return new SuccessResponseData(detail);
     }
@@ -79,7 +83,7 @@ public class TranslationController {
      * @author fengshuonan
      * @date 2021/1/24 19:20
      */
-    @PostResource(name = "新增多语言配置", path = "/i18n/page")
+    @GetResource(name = "新增多语言配置", path = "/i18n/page")
     public ResponseData list(TranslationRequest translationRequest) {
         PageResult<Translation> page = this.translationService.findPage(translationRequest);
         return new SuccessResponseData(page);

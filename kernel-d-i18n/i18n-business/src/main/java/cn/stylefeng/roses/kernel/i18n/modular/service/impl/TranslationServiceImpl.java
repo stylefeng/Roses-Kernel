@@ -136,7 +136,7 @@ public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Trans
 
             // 如果翻译名称不为空，则带上翻译名称
             if (ObjectUtil.isNotEmpty(param.getTranName())) {
-                queryWrapper.eq(Translation::getTranName, param.getTranName());
+                queryWrapper.like(Translation::getTranName, param.getTranName());
             }
         }
 
