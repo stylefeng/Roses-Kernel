@@ -79,6 +79,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--系统消息业务模块的api-->
+        <!--获取当前登录用户的ws-url-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>message-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

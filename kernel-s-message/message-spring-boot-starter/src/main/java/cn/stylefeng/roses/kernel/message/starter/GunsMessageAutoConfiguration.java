@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.message.starter;
 
+import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
 import cn.stylefeng.roses.kernel.message.api.pojo.MessageWebSocketProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,8 +29,10 @@ public class GunsMessageAutoConfiguration {
      */
     @Bean
     @ConfigurationProperties(prefix = WEB_SOCKET_PREFIX)
-    public MessageWebSocketProperties sysLogProperties() {
-        return new MessageWebSocketProperties();
+    public MessageWebSocketProperties messageWebSocketProperties() {
+        MessageWebSocketProperties properties = new MessageWebSocketProperties();
+        properties.setWsUrl(WebSocketConfigExpander.getWebSocketWsUrl());
+        return properties;
     }
 
 

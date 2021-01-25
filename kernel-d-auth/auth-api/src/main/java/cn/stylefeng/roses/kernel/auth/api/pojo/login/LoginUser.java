@@ -1,15 +1,15 @@
 package cn.stylefeng.roses.kernel.auth.api.pojo.login;
 
 import cn.hutool.core.lang.Dict;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 登录用户信息
@@ -88,5 +88,21 @@ public class LoginUser implements Serializable {
      * 其他信息，Dict为Map的拓展
      */
     private Dict otherInfos;
+
+    /**
+     * 用户的ws-url
+     */
+    private String wsUrl;
+
+
+    public String getWsUrl(){
+        AtomicReference<String> returnUrl = new AtomicReference<>(StrUtil.EMPTY);
+        Optional.ofNullable(this.wsUrl).ifPresent(url -> {
+            Map<String, Long> user = new HashMap<>(1);
+            user.put("userId", this.userId);
+            returnUrl.set(StrUtil.format(url, user));
+        });
+        return returnUrl.get();
+    }
 
 }

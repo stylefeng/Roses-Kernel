@@ -16,6 +16,7 @@ import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
 import cn.stylefeng.roses.kernel.jwt.api.exception.JwtException;
 import cn.stylefeng.roses.kernel.jwt.api.exception.enums.JwtExceptionEnum;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
+import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.LoginLogServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
@@ -212,6 +213,9 @@ public class AuthServiceImpl implements AuthServiceApi {
         String jwtToken = JwtContext.me().generateTokenDefaultPayload(defaultJwtPayload);
 
         synchronized (SESSION_OPERATE_LOCK) {
+
+            // 8.1 获取ws-url 保存到用户信息中
+            loginUser.setWsUrl(WebSocketConfigExpander.getWebSocketWsUrl());
 
             // 9. 缓存用户信息，创建会话
             sessionManagerApi.createSession(jwtToken, loginUser);
