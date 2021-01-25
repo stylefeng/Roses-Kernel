@@ -50,7 +50,7 @@ public class GunsLogAutoConfiguration {
     }
 
     /**
-     * 系统日志的的配置
+     * 系统日志的配置
      *
      * @author liuhanqing
      * @date 2020/12/20 14:17
