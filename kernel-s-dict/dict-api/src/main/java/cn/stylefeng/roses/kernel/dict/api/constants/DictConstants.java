@@ -23,4 +23,10 @@ public interface DictConstants {
      */
     Long DEFAULT_DICT_PARENT_ID = -1L;
 
+
+    /**
+     * 系统配置分组code
+     */
+    String CONFIG_GROUP_DICT_TYPE_CODE = "config_group";
+
 }

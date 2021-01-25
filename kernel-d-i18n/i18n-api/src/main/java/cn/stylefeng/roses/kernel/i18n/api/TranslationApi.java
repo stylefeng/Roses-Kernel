@@ -33,4 +33,23 @@ public interface TranslationApi {
      */
     Map<String, String> getTranslationDictByLanguage(TranslationEnum translationLanguages);
 
+    /**
+     * 添加一个翻译项到context
+     *
+     * @param translationDict 具体的翻译项
+     * @author fengshuonan
+     * @date 2021/1/24 21:47
+     */
+    void addTranslationDict(TranslationDict translationDict);
+
+    /**
+     * 删除某条翻译记录
+     *
+     * @param translationLanguages 语种枚举
+     * @param tranCode             具体翻译项编码
+     * @author fengshuonan
+     * @date 2021/1/24 21:59
+     */
+    void deleteTranslationDict(TranslationEnum translationLanguages, String tranCode);
+
 }

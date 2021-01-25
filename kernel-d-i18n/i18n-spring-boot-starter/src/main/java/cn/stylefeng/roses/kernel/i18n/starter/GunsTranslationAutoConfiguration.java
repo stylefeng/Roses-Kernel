@@ -1,5 +1,8 @@
 package cn.stylefeng.roses.kernel.i18n.starter;
 
+import cn.stylefeng.roses.kernel.i18n.TranslationContainer;
+import cn.stylefeng.roses.kernel.i18n.api.TranslationApi;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -10,5 +13,16 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class GunsTranslationAutoConfiguration {
+
+    /**
+     * 多语言翻译条目存放容器
+     *
+     * @author fengshuonan
+     * @date 2021/1/24 19:42
+     */
+    @Bean
+    public TranslationApi translationApi() {
+        return new TranslationContainer();
+    }
 
 }

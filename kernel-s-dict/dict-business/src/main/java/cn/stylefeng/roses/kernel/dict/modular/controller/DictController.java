@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static cn.stylefeng.roses.kernel.dict.api.constants.DictConstants.CONFIG_GROUP_DICT_TYPE_CODE;
+
 /**
  * 字典详情管理，具体管理某个字典类型下的条目
  *
@@ -127,6 +129,19 @@ public class DictController {
      */
     @GetResource(name = "获取字典列表", path = "/dict/getDictListPage", requiredPermission = false)
     public ResponseData getDictListPage(DictRequest dictRequest) {
+        PageResult<SysDict> page = this.dictService.findPageList(dictRequest);
+        return new SuccessResponseData(page);
+    }
+
+    /**
+     * 获取系统配置分组字典列表(分页)
+     *
+     * @author chenjinlong
+     * @date 2021/1/25 11:47
+     */
+    @GetResource(name = "获取系统配置分组字典列表", path = "/dict/getConfigGroupPage", requiredPermission = false)
+    public ResponseData getConfigGroupPage(DictRequest dictRequest) {
+        dictRequest.setDictTypeCode(CONFIG_GROUP_DICT_TYPE_CODE);
         PageResult<SysDict> page = this.dictService.findPageList(dictRequest);
         return new SuccessResponseData(page);
     }

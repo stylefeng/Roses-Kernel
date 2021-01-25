@@ -17,7 +17,7 @@ public class TranslationContext {
      * @author fengshuonan
      * @date 2021/1/24 19:06
      */
-    public TranslationApi me() {
+    public static TranslationApi me() {
         return SpringUtil.getBean(TranslationApi.class);
     }
 

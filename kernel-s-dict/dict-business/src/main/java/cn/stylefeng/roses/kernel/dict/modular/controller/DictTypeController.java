@@ -92,6 +92,19 @@ public class DictTypeController {
         return new SuccessResponseData(detail);
     }
 
+
+    /**
+     * 获取字典类型详情
+     *
+     * @author fengshuonan
+     * @date 2021/1/13 11:25
+     */
+    @GetResource(name = "获取字典类型详情", path = "/dictType/getConfigDictTypeDetail", requiredPermission = false)
+    public ResponseData getConfigDictTypeDetail() {
+        SysDictType detail = this.dictTypeService.getConfigDictTypeDetail();
+        return new SuccessResponseData(detail);
+    }
+
     /**
      * 获取字典类型列表
      *

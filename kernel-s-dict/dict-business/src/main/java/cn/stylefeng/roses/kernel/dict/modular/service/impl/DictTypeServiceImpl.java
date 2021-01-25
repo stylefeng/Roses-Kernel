@@ -28,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static cn.stylefeng.roses.kernel.dict.api.constants.DictConstants.CONFIG_GROUP_DICT_TYPE_CODE;
+
 /**
  * 字典类型表 服务实现类
  *
@@ -173,6 +175,13 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
     @Override
     public SysDictType findDetail(Long dictTypeId) {
         return this.baseMapper.findDetail(dictTypeId);
+    }
+
+    @Override
+    public SysDictType getConfigDictTypeDetail() {
+        LambdaQueryWrapper<SysDictType> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysDictType::getDictTypeCode, CONFIG_GROUP_DICT_TYPE_CODE);
+        return this.getOne(queryWrapper);
     }
 
     /**

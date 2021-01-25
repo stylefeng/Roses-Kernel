@@ -42,8 +42,8 @@ public class Translation extends BaseEntity {
     /**
      * 1:中文  2:英语
      */
-    @TableField("languages")
-    private Integer languages;
+    @TableField("language")
+    private Integer language;
 
     /**
      * 翻译的值

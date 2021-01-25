@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserOrgMapper;
@@ -68,14 +69,10 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
 
     @Override
     public Boolean getUserOrgFlag(Long orgId, Long positionId) {
-
-        // TODO 测试
-        LambdaQueryWrapper<SysUserOrg> sysUserOrgLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysUserOrgLambdaQueryWrapper.eq(true, SysUserOrg::getOrgId, orgId);
-        sysUserOrgLambdaQueryWrapper.eq(true, SysUserOrg::getPositionId, positionId);
-
-        List<SysUserOrg> list = this.list(sysUserOrgLambdaQueryWrapper);
-        return list.size() > 0;
+        LambdaQueryWrapper<SysUserOrg> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ObjectUtil.isNotNull(orgId), SysUserOrg::getOrgId, orgId);
+        queryWrapper.eq(ObjectUtil.isNotNull(positionId), SysUserOrg::getPositionId, positionId);
+        return this.list(queryWrapper).size() > 0;
     }
 
 }

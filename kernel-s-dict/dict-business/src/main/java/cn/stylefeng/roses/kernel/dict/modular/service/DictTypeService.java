@@ -91,4 +91,11 @@ public interface DictTypeService extends IService<SysDictType> {
      */
     SysDictType findDetail(Long dictTypeId);
 
+    /**
+     * 获取字典详情
+     *
+     * @author huangyao
+     * @date 2021/1/10 17:27
+     */
+    SysDictType getConfigDictTypeDetail();
 }

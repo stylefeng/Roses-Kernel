@@ -15,9 +15,9 @@ import lombok.Getter;
 public enum TranslationExceptionEnum implements AbstractExceptionEnum {
 
     /**
-     * 多语言xx
+     * 多语言记录不存在
      */
-    JWT_PARSE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + TranslationConstants.I18N_EXCEPTION_STEP_CODE + "01", "jwt解析错误！jwt为：{}");
+    NOT_EXISTED(RuleConstants.BUSINESS_ERROR_TYPE_CODE + TranslationConstants.I18N_EXCEPTION_STEP_CODE + "01", "多语言记录不存在，id为：{}");
 
     /**
      * 错误编码
