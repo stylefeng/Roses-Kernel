@@ -33,7 +33,7 @@ public class WebSocketEndpoint {
         // 添加到链接管理
         WebSocketManager.add(userId, session);
         // 返回消息
-        session.getAsyncRemote().sendText("WebSocket连接成功");
+//        session.getAsyncRemote().sendText("WebSocket连接成功");
     }
 
     /**

@@ -1,12 +1,14 @@
 package cn.stylefeng.roses.kernel.message.db;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.message.api.MessageApi;
+import cn.stylefeng.roses.kernel.message.api.WebsocketApi;
 import cn.stylefeng.roses.kernel.message.api.constants.MessageConstants;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import cn.stylefeng.roses.kernel.message.api.exception.MessageException;
@@ -40,6 +42,9 @@ public class MessageDbServiceImpl implements MessageApi {
 
 
     @Resource
+    private WebsocketApi websocketApi;
+
+    @Resource
     private UserServiceApi userServiceApi;
 
     @Resource
@@ -57,7 +62,6 @@ public class MessageDbServiceImpl implements MessageApi {
         if (MessageConstants.RECEIVE_ALL_USER_FLAG.equals(receiveUserIds)) {
             // 查询所有用户
             userIds = userServiceApi.queryAllUserIdList(new SysUserRequest());
-
         } else {
             String[] userIdArr = receiveUserIds.split(",");
             userIds = Convert.toList(Long.class, userIdArr);
@@ -72,7 +76,6 @@ public class MessageDbServiceImpl implements MessageApi {
         // 初始化默认值
         sysMessage.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());
         sysMessage.setSendUserId(loginUser.getUserId());
-        sysMessage.setMessageSendTime(new Date());
         userIdSet.forEach(userId -> {
             // 判断用户是否存在
             if (userServiceApi.userExist(userId)) {
@@ -80,6 +83,8 @@ public class MessageDbServiceImpl implements MessageApi {
                 sendMsgList.add(sysMessage);
             }
         });
+
+        websocketApi.sendWebSocketMessage(ListUtil.toList(userIdSet), messageSendParam);
         sysMessageService.saveBatch(sendMsgList);
 
     }

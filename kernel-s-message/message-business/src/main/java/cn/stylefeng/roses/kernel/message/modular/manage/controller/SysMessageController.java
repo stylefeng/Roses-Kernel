@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ public class SysMessageController {
      */
     @PostResource(name = "发送系统消息", path = "/sysMessage/sendMessage")
     public ResponseData sendMessage(@RequestBody @Validated(MessageSendParam.add.class) MessageSendParam messageSendParam) {
+        messageSendParam.setMessageSendTime(new Date());
         messageApi.sendMessage(messageSendParam);
         return new SuccessResponseData();
     }
