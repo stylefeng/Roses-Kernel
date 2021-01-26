@@ -92,10 +92,20 @@ public interface DictTypeService extends IService<SysDictType> {
     SysDictType findDetail(Long dictTypeId);
 
     /**
-     * 获取字典详情
+     * 查询-详情-按实体对象
      *
-     * @author huangyao
-     * @date 2021/1/10 17:27
+     * @param dictTypeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
      */
-    SysDictType getConfigDictTypeDetail();
+    SysDictType detailBy(DictTypeRequest dictTypeRequest);
+
+    /**
+     * 查询-列表-按实体对象
+     *
+     * @param dictTypeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    List<SysDictType> listBy(DictTypeRequest dictTypeRequest);
 }
