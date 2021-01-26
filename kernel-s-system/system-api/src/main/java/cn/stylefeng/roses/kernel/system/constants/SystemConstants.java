@@ -51,6 +51,6 @@ public interface SystemConstants {
     /**
      * 超级管理员角色编码
      */
-    String SYSTEM_ADMIN_ROLE_CODE = "superAdmin";
+    //String SYSTEM_ADMIN_ROLE_CODE = "superAdmin";
 
 }

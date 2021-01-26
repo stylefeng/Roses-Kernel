@@ -87,7 +87,19 @@ public class SysRole extends BaseEntity {
     /**
      * 删除标记（Y-已删除，N-未删除）
      */
-    @TableField("del_flag")
+    @TableField(value = "del_flag",fill = FieldFill.INSERT)
     private String delFlag;
+
+    /**
+     * 是否是系统角色：Y-是，N-否
+     */
+    @TableField("role_system_flag")
+    private String roleSystemFlag;
+
+    /**
+     * 角色类型
+     */
+    @TableField("role_type_code")
+    private String roleTypeCode;
 
 }

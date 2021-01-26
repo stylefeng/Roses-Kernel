@@ -53,4 +53,14 @@ public class SysRoleResponse extends BaseRequest {
      */
     private Integer statusFlag;
 
+    /**
+     * 是否是系统角色：Y-是，N-否
+     */
+    private String roleSystemFlag;
+
+    /**
+     * 角色类型
+     */
+    private String roleTypeCode;
+
 }

@@ -66,8 +66,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static cn.stylefeng.roses.kernel.system.constants.SystemConstants.SYSTEM_ADMIN_ROLE_CODE;
-import static cn.stylefeng.roses.kernel.system.exception.enums.SysRoleExceptionEnum.SUPER_ADMIN_CANT_DELETE;
 
 /**
  * 系统角色service接口实现类
@@ -97,10 +95,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public void add(SysRoleRequest sysRoleRequest) {
         SysRole sysRole = new SysRole();
         BeanUtil.copyProperties(sysRoleRequest, sysRole);
-
         // 默认设置为启用
         sysRole.setStatusFlag(StatusEnum.ENABLE.getCode());
-
+        // 默认设置为普通角色
+        sysRole.setRoleSystemFlag(YesOrNotEnum.N.getCode());
+        //默认数据范围
+        sysRole.setDataScopeType(DataScopeTypeEnum.SELF.getCode());
         this.save(sysRole);
     }
 
@@ -121,9 +121,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         SysRole sysRole = this.querySysRole(sysRoleRequest);
 
         // 超级管理员不能删除
-        if (SYSTEM_ADMIN_ROLE_CODE.equals(sysRole.getRoleCode())) {
-            throw new ServiceException(SUPER_ADMIN_CANT_DELETE);
+        if (YesOrNotEnum.Y.getCode().equals(sysRole.getRoleSystemFlag())) {
+            throw new ServiceException(SysRoleExceptionEnum.SYSTEM_ROLE_CANT_DELETE);
         }
+        // 超级管理员不能删除
+        // TODO 暂时弃用
+        //if (SYSTEM_ADMIN_ROLE_CODE.equals(sysRole.getRoleCode())) {
+        //    throw new ServiceException(SUPER_ADMIN_CANT_DELETE);
+        //}
 
         // 逻辑删除，设为删除标志
         sysRole.setDelFlag(YesOrNotEnum.Y.getCode());

@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.system.pojo.role.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.validators.unique.TableUniqueValue;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -92,6 +93,16 @@ public class SysRoleRequest extends BaseRequest {
      * 状态（字典 1正常 2停用）
      */
     private Integer statusFlag;
+
+    /**
+     * 是否是系统角色：Y-是，N-否
+     */
+    private String roleSystemFlag;
+
+    /**
+     * 角色类型
+     */
+    private String roleTypeCode;
 
     /**
      * 授权资源
