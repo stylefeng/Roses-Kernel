@@ -28,8 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static cn.stylefeng.roses.kernel.dict.api.constants.DictConstants.CONFIG_GROUP_DICT_TYPE_CODE;
-
 /**
  * 字典类型表 服务实现类
  *
@@ -178,10 +176,18 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
     }
 
     @Override
-    public SysDictType getConfigDictTypeDetail() {
-        LambdaQueryWrapper<SysDictType> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysDictType::getDictTypeCode, CONFIG_GROUP_DICT_TYPE_CODE);
-        return this.getOne(queryWrapper);
+    public SysDictType detailBy(DictTypeRequest dictTypeRequest) {
+        List<SysDictType> list = this.listBy(dictTypeRequest);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
+    public List<SysDictType> listBy(DictTypeRequest dictTypeRequest) {
+        LambdaQueryWrapper<SysDictType> queryWrapper = this.createWrapper(dictTypeRequest);
+        return this.list(queryWrapper);
     }
 
     /**
@@ -196,6 +202,39 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
                 throw new DictException(DictExceptionEnum.SYSTEM_DICT_NOT_ALLOW_OPERATION);
             }
         }
+    }
+
+    /**
+     * 根据主键id获取对象
+     *
+     * @param
+     * @return
+     * @author chenjinlong
+     * @date 2021/1/26 13:28
+     */
+    private SysDictType querySysDictType(DictTypeRequest dictTypeRequest) {
+        SysDictType sysDictType = this.getById(dictTypeRequest.getDictTypeId());
+        if (ObjectUtil.isEmpty(sysDictType)) {
+            throw new DictException(DictExceptionEnum.SYSTEM_DICT_NOT_ALLOW_OPERATION);
+        }
+        return sysDictType;
+    }
+
+    /**
+     * 实体构建queryWrapper
+     *
+     * @author fengshuonan
+     * @date 2021/1/24 22:03
+     */
+    private LambdaQueryWrapper<SysDictType> createWrapper(DictTypeRequest translationRequest) {
+        LambdaQueryWrapper<SysDictType> queryWrapper = new LambdaQueryWrapper<>();
+        String dictTypeCode = translationRequest.getDictTypeCode();
+        String dictTypeName = translationRequest.getDictTypeName();
+        queryWrapper.eq(ObjectUtil.isNotNull(dictTypeCode), SysDictType::getDictTypeCode, dictTypeCode);
+        queryWrapper.like(ObjectUtil.isNotNull(dictTypeName), SysDictType::getDictTypeName, dictTypeName);
+        queryWrapper.eq(SysDictType::getDelFlag, YesOrNotEnum.N.getCode());
+
+        return queryWrapper;
     }
 
 }
