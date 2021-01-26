@@ -85,7 +85,7 @@ public class TranslationController {
      */
     @GetResource(name = "新增多语言配置", path = "/i18n/page")
     public ResponseData page(TranslationRequest translationRequest) {
-        PageResult<Translation> page = this.translationService.getPage(translationRequest);
+        PageResult<Translation> page = this.translationService.findPage(translationRequest);
         return new SuccessResponseData(page);
     }
 

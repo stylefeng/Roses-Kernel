@@ -53,22 +53,13 @@ public interface TranslationService extends IService<Translation>, TranslationPe
     Translation detail(TranslationRequest translationRequest);
 
     /**
-     * 查询-详情-按实体对象
-     *
-     * @param translationRequest 参数对象
-     * @author chenjinlong
-     * @date 2021/1/26 12:52
-     */
-    Translation detailBy(TranslationRequest translationRequest);
-
-    /**
      * 查询-列表-按实体对象
      *
      * @param translationRequest 参数对象
      * @author chenjinlong
      * @date 2021/1/26 12:52
      */
-    List<Translation> listBy(TranslationRequest translationRequest);
+    List<Translation> findList(TranslationRequest translationRequest);
 
     /**
      * 查询-列表-分页-按实体对象
@@ -77,7 +68,6 @@ public interface TranslationService extends IService<Translation>, TranslationPe
      * @author chenjinlong
      * @date 2021/1/26 12:52
      */
-    PageResult<Translation> getPage(TranslationRequest translationRequest);
-
+    PageResult<Translation> findPage(TranslationRequest translationRequest);
 
 }
