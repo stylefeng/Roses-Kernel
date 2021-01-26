@@ -6,7 +6,6 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.i18n.api.context.TranslationContext;
-import cn.stylefeng.roses.kernel.i18n.api.enums.TranslationEnum;
 import cn.stylefeng.roses.kernel.i18n.api.exception.TranslationException;
 import cn.stylefeng.roses.kernel.i18n.api.exception.enums.TranslationExceptionEnum;
 import cn.stylefeng.roses.kernel.i18n.api.pojo.TranslationDict;
@@ -58,8 +57,7 @@ public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Trans
         this.removeById(translationRequest.getTranId());
 
         // 删除对应缓存
-        TranslationEnum translationEnum = TranslationEnum.valueOf(translation.getTranLanguageCode());
-        TranslationContext.me().deleteTranslationDict(translationEnum, translation.getTranCode());
+        TranslationContext.me().deleteTranslationDict(translation.getTranLanguageCode(), translation.getTranCode());
     }
 
     @Override
@@ -86,8 +84,7 @@ public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Trans
         List<Translation> list = this.list();
         ArrayList<TranslationDict> translationDictList = new ArrayList<>();
         for (Translation translation : list) {
-            TranslationEnum translationEnum = TranslationEnum.getValue(translation.getTranLanguageCode());
-            TranslationDict translationDict = TranslationDictFactory.createTranslationDict(translationEnum, translation);
+            TranslationDict translationDict = TranslationDictFactory.createTranslationDict(translation.getTranLanguageCode(), translation);
             translationDictList.add(translationDict);
         }
         return translationDictList;
@@ -141,14 +138,12 @@ public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Trans
      */
     private void saveContext(Translation translation) {
 
-        TranslationEnum translationEnum = TranslationEnum.getValue(translation.getTranLanguageCode());
-
         // 没有对应的语种，不添加到context
-        if (translationEnum == null) {
+        if (translation.getTranLanguageCode() == null) {
             return;
         }
 
-        TranslationDict translationDict = TranslationDictFactory.createTranslationDict(translationEnum, translation);
+        TranslationDict translationDict = TranslationDictFactory.createTranslationDict(translation.getTranLanguageCode(), translation);
         TranslationContext.me().addTranslationDict(translationDict);
     }
 

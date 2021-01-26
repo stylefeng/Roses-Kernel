@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.i18n.api.pojo;
 
-import cn.stylefeng.roses.kernel.i18n.api.enums.TranslationEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -25,9 +24,9 @@ public class TranslationDict implements Serializable {
     private String tranName;
 
     /**
-     * 1:中文  2:英语
+     * 多语言语种的编码，值是字典的值，字典类型的编码是 languages
      */
-    private TranslationEnum translationLanguages;
+    private String translationLanguages;
 
     /**
      * 翻译的值，例如：账号

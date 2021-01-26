@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.i18n.api;
 
-import cn.stylefeng.roses.kernel.i18n.api.enums.TranslationEnum;
 import cn.stylefeng.roses.kernel.i18n.api.pojo.TranslationDict;
 
 import java.util.List;
@@ -26,12 +25,12 @@ public interface TranslationApi {
     /**
      * 获取某个语种下的所有多语言字典
      *
-     * @param translationLanguages 语种枚举
+     * @param translationLanguages 语种字典
      * @return key-翻译项标识，value-翻译的值TranslationApi
      * @author fengshuonan
      * @date 2021/1/24 19:01
      */
-    Map<String, String> getTranslationDictByLanguage(TranslationEnum translationLanguages);
+    Map<String, String> getTranslationDictByLanguage(String translationLanguages);
 
     /**
      * 添加一个翻译项到context
@@ -45,11 +44,11 @@ public interface TranslationApi {
     /**
      * 删除某条翻译记录
      *
-     * @param translationLanguages 语种枚举
+     * @param translationLanguages 语种字典
      * @param tranCode             具体翻译项编码
      * @author fengshuonan
      * @date 2021/1/24 21:59
      */
-    void deleteTranslationDict(TranslationEnum translationLanguages, String tranCode);
+    void deleteTranslationDict(String translationLanguages, String tranCode);
 
 }
