@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.i18n.modular.factory;
 
-import cn.stylefeng.roses.kernel.i18n.api.enums.TranslationEnum;
 import cn.stylefeng.roses.kernel.i18n.api.pojo.TranslationDict;
 import cn.stylefeng.roses.kernel.i18n.modular.entity.Translation;
 
@@ -18,12 +17,12 @@ public class TranslationDictFactory {
      * @author fengshuonan
      * @date 2021/1/24 21:50
      */
-    public static TranslationDict createTranslationDict(TranslationEnum translationEnum, Translation translation) {
+    public static TranslationDict createTranslationDict(String translationLanguages, Translation translation) {
         TranslationDict translationDict = new TranslationDict();
         translationDict.setTranName(translation.getTranName());
         translationDict.setTranCode(translation.getTranCode());
         translationDict.setTranValue(translation.getTranValue());
-        translationDict.setTranslationLanguages(translationEnum);
+        translationDict.setTranslationLanguages(translationLanguages);
         return translationDict;
     }
 

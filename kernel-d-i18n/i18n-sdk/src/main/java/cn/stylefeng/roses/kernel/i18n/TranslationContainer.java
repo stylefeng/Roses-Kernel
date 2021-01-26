@@ -1,7 +1,6 @@
 package cn.stylefeng.roses.kernel.i18n;
 
 import cn.stylefeng.roses.kernel.i18n.api.TranslationApi;
-import cn.stylefeng.roses.kernel.i18n.api.enums.TranslationEnum;
 import cn.stylefeng.roses.kernel.i18n.api.pojo.TranslationDict;
 
 import java.util.HashMap;
@@ -20,35 +19,25 @@ public class TranslationContainer implements TranslationApi {
     /**
      * 所有翻译的条目的字典项
      * <p>
-     * key是语种，value是对应语种下的所有key value翻译值（第二个key是具体翻译项的编码）
+     * key是语种（字典），value是对应语种下的所有key value翻译值（第二个key是具体翻译项的编码）
      */
-    private static final Map<TranslationEnum, Map<String, String>> TRAN_DICT_CONTAINER = new ConcurrentHashMap<>();
+    private static final Map<String, Map<String, String>> TRAN_DICT_CONTAINER = new ConcurrentHashMap<>();
 
     @Override
     public void init(List<TranslationDict> translationDict) {
-
-        // 根据语种数量，创建多个语种的翻译Map
-        for (TranslationEnum type : TranslationEnum.values()) {
-            HashMap<String, String> typeMap = new HashMap<>();
-            TRAN_DICT_CONTAINER.put(type, typeMap);
-        }
-
-        // 整理数据库中的字典
         for (TranslationDict translationItem : translationDict) {
-            TranslationEnum translationLanguages = translationItem.getTranslationLanguages();
-            TRAN_DICT_CONTAINER.get(translationLanguages).put(translationItem.getTranCode(), translationItem.getTranValue());
+            this.addTranslationDict(translationItem);
         }
-
     }
 
     @Override
-    public Map<String, String> getTranslationDictByLanguage(TranslationEnum translationLanguages) {
+    public Map<String, String> getTranslationDictByLanguage(String translationLanguages) {
         return TRAN_DICT_CONTAINER.get(translationLanguages);
     }
 
     @Override
     public void addTranslationDict(TranslationDict translationDict) {
-        TranslationEnum translationLanguages = translationDict.getTranslationLanguages();
+        String translationLanguages = translationDict.getTranslationLanguages();
 
         Map<String, String> languageDict = TRAN_DICT_CONTAINER.get(translationLanguages);
         if (languageDict == null) {
@@ -60,7 +49,7 @@ public class TranslationContainer implements TranslationApi {
     }
 
     @Override
-    public void deleteTranslationDict(TranslationEnum translationLanguages, String tranCode) {
+    public void deleteTranslationDict(String translationLanguages, String tranCode) {
         Map<String, String> languageDict = TRAN_DICT_CONTAINER.get(translationLanguages);
 
         if (languageDict == null) {
