@@ -29,4 +29,9 @@ public interface DictConstants {
      */
     String CONFIG_GROUP_DICT_TYPE_CODE = "config_group";
 
+    /**
+     * 多语言
+     */
+    String LANGUAGES_DICT_TYPE_CODE = "languages";
+
 }
