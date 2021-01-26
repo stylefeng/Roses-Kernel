@@ -38,10 +38,10 @@ public class TranslationRequest extends BaseRequest {
     private String tranName;
 
     /**
-     * 1:中文  2:英语
+     * 语种字典
      */
     @NotBlank(message = "language不能为空", groups = {add.class, edit.class})
-    private Integer language;
+    private String tranLanguageCode;
 
     /**
      * 翻译的值

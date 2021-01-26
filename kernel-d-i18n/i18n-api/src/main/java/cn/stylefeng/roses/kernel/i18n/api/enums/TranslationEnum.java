@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.i18n.api.enums;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -17,24 +18,24 @@ public enum TranslationEnum {
     /**
      * 中文
      */
-    CHINESE(1, "中文"),
+    CHINESE("chinese", "中文"),
 
     /**
      * 英文
      */
-    ENGLISH(2, "English");
+    ENGLISH("english", "English");
 
     /**
      * 语种编码
      */
-    private final Integer code;
+    private final String code;
 
     /**
      * 语种的中文描述
      */
     private final String description;
 
-    TranslationEnum(Integer code, String description) {
+    TranslationEnum(String code, String description) {
         this.code = code;
         this.description = description;
     }
@@ -59,8 +60,8 @@ public enum TranslationEnum {
      * @author fengshuonan
      * @date 2019/10/18 10:33
      */
-    public static TranslationEnum valueOf(Integer value) {
-        if (value != null) {
+    public static TranslationEnum getValue(String value) {
+        if (StrUtil.isNotBlank(value)) {
             for (TranslationEnum translationLanguages : TranslationEnum.values()) {
                 if (translationLanguages.getCode().equals(value)) {
                     return translationLanguages;

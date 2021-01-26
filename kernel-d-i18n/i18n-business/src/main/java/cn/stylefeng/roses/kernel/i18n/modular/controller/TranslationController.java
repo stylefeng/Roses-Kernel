@@ -36,7 +36,7 @@ public class TranslationController {
      * @date 2021/1/24 19:17
      */
     @PostResource(name = "新增多语言配置", path = "/i18n/add")
-    public ResponseData addItem(@RequestBody @Validated(TranslationRequest.add.class) TranslationRequest translationRequest) {
+    public ResponseData add(@RequestBody @Validated(TranslationRequest.add.class) TranslationRequest translationRequest) {
         this.translationService.add(translationRequest);
         return new SuccessResponseData();
     }
@@ -48,8 +48,8 @@ public class TranslationController {
      * @date 2021/1/24 19:17
      */
     @PostResource(name = "新增多语言配置", path = "/i18n/edit")
-    public ResponseData editItem(@RequestBody @Validated(BaseRequest.edit.class) TranslationRequest translationRequest) {
-        this.translationService.update(translationRequest);
+    public ResponseData edit(@RequestBody @Validated(BaseRequest.edit.class) TranslationRequest translationRequest) {
+        this.translationService.edit(translationRequest);
         return new SuccessResponseData();
     }
 
@@ -61,7 +61,7 @@ public class TranslationController {
      */
     @PostResource(name = "新增多语言配置", path = "/i18n/delete")
     public ResponseData delete(@RequestBody @Validated(BaseRequest.delete.class) TranslationRequest translationRequest) {
-        this.translationService.delete(translationRequest);
+        this.translationService.del(translationRequest);
         return new SuccessResponseData();
     }
 
@@ -73,7 +73,7 @@ public class TranslationController {
      */
     @GetResource(name = "新增多语言配置", path = "/i18n/detail")
     public ResponseData detail(@Validated(BaseRequest.detail.class) TranslationRequest translationRequest) {
-        Translation detail = this.translationService.findDetail(translationRequest);
+        Translation detail = this.translationService.detail(translationRequest);
         return new SuccessResponseData(detail);
     }
 
@@ -84,8 +84,8 @@ public class TranslationController {
      * @date 2021/1/24 19:20
      */
     @GetResource(name = "新增多语言配置", path = "/i18n/page")
-    public ResponseData list(TranslationRequest translationRequest) {
-        PageResult<Translation> page = this.translationService.findPage(translationRequest);
+    public ResponseData page(TranslationRequest translationRequest) {
+        PageResult<Translation> page = this.translationService.getPage(translationRequest);
         return new SuccessResponseData(page);
     }
 

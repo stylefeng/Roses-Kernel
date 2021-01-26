@@ -40,10 +40,10 @@ public class Translation extends BaseEntity {
     private String tranName;
 
     /**
-     * 1:中文  2:英语
+     * 语种字典
      */
-    @TableField("language")
-    private Integer language;
+    @TableField("tran_language_code")
+    private String tranLanguageCode;
 
     /**
      * 翻译的值

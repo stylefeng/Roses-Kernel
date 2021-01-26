@@ -33,61 +33,55 @@ import java.util.List;
 public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Translation> implements TranslationService {
 
     @Override
-    public void add(TranslationRequest param) {
-
-        // 1.构造实体
+    public void add(TranslationRequest translationRequest) {
         Translation translation = new Translation();
-        BeanUtil.copyProperties(param, translation);
-
-        // 2.保存到库中
+        BeanUtil.copyProperties(translationRequest, translation);
         this.save(translation);
-
-        // 3.添加对应context
-        TranslationEnum translationEnum = TranslationEnum.valueOf(param.getLanguage());
-        TranslationDict translationDict = TranslationDictFactory.createTranslationDict(translationEnum, translation);
-        TranslationContext.me().addTranslationDict(translationDict);
+        // 更新对应常量
+        this.saveContext(translation);
     }
 
+
     @Override
-    public void update(TranslationRequest param) {
-
-        // 1.根据id获取信息
-        Translation translation = this.queryTranslation(param);
-
-        // 2.请求参数转化为实体
-        BeanUtil.copyProperties(param, translation);
-
-        // 3.更新记录
+    public void edit(TranslationRequest translationRequest) {
+        Translation translation = this.queryTranslation(translationRequest);
+        BeanUtil.copyProperties(translationRequest, translation);
         this.updateById(translation);
-
-        // 4.更新对应常量context
-        TranslationEnum translationEnum = TranslationEnum.valueOf(param.getLanguage());
-        TranslationDict translationDict = TranslationDictFactory.createTranslationDict(translationEnum, translation);
-        TranslationContext.me().addTranslationDict(translationDict);
+        // 更新对应常量
+        this.saveContext(translation);
     }
 
     @Override
-    public void delete(TranslationRequest param) {
-
-        // 1.根据id获取实体
-        Translation translation = this.queryTranslation(param);
-
-        // 2.删除该记录
-        this.removeById(param.getTranId());
-
-        // 3.删除对应context
-        TranslationEnum translationEnum = TranslationEnum.valueOf(translation.getLanguage());
-        TranslationContext.me().deleteTranslationDict(translationEnum, translation.getTranCode());
+    public void del(TranslationRequest translationRequest) {
+        Translation translation = this.queryTranslation(translationRequest);
+        this.removeById(translationRequest.getTranId());
+        // 更新对应常量
+        this.saveContext(translation);
     }
 
     @Override
-    public Translation findDetail(TranslationRequest param) {
-        return queryTranslation(param);
+    public Translation detail(TranslationRequest translationRequest) {
+        return this.queryTranslation(translationRequest);
     }
 
     @Override
-    public PageResult<Translation> findPage(TranslationRequest param) {
-        LambdaQueryWrapper<Translation> wrapper = createWrapper(param);
+    public Translation detailBy(TranslationRequest translationRequest) {
+        List<Translation> list = this.listBy(translationRequest);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
+    public List<Translation> listBy(TranslationRequest translationRequest) {
+        LambdaQueryWrapper<Translation> queryWrapper = this.createWrapper(translationRequest);
+        return this.list(queryWrapper);
+    }
+
+    @Override
+    public PageResult<Translation> getPage(TranslationRequest translationRequest) {
+        LambdaQueryWrapper<Translation> wrapper = createWrapper(translationRequest);
         Page<Translation> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
     }
@@ -97,7 +91,7 @@ public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Trans
         List<Translation> list = this.list();
         ArrayList<TranslationDict> translationDictList = new ArrayList<>();
         for (Translation translation : list) {
-            TranslationEnum translationEnum = TranslationEnum.valueOf(translation.getLanguage());
+            TranslationEnum translationEnum = TranslationEnum.getValue(translation.getTranLanguageCode());
             TranslationDict translationDict = TranslationDictFactory.createTranslationDict(translationEnum, translation);
             translationDictList.add(translationDict);
         }
@@ -105,45 +99,55 @@ public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Trans
     }
 
     /**
-     * 获取字典项的对象
+     * 根据主键id获取对象
      *
-     * @author fengshuonan
-     * @date 2021/1/24 21:54
+     * @param
+     * @return
+     * @author chenjinlong
+     * @date 2021/1/26 13:28
      */
-    private Translation queryTranslation(TranslationRequest param) {
-        Translation translation = this.getById(param.getTranId());
+    private Translation queryTranslation(TranslationRequest translationRequest) {
+        Translation translation = this.getById(translationRequest.getTranId());
         if (ObjectUtil.isEmpty(translation)) {
-            throw new TranslationException(TranslationExceptionEnum.NOT_EXISTED, param.getTranId());
+            throw new TranslationException(TranslationExceptionEnum.NOT_EXISTED, translationRequest.getTranId());
         }
         return translation;
     }
 
     /**
-     * 创建多语言的wrapper
+     * 实体构建queryWrapper
      *
      * @author fengshuonan
      * @date 2021/1/24 22:03
      */
-    private LambdaQueryWrapper<Translation> createWrapper(TranslationRequest param) {
+    private LambdaQueryWrapper<Translation> createWrapper(TranslationRequest translationRequest) {
         LambdaQueryWrapper<Translation> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (ObjectUtil.isNotNull(param)) {
-
-            // 如果编码不为空，则带上名称搜素搜条件
-            if (ObjectUtil.isNotEmpty(param.getTranCode())) {
-                queryWrapper.like(Translation::getTranCode, param.getTranCode());
-            }
-
-            // 如果翻译名称不为空，则带上翻译名称
-            if (ObjectUtil.isNotEmpty(param.getTranName())) {
-                queryWrapper.like(Translation::getTranName, param.getTranName());
-            }
-        }
-
-        // 按时间倒序
-        queryWrapper.orderByDesc(Translation::getCreateTime);
+        String tranCode = translationRequest.getTranCode();
+        String tranName = translationRequest.getTranName();
+        String tranLanguageCode = translationRequest.getTranLanguageCode();
+        // SQL条件拼接
+        queryWrapper.like(ObjectUtil.isNotEmpty(tranCode), Translation::getTranCode, tranCode);
+        queryWrapper.like(ObjectUtil.isNotEmpty(tranName), Translation::getTranName, tranName);
+        queryWrapper.eq(ObjectUtil.isNotEmpty(tranLanguageCode), Translation::getTranLanguageCode, tranLanguageCode);
+        // 排序
+        queryWrapper.orderByDesc(Translation::getTranCode);
 
         return queryWrapper;
+    }
+
+
+    /**
+     * 更新对应常量
+     *
+     * @param translation
+     * @author chenjinlong
+     * @date 2021/1/26 13:45
+     */
+    private void saveContext(Translation translation) {
+        TranslationEnum translationEnum = TranslationEnum.getValue(translation.getTranLanguageCode());
+        TranslationDict translationDict = TranslationDictFactory.createTranslationDict(translationEnum, translation);
+        TranslationContext.me().addTranslationDict(translationDict);
     }
 
 }
