@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static cn.stylefeng.roses.kernel.dict.api.constants.DictConstants.CONFIG_GROUP_DICT_TYPE_CODE;
+import static cn.stylefeng.roses.kernel.dict.api.constants.DictConstants.LANGUAGES_DICT_TYPE_CODE;
+
 
 /**
  * 字典类型管理
@@ -99,11 +102,26 @@ public class DictTypeController {
      * @author fengshuonan
      * @date 2021/1/13 11:25
      */
-    @GetResource(name = "获取字典类型详情", path = "/dictType/getConfigDictTypeDetail", requiredPermission = false)
-    public ResponseData getConfigDictTypeDetail() {
-        SysDictType detail = this.dictTypeService.getConfigDictTypeDetail();
+    @GetResource(name = "获取系统配置字典类型详情", path = "/dictType/getConfigDictTypeDetail", requiredPermission = false)
+    public ResponseData getConfigDictTypeDetail(DictTypeRequest dictTypeRequest) {
+        dictTypeRequest.setDictTypeCode(CONFIG_GROUP_DICT_TYPE_CODE);
+        SysDictType detail = this.dictTypeService.detailBy(dictTypeRequest);
         return new SuccessResponseData(detail);
     }
+
+    /**
+     * 获取字典类型详情
+     *
+     * @author fengshuonan
+     * @date 2021/1/13 11:25
+     */
+    @GetResource(name = "获取语种字典类型型详情", path = "/dictType/getTranslationDetail", requiredPermission = false)
+    public ResponseData getTranslationDetail(DictTypeRequest dictTypeRequest) {
+        dictTypeRequest.setDictTypeCode(LANGUAGES_DICT_TYPE_CODE);
+        SysDictType detail = this.dictTypeService.detailBy(dictTypeRequest);
+        return new SuccessResponseData(detail);
+    }
+
 
     /**
      * 获取字典类型列表
