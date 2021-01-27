@@ -98,8 +98,10 @@ public class LoginUser implements Serializable {
      * 当前用户语种的标识，例如：chinese，english
      * <p>
      * 这个值是根据字典获取，字典类型编码 languages
+     * <p>
+     * 默认语种是中文
      */
-    private String tranLanguageCode;
+    private String tranLanguageCode = "chinese";
 
     public String getWsUrl() {
         AtomicReference<String> returnUrl = new AtomicReference<>(StrUtil.EMPTY);

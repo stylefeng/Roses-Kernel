@@ -23,6 +23,7 @@ import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -331,6 +332,25 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
         } else {
             return StrUtil.EMPTY;
         }
+    }
+
+    @Override
+    public List<SimpleDict> getDictDetailsByDictTypeCode(String dictTypeCode) {
+        DictRequest dictRequest = new DictRequest();
+        dictRequest.setDictTypeCode(dictTypeCode);
+        LambdaQueryWrapper<SysDict> wrapper = createWrapper(dictRequest);
+        List<SysDict> dictList = this.list(wrapper);
+        if (dictList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        ArrayList<SimpleDict> simpleDictList = new ArrayList<>();
+        for (SysDict sysDict : dictList) {
+            SimpleDict simpleDict = new SimpleDict();
+            simpleDict.setCode(sysDict.getDictCode());
+            simpleDict.setName(sysDict.getDictName());
+            simpleDictList.add(simpleDict);
+        }
+        return simpleDictList;
     }
 
     /**
