@@ -2,10 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -130,7 +127,7 @@ public class SysUser extends BaseEntity {
      * 删除标记（Y-已删除，N-未删除）
      */
     @ExcelProperty(value = {"删除标记"}, index = 14)
-    @TableField("del_flag")
+    @TableField(value = "del_flag", fill = FieldFill.INSERT)
     private String delFlag;
 
 }
