@@ -94,6 +94,13 @@ public class LoginUser implements Serializable {
      */
     private String wsUrl;
 
+    /**
+     * 当前用户语种的标识，例如：chinese，english
+     * <p>
+     * 这个值是根据字典获取，字典类型编码 languages
+     */
+    private String tranLanguageCode;
+
     public String getWsUrl() {
         AtomicReference<String> returnUrl = new AtomicReference<>(StrUtil.EMPTY);
         Optional.ofNullable(this.wsUrl).ifPresent(url -> {

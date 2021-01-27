@@ -22,7 +22,7 @@ public class TranslationDictFactory {
         translationDict.setTranName(translation.getTranName());
         translationDict.setTranCode(translation.getTranCode());
         translationDict.setTranValue(translation.getTranValue());
-        translationDict.setTranslationLanguages(translationLanguages);
+        translationDict.setTranLanguageCode(translationLanguages);
         return translationDict;
     }
 

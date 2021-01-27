@@ -37,7 +37,7 @@ public class TranslationContainer implements TranslationApi {
 
     @Override
     public void addTranslationDict(TranslationDict translationDict) {
-        String translationLanguages = translationDict.getTranslationLanguages();
+        String translationLanguages = translationDict.getTranLanguageCode();
 
         Map<String, String> languageDict = TRAN_DICT_CONTAINER.get(translationLanguages);
         if (languageDict == null) {

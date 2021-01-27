@@ -40,7 +40,7 @@ public class TranslationRequest extends BaseRequest {
     /**
      * 语种字典
      */
-    @NotBlank(message = "language不能为空", groups = {add.class, edit.class})
+    @NotBlank(message = "tranLanguageCode不能为空", groups = {add.class, edit.class})
     private String tranLanguageCode;
 
     /**

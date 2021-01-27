@@ -26,7 +26,7 @@ public class TranslationDict implements Serializable {
     /**
      * 多语言语种的编码，值是字典的值，字典类型的编码是 languages
      */
-    private String translationLanguages;
+    private String tranLanguageCode;
 
     /**
      * 翻译的值，例如：账号
