@@ -31,33 +31,33 @@ public class TranslationContainer implements TranslationApi {
     }
 
     @Override
-    public Map<String, String> getTranslationDictByLanguage(String translationLanguages) {
-        return TRAN_DICT_CONTAINER.get(translationLanguages);
+    public Map<String, String> getTranslationDictByLanguage(String tranLanguageCode) {
+        return TRAN_DICT_CONTAINER.get(tranLanguageCode);
     }
 
     @Override
     public void addTranslationDict(TranslationDict translationDict) {
-        String translationLanguages = translationDict.getTranLanguageCode();
+        String tranLanguageCode = translationDict.getTranLanguageCode();
 
-        Map<String, String> languageDict = TRAN_DICT_CONTAINER.get(translationLanguages);
+        Map<String, String> languageDict = TRAN_DICT_CONTAINER.get(tranLanguageCode);
         if (languageDict == null) {
             languageDict = new HashMap<>();
         }
         languageDict.put(translationDict.getTranCode(), translationDict.getTranValue());
 
-        TRAN_DICT_CONTAINER.put(translationLanguages, languageDict);
+        TRAN_DICT_CONTAINER.put(tranLanguageCode, languageDict);
     }
 
     @Override
-    public void deleteTranslationDict(String translationLanguages, String tranCode) {
-        Map<String, String> languageDict = TRAN_DICT_CONTAINER.get(translationLanguages);
+    public void deleteTranslationDict(String tranLanguageCode, String tranCode) {
+        Map<String, String> languageDict = TRAN_DICT_CONTAINER.get(tranLanguageCode);
 
         if (languageDict == null) {
             return;
         }
         languageDict.remove(tranCode);
 
-        TRAN_DICT_CONTAINER.put(translationLanguages, languageDict);
+        TRAN_DICT_CONTAINER.put(tranLanguageCode, languageDict);
     }
 
 }
