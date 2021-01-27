@@ -24,13 +24,8 @@ public interface MessageConstants {
     String RECEIVE_ALL_USER_FLAG = "all";
 
     /**
-     * 默认查询日志分页
+     * 默认websocket-url
      */
-    Integer DEFAULT_BEGIN_PAGE_NO = 1;
-
-    /**
-     * 默认查询日志分页大小
-     */
-    Integer DEFAULT_PAGE_SIZE = 10;
+    String DEFAULT_WS_URL = "ws://localhost:8080/message/websocket/{userId}";
 
 }

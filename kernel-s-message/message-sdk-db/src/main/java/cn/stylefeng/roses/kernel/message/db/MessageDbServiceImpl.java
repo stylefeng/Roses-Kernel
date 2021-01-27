@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
 @Service
 public class MessageDbServiceImpl implements MessageApi {
 
-
     @Resource
     private WebsocketApi websocketApi;
 
@@ -132,7 +131,6 @@ public class MessageDbServiceImpl implements MessageApi {
         updateWrapper.eq(SysMessage::getMessageId, messageId)
                 .set(SysMessage::getDelFlag, YesOrNotEnum.Y.getCode());
         sysMessageService.update(updateWrapper);
-//        sysMessageService.remove(updateWrapper);
     }
 
     @Override
@@ -149,7 +147,7 @@ public class MessageDbServiceImpl implements MessageApi {
         SysMessage sysMessage = sysMessageService.getById(messageParam.getMessageId());
         // 判断消息为未读状态更新为已读
         Optional.ofNullable(sysMessage).ifPresent(msg -> {
-            if(MessageReadFlagEnum.UNREAD.getCode().equals(sysMessage.getReadFlag())){
+            if (MessageReadFlagEnum.UNREAD.getCode().equals(sysMessage.getReadFlag())) {
                 msg.setReadFlag(MessageReadFlagEnum.READ.getCode());
                 sysMessageService.updateById(msg);
             }
@@ -165,7 +163,7 @@ public class MessageDbServiceImpl implements MessageApi {
         PageResult<MessageResponse> result = new PageResult<>();
         List<SysMessage> messageList = pageResult.getRows();
         List<MessageResponse> resultList = messageList.stream().map(msg -> {
-            MessageResponse response =  new MessageResponse();
+            MessageResponse response = new MessageResponse();
             BeanUtil.copyProperties(msg, response);
             return response;
         }).collect(Collectors.toList());
@@ -178,7 +176,7 @@ public class MessageDbServiceImpl implements MessageApi {
     public List<MessageResponse> queryList(MessageParam messageParam) {
         List<SysMessage> messageList = sysMessageService.list(messageParam);
         List<MessageResponse> resultList = messageList.stream().map(msg -> {
-            MessageResponse response =  new MessageResponse();
+            MessageResponse response = new MessageResponse();
             BeanUtil.copyProperties(msg, response);
             return response;
         }).collect(Collectors.toList());
@@ -211,6 +209,7 @@ public class MessageDbServiceImpl implements MessageApi {
     public Integer queryCount(MessageParam messageParam) {
         return sysMessageService.count(messageParam);
     }
+
     @Override
     public Integer queryCountCurrentUser(MessageParam messageParam) {
         if (ObjectUtil.isEmpty(messageParam)) {
@@ -221,4 +220,5 @@ public class MessageDbServiceImpl implements MessageApi {
         messageParam.setReceiveUserId(loginUser.getUserId());
         return this.queryCount(messageParam);
     }
+
 }

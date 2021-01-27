@@ -94,8 +94,7 @@ public class LoginUser implements Serializable {
      */
     private String wsUrl;
 
-
-    public String getWsUrl(){
+    public String getWsUrl() {
         AtomicReference<String> returnUrl = new AtomicReference<>(StrUtil.EMPTY);
         Optional.ofNullable(this.wsUrl).ifPresent(url -> {
             Map<String, Long> user = new HashMap<>(1);

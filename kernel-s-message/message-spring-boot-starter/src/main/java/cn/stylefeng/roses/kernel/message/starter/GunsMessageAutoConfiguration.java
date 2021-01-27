@@ -1,10 +1,7 @@
 package cn.stylefeng.roses.kernel.message.starter;
 
-import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
-import cn.stylefeng.roses.kernel.message.api.pojo.MessageWebSocketProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
@@ -19,22 +16,6 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 public class GunsMessageAutoConfiguration {
 
     public static final String WEB_SOCKET_PREFIX = "web-socket";
-
-
-    /**
-     * websocket的配置
-     *
-     * @author liuhanqing
-     * @date 2021/1/25 9:29
-     */
-    @Bean
-    @ConfigurationProperties(prefix = WEB_SOCKET_PREFIX)
-    public MessageWebSocketProperties messageWebSocketProperties() {
-        MessageWebSocketProperties properties = new MessageWebSocketProperties();
-        properties.setWsUrl(WebSocketConfigExpander.getWebSocketWsUrl());
-        return properties;
-    }
-
 
     /**
      * 开启WebSocket功能
