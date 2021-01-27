@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.menu.modular.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -127,7 +128,7 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     /**
      * 是否删除：Y-被删除，N-未删除
      */
-    @TableField("del_flag")
+    @TableField(value = "del_flag", fill = FieldFill.INSERT)
     private String delFlag;
 
     /**

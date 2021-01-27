@@ -35,7 +35,7 @@ public class SysMenuButtonRequest extends BaseRequest {
     /**
      * 菜单id，按钮需要挂在菜单下
      */
-    @NotNull(message = "菜单id不能为空", groups = {add.class, edit.class, list.class})
+    @NotNull(message = "菜单id不能为空", groups = {add.class, edit.class, list.class, def.class})
     private Long menuId;
 
     /**
@@ -61,6 +61,13 @@ public class SysMenuButtonRequest extends BaseRequest {
      * 批量删除验证分组
      */
     public @interface batchDelete {
+
+    }
+
+    /**
+     * 一键添加系统默认按钮
+     */
+    public @interface def {
 
     }
 

@@ -42,6 +42,18 @@ public class SysMenuButtonController {
     }
 
     /**
+     * 添加系统菜单按钮-默认按钮
+     *
+     * @author chenjinlong
+     * @date 2021/1/9 11:28
+     */
+    @PostResource(name = "添加系统默认菜单按钮", path = "/sysMenuButton/addSystemDefaultButton")
+    public ResponseData addSystemDefaultButton(@RequestBody @Validated(SysMenuButtonRequest.def.class) SysMenuButtonRequest sysMenuButtonRequest) {
+        sysMenuButtonService.addSystemDefaultButton(sysMenuButtonRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 获取菜单按钮详情
      *
      * @param sysMenuButtonRequest 菜单按钮id
@@ -76,7 +88,7 @@ public class SysMenuButtonController {
      */
     @PostResource(name = "删除单个系统菜单按钮", path = "/sysMenuButton/delete")
     public ResponseData delete(@RequestBody @Validated(SysMenuButtonRequest.delete.class) SysMenuButtonRequest sysMenuButtonRequest) {
-        sysMenuButtonService.delete(sysMenuButtonRequest);
+        sysMenuButtonService.del(sysMenuButtonRequest);
         return new SuccessResponseData();
     }
 
@@ -89,7 +101,7 @@ public class SysMenuButtonController {
      */
     @PostResource(name = "批量删除多个系统菜单按钮", path = "/sysMenuButton/batchDelete")
     public ResponseData batchDelete(@RequestBody @Validated(SysMenuButtonRequest.batchDelete.class) SysMenuButtonRequest sysMenuButtonRequest) {
-        sysMenuButtonService.batchDelete(sysMenuButtonRequest);
+        sysMenuButtonService.batchDel(sysMenuButtonRequest);
         return new SuccessResponseData();
     }
 
@@ -102,7 +114,7 @@ public class SysMenuButtonController {
      */
     @GetResource(name = "获取菜单按钮列表", path = "/sysMenuButton/pageList")
     public ResponseData pageList(@Validated(SysMenuButtonRequest.list.class) SysMenuButtonRequest sysMenuButtonRequest) {
-        PageResult<SysMenuButton> pageResult = sysMenuButtonService.pageList(sysMenuButtonRequest);
+        PageResult<SysMenuButton> pageResult = sysMenuButtonService.findPage(sysMenuButtonRequest);
         return new SuccessResponseData(pageResult);
     }
 
