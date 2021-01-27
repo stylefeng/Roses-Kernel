@@ -1,11 +1,13 @@
 package cn.stylefeng.roses.kernel.message.api.pojo;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * 发送系统消息的参数
@@ -55,5 +57,10 @@ public class MessageSendParam extends BaseRequest {
      */
     @NotBlank(message = "业务类型不能为空", groups = {add.class, edit.class})
     private String businessType;
+
+    /**
+     * 消息发送时间
+     */
+    private Date messageSendTime;
 
 }

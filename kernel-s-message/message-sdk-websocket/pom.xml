@@ -11,31 +11,29 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>message-spring-boot-starter</artifactId>
+    <artifactId>message-sdk-websocket</artifactId>
 
     <packaging>jar</packaging>
 
     <dependencies>
 
-        <!--消息管理-->
+        <!--消息模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-business</artifactId>
+            <artifactId>message-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-
-        <!--消息默认记录到库中-->
+        <!--websocket 依赖-->
         <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-sdk-db</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-sdk-websocket</artifactId>
+            <artifactId>auth-api</artifactId>
             <version>1.0.0</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

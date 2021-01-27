@@ -19,6 +19,7 @@
         <module>message-api</module>
         <module>message-business</module>
         <module>message-sdk-db</module>
+        <module>message-sdk-websocket</module>
         <module>message-spring-boot-starter</module>
     </modules>
 

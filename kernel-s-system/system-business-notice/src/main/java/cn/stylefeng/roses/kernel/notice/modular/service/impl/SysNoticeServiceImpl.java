@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,6 +57,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         // 消息业务类型
         message.setBusinessType(MessageBusinessTypeEnum.SYS_NOTICE.getCode());
         message.setBusinessId(sysNotice.getNoticeId());
+        message.setMessageSendTime(new Date());
         messageApi.sendMessage(message);
     }
 
