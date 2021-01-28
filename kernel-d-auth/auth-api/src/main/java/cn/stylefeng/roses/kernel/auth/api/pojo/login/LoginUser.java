@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
+import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -101,7 +102,7 @@ public class LoginUser implements Serializable {
      * <p>
      * 默认语种是中文
      */
-    private String tranLanguageCode = "chinese";
+    private String tranLanguageCode = RuleConstants.CHINES_TRAN_LANGUAGE_CODE;
 
     public String getWsUrl() {
         AtomicReference<String> returnUrl = new AtomicReference<>(StrUtil.EMPTY);

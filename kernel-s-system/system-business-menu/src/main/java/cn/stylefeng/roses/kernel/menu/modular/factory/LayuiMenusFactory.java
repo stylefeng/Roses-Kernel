@@ -1,18 +1,20 @@
 package cn.stylefeng.roses.kernel.menu.modular.factory;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
+import cn.stylefeng.roses.kernel.i18n.api.constants.TranslationConstants;
+import cn.stylefeng.roses.kernel.i18n.api.context.TranslationContext;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
+import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiIndexMenuTreeNode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -58,6 +60,16 @@ public class LayuiMenusFactory {
 
                 // 每个节点的url要加上context-path
                 layuiIndexMenuTreeNode.setLayuiPath(contextPath + appMenu.getLayuiPath());
+
+                // 如果当前用户时非中文状态，则翻译菜单
+                String tranLanguageCode = LoginContext.me().getLoginUser().getTranLanguageCode();
+                if (!RuleConstants.CHINES_TRAN_LANGUAGE_CODE.equals(tranLanguageCode)) {
+                    Map<String, String> tranDictBook = TranslationContext.me().getTranslationDictByLanguage(tranLanguageCode);
+                    String translatedName = tranDictBook.get(TranslationConstants.TRAN_CODE_MENU_PREFIX + appMenu.getMenuCode().toUpperCase());
+                    if (StrUtil.isNotBlank(translatedName)) {
+                        layuiIndexMenuTreeNode.setMenuName(translatedName);
+                    }
+                }
 
                 layuiIndexMenuTreeNodes.add(layuiIndexMenuTreeNode);
             }

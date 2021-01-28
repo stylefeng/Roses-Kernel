@@ -18,4 +18,9 @@ public interface TranslationConstants {
      */
     String I18N_EXCEPTION_STEP_CODE = "25";
 
+    /**
+     * 菜单类型的tranCode前缀
+     */
+    String TRAN_CODE_MENU_PREFIX = "MENU_";
+
 }
