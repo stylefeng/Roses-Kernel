@@ -14,7 +14,7 @@ public enum MessageBusinessTypeEnum {
     /**
      * 已读
      */
-    SYS_NOTICE("sys_notice", "系统通知", "/sysNotice/detail");
+    SYS_NOTICE("sys_notice", "通知", "/sysNotice/detail");
 
     private final String code;
 
@@ -36,6 +36,18 @@ public enum MessageBusinessTypeEnum {
         for (MessageBusinessTypeEnum flagEnum : MessageBusinessTypeEnum.values()) {
             if (flagEnum.getCode().equals(code)) {
                 return flagEnum;
+            }
+        }
+        return null;
+    }
+
+    public static String getName(String code) {
+        if (code == null) {
+            return null;
+        }
+        for (MessageBusinessTypeEnum flagEnum : MessageBusinessTypeEnum.values()) {
+            if (flagEnum.getCode().equals(code)) {
+                return flagEnum.name;
             }
         }
         return null;

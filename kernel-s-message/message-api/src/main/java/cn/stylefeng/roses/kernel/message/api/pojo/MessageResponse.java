@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.message.api.pojo;
 
+import cn.stylefeng.roses.kernel.message.api.enums.MessageBusinessTypeEnum;
 import cn.stylefeng.roses.kernel.message.api.enums.MessagePriorityLevelEnum;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import lombok.Data;
@@ -95,6 +96,14 @@ public class MessageResponse implements Serializable {
         AtomicReference<String> value = new AtomicReference<>("");
         Optional.ofNullable(this.readFlag).ifPresent(val ->{
             value.set(MessageReadFlagEnum.getName(this.readFlag));
+        });
+        return value.get();
+    }
+
+    public String getBusinessTypeValue(){
+        AtomicReference<String> value = new AtomicReference<>("");
+        Optional.ofNullable(this.businessType).ifPresent(val ->{
+            value.set(MessageBusinessTypeEnum.getName(this.businessType));
         });
         return value.get();
     }
