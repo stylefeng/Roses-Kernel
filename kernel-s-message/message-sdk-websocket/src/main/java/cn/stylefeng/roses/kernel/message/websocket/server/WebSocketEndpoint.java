@@ -58,7 +58,7 @@ public class WebSocketEndpoint {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        log.info("来自客户端的消息:" + message);
+        log.debug("来自客户端的消息:" + message);
     }
 
     /**
@@ -72,7 +72,9 @@ public class WebSocketEndpoint {
     @OnError
     public void onError(Session session, Throwable error) {
         log.error("WebSocket发生错误");
-        error.printStackTrace();
+        if (log.isDebugEnabled()) {
+            error.printStackTrace();
+        }
     }
 
 }
