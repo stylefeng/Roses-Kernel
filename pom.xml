@@ -49,6 +49,9 @@
         <!--文件操作模块-->
         <module>kernel-d-file</module>
 
+        <!--动态代码执行-->
+        <module>kernel-d-groovy</module>
+
         <!--文件操作模块-->
         <module>kernel-d-i18n</module>
 
@@ -110,6 +113,7 @@
         <minio.version>3.0.10</minio.version>
         <rocketmq.version>4.5.2</rocketmq.version>
         <easy.captcha>1.6.2</easy.captcha>
+        <groovy.version>3.0.7</groovy.version>
     </properties>
 
     <dependencyManagement>
@@ -252,6 +256,14 @@
                 <groupId>com.github.whvcse</groupId>
                 <artifactId>easy-captcha</artifactId>
                 <version>${easy.captcha}</version>
+            </dependency>
+
+            <!-- groovy动态代码执行 -->
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
+                <type>pom</type>
             </dependency>
 
         </dependencies>
