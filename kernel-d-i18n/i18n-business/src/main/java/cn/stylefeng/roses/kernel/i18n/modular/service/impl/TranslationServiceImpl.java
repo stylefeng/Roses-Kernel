@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dict.api.DictApi;
 import cn.stylefeng.roses.kernel.i18n.api.context.TranslationContext;
 import cn.stylefeng.roses.kernel.i18n.api.exception.TranslationException;
 import cn.stylefeng.roses.kernel.i18n.api.exception.enums.TranslationExceptionEnum;
@@ -15,10 +16,12 @@ import cn.stylefeng.roses.kernel.i18n.modular.factory.TranslationDictFactory;
 import cn.stylefeng.roses.kernel.i18n.modular.mapper.TranslationMapper;
 import cn.stylefeng.roses.kernel.i18n.modular.service.TranslationService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +33,9 @@ import java.util.List;
  */
 @Service
 public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Translation> implements TranslationService {
+
+    @Resource
+    private DictApi dictApi;
 
     @Override
     public void add(TranslationRequest translationRequest) {
@@ -77,6 +83,18 @@ public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Trans
         LambdaQueryWrapper<Translation> wrapper = createWrapper(translationRequest);
         Page<Translation> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
+    }
+
+    @Override
+    public void deleteTranLanguage(TranslationRequest translationRequest) {
+
+        // 删除对应的字典信息
+        dictApi.deleteByDictId(translationRequest.getDictId());
+
+        // 删除该语言下的所有翻译项
+        LambdaUpdateWrapper<Translation> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Translation::getTranLanguageCode, translationRequest.getTranLanguageCode());
+        this.remove(wrapper);
     }
 
     @Override

@@ -66,6 +66,18 @@ public class TranslationController {
     }
 
     /**
+     * 删除某个语种
+     *
+     * @author fengshuonan
+     * @date 2021/1/24 19:20
+     */
+    @PostResource(name = "删除某个语种", path = "/i18n/deleteTranLanguage")
+    public ResponseData deleteTranLanguage(@RequestBody @Validated(TranslationRequest.deleteTranLanguage.class) TranslationRequest translationRequest) {
+        this.translationService.deleteTranLanguage(translationRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 查看多语言详情
      *
      * @author fengshuonan

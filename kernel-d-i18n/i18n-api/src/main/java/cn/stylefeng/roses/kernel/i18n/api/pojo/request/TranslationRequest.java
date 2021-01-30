@@ -40,7 +40,7 @@ public class TranslationRequest extends BaseRequest {
     /**
      * 语种字典
      */
-    @NotBlank(message = "tranLanguageCode不能为空", groups = {add.class, edit.class, changeUserLanguage.class})
+    @NotBlank(message = "tranLanguageCode不能为空", groups = {add.class, edit.class, changeUserLanguage.class, deleteTranLanguage.class})
     private String tranLanguageCode;
 
     /**
@@ -50,9 +50,21 @@ public class TranslationRequest extends BaseRequest {
     private String tranValue;
 
     /**
+     * 字典id，用在删除语种
+     */
+    @NotNull(message = "字典id", groups = {deleteTranLanguage.class})
+    private Long dictId;
+
+    /**
      * 改变当前用户多语言
      */
     public @interface changeUserLanguage {
+    }
+
+    /**
+     * 删除语种
+     */
+    public @interface deleteTranLanguage {
     }
 
 }

@@ -70,4 +70,13 @@ public interface TranslationService extends IService<Translation>, TranslationPe
      */
     PageResult<Translation> findPage(TranslationRequest translationRequest);
 
+    /**
+     * 删除语种
+     *
+     * @param translationRequest 参数对象
+     * @author fengshuonan
+     * @date 2021/1/30 10:00
+     */
+    void deleteTranLanguage(TranslationRequest translationRequest);
+
 }

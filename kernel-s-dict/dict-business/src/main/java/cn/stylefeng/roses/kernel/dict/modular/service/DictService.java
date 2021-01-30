@@ -122,7 +122,6 @@ public interface DictService extends IService<SysDict>, DictApi {
      */
     List<ZTreeNode> dictZTree(DictRequest dictRequest);
 
-
     /**
      * 分页查询
      *

@@ -353,6 +353,11 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
         return simpleDictList;
     }
 
+    @Override
+    public void deleteByDictId(Long dictId) {
+        this.removeById(dictId);
+    }
+
     /**
      * 批量修改pids的请求
      *

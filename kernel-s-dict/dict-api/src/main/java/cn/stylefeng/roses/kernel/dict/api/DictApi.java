@@ -41,4 +41,13 @@ public interface DictApi {
      */
     List<SimpleDict> getDictDetailsByDictTypeCode(String dictTypeCode);
 
+    /**
+     * 删除字典，通过dictId
+     *
+     * @param dictId 字典id
+     * @author fengshuonan
+     * @date 2021/1/30 10:03
+     */
+    void deleteByDictId(Long dictId);
+
 }
