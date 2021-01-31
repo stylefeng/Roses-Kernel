@@ -22,26 +22,20 @@
         <!--规则模块，开发规则-->
         <module>kernel-a-rule</module>
 
-        <!--dao框架-->
-        <module>kernel-d-db</module>
-
         <!--认证和鉴权模块-->
         <module>kernel-d-auth</module>
+
+        <!--缓存模块-->
+        <module>kernel-d-cache</module>
 
         <!--系统配置表-->
         <module>kernel-d-config</module>
 
-        <!--参数校验模块-->
-        <module>kernel-d-validator</module>
+        <!--dao框架-->
+        <module>kernel-d-db</module>
 
-        <!--wrapper包装模块-->
-        <module>kernel-d-wrapper</module>
-
-        <!--jwt模块，用于token校验-->
-        <module>kernel-d-jwt</module>
-
-        <!--缓存模块-->
-        <module>kernel-d-cache</module>
+        <!--多数据源模块-->
+        <module>kernel-d-ds-container</module>
 
         <!--邮件发送模块-->
         <module>kernel-d-email</module>
@@ -55,26 +49,35 @@
         <!--文件操作模块-->
         <module>kernel-d-i18n</module>
 
-        <!--sms模块-->
-        <module>kernel-d-sms</module>
-
-        <!--定时任务模块-->
-        <module>kernel-d-timer</module>
+        <!--jwt模块，用于token校验-->
+        <module>kernel-d-jwt</module>
 
         <!--日志记录模块-->
         <module>kernel-d-log</module>
-
-        <!--多数据源模块-->
-        <module>kernel-d-ds-container</module>
-
-        <!--资源扫描模块-->
-        <module>kernel-d-scanner</module>
 
         <!--office模块-->
         <module>kernel-d-office</module>
 
         <!--拼音工具模块-->
         <module>kernel-d-pinyin</module>
+
+        <!--资源扫描模块-->
+        <module>kernel-d-scanner</module>
+
+        <!--sms模块-->
+        <module>kernel-d-sms</module>
+
+        <!--定时任务模块-->
+        <module>kernel-d-timer</module>
+
+        <!--参数校验模块-->
+        <module>kernel-d-validator</module>
+
+        <!--wrapper包装模块-->
+        <module>kernel-d-wrapper</module>
+
+        <!--系统监控模块-->
+        <module>kernel-o-monitor</module>
 
         <!--演示环境-->
         <module>kernel-s-demo</module>
@@ -87,6 +90,7 @@
 
         <!--系统管理基础业务-->
         <module>kernel-s-system</module>
+
     </modules>
 
     <properties>
