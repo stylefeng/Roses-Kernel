@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.pojo.organization.layui;
 
 import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
+import cn.stylefeng.roses.kernel.rule.abstracts.AbstractXmSelectNode;
 import lombok.Data;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * @date 2020/12/27 18:36
  */
 @Data
-public class LayuiOrganizationTreeNode implements AbstractTreeNode {
+public class LayuiOrganizationTreeNode implements AbstractTreeNode, AbstractXmSelectNode {
 
     /**
      * 父id，一级节点父id是0
@@ -52,6 +53,31 @@ public class LayuiOrganizationTreeNode implements AbstractTreeNode {
     @Override
     public void setChildrenNodes(List childrenNodes) {
         this.children = childrenNodes;
+    }
+
+    @Override
+    public String getName() {
+        return this.title;
+    }
+
+    @Override
+    public String getValue() {
+        return String.valueOf(id);
+    }
+
+    @Override
+    public Boolean getSelected() {
+        return false;
+    }
+
+    @Override
+    public Boolean getDisabled() {
+        return false;
+    }
+
+    @Override
+    public List getChildren() {
+        return this.children;
     }
 
 }

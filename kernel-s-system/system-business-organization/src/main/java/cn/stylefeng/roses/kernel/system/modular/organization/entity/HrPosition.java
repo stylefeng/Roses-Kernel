@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import cn.stylefeng.roses.kernel.rule.abstracts.AbstractXmSelectNode;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 系统职位表
@@ -19,7 +21,7 @@ import java.math.BigDecimal;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("hr_position")
-public class HrPosition extends BaseEntity {
+public class HrPosition extends BaseEntity implements AbstractXmSelectNode {
 
     /**
      * 主键
@@ -60,7 +62,31 @@ public class HrPosition extends BaseEntity {
     /**
      * 删除标记：Y-已删除，N-未删除
      */
-    @TableField(value = "del_flag",fill = FieldFill.INSERT)
+    @TableField(value = "del_flag", fill = FieldFill.INSERT)
     private String delFlag;
 
+    @Override
+    public String getName() {
+        return this.positionName;
+    }
+
+    @Override
+    public String getValue() {
+        return String.valueOf(positionId);
+    }
+
+    @Override
+    public Boolean getSelected() {
+        return false;
+    }
+
+    @Override
+    public Boolean getDisabled() {
+        return false;
+    }
+
+    @Override
+    public List<?> getChildren() {
+        return null;
+    }
 }
