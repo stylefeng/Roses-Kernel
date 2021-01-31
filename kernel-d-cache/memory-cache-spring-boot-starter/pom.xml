@@ -6,29 +6,21 @@
 
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>roses-kernel</artifactId>
+        <artifactId>kernel-d-cache</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>kernel-d-cache</artifactId>
+    <artifactId>memory-cache-spring-boot-starter</artifactId>
 
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>cache-api</module>
-        <module>cache-sdk-memory</module>
-        <module>cache-sdk-redis</module>
-        <module>memory-cache-spring-boot-starter</module>
-        <module>redis-spring-boot-starter</module>
-    </modules>
+    <packaging>jar</packaging>
 
     <dependencies>
 
-        <!-- 开发规则 -->
+        <!--内存缓存的sdk-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>kernel-a-rule</artifactId>
+            <artifactId>cache-sdk-memory</artifactId>
             <version>1.0.0</version>
         </dependency>
 

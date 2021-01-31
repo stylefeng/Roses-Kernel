@@ -28,4 +28,9 @@ public interface CacheConstants {
      */
     Long NONE_EXPIRED_TIME = 1000L * 3600 * 24 * 999;
 
+    /**
+     * 默认缓存的过期时间，10分钟
+     */
+    Long DEFAULT_CACHE_TIMEOUT = 1000L * 60 * 10;
+
 }
