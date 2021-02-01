@@ -109,6 +109,25 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         this.save(sysMenu);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void del(SysMenuRequest sysMenuRequest) {
+
+        Long id = sysMenuRequest.getMenuId();
+
+        // 获取所有子级的节点id
+        Set<Long> childIdList = this.dbOperatorApi.findSubListByParentId("sys_menu", "menu_pids", "menu_id", id);
+        childIdList.add(id);
+
+        // 逻辑删除，设置删除标识
+        LambdaUpdateWrapper<SysMenu> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.in(SysMenu::getMenuId, childIdList).set(SysMenu::getDelFlag, YesOrNotEnum.Y.getCode());
+        this.update(updateWrapper);
+
+        // 删除该菜单下的按钮
+        sysMenuButtonService.deleteMenuButtonByMenuId(id);
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(SysMenuRequest sysMenuRequest) {
@@ -128,25 +147,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         oldMenu.setStatusFlag(null);
 
         this.updateById(oldMenu);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void delete(SysMenuRequest sysMenuRequest) {
-
-        Long id = sysMenuRequest.getMenuId();
-
-        // 获取所有子级的节点id
-        Set<Long> childIdList = this.dbOperatorApi.findSubListByParentId("sys_menu", "menu_pids", "menu_id", id);
-        childIdList.add(id);
-
-        // 逻辑删除，设置删除标识
-        LambdaUpdateWrapper<SysMenu> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.in(SysMenu::getMenuId, childIdList).set(SysMenu::getDelFlag, YesOrNotEnum.Y.getCode());
-        this.update(updateWrapper);
-
-        // 删除该菜单下的按钮
-        sysMenuButtonService.deleteMenuButtonByMenuId(id);
     }
 
     @Override
@@ -170,6 +170,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
 
         return sysMenu;
+    }
+
+    @Override
+    public List<SysMenu> findList(SysMenuRequest sysMenuRequest) {
+
+        LambdaQueryWrapper<SysMenu> wrapper = createWrapper(sysMenuRequest);
+
+        List<SysMenu> sysMenuList = this.list(wrapper);
+
+        // 将结果集处理成树
+        return new DefaultTreeBuildFactory<SysMenu>().doTreeBuild(sysMenuList);
     }
 
     @Override
@@ -214,17 +225,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         zTreeNodes.add(ZTreeNode.createParent());
 
         return zTreeNodes;
-    }
-
-    @Override
-    public List<SysMenu> list(SysMenuRequest sysMenuRequest) {
-
-        LambdaQueryWrapper<SysMenu> wrapper = createWrapper(sysMenuRequest);
-
-        List<SysMenu> sysMenuList = this.list(wrapper);
-
-        // 将结果集处理成树
-        return new DefaultTreeBuildFactory<SysMenu>().doTreeBuild(sysMenuList);
     }
 
     @Override

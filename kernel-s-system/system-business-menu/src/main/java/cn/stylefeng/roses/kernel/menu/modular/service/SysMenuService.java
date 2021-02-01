@@ -55,6 +55,15 @@ public interface SysMenuService extends IService<SysMenu> {
     void add(SysMenuRequest sysMenuRequest);
 
     /**
+     * 删除系统菜单
+     *
+     * @param sysMenuRequest 删除参数
+     * @author fengshuonan
+     * @date 2020/3/27 9:03
+     */
+    void del(SysMenuRequest sysMenuRequest);
+
+    /**
      * 编辑系统菜单
      *
      * @param sysMenuRequest 编辑参数
@@ -62,15 +71,6 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2020/3/27 9:03
      */
     void edit(SysMenuRequest sysMenuRequest);
-
-    /**
-     * 删除系统菜单
-     *
-     * @param sysMenuRequest 删除参数
-     * @author fengshuonan
-     * @date 2020/3/27 9:03
-     */
-    void delete(SysMenuRequest sysMenuRequest);
 
     /**
      * 查看系统菜单
@@ -81,6 +81,16 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2020/3/27 9:03
      */
     SysMenu detail(SysMenuRequest sysMenuRequest);
+
+    /**
+     * 系统菜单列表，树形结构，用于菜单管理界面的列表展示
+     *
+     * @param sysMenuRequest 查询参数
+     * @return 菜单树表列表
+     * @author fengshuonan
+     * @date 2020/3/26 10:19
+     */
+    List<SysMenu> findList(SysMenuRequest sysMenuRequest);
 
     /**
      * 获取菜单列表（layui版本）
@@ -98,16 +108,6 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2021/1/6 21:47
      */
     List<ZTreeNode> layuiSelectParentMenuTreeList();
-
-    /**
-     * 系统菜单列表，树形结构，用于菜单管理界面的列表展示
-     *
-     * @param sysMenuRequest 查询参数
-     * @return 菜单树表列表
-     * @author fengshuonan
-     * @date 2020/3/26 10:19
-     */
-    List<SysMenu> list(SysMenuRequest sysMenuRequest);
 
     /**
      * 获取当前用户的所有菜单

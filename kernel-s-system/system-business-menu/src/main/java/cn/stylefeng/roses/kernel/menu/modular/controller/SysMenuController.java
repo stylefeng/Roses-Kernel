@@ -46,6 +46,18 @@ public class SysMenuController {
     }
 
     /**
+     * 删除系统菜单
+     *
+     * @author fengshuonan
+     * @date 2020/3/27 8:58
+     */
+    @PostResource(name = "删除系统菜单", path = "/sysMenu/delete")
+    public ResponseData delete(@RequestBody @Validated(SysMenuRequest.delete.class) SysMenuRequest sysMenuRequest) {
+        sysMenuService.del(sysMenuRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 编辑系统菜单
      *
      * @author fengshuonan
@@ -58,18 +70,6 @@ public class SysMenuController {
     }
 
     /**
-     * 删除系统菜单
-     *
-     * @author fengshuonan
-     * @date 2020/3/27 8:58
-     */
-    @PostResource(name = "删除系统菜单", path = "/sysMenu/delete")
-    public ResponseData delete(@RequestBody @Validated(SysMenuRequest.delete.class) SysMenuRequest sysMenuRequest) {
-        sysMenuService.delete(sysMenuRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 查看系统菜单
      *
      * @author fengshuonan
@@ -78,6 +78,17 @@ public class SysMenuController {
     @GetResource(name = "查看系统菜单", path = "/sysMenu/detail")
     public ResponseData detail(@Validated(SysMenuRequest.detail.class) SysMenuRequest sysMenuRequest) {
         return new SuccessResponseData(sysMenuService.detail(sysMenuRequest));
+    }
+
+    /**
+     * 系统菜单列表，树形结构，用于菜单管理界面的列表展示
+     *
+     * @author fengshuonan
+     * @date 2020/3/20 21:23
+     */
+    @GetResource(name = "系统菜单列表（树）", path = "/sysMenu/list")
+    public ResponseData list(SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData(sysMenuService.findList(sysMenuRequest));
     }
 
     /**
@@ -103,14 +114,14 @@ public class SysMenuController {
     }
 
     /**
-     * 系统菜单列表，树形结构，用于菜单管理界面的列表展示
+     * 获取主页左侧菜单列表（适配Antd Vue的版本）
      *
      * @author fengshuonan
-     * @date 2020/3/20 21:23
+     * @date 2020/4/19 15:50
      */
-    @GetResource(name = "系统菜单列表（树）", path = "/sysMenu/list")
-    public ResponseData list(SysMenuRequest sysMenuRequest) {
-        return new SuccessResponseData(sysMenuService.list(sysMenuRequest));
+    @GetResource(name = "获取主页左侧菜单列表（Antd Vue）", path = "/sysMenu/getIndexMenuAntdVue", requiredPermission = false)
+    public ResponseData getAppMenus(@Validated(SysMenuRequest.getAppMenusAntdVue.class) SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData(sysMenuService.getAntDVueIndexMenus(sysMenuRequest.getAppCode()));
     }
 
     /**
@@ -136,6 +147,19 @@ public class SysMenuController {
     }
 
     /**
+     * 获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）
+     *
+     * @author majianguo
+     * @date 2021/1/7 15:17
+     */
+    @GetResource(name = "获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）", path = "/sysMenu/getSystemAllMenusAntdv", requiredPermission = false)
+    public ResponseData getSystemAllMenusAntdv() {
+        List<AntdSysMenuResponse> sysMenuResponses = sysMenuService.getSystemAllMenusAntdv();
+        List<AntdvMenuItem> totalMenus = AntdMenusFactory.createTotalMenus(sysMenuResponses);
+        return new SuccessResponseData(totalMenus);
+    }
+
+    /**
      * 获取系统菜单平级树(包含按钮)，用于给角色授权时选择（layui版本使用）
      *
      * @author majianguo
@@ -156,30 +180,6 @@ public class SysMenuController {
     public ResponseData menuAndButtonTreeChildren(SysRoleRequest sysRoleRequest) {
         List<LayuiMenuAndButtonTreeResponse> treeResponseList = sysMenuService.getMenuAndButtonTree(sysRoleRequest, false);
         return new SuccessResponseData(treeResponseList);
-    }
-
-    /**
-     * 获取主页左侧菜单列表（适配Antd Vue的版本）
-     *
-     * @author fengshuonan
-     * @date 2020/4/19 15:50
-     */
-    @GetResource(name = "获取主页左侧菜单列表（Antd Vue）", path = "/sysMenu/getIndexMenuAntdVue", requiredPermission = false)
-    public ResponseData getAppMenus(@Validated(SysMenuRequest.getAppMenusAntdVue.class) SysMenuRequest sysMenuRequest) {
-        return new SuccessResponseData(sysMenuService.getAntDVueIndexMenus(sysMenuRequest.getAppCode()));
-    }
-
-    /**
-     * 获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）
-     *
-     * @author majianguo
-     * @date 2021/1/7 15:17
-     */
-    @GetResource(name = "获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）", path = "/sysMenu/getSystemAllMenusAntdv", requiredPermission = false)
-    public ResponseData getSystemAllMenusAntdv() {
-        List<AntdSysMenuResponse> sysMenuResponses = sysMenuService.getSystemAllMenusAntdv();
-        List<AntdvMenuItem> totalMenus = AntdMenusFactory.createTotalMenus(sysMenuResponses);
-        return new SuccessResponseData(totalMenus);
     }
 
 }
