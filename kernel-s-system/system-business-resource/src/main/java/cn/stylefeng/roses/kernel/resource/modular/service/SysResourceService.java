@@ -77,4 +77,5 @@ public interface SysResourceService extends IService<SysResource> {
      * @date 2021/1/9 15:08
      */
     List<ResourceTreeNode> getResourceTree(Long roleId, Boolean lateralFlag);
+
 }

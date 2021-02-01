@@ -133,7 +133,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
     @Override
     public List<ResourceTreeNode> getResourceTree(Long roleId, Boolean lateralFlag) {
-        // 结果
+
         List<ResourceTreeNode> res = new ArrayList<>();
 
         // 获取所有的资源
