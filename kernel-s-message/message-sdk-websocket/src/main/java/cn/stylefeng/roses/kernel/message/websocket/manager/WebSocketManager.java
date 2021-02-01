@@ -41,7 +41,7 @@ public class WebSocketManager {
     /**
      * 移除失效的Session
      *
-     * @param userId   用户id
+     * @param userId  用户id
      * @param session 用户websocketSession
      * @author liuhanqing
      * @date 2021/1/24 22:11
@@ -75,11 +75,16 @@ public class WebSocketManager {
      * @author liuhanqing
      * @date 2021/1/24 22:11
      */
-    public static void sendMessage(Long userId, String message){
-        for(Session userSession: getSessionByUserId(userId)){
-            userSession.getAsyncRemote().sendText(message);
+    public static void sendMessage(Long userId, String message) {
+        List<Session> sessionList = getSessionByUserId(userId);
+        // 增加判断不为空
+        if (!CollectionUtils.isEmpty(sessionList)) {
+            for (Session userSession : sessionList) {
+                userSession.getAsyncRemote().sendText(message);
+            }
         }
     }
+
     /**
      * 发送消息
      *
@@ -87,7 +92,7 @@ public class WebSocketManager {
      * @author liuhanqing
      * @date 2021/1/24 22:11
      */
-    public static void sendMessageToAll(String message){
+    public static void sendMessageToAll(String message) {
         for (Long userId : WebSocketManager.getUserList()) {
             sendMessage(userId, message);
         }
