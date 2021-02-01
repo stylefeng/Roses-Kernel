@@ -40,7 +40,7 @@ public interface SysTimersService extends IService<SysTimers> {
      * @author stylefeng
      * @date 2020/6/30 18:26
      */
-    void delete(SysTimersParam sysTimersParam);
+    void del(SysTimersParam sysTimersParam);
 
     /**
      * 启动任务
@@ -78,7 +78,7 @@ public interface SysTimersService extends IService<SysTimers> {
      * @author stylefeng
      * @date 2020/6/30 18:26
      */
-    PageResult<SysTimers> page(SysTimersParam sysTimersParam);
+    PageResult<SysTimers> findPage(SysTimersParam sysTimersParam);
 
     /**
      * 查询所有定时任务
@@ -88,7 +88,7 @@ public interface SysTimersService extends IService<SysTimers> {
      * @author stylefeng
      * @date 2020/6/30 18:26
      */
-    List<SysTimers> list(SysTimersParam sysTimersParam);
+    List<SysTimers> findList(SysTimersParam sysTimersParam);
 
     /**
      * 获取所有可执行的任务列表

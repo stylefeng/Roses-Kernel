@@ -58,8 +58,8 @@ public class SysTimersController {
      * @date 2020/6/30 18:26
      */
     @PostResource(name = "删除定时任务", path = "/sysTimers/delete")
-    public ResponseData delete(@RequestBody @Validated(SysTimersParam.delete.class) SysTimersParam sysTimersParam) {
-        sysTimersService.delete(sysTimersParam);
+    public ResponseData del(@RequestBody @Validated(SysTimersParam.delete.class) SysTimersParam sysTimersParam) {
+        sysTimersService.del(sysTimersParam);
         return new SuccessResponseData();
     }
 
@@ -106,7 +106,7 @@ public class SysTimersController {
      */
     @GetResource(name = "分页查询定时任务", path = "/sysTimers/page")
     public ResponseData page(SysTimersParam sysTimersParam) {
-        return new SuccessResponseData(sysTimersService.page(sysTimersParam));
+        return new SuccessResponseData(sysTimersService.findPage(sysTimersParam));
     }
 
     /**
@@ -117,7 +117,7 @@ public class SysTimersController {
      */
     @GetResource(name = "获取全部定时任务", path = "/sysTimers/list")
     public ResponseData list(SysTimersParam sysTimersParam) {
-        return new SuccessResponseData(sysTimersService.list(sysTimersParam));
+        return new SuccessResponseData(sysTimersService.findList(sysTimersParam));
     }
 
     /**
