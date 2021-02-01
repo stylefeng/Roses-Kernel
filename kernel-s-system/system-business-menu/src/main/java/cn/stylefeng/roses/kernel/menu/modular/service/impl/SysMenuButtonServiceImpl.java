@@ -46,8 +46,15 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
     }
 
     @Override
-    public SysMenuButton detail(SysMenuButtonRequest sysMenuButtonRequest) {
-        return this.queryButton(sysMenuButtonRequest);
+    public void del(SysMenuButtonRequest sysMenuButtonRequest) {
+
+        // 查询按钮
+        SysMenuButton button = this.queryButton(sysMenuButtonRequest);
+
+        // 设置为删除状态
+        button.setDelFlag(YesOrNotEnum.Y.getCode());
+
+        this.updateById(button);
     }
 
     @Override
@@ -70,15 +77,15 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
     }
 
     @Override
-    public void del(SysMenuButtonRequest sysMenuButtonRequest) {
+    public SysMenuButton detail(SysMenuButtonRequest sysMenuButtonRequest) {
+        return this.queryButton(sysMenuButtonRequest);
+    }
 
-        // 查询按钮
-        SysMenuButton button = this.queryButton(sysMenuButtonRequest);
-
-        // 设置为删除状态
-        button.setDelFlag(YesOrNotEnum.Y.getCode());
-
-        this.updateById(button);
+    @Override
+    public PageResult<SysMenuButton> findPage(SysMenuButtonRequest sysMenuButtonRequest) {
+        LambdaQueryWrapper<SysMenuButton> wrapper = this.createWrapper(sysMenuButtonRequest);
+        Page<SysMenuButton> page = this.page(PageFactory.defaultPage(), wrapper);
+        return PageResultFactory.createPageResult(page);
     }
 
     @Override
@@ -96,13 +103,6 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
 
             this.update(entity, queryWrapper);
         }
-    }
-
-    @Override
-    public PageResult<SysMenuButton> findPage(SysMenuButtonRequest sysMenuButtonRequest) {
-        LambdaQueryWrapper<SysMenuButton> wrapper = this.createWrapper(sysMenuButtonRequest);
-        Page<SysMenuButton> page = this.page(PageFactory.defaultPage(), wrapper);
-        return PageResultFactory.createPageResult(page);
     }
 
     @Override

@@ -48,6 +48,18 @@ public class SysRoleController {
     }
 
     /**
+     * 删除系统角色
+     *
+     * @author majianguo
+     * @date 2020/11/5 上午10:48
+     */
+    @PostResource(name = "角色删除", path = "/sysRole/delete")
+    public ResponseData delete(@RequestBody @Validated(SysRoleRequest.delete.class) SysRoleRequest sysRoleRequest) {
+        sysRoleService.del(sysRoleRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 编辑系统角色
      *
      * @author majianguo
@@ -60,15 +72,25 @@ public class SysRoleController {
     }
 
     /**
-     * 删除系统角色
+     * 查看系统角色
      *
      * @author majianguo
-     * @date 2020/11/5 上午10:48
+     * @date 2020/11/5 上午10:50
      */
-    @PostResource(name = "角色删除", path = "/sysRole/delete")
-    public ResponseData delete(@RequestBody @Validated(SysRoleRequest.delete.class) SysRoleRequest sysRoleRequest) {
-        sysRoleService.delete(sysRoleRequest);
-        return new SuccessResponseData();
+    @GetResource(name = "角色查看", path = "/sysRole/detail")
+    public ResponseData detail(@Validated(SysRoleRequest.detail.class) SysRoleRequest sysRoleRequest) {
+        return new SuccessResponseData(sysRoleService.detail(sysRoleRequest));
+    }
+
+    /**
+     * 查询系统角色
+     *
+     * @author majianguo
+     * @date 2020/11/5 上午10:19
+     */
+    @GetResource(name = "查询角色", path = "/sysRole/page")
+    public ResponseData page(SysRoleRequest sysRoleRequest) {
+        return new SuccessResponseData(sysRoleService.findPage(sysRoleRequest));
     }
 
     /**
@@ -105,28 +127,6 @@ public class SysRoleController {
     public ResponseData grantData(@RequestBody @Validated(SysRoleRequest.grantDataScope.class) SysRoleRequest sysRoleParam) {
         sysRoleService.grantDataScope(sysRoleParam);
         return new SuccessResponseData();
-    }
-
-    /**
-     * 查看系统角色
-     *
-     * @author majianguo
-     * @date 2020/11/5 上午10:50
-     */
-    @GetResource(name = "角色查看", path = "/sysRole/detail")
-    public ResponseData detail(@Validated(SysRoleRequest.detail.class) SysRoleRequest sysRoleRequest) {
-        return new SuccessResponseData(sysRoleService.detail(sysRoleRequest));
-    }
-
-    /**
-     * 查询系统角色
-     *
-     * @author majianguo
-     * @date 2020/11/5 上午10:19
-     */
-    @GetResource(name = "查询角色", path = "/sysRole/page")
-    public ResponseData page(SysRoleRequest sysRoleRequest) {
-        return new SuccessResponseData(sysRoleService.page(sysRoleRequest));
     }
 
     /**
