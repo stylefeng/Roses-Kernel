@@ -118,6 +118,7 @@
         <rocketmq.version>4.5.2</rocketmq.version>
         <easy.captcha>1.6.2</easy.captcha>
         <groovy.version>3.0.7</groovy.version>
+        <oshi.version>3.9.1</oshi.version>
     </properties>
 
     <dependencyManagement>
@@ -268,6 +269,13 @@
                 <artifactId>groovy-all</artifactId>
                 <version>${groovy.version}</version>
                 <type>pom</type>
+            </dependency>
+
+            <!--硬件信息获取-->
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi.version}</version>
             </dependency>
 
         </dependencies>
