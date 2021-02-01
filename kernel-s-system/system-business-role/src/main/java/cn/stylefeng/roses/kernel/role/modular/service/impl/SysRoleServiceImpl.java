@@ -93,42 +93,31 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public void add(SysRoleRequest sysRoleRequest) {
+
         SysRole sysRole = new SysRole();
         BeanUtil.copyProperties(sysRoleRequest, sysRole);
+
         // 默认设置为启用
         sysRole.setStatusFlag(StatusEnum.ENABLE.getCode());
+
         // 默认设置为普通角色
         sysRole.setRoleSystemFlag(YesOrNotEnum.N.getCode());
+
         //默认数据范围
         sysRole.setDataScopeType(DataScopeTypeEnum.SELF.getCode());
+
         this.save(sysRole);
     }
 
     @Override
-    public void edit(SysRoleRequest sysRoleRequest) {
-        SysRole sysRole = this.querySysRole(sysRoleRequest);
-        BeanUtil.copyProperties(sysRoleRequest, sysRole);
-
-        // 不能修改状态，用修改状态接口修改状态
-        sysRole.setStatusFlag(null);
-
-        this.updateById(sysRole);
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(SysRoleRequest sysRoleRequest) {
+    public void del(SysRoleRequest sysRoleRequest) {
         SysRole sysRole = this.querySysRole(sysRoleRequest);
 
         // 超级管理员不能删除
         if (YesOrNotEnum.Y.getCode().equals(sysRole.getRoleSystemFlag())) {
             throw new ServiceException(SysRoleExceptionEnum.SYSTEM_ROLE_CANT_DELETE);
         }
-        // 超级管理员不能删除
-        // TODO 暂时弃用
-        //if (SYSTEM_ADMIN_ROLE_CODE.equals(sysRole.getRoleCode())) {
-        //    throw new ServiceException(SUPER_ADMIN_CANT_DELETE);
-        //}
 
         // 逻辑删除，设为删除标志
         sysRole.setDelFlag(YesOrNotEnum.Y.getCode());
@@ -145,6 +134,62 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // 级联删除该角色对应的角色-菜单表关联信息
         sysRoleResourceService.deleteRoleResourceListByRoleId(id);
+    }
+
+    @Override
+    public void edit(SysRoleRequest sysRoleRequest) {
+        SysRole sysRole = this.querySysRole(sysRoleRequest);
+        BeanUtil.copyProperties(sysRoleRequest, sysRole);
+
+        // 不能修改状态，用修改状态接口修改状态
+        sysRole.setStatusFlag(null);
+
+        this.updateById(sysRole);
+    }
+
+    @Override
+    public SysRoleResponse detail(SysRoleRequest sysRoleRequest) {
+        SysRole sysRole = this.querySysRole(sysRoleRequest);
+        SysRoleResponse roleResponse = new SysRoleResponse();
+        BeanUtil.copyProperties(sysRole, roleResponse);
+
+        // 填充数据范围类型枚举
+        roleResponse.setDataScopeTypeEnum(DataScopeTypeEnum.codeToEnum(sysRole.getDataScopeType()));
+
+        return roleResponse;
+    }
+
+    @Override
+    public PageResult<SysRole> findPage(SysRoleRequest sysRoleRequest) {
+        LambdaQueryWrapper<SysRole> wrapper = createWrapper(sysRoleRequest);
+        Page<SysRole> sysRolePage = this.page(PageFactory.defaultPage(), wrapper);
+        return PageResultFactory.createPageResult(sysRolePage);
+    }
+
+    @Override
+    public List<SimpleDict> findList(SysRoleRequest sysRoleParam) {
+        List<SimpleDict> dictList = CollectionUtil.newArrayList();
+        LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
+        if (ObjectUtil.isNotNull(sysRoleParam)) {
+
+            // 根据角色名称或编码模糊查询
+            if (ObjectUtil.isNotEmpty(sysRoleParam.getRoleName())) {
+                queryWrapper.and(i -> i.like(SysRole::getRoleName, sysRoleParam.getRoleName()).or().like(SysRole::getRoleCode, sysRoleParam.getRoleName()));
+            }
+        }
+
+        // 只查询正常状态
+        queryWrapper.eq(SysRole::getStatusFlag, StatusEnum.ENABLE.getCode());
+
+        // 根据排序升序排列，序号越小越在前
+        queryWrapper.orderByAsc(SysRole::getRoleSort);
+        this.list(queryWrapper).forEach(sysRole -> {
+            SimpleDict simpleDict = new SimpleDict();
+            simpleDict.setId(sysRole.getRoleId());
+            simpleDict.setName(sysRole.getRoleName() + SymbolConstant.LEFT_SQUARE_BRACKETS + sysRole.getRoleCode() + SymbolConstant.RIGHT_SQUARE_BRACKETS);
+            dictList.add(simpleDict);
+        });
+        return dictList;
     }
 
     @Override
@@ -186,25 +231,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public SysRoleResponse detail(SysRoleRequest sysRoleRequest) {
-        SysRole sysRole = this.querySysRole(sysRoleRequest);
-        SysRoleResponse roleResponse = new SysRoleResponse();
-        BeanUtil.copyProperties(sysRole, roleResponse);
-
-        // 填充数据范围类型枚举
-        roleResponse.setDataScopeTypeEnum(DataScopeTypeEnum.codeToEnum(sysRole.getDataScopeType()));
-
-        return roleResponse;
-    }
-
-    @Override
-    public PageResult<SysRole> page(SysRoleRequest sysRoleRequest) {
-        LambdaQueryWrapper<SysRole> wrapper = createWrapper(sysRoleRequest);
-        Page<SysRole> sysRolePage = this.page(PageFactory.defaultPage(), wrapper);
-        return PageResultFactory.createPageResult(sysRolePage);
-    }
-
-    @Override
     public List<SimpleDict> dropDown() {
         List<SimpleDict> dictList = CollectionUtil.newArrayList();
         LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
@@ -243,38 +269,54 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public List<SimpleDict> list(SysRoleRequest sysRoleParam) {
-        List<SimpleDict> dictList = CollectionUtil.newArrayList();
-        LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
-        if (ObjectUtil.isNotNull(sysRoleParam)) {
-
-            // 根据角色名称或编码模糊查询
-            if (ObjectUtil.isNotEmpty(sysRoleParam.getRoleName())) {
-                queryWrapper.and(i -> i.like(SysRole::getRoleName, sysRoleParam.getRoleName()).or().like(SysRole::getRoleCode, sysRoleParam.getRoleName()));
-            }
-        }
-
-        // 只查询正常状态
-        queryWrapper.eq(SysRole::getStatusFlag, StatusEnum.ENABLE.getCode());
-
-        // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(SysRole::getRoleSort);
-        this.list(queryWrapper).forEach(sysRole -> {
-            SimpleDict simpleDict = new SimpleDict();
-            simpleDict.setId(sysRole.getRoleId());
-            simpleDict.setName(sysRole.getRoleName() + SymbolConstant.LEFT_SQUARE_BRACKETS + sysRole.getRoleCode() + SymbolConstant.RIGHT_SQUARE_BRACKETS);
-            dictList.add(simpleDict);
-        });
-        return dictList;
-    }
-
-    @Override
     public String getNameByRoleId(Long roleId) {
         SysRole sysRole = this.getById(roleId);
         if (ObjectUtil.isEmpty(sysRole)) {
             throw new SystemModularException(SysRoleExceptionEnum.ROLE_NOT_EXIST);
         }
         return sysRole.getRoleName();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void grantMenuAndButton(SysRoleRequest sysRoleMenuButtonRequest) {
+        // 清除该角色之前的菜单
+        LambdaQueryWrapper<SysRoleMenu> sysRoleMenuLqw = new LambdaQueryWrapper<>();
+        sysRoleMenuLqw.eq(SysRoleMenu::getRoleId, sysRoleMenuButtonRequest.getRoleId());
+        roleMenuService.remove(sysRoleMenuLqw);
+
+        // 清除该角色之前的按钮授权
+        LambdaQueryWrapper<SysRoleMenuButton> menuButtonLqw = new LambdaQueryWrapper<>();
+        menuButtonLqw.eq(SysRoleMenuButton::getRoleId, sysRoleMenuButtonRequest.getRoleId());
+        sysRoleMenuButtonService.remove(menuButtonLqw);
+
+        // 新增菜单
+        List<Long> menuIdList = sysRoleMenuButtonRequest.getGrantMenuIdList();
+        if (ObjectUtil.isNotEmpty(menuIdList)) {
+            List<SysRoleMenu> sysRoleMenus = new ArrayList<>();
+            for (Long menuId : menuIdList) {
+                SysRoleMenu item = new SysRoleMenu();
+                item.setRoleId(sysRoleMenuButtonRequest.getRoleId());
+                item.setMenuId(menuId);
+                sysRoleMenus.add(item);
+            }
+            roleMenuService.saveBatch(sysRoleMenus);
+        }
+
+        // 新增按钮
+        List<SysRoleMenuButtonRequest> menuButtonList = sysRoleMenuButtonRequest.getGrantMenuButtonIdList();
+        if (ObjectUtil.isNotEmpty(menuButtonList)) {
+            List<SysRoleMenuButton> sysRoleMenuButtons = new ArrayList<>();
+            for (SysRoleMenuButtonRequest menuButton : menuButtonList) {
+                SysRoleMenuButton item = new SysRoleMenuButton();
+                item.setRoleId(sysRoleMenuButtonRequest.getRoleId());
+                item.setButtonId(menuButton.getButtonId());
+                item.setButtonCode(menuButton.getButtonCode());
+                sysRoleMenuButtons.add(item);
+            }
+            sysRoleMenuButtonService.saveBatch(sysRoleMenuButtons);
+        }
+
     }
 
     @Override
@@ -380,48 +422,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         List<SysRoleMenuButton> sysRoleMenuButtons = sysRoleMenuButtonService.list(sysRoleMenuButtonLambdaQueryWrapper);
         List<SysRoleMenuButtonResponse> sysRoleMenuButtonResponses = sysRoleMenuButtons.parallelStream().map(item -> BeanUtil.copyProperties(item, SysRoleMenuButtonResponse.class)).collect(Collectors.toList());
         return sysRoleMenuButtonResponses;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void grantMenuAndButton(SysRoleRequest sysRoleMenuButtonRequest) {
-        // 清除该角色之前的菜单
-        LambdaQueryWrapper<SysRoleMenu> sysRoleMenuLqw = new LambdaQueryWrapper<>();
-        sysRoleMenuLqw.eq(SysRoleMenu::getRoleId, sysRoleMenuButtonRequest.getRoleId());
-        roleMenuService.remove(sysRoleMenuLqw);
-
-        // 清除该角色之前的按钮授权
-        LambdaQueryWrapper<SysRoleMenuButton> menuButtonLqw = new LambdaQueryWrapper<>();
-        menuButtonLqw.eq(SysRoleMenuButton::getRoleId, sysRoleMenuButtonRequest.getRoleId());
-        sysRoleMenuButtonService.remove(menuButtonLqw);
-
-        // 新增菜单
-        List<Long> menuIdList = sysRoleMenuButtonRequest.getGrantMenuIdList();
-        if (ObjectUtil.isNotEmpty(menuIdList)) {
-            List<SysRoleMenu> sysRoleMenus = new ArrayList<>();
-            for (Long menuId : menuIdList) {
-                SysRoleMenu item = new SysRoleMenu();
-                item.setRoleId(sysRoleMenuButtonRequest.getRoleId());
-                item.setMenuId(menuId);
-                sysRoleMenus.add(item);
-            }
-            roleMenuService.saveBatch(sysRoleMenus);
-        }
-
-        // 新增按钮
-        List<SysRoleMenuButtonRequest> menuButtonList = sysRoleMenuButtonRequest.getGrantMenuButtonIdList();
-        if (ObjectUtil.isNotEmpty(menuButtonList)) {
-            List<SysRoleMenuButton> sysRoleMenuButtons = new ArrayList<>();
-            for (SysRoleMenuButtonRequest menuButton : menuButtonList) {
-                SysRoleMenuButton item = new SysRoleMenuButton();
-                item.setRoleId(sysRoleMenuButtonRequest.getRoleId());
-                item.setButtonId(menuButton.getButtonId());
-                item.setButtonCode(menuButton.getButtonCode());
-                sysRoleMenuButtons.add(item);
-            }
-            sysRoleMenuButtonService.saveBatch(sysRoleMenuButtons);
-        }
-
     }
 
     /**

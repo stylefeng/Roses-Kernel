@@ -51,6 +51,15 @@ public interface SysRoleService extends IService<SysRole> {
     void add(SysRoleRequest sysRoleRequest);
 
     /**
+     * 删除系统角色
+     *
+     * @param sysRoleRequest 删除参数
+     * @author majianguo
+     * @date 2020/11/5 上午11:14
+     */
+    void del(SysRoleRequest sysRoleRequest);
+
+    /**
      * 编辑系统角色
      *
      * @param sysRoleRequest 编辑参数
@@ -58,24 +67,6 @@ public interface SysRoleService extends IService<SysRole> {
      * @date 2020/11/5 上午11:14
      */
     void edit(SysRoleRequest sysRoleRequest);
-
-    /**
-     * 删除系统角色
-     *
-     * @param sysRoleRequest 删除参数
-     * @author majianguo
-     * @date 2020/11/5 上午11:14
-     */
-    void delete(SysRoleRequest sysRoleRequest);
-
-    /**
-     * 授权数据范围（组织机构）
-     *
-     * @param sysRoleRequest 授权参数
-     * @author majianguo
-     * @date 2020/11/5 上午11:14
-     */
-    void grantDataScope(SysRoleRequest sysRoleRequest);
 
     /**
      * 查看系统角色
@@ -95,7 +86,26 @@ public interface SysRoleService extends IService<SysRole> {
      * @author majianguo
      * @date 2020/11/5 上午11:13
      */
-    PageResult<SysRole> page(SysRoleRequest sysRoleRequest);
+    PageResult<SysRole> findPage(SysRoleRequest sysRoleRequest);
+
+    /**
+     * 根据角色名模糊搜索系统角色列表
+     *
+     * @param sysRoleRequest 查询参数
+     * @return 增强版hashMap，格式：[{"id":456, "name":"总经理(zjl)"}]
+     * @author majianguo
+     * @date 2020/11/5 上午11:13
+     */
+    List<SimpleDict> findList(SysRoleRequest sysRoleRequest);
+
+    /**
+     * 授权数据范围（组织机构）
+     *
+     * @param sysRoleRequest 授权参数
+     * @author majianguo
+     * @date 2020/11/5 上午11:14
+     */
+    void grantDataScope(SysRoleRequest sysRoleRequest);
 
     /**
      * 系统角色下拉（用于授权角色时选择）
@@ -115,16 +125,6 @@ public interface SysRoleService extends IService<SysRole> {
      * @date 2020/11/5 上午11:15
      */
     List<Long> getRoleDataScope(SysRoleRequest sysRoleRequest);
-
-    /**
-     * 根据角色名模糊搜索系统角色列表
-     *
-     * @param sysRoleRequest 查询参数
-     * @return 增强版hashMap，格式：[{"id":456, "name":"总经理(zjl)"}]
-     * @author majianguo
-     * @date 2020/11/5 上午11:13
-     */
-    List<SimpleDict> list(SysRoleRequest sysRoleRequest);
 
     /**
      * 根据角色id获取角色名称
