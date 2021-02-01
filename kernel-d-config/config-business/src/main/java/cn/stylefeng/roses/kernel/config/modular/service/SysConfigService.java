@@ -84,7 +84,7 @@ public interface SysConfigService extends IService<SysConfig> {
      * @author fengshuonan
      * @date 2020/4/14 11:14
      */
-    PageResult<SysConfig> page(SysConfigParam sysConfigParam);
+    PageResult<SysConfig> findPage(SysConfigParam sysConfigParam);
 
     /**
      * 查询系统参数配置
@@ -94,6 +94,6 @@ public interface SysConfigService extends IService<SysConfig> {
      * @author fengshuonan
      * @date 2020/4/14 11:14
      */
-    List<SysConfig> list(SysConfigParam sysConfigParam);
+    List<SysConfig> findList(SysConfigParam sysConfigParam);
 
 }

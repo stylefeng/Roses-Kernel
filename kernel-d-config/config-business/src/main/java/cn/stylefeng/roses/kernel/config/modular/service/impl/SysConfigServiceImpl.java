@@ -98,14 +98,14 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     }
 
     @Override
-    public PageResult<SysConfig> page(SysConfigParam sysConfigParam) {
+    public PageResult<SysConfig> findPage(SysConfigParam sysConfigParam) {
         LambdaQueryWrapper<SysConfig> wrapper = createWrapper(sysConfigParam);
         Page<SysConfig> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
     }
 
     @Override
-    public List<SysConfig> list(SysConfigParam sysConfigParam) {
+    public List<SysConfig> findList(SysConfigParam sysConfigParam) {
         LambdaQueryWrapper<SysConfig> wrapper = createWrapper(sysConfigParam);
         return this.list(wrapper);
     }
