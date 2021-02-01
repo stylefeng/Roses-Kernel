@@ -2,18 +2,18 @@ package cn.stylefeng.roses.kernel.log.file;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.exception.LogException;
-import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerParam;
+import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,6 +38,8 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
 
     private final String fileSavePath;
 
+    private Integer total;
+
     /**
      * 构造函数
      *
@@ -48,14 +50,13 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
     }
 
     @Override
-    public List<LogRecordDTO> queryLogList(LogManagerParam logManagerParam) {
-        logManagerParam.setPageSize(1000);
-        PageResult<LogRecordDTO> pageResult = queryLogListPage(logManagerParam);
+    public List<LogRecordDTO> findList(LogManagerRequest logManagerParam) {
+        PageResult<LogRecordDTO> pageResult = findPage(logManagerParam);
         return pageResult.getRows();
     }
 
     @Override
-    public PageResult<LogRecordDTO> queryLogListPage(LogManagerParam logManagerParam) {
+    public PageResult<LogRecordDTO> findPage(LogManagerRequest logManagerParam) {
 
         // 文件日志，必须有AppName,否则文件太多太大
         if (ObjectUtil.isEmpty(logManagerParam.getAppName())) {
@@ -93,12 +94,12 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
         // 读取日志
         List<LogRecordDTO> dtos = readLog(filePath, filePointer, logManagerParam.getPageSize());
         pageResult.setRows(dtos);
-
+        pageResult.setTotalRows(total);
         return pageResult;
     }
 
     @Override
-    public void deleteLogs(LogManagerParam logManagerParam) {
+    public void del(LogManagerRequest logManagerParam) {
 
         // 删除操作,必须有appName
         if (ObjectUtil.isEmpty(logManagerParam.getAppName())) {
@@ -131,6 +132,24 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
         }
     }
 
+    @Override
+    public LogRecordDTO detail(LogManagerRequest logManagerRequest) {
+
+        // 文件日志，必须有AppName,否则文件太多太大
+        if (ObjectUtil.isEmpty(logManagerRequest.getAppName())) {
+            throw new LogException(APP_NAME_NOT_EXIST);
+        }
+
+        // 文件日志，必须有开始时间,否则文件太多太大
+        if (ObjectUtil.isEmpty(logManagerRequest.getBeginDateTime())) {
+            throw new LogException(BEGIN_DATETIME_NOT_EXIST);
+        }
+
+        // 获取文件路径
+        String filePath = getLogPath(logManagerRequest.getAppName(), logManagerRequest.getBeginDateTime());
+        return this.readLog(filePath, logManagerRequest.getLogId());
+    }
+
     /**
      * 根据app名称和日期获取日志文件全路径
      *
@@ -148,6 +167,49 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
         // 文件绝对路径生成，带文件名的完整路径
         String fileAbsolutePath = fileSavePath + File.separator;
         return fileAbsolutePath + fileName;
+    }
+
+    /**
+     * 根据id获取日志记录
+     *
+     * @param
+     * @return
+     * @author chenjinlong
+     * @date 2021/2/1 19:54
+     */
+    private LogRecordDTO readLog(String path, Long logId) {
+
+        // 判断文件是否存在,不存在直接返回Null
+        if (!FileUtil.exist(path)) {
+            return null;
+        }
+
+        LogRecordDTO logRecordDTO = new LogRecordDTO();
+        RandomAccessFile file;
+        try {
+            // 创建随机读文件流
+            file = new RandomAccessFile(path, "r");
+
+            while (true) {
+
+                String str = file.readLine();
+
+                // 读取到的字符串不为空
+                if (ObjectUtil.isNotEmpty(str)) {
+                    logRecordDTO = parseObject(str);
+                    if (logRecordDTO.getLogId().equals(logId)) {
+                        return logRecordDTO;
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                e.printStackTrace();
+            }
+            log.error(e.getMessage());
+        }
+        return logRecordDTO;
     }
 
     /**
@@ -191,8 +253,12 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
                 }
             }
 
+            //获取总行数
+
+            total = getTotalLines(new File(path));
+
             // 在用户信息中记录当前用户读取的文件指针
-            LoginContext.me().getLoginUser().getOtherInfos().put("filePointer", file.getFilePointer());
+            LoginContext.me().getLoginUser().setOtherInfos(Dict.create().set("filePointer", file.getFilePointer()));
 
         } catch (Exception e) {
             if (log.isDebugEnabled()) {
@@ -278,6 +344,23 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
             log.error(e.getMessage());
         }
         return list;
+    }
+
+    /**
+     * 获取总行数
+     *
+     * @param file 日志文件路径
+     * @return 日志总行数
+     * @author chenjinlong
+     * @date 2021/2/1 19:45
+     */
+    public int getTotalLines(File file) throws IOException {
+        FileReader in = new FileReader(file);
+        LineNumberReader reader = new LineNumberReader(in);
+        reader.skip(Long.MAX_VALUE);
+        int lines = reader.getLineNumber();
+        reader.close();
+        return lines;
     }
 
 }

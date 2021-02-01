@@ -14,6 +14,11 @@ import java.util.Date;
 public class LogRecordDTO {
 
     /**
+     * 日志id
+     */
+    private Long logId;
+
+    /**
      * 日志的名称，一般为业务名称
      */
     private String logName;

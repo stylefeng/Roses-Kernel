@@ -59,14 +59,14 @@ public class FileLogRecordServiceImpl implements LogRecordApi {
      * @date 2020/10/28 15:53
      */
     @Override
-    public void recordLog(LogRecordDTO logRecordDTO) {
+    public void add(LogRecordDTO logRecordDTO) {
 
         if (logRecordDTO == null) {
             return;
         }
 
         // 输出日志
-        recordLogByList(CollectionUtil.list(false, logRecordDTO));
+        addBatch(CollectionUtil.list(false, logRecordDTO));
     }
 
     /**
@@ -77,7 +77,7 @@ public class FileLogRecordServiceImpl implements LogRecordApi {
      * @date 2020/11/2 下午2:59
      */
     @Override
-    public void recordLogByList(List<LogRecordDTO> list) {
+    public void addBatch(List<LogRecordDTO> list) {
 
         if (ObjectUtil.isEmpty(list)) {
             return;
@@ -119,7 +119,7 @@ public class FileLogRecordServiceImpl implements LogRecordApi {
     }
 
     @Override
-    public void recordLogAsync(LogRecordDTO logRecordDTO) {
+    public void addAsync(LogRecordDTO logRecordDTO) {
         logManagerThreadPool.executeLog(new TimerTask() {
             @Override
             public void run() {
@@ -242,7 +242,7 @@ public class FileLogRecordServiceImpl implements LogRecordApi {
                 }
 
                 // 调用方法刷新到磁盘
-                recordLogByList(cacheAll);
+                addBatch(cacheAll);
 
             } catch (Exception e) {
 

@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class LogManagerParam extends BaseRequest {
+public class LogManagerRequest extends BaseRequest {
 
     /**
      * 单条日志id

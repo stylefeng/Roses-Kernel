@@ -80,18 +80,20 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
     }
 
     @Override
-    public void delete(SysLoginLogRequest sysLoginLogRequest) {
-
-    }
-
-    @Override
     public void deleteAll() {
         this.remove(null);
     }
 
     @Override
+    public void del(SysLoginLogRequest sysLoginLogRequest) {
+        SysLoginLog sysLoginLog = this.querySysLoginLogById(sysLoginLogRequest);
+        this.removeById(sysLoginLog.getLlgId());
+    }
+
+    @Override
     public SysLoginLog detail(SysLoginLogRequest sysLoginLogRequest) {
-        return this.querySysLoginLog(sysLoginLogRequest);
+        LambdaQueryWrapper<SysLoginLog> queryWrapper = this.createWrapper(sysLoginLogRequest);
+        return this.getOne(queryWrapper, false);
     }
 
     @Override
@@ -108,7 +110,7 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
      * @author chenjinlong
      * @date 2021/1/13 10:50
      */
-    private SysLoginLog querySysLoginLog(SysLoginLogRequest sysLoginLogRequest) {
+    private SysLoginLog querySysLoginLogById(SysLoginLogRequest sysLoginLogRequest) {
         SysLoginLog sysLoginLog = this.getById(sysLoginLogRequest.getLlgId());
         if (ObjectUtil.isNull(sysLoginLog)) {
             throw new ServiceException(AppExceptionEnum.APP_NOT_EXIST);
@@ -124,9 +126,12 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
      */
     private LambdaQueryWrapper<SysLoginLog> createWrapper(SysLoginLogRequest sysLoginLogRequest) {
         LambdaQueryWrapper<SysLoginLog> queryWrapper = new LambdaQueryWrapper<>();
+
+        // SQL条件拼接
         queryWrapper.eq(StrUtil.isNotBlank(sysLoginLogRequest.getLlgName()), SysLoginLog::getLlgName, sysLoginLogRequest.getLlgName());
         queryWrapper.ge(StrUtil.isNotBlank(sysLoginLogRequest.getBeginTime()), SysLoginLog::getCreateTime, sysLoginLogRequest.getBeginTime());
         queryWrapper.le(StrUtil.isNotBlank(sysLoginLogRequest.getEndTime()), SysLoginLog::getCreateTime, sysLoginLogRequest.getEndTime());
+
         return queryWrapper;
     }
 

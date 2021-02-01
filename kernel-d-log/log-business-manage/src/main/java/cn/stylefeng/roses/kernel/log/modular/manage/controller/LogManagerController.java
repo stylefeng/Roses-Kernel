@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.log.modular.manage.controller;
 
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
-import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerParam;
+import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
@@ -43,8 +43,8 @@ public class LogManagerController {
      * @date 2020/11/3 12:58
      */
     @GetResource(name = "查询日志列表", path = "/logManager/list")
-    public ResponseData list(@RequestBody LogManagerParam logManagerParam) {
-        return new SuccessResponseData(logManagerApi.queryLogList(logManagerParam));
+    public ResponseData list(@RequestBody LogManagerRequest logManagerRequest) {
+        return new SuccessResponseData(logManagerApi.findList(logManagerRequest));
     }
 
     /**
@@ -54,8 +54,8 @@ public class LogManagerController {
      * @date 2021/1/8 17:36
      */
     @GetResource(name = "查询日志列表", path = "/logManager/page")
-    public ResponseData page(LogManagerParam logManagerParam) {
-        return new SuccessResponseData(logManagerApi.queryLogListPage(logManagerParam));
+    public ResponseData page(LogManagerRequest logManagerRequest) {
+        return new SuccessResponseData(logManagerApi.findPage(logManagerRequest));
     }
 
     /**
@@ -65,8 +65,8 @@ public class LogManagerController {
      * @date 2020/11/3 13:47
      */
     @PostResource(name = "删除日志", path = "/logManager/delete")
-    public ResponseData delete(@RequestBody @Validated(LogManagerParam.delete.class) LogManagerParam logManagerParam) {
-        logManagerApi.deleteLogs(logManagerParam);
+    public ResponseData delete(@RequestBody @Validated(LogManagerRequest.delete.class) LogManagerRequest logManagerRequest) {
+        logManagerApi.del(logManagerRequest);
         return new SuccessResponseData();
     }
 
@@ -77,8 +77,8 @@ public class LogManagerController {
      * @date 2021/1/11 17:36
      */
     @GetResource(name = "查看日志详情", path = "/logManager/detail")
-    public ResponseData detail(@Validated(LogManagerParam.detail.class) LogManagerParam logManagerParam) {
-        return new SuccessResponseData(sysLogService.detail(logManagerParam));
+    public ResponseData detail(@Validated(LogManagerRequest.detail.class) LogManagerRequest logManagerRequest) {
+        return new SuccessResponseData(logManagerApi.detail(logManagerRequest));
     }
 
 }

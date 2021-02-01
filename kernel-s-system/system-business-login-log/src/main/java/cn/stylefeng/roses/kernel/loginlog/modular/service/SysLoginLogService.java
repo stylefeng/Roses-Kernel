@@ -46,7 +46,7 @@ public interface SysLoginLogService extends IService<SysLoginLog>, LoginLogServi
      * @author chenjinlong
      * @date 2021/1/13 10:55
      */
-    void delete(SysLoginLogRequest sysLoginLogRequest);
+    void del(SysLoginLogRequest sysLoginLogRequest);
 
 
     /**

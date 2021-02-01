@@ -142,7 +142,7 @@ public class RequestApiLogRecordAop implements Ordered {
         ParamsLogAppender.appendAuthedHttpLog(logRecordDTO, params, result);
 
         // 异步记录日志
-        logRecordApi.recordLogAsync(logRecordDTO);
+        logRecordApi.addAsync(logRecordDTO);
     }
 
     @Override
@@ -174,7 +174,7 @@ public class RequestApiLogRecordAop implements Ordered {
             for (int k = 0; k < args.length; k++) {
                 if (args[k] instanceof Model) {
                     classes[k] = Model.class;
-                } else if (args[k] instanceof  MultipartFile) {
+                } else if (args[k] instanceof MultipartFile) {
                     classes[k] = MultipartFile.class;
                 } else {
                     classes[k] = args[k].getClass();
@@ -198,10 +198,10 @@ public class RequestApiLogRecordAop implements Ordered {
             // 装载参数名称和参数值
             for (int i = 0; i < parameterNames.length; i++) {
                 // 解决上传文件接口aop记录日志报错
-                if (args[i] instanceof MultipartFile && args[i]!=null) {
+                if (args[i] instanceof MultipartFile && args[i] != null) {
                     // 根据参数名只记录文件名
                     paramMap.put(parameterNames[i], ((MultipartFile) args[i]).getOriginalFilename());
-                }else{
+                } else {
                     paramMap.put(parameterNames[i], args[i]);
                 }
 
@@ -217,10 +217,10 @@ public class RequestApiLogRecordAop implements Ordered {
 
             // 有异常则不显示参数名称直接返回参数
             for (int i = 0; i < args.length; i++) {
-                if (args[i] instanceof MultipartFile && args[i]!=null) {
+                if (args[i] instanceof MultipartFile && args[i] != null) {
                     // 根据参数名只记录文件名
                     paramMap.put("args" + i, ((MultipartFile) args[i]).getOriginalFilename());
-                }else {
+                } else {
                     paramMap.put("args" + i, args[i]);
                 }
             }

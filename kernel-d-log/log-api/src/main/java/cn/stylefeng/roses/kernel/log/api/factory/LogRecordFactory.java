@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.log.api.factory;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.log.api.constants.LogConstants;
 import cn.stylefeng.roses.kernel.log.api.context.ServerInfoContext;
@@ -25,6 +26,9 @@ public class LogRecordFactory {
      */
     public static LogRecordDTO createLogRecord(String name, Object content) {
         LogRecordDTO logRecordDTO = new LogRecordDTO();
+
+        //设置全局id
+        logRecordDTO.setLogId(IdUtil.getSnowflake(1, 1).nextId());
 
         // 设置日志名称
         logRecordDTO.setLogName(name);

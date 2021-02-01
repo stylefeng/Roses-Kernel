@@ -62,17 +62,17 @@ public class DbLogRecordServiceImpl implements LogRecordApi {
     }
 
     @Override
-    public void recordLog(LogRecordDTO logRecordDTO) {
+    public void add(LogRecordDTO logRecordDTO) {
         if (logRecordDTO == null) {
             return;
         }
 
         // 输出日志
-        recordLogByList(CollectionUtil.list(false, logRecordDTO));
+        addBatch(CollectionUtil.list(false, logRecordDTO));
     }
 
     @Override
-    public void recordLogByList(List<LogRecordDTO> logRecords) {
+    public void addBatch(List<LogRecordDTO> logRecords) {
 
         if (ObjectUtil.isEmpty(logRecords)) {
             return;
@@ -101,7 +101,7 @@ public class DbLogRecordServiceImpl implements LogRecordApi {
     }
 
     @Override
-    public void recordLogAsync(LogRecordDTO logRecordDTO) {
+    public void addAsync(LogRecordDTO logRecordDTO) {
         logManagerThreadPool.executeLog(new TimerTask() {
             @Override
             public void run() {
@@ -217,7 +217,7 @@ public class DbLogRecordServiceImpl implements LogRecordApi {
             }
 
             // 调用方法刷新到磁盘
-            recordLogByList(cacheAll);
+            addBatch(cacheAll);
         }
 
         /**
