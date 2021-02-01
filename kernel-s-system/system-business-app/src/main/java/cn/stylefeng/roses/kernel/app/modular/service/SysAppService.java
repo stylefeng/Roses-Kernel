@@ -49,6 +49,15 @@ public interface SysAppService extends IService<SysApp> {
     void add(SysAppRequest sysAppParam);
 
     /**
+     * 删除系统应用
+     *
+     * @param sysAppParam 删除参数
+     * @author fengshuonan
+     * @date 2020/3/25 14:57
+     */
+    void del(SysAppRequest sysAppParam);
+
+    /**
      * 编辑系统应用
      *
      * @param sysAppParam 编辑参数
@@ -56,6 +65,36 @@ public interface SysAppService extends IService<SysApp> {
      * @date 2020/3/25 14:58
      */
     void edit(SysAppRequest sysAppParam);
+
+    /**
+     * 查看系统应用
+     *
+     * @param sysAppParam 查看参数
+     * @return 系统应用
+     * @author fengshuonan
+     * @date 2020/3/26 9:50
+     */
+    SysApp detail(SysAppRequest sysAppParam);
+
+    /**
+     * 系统应用列表
+     *
+     * @param sysAppParam 查询参数
+     * @return 系统应用列表
+     * @author fengshuonan
+     * @date 2020/4/19 14:56
+     */
+    List<SysApp> findList(SysAppRequest sysAppParam);
+
+    /**
+     * 查询系统应用
+     *
+     * @param sysAppParam 查询参数
+     * @return 查询分页结果
+     * @author fengshuonan
+     * @date 2020/3/24 20:55
+     */
+    PageResult<SysApp> findPage(SysAppRequest sysAppParam);
 
     /**
      * 将应用设为默认应用，用户进入系统会默认进这个应用的菜单
@@ -74,44 +113,5 @@ public interface SysAppService extends IService<SysApp> {
      * @date 2021/1/6 14:30
      */
     void updateStatus(SysAppRequest sysAppParam);
-
-    /**
-     * 删除系统应用
-     *
-     * @param sysAppParam 删除参数
-     * @author fengshuonan
-     * @date 2020/3/25 14:57
-     */
-    void delete(SysAppRequest sysAppParam);
-
-    /**
-     * 查看系统应用
-     *
-     * @param sysAppParam 查看参数
-     * @return 系统应用
-     * @author fengshuonan
-     * @date 2020/3/26 9:50
-     */
-    SysApp detail(SysAppRequest sysAppParam);
-
-    /**
-     * 查询系统应用
-     *
-     * @param sysAppParam 查询参数
-     * @return 查询分页结果
-     * @author fengshuonan
-     * @date 2020/3/24 20:55
-     */
-    PageResult<SysApp> page(SysAppRequest sysAppParam);
-
-    /**
-     * 系统应用列表
-     *
-     * @param sysAppParam 查询参数
-     * @return 系统应用列表
-     * @author fengshuonan
-     * @date 2020/4/19 14:56
-     */
-    List<SysApp> list(SysAppRequest sysAppParam);
 
 }

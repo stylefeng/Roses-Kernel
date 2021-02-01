@@ -39,6 +39,18 @@ public class SysAppController {
     }
 
     /**
+     * 删除系统应用
+     *
+     * @author fengshuonan
+     * @date 2020/3/25 14:54
+     */
+    @PostResource(name = "删除系统应用", path = "/sysApp/delete")
+    public ResponseData delete(@RequestBody @Validated(SysAppRequest.delete.class) SysAppRequest sysAppParam) {
+        sysAppService.del(sysAppParam);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 编辑系统应用
      *
      * @author fengshuonan
@@ -48,6 +60,39 @@ public class SysAppController {
     public ResponseData edit(@RequestBody @Validated(SysAppRequest.edit.class) SysAppRequest sysAppParam) {
         sysAppService.edit(sysAppParam);
         return new SuccessResponseData();
+    }
+
+    /**
+     * 查看系统应用
+     *
+     * @author fengshuonan
+     * @date 2020/3/26 9:49
+     */
+    @GetResource(name = "查看系统应用", path = "/sysApp/detail")
+    public ResponseData detail(@Validated(SysAppRequest.detail.class) SysAppRequest sysAppParam) {
+        return new SuccessResponseData(sysAppService.detail(sysAppParam));
+    }
+
+    /**
+     * 系统应用列表
+     *
+     * @author fengshuonan
+     * @date 2020/4/19 14:55
+     */
+    @GetResource(name = "系统应用列表", path = "/sysApp/list")
+    public ResponseData list(SysAppRequest sysAppParam) {
+        return new SuccessResponseData(sysAppService.findList(sysAppParam));
+    }
+
+    /**
+     * 查询系统应用
+     *
+     * @author fengshuonan
+     * @date 2020/3/20 21:23
+     */
+    @GetResource(name = "查询系统应用", path = "/sysApp/page")
+    public ResponseData page(SysAppRequest sysAppParam) {
+        return new SuccessResponseData(sysAppService.findPage(sysAppParam));
     }
 
     /**
@@ -72,51 +117,6 @@ public class SysAppController {
     public ResponseData updateStatus(@RequestBody @Validated(SysAppRequest.updateStatus.class) SysAppRequest sysAppParam) {
         sysAppService.updateStatus(sysAppParam);
         return new SuccessResponseData();
-    }
-
-    /**
-     * 删除系统应用
-     *
-     * @author fengshuonan
-     * @date 2020/3/25 14:54
-     */
-    @PostResource(name = "删除系统应用", path = "/sysApp/delete")
-    public ResponseData delete(@RequestBody @Validated(SysAppRequest.delete.class) SysAppRequest sysAppParam) {
-        sysAppService.delete(sysAppParam);
-        return new SuccessResponseData();
-    }
-
-    /**
-     * 查看系统应用
-     *
-     * @author fengshuonan
-     * @date 2020/3/26 9:49
-     */
-    @GetResource(name = "查看系统应用", path = "/sysApp/detail")
-    public ResponseData detail(@Validated(SysAppRequest.detail.class) SysAppRequest sysAppParam) {
-        return new SuccessResponseData(sysAppService.detail(sysAppParam));
-    }
-
-    /**
-     * 查询系统应用
-     *
-     * @author fengshuonan
-     * @date 2020/3/20 21:23
-     */
-    @GetResource(name = "查询系统应用", path = "/sysApp/page")
-    public ResponseData page(SysAppRequest sysAppParam) {
-        return new SuccessResponseData(sysAppService.page(sysAppParam));
-    }
-
-    /**
-     * 系统应用列表
-     *
-     * @author fengshuonan
-     * @date 2020/4/19 14:55
-     */
-    @GetResource(name = "系统应用列表", path = "/sysApp/list")
-    public ResponseData list(SysAppRequest sysAppParam) {
-        return new SuccessResponseData(sysAppService.list(sysAppParam));
     }
 
 }

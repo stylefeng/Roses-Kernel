@@ -60,6 +60,23 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     }
 
     @Override
+    public void del(SysAppRequest sysAppRequest) {
+        SysApp sysApp = this.querySysApp(sysAppRequest);
+        String code = sysApp.getAppCode();
+
+        // 该应用下有菜单，则不能删除
+        boolean hasMenu = menuApi.hasMenu(code);
+        if (hasMenu) {
+            throw new ServiceException(AppExceptionEnum.APP_CANNOT_DELETE);
+        }
+
+        // 逻辑删除
+        sysApp.setDelFlag(YesOrNotEnum.Y.getCode());
+
+        this.updateById(sysApp);
+    }
+
+    @Override
     public void edit(SysAppRequest sysAppRequest) {
 
         SysApp sysApp = this.querySysApp(sysAppRequest);
@@ -75,6 +92,24 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         sysApp.setActiveFlag(null);
 
         this.updateById(sysApp);
+    }
+
+    @Override
+    public SysApp detail(SysAppRequest sysAppRequest) {
+        return this.querySysApp(sysAppRequest);
+    }
+
+    @Override
+    public List<SysApp> findList(SysAppRequest sysAppRequest) {
+        LambdaQueryWrapper<SysApp> wrapper = createWrapper(sysAppRequest);
+        return this.list(wrapper);
+    }
+
+    @Override
+    public PageResult<SysApp> findPage(SysAppRequest sysAppRequest) {
+        LambdaQueryWrapper<SysApp> wrapper = createWrapper(sysAppRequest);
+        Page<SysApp> page = this.page(PageFactory.defaultPage(), wrapper);
+        return PageResultFactory.createPageResult(page);
     }
 
     @Override
@@ -105,41 +140,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
 
         currentApp.setStatusFlag(sysAppParam.getStatusFlag());
         this.updateById(currentApp);
-    }
-
-    @Override
-    public void delete(SysAppRequest sysAppRequest) {
-        SysApp sysApp = this.querySysApp(sysAppRequest);
-        String code = sysApp.getAppCode();
-
-        // 该应用下有菜单，则不能删除
-        boolean hasMenu = menuApi.hasMenu(code);
-        if (hasMenu) {
-            throw new ServiceException(AppExceptionEnum.APP_CANNOT_DELETE);
-        }
-
-        // 逻辑删除
-        sysApp.setDelFlag(YesOrNotEnum.Y.getCode());
-
-        this.updateById(sysApp);
-    }
-
-    @Override
-    public SysApp detail(SysAppRequest sysAppRequest) {
-        return this.querySysApp(sysAppRequest);
-    }
-
-    @Override
-    public PageResult<SysApp> page(SysAppRequest sysAppRequest) {
-        LambdaQueryWrapper<SysApp> wrapper = createWrapper(sysAppRequest);
-        Page<SysApp> page = this.page(PageFactory.defaultPage(), wrapper);
-        return PageResultFactory.createPageResult(page);
-    }
-
-    @Override
-    public List<SysApp> list(SysAppRequest sysAppRequest) {
-        LambdaQueryWrapper<SysApp> wrapper = createWrapper(sysAppRequest);
-        return this.list(wrapper);
     }
 
     @Override
