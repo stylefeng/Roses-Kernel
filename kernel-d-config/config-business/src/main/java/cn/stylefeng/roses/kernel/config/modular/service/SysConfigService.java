@@ -64,7 +64,7 @@ public interface SysConfigService extends IService<SysConfig> {
      * @author fengshuonan
      * @date 2020/4/14 11:15
      */
-    void delete(SysConfigParam sysConfigParam);
+    void del(SysConfigParam sysConfigParam);
 
     /**
      * 查看系统参数配置

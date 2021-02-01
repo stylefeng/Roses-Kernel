@@ -59,7 +59,7 @@ public class SysConfigController {
      */
     @PostResource(name = "删除系统参数配置", path = "/sysConfig/delete")
     public ResponseData delete(@RequestBody @Validated(SysConfigParam.delete.class) SysConfigParam sysConfigParam) {
-        sysConfigService.delete(sysConfigParam);
+        sysConfigService.del(sysConfigParam);
         return new SuccessResponseData();
     }
 

@@ -69,7 +69,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(SysConfigParam sysConfigParam) {
+    public void del(SysConfigParam sysConfigParam) {
 
         // 1.根据id获取常量
         SysConfig sysConfig = this.querySysConfig(sysConfigParam);
@@ -135,20 +135,20 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         LambdaQueryWrapper<SysConfig> queryWrapper = new LambdaQueryWrapper<>();
 
         if (ObjectUtil.isNotNull(sysConfigParam)) {
+
+            String configName = sysConfigParam.getConfigName();
+            String configCode = sysConfigParam.getConfigCode();
+            String groupCode = sysConfigParam.getGroupCode();
+
             // 如果名称不为空，则带上名称搜素搜条件
-            if (ObjectUtil.isNotEmpty(sysConfigParam.getConfigName())) {
-                queryWrapper.like(SysConfig::getConfigName, sysConfigParam.getConfigName());
-            }
+            queryWrapper.like(ObjectUtil.isNotEmpty(configName), SysConfig::getConfigName, configName);
 
             // 如果常量编码不为空，则带上常量编码搜素搜条件
-            if (ObjectUtil.isNotEmpty(sysConfigParam.getConfigCode())) {
-                queryWrapper.like(SysConfig::getConfigCode, sysConfigParam.getConfigCode());
-            }
+            queryWrapper.like(ObjectUtil.isNotEmpty(configCode), SysConfig::getConfigCode, configCode);
 
             // 如果分类编码不为空，则带上分类编码
-            if (ObjectUtil.isNotEmpty(sysConfigParam.getGroupCode())) {
-                queryWrapper.eq(SysConfig::getGroupCode, sysConfigParam.getGroupCode());
-            }
+            queryWrapper.eq(ObjectUtil.isNotEmpty(groupCode), SysConfig::getGroupCode, groupCode);
+
         }
 
         // 查询未删除的
