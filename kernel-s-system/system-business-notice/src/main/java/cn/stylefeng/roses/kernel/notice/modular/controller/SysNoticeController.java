@@ -6,7 +6,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.pojo.notice.SysNoticeRequest;
+import cn.stylefeng.roses.kernel.system.pojo.notice.request.SysNoticeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @ApiResource(name = "通知管理")
-public class NoticeController {
+public class SysNoticeController {
 
     @Autowired
-    private SysNoticeService sysResourceService;
+    private SysNoticeService sysNoticeService;
 
 
     /**
@@ -34,7 +34,7 @@ public class NoticeController {
      */
     @PostResource(name = "添加通知管理", path = "/sysNotice/add")
     public ResponseData add(@RequestBody @Validated(SysNoticeRequest.add.class) SysNoticeRequest sysNoticeParam) {
-        sysResourceService.add(sysNoticeParam);
+        sysNoticeService.add(sysNoticeParam);
         return new SuccessResponseData();
     }
 
@@ -46,7 +46,7 @@ public class NoticeController {
      */
     @PostResource(name = "编辑通知管理", path = "/sysNotice/edit")
     public ResponseData edit(@RequestBody @Validated(SysNoticeRequest.edit.class) SysNoticeRequest sysNoticeParam) {
-        sysResourceService.edit(sysNoticeParam);
+        sysNoticeService.edit(sysNoticeParam);
         return new SuccessResponseData();
     }
 
@@ -59,7 +59,7 @@ public class NoticeController {
      */
     @PostResource(name = "删除通知管理", path = "/sysNotice/delete")
     public ResponseData delete(@RequestBody @Validated(SysNoticeRequest.delete.class) SysNoticeRequest sysNoticeParam) {
-        sysResourceService.delete(sysNoticeParam);
+        sysNoticeService.del(sysNoticeParam);
         return new SuccessResponseData();
     }
 
@@ -71,7 +71,7 @@ public class NoticeController {
      */
     @GetResource(name = "查看通知管理", path = "/sysNotice/detail")
     public ResponseData detail(@Validated(SysNoticeRequest.detail.class) SysNoticeRequest sysNoticeParam) {
-        return new SuccessResponseData(sysResourceService.detail(sysNoticeParam));
+        return new SuccessResponseData(sysNoticeService.detail(sysNoticeParam));
     }
 
     /**
@@ -82,7 +82,7 @@ public class NoticeController {
      */
     @GetResource(name = "查询通知管理", path = "/sysNotice/page")
     public ResponseData page(SysNoticeRequest sysNoticeParam) {
-        return new SuccessResponseData(sysResourceService.page(sysNoticeParam));
+        return new SuccessResponseData(sysNoticeService.findPage(sysNoticeParam));
     }
 
     /**
@@ -93,6 +93,6 @@ public class NoticeController {
      */
     @GetResource(name = "通知管理列表", path = "/sysNotice/list")
     public ResponseData list(SysNoticeRequest sysNoticeParam) {
-        return new SuccessResponseData(sysResourceService.list(sysNoticeParam));
+        return new SuccessResponseData(sysNoticeService.findList(sysNoticeParam));
     }
 }

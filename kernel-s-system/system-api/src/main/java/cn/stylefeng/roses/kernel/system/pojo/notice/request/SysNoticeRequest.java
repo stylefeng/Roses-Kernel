@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.pojo.notice;
+package cn.stylefeng.roses.kernel.system.pojo.notice.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;

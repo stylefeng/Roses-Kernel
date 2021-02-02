@@ -8,14 +8,14 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.message.api.MessageApi;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageBusinessTypeEnum;
-import cn.stylefeng.roses.kernel.message.api.pojo.MessageSendParam;
+import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageSendRequest;
 import cn.stylefeng.roses.kernel.notice.modular.entity.SysNotice;
 import cn.stylefeng.roses.kernel.notice.modular.mapper.SysNoticeMapper;
 import cn.stylefeng.roses.kernel.notice.modular.service.SysNoticeService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
-import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.NoticeExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.notice.SysNoticeRequest;
+import cn.stylefeng.roses.kernel.system.pojo.notice.request.SysNoticeRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -45,7 +45,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     private MessageApi messageApi;
 
     private void sendMessage(SysNotice sysNotice) {
-        MessageSendParam message = new MessageSendParam();
+        MessageSendRequest message = new MessageSendRequest();
         // 消息标题
         message.setMessageTitle(sysNotice.getNoticeTitle());
         // 消息内容
@@ -78,17 +78,17 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     @Override
     public void edit(SysNoticeRequest sysNoticeRequest) {
 
-        SysNotice sysNotice = this.querySysNotice(sysNoticeRequest);
+        SysNotice sysNotice = this.querySysNoticeById(sysNoticeRequest);
         String noticeScope = sysNotice.getNoticeScope();
         if (StrUtil.isBlank(sysNoticeRequest.getNoticeScope())) {
             sysNoticeRequest.setNoticeScope(NOTICE_SCOPE_ALL);
         }
-        if (sysNoticeRequest.equals(sysNotice.getNoticeScope())) {
-            throw new ServiceException(NoticeExceptionEnum.NOTICE_SCOPE_NOT_EDIT);
+        // 通知范围不允许修改， 如果通知范围不同抛出异常
+        if (!sysNoticeRequest.getNoticeScope().equals(sysNotice.getNoticeScope())) {
+            throw new SystemModularException(NoticeExceptionEnum.NOTICE_SCOPE_NOT_EDIT);
         }
         BeanUtil.copyProperties(sysNoticeRequest, sysNotice);
 
-        // 通知范围不允许修改
         sysNotice.setNoticeScope(noticeScope);
 
         if (this.updateById(sysNotice)) {
@@ -98,8 +98,8 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
 
 
     @Override
-    public void delete(SysNoticeRequest sysNoticeRequest) {
-        SysNotice sysNotice = this.querySysNotice(sysNoticeRequest);
+    public void del(SysNoticeRequest sysNoticeRequest) {
+        SysNotice sysNotice = this.querySysNoticeById(sysNoticeRequest);
         // 逻辑删除
         sysNotice.setDelFlag(YesOrNotEnum.Y.getCode());
         this.updateById(sysNotice);
@@ -107,18 +107,19 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
 
     @Override
     public SysNotice detail(SysNoticeRequest sysNoticeRequest) {
-        return this.querySysNotice(sysNoticeRequest);
+        LambdaQueryWrapper<SysNotice> queryWrapper = this.createWrapper(sysNoticeRequest);
+        return this.getOne(queryWrapper, false);
     }
 
     @Override
-    public PageResult<SysNotice> page(SysNoticeRequest sysNoticeRequest) {
+    public PageResult<SysNotice> findPage(SysNoticeRequest sysNoticeRequest) {
         LambdaQueryWrapper<SysNotice> wrapper = createWrapper(sysNoticeRequest);
         Page<SysNotice> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
     }
 
     @Override
-    public List<SysNotice> list(SysNoticeRequest sysNoticeRequest) {
+    public List<SysNotice> findList(SysNoticeRequest sysNoticeRequest) {
         LambdaQueryWrapper<SysNotice> wrapper = createWrapper(sysNoticeRequest);
         return this.list(wrapper);
     }
@@ -130,10 +131,10 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
      * @author liuhanqing
      * @date 2021/1/9 16:56
      */
-    private SysNotice querySysNotice(SysNoticeRequest sysNoticeRequest) {
+    private SysNotice querySysNoticeById(SysNoticeRequest sysNoticeRequest) {
         SysNotice sysNotice = this.getById(sysNoticeRequest.getNoticeId());
         if (ObjectUtil.isNull(sysNotice)) {
-            throw new ServiceException(NoticeExceptionEnum.NOTICE_NOT_EXIST);
+            throw new SystemModularException(NoticeExceptionEnum.NOTICE_NOT_EXIST, sysNoticeRequest.getNoticeId());
         }
         return sysNotice;
     }
@@ -146,18 +147,16 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
      */
     private LambdaQueryWrapper<SysNotice> createWrapper(SysNoticeRequest sysNoticeRequest) {
         LambdaQueryWrapper<SysNotice> queryWrapper = new LambdaQueryWrapper<>();
-        if (ObjectUtil.isNotNull(sysNoticeRequest)) {
-            // 根据id查询
-            if (ObjectUtil.isNotEmpty(sysNoticeRequest.getNoticeId())) {
-                queryWrapper.eq(SysNotice::getNoticeId, sysNoticeRequest.getNoticeId());
-            }
 
-            // 根据消息标题模糊查询
-            if (ObjectUtil.isNotEmpty(sysNoticeRequest.getNoticeTitle())) {
-                queryWrapper.like(SysNotice::getNoticeTitle, sysNoticeRequest.getNoticeTitle()).or().like(SysNotice::getNoticeSummary, sysNoticeRequest.getNoticeTitle()).or().like(SysNotice::getNoticeContent, sysNoticeRequest.getNoticeTitle());
-            }
+        // 通知id
+        Long noticeId = sysNoticeRequest.getNoticeId();
 
-        }
+        // 通知标题
+        String noticeTitle = sysNoticeRequest.getNoticeTitle();
+
+        // 拼接sql 条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(noticeTitle), SysNotice::getNoticeTitle, noticeTitle);
+        queryWrapper.eq(ObjectUtil.isNotEmpty(noticeId), SysNotice::getNoticeId, noticeId);
 
         // 查询未删除状态的
         queryWrapper.eq(SysNotice::getDelFlag, YesOrNotEnum.N.getCode());
