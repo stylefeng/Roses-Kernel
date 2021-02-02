@@ -1,7 +1,13 @@
 package cn.stylefeng.roses.kernel.file.tencent;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.thread.ExecutorBuilder;
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.file.FileOperatorApi;
+import cn.stylefeng.roses.kernel.file.enums.BucketAuthEnum;
+import cn.stylefeng.roses.kernel.file.exception.FileException;
+import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.pojo.props.TenCosProperties;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
@@ -13,11 +19,6 @@ import com.qcloud.cos.model.*;
 import com.qcloud.cos.region.Region;
 import com.qcloud.cos.transfer.TransferManager;
 import com.qcloud.cos.transfer.TransferManagerConfiguration;
-import cn.stylefeng.roses.kernel.file.FileOperatorApi;
-import cn.stylefeng.roses.kernel.file.enums.BucketAuthEnum;
-import cn.stylefeng.roses.kernel.file.exception.FileException;
-import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
-import cn.stylefeng.roses.kernel.file.pojo.props.TenCosProperties;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.ByteArrayInputStream;
@@ -25,7 +26,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * 腾讯云内网文件操作
@@ -63,7 +63,9 @@ public class TenFileOperator implements FileOperatorApi {
 
         // 4.线程池大小，建议在客户端与 COS 网络充足（例如使用腾讯云的 CVM，同地域上传 COS）的情况下，设置成16或32即可，可较充分的利用网络资源
         // 对于使用公网传输且网络带宽质量不高的情况，建议减小该值，避免因网速过慢，造成请求超时。
-        ExecutorService threadPool = Executors.newFixedThreadPool(32);
+        
+        //ExecutorService threadPool = Executors.newFixedThreadPool(32); 线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
+        ExecutorService threadPool = ExecutorBuilder.create().build();
 
         // 5.传入一个 threadpool, 若不传入线程池，默认 TransferManager 中会生成一个单线程的线程池。
         transferManager = new TransferManager(cosClient, threadPool);
