@@ -419,6 +419,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
+    public String getUserAvatarUrl(Long fileId, String token) {
+
+        // 获取头像的访问地址
+        return fileInfoApi.getFileAuthUrl(fileId, token);
+    }
+
+    @Override
     public UserLoginInfoDTO getUserLoginInfo(String account) {
 
         // 1. 获取用户和账号信息

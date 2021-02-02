@@ -372,6 +372,15 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
     }
 
+    @Override
+    public String getFileAuthUrl(Long fileId, String token) {
+
+        // 获取context-path
+        String contextPath = HttpServletUtil.getRequest().getContextPath();
+
+        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
+    }
+
     /**
      * 渲染被预览的文件到servlet的response流中
      *

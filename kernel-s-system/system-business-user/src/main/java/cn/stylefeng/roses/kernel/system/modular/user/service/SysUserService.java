@@ -2,7 +2,6 @@ package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
-import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.UserSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
@@ -179,6 +178,16 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @date 2020/12/27 19:13
      */
     String getUserAvatarUrl(Long fileId);
+
+    /**
+     * 获取用户头像的url
+     *
+     * @param fileId 文件id
+     * @param token  预览文件带的token
+     * @author fengshuonan
+     * @date 2020/12/27 19:13
+     */
+    String getUserAvatarUrl(Long fileId, String token);
 
     /**
      * 用户选择树数据
