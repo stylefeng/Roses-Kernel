@@ -19,11 +19,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 系统职位表 服务实现类
@@ -50,24 +48,16 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
 
     @Override
     public void edit(HrPositionRequest hrPositionRequest) {
-
-        HrPosition sysPosition = this.querySysPosition(hrPositionRequest);
+        HrPosition sysPosition = this.querySysPositionById(hrPositionRequest);
         BeanUtil.copyProperties(hrPositionRequest, sysPosition);
-
-        // 不能修改状态，用修改状态接口修改状态
-        sysPosition.setStatusFlag(null);
-
         this.updateById(sysPosition);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(HrPositionRequest hrPositionRequest) {
+    public void del(HrPositionRequest hrPositionRequest) {
+        HrPosition sysPosition = this.querySysPositionById(hrPositionRequest);
 
-        HrPosition sysPosition = this.querySysPosition(hrPositionRequest);
-
-        // 该职位下是否有员工
-        // 职位有绑定员工，不能删除
+        // 该职位下是否有员工，如果有将不能删除
         Boolean userOrgFlag = userOrgServiceApi.getUserOrgFlag(null, sysPosition.getPositionId());
         if (userOrgFlag) {
             throw new SystemModularException(PositionExceptionEnum.CANT_DELETE_POSITION);
@@ -75,92 +65,43 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
 
         // 逻辑删除
         sysPosition.setDelFlag(YesOrNotEnum.Y.getCode());
-
         this.updateById(sysPosition);
     }
 
     @Override
     public void updateStatus(HrPositionRequest hrPositionRequest) {
-
-        // 先查询有没有这条记录，再更新
-        HrPosition sysPosition = this.querySysPosition(hrPositionRequest);
-
+        HrPosition sysPosition = this.querySysPositionById(hrPositionRequest);
         sysPosition.setStatusFlag(hrPositionRequest.getStatusFlag());
-
         this.updateById(sysPosition);
     }
 
     @Override
     public HrPosition detail(HrPositionRequest hrPositionRequest) {
-        return this.querySysPosition(hrPositionRequest);
+        return this.querySysPositionById(hrPositionRequest);
     }
 
     @Override
-    public PageResult<HrPosition> page(HrPositionRequest hrPositionRequest) {
-        LambdaQueryWrapper<HrPosition> wrapper = createWrapper(hrPositionRequest);
+    public List<HrPosition> findList(HrPositionRequest hrPositionRequest) {
+        LambdaQueryWrapper<HrPosition> wrapper = this.createWrapper(hrPositionRequest);
+        return this.list(wrapper);
+    }
+
+    @Override
+    public PageResult<HrPosition> findPage(HrPositionRequest hrPositionRequest) {
+        LambdaQueryWrapper<HrPosition> wrapper = this.createWrapper(hrPositionRequest);
 
         Page<HrPosition> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
     }
 
-    @Override
-    public List<HrPosition> list(HrPositionRequest hrPositionRequest) {
-        LambdaQueryWrapper<HrPosition> wrapper = createWrapper(hrPositionRequest);
-        return this.list(wrapper);
-    }
-
-    @Override
-    public List<String> getPositionNamesByPositionIds(List<Long> positionIds) {
-
-        // 拼接查询条件
-        LambdaQueryWrapper<HrPosition> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(HrPosition::getPositionId, positionIds);
-        queryWrapper.select(HrPosition::getPositionName);
-
-        // 查询结果
-        List<HrPosition> sysPositions = this.list(queryWrapper);
-
-        // 把name组装起来
-        return sysPositions.stream().map(HrPosition::getPositionName).collect(Collectors.toList());
-    }
-
     /**
-     * 拼接查询条件
+     * 根据主键id获取对象信息
      *
-     * @author fengshuonan
-     * @date 2020/11/6 18:35
+     * @return 实体对象
+     * @author chenjinlong
+     * @date 2021/2/2 10:16
      */
-    private LambdaQueryWrapper<HrPosition> createWrapper(HrPositionRequest hrPositionRequest) {
-        LambdaQueryWrapper<HrPosition> queryWrapper = new LambdaQueryWrapper<>();
-        if (ObjectUtil.isNotNull(hrPositionRequest)) {
-
-            // 拼接职位名称条件
-            if (ObjectUtil.isNotEmpty(hrPositionRequest.getPositionName())) {
-                queryWrapper.like(HrPosition::getPositionName, hrPositionRequest.getPositionName());
-            }
-
-            // 拼接职位编码条件
-            if (ObjectUtil.isNotEmpty(hrPositionRequest.getPositionCode())) {
-                queryWrapper.eq(HrPosition::getPositionCode, hrPositionRequest.getPositionCode());
-            }
-        }
-
-        // 查询未删除状态的
-        queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
-
-        // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(HrPosition::getPositionSort);
-
-        return queryWrapper;
-    }
-
-    /**
-     * 获取系统职位表
-     *
-     * @author fengshuonan
-     * @date 2020/11/18 22:59
-     */
-    private HrPosition querySysPosition(HrPositionRequest hrPositionRequest) {
+    private HrPosition querySysPositionById(HrPositionRequest hrPositionRequest) {
         HrPosition hrPosition = this.getById(hrPositionRequest.getPositionId());
         if (ObjectUtil.isEmpty(hrPosition)) {
             String userTip = StrUtil.format(PositionExceptionEnum.CANT_FIND_POSITION.getUserTip(), hrPositionRequest.getPositionId());
@@ -168,4 +109,34 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
         }
         return hrPosition;
     }
+
+
+    /**
+     * 实体构建 QueryWrapper
+     *
+     * @return
+     * @author chenjinlong
+     * @date 2021/2/2 10:17
+     */
+    private LambdaQueryWrapper<HrPosition> createWrapper(HrPositionRequest hrPositionRequest) {
+        LambdaQueryWrapper<HrPosition> queryWrapper = new LambdaQueryWrapper<>();
+
+        Long positionId = hrPositionRequest.getPositionId();
+        String positionName = hrPositionRequest.getPositionName();
+        String positionCode = hrPositionRequest.getPositionCode();
+
+        // SQL条件拼接
+        queryWrapper.eq(ObjectUtil.isNotNull(positionId), HrPosition::getPositionId, positionId);
+        queryWrapper.like(StrUtil.isNotEmpty(positionName), HrPosition::getPositionName, positionName);
+        queryWrapper.eq(StrUtil.isNotEmpty(positionCode), HrPosition::getPositionCode, positionCode);
+
+        // 查询未删除状态的
+        queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
+        // 根据排序升序排列，序号越小越在前
+        queryWrapper.orderByAsc(HrPosition::getPositionSort);
+
+        return queryWrapper;
+    }
+
+
 }

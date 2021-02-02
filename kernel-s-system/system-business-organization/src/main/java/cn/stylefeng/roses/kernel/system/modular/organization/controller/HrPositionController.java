@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 /**
  * 系统职位控制器
  *
- * @author fengshuonan
+ * @author chenjinlong
  * @date 2020/11/18 21:56
  */
 @RestController
@@ -30,7 +30,7 @@ public class HrPositionController {
     /**
      * 添加系统职位
      *
-     * @author fengshuonan
+     * @author chenjinlong
      * @date 2020/11/04 11:07
      */
     @PostResource(name = "添加系统职位", path = "/hrPosition/add")
@@ -42,7 +42,7 @@ public class HrPositionController {
     /**
      * 编辑系统职位
      *
-     * @author fengshuonan
+     * @author chenjinlong
      * @date 2020/11/04 11:07
      */
     @PostResource(name = "编辑系统职位", path = "/hrPosition/edit")
@@ -54,19 +54,19 @@ public class HrPositionController {
     /**
      * 删除系统职位
      *
-     * @author fengshuonan
+     * @author chenjinlong
      * @date 2020/11/04 11:07
      */
     @PostResource(name = "删除系统职位", path = "/hrPosition/delete")
     public ResponseData delete(@RequestBody @Validated(HrPositionRequest.delete.class) HrPositionRequest hrPositionRequest) {
-        hrPositionService.delete(hrPositionRequest);
+        hrPositionService.del(hrPositionRequest);
         return new SuccessResponseData();
     }
 
     /**
      * 更新职位状态
      *
-     * @author fengshuonan
+     * @author chenjinlong
      * @date 2020/11/04 11:07
      */
     @PostResource(name = "更新职位状态", path = "/hrPosition/updateStatus")
@@ -78,7 +78,7 @@ public class HrPositionController {
     /**
      * 查看详情系统职位
      *
-     * @author fengshuonan
+     * @author chenjinlong
      * @date 2020/11/04 11:07
      */
     @GetResource(name = "查看详情系统职位", path = "/hrPosition/detail")
@@ -89,23 +89,23 @@ public class HrPositionController {
     /**
      * 分页查询系统职位
      *
-     * @author fengshuonan
+     * @author chenjinlong
      * @date 2020/11/04 11:07
      */
     @GetResource(name = "分页查询系统职位", path = "/hrPosition/page")
     public ResponseData page(HrPositionRequest hrPositionRequest) {
-        return new SuccessResponseData(hrPositionService.page(hrPositionRequest));
+        return new SuccessResponseData(hrPositionService.findPage(hrPositionRequest));
     }
 
     /**
      * 获取全部系统职位
      *
-     * @author fengshuonan
+     * @author chenjinlong
      * @date 2020/11/04 11:07
      */
     @GetResource(name = "获取全部系统职位", path = "/hrPosition/list")
     public ResponseData list(HrPositionRequest hrPositionRequest) {
-        return new SuccessResponseData(hrPositionService.list(hrPositionRequest));
+        return new SuccessResponseData(hrPositionService.findList(hrPositionRequest));
     }
 
 }
