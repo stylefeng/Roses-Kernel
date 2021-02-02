@@ -6,7 +6,6 @@ import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.OrganizationServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
-import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationResponse;
 import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -46,7 +45,7 @@ public interface HrOrganizationService extends IService<HrOrganization>, Organiz
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    void delete(HrOrganizationRequest hrOrganizationRequest);
+    void del(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 修改组织机构状态
@@ -75,7 +74,7 @@ public interface HrOrganizationService extends IService<HrOrganization>, Organiz
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    PageResult<HrOrganization> page(HrOrganizationRequest hrOrganizationRequest);
+    PageResult<HrOrganization> findPage(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 查询所有系统组织机构
@@ -85,7 +84,7 @@ public interface HrOrganizationService extends IService<HrOrganization>, Organiz
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    List<HrOrganization> list(HrOrganizationRequest hrOrganizationRequest);
+    List<HrOrganization> findList(HrOrganizationRequest hrOrganizationRequest);
 
 
     /**

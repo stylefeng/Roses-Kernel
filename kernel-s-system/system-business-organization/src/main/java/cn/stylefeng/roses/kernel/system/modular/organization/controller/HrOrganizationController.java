@@ -60,7 +60,7 @@ public class HrOrganizationController {
      */
     @PostResource(name = "删除系统组织机构", path = "/hrOrganization/delete")
     public ResponseData delete(@RequestBody @Validated(HrOrganizationRequest.delete.class) HrOrganizationRequest hrOrganizationRequest) {
-        hrOrganizationService.delete(hrOrganizationRequest);
+        hrOrganizationService.del(hrOrganizationRequest);
         return new SuccessResponseData();
     }
 
@@ -95,7 +95,7 @@ public class HrOrganizationController {
      */
     @GetResource(name = "分页查询系统组织机构", path = "/hrOrganization/page")
     public ResponseData page(HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.page(hrOrganizationRequest));
+        return new SuccessResponseData(hrOrganizationService.findPage(hrOrganizationRequest));
     }
 
     /**
@@ -106,7 +106,7 @@ public class HrOrganizationController {
      */
     @GetResource(name = "获取全部系统组织机构", path = "/hrOrganization/list")
     public ResponseData list(HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.list(hrOrganizationRequest));
+        return new SuccessResponseData(hrOrganizationService.findList(hrOrganizationRequest));
     }
 
     /**

@@ -106,7 +106,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(HrOrganizationRequest hrOrganizationRequest) {
+    public void del(HrOrganizationRequest hrOrganizationRequest) {
 
         HrOrganization hrOrganization = this.queryOrganization(hrOrganizationRequest);
         Long organizationId = hrOrganization.getOrgId();
@@ -123,9 +123,9 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         // 级联删除子节点，逻辑删除
         Set<Long> childIdList = DbOperatorContext.me().findSubListByParentId("hr_organization", "org_pids", "org_id", organizationId);
         childIdList.add(organizationId);
+
         LambdaUpdateWrapper<HrOrganization> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.in(HrOrganization::getOrgId, childIdList)
-                .set(HrOrganization::getDelFlag, YesOrNotEnum.Y.getCode());
+        updateWrapper.in(HrOrganization::getOrgId, childIdList).set(HrOrganization::getDelFlag, YesOrNotEnum.Y.getCode());
         this.update(updateWrapper);
 
         // 删除角色对应的组织架构数据范围
@@ -137,7 +137,6 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
     @Override
     public void updateStatus(HrOrganizationRequest hrOrganizationRequest) {
-        // 先查询有没有这条记录，再更新
         HrOrganization hrOrganization = this.queryOrganization(hrOrganizationRequest);
         hrOrganization.setStatusFlag(hrOrganizationRequest.getStatusFlag());
         this.updateById(hrOrganization);
@@ -149,24 +148,15 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     }
 
     @Override
-    public PageResult<HrOrganization> page(HrOrganizationRequest hrOrganizationRequest) {
-
-        // 构造条件
-        LambdaQueryWrapper<HrOrganization> wrapper = createWrapper(hrOrganizationRequest);
-
-        // 获取分页参数
-        Page<HrOrganization> page = PageFactory.defaultPage();
-
-        // 返回分页结果
-        return PageResultFactory.createPageResult(this.page(page, wrapper));
+    public PageResult<HrOrganization> findPage(HrOrganizationRequest hrOrganizationRequest) {
+        LambdaQueryWrapper<HrOrganization> wrapper = this.createWrapper(hrOrganizationRequest);
+        Page<HrOrganization> page = this.page(PageFactory.defaultPage(), wrapper);
+        return PageResultFactory.createPageResult(page);
     }
 
     @Override
-    public List<HrOrganization> list(HrOrganizationRequest hrOrganizationRequest) {
-
-        // 构造条件
-        LambdaQueryWrapper<HrOrganization> wrapper = createWrapper(hrOrganizationRequest);
-
+    public List<HrOrganization> findList(HrOrganizationRequest hrOrganizationRequest) {
+        LambdaQueryWrapper<HrOrganization> wrapper = this.createWrapper(hrOrganizationRequest);
         return this.list(wrapper);
     }
 
@@ -219,15 +209,13 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         return resultList;
     }
 
-    @Override
-    public List<DefaultTreeNode> tree(HrOrganizationRequest hrOrganizationRequest) {
 
-        // 定义返回结果
-        List<DefaultTreeNode> treeNodeList = CollectionUtil.newArrayList();
+    private List<HrOrganization> findListByDataScope(HrOrganizationRequest hrOrganizationRequest) {
 
-        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<HrOrganization> queryWrapper = this.createWrapper(hrOrganizationRequest);
 
-        // 如果是超级管理员 或 数据范围是所有，则不过滤数据范围
+        // 数据范围过滤
+        // 如果是超级管理员并且数据范围是所有则不过滤数据范围
         boolean needToDataScope = true;
         if (LoginContext.me().getSuperAdminFlag()) {
             Set<DataScopeTypeEnum> dataScopeTypes = LoginContext.me().getLoginUser().getDataScopeTypeEnums();
@@ -236,30 +224,26 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
             }
         }
 
-        // 如果需要数据范围过滤，则获取用户的数据范围，拼接查询条件
+        // 过滤数据范围的SQL拼接
         if (needToDataScope) {
+            // 获取用户数据范围信息
             Set<Long> dataScope = LoginContext.me().getLoginUser().getDataScopeOrganizationIds();
-
-            // 数据范围没有，直接返回空
-            if (ObjectUtil.isEmpty(dataScope)) {
-                return treeNodeList;
-            }
-
             // 根据组织机构数据范围的上级组织，用于展示完整的树形结构
             Set<Long> allLevelParentIdsByOrganizations = this.findAllLevelParentIdsByOrganizations(dataScope);
-
             // 拼接查询条件
             queryWrapper.in(HrOrganization::getOrgId, allLevelParentIdsByOrganizations);
         }
 
-        // 只查询未删除的
-        queryWrapper.eq(HrOrganization::getDelFlag, YesOrNotEnum.N.getCode());
 
-        // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(HrOrganization::getOrgSort);
+        return this.list(queryWrapper);
+    }
 
+    @Override
+    public List<DefaultTreeNode> tree(HrOrganizationRequest hrOrganizationRequest) {
+        // 定义返回结果
+        List<DefaultTreeNode> treeNodeList = CollectionUtil.newArrayList();
+        List<HrOrganization> list = this.findListByDataScope(hrOrganizationRequest);
         // 组装节点
-        List<HrOrganization> list = this.list(queryWrapper);
         for (HrOrganization hrOrganization : list) {
             DefaultTreeNode orgTreeNode = new DefaultTreeNode();
             orgTreeNode.setId(String.valueOf(hrOrganization.getOrgId()));
@@ -268,7 +252,6 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
             orgTreeNode.setSort(hrOrganization.getOrgSort());
             treeNodeList.add(orgTreeNode);
         }
-
         // 构建树并返回
         return new DefaultTreeBuildFactory<DefaultTreeNode>().doTreeBuild(treeNodeList);
     }
@@ -277,40 +260,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     public List<LayuiOrganizationTreeNode> treeLayui(HrOrganizationRequest hrOrganizationRequest) {
         // 定义返回结果
         List<LayuiOrganizationTreeNode> treeNodeList = CollectionUtil.newArrayList();
-        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
-
-        // 如果是超级管理员 或 数据范围是所有，则不过滤数据范围
-        boolean needToDataScope = true;
-        if (LoginContext.me().getSuperAdminFlag()) {
-            Set<DataScopeTypeEnum> dataScopeTypes = LoginContext.me().getLoginUser().getDataScopeTypeEnums();
-            if (dataScopeTypes != null && dataScopeTypes.contains(DataScopeTypeEnum.ALL)) {
-                needToDataScope = false;
-            }
-        }
-
-        // 如果需要数据范围过滤，则获取用户的数据范围，拼接查询条件
-        if (needToDataScope) {
-            Set<Long> dataScope = LoginContext.me().getLoginUser().getDataScopeOrganizationIds();
-
-            // 数据范围没有，直接返回空
-            if (ObjectUtil.isEmpty(dataScope)) {
-                return treeNodeList;
-            }
-
-            // 根据组织机构数据范围的上级组织，用于展示完整的树形结构
-            Set<Long> allLevelParentIdsByOrganizations = this.findAllLevelParentIdsByOrganizations(dataScope);
-
-            // 拼接查询条件
-            queryWrapper.in(HrOrganization::getOrgId, allLevelParentIdsByOrganizations);
-        }
-
-        // 只查询未删除的
-        queryWrapper.eq(HrOrganization::getDelFlag, YesOrNotEnum.N.getCode());
-
-        // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(HrOrganization::getOrgSort);
-        // 组装节点
-        List<HrOrganization> hrOrganizationList = this.list(queryWrapper);
+        List<HrOrganization> hrOrganizationList = this.findListByDataScope(hrOrganizationRequest);
         hrOrganizationList.forEach(hrOrganization -> {
             LayuiOrganizationTreeNode treeNode = OrganizationFactory.parseOrganizationTreeNode(hrOrganization);
             treeNodeList.add(treeNode);
@@ -339,22 +289,18 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
             // 获取pids值
             String pids = hrOrganization.getOrgPids();
-
             // 去掉所有的左中括号
-            String cutLeft = StrUtil.removeAll(pids, SystemConstants.PID_LEFT_DIVIDE_SYMBOL);
-
+            pids = StrUtil.removeAll(pids, SystemConstants.PID_LEFT_DIVIDE_SYMBOL);
             // 去掉所有的右中括号
-            String cutRight = StrUtil.removeAll(cutLeft, SystemConstants.PID_RIGHT_DIVIDE_SYMBOL);
-
+            pids = StrUtil.removeAll(pids, SystemConstants.PID_RIGHT_DIVIDE_SYMBOL);
             // 按逗号分割这个字符串，得到pid的数组
-            String[] finalPidArray = cutRight.split(StrUtil.COMMA);
+            String[] finalPidArray = pids.split(StrUtil.COMMA);
 
             // 遍历这些值，放入到最终的set
             for (String pid : finalPidArray) {
                 allLevelParentIds.add(Convert.toLong(pid));
             }
         }
-
         return allLevelParentIds;
     }
 
