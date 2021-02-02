@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.dsctn.api.exception;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.dsctn.api.constants.DatasourceContainerConstants;
 import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
@@ -12,12 +13,12 @@ import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
  */
 public class DatasourceContainerException extends ServiceException {
 
-    public DatasourceContainerException(AbstractExceptionEnum exception) {
-        super(DatasourceContainerConstants.DS_CTN_MODULE_NAME, exception);
+    public DatasourceContainerException(AbstractExceptionEnum exception, Object... params) {
+        super(DatasourceContainerConstants.DS_CTN_MODULE_NAME, exception.getErrorCode(), StrUtil.format(exception.getUserTip(), params));
     }
 
-    public DatasourceContainerException(AbstractExceptionEnum exception, String userTip) {
-        super(DatasourceContainerConstants.DS_CTN_MODULE_NAME, exception.getErrorCode(), userTip);
+    public DatasourceContainerException(AbstractExceptionEnum exception) {
+        super(DatasourceContainerConstants.DS_CTN_MODULE_NAME, exception);
     }
 
 }

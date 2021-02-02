@@ -17,6 +17,13 @@
 
     <dependencies>
 
+        <!--校验模块的api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>validator-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
 
     </dependencies>
 
