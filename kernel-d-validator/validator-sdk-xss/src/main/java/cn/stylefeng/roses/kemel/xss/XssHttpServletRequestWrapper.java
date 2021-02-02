@@ -25,6 +25,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
      * @author fengshuonan
      * @date 2021/1/13 22:52
      */
+    @Override
     public String[] getParameterValues(String parameter) {
 
         // 获取所有参数
@@ -48,6 +49,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
      * @author fengshuonan
      * @date 2021/1/13 22:52
      */
+    @Override
     public String getParameter(String parameter) {
         String value = super.getParameter(parameter);
         if (ObjectUtil.isEmpty(value)) {
@@ -62,6 +64,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
      * @author fengshuonan
      * @date 2021/1/13 22:53
      */
+    @Override
     public String getHeader(String name) {
         String value = super.getHeader(name);
         if (ObjectUtil.isEmpty(value)) {
