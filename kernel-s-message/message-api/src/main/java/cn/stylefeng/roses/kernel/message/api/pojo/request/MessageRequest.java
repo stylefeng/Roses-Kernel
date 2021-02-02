@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.message.api.pojo;
+package cn.stylefeng.roses.kernel.message.api.pojo.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class MessageParam extends BaseRequest {
+public class MessageRequest extends BaseRequest {
 
     /**
      * 消息id

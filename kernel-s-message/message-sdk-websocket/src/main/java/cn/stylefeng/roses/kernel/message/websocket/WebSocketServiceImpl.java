@@ -5,8 +5,8 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.message.api.WebsocketApi;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
-import cn.stylefeng.roses.kernel.message.api.pojo.MessageResponse;
-import cn.stylefeng.roses.kernel.message.api.pojo.MessageSendParam;
+import cn.stylefeng.roses.kernel.message.api.pojo.response.MessageResponse;
+import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageSendRequest;
 import cn.stylefeng.roses.kernel.message.websocket.manager.WebSocketManager;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,12 +34,12 @@ public class WebSocketServiceImpl implements WebsocketApi {
     }
 
     @Override
-    public void sendWebSocketMessage(List<Long> userIdList, MessageSendParam messageSendParam) {
+    public void sendWebSocketMessage(List<Long> userIdList, MessageSendRequest messageSendRequest) {
         // 获取当前登录人
         LoginUser loginUser = LoginContext.me().getLoginUser();
         try {
             MessageResponse sysMessage = new MessageResponse();
-            BeanUtil.copyProperties(messageSendParam, sysMessage);
+            BeanUtil.copyProperties(messageSendRequest, sysMessage);
             sysMessage.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());
             sysMessage.setSendUserId(loginUser.getUserId());
             String msgInfo = MAPPER.writeValueAsString(sysMessage);

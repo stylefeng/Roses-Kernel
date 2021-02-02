@@ -1,10 +1,13 @@
 package cn.stylefeng.roses.kernel.message.db.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.message.api.pojo.MessageParam;
+import cn.stylefeng.roses.kernel.message.api.exception.MessageException;
+import cn.stylefeng.roses.kernel.message.api.exception.enums.MessageExceptionEnum;
+import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageRequest;
 import cn.stylefeng.roses.kernel.message.db.entity.SysMessage;
 import cn.stylefeng.roses.kernel.message.db.mapper.SysMessageMapper;
 import cn.stylefeng.roses.kernel.message.db.service.SysMessageService;
@@ -25,23 +28,65 @@ import java.util.List;
 @Service
 public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMessage> implements SysMessageService {
 
+    @Override
+    public void add(MessageRequest messageRequest) {
+        SysMessage sysMessage = new SysMessage();
+        BeanUtil.copyProperties(messageRequest, sysMessage);
+        this.save(sysMessage);
+    }
 
     @Override
-    public PageResult<SysMessage> page(MessageParam messageParam) {
-        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageParam);
+    public void del(MessageRequest messageRequest) {
+        SysMessage sysMessage = this.querySysMessageById(messageRequest);
+        // 逻辑删除
+        sysMessage.setDelFlag(YesOrNotEnum.Y.getCode());
+        this.updateById(sysMessage);
+    }
+
+    @Override
+    public void edit(MessageRequest messageRequest) {
+        SysMessage sysMessage = new SysMessage();
+        BeanUtil.copyProperties(messageRequest, sysMessage);
+        this.updateById(sysMessage);
+    }
+
+    @Override
+    public SysMessage detail(MessageRequest messageRequest) {
+        LambdaQueryWrapper<SysMessage> queryWrapper = this.createWrapper(messageRequest);
+        return this.getOne(queryWrapper, false);
+    }
+
+    @Override
+    public PageResult<SysMessage> findPage(MessageRequest messageRequest) {
+        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageRequest);
         Page<SysMessage> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
     }
 
     @Override
-    public List<SysMessage> list(MessageParam messageParam) {
-        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageParam);
+    public List<SysMessage> findList(MessageRequest messageRequest) {
+        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageRequest);
         return this.list(wrapper);
     }
+
     @Override
-    public Integer count(MessageParam messageParam) {
-        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageParam);
+    public Integer findCount(MessageRequest messageRequest) {
+        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageRequest);
         return this.count(wrapper);
+    }
+
+    /**
+     * 根据主键id获取对象
+     *
+     * @author liuhanqing
+     * @date 2021/2/2 20:57
+     */
+    private SysMessage querySysMessageById(MessageRequest messageRequest) {
+        SysMessage sysMessage = this.getById(messageRequest.getMessageId());
+        if (ObjectUtil.isEmpty(sysMessage)) {
+            throw new MessageException(MessageExceptionEnum.NOT_EXISTED, messageRequest.getMessageId());
+        }
+        return sysMessage;
     }
 
     /**
@@ -50,31 +95,27 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
      * @author liuhanqing
      * @date 2021/1/8 14:16
      */
-    private LambdaQueryWrapper<SysMessage> createWrapper(MessageParam messageParam) {
+    private LambdaQueryWrapper<SysMessage> createWrapper(MessageRequest messageRequest) {
         LambdaQueryWrapper<SysMessage> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (ObjectUtil.isNotNull(messageParam)) {
+        // 消息标题
+        String messageTitle = messageRequest.getMessageTitle();
 
-            // 拼接消息标题
-            if (ObjectUtil.isNotEmpty(messageParam.getMessageTitle())) {
-                queryWrapper.like(SysMessage::getMessageTitle, messageParam.getMessageTitle());
-            }
+        // 接收人id
+        Long receiveUserId = messageRequest.getReceiveUserId();
 
-            // 拼接接收人id查询条件
-            if (ObjectUtil.isNotEmpty(messageParam.getReceiveUserId())) {
-                queryWrapper.eq(SysMessage::getReceiveUserId, messageParam.getReceiveUserId());
-            }
+        // 消息类型
+        String messageType = messageRequest.getMessageType();
 
-            // 拼接消息类型
-            if (ObjectUtil.isNotEmpty(messageParam.getMessageType())) {
-                queryWrapper.eq(SysMessage::getMessageType, messageParam.getMessageType());
-            }
+        // 阅读状态
+        Integer readFlag = messageRequest.getReadFlag();
 
-            // 拼接阅读状态
-            if (ObjectUtil.isNotEmpty(messageParam.getReadFlag())) {
-                queryWrapper.eq(SysMessage::getReadFlag, messageParam.getReadFlag());
-            }
-        }
+        // 拼接sql 条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(messageTitle), SysMessage::getMessageTitle, messageTitle);
+        queryWrapper.eq(ObjectUtil.isNotEmpty(receiveUserId), SysMessage::getReceiveUserId, receiveUserId);
+        queryWrapper.eq(ObjectUtil.isNotEmpty(messageType), SysMessage::getMessageType, messageType);
+        queryWrapper.eq(ObjectUtil.isNotEmpty(readFlag), SysMessage::getReadFlag, readFlag);
+
         // 查询未删除的
         queryWrapper.ne(SysMessage::getDelFlag, YesOrNotEnum.Y.getCode());
 
