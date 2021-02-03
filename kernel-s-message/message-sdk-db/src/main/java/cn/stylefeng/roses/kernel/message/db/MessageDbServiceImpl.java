@@ -13,9 +13,9 @@ import cn.stylefeng.roses.kernel.message.api.constants.MessageConstants;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import cn.stylefeng.roses.kernel.message.api.exception.MessageException;
 import cn.stylefeng.roses.kernel.message.api.exception.enums.MessageExceptionEnum;
-import cn.stylefeng.roses.kernel.message.api.pojo.MessageParam;
-import cn.stylefeng.roses.kernel.message.api.pojo.MessageResponse;
-import cn.stylefeng.roses.kernel.message.api.pojo.MessageSendParam;
+import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageRequest;
+import cn.stylefeng.roses.kernel.message.api.pojo.response.MessageResponse;
+import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageSendRequest;
 import cn.stylefeng.roses.kernel.message.db.entity.SysMessage;
 import cn.stylefeng.roses.kernel.message.db.service.SysMessageService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
@@ -51,8 +51,8 @@ public class MessageDbServiceImpl implements MessageApi {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void sendMessage(MessageSendParam messageSendParam) {
-        String receiveUserIds = messageSendParam.getReceiveUserIds();
+    public void sendMessage(MessageSendRequest messageSendRequest) {
+        String receiveUserIds = messageSendRequest.getReceiveUserIds();
         // 获取当前登录人
         LoginUser loginUser = LoginContext.me().getLoginUser();
         List<SysMessage> sendMsgList = new ArrayList<>();
@@ -71,7 +71,7 @@ public class MessageDbServiceImpl implements MessageApi {
 
         Set<Long> userIdSet = new HashSet<>(userIds);
         SysMessage sysMessage = new SysMessage();
-        BeanUtil.copyProperties(messageSendParam, sysMessage);
+        BeanUtil.copyProperties(messageSendRequest, sysMessage);
         // 初始化默认值
         sysMessage.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());
         sysMessage.setSendUserId(loginUser.getUserId());
@@ -83,18 +83,18 @@ public class MessageDbServiceImpl implements MessageApi {
             }
         });
 
-        websocketApi.sendWebSocketMessage(ListUtil.toList(userIdSet), messageSendParam);
+        websocketApi.sendWebSocketMessage(ListUtil.toList(userIdSet), messageSendRequest);
         sysMessageService.saveBatch(sendMsgList);
 
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateReadFlag(MessageParam messageParam) {
-        Long messageId = messageParam.getMessageId();
+    public void updateReadFlag(MessageRequest messageRequest) {
+        Long messageId = messageRequest.getMessageId();
         SysMessage sysMessage = sysMessageService.getById(messageId);
         Optional.ofNullable(sysMessage).ifPresent(msg -> {
-            msg.setReadFlag(messageParam.getReadFlag());
+            msg.setReadFlag(messageRequest.getReadFlag());
             sysMessageService.updateById(msg);
         });
 
@@ -143,8 +143,8 @@ public class MessageDbServiceImpl implements MessageApi {
     }
 
     @Override
-    public MessageResponse messageDetail(MessageParam messageParam) {
-        SysMessage sysMessage = sysMessageService.getById(messageParam.getMessageId());
+    public MessageResponse messageDetail(MessageRequest messageRequest) {
+        SysMessage sysMessage = sysMessageService.getById(messageRequest.getMessageId());
         // 判断消息为未读状态更新为已读
         Optional.ofNullable(sysMessage).ifPresent(msg -> {
             if (MessageReadFlagEnum.UNREAD.getCode().equals(sysMessage.getReadFlag())) {
@@ -158,8 +158,8 @@ public class MessageDbServiceImpl implements MessageApi {
     }
 
     @Override
-    public PageResult<MessageResponse> queryPage(MessageParam messageParam) {
-        PageResult<SysMessage> pageResult = sysMessageService.page(messageParam);
+    public PageResult<MessageResponse> queryPage(MessageRequest messageRequest) {
+        PageResult<SysMessage> pageResult = sysMessageService.findPage(messageRequest);
         PageResult<MessageResponse> result = new PageResult<>();
         List<SysMessage> messageList = pageResult.getRows();
         List<MessageResponse> resultList = messageList.stream().map(msg -> {
@@ -173,8 +173,8 @@ public class MessageDbServiceImpl implements MessageApi {
     }
 
     @Override
-    public List<MessageResponse> queryList(MessageParam messageParam) {
-        List<SysMessage> messageList = sysMessageService.list(messageParam);
+    public List<MessageResponse> queryList(MessageRequest messageRequest) {
+        List<SysMessage> messageList = sysMessageService.findList(messageRequest);
         List<MessageResponse> resultList = messageList.stream().map(msg -> {
             MessageResponse response = new MessageResponse();
             BeanUtil.copyProperties(msg, response);
@@ -184,41 +184,41 @@ public class MessageDbServiceImpl implements MessageApi {
     }
 
     @Override
-    public PageResult<MessageResponse> queryPageCurrentUser(MessageParam messageParam) {
-        if (ObjectUtil.isEmpty(messageParam)) {
-            messageParam = new MessageParam();
+    public PageResult<MessageResponse> queryPageCurrentUser(MessageRequest messageRequest) {
+        if (ObjectUtil.isEmpty(messageRequest)) {
+            messageRequest = new MessageRequest();
         }
         // 获取当前登录人
         LoginUser loginUser = LoginContext.me().getLoginUser();
-        messageParam.setReceiveUserId(loginUser.getUserId());
-        return this.queryPage(messageParam);
+        messageRequest.setReceiveUserId(loginUser.getUserId());
+        return this.queryPage(messageRequest);
     }
 
     @Override
-    public List<MessageResponse> queryListCurrentUser(MessageParam messageParam) {
-        if (ObjectUtil.isEmpty(messageParam)) {
-            messageParam = new MessageParam();
+    public List<MessageResponse> queryListCurrentUser(MessageRequest messageRequest) {
+        if (ObjectUtil.isEmpty(messageRequest)) {
+            messageRequest = new MessageRequest();
         }
         // 获取当前登录人
         LoginUser loginUser = LoginContext.me().getLoginUser();
-        messageParam.setReceiveUserId(loginUser.getUserId());
-        return this.queryList(messageParam);
+        messageRequest.setReceiveUserId(loginUser.getUserId());
+        return this.queryList(messageRequest);
     }
 
     @Override
-    public Integer queryCount(MessageParam messageParam) {
-        return sysMessageService.count(messageParam);
+    public Integer queryCount(MessageRequest messageRequest) {
+        return sysMessageService.findCount(messageRequest);
     }
 
     @Override
-    public Integer queryCountCurrentUser(MessageParam messageParam) {
-        if (ObjectUtil.isEmpty(messageParam)) {
-            messageParam = new MessageParam();
+    public Integer queryCountCurrentUser(MessageRequest messageRequest) {
+        if (ObjectUtil.isEmpty(messageRequest)) {
+            messageRequest = new MessageRequest();
         }
         // 获取当前登录人
         LoginUser loginUser = LoginContext.me().getLoginUser();
-        messageParam.setReceiveUserId(loginUser.getUserId());
-        return this.queryCount(messageParam);
+        messageRequest.setReceiveUserId(loginUser.getUserId());
+        return this.queryCount(messageRequest);
     }
 
 }

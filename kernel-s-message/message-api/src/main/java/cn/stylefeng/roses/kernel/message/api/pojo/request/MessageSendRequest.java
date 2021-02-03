@@ -1,7 +1,6 @@
-package cn.stylefeng.roses.kernel.message.api.pojo;
+package cn.stylefeng.roses.kernel.message.api.pojo.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +16,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class MessageSendParam extends BaseRequest {
+public class MessageSendRequest extends BaseRequest {
 
     /**
      * 接收用户id字符串，多个以,分割

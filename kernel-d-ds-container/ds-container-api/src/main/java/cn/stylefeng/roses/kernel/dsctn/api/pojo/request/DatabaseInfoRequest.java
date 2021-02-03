@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.dsctn.modular.pojo;
+package cn.stylefeng.roses.kernel.dsctn.api.pojo.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.validators.unique.TableUniqueValue;
@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class DatabaseInfoParam extends BaseRequest {
+public class DatabaseInfoRequest extends BaseRequest {
 
     private static final long serialVersionUID = 1L;
 

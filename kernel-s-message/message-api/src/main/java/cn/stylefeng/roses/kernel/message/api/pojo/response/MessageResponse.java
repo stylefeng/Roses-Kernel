@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.message.api.pojo;
+package cn.stylefeng.roses.kernel.message.api.pojo.response;
 
 import cn.stylefeng.roses.kernel.message.api.enums.MessageBusinessTypeEnum;
 import cn.stylefeng.roses.kernel.message.api.enums.MessagePriorityLevelEnum;
