@@ -2,7 +2,10 @@ package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
+import cn.stylefeng.roses.kernel.system.pojo.UserOrgRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * 用户组织机构关联信息
@@ -13,19 +16,80 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface SysUserOrgService extends IService<SysUserOrg>, UserOrgServiceApi {
 
     /**
-     * 更新用户组织机构绑定
+     * 新增
      *
-     * @author fengshuonan
-     * @date 2020/12/19 22:29
+     * @param userOrgResponse 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
      */
-    void updateUserOrg(Long userId, Long orgId, Long positionId);
+    void add(UserOrgRequest userOrgResponse);
 
     /**
-     * 删除用户对应的组织机构信息
+     * 新增
      *
-     * @author fengshuonan
-     * @date 2020/12/19 22:38
+     * @param userId     用户id
+     * @param orgId      机构id
+     * @param positionId 部门id
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
      */
-    void deleteUserOrg(Long userId);
+    void add(Long userId, Long orgId, Long positionId);
+
+    /**
+     * 删除
+     *
+     * @param userOrgResponse 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void del(UserOrgRequest userOrgResponse);
+
+    /**
+     * 删除
+     *
+     * @param userId 用户id
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void delByUserId(Long userId);
+
+    /**
+     * 修改
+     *
+     * @param userOrgResponse 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void edit(UserOrgRequest userOrgResponse);
+
+    /**
+     * 修改
+     *
+     * @param userId     用户id
+     * @param orgId      机构id
+     * @param positionId 部门id
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void edit(Long userId, Long orgId, Long positionId);
+
+    /**
+     * 详情
+     *
+     * @param userOrgResponse 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    SysUserOrg detail(UserOrgRequest userOrgResponse);
+
+    /**
+     * 查询-列表
+     *
+     * @param userOrgResponse 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    List<SysUserOrg> findList(UserOrgRequest userOrgResponse);
+
 
 }

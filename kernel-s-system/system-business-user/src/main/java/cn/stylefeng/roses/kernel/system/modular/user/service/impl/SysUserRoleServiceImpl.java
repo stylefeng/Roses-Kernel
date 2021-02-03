@@ -1,17 +1,18 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
-import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserRoleMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
+import cn.stylefeng.roses.kernel.system.pojo.UserRoleRequest;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,58 +25,114 @@ import java.util.stream.Collectors;
 @Service
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements SysUserRoleService {
 
+
     @Override
-    public List<SysUserRole> getUserRoles(Long userId) {
-        LambdaQueryWrapper<SysUserRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysUserRole::getUserId, userId);
-        List<SysUserRole> list = this.list(wrapper);
-
-        // 账号下没有绑定角色
-        if (list.isEmpty()) {
-            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_BIND_ROLE);
-        }
-
-        return list;
+    public void add(UserRoleRequest userRoleRequest) {
+        SysUserRole sysUserRole = new SysUserRole();
+        BeanUtil.copyProperties(userRoleRequest, sysUserRole);
+        this.save(sysUserRole);
     }
 
     @Override
-    public List<Long> getUserRoleIds(Long userId) {
-        LambdaQueryWrapper<SysUserRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysUserRole::getUserId, userId);
-        List<SysUserRole> list = this.list(wrapper);
-        return list.stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
+    public void del(UserRoleRequest userRoleRequest) {
+        SysUserRole sysUserRole = querySysUserRoleById(userRoleRequest);
+        this.removeById(sysUserRole.getUserRoleId());
     }
+
+    @Override
+    public void delByUserId(Long userId) {
+        LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUserRole::getUserId, userId);
+        this.remove(queryWrapper);
+    }
+
+    @Override
+    public void edit(UserRoleRequest userRoleRequest) {
+        SysUserRole sysUserRole = this.querySysUserRoleById(userRoleRequest);
+        BeanUtil.copyProperties(userRoleRequest, sysUserRole);
+        this.updateById(sysUserRole);
+    }
+
+    @Override
+    public SysUserRole detail(UserRoleRequest userRoleRequest) {
+        LambdaQueryWrapper<SysUserRole> queryWrapper = this.createQueryWrapper(userRoleRequest);
+        return this.getOne(queryWrapper, false);
+    }
+
+    @Override
+    public List<SysUserRole> findList(UserRoleRequest userRoleRequest) {
+        LambdaQueryWrapper<SysUserRole> queryWrapper = this.createQueryWrapper(userRoleRequest);
+        return this.list(queryWrapper);
+    }
+
+    @Override
+    public List<SysUserRole> findListByUserId(Long userId) {
+        UserRoleRequest userRoleRequest = new UserRoleRequest();
+        userRoleRequest.setUserId(userId);
+        return this.findList(userRoleRequest);
+    }
+
+    @Override
+
+    public List<Long> findRoleIdsByUserId(Long userId) {
+        UserRoleRequest userRoleRequest = new UserRoleRequest();
+        userRoleRequest.setUserId(userId);
+        List<SysUserRole> sysUserRoleList = this.findList(userRoleRequest);
+        return sysUserRoleList.stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
+    }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void grantRole(SysUserRequest sysUserRequest) {
-
+    public void assignRoles(SysUserRequest sysUserRequest) {
         // 获取用户id
         Long userId = sysUserRequest.getUserId();
 
-        // 删除该用户的所有角色
-        LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUserRole::getUserId, userId);
-        this.remove(queryWrapper);
+        // 删除已有角色
+        this.delByUserId(userId);
 
         // 为该用户授权角色
-        List<Long> roleIdList = sysUserRequest.getGrantRoleIdList();
+        List<Long> rileIds = sysUserRequest.getGrantRoleIdList();
 
-        ArrayList<SysUserRole> sysUserRoles = new ArrayList<>();
-        for (Long roleId : roleIdList) {
+        // 批量添加角色
+        List<SysUserRole> sysUserRoleList = CollUtil.newArrayList();
+        rileIds.forEach(roleId -> {
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setUserId(userId);
             sysUserRole.setRoleId(roleId);
-            sysUserRoles.add(sysUserRole);
-        }
-        this.saveBatch(sysUserRoles);
+            sysUserRoleList.add(sysUserRole);
+        });
+
+        this.saveBatch(sysUserRoleList);
     }
 
-    @Override
-    public void deleteUserRoleListByUserId(Long userId) {
+    /**
+     * 根据主键查询
+     *
+     * @param userRoleRequest dto实体
+     * @return
+     * @author chenjinlong
+     * @date 2021/2/3 15:02
+     */
+    private SysUserRole querySysUserRoleById(UserRoleRequest userRoleRequest) {
+        return this.getById(userRoleRequest.getUserRoleId());
+    }
+
+    /**
+     * 构建 QueryWrapper
+     *
+     * @param userRoleRequest dto实体
+     * @author chenjinlong
+     * @date 2021/2/3 14:54
+     */
+    private LambdaQueryWrapper<SysUserRole> createQueryWrapper(UserRoleRequest userRoleRequest) {
         LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUserRole::getUserId, userId);
+        // SQL拼接
+        queryWrapper.eq(ObjectUtil.isNotNull(userRoleRequest.getUserRoleId()), SysUserRole::getUserRoleId, userRoleRequest.getUserRoleId());
+        queryWrapper.eq(ObjectUtil.isNotNull(userRoleRequest.getUserId()), SysUserRole::getUserId, userRoleRequest.getUserId());
+        queryWrapper.eq(ObjectUtil.isNotNull(userRoleRequest.getRoleId()), SysUserRole::getRoleId, userRoleRequest.getRoleId());
 
-        this.remove(queryWrapper);
+        return queryWrapper;
     }
+
 }

@@ -27,7 +27,12 @@ public enum SysUserOrgExceptionEnum implements AbstractExceptionEnum {
     /**
      * 用户未设置主部门，或主部门信息为多个
      */
-    EMPLOYEE_NOT_OR_MANY(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "23", "用户未设置主部门，或主部门信息为多个");
+    EMPLOYEE_NOT_OR_MANY(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "23", "用户未设置主部门，或主部门信息为多个"),
+
+    /**
+     * 用户组织或部门不存在
+     */
+    USER_ORG_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "24", "用户组织或部门不存在：用户组织id：{}");
 
     /**
      * 错误编码

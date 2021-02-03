@@ -36,7 +36,6 @@ import cn.stylefeng.roses.kernel.system.modular.user.factory.OnlineUserCreateFac
 import cn.stylefeng.roses.kernel.system.modular.user.factory.SysUserCreateFactory;
 import cn.stylefeng.roses.kernel.system.modular.user.factory.UserLoginInfoFactory;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserMapper;
-import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
@@ -44,10 +43,7 @@ import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
-import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserResponse;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
-import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
+import cn.stylefeng.roses.kernel.system.pojo.user.*;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
@@ -141,7 +137,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         this.save(sysUser);
 
         // 更新用户员工信息
-        sysUserOrgService.updateUserOrg(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        sysUserOrgService.add(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
     }
 
     @Override
@@ -165,7 +161,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long sysUserId = sysUser.getUserId();
 
         // 更新用户员工信息
-        sysUserOrgService.updateUserOrg(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        sysUserOrgService.edit(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
     }
 
     @Override
@@ -273,7 +269,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         DataScopeUtil.quickValidateDataScope(organizationId);
 
         // 给用户授权角色
-        sysUserRoleService.grantRole(sysUserRequest);
+        sysUserRoleService.assignRoles(sysUserRequest);
     }
 
     @Override
@@ -288,7 +284,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 判断当前用户有无该用户的权限
         DataScopeUtil.quickValidateDataScope(organizationId);
 
-        sysUserDataScopeService.grantData(sysUserRequest);
+        sysUserDataScopeService.assignData(sysUserRequest);
     }
 
     @Override
@@ -315,13 +311,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long userId = sysUser.getUserId();
 
         // 删除该用户对应的员工表信息
-        sysUserOrgService.deleteUserOrg(userId);
+        sysUserOrgService.delByUserId(userId);
 
         // 删除该用户对应的用户-角色表关联信息
-        sysUserRoleService.deleteUserRoleListByUserId(userId);
+        sysUserRoleService.delByUserId(userId);
 
         // 删除该用户对应的用户-数据范围表关联信息
-        sysUserDataScopeService.deleteUserDataScopeListByUserId(userId);
+        sysUserDataScopeService.delByUserId(userId);
     }
 
     @Override
@@ -338,7 +334,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserResponse.setPositionId(userOrgInfo.getPositionId());
 
         // 获取用户角色信息
-        sysUserResponse.setGrantRoleIdList(sysUserRoleService.getUserRoleIds(sysUser.getUserId()));
+        sysUserResponse.setGrantRoleIdList(sysUserRoleService.findRoleIdsByUserId(sysUser.getUserId()));
 
         return sysUserResponse;
     }
@@ -433,8 +429,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long userId = sysUser.getUserId();
 
         // 2. 获取用户角色信息
-        List<SysUserRole> userRoles = sysUserRoleService.getUserRoles(userId);
-        List<Long> roleIds = userRoles.stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
+        List<Long> roleIds = sysUserRoleService.findRoleIdsByUserId(userId);
         List<SysRoleResponse> roleResponseList = roleServiceApi.getRolesByIds(roleIds);
 
         // 3. 获取用户的数据范围
@@ -505,7 +500,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public List<Long> getUserBindDataScope(Long userId) {
-        return sysUserDataScopeService.getUserDataScopeIdList(userId);
+        return sysUserDataScopeService.findOrgIdsByUserId(userId);
     }
 
     @Override
@@ -651,23 +646,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     private LambdaQueryWrapper<SysUser> createWrapper(SysUserRequest sysUserRequest) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        if (ObjectUtil.isNotNull(sysUserRequest)) {
 
-            // 组装账号的查询条件
-            if (ObjectUtil.isNotEmpty(sysUserRequest.getUserId())) {
-                queryWrapper.eq(SysUser::getUserId, sysUserRequest.getUserId());
-            }
-
-            // 组装账号的查询条件
-            if (ObjectUtil.isNotEmpty(sysUserRequest.getAccount())) {
-                queryWrapper.like(SysUser::getAccount, sysUserRequest.getAccount());
-            }
-
-            // 组装用户姓名的查询条件
-            if (ObjectUtil.isNotEmpty(sysUserRequest.getRealName())) {
-                queryWrapper.eq(SysUser::getRealName, sysUserRequest.getRealName());
-            }
-        }
+        // SQL拼接
+        queryWrapper.eq(ObjectUtil.isNotEmpty(sysUserRequest.getUserId()), SysUser::getUserId, sysUserRequest.getUserId());
+        queryWrapper.like(ObjectUtil.isNotEmpty(sysUserRequest.getAccount()), SysUser::getAccount, sysUserRequest.getAccount());
+        queryWrapper.eq(ObjectUtil.isNotEmpty(sysUserRequest.getRealName()), SysUser::getRealName, sysUserRequest.getRealName());
 
         // 查询未删除状态的
         queryWrapper.eq(SysUser::getDelFlag, YesOrNotEnum.N.getCode());

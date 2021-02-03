@@ -3,7 +3,7 @@
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserMapper">
 
     <!--获取用户分页列表-->
-    <select id="findUserPage" resultType="cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse">
+    <select id="findUserPage" resultType="cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse">
         select
         suser.user_id as userId,
         suser.account as account,
@@ -31,7 +31,8 @@
                 and suser.status_flag like concat('%',#{sysUserRequest.statusFlag},'%')
             </if>
             <if test="sysUserRequest.orgId != null and sysUserRequest.orgId != ''">
-                and suorg.org_id in(select org_id from hr_organization where org_pids like CONCAT('%[',#{sysUserRequest.orgId},']%') or org_id=#{sysUserRequest.orgId})
+                and suorg.org_id in(select org_id from hr_organization where org_pids like CONCAT('%[',#{sysUserRequest.orgId},']%') or
+                org_id=#{sysUserRequest.orgId})
             </if>
             and suser.del_flag = 'N'
             order by suser.create_time desc
@@ -40,7 +41,7 @@
     </select>
 
     <!--获取用户列表-->
-    <select id="findUserList" resultType="cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse">
+    <select id="findUserList" resultType="cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse">
         select
         suser.user_id as userId,
         suser.account as account,
@@ -68,7 +69,8 @@
                 and suser.status_flag like concat('%',#{sysUserRequest.statusFlag},'%')
             </if>
             <if test="sysUserRequest.orgId != null and sysUserRequest.orgId != ''">
-                and suorg.org_id in(select org_id from hr_organization where org_pids like CONCAT('%[',#{sysUserRequest.orgId},']%') or org_id=#{sysUserRequest.orgId})
+                and suorg.org_id in(select org_id from hr_organization where org_pids like CONCAT('%[',#{sysUserRequest.orgId},']%') or
+                org_id=#{sysUserRequest.orgId})
             </if>
             and suser.del_flag = 'N'
             order by suser.create_time desc

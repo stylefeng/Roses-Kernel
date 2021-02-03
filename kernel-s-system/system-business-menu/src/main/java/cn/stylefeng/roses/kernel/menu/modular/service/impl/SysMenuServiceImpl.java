@@ -53,7 +53,7 @@ import cn.stylefeng.roses.kernel.system.constants.SymbolConstant;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuExceptionEnum;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
+import cn.stylefeng.roses.kernel.system.pojo.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;

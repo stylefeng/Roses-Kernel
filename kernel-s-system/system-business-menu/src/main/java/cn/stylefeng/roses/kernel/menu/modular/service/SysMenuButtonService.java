@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.menu.modular.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenuButton;
-import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuButtonRequest;
+import cn.stylefeng.roses.kernel.system.pojo.SysMenuButtonRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

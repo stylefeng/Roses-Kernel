@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserDataScope;
+import cn.stylefeng.roses.kernel.system.pojo.UserDataScopeRequest;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -14,14 +15,51 @@ import java.util.List;
  */
 public interface SysUserDataScopeService extends IService<SysUserDataScope> {
 
+
     /**
-     * 授权数据范围（组织机构id集合）给某个用户
+     * 新增
      *
-     * @param sysUserRequest 授权参数
-     * @author fengshuonan
-     * @date 2020/11/21 14:49
+     * @param userDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
      */
-    void grantData(SysUserRequest sysUserRequest);
+    void add(UserDataScopeRequest userDataScopeRequest);
+
+    /**
+     * 删除
+     *
+     * @param userDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void del(UserDataScopeRequest userDataScopeRequest);
+
+    /**
+     * 根据 用户id 删除
+     *
+     * @param userId 用户id
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void delByUserId(Long userId);
+
+    /**
+     * 修改
+     *
+     * @param userDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void edit(UserDataScopeRequest userDataScopeRequest);
+
+    /**
+     * 查询-详情-根据主键id
+     *
+     * @param userDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    SysUserDataScope detail(UserDataScopeRequest userDataScopeRequest);
 
     /**
      * 获取用户的数据范围id集合
@@ -31,14 +69,23 @@ public interface SysUserDataScopeService extends IService<SysUserDataScope> {
      * @author luojie
      * @date 2020/11/6 15:01
      */
-    List<Long> getUserDataScopeIdList(Long uerId);
+    List<Long> findOrgIdsByUserId(Long uerId);
 
     /**
-     * 根据用户id删除对应的用户-数据范围关联信息
+     * 查询-列表-按实体对象
      *
-     * @param userId 用户id
-     * @author luojie
-     * @date 2020/11/6 15:01
+     * @param userDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
      */
-    void deleteUserDataScopeListByUserId(Long userId);
+    List<SysUserDataScope> findList(UserDataScopeRequest userDataScopeRequest);
+
+    /**
+     * 分配数据范围
+     *
+     * @author chenjinlong
+     * @date 2021/2/3 15:49
+     */
+    void assignData(SysUserRequest sysUserRequest);
+
 }

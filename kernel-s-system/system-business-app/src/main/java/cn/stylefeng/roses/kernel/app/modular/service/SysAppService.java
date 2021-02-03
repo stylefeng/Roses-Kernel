@@ -26,7 +26,7 @@ package cn.stylefeng.roses.kernel.app.modular.service;
 
 import cn.stylefeng.roses.kernel.app.modular.entity.SysApp;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.system.pojo.app.request.SysAppRequest;
+import cn.stylefeng.roses.kernel.system.pojo.SysAppRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
