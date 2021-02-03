@@ -15,7 +15,7 @@ import cn.stylefeng.roses.kernel.notice.modular.service.SysNoticeService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.system.exception.enums.NoticeExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.notice.SysNoticeRequest;
+import cn.stylefeng.roses.kernel.system.pojo.SysNoticeRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

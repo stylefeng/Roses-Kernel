@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.pojo.notice;
+package cn.stylefeng.roses.kernel.system.pojo;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -47,7 +47,7 @@ public class SysNoticeRequest extends BaseRequest {
      * 通知开始时间
      */
     @NotNull(message = "通知开始时间不能为空", groups = {add.class, edit.class})
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date noticeBeginTime;
 
 
@@ -55,7 +55,7 @@ public class SysNoticeRequest extends BaseRequest {
      * 通知结束时间
      */
     @NotNull(message = "通知开始时间不能为空", groups = {add.class, edit.class})
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date noticeEndTime;
 
     /**

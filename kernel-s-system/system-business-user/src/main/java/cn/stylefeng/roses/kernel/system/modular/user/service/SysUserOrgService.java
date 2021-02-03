@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
-import cn.stylefeng.roses.kernel.system.pojo.userOrg.UserOrgResponse;
+import cn.stylefeng.roses.kernel.system.pojo.UserOrgResponse;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

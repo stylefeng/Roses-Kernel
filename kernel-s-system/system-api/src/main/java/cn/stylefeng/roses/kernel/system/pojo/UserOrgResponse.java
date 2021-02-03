@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.pojo.userOrg;
+package cn.stylefeng.roses.kernel.system.pojo;
 
 import lombok.Data;
 

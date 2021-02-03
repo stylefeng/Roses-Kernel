@@ -13,7 +13,7 @@ import cn.stylefeng.roses.kernel.loginlog.modular.service.SysLoginLogService;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.exception.enums.AppExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.loginlog.request.SysLoginLogRequest;
+import cn.stylefeng.roses.kernel.system.pojo.SysLoginLogRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
