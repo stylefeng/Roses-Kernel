@@ -141,7 +141,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         this.save(sysUser);
 
         // 更新用户员工信息
-        sysUserOrgService.updateUserOrg(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        sysUserOrgService.add(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
     }
 
     @Override
@@ -165,7 +165,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long sysUserId = sysUser.getUserId();
 
         // 更新用户员工信息
-        sysUserOrgService.updateUserOrg(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        sysUserOrgService.edit(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
     }
 
     @Override
@@ -315,7 +315,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long userId = sysUser.getUserId();
 
         // 删除该用户对应的员工表信息
-        sysUserOrgService.deleteUserOrg(userId);
+        sysUserOrgService.delByUserId(userId);
 
         // 删除该用户对应的用户-角色表关联信息
         sysUserRoleService.deleteUserRoleListByUserId(userId);
@@ -651,24 +651,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     private LambdaQueryWrapper<SysUser> createWrapper(SysUserRequest sysUserRequest) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        if (ObjectUtil.isNotNull(sysUserRequest)) {
 
-            // 组装账号的查询条件
-            if (ObjectUtil.isNotEmpty(sysUserRequest.getUserId())) {
-                queryWrapper.eq(SysUser::getUserId, sysUserRequest.getUserId());
-            }
-
-            // 组装账号的查询条件
-            if (ObjectUtil.isNotEmpty(sysUserRequest.getAccount())) {
-                queryWrapper.like(SysUser::getAccount, sysUserRequest.getAccount());
-            }
-
-            // 组装用户姓名的查询条件
-            if (ObjectUtil.isNotEmpty(sysUserRequest.getRealName())) {
-                queryWrapper.eq(SysUser::getRealName, sysUserRequest.getRealName());
-            }
-        }
-
+        // SQL拼接
+        queryWrapper.eq(ObjectUtil.isNotEmpty(sysUserRequest.getUserId()), SysUser::getUserId, sysUserRequest.getUserId());
+        queryWrapper.like(ObjectUtil.isNotEmpty(sysUserRequest.getAccount()), SysUser::getAccount, sysUserRequest.getAccount());
+        queryWrapper.eq(ObjectUtil.isNotEmpty(sysUserRequest.getRealName()), SysUser::getRealName, sysUserRequest.getRealName());
+        
         // 查询未删除状态的
         queryWrapper.eq(SysUser::getDelFlag, YesOrNotEnum.N.getCode());
 

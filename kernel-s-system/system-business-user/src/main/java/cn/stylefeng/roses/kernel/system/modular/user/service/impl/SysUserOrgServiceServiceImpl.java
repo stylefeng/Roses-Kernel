@@ -3,12 +3,13 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.exception.enums.SysUserOrgExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserOrgMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
+import cn.stylefeng.roses.kernel.system.pojo.userOrg.UserOrgResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,23 +28,6 @@ import static cn.stylefeng.roses.kernel.system.exception.enums.SysUserOrgExcepti
 public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, SysUserOrg> implements SysUserOrgService {
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void updateUserOrg(Long userId, Long orgId, Long positionId) {
-
-        // 删除旧的绑定信息
-        LambdaUpdateWrapper<SysUserOrg> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysUserOrg::getUserId, userId);
-        this.remove(updateWrapper);
-
-        // 新增新的绑定信息
-        SysUserOrg sysUserOrg = new SysUserOrg();
-        sysUserOrg.setUserId(userId);
-        sysUserOrg.setOrgId(orgId);
-        sysUserOrg.setPositionId(positionId);
-        this.save(sysUserOrg);
-    }
-
-    @Override
     public SysUserOrgResponse getUserOrgInfo(Long userId) {
 
         LambdaQueryWrapper<SysUserOrg> sysUserOrgLambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -60,12 +44,70 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
         }
     }
 
+
     @Override
-    public void deleteUserOrg(Long userId) {
-        LambdaUpdateWrapper<SysUserOrg> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysUserOrg::getUserId, userId);
-        this.remove(updateWrapper);
+    public void add(UserOrgResponse userOrgResponse) {
+        SysUserOrg sysUserOrg = new SysUserOrg();
+        BeanUtil.copyProperties(userOrgResponse, sysUserOrg);
+        this.save(sysUserOrg);
     }
+
+    @Override
+    public void add(Long userId, Long orgId, Long positionId) {
+        SysUserOrg sysUserOrg = new SysUserOrg();
+        sysUserOrg.setUserId(userId);
+        sysUserOrg.setOrgId(orgId);
+        sysUserOrg.setPositionId(positionId);
+        this.save(sysUserOrg);
+    }
+
+    @Override
+    public void del(UserOrgResponse userOrgResponse) {
+        SysUserOrg sysUserOrg = this.querySysUserOrgById(userOrgResponse);
+        this.removeById(sysUserOrg.getUserOrgId());
+    }
+
+    @Override
+    public void delByUserId(Long userId) {
+        LambdaQueryWrapper<SysUserOrg> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUserOrg::getUserId, userId);
+        this.remove(queryWrapper);
+    }
+
+    @Override
+    public void edit(UserOrgResponse userOrgResponse) {
+        SysUserOrg sysUserOrg = this.querySysUserOrgById(userOrgResponse);
+        BeanUtil.copyProperties(userOrgResponse, sysUserOrg);
+        this.updateById(sysUserOrg);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(Long userId, Long orgId, Long positionId) {
+        UserOrgResponse userOrgResponse = new UserOrgResponse();
+        userOrgResponse.setUserId(userId);
+        userOrgResponse.setOrgId(orgId);
+        userOrgResponse.setPositionId(positionId);
+
+        // 删除已有
+        this.delByUserId(userId);
+
+        this.add(userId, orgId, positionId);
+    }
+
+
+    @Override
+    public SysUserOrg detail(UserOrgResponse userOrgResponse) {
+        LambdaQueryWrapper<SysUserOrg> queryWrapper = this.createWrapper(userOrgResponse);
+        return this.getOne(queryWrapper, false);
+    }
+
+    @Override
+    public List<SysUserOrg> findList(UserOrgResponse userOrgResponse) {
+        LambdaQueryWrapper<SysUserOrg> queryWrapper = this.createWrapper(userOrgResponse);
+        return this.list(queryWrapper);
+    }
+
 
     @Override
     public Boolean getUserOrgFlag(Long orgId, Long positionId) {
@@ -73,6 +115,36 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
         queryWrapper.eq(ObjectUtil.isNotNull(orgId), SysUserOrg::getOrgId, orgId);
         queryWrapper.eq(ObjectUtil.isNotNull(positionId), SysUserOrg::getPositionId, positionId);
         return this.list(queryWrapper).size() > 0;
+    }
+
+
+    /**
+     * 根据主键id获取对象
+     *
+     * @author chenjinlong
+     * @date 2021/1/26 13:28
+     */
+    private SysUserOrg querySysUserOrgById(UserOrgResponse userOrgResponse) {
+        SysUserOrg sysUserOrg = this.getById(userOrgResponse.getUserOrgId());
+        if (ObjectUtil.isEmpty(sysUserOrg)) {
+            throw new SystemModularException(SysUserOrgExceptionEnum.USER_ORG_NOT_EXIST, sysUserOrg.getOrgId());
+        }
+        return sysUserOrg;
+    }
+
+    /**
+     * 实体构建queryWrapper
+     *
+     * @author fengshuonan
+     * @date 2021/1/24 22:03
+     */
+    private LambdaQueryWrapper<SysUserOrg> createWrapper(UserOrgResponse userOrgResponse) {
+        LambdaQueryWrapper<SysUserOrg> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ObjectUtil.isNotEmpty(userOrgResponse.getUserOrgId()), SysUserOrg::getUserOrgId, userOrgResponse.getUserOrgId());
+        queryWrapper.eq(ObjectUtil.isNotEmpty(userOrgResponse.getUserId()), SysUserOrg::getUserId, userOrgResponse.getUserId());
+        queryWrapper.eq(ObjectUtil.isNotEmpty(userOrgResponse.getOrgId()), SysUserOrg::getOrgId, userOrgResponse.getOrgId());
+        queryWrapper.eq(ObjectUtil.isNotEmpty(userOrgResponse.getPositionId()), SysUserOrg::getPositionId, userOrgResponse.getPositionId());
+        return queryWrapper;
     }
 
 }
