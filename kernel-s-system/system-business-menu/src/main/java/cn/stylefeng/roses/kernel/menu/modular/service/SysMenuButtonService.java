@@ -32,6 +32,15 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
     void del(SysMenuButtonRequest sysMenuButtonRequest);
 
     /**
+     * 批量删除多个系统菜单按钮
+     *
+     * @param sysMenuButtonRequest 菜单按钮id集合
+     * @author luojie
+     * @date 2021/1/9 12:27
+     */
+    void delBatch(SysMenuButtonRequest sysMenuButtonRequest);
+
+    /**
      * 编辑系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮请求参数
@@ -60,14 +69,6 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      */
     PageResult<SysMenuButton> findPage(SysMenuButtonRequest sysMenuButtonRequest);
 
-    /**
-     * 批量删除多个系统菜单按钮
-     *
-     * @param sysMenuButtonRequest 菜单按钮id集合
-     * @author luojie
-     * @date 2021/1/9 12:27
-     */
-    void batchDel(SysMenuButtonRequest sysMenuButtonRequest);
 
     /**
      * 根据菜单id删除该菜单下的所有按钮
@@ -82,9 +83,9 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      * 添加系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮请求参数
-     * @author luojie
+     * @author chenjinlong
      * @date 2021/1/9 11:28
      */
-    void addSystemDefaultButton(SysMenuButtonRequest sysMenuButtonRequest);
+    void addDefaultButtons(SysMenuButtonRequest sysMenuButtonRequest);
 
 }

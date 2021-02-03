@@ -10,7 +10,6 @@ import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenuButton;
 import cn.stylefeng.roses.kernel.menu.modular.factory.MenuButtonFactory;
 import cn.stylefeng.roses.kernel.menu.modular.mapper.SysMenuButtonMapper;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuButtonService;
-import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuButtonExceptionEnum;
@@ -19,9 +18,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
 
@@ -34,11 +31,8 @@ import java.util.Set;
 @Service
 public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, SysMenuButton> implements SysMenuButtonService {
 
-    @Resource
-    private SysMenuService sysMenuService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void add(SysMenuButtonRequest sysMenuButtonRequest) {
         SysMenuButton sysMenuButton = new SysMenuButton();
         BeanUtil.copyProperties(sysMenuButtonRequest, sysMenuButton);
@@ -47,21 +41,33 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
 
     @Override
     public void del(SysMenuButtonRequest sysMenuButtonRequest) {
-
-        // 查询按钮
-        SysMenuButton button = this.queryButton(sysMenuButtonRequest);
+        SysMenuButton button = this.queryButtonById(sysMenuButtonRequest);
 
         // 设置为删除状态
         button.setDelFlag(YesOrNotEnum.Y.getCode());
-
         this.updateById(button);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void edit(SysMenuButtonRequest sysMenuButtonRequest) {
+    public void delBatch(SysMenuButtonRequest sysMenuButtonRequest) {
+        Set<Long> buttonIds = sysMenuButtonRequest.getButtonIds();
+        if (ArrayUtil.isNotEmpty(buttonIds)) {
+            // 查询条件
+            LambdaQueryWrapper<SysMenuButton> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.in(SysMenuButton::getButtonId, buttonIds);
+            queryWrapper.eq(SysMenuButton::getDelFlag, YesOrNotEnum.N.getCode());
 
-        SysMenuButton button = this.queryButton(sysMenuButtonRequest);
+            // 设置为删除状态
+            SysMenuButton entity = new SysMenuButton();
+            entity.setDelFlag(YesOrNotEnum.Y.getCode());
+
+            this.update(entity, queryWrapper);
+        }
+    }
+    
+    @Override
+    public void edit(SysMenuButtonRequest sysMenuButtonRequest) {
+        SysMenuButton button = this.queryButtonById(sysMenuButtonRequest);
         BeanUtil.copyProperties(sysMenuButtonRequest, button);
 
         // 不更新删除状态
@@ -78,7 +84,8 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
 
     @Override
     public SysMenuButton detail(SysMenuButtonRequest sysMenuButtonRequest) {
-        return this.queryButton(sysMenuButtonRequest);
+        LambdaQueryWrapper<SysMenuButton> queryWrapper = this.createWrapper(sysMenuButtonRequest);
+        return this.getOne(queryWrapper, false);
     }
 
     @Override
@@ -88,22 +95,6 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
         return PageResultFactory.createPageResult(page);
     }
 
-    @Override
-    public void batchDel(SysMenuButtonRequest sysMenuButtonRequest) {
-        Set<Long> buttonIds = sysMenuButtonRequest.getButtonIds();
-        if (ArrayUtil.isNotEmpty(buttonIds)) {
-            // 查询条件
-            LambdaQueryWrapper<SysMenuButton> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.in(SysMenuButton::getButtonId, buttonIds);
-            queryWrapper.eq(SysMenuButton::getDelFlag, YesOrNotEnum.N.getCode());
-
-            // 设置为删除状态
-            SysMenuButton entity = new SysMenuButton();
-            entity.setDelFlag(YesOrNotEnum.Y.getCode());
-
-            this.update(entity, queryWrapper);
-        }
-    }
 
     @Override
     public void deleteMenuButtonByMenuId(Long menuId) {
@@ -122,7 +113,7 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
     }
 
     @Override
-    public void addSystemDefaultButton(SysMenuButtonRequest sysMenuButtonRequest) {
+    public void addDefaultButtons(SysMenuButtonRequest sysMenuButtonRequest) {
         Long menuId = sysMenuButtonRequest.getMenuId();
         // 构建菜单的系统默认按钮
         List<SysMenuButton> sysMenuButtonList = MenuButtonFactory.createSystemDefaultButton(menuId);
@@ -135,7 +126,7 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
      * @author chenjinlong
      * @date 2021/1/26 13:28
      */
-    private SysMenuButton queryButton(SysMenuButtonRequest sysMenuButtonRequest) {
+    private SysMenuButton queryButtonById(SysMenuButtonRequest sysMenuButtonRequest) {
         SysMenuButton button = this.getById(sysMenuButtonRequest.getButtonId());
         if (ObjectUtil.isNull(button)) {
             throw new SystemModularException(SysMenuButtonExceptionEnum.MENU_BUTTON_NOT_EXIST);
