@@ -5,7 +5,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.UserSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.modular.user.pojo.response.SysUserResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 

@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.system.pojo.user;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 系统用户结果
@@ -77,5 +78,10 @@ public class SysUserResponse {
      * 状态
      */
     private Integer statusFlag;
+
+    /**
+     * 用户角色id
+     */
+    private List<Long> grantRoleIdList;
 
 }
