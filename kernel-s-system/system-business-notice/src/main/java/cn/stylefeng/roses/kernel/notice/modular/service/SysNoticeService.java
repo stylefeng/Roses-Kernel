@@ -3,7 +3,7 @@ package cn.stylefeng.roses.kernel.notice.modular.service;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.notice.modular.entity.SysNotice;
 import cn.stylefeng.roses.kernel.system.NoticeServiceApi;
-import cn.stylefeng.roses.kernel.system.pojo.notice.request.SysNoticeRequest;
+import cn.stylefeng.roses.kernel.system.pojo.SysNoticeRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
