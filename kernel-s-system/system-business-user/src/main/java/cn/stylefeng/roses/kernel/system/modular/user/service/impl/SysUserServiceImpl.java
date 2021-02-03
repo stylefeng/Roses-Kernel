@@ -273,7 +273,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         DataScopeUtil.quickValidateDataScope(organizationId);
 
         // 给用户授权角色
-        sysUserRoleService.grantRole(sysUserRequest);
+        sysUserRoleService.assignRoles(sysUserRequest);
     }
 
     @Override
@@ -288,7 +288,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 判断当前用户有无该用户的权限
         DataScopeUtil.quickValidateDataScope(organizationId);
 
-        sysUserDataScopeService.grantData(sysUserRequest);
+        sysUserDataScopeService.assignData(sysUserRequest);
     }
 
     @Override
@@ -318,10 +318,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserOrgService.delByUserId(userId);
 
         // 删除该用户对应的用户-角色表关联信息
-        sysUserRoleService.deleteUserRoleListByUserId(userId);
+        sysUserRoleService.delByUserId(userId);
 
         // 删除该用户对应的用户-数据范围表关联信息
-        sysUserDataScopeService.deleteUserDataScopeListByUserId(userId);
+        sysUserDataScopeService.delByUserId(userId);
     }
 
     @Override
@@ -338,7 +338,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserResponse.setPositionId(userOrgInfo.getPositionId());
 
         // 获取用户角色信息
-        sysUserResponse.setGrantRoleIdList(sysUserRoleService.getUserRoleIds(sysUser.getUserId()));
+        sysUserResponse.setGrantRoleIdList(sysUserRoleService.findRoleIdsByUserId(sysUser.getUserId()));
 
         return sysUserResponse;
     }
@@ -433,8 +433,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long userId = sysUser.getUserId();
 
         // 2. 获取用户角色信息
-        List<SysUserRole> userRoles = sysUserRoleService.getUserRoles(userId);
-        List<Long> roleIds = userRoles.stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
+        List<Long> roleIds = sysUserRoleService.findRoleIdsByUserId(userId);
         List<SysRoleResponse> roleResponseList = roleServiceApi.getRolesByIds(roleIds);
 
         // 3. 获取用户的数据范围
@@ -505,7 +504,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public List<Long> getUserBindDataScope(Long userId) {
-        return sysUserDataScopeService.getUserDataScopeIdList(userId);
+        return sysUserDataScopeService.findOrgIdsByUserId(userId);
     }
 
     @Override
@@ -656,7 +655,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         queryWrapper.eq(ObjectUtil.isNotEmpty(sysUserRequest.getUserId()), SysUser::getUserId, sysUserRequest.getUserId());
         queryWrapper.like(ObjectUtil.isNotEmpty(sysUserRequest.getAccount()), SysUser::getAccount, sysUserRequest.getAccount());
         queryWrapper.eq(ObjectUtil.isNotEmpty(sysUserRequest.getRealName()), SysUser::getRealName, sysUserRequest.getRealName());
-        
+
         // 查询未删除状态的
         queryWrapper.eq(SysUser::getDelFlag, YesOrNotEnum.N.getCode());
 
