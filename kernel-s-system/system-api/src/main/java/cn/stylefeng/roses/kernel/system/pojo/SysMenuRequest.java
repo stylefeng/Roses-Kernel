@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.pojo.menu;
+package cn.stylefeng.roses.kernel.system.pojo;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.validators.flag.FlagValue;

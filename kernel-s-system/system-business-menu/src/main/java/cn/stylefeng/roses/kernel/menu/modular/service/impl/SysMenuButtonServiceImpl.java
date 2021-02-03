@@ -14,7 +14,7 @@ import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuButtonExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuButtonRequest;
+import cn.stylefeng.roses.kernel.system.pojo.SysMenuButtonRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

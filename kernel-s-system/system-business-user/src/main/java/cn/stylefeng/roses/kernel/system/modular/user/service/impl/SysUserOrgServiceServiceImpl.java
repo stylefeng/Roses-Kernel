@@ -7,7 +7,7 @@ import cn.stylefeng.roses.kernel.system.exception.enums.SysUserOrgExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserOrgMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
-import cn.stylefeng.roses.kernel.system.pojo.UserOrgResponse;
+import cn.stylefeng.roses.kernel.system.pojo.UserOrgRequest;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -46,7 +46,7 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
 
 
     @Override
-    public void add(UserOrgResponse userOrgResponse) {
+    public void add(UserOrgRequest userOrgResponse) {
         SysUserOrg sysUserOrg = new SysUserOrg();
         BeanUtil.copyProperties(userOrgResponse, sysUserOrg);
         this.save(sysUserOrg);
@@ -62,7 +62,7 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
     }
 
     @Override
-    public void del(UserOrgResponse userOrgResponse) {
+    public void del(UserOrgRequest userOrgResponse) {
         SysUserOrg sysUserOrg = this.querySysUserOrgById(userOrgResponse);
         this.removeById(sysUserOrg.getUserOrgId());
     }
@@ -75,7 +75,7 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
     }
 
     @Override
-    public void edit(UserOrgResponse userOrgResponse) {
+    public void edit(UserOrgRequest userOrgResponse) {
         SysUserOrg sysUserOrg = this.querySysUserOrgById(userOrgResponse);
         BeanUtil.copyProperties(userOrgResponse, sysUserOrg);
         this.updateById(sysUserOrg);
@@ -84,7 +84,7 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(Long userId, Long orgId, Long positionId) {
-        UserOrgResponse userOrgResponse = new UserOrgResponse();
+        UserOrgRequest userOrgResponse = new UserOrgRequest();
         userOrgResponse.setUserId(userId);
         userOrgResponse.setOrgId(orgId);
         userOrgResponse.setPositionId(positionId);
@@ -97,13 +97,13 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
 
 
     @Override
-    public SysUserOrg detail(UserOrgResponse userOrgResponse) {
+    public SysUserOrg detail(UserOrgRequest userOrgResponse) {
         LambdaQueryWrapper<SysUserOrg> queryWrapper = this.createWrapper(userOrgResponse);
         return this.getOne(queryWrapper, false);
     }
 
     @Override
-    public List<SysUserOrg> findList(UserOrgResponse userOrgResponse) {
+    public List<SysUserOrg> findList(UserOrgRequest userOrgResponse) {
         LambdaQueryWrapper<SysUserOrg> queryWrapper = this.createWrapper(userOrgResponse);
         return this.list(queryWrapper);
     }
@@ -124,7 +124,7 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
      * @author chenjinlong
      * @date 2021/1/26 13:28
      */
-    private SysUserOrg querySysUserOrgById(UserOrgResponse userOrgResponse) {
+    private SysUserOrg querySysUserOrgById(UserOrgRequest userOrgResponse) {
         SysUserOrg sysUserOrg = this.getById(userOrgResponse.getUserOrgId());
         if (ObjectUtil.isEmpty(sysUserOrg)) {
             throw new SystemModularException(SysUserOrgExceptionEnum.USER_ORG_NOT_EXIST, sysUserOrg.getOrgId());
@@ -138,7 +138,7 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
      * @author fengshuonan
      * @date 2021/1/24 22:03
      */
-    private LambdaQueryWrapper<SysUserOrg> createWrapper(UserOrgResponse userOrgResponse) {
+    private LambdaQueryWrapper<SysUserOrg> createWrapper(UserOrgRequest userOrgResponse) {
         LambdaQueryWrapper<SysUserOrg> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ObjectUtil.isNotEmpty(userOrgResponse.getUserOrgId()), SysUserOrg::getUserOrgId, userOrgResponse.getUserOrgId());
         queryWrapper.eq(ObjectUtil.isNotEmpty(userOrgResponse.getUserId()), SysUserOrg::getUserId, userOrgResponse.getUserId());

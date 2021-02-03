@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2021/2/3 10:51
  */
 @Data
-public class UserOrgResponse {
+public class UserOrgRequest {
 
     /**
      * 主键

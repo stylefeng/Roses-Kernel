@@ -7,7 +7,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
-import cn.stylefeng.roses.kernel.system.pojo.organization.HrPositionRequest;
+import cn.stylefeng.roses.kernel.system.pojo.HrPositionRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

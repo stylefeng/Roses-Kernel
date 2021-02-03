@@ -14,7 +14,7 @@ import cn.stylefeng.roses.kernel.system.exception.enums.PositionExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrPositionMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
-import cn.stylefeng.roses.kernel.system.pojo.organization.HrPositionRequest;
+import cn.stylefeng.roses.kernel.system.pojo.HrPositionRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

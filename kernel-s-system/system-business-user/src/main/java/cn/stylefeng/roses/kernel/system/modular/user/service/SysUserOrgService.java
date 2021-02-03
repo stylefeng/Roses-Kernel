@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
-import cn.stylefeng.roses.kernel.system.pojo.UserOrgResponse;
+import cn.stylefeng.roses.kernel.system.pojo.UserOrgRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public interface SysUserOrgService extends IService<SysUserOrg>, UserOrgServiceA
      * @author chenjinlong
      * @date 2021/1/26 12:52
      */
-    void add(UserOrgResponse userOrgResponse);
+    void add(UserOrgRequest userOrgResponse);
 
     /**
      * 新增
@@ -42,7 +42,7 @@ public interface SysUserOrgService extends IService<SysUserOrg>, UserOrgServiceA
      * @author chenjinlong
      * @date 2021/1/26 12:52
      */
-    void del(UserOrgResponse userOrgResponse);
+    void del(UserOrgRequest userOrgResponse);
 
     /**
      * 删除
@@ -60,7 +60,7 @@ public interface SysUserOrgService extends IService<SysUserOrg>, UserOrgServiceA
      * @author chenjinlong
      * @date 2021/1/26 12:52
      */
-    void edit(UserOrgResponse userOrgResponse);
+    void edit(UserOrgRequest userOrgResponse);
 
     /**
      * 修改
@@ -80,7 +80,7 @@ public interface SysUserOrgService extends IService<SysUserOrg>, UserOrgServiceA
      * @author chenjinlong
      * @date 2021/1/26 12:52
      */
-    SysUserOrg detail(UserOrgResponse userOrgResponse);
+    SysUserOrg detail(UserOrgRequest userOrgResponse);
 
     /**
      * 查询-列表
@@ -89,7 +89,7 @@ public interface SysUserOrgService extends IService<SysUserOrg>, UserOrgServiceA
      * @author chenjinlong
      * @date 2021/1/26 12:52
      */
-    List<SysUserOrg> findList(UserOrgResponse userOrgResponse);
+    List<SysUserOrg> findList(UserOrgRequest userOrgResponse);
 
 
 }

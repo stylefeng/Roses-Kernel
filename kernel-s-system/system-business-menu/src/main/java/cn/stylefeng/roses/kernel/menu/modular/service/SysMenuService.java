@@ -26,7 +26,7 @@ package cn.stylefeng.roses.kernel.menu.modular.service;
 
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
+import cn.stylefeng.roses.kernel.system.pojo.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
