@@ -49,7 +49,7 @@ public class SysMenuButtonController {
      */
     @PostResource(name = "添加系统默认菜单按钮", path = "/sysMenuButton/addSystemDefaultButton")
     public ResponseData addSystemDefaultButton(@RequestBody @Validated(SysMenuButtonRequest.def.class) SysMenuButtonRequest sysMenuButtonRequest) {
-        sysMenuButtonService.addSystemDefaultButton(sysMenuButtonRequest);
+        sysMenuButtonService.addDefaultButtons(sysMenuButtonRequest);
         return new SuccessResponseData();
     }
 
@@ -101,7 +101,7 @@ public class SysMenuButtonController {
      */
     @PostResource(name = "批量删除多个系统菜单按钮", path = "/sysMenuButton/batchDelete")
     public ResponseData batchDelete(@RequestBody @Validated(SysMenuButtonRequest.batchDelete.class) SysMenuButtonRequest sysMenuButtonRequest) {
-        sysMenuButtonService.batchDel(sysMenuButtonRequest);
+        sysMenuButtonService.delBatch(sysMenuButtonRequest);
         return new SuccessResponseData();
     }
 
