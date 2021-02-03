@@ -11,39 +11,39 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>message-spring-boot-starter</artifactId>
+    <artifactId>message-business-websocket</artifactId>
 
     <packaging>jar</packaging>
 
     <dependencies>
-
-        <!--消息管理-->
+        <!--auth鉴权模块的api-->
+        <!--需要用auth模块的LoginContext获取当前登录用户，然后返回ws-url-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-business</artifactId>
+            <artifactId>auth-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-
-        <!--websocket管理-->
+        <!--资源api模块-->
+        <!--用在资源控制器，资源扫描上-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-business-websocket</artifactId>
+            <artifactId>scanner-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
-
-        <!--消息默认记录到库中-->
+        <!--参数校验模块-->
+        <!--用在控制器，参数校验-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-sdk-db</artifactId>
+            <artifactId>validator-api</artifactId>
             <version>1.0.0</version>
         </dependency>
 
+        <!--web模块-->
         <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-sdk-websocket</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
     </dependencies>
