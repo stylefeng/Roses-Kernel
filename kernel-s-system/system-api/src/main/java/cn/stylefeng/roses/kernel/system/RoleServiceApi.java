@@ -17,15 +17,6 @@ import java.util.Set;
 public interface RoleServiceApi {
 
     /**
-     * 删除角色关联的组织架构数据范围
-     *
-     * @param organizationIds 组织架构id集合
-     * @author fengshuonan
-     * @date 2020/11/5 19:17
-     */
-    void deleteRoleDataScopeListByOrgIdList(Set<Long> organizationIds);
-
-    /**
      * 获取角色，通过传递角色id列表
      *
      * @param roleIds 角色id列表

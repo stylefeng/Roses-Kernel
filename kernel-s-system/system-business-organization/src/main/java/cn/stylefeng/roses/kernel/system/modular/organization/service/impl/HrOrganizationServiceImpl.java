@@ -18,6 +18,7 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
 import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.system.RoleDataScopeServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
@@ -61,6 +62,9 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
     @Resource
     private UserServiceApi userServiceApi;
+
+    @Resource
+    private RoleDataScopeServiceApi roleDataScopeServiceApi;
 
     @Override
     public void add(HrOrganizationRequest hrOrganizationRequest) {
@@ -129,7 +133,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         this.update(updateWrapper);
 
         // 删除角色对应的组织架构数据范围
-        roleServiceApi.deleteRoleDataScopeListByOrgIdList(childIdList);
+        roleDataScopeServiceApi.delByOrgIds(childIdList);
 
         // 删除用户对应的组织架构数据范围
         userServiceApi.deleteUserDataScopeListByOrgIdList(childIdList);

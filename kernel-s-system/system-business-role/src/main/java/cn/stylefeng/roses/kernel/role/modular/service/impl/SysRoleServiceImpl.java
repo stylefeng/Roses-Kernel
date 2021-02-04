@@ -124,16 +124,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         this.updateById(sysRole);
 
-        Long id = sysRole.getRoleId();
+        Long roleId = sysRole.getRoleId();
 
         // 级联删除该角色对应的角色-数据范围关联信息
-        sysRoleDataScopeService.deleteRoleDataScopeListByRoleId(id);
+        sysRoleDataScopeService.delByRoleId(roleId);
 
         // 级联删除该角色对应的用户-角色表关联信息
-        userServiceApi.deleteUserRoleListByRoleId(id);
+        userServiceApi.deleteUserRoleListByRoleId(roleId);
 
         // 级联删除该角色对应的角色-菜单表关联信息
-        sysRoleResourceService.deleteRoleResourceListByRoleId(id);
+        sysRoleResourceService.deleteRoleResourceListByRoleId(roleId);
     }
 
     @Override
@@ -317,11 +317,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             sysRoleMenuButtonService.saveBatch(sysRoleMenuButtons);
         }
 
-    }
-
-    @Override
-    public void deleteRoleDataScopeListByOrgIdList(Set<Long> organizationIds) {
-        sysRoleDataScopeService.deleteRoleDataScopeListByOrgIdList(organizationIds);
     }
 
     @Override

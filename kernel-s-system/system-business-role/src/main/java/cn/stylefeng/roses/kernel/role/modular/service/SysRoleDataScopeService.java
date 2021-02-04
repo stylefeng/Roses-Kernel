@@ -1,11 +1,11 @@
 package cn.stylefeng.roses.kernel.role.modular.service;
 
 import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleDataScope;
-import com.baomidou.mybatisplus.extension.service.IService;
+import cn.stylefeng.roses.kernel.system.pojo.SysRoleDataScopeRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 系统角色数据范围service接口
@@ -34,22 +34,61 @@ public interface SysRoleDataScopeService extends IService<SysRoleDataScope> {
      */
     List<Long> getRoleDataScopeIdList(List<Long> roleIdList);
 
-    /**
-     * 根据机构id集合删除对应的角色-数据范围关联信息
-     *
-     * @param orgIdList 机构id集合
-     * @author majianguo
-     * @date 2020/11/5 上午11:21
-     */
-    void deleteRoleDataScopeListByOrgIdList(Set<Long> orgIdList);
 
     /**
-     * 根据角色id删除对应的角色-数据范围关联信息
+     * 新增
+     *
+     * @param sysRoleDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void add(SysRoleDataScopeRequest sysRoleDataScopeRequest);
+
+    /**
+     * 删除
+     *
+     * @param sysRoleDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void del(SysRoleDataScopeRequest sysRoleDataScopeRequest);
+
+    /**
+     * 根据角色id 删除角色数据范围
      *
      * @param roleId 角色id
-     * @author majianguo
-     * @date 2020/11/5 上午11:21
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
      */
-    void deleteRoleDataScopeListByRoleId(Long roleId);
+    void delByRoleId(Long roleId);
+
+
+    /**
+     * 修改
+     *
+     * @param sysRoleDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void edit(SysRoleDataScopeRequest sysRoleDataScopeRequest);
+
+    /**
+     * 查询-详情
+     *
+     * @param sysRoleDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    SysRoleDataScope detail(SysRoleDataScopeRequest sysRoleDataScopeRequest);
+
+    /**
+     * 查询-列表
+     *
+     * @param sysRoleDataScopeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    List<SysRoleDataScope> findList(SysRoleDataScopeRequest sysRoleDataScopeRequest);
+
 
 }
