@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-validator</artifactId>
-        <version>1.0.0</version>
+        <version>7.0.0</version>
     </parent>
 
     <artifactId>validator-sdk-xss</artifactId>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--web模块-->

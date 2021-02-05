@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-validator</artifactId>
-        <version>1.0.0</version>
+        <version>7.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,35 +21,35 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-business-count</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--黑名单和白名单限制-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-sdk-black-white</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--技术校验器，为了限制某个数据一定时间内的反问频次-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-sdk-count</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--XSS安全过滤器-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-sdk-xss</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!-- captcha图形验证码 -->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-sdk-captcha</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
     </dependencies>

@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-log</artifactId>
-        <version>1.0.0</version>
+        <version>7.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,26 +21,26 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-business-manage</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--接口请求日志记录-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-business-requestapi</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--日志默认记录到库中-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-sdk-db</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-sdk-file</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
     </dependencies>

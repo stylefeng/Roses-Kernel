@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-validator</artifactId>
-        <version>1.0.0</version>
+        <version>7.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -22,14 +22,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--系统配置表的sdk-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>config-sdk-db</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--资源api模块-->
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--数据库sdk-->
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>db-sdk-mp</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--web模块-->

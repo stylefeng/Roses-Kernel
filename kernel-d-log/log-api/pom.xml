@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-log</artifactId>
-        <version>1.0.0</version>
+        <version>7.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>auth-api</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
             <optional>true</optional>
         </dependency>
 
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--数据库模块 api-->
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>db-api</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
 
         <!--web-->
