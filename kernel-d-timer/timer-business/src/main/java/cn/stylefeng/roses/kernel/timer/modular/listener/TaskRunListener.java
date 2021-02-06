@@ -32,7 +32,7 @@ public class TaskRunListener implements ApplicationListener<ApplicationStartedEv
         // 获取数据库所有开启状态的任务
         SysTimersParam sysTimersParam = new SysTimersParam();
         sysTimersParam.setJobStatus(TimerJobStatusEnum.RUNNING.getCode());
-        List<SysTimers> list = sysTimersService.list(sysTimersParam);
+        List<SysTimers> list = sysTimersService.findList(sysTimersParam);
 
         // 添加定时任务到调度器
         for (SysTimers sysTimers : list) {
