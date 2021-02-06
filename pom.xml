@@ -308,6 +308,39 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!--推送到中央仓库用-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-javadoc-plugin</artifactId>-->
+<!--                <version>2.9.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>jar</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <additionalparam>-Xdoclint:none</additionalparam>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+            <!--推送到中央仓库用-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-gpg-plugin</artifactId>-->
+<!--                <version>1.5</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>verify</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>sign</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
         </plugins>
         <resources>
             <resource>
@@ -328,5 +361,22 @@
             <email>sn93@qq.com</email>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git@gitee.com:stylefeng/roses.git</connection>
+        <developerConnection>scm:git@gitee.com:stylefeng/roses.git</developerConnection>
+        <url>https://gitee.com/stylefeng/roses</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>center</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>center</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 
 </project>
