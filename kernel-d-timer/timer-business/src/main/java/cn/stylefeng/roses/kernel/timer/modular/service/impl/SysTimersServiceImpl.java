@@ -28,6 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +83,7 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
     }
 
     @Override
-    public void delete(SysTimersParam sysTimersParam) {
+    public void del(SysTimersParam sysTimersParam) {
 
         // 先停止id为参数id的定时器
         CronUtil.remove(String.valueOf(sysTimersParam.getTimerId()));
@@ -129,7 +131,7 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
     }
 
     @Override
-    public PageResult<SysTimers> page(SysTimersParam sysTimersParam) {
+    public PageResult<SysTimers> findPage(SysTimersParam sysTimersParam) {
 
         // 构造条件
         LambdaQueryWrapper<SysTimers> queryWrapper = createWrapper(sysTimersParam);
@@ -140,7 +142,7 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
     }
 
     @Override
-    public List<SysTimers> list(SysTimersParam sysTimersParam) {
+    public List<SysTimers> findList(SysTimersParam sysTimersParam) {
         LambdaQueryWrapper<SysTimers> queryWrapper = createWrapper(sysTimersParam);
         return this.list(queryWrapper);
     }
@@ -184,14 +186,18 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
         LambdaQueryWrapper<SysTimers> queryWrapper = new LambdaQueryWrapper<>();
 
         if (ObjectUtil.isNotNull(sysTimersParam)) {
+            String timerName = sysTimersParam.getTimerName();
+            Integer jobStatus = sysTimersParam.getJobStatus();
+            String actionClass = sysTimersParam.getActionClass();
+
             // 拼接查询条件-任务名称
-            if (ObjectUtil.isNotEmpty(sysTimersParam.getTimerName())) {
-                queryWrapper.like(SysTimers::getTimerName, sysTimersParam.getTimerName());
-            }
+            queryWrapper.like(ObjectUtil.isNotEmpty(timerName), SysTimers::getTimerName, timerName);
+
             // 拼接查询条件-状态（字典 1运行  2停止）
-            if (ObjectUtil.isNotEmpty(sysTimersParam.getJobStatus())) {
-                queryWrapper.like(SysTimers::getJobStatus, sysTimersParam.getJobStatus());
-            }
+            queryWrapper.like(ObjectUtil.isNotNull(jobStatus), SysTimers::getJobStatus, jobStatus);
+
+            // 拼接查询条件-类名
+            queryWrapper.like(ObjectUtil.isNotEmpty(actionClass), SysTimers::getActionClass, actionClass);
         }
 
         // 查询未删除的

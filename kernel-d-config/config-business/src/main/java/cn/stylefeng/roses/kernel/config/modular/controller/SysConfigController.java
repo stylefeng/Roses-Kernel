@@ -59,7 +59,7 @@ public class SysConfigController {
      */
     @PostResource(name = "删除系统参数配置", path = "/sysConfig/delete")
     public ResponseData delete(@RequestBody @Validated(SysConfigParam.delete.class) SysConfigParam sysConfigParam) {
-        sysConfigService.delete(sysConfigParam);
+        sysConfigService.del(sysConfigParam);
         return new SuccessResponseData();
     }
 
@@ -83,7 +83,7 @@ public class SysConfigController {
      */
     @GetResource(name = "分页查询配置列表", path = "/sysConfig/page")
     public ResponseData page(SysConfigParam sysConfigParam) {
-        return new SuccessResponseData(sysConfigService.page(sysConfigParam));
+        return new SuccessResponseData(sysConfigService.findPage(sysConfigParam));
     }
 
     /**
@@ -94,7 +94,7 @@ public class SysConfigController {
      */
     @GetResource(name = "系统参数配置列表", path = "/sysConfig/list")
     public ResponseData list(SysConfigParam sysConfigParam) {
-        return new SuccessResponseData(sysConfigService.list(sysConfigParam));
+        return new SuccessResponseData(sysConfigService.findList(sysConfigParam));
     }
 
 }
