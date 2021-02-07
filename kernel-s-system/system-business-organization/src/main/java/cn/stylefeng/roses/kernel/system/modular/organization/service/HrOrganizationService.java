@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.rule.pojo.tree.DefaultTreeNode;
-import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.rule.tree.factory.node.DefaultTreeNode;
+import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.OrganizationServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;

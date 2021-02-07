@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.menu.modular.pojo;
 
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
+import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import lombok.Data;
 
 import java.util.List;

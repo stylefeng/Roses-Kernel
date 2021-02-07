@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.jwt.api.exception;
 
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.jwt.api.constants.JwtConstants;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
+import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 
 /**

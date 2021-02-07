@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.pojo.organization.layui;
 
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractXmSelectNode;
+import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
+import cn.stylefeng.roses.kernel.rule.tree.xmtree.base.AbstractXmSelectNode;
 import lombok.Data;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.auth.api.exception;
 
 import cn.stylefeng.roses.kernel.auth.api.constants.AuthConstants;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
+import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 
 /**

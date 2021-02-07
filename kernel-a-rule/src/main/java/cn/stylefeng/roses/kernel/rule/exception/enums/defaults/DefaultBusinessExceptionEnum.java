@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.rule.exception.enums.defaults;
 
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
+import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import lombok.Getter;
 
 import static cn.stylefeng.roses.kernel.rule.constants.RuleConstants.BUSINESS_ERROR_TYPE_CODE;

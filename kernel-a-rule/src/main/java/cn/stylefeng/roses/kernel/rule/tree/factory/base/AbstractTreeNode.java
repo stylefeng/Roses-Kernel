@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.rule.abstracts;
+package cn.stylefeng.roses.kernel.rule.tree.factory.base;
 
 import java.util.List;
 

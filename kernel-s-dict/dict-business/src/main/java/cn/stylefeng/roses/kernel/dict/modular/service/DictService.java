@@ -5,7 +5,7 @@ import cn.stylefeng.roses.kernel.dict.api.DictApi;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.TreeDictInfo;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
-import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

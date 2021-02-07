@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.i18n.api.exception;
 
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.i18n.api.constants.TranslationConstants;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
+import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 
 /**

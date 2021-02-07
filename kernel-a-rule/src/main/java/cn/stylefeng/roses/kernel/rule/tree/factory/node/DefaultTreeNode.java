@@ -1,6 +1,6 @@
-package cn.stylefeng.roses.kernel.rule.pojo.tree;
+package cn.stylefeng.roses.kernel.rule.tree.factory.node;
 
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
+import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import lombok.Data;
 
 import java.math.BigDecimal;

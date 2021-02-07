@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.rule.abstracts;
+package cn.stylefeng.roses.kernel.rule.exception;
 
 /**
  * 异常枚举格式规范，每个异常枚举都要实现这个接口

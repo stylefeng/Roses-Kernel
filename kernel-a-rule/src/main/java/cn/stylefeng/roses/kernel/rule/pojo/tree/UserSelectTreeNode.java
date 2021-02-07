@@ -1,13 +1,10 @@
 package cn.stylefeng.roses.kernel.rule.pojo.tree;
 
 import cn.hutool.core.collection.IterUtil;
-import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.rule.enums.TreeNodeEnum;
+import cn.stylefeng.roses.kernel.rule.tree.factory.node.DefaultTreeNode;
 import lombok.Data;
-
-import java.util.List;
+import lombok.EqualsAndHashCode;
 
 /**
  * 用户选择树节点封装
@@ -17,6 +14,7 @@ import java.util.List;
  * @author liuhanqing
  * @date 2021/1/15 13:36
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class UserSelectTreeNode extends DefaultTreeNode {
 

@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.email.api.exception.enums;
 
 import cn.stylefeng.roses.kernel.email.api.constants.MailConstants;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
+import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import lombok.Getter;
 
 /**

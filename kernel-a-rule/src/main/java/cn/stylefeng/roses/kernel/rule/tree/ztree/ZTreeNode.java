@@ -1,7 +1,7 @@
-package cn.stylefeng.roses.kernel.rule.pojo.ztree;
+package cn.stylefeng.roses.kernel.rule.tree.ztree;
 
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
+import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.file.exception;
 
 import cn.stylefeng.roses.kernel.file.constants.FileConstants;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
+import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 
 /**

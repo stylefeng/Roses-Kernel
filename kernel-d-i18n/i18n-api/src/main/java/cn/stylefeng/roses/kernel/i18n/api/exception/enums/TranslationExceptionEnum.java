@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.i18n.api.exception.enums;
 
 import cn.stylefeng.roses.kernel.i18n.api.constants.TranslationConstants;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
+import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import lombok.Getter;
 
 /**

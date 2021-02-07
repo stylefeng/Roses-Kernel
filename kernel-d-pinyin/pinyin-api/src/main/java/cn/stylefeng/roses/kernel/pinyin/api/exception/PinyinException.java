@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.pinyin.api.exception;
 
 import cn.stylefeng.roses.kernel.pinyin.api.constants.PinyinConstants;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractExceptionEnum;
+import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import lombok.Getter;
 

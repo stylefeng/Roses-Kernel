@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.menu.modular.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
-import cn.stylefeng.roses.kernel.rule.abstracts.AbstractTreeNode;
+import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

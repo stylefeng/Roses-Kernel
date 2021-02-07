@@ -25,7 +25,7 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 package cn.stylefeng.roses.kernel.menu.modular.service;
 
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
-import cn.stylefeng.roses.kernel.rule.pojo.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
