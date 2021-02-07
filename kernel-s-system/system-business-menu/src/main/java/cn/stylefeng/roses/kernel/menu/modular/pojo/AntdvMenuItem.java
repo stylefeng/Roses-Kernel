@@ -40,6 +40,11 @@ public class AntdvMenuItem implements AbstractTreeNode {
     private String name;
 
     /**
+     * 是否隐藏
+     */
+    private Boolean invisible;
+
+    /**
      * 路由信息
      */
     private AuthorityItem authority;

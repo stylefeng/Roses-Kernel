@@ -8,6 +8,7 @@
         <result column="menu_name" property="menuName"/>
         <result column="antdv_router" property="antdvRouter"/>
         <result column="antdv_icon" property="antdvIcon"/>
+        <result column="visible" property="visible"/>
         <collection property="roles" ofType="cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo">
             <id column="role_id" property="roleId"/>
             <result column="role_name" property="roleName"/>
@@ -21,6 +22,7 @@
                sm.menu_name,
                sm.antdv_router,
                sm.antdv_icon,
+               sm.visible,
                sr.role_id,
                sr.role_name,
                sr.role_code

@@ -44,6 +44,9 @@ public class AntdMenusFactory {
             antdvMenuItem.setRouter(antdSysMenuResponse.getAntdvRouter());
             antdvMenuItem.setIcon(antdSysMenuResponse.getAntdvIcon());
 
+            // 填充是否隐藏
+            antdvMenuItem.setInvisible(YesOrNotEnum.N.getCode().equals(antdSysMenuResponse.getVisible()));
+
             // 填充哪个角色绑定了这个菜单
             List<SimpleRoleInfo> roles = antdSysMenuResponse.getRoles();
             AuthorityItem authorityItem = new AuthorityItem();

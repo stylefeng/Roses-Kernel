@@ -40,6 +40,11 @@ public class AntdSysMenuResponse {
     private String antdvIcon;
 
     /**
+     * 是否显示，Y-显示，N-不显示
+     */
+    private String visible;
+
+    /**
      * 子节点（表中不存在，用于构造树）
      */
     private List children;
