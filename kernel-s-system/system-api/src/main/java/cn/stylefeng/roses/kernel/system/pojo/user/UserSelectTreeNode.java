@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.rule.pojo.tree;
+package cn.stylefeng.roses.kernel.system.pojo.user;
 
 import cn.hutool.core.collection.IterUtil;
 import cn.stylefeng.roses.kernel.rule.enums.TreeNodeEnum;
