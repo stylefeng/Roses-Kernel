@@ -8,7 +8,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import cn.stylefeng.roses.kernel.auth.api.prop.LoginUserPropExpander;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
+import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
@@ -37,7 +37,7 @@ public class UserLoginInfoFactory {
      */
     public static UserLoginInfoDTO userLoginInfoDTO(SysUser sysUser,
                                                     List<SysRoleResponse> roleResponseList,
-                                                    DataScopeResponse dataScopeResponse,
+                                                    DataScopeDTO dataScopeResponse,
                                                     SysUserOrgResponse userOrgInfo,
                                                     Set<String> resourceUrlsListByCodes,
                                                     Set<String> roleButtonCodes) {

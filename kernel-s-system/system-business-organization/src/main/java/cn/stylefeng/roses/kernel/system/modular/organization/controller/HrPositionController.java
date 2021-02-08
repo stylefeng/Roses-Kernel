@@ -7,7 +7,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
-import cn.stylefeng.roses.kernel.system.pojo.HrPositionRequest;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrPositionRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,18 +40,6 @@ public class HrPositionController {
     }
 
     /**
-     * 编辑系统职位
-     *
-     * @author chenjinlong
-     * @date 2020/11/04 11:07
-     */
-    @PostResource(name = "编辑系统职位", path = "/hrPosition/edit")
-    public ResponseData edit(@RequestBody @Validated(HrPositionRequest.edit.class) HrPositionRequest hrPositionRequest) {
-        hrPositionService.edit(hrPositionRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 删除系统职位
      *
      * @author chenjinlong
@@ -60,6 +48,18 @@ public class HrPositionController {
     @PostResource(name = "删除系统职位", path = "/hrPosition/delete")
     public ResponseData delete(@RequestBody @Validated(HrPositionRequest.delete.class) HrPositionRequest hrPositionRequest) {
         hrPositionService.del(hrPositionRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 编辑系统职位
+     *
+     * @author chenjinlong
+     * @date 2020/11/04 11:07
+     */
+    @PostResource(name = "编辑系统职位", path = "/hrPosition/edit")
+    public ResponseData edit(@RequestBody @Validated(HrPositionRequest.edit.class) HrPositionRequest hrPositionRequest) {
+        hrPositionService.edit(hrPositionRequest);
         return new SuccessResponseData();
     }
 

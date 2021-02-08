@@ -41,18 +41,6 @@ public class HrOrganizationController {
     }
 
     /**
-     * 编辑系统组织机构
-     *
-     * @author fengshuonan
-     * @date 2020/11/04 11:05
-     */
-    @PostResource(name = "编辑系统组织机构", path = "/hrOrganization/edit")
-    public ResponseData edit(@RequestBody @Validated(HrOrganizationRequest.edit.class) HrOrganizationRequest hrOrganizationRequest) {
-        hrOrganizationService.edit(hrOrganizationRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 删除系统组织机构
      *
      * @author fengshuonan
@@ -61,6 +49,18 @@ public class HrOrganizationController {
     @PostResource(name = "删除系统组织机构", path = "/hrOrganization/delete")
     public ResponseData delete(@RequestBody @Validated(HrOrganizationRequest.delete.class) HrOrganizationRequest hrOrganizationRequest) {
         hrOrganizationService.del(hrOrganizationRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 编辑系统组织机构
+     *
+     * @author fengshuonan
+     * @date 2020/11/04 11:05
+     */
+    @PostResource(name = "编辑系统组织机构", path = "/hrOrganization/edit")
+    public ResponseData edit(@RequestBody @Validated(HrOrganizationRequest.edit.class) HrOrganizationRequest hrOrganizationRequest) {
+        hrOrganizationService.edit(hrOrganizationRequest);
         return new SuccessResponseData();
     }
 
@@ -110,18 +110,18 @@ public class HrOrganizationController {
     }
 
     /**
-     * 获取全部系统组织机构树，用于新增，编辑时选择上级节点
+     * 获取全部系统组织机构树（antd vue版本，用于新增，编辑组织机构时选择上级节点）
      *
      * @author chenjinlong
      * @date 2021/01/05 15:55
      */
     @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/tree")
     public ResponseData tree(HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.tree(hrOrganizationRequest));
+        return new SuccessResponseData(hrOrganizationService.treeAntdv(hrOrganizationRequest));
     }
 
     /**
-     * 获取全部系统组织机构树，用于新增，编辑时选择上级节点
+     * 获取全部系统组织机构树（layui版本，用于新增，编辑组织机构时选择上级节点）
      *
      * @author chenjinlong
      * @date 2021/01/05 15:55
@@ -132,7 +132,7 @@ public class HrOrganizationController {
     }
 
     /**
-     * 获取zTree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）
+     * 获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）
      *
      * @author fengshuonan
      * @date 2021/1/9 18:37
@@ -143,7 +143,7 @@ public class HrOrganizationController {
     }
 
     /**
-     * 获取zTree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（antd vue版本）
+     * 获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（antd vue版本）
      *
      * @author fengshuonan
      * @date 2021/1/9 18:37
@@ -153,6 +153,5 @@ public class HrOrganizationController {
         List<ZTreeNode> zTreeNodes = hrOrganizationService.orgZTree(hrOrganizationRequest, true);
         return new SuccessResponseData(zTreeNodes);
     }
-
 
 }

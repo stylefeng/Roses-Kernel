@@ -12,7 +12,7 @@ import java.util.Set;
  * @date 2020/11/6 11:30
  */
 @Data
-public class DataScopeResponse {
+public class DataScopeDTO {
 
     /**
      * 数据范围类型的响应结果

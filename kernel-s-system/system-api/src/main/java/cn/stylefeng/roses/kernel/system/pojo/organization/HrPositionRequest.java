@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.pojo;
+package cn.stylefeng.roses.kernel.system.pojo.organization;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.validators.status.StatusValue;

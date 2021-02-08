@@ -39,8 +39,8 @@ import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeSer
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
-import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
-import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationResponse;
+import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationDTO;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.*;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.OnlineUserRequest;
@@ -430,7 +430,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<SysRoleResponse> roleResponseList = roleServiceApi.getRolesByIds(roleIds);
 
         // 3. 获取用户的数据范围
-        DataScopeResponse dataScopeResponse = dataScopeApi.getDataScope(userId, roleResponseList);
+        DataScopeDTO dataScopeResponse = dataScopeApi.getDataScope(userId, roleResponseList);
 
         // 4. 获取用户的组织机构和职位信息
         SysUserOrgResponse userOrgInfo = sysUserOrgService.getUserOrgInfo(userId);
@@ -594,9 +594,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<UserSelectTreeNode> userSelectTree(SysUserRequest sysUserRequest) {
         // 定义返回结果
         List<UserSelectTreeNode> treeNodeList = CollectionUtil.newArrayList();
-        List<HrOrganizationResponse> orgList = organizationServiceApi.orgList();
+        List<HrOrganizationDTO> orgList = organizationServiceApi.orgList();
         UserSelectTreeNode orgTreeNode;
-        for (HrOrganizationResponse hrOrganization : orgList) {
+        for (HrOrganizationDTO hrOrganization : orgList) {
             orgTreeNode = new UserSelectTreeNode();
             orgTreeNode.setId(String.valueOf(hrOrganization.getOrgId()));
             orgTreeNode.setPId(String.valueOf(hrOrganization.getOrgParentId()));

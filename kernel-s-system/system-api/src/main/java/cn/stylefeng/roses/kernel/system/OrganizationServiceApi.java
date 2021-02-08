@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.system;
 
-import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationResponse;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationDTO;
 
 import java.util.List;
 
@@ -19,5 +19,6 @@ public interface OrganizationServiceApi {
      * @author liuhanqing
      * @date 2021/1/15 10:41
      */
-    List<HrOrganizationResponse> orgList();
+    List<HrOrganizationDTO> orgList();
+
 }

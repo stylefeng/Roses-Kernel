@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * @date 2020/11/04 11:05
  */
 @Data
-public class HrOrganizationResponse {
+public class HrOrganizationDTO {
 
     /**
      * 主键

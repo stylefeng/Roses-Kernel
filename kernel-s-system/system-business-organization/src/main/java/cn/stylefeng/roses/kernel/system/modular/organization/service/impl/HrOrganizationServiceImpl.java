@@ -24,13 +24,14 @@ import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.OrganizationExceptionEnum;
+import cn.stylefeng.roses.kernel.system.exception.enums.organization.OrganizationExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
-import cn.stylefeng.roses.kernel.system.modular.organization.factory.OrganizationFactory;
+import cn.stylefeng.roses.kernel.system.modular.organization.factory.AntdvOrganizationFactory;
+import cn.stylefeng.roses.kernel.system.modular.organization.factory.LayuiOrganizationFactory;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrOrganizationMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationDTO;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationRequest;
-import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationResponse;
 import cn.stylefeng.roses.kernel.system.pojo.organization.layui.LayuiOrganizationTreeNode;
 import cn.stylefeng.roses.kernel.system.util.DataScopeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -88,27 +89,6 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     }
 
     @Override
-    public void edit(HrOrganizationRequest hrOrganizationRequest) {
-
-        HrOrganization hrOrganization = this.queryOrganization(hrOrganizationRequest);
-        Long id = hrOrganization.getOrgId();
-
-        // 校验数据范围
-        DataScopeUtil.quickValidateDataScope(id);
-
-        BeanUtil.copyProperties(hrOrganizationRequest, hrOrganization);
-
-        // 填充parentIds
-        this.fillParentIds(hrOrganization);
-
-        // 不能修改状态，用修改状态接口修改状态
-        hrOrganization.setStatusFlag(null);
-
-        // 更新这条记录
-        this.updateById(hrOrganization);
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public void del(HrOrganizationRequest hrOrganizationRequest) {
 
@@ -140,6 +120,27 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     }
 
     @Override
+    public void edit(HrOrganizationRequest hrOrganizationRequest) {
+
+        HrOrganization hrOrganization = this.queryOrganization(hrOrganizationRequest);
+        Long id = hrOrganization.getOrgId();
+
+        // 校验数据范围
+        DataScopeUtil.quickValidateDataScope(id);
+
+        BeanUtil.copyProperties(hrOrganizationRequest, hrOrganization);
+
+        // 填充parentIds
+        this.fillParentIds(hrOrganization);
+
+        // 不能修改状态，用修改状态接口修改状态
+        hrOrganization.setStatusFlag(null);
+
+        // 更新这条记录
+        this.updateById(hrOrganization);
+    }
+
+    @Override
     public void updateStatus(HrOrganizationRequest hrOrganizationRequest) {
         HrOrganization hrOrganization = this.queryOrganization(hrOrganizationRequest);
         hrOrganization.setStatusFlag(hrOrganizationRequest.getStatusFlag());
@@ -165,8 +166,106 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     }
 
     @Override
-    public List<HrOrganizationResponse> orgList() {
+    public List<DefaultTreeNode> treeAntdv(HrOrganizationRequest hrOrganizationRequest) {
+        // 定义返回结果
+        List<DefaultTreeNode> treeNodeList = CollectionUtil.newArrayList();
 
+        // 组装节点
+        List<HrOrganization> list = this.findListByDataScope(hrOrganizationRequest);
+        for (HrOrganization hrOrganization : list) {
+            DefaultTreeNode defaultTreeNode = AntdvOrganizationFactory.parseTreeNode(hrOrganization);
+            treeNodeList.add(defaultTreeNode);
+        }
+
+        // 构建树并返回
+        return new DefaultTreeBuildFactory<DefaultTreeNode>().doTreeBuild(treeNodeList);
+    }
+
+    @Override
+    public List<LayuiOrganizationTreeNode> treeLayui(HrOrganizationRequest hrOrganizationRequest) {
+        // 定义返回结果
+        List<LayuiOrganizationTreeNode> treeNodeList = CollectionUtil.newArrayList();
+
+        // 组装节点
+        List<HrOrganization> hrOrganizationList = this.findListByDataScope(hrOrganizationRequest);
+        for (HrOrganization hrOrganization : hrOrganizationList) {
+            LayuiOrganizationTreeNode treeNode = LayuiOrganizationFactory.parseOrganizationTreeNode(hrOrganization);
+            treeNodeList.add(treeNode);
+        }
+
+        // 构建树并返回
+        return new DefaultTreeBuildFactory<LayuiOrganizationTreeNode>().doTreeBuild(treeNodeList);
+    }
+
+    @Override
+    public List<ZTreeNode> orgZTree(HrOrganizationRequest hrOrganizationRequest, boolean buildTree) {
+
+        // 获取角色id
+        Long roleId = hrOrganizationRequest.getRoleId();
+
+        // 获取所有组织机构列表
+        LambdaQueryWrapper<HrOrganization> wrapper = createWrapper(hrOrganizationRequest);
+        List<HrOrganization> list = this.list(wrapper);
+        List<ZTreeNode> zTreeNodes = LayuiOrganizationFactory.parseZTree(list);
+
+        // 获取角色目前绑定的组织机构范围
+        List<Long> roleDataScopes = roleServiceApi.getRoleDataScopes(ListUtil.toList(roleId));
+
+        // 设置绑定的组织机构范围为已选则状态
+        for (ZTreeNode zTreeNode : zTreeNodes) {
+            if (roleDataScopes.contains(zTreeNode.getId())) {
+                zTreeNode.setChecked(true);
+            }
+        }
+
+        if (buildTree) {
+            return new DefaultTreeBuildFactory<ZTreeNode>().doTreeBuild(zTreeNodes);
+        } else {
+            return zTreeNodes;
+        }
+    }
+
+    @Override
+    public Set<Long> findAllLevelParentIdsByOrganizations(Set<Long> organizationIds) {
+
+        // 定义返回结果
+        Set<Long> allLevelParentIds = new HashSet<>(organizationIds);
+
+        // 查询出这些节点的pids字段
+        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(HrOrganization::getOrgId, organizationIds);
+        queryWrapper.select(HrOrganization::getOrgPids);
+
+        List<HrOrganization> organizationList = this.list(queryWrapper);
+        if (organizationList == null || organizationList.isEmpty()) {
+            return allLevelParentIds;
+        }
+
+        // 把所有的pids分割，并放入到set中
+        for (HrOrganization hrOrganization : organizationList) {
+
+            // 获取pids值
+            String pids = hrOrganization.getOrgPids();
+
+            // 去掉所有的左中括号
+            pids = StrUtil.removeAll(pids, SymbolConstant.LEFT_SQUARE_BRACKETS);
+
+            // 去掉所有的右中括号
+            pids = StrUtil.removeAll(pids, SymbolConstant.RIGHT_SQUARE_BRACKETS);
+
+            // 按逗号分割这个字符串，得到pid的数组
+            String[] finalPidArray = pids.split(StrUtil.COMMA);
+
+            // 遍历这些值，放入到最终的set
+            for (String pid : finalPidArray) {
+                allLevelParentIds.add(Convert.toLong(pid));
+            }
+        }
+        return allLevelParentIds;
+    }
+
+    @Override
+    public List<HrOrganizationDTO> orgList() {
 
         LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
 
@@ -200,20 +299,109 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
         // 根据排序升序排列，序号越小越在前
         queryWrapper.orderByAsc(HrOrganization::getOrgSort);
+
         // 先实例化出Function接口
-        Function<Object, HrOrganizationResponse> mapper = e -> {
-            HrOrganizationResponse org = new HrOrganizationResponse();
+        Function<Object, HrOrganizationDTO> mapper = e -> {
+            HrOrganizationDTO org = new HrOrganizationDTO();
             HrOrganization hrOrg = (HrOrganization) e;
             BeanUtil.copyProperties(hrOrg, org);
             return org;
         };
+
         // 返回数据
         List<HrOrganization> list = this.list(queryWrapper);
-        List<HrOrganizationResponse> resultList = list.stream().filter(Objects::nonNull).map(mapper).collect(Collectors.toList());
-        return resultList;
+        return list.stream().filter(Objects::nonNull).map(mapper).collect(Collectors.toList());
+    }
+
+    /**
+     * 创建组织架构的通用条件查询wrapper
+     *
+     * @author fengshuonan
+     * @date 2020/11/6 10:16
+     */
+    private LambdaQueryWrapper<HrOrganization> createWrapper(HrOrganizationRequest hrOrganizationRequest) {
+        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
+
+        // 查询未删除状态的
+        queryWrapper.eq(HrOrganization::getDelFlag, YesOrNotEnum.N.getCode());
+
+        // 根据排序升序排列，序号越小越在前
+        queryWrapper.orderByAsc(HrOrganization::getOrgSort);
+
+        if (ObjectUtil.isEmpty(hrOrganizationRequest)) {
+            return queryWrapper;
+        }
+
+        String orgName = hrOrganizationRequest.getOrgName();
+        String orgCode = hrOrganizationRequest.getOrgCode();
+        Long orgParentId = hrOrganizationRequest.getOrgParentId();
+        Long orgId = hrOrganizationRequest.getOrgId();
+
+        // 拼接组织机构名称条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(orgName), HrOrganization::getOrgName, orgName);
+
+        // 拼接组织机构编码条件
+        queryWrapper.eq(ObjectUtil.isNotEmpty(orgCode), HrOrganization::getOrgCode, orgCode);
+
+        // 拼接父机构id查询条件
+        if (ObjectUtil.isNotEmpty(orgParentId)) {
+            queryWrapper.and(qw -> {
+                qw.eq(HrOrganization::getOrgId, orgParentId).or().like(HrOrganization::getOrgPids, orgParentId);
+            });
+        }
+
+        // 拼接机构id查询条件
+        queryWrapper.eq(ObjectUtil.isNotEmpty(orgId), HrOrganization::getOrgId, orgId);
+
+        return queryWrapper;
     }
 
 
+    /**
+     * 获取系统组织机构
+     *
+     * @author fengshuonan
+     * @date 2020/11/04 11:05
+     */
+    private HrOrganization queryOrganization(HrOrganizationRequest hrOrganizationRequest) {
+        HrOrganization hrOrganization = this.getById(hrOrganizationRequest.getOrgId());
+        if (ObjectUtil.isEmpty(hrOrganization)) {
+            throw new SystemModularException(OrganizationExceptionEnum.CANT_FIND_ORG, hrOrganizationRequest.getOrgId());
+        }
+        return hrOrganization;
+    }
+
+    /**
+     * 填充该节点的pIds
+     * <p>
+     * 如果pid是顶级节点，pids就是 [-1],
+     * <p>
+     * 如果pid不是顶级节点，pids就是父节点的pids + [pid] + ,
+     *
+     * @author fengshuonan
+     * @date 2020/11/5 13:45
+     */
+    private void fillParentIds(HrOrganization hrOrganization) {
+        if (TreeConstants.DEFAULT_PARENT_ID.equals(hrOrganization.getOrgParentId())) {
+            hrOrganization.setOrgPids(SymbolConstant.LEFT_SQUARE_BRACKETS + TreeConstants.DEFAULT_PARENT_ID + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA);
+        } else {
+            // 获取父组织机构
+            HrOrganizationRequest hrOrganizationRequest = new HrOrganizationRequest();
+            hrOrganizationRequest.setOrgId(hrOrganization.getOrgId());
+            HrOrganization parentOrganization = this.queryOrganization(hrOrganizationRequest);
+
+            // 设置本节点的父ids为 (上一个节点的pids + (上级节点的id) )
+            hrOrganization.setOrgPids(
+                    parentOrganization.getOrgPids() + SymbolConstant.LEFT_SQUARE_BRACKETS + parentOrganization.getOrgId() + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA);
+        }
+    }
+
+    /**
+     * 根据数据范围获取组织机构列表
+     *
+     * @author fengshuonan
+     * @date 2021/2/8 20:22
+     */
     private List<HrOrganization> findListByDataScope(HrOrganizationRequest hrOrganizationRequest) {
 
         LambdaQueryWrapper<HrOrganization> queryWrapper = this.createWrapper(hrOrganizationRequest);
@@ -238,169 +426,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
             queryWrapper.in(HrOrganization::getOrgId, allLevelParentIdsByOrganizations);
         }
 
-
         return this.list(queryWrapper);
-    }
-
-    @Override
-    public List<DefaultTreeNode> tree(HrOrganizationRequest hrOrganizationRequest) {
-        // 定义返回结果
-        List<DefaultTreeNode> treeNodeList = CollectionUtil.newArrayList();
-        List<HrOrganization> list = this.findListByDataScope(hrOrganizationRequest);
-        // 组装节点
-        for (HrOrganization hrOrganization : list) {
-            DefaultTreeNode orgTreeNode = new DefaultTreeNode();
-            orgTreeNode.setId(String.valueOf(hrOrganization.getOrgId()));
-            orgTreeNode.setPId(String.valueOf(hrOrganization.getOrgParentId()));
-            orgTreeNode.setName(hrOrganization.getOrgName());
-            orgTreeNode.setSort(hrOrganization.getOrgSort());
-            treeNodeList.add(orgTreeNode);
-        }
-        // 构建树并返回
-        return new DefaultTreeBuildFactory<DefaultTreeNode>().doTreeBuild(treeNodeList);
-    }
-
-    @Override
-    public List<LayuiOrganizationTreeNode> treeLayui(HrOrganizationRequest hrOrganizationRequest) {
-        // 定义返回结果
-        List<LayuiOrganizationTreeNode> treeNodeList = CollectionUtil.newArrayList();
-        List<HrOrganization> hrOrganizationList = this.findListByDataScope(hrOrganizationRequest);
-        hrOrganizationList.forEach(hrOrganization -> {
-            LayuiOrganizationTreeNode treeNode = OrganizationFactory.parseOrganizationTreeNode(hrOrganization);
-            treeNodeList.add(treeNode);
-        });
-        return new DefaultTreeBuildFactory<LayuiOrganizationTreeNode>().doTreeBuild(treeNodeList);
-    }
-
-    @Override
-    public Set<Long> findAllLevelParentIdsByOrganizations(Set<Long> organizationIds) {
-
-        // 定义返回结果
-        Set<Long> allLevelParentIds = new HashSet<>(organizationIds);
-
-        // 查询出这些节点的pids字段
-        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(HrOrganization::getOrgId, organizationIds);
-        queryWrapper.select(HrOrganization::getOrgPids);
-
-        List<HrOrganization> organizationList = this.list(queryWrapper);
-        if (organizationList == null || organizationList.isEmpty()) {
-            return allLevelParentIds;
-        }
-
-        // 把所有的pids分割，并放入到set中
-        for (HrOrganization hrOrganization : organizationList) {
-
-            // 获取pids值
-            String pids = hrOrganization.getOrgPids();
-            // 去掉所有的左中括号
-            pids = StrUtil.removeAll(pids, SymbolConstant.LEFT_SQUARE_BRACKETS);
-            // 去掉所有的右中括号
-            pids = StrUtil.removeAll(pids, SymbolConstant.RIGHT_SQUARE_BRACKETS);
-            // 按逗号分割这个字符串，得到pid的数组
-            String[] finalPidArray = pids.split(StrUtil.COMMA);
-
-            // 遍历这些值，放入到最终的set
-            for (String pid : finalPidArray) {
-                allLevelParentIds.add(Convert.toLong(pid));
-            }
-        }
-        return allLevelParentIds;
-    }
-
-    @Override
-    public List<ZTreeNode> orgZTree(HrOrganizationRequest hrOrganizationRequest, boolean buildTree) {
-
-        // 获取角色id
-        Long roleId = hrOrganizationRequest.getRoleId();
-
-        // 获取所有组织机构列表
-        LambdaQueryWrapper<HrOrganization> wrapper = createWrapper(hrOrganizationRequest);
-        List<HrOrganization> list = this.list(wrapper);
-        List<ZTreeNode> zTreeNodes = OrganizationFactory.parseZTree(list);
-
-        // 获取角色目前绑定的组织机构范围
-        List<Long> roleDataScopes = roleServiceApi.getRoleDataScopes(ListUtil.toList(roleId));
-
-        // 设置绑定的组织机构范围为已选则状态
-        for (ZTreeNode zTreeNode : zTreeNodes) {
-            if (roleDataScopes.contains(zTreeNode.getId())) {
-                zTreeNode.setChecked(true);
-            }
-        }
-
-        if (buildTree) {
-            return new DefaultTreeBuildFactory<ZTreeNode>().doTreeBuild(zTreeNodes);
-        } else {
-            return zTreeNodes;
-        }
-    }
-
-    /**
-     * 创建组织架构的通用条件查询wrapper
-     *
-     * @author fengshuonan
-     * @date 2020/11/6 10:16
-     */
-    private LambdaQueryWrapper<HrOrganization> createWrapper(HrOrganizationRequest hrOrganizationRequest) {
-        LambdaQueryWrapper<HrOrganization> queryWrapper = new LambdaQueryWrapper<>();
-
-        String orgName = hrOrganizationRequest.getOrgName();
-        String orgCode = hrOrganizationRequest.getOrgCode();
-        Long orgParentId = hrOrganizationRequest.getOrgParentId();
-        Long orgId = hrOrganizationRequest.getOrgId();
-        queryWrapper.like(ObjectUtil.isNotEmpty(orgName), HrOrganization::getOrgName, orgName);
-        queryWrapper.eq(ObjectUtil.isNotEmpty(orgCode), HrOrganization::getOrgCode, orgCode);
-        // 拼接机构id查询条件
-        queryWrapper.eq(ObjectUtil.isNotEmpty(orgId), HrOrganization::getOrgId, orgId);
-        // 拼接父机构id查询条件
-        if (ObjectUtil.isNotEmpty(orgParentId)) {
-            queryWrapper.and(qw -> {
-                qw.eq(HrOrganization::getOrgId, orgParentId).or().like(HrOrganization::getOrgPids, orgParentId);
-            });
-        }
-        // 查询未删除状态的
-        queryWrapper.eq(HrOrganization::getDelFlag, YesOrNotEnum.N.getCode());
-        // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(HrOrganization::getOrgSort);
-        return queryWrapper;
-    }
-
-
-    /**
-     * 获取系统组织机构
-     *
-     * @author fengshuonan
-     * @date 2020/11/04 11:05
-     */
-    private HrOrganization queryOrganization(HrOrganizationRequest hrOrganizationRequest) {
-        HrOrganization hrOrganization = this.getById(hrOrganizationRequest.getOrgId());
-        if (ObjectUtil.isEmpty(hrOrganization)) {
-            throw new SystemModularException(OrganizationExceptionEnum.CANT_FIND_ORG, hrOrganizationRequest.getOrgId());
-        }
-        return hrOrganization;
-    }
-
-    /**
-     * 填充该节点的pIds
-     *
-     * @author fengshuonan
-     * @date 2020/11/5 13:45
-     */
-    private void fillParentIds(HrOrganization hrOrganization) {
-
-        // 如果是一级节点（一级节点的pid是0）
-        if (hrOrganization.getOrgParentId().equals(TreeConstants.DEFAULT_PARENT_ID)) {
-            // 设置一级节点的pid为[0],
-            hrOrganization.setOrgPids(SymbolConstant.LEFT_SQUARE_BRACKETS + TreeConstants.DEFAULT_PARENT_ID + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA);
-        } else {
-            // 获取父组织机构
-            HrOrganization parentOrganization = this.getById(hrOrganization.getOrgParentId());
-
-            // 设置本节点的父ids为 (上一个节点的pids + (上级节点的id) )
-            hrOrganization.setOrgPids(
-                    parentOrganization.getOrgPids() + SymbolConstant.LEFT_SQUARE_BRACKETS + parentOrganization.getOrgId() + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA);
-        }
     }
 
 }

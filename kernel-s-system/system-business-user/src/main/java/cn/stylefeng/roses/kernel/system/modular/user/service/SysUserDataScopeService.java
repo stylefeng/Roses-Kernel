@@ -15,7 +15,6 @@ import java.util.List;
  */
 public interface SysUserDataScopeService extends IService<SysUserDataScope> {
 
-
     /**
      * 新增
      *

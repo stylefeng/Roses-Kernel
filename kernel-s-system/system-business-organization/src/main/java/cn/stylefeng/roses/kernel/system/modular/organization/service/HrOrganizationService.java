@@ -30,15 +30,6 @@ public interface HrOrganizationService extends IService<HrOrganization>, Organiz
     void add(HrOrganizationRequest hrOrganizationRequest);
 
     /**
-     * 编辑系统组织机构
-     *
-     * @param hrOrganizationRequest 组织机构请求参数
-     * @author fengshuonan
-     * @date 2020/11/04 11:05
-     */
-    void edit(HrOrganizationRequest hrOrganizationRequest);
-
-    /**
      * 删除系统组织机构
      *
      * @param hrOrganizationRequest 组织机构请求参数
@@ -46,6 +37,15 @@ public interface HrOrganizationService extends IService<HrOrganization>, Organiz
      * @date 2020/11/04 11:05
      */
     void del(HrOrganizationRequest hrOrganizationRequest);
+
+    /**
+     * 编辑系统组织机构
+     *
+     * @param hrOrganizationRequest 组织机构请求参数
+     * @author fengshuonan
+     * @date 2020/11/04 11:05
+     */
+    void edit(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 修改组织机构状态
@@ -86,19 +86,18 @@ public interface HrOrganizationService extends IService<HrOrganization>, Organiz
      */
     List<HrOrganization> findList(HrOrganizationRequest hrOrganizationRequest);
 
-
     /**
-     * 获取组织架构树
+     * 获取全部系统组织机构树（antd vue版本，用于新增，编辑组织机构时选择上级节点）
      *
      * @param hrOrganizationRequest 查询参数
      * @return 系统组织机构树
      * @author fengshuonan
      * @date 2020/11/6 13:41
      */
-    List<DefaultTreeNode> tree(HrOrganizationRequest hrOrganizationRequest);
+    List<DefaultTreeNode> treeAntdv(HrOrganizationRequest hrOrganizationRequest);
 
     /**
-     * 获取组织架构树
+     * 获取全部系统组织机构树（layui版本，用于新增，编辑组织机构时选择上级节点）
      *
      * @param hrOrganizationRequest 查询参数
      * @return 系统组织机构树
@@ -106,16 +105,6 @@ public interface HrOrganizationService extends IService<HrOrganization>, Organiz
      * @date 2020/11/6 13:41
      */
     List<LayuiOrganizationTreeNode> treeLayui(HrOrganizationRequest hrOrganizationRequest);
-
-    /**
-     * 查询所有参数组织架构id集合的所有层级的父id，包含父级的父级等
-     *
-     * @param organizationIds 组织架构id集合
-     * @return 被查询参数id集合的所有层级父级id，包含他们本身
-     * @author fengshuonan
-     * @date 2020/11/6 14:24
-     */
-    Set<Long> findAllLevelParentIdsByOrganizations(Set<Long> organizationIds);
 
     /**
      * 获取ztree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）
@@ -127,5 +116,15 @@ public interface HrOrganizationService extends IService<HrOrganization>, Organiz
      * @date 2021/1/9 18:40
      */
     List<ZTreeNode> orgZTree(HrOrganizationRequest hrOrganizationRequest, boolean buildTree);
+
+    /**
+     * 查询所有参数组织架构id集合的所有层级的父id，包含父级的父级等
+     *
+     * @param organizationIds 组织架构id集合
+     * @return 被查询参数id集合的所有层级父级id，包含他们本身
+     * @author fengshuonan
+     * @date 2020/11/6 14:24
+     */
+    Set<Long> findAllLevelParentIdsByOrganizations(Set<Long> organizationIds);
 
 }

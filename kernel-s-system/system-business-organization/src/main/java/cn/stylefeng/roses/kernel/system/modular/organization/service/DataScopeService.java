@@ -7,8 +7,8 @@ import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
+import cn.stylefeng.roses.kernel.system.exception.enums.organization.DataScopeExceptionEnum;
+import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import org.springframework.stereotype.Service;
@@ -41,10 +41,10 @@ public class DataScopeService implements DataScopeApi {
     private DbOperatorApi dbOperatorApi;
 
     @Override
-    public DataScopeResponse getDataScope(Long userId, List<SysRoleResponse> sysRoles) {
+    public DataScopeDTO getDataScope(Long userId, List<SysRoleResponse> sysRoles) {
 
         // 初始化返回结果
-        DataScopeResponse dataScopeResponse = new DataScopeResponse();
+        DataScopeDTO dataScopeResponse = new DataScopeDTO();
         Set<Long> userIds = new HashSet<>();
         Set<Long> organizationIds = new HashSet<>();
 

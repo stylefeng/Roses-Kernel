@@ -6,7 +6,7 @@ import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
+import cn.stylefeng.roses.kernel.system.exception.enums.organization.DataScopeExceptionEnum;
 
 import java.util.Set;
 

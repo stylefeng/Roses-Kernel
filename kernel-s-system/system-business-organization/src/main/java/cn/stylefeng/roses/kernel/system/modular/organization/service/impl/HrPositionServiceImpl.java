@@ -14,7 +14,7 @@ import cn.stylefeng.roses.kernel.system.exception.enums.PositionExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrPositionMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
-import cn.stylefeng.roses.kernel.system.pojo.HrPositionRequest;
+import cn.stylefeng.roses.kernel.system.pojo.organization.HrPositionRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -47,13 +47,6 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
     }
 
     @Override
-    public void edit(HrPositionRequest hrPositionRequest) {
-        HrPosition sysPosition = this.querySysPositionById(hrPositionRequest);
-        BeanUtil.copyProperties(hrPositionRequest, sysPosition);
-        this.updateById(sysPosition);
-    }
-
-    @Override
     public void del(HrPositionRequest hrPositionRequest) {
         HrPosition sysPosition = this.querySysPositionById(hrPositionRequest);
 
@@ -65,6 +58,13 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
 
         // 逻辑删除
         sysPosition.setDelFlag(YesOrNotEnum.Y.getCode());
+        this.updateById(sysPosition);
+    }
+
+    @Override
+    public void edit(HrPositionRequest hrPositionRequest) {
+        HrPosition sysPosition = this.querySysPositionById(hrPositionRequest);
+        BeanUtil.copyProperties(hrPositionRequest, sysPosition);
         this.updateById(sysPosition);
     }
 
@@ -113,12 +113,21 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
     /**
      * 实体构建 QueryWrapper
      *
-     * @return
      * @author chenjinlong
      * @date 2021/2/2 10:17
      */
     private LambdaQueryWrapper<HrPosition> createWrapper(HrPositionRequest hrPositionRequest) {
         LambdaQueryWrapper<HrPosition> queryWrapper = new LambdaQueryWrapper<>();
+
+        // 查询未删除状态的
+        queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
+
+        // 根据排序升序排列，序号越小越在前
+        queryWrapper.orderByAsc(HrPosition::getPositionSort);
+
+        if (ObjectUtil.isEmpty(hrPositionRequest)) {
+            return queryWrapper;
+        }
 
         Long positionId = hrPositionRequest.getPositionId();
         String positionName = hrPositionRequest.getPositionName();
@@ -129,13 +138,7 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
         queryWrapper.like(StrUtil.isNotEmpty(positionName), HrPosition::getPositionName, positionName);
         queryWrapper.eq(StrUtil.isNotEmpty(positionCode), HrPosition::getPositionCode, positionCode);
 
-        // 查询未删除状态的
-        queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
-        // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(HrPosition::getPositionSort);
-
         return queryWrapper;
     }
-
 
 }

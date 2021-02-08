@@ -13,7 +13,7 @@ import java.util.List;
  * @author chenjinlong
  * @date 2021/1/6 21:03
  */
-public class OrganizationFactory {
+public class LayuiOrganizationFactory {
 
     /**
      * 实体转换
