@@ -50,7 +50,6 @@ public interface SysLogService extends IService<SysLog> {
      */
     SysLog detail(LogManagerRequest logManagerParam);
 
-
     /**
      * 查询-列表-按实体对象
      *

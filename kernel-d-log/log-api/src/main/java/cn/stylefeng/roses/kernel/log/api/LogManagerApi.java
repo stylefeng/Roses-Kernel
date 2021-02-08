@@ -48,10 +48,8 @@ public interface LogManagerApi {
     void del(LogManagerRequest logManagerRequest);
 
     /**
-     * 详情
+     * 查询日志详情
      *
-     * @param
-     * @return
      * @author chenjinlong
      * @date 2021/2/1 19:47
      */

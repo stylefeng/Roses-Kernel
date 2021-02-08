@@ -40,5 +40,4 @@ public interface LogRecordApi {
      */
     void addBatch(List<LogRecordDTO> logRecords);
 
-
 }

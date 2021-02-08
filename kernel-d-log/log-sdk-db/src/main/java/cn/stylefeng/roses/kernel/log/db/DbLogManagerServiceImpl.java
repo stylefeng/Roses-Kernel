@@ -22,9 +22,6 @@ import java.util.List;
 @Slf4j
 public class DbLogManagerServiceImpl implements LogManagerApi {
 
-    /**
-     * 日志记录 service接口
-     */
     @Resource
     private SysLogService sysLogService;
 
@@ -58,6 +55,5 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
         BeanUtil.copyProperties(detail, logRecordDTO);
         return logRecordDTO;
     }
-
 
 }

@@ -32,7 +32,12 @@ public enum LogExceptionEnum implements AbstractExceptionEnum {
     /**
      * 初始化日志记录表失败，执行查询语句失败
      */
-    LOG_SQL_EXE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + LogConstants.LOG_EXCEPTION_STEP_CODE + "04", "初始化日志记录表失败，执行查询语句失败");
+    LOG_SQL_EXE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + LogConstants.LOG_EXCEPTION_STEP_CODE + "04", "初始化日志记录表失败，执行查询语句失败"),
+
+    /**
+     * 被查询日志不存在
+     */
+    LOG_NOT_EXISTED(RuleConstants.BUSINESS_ERROR_TYPE_CODE + LogConstants.LOG_EXCEPTION_STEP_CODE + "05", "被查询日志不存在，日志id：{}");
 
     /**
      * 错误编码

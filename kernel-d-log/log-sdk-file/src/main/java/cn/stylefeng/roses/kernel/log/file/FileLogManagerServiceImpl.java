@@ -172,8 +172,6 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
     /**
      * 根据id获取日志记录
      *
-     * @param
-     * @return
      * @author chenjinlong
      * @date 2021/2/1 19:54
      */

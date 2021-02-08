@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.log.api.exception.LogException;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.db.entity.SysLog;
 import cn.stylefeng.roses.kernel.log.db.mapper.SysLogMapper;
@@ -16,6 +17,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static cn.stylefeng.roses.kernel.log.api.exception.enums.LogExceptionEnum.LOG_NOT_EXISTED;
 
 /**
  * 日志记录 service接口实现类
@@ -51,7 +54,6 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         return this.getOne(queryWrapper, false);
     }
 
-
     @Override
     public List<SysLog> findList(LogManagerRequest logManagerRequest) {
         LambdaQueryWrapper<SysLog> wrapper = this.createWrapper(logManagerRequest);
@@ -65,7 +67,6 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         return PageResultFactory.createPageResult(page);
     }
 
-
     /**
      * 根据主键id获取对象
      *
@@ -74,6 +75,9 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
      */
     private SysLog querySysLogById(LogManagerRequest logManagerRequest) {
         SysLog sysLog = this.getById(logManagerRequest.getLogId());
+        if (sysLog == null) {
+            throw new LogException(LOG_NOT_EXISTED, logManagerRequest.getLogId());
+        }
         return sysLog;
     }
 
@@ -88,6 +92,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 
         String beginDateTime = logManagerRequest.getBeginDateTime();
         String endDateTime = logManagerRequest.getEndDateTime();
+
         // SQL条件拼接
         String name = logManagerRequest.getLogName();
         String appName = logManagerRequest.getAppName();
