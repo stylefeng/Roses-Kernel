@@ -87,4 +87,15 @@ public abstract class AbstractRedisCacheOperator<T> implements CacheOperatorApi<
         }
         return results;
     }
+
+    /**
+     * 获取RedisTemplate
+     *
+     * @author fengshuonan
+     * @date 2021/2/8 9:40
+     */
+    public RedisTemplate<String, T> getRedisTemplate() {
+        return this.redisTemplate;
+    }
+
 }
