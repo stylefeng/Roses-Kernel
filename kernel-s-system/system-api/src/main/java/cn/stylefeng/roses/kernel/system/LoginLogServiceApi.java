@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.system;
 
-import cn.stylefeng.roses.kernel.system.pojo.SysLoginLogRequest;
+import cn.stylefeng.roses.kernel.system.pojo.loginlog.SysLoginLogRequest;
 
 /**
  * 登录日志api接口
