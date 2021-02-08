@@ -25,7 +25,7 @@ public interface DictMapper extends BaseMapper<SysDict> {
      * @author fengshuonan
      * @date 2020/10/29 17:21
      */
-    SysDict findDetail(@Param("dictId") Long dictId);
+    SysDict detail(@Param("dictId") Long dictId);
 
     /**
      * 获取分页字典列表
@@ -36,7 +36,7 @@ public interface DictMapper extends BaseMapper<SysDict> {
      * @author fengshuonan
      * @date 2020/10/29 17:21
      */
-    List<SysDict> findList(@Param("page") Page<SysDict> page, @Param("dictRequest") DictRequest dictRequest);
+    List<SysDict> findPage(@Param("page") Page<SysDict> page, @Param("dictRequest") DictRequest dictRequest);
 
     /**
      * 获取字典下拉列表，用在新增和修改字典，选择字典的父级

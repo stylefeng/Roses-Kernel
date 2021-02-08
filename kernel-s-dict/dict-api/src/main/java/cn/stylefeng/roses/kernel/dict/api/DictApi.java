@@ -13,14 +13,6 @@ import java.util.List;
 public interface DictApi {
 
     /**
-     * 获取字典名称通过code
-     *
-     * @author fengshuonan
-     * @date 2020/12/25 14:14
-     */
-    String getDictNameByDictCode(String dictCode);
-
-    /**
      * 通过字典类型编码和字典编码获取名称
      *
      * @param dictTypeCode 字典类型编码

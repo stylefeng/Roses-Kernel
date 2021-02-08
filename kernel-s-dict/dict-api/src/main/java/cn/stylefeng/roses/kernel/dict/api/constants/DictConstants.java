@@ -23,7 +23,6 @@ public interface DictConstants {
      */
     Long DEFAULT_DICT_PARENT_ID = -1L;
 
-
     /**
      * 系统配置分组code
      */

@@ -44,7 +44,7 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
     private PinYinApi pinYinApi;
 
     @Override
-    public void addDictType(DictTypeRequest dictTypeRequest) {
+    public void add(DictTypeRequest dictTypeRequest) {
 
         // 如果是系统级字典，只允许管理员操作
         validateSystemTypeClassOperate(dictTypeRequest);
@@ -63,7 +63,7 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
     }
 
     @Override
-    public void updateDictType(DictTypeRequest dictTypeRequest) {
+    public void edit(DictTypeRequest dictTypeRequest) {
 
         // 如果是系统级字典，只允许管理员操作
         validateSystemTypeClassOperate(dictTypeRequest);
@@ -87,7 +87,7 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateDictTypeStatus(DictTypeRequest dictTypeRequest) {
+    public void editStatus(DictTypeRequest dictTypeRequest) {
 
         // 如果是系统级字典，只允许管理员操作
         validateSystemTypeClassOperate(dictTypeRequest);
@@ -114,7 +114,7 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteDictType(DictTypeRequest dictTypeRequest) {
+    public void del(DictTypeRequest dictTypeRequest) {
 
         // 如果是系统级字典，只允许管理员操作
         validateSystemTypeClassOperate(dictTypeRequest);
@@ -137,12 +137,12 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
     }
 
     @Override
-    public List<SysDictType> getDictTypeList(DictTypeRequest dictTypeRequest) {
+    public List<SysDictType> findList(DictTypeRequest dictTypeRequest) {
         return this.baseMapper.findList(null, dictTypeRequest);
     }
 
     @Override
-    public PageResult<SysDictType> getDictTypePageList(DictTypeRequest dictTypeRequest) {
+    public PageResult<SysDictType> findPage(DictTypeRequest dictTypeRequest) {
 
         Page<SysDictType> page = PageFactory.defaultPage();
 

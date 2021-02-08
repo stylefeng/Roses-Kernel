@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.dict.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dict.api.constants.DictConstants;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictTypeService;
@@ -17,10 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
-
-import static cn.stylefeng.roses.kernel.dict.api.constants.DictConstants.CONFIG_GROUP_DICT_TYPE_CODE;
-import static cn.stylefeng.roses.kernel.dict.api.constants.DictConstants.LANGUAGES_DICT_TYPE_CODE;
-
 
 /**
  * 字典类型管理
@@ -43,7 +40,7 @@ public class DictTypeController {
      */
     @PostResource(name = "添加字典类型", path = "/dictType/addDictType", requiredPermission = false)
     public ResponseData addDictType(@RequestBody @Validated(DictTypeRequest.add.class) DictTypeRequest dictTypeRequest) {
-        this.dictTypeService.addDictType(dictTypeRequest);
+        this.dictTypeService.add(dictTypeRequest);
         return new SuccessResponseData();
     }
 
@@ -55,7 +52,7 @@ public class DictTypeController {
      */
     @PostResource(name = "修改字典类型", path = "/dictType/updateDictType", requiredPermission = false)
     public ResponseData updateDictType(@RequestBody @Validated(DictTypeRequest.edit.class) DictTypeRequest dictTypeRequest) {
-        this.dictTypeService.updateDictType(dictTypeRequest);
+        this.dictTypeService.edit(dictTypeRequest);
         return new SuccessResponseData();
     }
 
@@ -67,7 +64,7 @@ public class DictTypeController {
      */
     @PostResource(name = "修改字典类型状态", path = "/dictType/updateStatus", requiredPermission = false)
     public ResponseData updateStatus(@RequestBody @Validated(BaseRequest.updateStatus.class) DictTypeRequest dictTypeRequest) {
-        this.dictTypeService.updateDictTypeStatus(dictTypeRequest);
+        this.dictTypeService.editStatus(dictTypeRequest);
         return new SuccessResponseData();
     }
 
@@ -79,7 +76,7 @@ public class DictTypeController {
      */
     @PostResource(name = "删除字典类型", path = "/dictType/deleteDictType", requiredPermission = false)
     public ResponseData deleteDictType(@RequestBody @Validated(DictTypeRequest.delete.class) DictTypeRequest dictTypeRequest) {
-        this.dictTypeService.deleteDictType(dictTypeRequest);
+        this.dictTypeService.del(dictTypeRequest);
         return new SuccessResponseData();
     }
 
@@ -95,7 +92,6 @@ public class DictTypeController {
         return new SuccessResponseData(detail);
     }
 
-
     /**
      * 获取字典类型详情
      *
@@ -104,7 +100,7 @@ public class DictTypeController {
      */
     @GetResource(name = "获取系统配置字典类型详情", path = "/dictType/getConfigDictTypeDetail", requiredPermission = false)
     public ResponseData getConfigDictTypeDetail(DictTypeRequest dictTypeRequest) {
-        dictTypeRequest.setDictTypeCode(CONFIG_GROUP_DICT_TYPE_CODE);
+        dictTypeRequest.setDictTypeCode(DictConstants.CONFIG_GROUP_DICT_TYPE_CODE);
         SysDictType detail = this.dictTypeService.detailBy(dictTypeRequest);
         return new SuccessResponseData(detail);
     }
@@ -117,11 +113,10 @@ public class DictTypeController {
      */
     @GetResource(name = "获取语种字典类型型详情", path = "/dictType/getTranslationDetail", requiredPermission = false)
     public ResponseData getTranslationDetail(DictTypeRequest dictTypeRequest) {
-        dictTypeRequest.setDictTypeCode(LANGUAGES_DICT_TYPE_CODE);
+        dictTypeRequest.setDictTypeCode(DictConstants.LANGUAGES_DICT_TYPE_CODE);
         SysDictType detail = this.dictTypeService.detailBy(dictTypeRequest);
         return new SuccessResponseData(detail);
     }
-
 
     /**
      * 获取字典类型列表
@@ -131,7 +126,7 @@ public class DictTypeController {
      */
     @GetResource(name = "获取字典类型列表", path = "/dictType/getDictTypeList", requiredPermission = false)
     public ResponseData getDictTypeList(DictTypeRequest dictTypeRequest) {
-        List<SysDictType> sysDictTypeList = dictTypeService.getDictTypeList(dictTypeRequest);
+        List<SysDictType> sysDictTypeList = dictTypeService.findList(dictTypeRequest);
         return new SuccessResponseData(sysDictTypeList);
     }
 
@@ -143,7 +138,7 @@ public class DictTypeController {
      */
     @GetResource(name = "获取字典类型列表(分页)", path = "/dictType/getDictTypePageList", requiredPermission = false)
     public ResponseData getDictTypePageList(DictTypeRequest dictTypeRequest) {
-        PageResult<SysDictType> dictTypePageList = dictTypeService.getDictTypePageList(dictTypeRequest);
+        PageResult<SysDictType> dictTypePageList = dictTypeService.findPage(dictTypeRequest);
         return new SuccessResponseData(dictTypePageList);
     }
 

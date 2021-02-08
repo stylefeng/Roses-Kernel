@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.dict.modular.mapper.DictMapper">
 
-    <select id="findDetail" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict" parameterType="long">
+    <select id="detail" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict" parameterType="long">
         SELECT dict.dict_id          AS dictId,
                dict.dict_code        AS dictCode,
                dict.dict_name        as dictName,
@@ -22,8 +22,8 @@
           AND dict.dict_id = #{dictId}
     </select>
 
-    <select id="findList" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict">
-        SELECT type.dict_type_name  as dictTypeName,
+    <select id="findPage" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict">
+        SELECT dictType.dict_type_name   as dictTypeName,
                dict.dict_id          AS dictId,
                dict.dict_code        AS dictCode,
                dict.dict_encode      as dictEncode,
@@ -36,14 +36,11 @@
                dict.dict_parent_id   AS dictParentId,
                dict.status_flag      AS statusFlag,
                dict.create_time      AS createTime,
-               pDict.dict_name       AS parentName
+               parentDict.dict_name  AS parentName
         FROM sys_dict dict
-                 INNER JOIN sys_dict_type type ON dict.dict_type_code = type.dict_type_code
-                 LEFT JOIN sys_dict pDict ON pDict.dict_id = dict.dict_parent_id
+                 INNER JOIN sys_dict_type dictType ON dict.dict_type_code = dictType.dict_type_code
+                 LEFT JOIN sys_dict parentDict ON parentDict.dict_id = dict.dict_parent_id
         WHERE dict.del_flag = 'N'
-        <if test="dictRequest.statusFlag != null and dictRequest.statusFlag != ''">
-            AND dict.status_flag = #{dictRequest.statusFlag}
-        </if>
         <if test="dictRequest.dictTypeCode != null and dictRequest.dictTypeCode != ''">
             AND dict.dict_type_code = #{dictRequest.dictTypeCode}
         </if>
@@ -51,11 +48,10 @@
             AND dict.dict_code LIKE CONCAT('%',#{dictRequest.dictCode},'%')
         </if>
         <if test="dictRequest.dictName != null and dictRequest.dictName != ''">
-            AND
-            (
-            dict.dict_name LIKE CONCAT('%',#{dictRequest.dictName},'%')
-            OR
-            dict.dict_name_pinyin LIKE CONCAT('%',#{dictRequest.dictName},'%')
+            AND (
+                dict.dict_name LIKE CONCAT('%',#{dictRequest.dictName},'%')
+                OR
+                dict.dict_name_pinyin LIKE CONCAT('%',#{dictRequest.dictName},'%')
             )
         </if>
         <if test="dictRequest.dictParentId != null and dictRequest.dictParentId != ''">
@@ -65,7 +61,18 @@
     </select>
 
     <select id="getDictListExcludeSub" resultType="cn.stylefeng.roses.kernel.dict.modular.entity.SysDict" parameterType="long">
-        SELECT *
+        SELECT dict.dict_id          AS dictId,
+               dict.dict_code        AS dictCode,
+               dict.dict_encode      as dictEncode,
+               dict.dict_sort        as dictSort,
+               dict.dict_name        as dictName,
+               dict.dict_name_pinyin as dictNamePinyin,
+               dict.dict_type_code   AS dictTypeCode,
+               dict.dict_short_name  AS dictShortName,
+               dict.dict_short_code  AS dictShortCode,
+               dict.dict_parent_id   AS dictParentId,
+               dict.status_flag      AS statusFlag,
+               dict.create_time      AS createTime
         FROM sys_dict
         WHERE del_flag = 'N'
           AND dict_pids NOT LIKE CONCAT('%', #{dictId}, '%')
@@ -78,8 +85,8 @@
     <update id="updateSubPids" parameterType="cn.stylefeng.roses.kernel.dict.api.pojo.dict.request.ParentIdsUpdateRequest">
         UPDATE
             sys_dict
-        SET dict_pids         = replace(dict_pids, #{paramCondition.oldParentIds}, #{paramCondition.newParentIds}),
-            update_time       = #{paramCondition.updateTime},
+        SET dict_pids   = replace(dict_pids, #{paramCondition.oldParentIds}, #{paramCondition.newParentIds}),
+            update_time = #{paramCondition.updateTime},
             update_user = #{paramCondition.updateUser}
         WHERE dict_pids LIKE CONCAT('%', #{paramCondition.oldParentIds}, '%')
     </update>

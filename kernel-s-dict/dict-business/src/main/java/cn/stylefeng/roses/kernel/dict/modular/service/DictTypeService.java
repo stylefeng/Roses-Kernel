@@ -23,7 +23,7 @@ public interface DictTypeService extends IService<SysDictType> {
      * @author fengshuonan
      * @date 2020/10/29 18:55
      */
-    void addDictType(DictTypeRequest dictTypeRequest);
+    void add(DictTypeRequest dictTypeRequest);
 
     /**
      * 修改字典类型
@@ -32,7 +32,7 @@ public interface DictTypeService extends IService<SysDictType> {
      * @author fengshuonan
      * @date 2020/10/29 18:55
      */
-    void updateDictType(DictTypeRequest dictTypeRequest);
+    void edit(DictTypeRequest dictTypeRequest);
 
     /**
      * 修改字典状态
@@ -41,7 +41,7 @@ public interface DictTypeService extends IService<SysDictType> {
      * @author fengshuonan
      * @date 2020/10/29 18:56
      */
-    void updateDictTypeStatus(DictTypeRequest dictTypeRequest);
+    void editStatus(DictTypeRequest dictTypeRequest);
 
     /**
      * 删除字典类型
@@ -50,7 +50,7 @@ public interface DictTypeService extends IService<SysDictType> {
      * @author fengshuonan
      * @date 2020/10/29 18:55
      */
-    void deleteDictType(DictTypeRequest dictTypeRequest);
+    void del(DictTypeRequest dictTypeRequest);
 
     /**
      * 获取字典类型列表
@@ -60,7 +60,7 @@ public interface DictTypeService extends IService<SysDictType> {
      * @author fengshuonan
      * @date 2020/10/29 18:55
      */
-    List<SysDictType> getDictTypeList(DictTypeRequest dictTypeRequest);
+    List<SysDictType> findList(DictTypeRequest dictTypeRequest);
 
     /**
      * 获取字典类型列表（带分页）
@@ -70,7 +70,7 @@ public interface DictTypeService extends IService<SysDictType> {
      * @author fengshuonan
      * @date 2020/10/29 18:55
      */
-    PageResult<SysDictType> getDictTypePageList(DictTypeRequest dictTypeRequest);
+    PageResult<SysDictType> findPage(DictTypeRequest dictTypeRequest);
 
     /**
      * code校验重复

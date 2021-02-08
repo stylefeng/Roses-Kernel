@@ -104,7 +104,7 @@ public class SysDict extends BaseEntity {
     private transient String dictTypeName;
 
     /**
-     * 字典类型的名称
+     * 字典上级的名称（字典有上下级，字典类型没有上下级）
      */
     private transient String parentName;
 
