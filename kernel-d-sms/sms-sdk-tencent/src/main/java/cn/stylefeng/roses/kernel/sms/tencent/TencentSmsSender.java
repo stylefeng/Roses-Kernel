@@ -1,7 +1,6 @@
 package cn.stylefeng.roses.kernel.sms.tencent;
 
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.sms.api.SmsSenderApi;
 import cn.stylefeng.roses.kernel.sms.api.exception.SmsException;
 import cn.stylefeng.roses.kernel.sms.api.pojo.TencentSmsProperties;
@@ -82,13 +81,11 @@ public class TencentSmsSender implements SmsSenderApi {
             SendStatus[] sendStatusSet = res.getSendStatusSet();
             if (sendStatusSet != null && sendStatusSet.length > 0) {
                 if (!sendStatusSet[0].getCode().equals("Ok")) {
-                    String userTip = StrUtil.format(TENCENT_SMS_PARAM_NULL.getUserTip(), sendStatusSet[0].getCode(), sendStatusSet[0].getMessage());
-                    throw new SmsException(TENCENT_SMS_PARAM_NULL.getErrorCode(), userTip);
+                    throw new SmsException(TENCENT_SMS_PARAM_NULL, sendStatusSet[0].getCode(), sendStatusSet[0].getMessage());
                 }
             }
         } catch (TencentCloudSDKException e) {
-            String userTip = StrUtil.format(TENCENT_SMS_PARAM_NULL.getUserTip(), TENCENT_SMS_PARAM_NULL.getErrorCode(), e.getMessage());
-            throw new SmsException(TENCENT_SMS_PARAM_NULL.getErrorCode(), userTip);
+            throw new SmsException(TENCENT_SMS_PARAM_NULL, TENCENT_SMS_PARAM_NULL.getErrorCode(), e.getMessage());
         }
     }
 }

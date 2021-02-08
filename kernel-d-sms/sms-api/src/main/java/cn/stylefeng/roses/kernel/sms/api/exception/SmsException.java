@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.sms.api.exception;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.sms.api.constants.SmsConstants;
@@ -12,12 +13,12 @@ import cn.stylefeng.roses.kernel.sms.api.constants.SmsConstants;
  */
 public class SmsException extends ServiceException {
 
-    public SmsException(String errorCode, String userTip) {
-        super(SmsConstants.SMS_MODULE_NAME, errorCode, userTip);
-    }
-
     public SmsException(AbstractExceptionEnum exception) {
         super(SmsConstants.SMS_MODULE_NAME, exception);
+    }
+
+    public SmsException(AbstractExceptionEnum exception, Object... params) {
+        super(SmsConstants.SMS_MODULE_NAME, exception.getErrorCode(), StrUtil.format(exception.getUserTip(), params));
     }
 
 }

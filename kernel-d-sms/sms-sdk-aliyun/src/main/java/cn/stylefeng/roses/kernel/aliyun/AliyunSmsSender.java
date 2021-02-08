@@ -2,6 +2,12 @@ package cn.stylefeng.roses.kernel.aliyun;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.aliyun.enums.AliyunSmsResultEnum;
+import cn.stylefeng.roses.kernel.aliyun.msign.MultiSignManager;
+import cn.stylefeng.roses.kernel.sms.api.SmsSenderApi;
+import cn.stylefeng.roses.kernel.sms.api.exception.SmsException;
+import cn.stylefeng.roses.kernel.sms.api.exception.enums.SmsExceptionEnum;
+import cn.stylefeng.roses.kernel.sms.api.pojo.AliyunSmsProperties;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.CommonRequest;
@@ -10,12 +16,6 @@ import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
-import cn.stylefeng.roses.kernel.aliyun.enums.AliyunSmsResultEnum;
-import cn.stylefeng.roses.kernel.aliyun.msign.MultiSignManager;
-import cn.stylefeng.roses.kernel.sms.api.SmsSenderApi;
-import cn.stylefeng.roses.kernel.sms.api.exception.SmsException;
-import cn.stylefeng.roses.kernel.sms.api.exception.enums.SmsExceptionEnum;
-import cn.stylefeng.roses.kernel.sms.api.pojo.AliyunSmsProperties;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -68,9 +68,7 @@ public class AliyunSmsSender implements SmsSenderApi {
             }
 
             // 组装错误信息
-            String userTip = SmsExceptionEnum.ALIYUN_SMS_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, code, errorMessage);
-            throw new SmsException(SmsExceptionEnum.ALIYUN_SMS_ERROR.getErrorCode(), finalUserTip);
+            throw new SmsException(SmsExceptionEnum.ALIYUN_SMS_ERROR, code, errorMessage);
         }
     }
 
@@ -125,9 +123,7 @@ public class AliyunSmsSender implements SmsSenderApi {
             log.error("初始化阿里云sms异常！可能是accessKey和secret错误！", e);
 
             // 组装错误信息
-            String userTip = SmsExceptionEnum.ALIYUN_SMS_KEY_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, aliyunSmsProperties.getAccessKeyId());
-            throw new SmsException(SmsExceptionEnum.ALIYUN_SMS_ERROR.getErrorCode(), finalUserTip);
+            throw new SmsException(SmsExceptionEnum.ALIYUN_SMS_KEY_ERROR, aliyunSmsProperties.getAccessKeyId());
         }
     }
 
@@ -141,25 +137,20 @@ public class AliyunSmsSender implements SmsSenderApi {
                                      AliyunSmsProperties aliyunSmsProperties) {
 
         if (StrUtil.isBlank(phoneNumber)) {
-            String userTip = StrUtil.format(SEND_SMS_PARAM_NULL.getUserTip(), "电话号码");
-            throw new SmsException(SEND_SMS_PARAM_NULL.getErrorCode(), userTip);
+            throw new SmsException(SEND_SMS_PARAM_NULL, "电话号码");
         }
 
         if (StrUtil.isBlank(templateCode)) {
-            String userTip = StrUtil.format(SEND_SMS_PARAM_NULL.getUserTip(), "模板号templateCode");
-            throw new SmsException(SEND_SMS_PARAM_NULL.getErrorCode(), userTip);
+            throw new SmsException(SEND_SMS_PARAM_NULL, "模板号templateCode");
         }
 
         if (ObjectUtil.isEmpty(params)) {
-            String userTip = StrUtil.format(SEND_SMS_PARAM_NULL.getUserTip(), "模板参数");
-            throw new SmsException(SEND_SMS_PARAM_NULL.getErrorCode(), userTip);
+            throw new SmsException(SEND_SMS_PARAM_NULL, "模板参数");
         }
 
         if (ObjectUtil.isEmpty(aliyunSmsProperties)) {
-            String userTip = StrUtil.format(SEND_SMS_PARAM_NULL.getUserTip(), "短信配置properties");
-            throw new SmsException(SEND_SMS_PARAM_NULL.getErrorCode(), userTip);
+            throw new SmsException(SEND_SMS_PARAM_NULL, "短信配置properties");
         }
-
     }
 
     /**
