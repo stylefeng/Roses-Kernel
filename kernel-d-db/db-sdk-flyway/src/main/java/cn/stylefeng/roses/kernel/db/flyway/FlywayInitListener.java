@@ -103,7 +103,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
             flyway.migrate();
 
         } catch (Exception e) {
-            log.error(">>> flyway初始化失败", e);
+            log.error("flyway初始化失败", e);
             throw new DaoException(FlywayExceptionEnum.FLYWAY_MIGRATE_ERROR);
         }
     }

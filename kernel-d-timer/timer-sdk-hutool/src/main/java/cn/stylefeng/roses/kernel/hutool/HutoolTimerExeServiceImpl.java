@@ -68,7 +68,7 @@ public class HutoolTimerExeServiceImpl implements TimerExeService {
                 TimerAction timerAction = (TimerAction) SpringUtil.getBean(Class.forName(className));
                 timerAction.action();
             } catch (ClassNotFoundException e) {
-                log.error(">>> 任务执行异常：{}", e.getMessage());
+                log.error("任务执行异常：{}", e.getMessage());
             }
         };
 

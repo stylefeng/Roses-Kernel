@@ -36,7 +36,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
 
 
         } catch (ReflectionException e) {
-            log.warn(">>> CustomMetaObjectHandler处理过程中无相关字段，不做处理");
+            log.warn("CustomMetaObjectHandler处理过程中无相关字段，不做处理");
         }
 
     }
@@ -53,7 +53,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
             setFieldValByName(UPDATE_TIME, new Date(), metaObject);
 
         } catch (ReflectionException e) {
-            log.warn(">>> CustomMetaObjectHandler处理过程中无相关字段，不做处理");
+            log.warn("CustomMetaObjectHandler处理过程中无相关字段，不做处理");
         }
 
     }

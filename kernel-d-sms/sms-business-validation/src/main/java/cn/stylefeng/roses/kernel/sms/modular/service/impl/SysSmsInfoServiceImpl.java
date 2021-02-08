@@ -90,7 +90,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         // 4. 存储短信到数据库
         Long smsId = this.saveSmsInfo(sysSmsSendParam, validateCode);
 
-        log.info(">>> 开始发送短信：发送的电话号码= " + sysSmsSendParam.getPhone() + ",发送的模板号=" + sysSmsSendParam.getTemplateCode() + "，发送的参数是：" + JSON.toJSONString(params));
+        log.info("开始发送短信：发送的电话号码= " + sysSmsSendParam.getPhone() + ",发送的模板号=" + sysSmsSendParam.getTemplateCode() + "，发送的参数是：" + JSON.toJSONString(params));
 
         // 5. 发送短信
         smsSenderApi.sendSms(sysSmsSendParam.getPhone(), sysSmsSendParam.getTemplateCode(), params);
@@ -123,7 +123,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
         this.save(sysSms);
 
-        log.info(">>> 发送短信，存储短信到数据库，数据为：" + JSON.toJSONString(sysSms));
+        log.info("发送短信，存储短信到数据库，数据为：" + JSON.toJSONString(sysSms));
 
         return sysSms.getSmsId();
     }
@@ -148,7 +148,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
         List<SysSms> sysSmsList = this.list(smsQueryWrapper);
 
-        log.info(">>> 验证短信Provider接口，查询到sms记录：" + JSON.toJSONString(sysSmsList));
+        log.info("验证短信Provider接口，查询到sms记录：" + JSON.toJSONString(sysSmsList));
 
         // 如果找不到记录，提示验证失败
         if (ObjectUtil.isEmpty(sysSmsList)) {

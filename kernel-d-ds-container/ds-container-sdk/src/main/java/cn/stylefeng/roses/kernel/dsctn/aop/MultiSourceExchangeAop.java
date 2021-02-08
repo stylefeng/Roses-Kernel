@@ -51,16 +51,16 @@ public class MultiSourceExchangeAop implements Ordered {
         // 如果有DataSource注解，则设置DataSourceContextHolder为注解上的名称
         if (datasource != null) {
             CurrentDataSourceContext.setDataSourceName(datasource.name());
-            log.debug(">>> 设置数据源为：" + datasource.name());
+            log.debug("设置数据源为：" + datasource.name());
         } else {
             CurrentDataSourceContext.setDataSourceName(MASTER_DATASOURCE_NAME);
-            log.debug(">>> 设置数据源为：dataSourceCurrent");
+            log.debug("设置数据源为：dataSourceCurrent");
         }
 
         try {
             return point.proceed();
         } finally {
-            log.debug(">>> 清空数据源信息！");
+            log.debug("清空数据源信息！");
             CurrentDataSourceContext.clearDataSourceName();
         }
     }

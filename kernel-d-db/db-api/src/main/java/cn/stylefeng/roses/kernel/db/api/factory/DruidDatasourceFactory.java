@@ -79,7 +79,7 @@ public class DruidDatasourceFactory {
         try {
             dataSource.setFilters(druidProperties.getFilters());
         } catch (SQLException e) {
-            log.error(">>> 数据库连接池初始化异常：{}", e.getMessage());
+            log.error("数据库连接池初始化异常：{}", e.getMessage());
         }
 
         return dataSource;

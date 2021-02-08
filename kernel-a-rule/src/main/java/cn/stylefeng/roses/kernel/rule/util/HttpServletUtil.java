@@ -7,9 +7,9 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
+import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.exception.enums.http.ServletExceptionEnum;
 import com.alibaba.fastjson.JSONPath;
-import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -130,7 +130,7 @@ public class HttpServletUtil {
                 resultJson = String.join("", (List<String>) JSONPath.read(resultJson, jsonPath));
             }
         } catch (Exception e) {
-            log.error(">>> 根据ip定位异常，具体信息为：{}", e.getMessage());
+            log.error("根据ip定位异常，具体信息为：{}", e.getMessage());
         }
         return resultJson;
     }

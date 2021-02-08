@@ -40,18 +40,6 @@ public class SysConfigController {
     }
 
     /**
-     * 编辑系统参数配置
-     *
-     * @author fengshuonan
-     * @date 2020/4/14 11:11
-     */
-    @PostResource(name = "编辑系统参数配置", path = "/sysConfig/edit")
-    public ResponseData edit(@RequestBody @Validated(SysConfigParam.edit.class) SysConfigParam sysConfigParam) {
-        sysConfigService.edit(sysConfigParam);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 删除系统参数配置
      *
      * @author fengshuonan
@@ -60,6 +48,18 @@ public class SysConfigController {
     @PostResource(name = "删除系统参数配置", path = "/sysConfig/delete")
     public ResponseData delete(@RequestBody @Validated(SysConfigParam.delete.class) SysConfigParam sysConfigParam) {
         sysConfigService.del(sysConfigParam);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 编辑系统参数配置
+     *
+     * @author fengshuonan
+     * @date 2020/4/14 11:11
+     */
+    @PostResource(name = "编辑系统参数配置", path = "/sysConfig/edit")
+    public ResponseData edit(@RequestBody @Validated(SysConfigParam.edit.class) SysConfigParam sysConfigParam) {
+        sysConfigService.edit(sysConfigParam);
         return new SuccessResponseData();
     }
 

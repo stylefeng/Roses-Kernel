@@ -49,15 +49,6 @@ public interface SysConfigService extends IService<SysConfig> {
     void add(SysConfigParam sysConfigParam);
 
     /**
-     * 编辑系统参数配置
-     *
-     * @param sysConfigParam 编辑参数
-     * @author fengshuonan
-     * @date 2020/4/14 11:15
-     */
-    void edit(SysConfigParam sysConfigParam);
-
-    /**
      * 删除系统参数配置
      *
      * @param sysConfigParam 删除参数
@@ -65,6 +56,15 @@ public interface SysConfigService extends IService<SysConfig> {
      * @date 2020/4/14 11:15
      */
     void del(SysConfigParam sysConfigParam);
+
+    /**
+     * 编辑系统参数配置
+     *
+     * @param sysConfigParam 编辑参数
+     * @author fengshuonan
+     * @date 2020/4/14 11:15
+     */
+    void edit(SysConfigParam sysConfigParam);
 
     /**
      * 查看系统参数配置

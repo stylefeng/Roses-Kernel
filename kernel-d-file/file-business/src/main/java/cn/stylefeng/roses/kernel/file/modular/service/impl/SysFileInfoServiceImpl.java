@@ -82,7 +82,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         try {
             fileBytes = fileOperatorApi.getFileBytes(DEFAULT_BUCKET_NAME, sysFileInfo.getFileObjectName());
         } catch (Exception e) {
-            log.error(">>> 获取文件流异常，具体信息为：{}", e.getMessage());
+            log.error("获取文件流异常，具体信息为：{}", e.getMessage());
             throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR);
         }
 
@@ -221,7 +221,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             // 下载文件
             DownloadUtil.download(DateUtil.now() + "-打包下载" + FILE_POSTFIX_SEPARATOR + "zip", bos.toByteArray(), response);
         } catch (Exception e) {
-            log.error(">>> 获取文件流异常，具体信息为：{}", e.getMessage());
+            log.error("获取文件流异常，具体信息为：{}", e.getMessage());
             throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR);
         } finally {
             try {
@@ -229,7 +229,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
                 zip.close();
                 bos.close();
             } catch (IOException e) {
-                log.error(">>> 关闭数据流失败，具体信息为：{}", e.getMessage());
+                log.error("关闭数据流失败，具体信息为：{}", e.getMessage());
             }
         }
     }
@@ -328,7 +328,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         try {
             fileBytes = fileOperatorApi.getFileBytes(sysFileInfoRequest.getFileBucket(), sysFileInfoRequest.getFileObjectName());
         } catch (Exception e) {
-            log.error(">>> 获取文件流异常，具体信息为：{}", e.getMessage());
+            log.error("获取文件流异常，具体信息为：{}", e.getMessage());
             throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR);
         }
 

@@ -70,7 +70,7 @@ public class DataSourceInitListener implements ApplicationListener<ApplicationCo
         try {
             DataSourceContext.initDataSource(druidProperties, druidDataSource);
         } catch (Exception exception) {
-            log.error(">>> 初始化数据源容器错误!", exception);
+            log.error("初始化数据源容器错误!", exception);
             String userTip = StrUtil.format(INIT_DATASOURCE_CONTAINER_ERROR.getUserTip(), exception.getMessage());
             throw new DatasourceContainerException(INIT_DATASOURCE_CONTAINER_ERROR, userTip);
         }

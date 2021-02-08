@@ -50,25 +50,6 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void edit(SysConfigParam sysConfigParam) {
-
-        // 1.根据id获取常量信息
-        SysConfig sysConfig = this.querySysConfig(sysConfigParam);
-
-        // 2.请求参数转化为实体
-        BeanUtil.copyProperties(sysConfigParam, sysConfig);
-        // 不能修改状态，用修改状态接口修改状态
-        sysConfig.setStatusFlag(null);
-
-        // 3.更新记录
-        this.updateById(sysConfig);
-
-        // 4.更新对应常量context
-        ConfigContext.me().putConfig(sysConfigParam.getConfigCode(), sysConfigParam.getConfigValue());
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
     public void del(SysConfigParam sysConfigParam) {
 
         // 1.根据id获取常量
@@ -90,6 +71,25 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
         // 4.删除对应context
         ConfigContext.me().deleteConfig(sysConfigParam.getConfigCode());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(SysConfigParam sysConfigParam) {
+
+        // 1.根据id获取常量信息
+        SysConfig sysConfig = this.querySysConfig(sysConfigParam);
+
+        // 2.请求参数转化为实体
+        BeanUtil.copyProperties(sysConfigParam, sysConfig);
+        // 不能修改状态，用修改状态接口修改状态
+        sysConfig.setStatusFlag(null);
+
+        // 3.更新记录
+        this.updateById(sysConfig);
+
+        // 4.更新对应常量context
+        ConfigContext.me().putConfig(sysConfigParam.getConfigCode(), sysConfigParam.getConfigValue());
     }
 
     @Override
@@ -148,7 +148,6 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
             // 如果分类编码不为空，则带上分类编码
             queryWrapper.eq(ObjectUtil.isNotEmpty(groupCode), SysConfig::getGroupCode, groupCode);
-
         }
 
         // 查询未删除的

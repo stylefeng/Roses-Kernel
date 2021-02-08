@@ -59,7 +59,7 @@ public class DataBaseInfoPersistence {
             return dataSourceList;
 
         } catch (Exception exception) {
-            log.error(">>> 查询数据源信息错误！", exception);
+            log.error("查询数据源信息错误！", exception);
             String userTip = StrUtil.format(QUERY_DBS_DAO_ERROR.getUserTip(), exception.getMessage());
             throw new DatasourceContainerException(QUERY_DBS_DAO_ERROR, userTip);
         }
@@ -89,9 +89,9 @@ public class DataBaseInfoPersistence {
             preparedStatement.setString(8, DateUtil.formatDateTime(new Date()));
 
             int i = preparedStatement.executeUpdate();
-            log.info(">>> 初始化master的databaseInfo信息！初始化" + i + "条！");
+            log.info("初始化master的databaseInfo信息！初始化" + i + "条！");
         } catch (Exception exception) {
-            log.error(">>> 初始化master的databaseInfo信息错误！", exception);
+            log.error("初始化master的databaseInfo信息错误！", exception);
             String userTip = StrUtil.format(INSERT_DBS_DAO_ERROR.getUserTip(), exception.getMessage());
             throw new DatasourceContainerException(INSERT_DBS_DAO_ERROR, userTip);
         }
@@ -112,9 +112,9 @@ public class DataBaseInfoPersistence {
             PreparedStatement preparedStatement = conn.prepareStatement(new DeleteDatabaseInfoSql().getSql(druidProperties.getUrl()));
             preparedStatement.setString(1, MASTER_DATASOURCE_NAME);
             int i = preparedStatement.executeUpdate();
-            log.info(">>> 删除master的databaseInfo信息！删除" + i + "条！");
+            log.info("删除master的databaseInfo信息！删除" + i + "条！");
         } catch (Exception exception) {
-            log.info(">>> 删除master的databaseInfo信息失败！", exception);
+            log.info("删除master的databaseInfo信息失败！", exception);
             String userTip = StrUtil.format(DELETE_DBS_DAO_ERROR.getUserTip(), exception.getMessage());
             throw new DatasourceContainerException(DELETE_DBS_DAO_ERROR, userTip);
         }
@@ -139,7 +139,7 @@ public class DataBaseInfoPersistence {
             druidProperties.setUsername(resultSet.getString("username"));
             druidProperties.setPassword(resultSet.getString("password"));
         } catch (SQLException exception) {
-            log.info(">>> 根据数据库查询结果，创建DruidProperties失败！", exception);
+            log.info("根据数据库查询结果，创建DruidProperties失败！", exception);
             String userTip = StrUtil.format(CREATE_PROP_DAO_ERROR.getUserTip(), exception.getMessage());
             throw new DatasourceContainerException(CREATE_PROP_DAO_ERROR, userTip);
         }
