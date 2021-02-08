@@ -114,9 +114,7 @@ public class LocalFileOperator implements FileOperatorApi {
         if (!FileUtil.exist(absoluteFile)) {
             // 组装返回信息
             String errorMessage = StrUtil.format("bucket={},key={}", bucketName, key);
-            String userTip = FileExceptionEnum.FILE_NOT_FOUND.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, errorMessage);
-            throw new FileException(FileExceptionEnum.FILE_NOT_FOUND.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.FILE_NOT_FOUND, errorMessage);
         } else {
             return FileUtil.readBytes(absoluteFile);
         }
@@ -135,9 +133,7 @@ public class LocalFileOperator implements FileOperatorApi {
         if (!FileUtil.exist(originFile)) {
             // 组装返回信息
             String errorMessage = StrUtil.format("bucket={},key={}", originBucketName, originFileKey);
-            String userTip = FileExceptionEnum.FILE_NOT_FOUND.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, errorMessage);
-            throw new FileException(FileExceptionEnum.FILE_NOT_FOUND.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.FILE_NOT_FOUND, errorMessage);
         } else {
 
             // 拷贝文件

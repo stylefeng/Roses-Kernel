@@ -3,7 +3,6 @@ package cn.stylefeng.roses.kernel.file.minio;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.file.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.constants.FileConstants;
@@ -64,9 +63,7 @@ public class MinIoFileOperator implements FileOperatorApi {
             minioClient = new MinioClient(endpoint, accessKey, secretKey);
         } catch (InvalidEndpointException | InvalidPortException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.MINIO_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -86,9 +83,7 @@ public class MinIoFileOperator implements FileOperatorApi {
             return minioClient.bucketExists(bucketName);
         } catch (Exception e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.MINIO_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -129,9 +124,7 @@ public class MinIoFileOperator implements FileOperatorApi {
             } catch (Exception e) {
 
                 // 组装提示信息
-                String userTip = FileExceptionEnum.MINIO_FILE_ERROR.getUserTip();
-                String finalUserTip = StrUtil.format(userTip, e.getMessage());
-                throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR.getErrorCode(), finalUserTip);
+                throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR, e.getMessage());
             }
         }
     }
@@ -151,9 +144,7 @@ public class MinIoFileOperator implements FileOperatorApi {
             return IoUtil.readBytes(inputStream);
         } catch (Exception e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.MINIO_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -172,9 +163,7 @@ public class MinIoFileOperator implements FileOperatorApi {
         } catch (Exception e) {
 
             // 组装提示信息
-            String userTip = FileExceptionEnum.MINIO_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -184,9 +173,7 @@ public class MinIoFileOperator implements FileOperatorApi {
             minioClient.copyObject(originBucketName, originFileKey, newBucketName, newFileKey);
         } catch (Exception e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.MINIO_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -209,9 +196,7 @@ public class MinIoFileOperator implements FileOperatorApi {
             minioClient.removeObject(bucketName, key);
         } catch (Exception e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.MINIO_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR, e.getMessage());
         }
 
     }

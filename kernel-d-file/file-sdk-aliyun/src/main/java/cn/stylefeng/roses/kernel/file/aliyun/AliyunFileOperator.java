@@ -1,7 +1,6 @@
 package cn.stylefeng.roses.kernel.file.aliyun;
 
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.file.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.enums.BucketAuthEnum;
 import cn.stylefeng.roses.kernel.file.exception.FileException;
@@ -69,9 +68,7 @@ public class AliyunFileOperator implements FileOperatorApi {
             return ossClient.doesBucketExist(bucketName);
         } catch (OSSException | ClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.ALIYUN_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -87,9 +84,7 @@ public class AliyunFileOperator implements FileOperatorApi {
             }
         } catch (OSSException | ClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.ALIYUN_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -99,9 +94,7 @@ public class AliyunFileOperator implements FileOperatorApi {
             return ossClient.doesObjectExist(bucketName, key);
         } catch (OSSException | ClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.ALIYUN_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -111,9 +104,7 @@ public class AliyunFileOperator implements FileOperatorApi {
             ossClient.putObject(bucketName, key, new ByteArrayInputStream(bytes));
         } catch (OSSException | ClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.ALIYUN_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -124,9 +115,7 @@ public class AliyunFileOperator implements FileOperatorApi {
             ossClient.putObject(putObjectRequest);
         } catch (OSSException | ClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.ALIYUN_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -139,9 +128,7 @@ public class AliyunFileOperator implements FileOperatorApi {
             return IoUtil.readBytes(objectContent);
         } catch (OSSException | ClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.ALIYUN_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         } finally {
             IoUtil.close(objectContent);
         }
@@ -160,9 +147,7 @@ public class AliyunFileOperator implements FileOperatorApi {
             }
         } catch (OSSException | ClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.ALIYUN_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -172,9 +157,7 @@ public class AliyunFileOperator implements FileOperatorApi {
             ossClient.copyObject(originBucketName, originFileKey, newBucketName, newFileKey);
         } catch (OSSException | ClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.ALIYUN_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -186,9 +169,7 @@ public class AliyunFileOperator implements FileOperatorApi {
             return url.toString();
         } catch (OSSException | ClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.ALIYUN_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         }
     }
 

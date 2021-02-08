@@ -3,7 +3,6 @@ package cn.stylefeng.roses.kernel.file.util;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.stylefeng.roses.kernel.file.exception.FileException;
 import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
@@ -43,8 +42,7 @@ public class DownloadUtil {
             response.setContentType("application/octet-stream;charset=UTF-8");
             IoUtil.write(response.getOutputStream(), true, fileBytes);
         } catch (IOException e) {
-            String userTip = StrUtil.format(FileExceptionEnum.DOWNLOAD_FILE_ERROR.getUserTip(), e.getMessage());
-            throw new FileException(FileExceptionEnum.DOWNLOAD_FILE_ERROR, userTip);
+            throw new FileException(FileExceptionEnum.DOWNLOAD_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -66,8 +64,7 @@ public class DownloadUtil {
         try {
             fileName = URLEncoder.encode(file.getName(), CharsetUtil.UTF_8);
         } catch (UnsupportedEncodingException e) {
-            String userTip = StrUtil.format(FileExceptionEnum.DOWNLOAD_FILE_ERROR.getUserTip(), e.getMessage());
-            throw new FileException(FileExceptionEnum.DOWNLOAD_FILE_ERROR, userTip);
+            throw new FileException(FileExceptionEnum.DOWNLOAD_FILE_ERROR, e.getMessage());
         }
 
         //下载文件
@@ -91,8 +88,7 @@ public class DownloadUtil {
             // 输出字节流
             IoUtil.write(outputStream, true, fileBytes);
         } catch (IOException e) {
-            String userTip = StrUtil.format(FileExceptionEnum.WRITE_BYTES_ERROR.getUserTip(), e.getMessage());
-            throw new FileException(FileExceptionEnum.WRITE_BYTES_ERROR, userTip);
+            throw new FileException(FileExceptionEnum.WRITE_BYTES_ERROR, e.getMessage());
         }
     }
 

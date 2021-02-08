@@ -205,8 +205,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
                     String fileOriginName = sysFileInfoResponse.getFileOriginName();
                     // 判断公有文件下载时是否包含私有文件
                     if (secretFlag.equals(YesOrNotEnum.N.getCode()) && !secretFlag.equals(sysFileInfoResponse.getSecretFlag())) {
-                        String userTip = StrUtil.format(FileExceptionEnum.SECRET_FLAG_INFO_ERROR.getUserTip(), fileOriginName);
-                        throw new FileException(FileExceptionEnum.SECRET_FLAG_INFO_ERROR, userTip);
+                        throw new FileException(FileExceptionEnum.SECRET_FLAG_INFO_ERROR, fileOriginName);
                     }
 
                     byte[] fileBytes = fileOperatorApi.getFileBytes(DEFAULT_BUCKET_NAME, sysFileInfoResponse.getFileObjectName());
@@ -299,7 +298,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         if (ObjectUtil.isEmpty(fileInfo)) {
             String userTip = FileExceptionEnum.FILE_NOT_FOUND.getUserTip();
             String errorMessage = StrUtil.format(userTip, "文件:" + fileInfo.getFileId() + "未找到！");
-            throw new FileException(FILE_NOT_FOUND.getErrorCode(), errorMessage);
+            throw new FileException(FILE_NOT_FOUND, errorMessage);
         }
 
         // 把之前的文件刷回
@@ -405,8 +404,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
                 // 输出字节流
                 IoUtil.write(outputStream, true, fileBytes);
             } catch (IOException e) {
-                String userTip = StrUtil.format(FileExceptionEnum.WRITE_BYTES_ERROR.getUserTip(), e.getMessage());
-                throw new FileException(FileExceptionEnum.WRITE_BYTES_ERROR, userTip);
+                throw new FileException(FileExceptionEnum.WRITE_BYTES_ERROR, e.getMessage());
             }
         } else {
             // 不支持别的文件预览
@@ -423,8 +421,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     private SysFileInfo querySysFileInfo(SysFileInfoRequest sysFileInfoRequest) {
         SysFileInfo sysFileInfo = this.getById(sysFileInfoRequest.getFileId());
         if (ObjectUtil.isEmpty(sysFileInfo) || sysFileInfo.getDelFlag().equals(YesOrNotEnum.Y.getCode())) {
-            String userTip = StrUtil.format(FileExceptionEnum.NOT_EXISTED.getUserTip(), sysFileInfoRequest.getFileId());
-            throw new FileException(FileExceptionEnum.NOT_EXISTED, userTip);
+            throw new FileException(FileExceptionEnum.NOT_EXISTED, sysFileInfoRequest.getFileId());
         }
         return sysFileInfo;
     }

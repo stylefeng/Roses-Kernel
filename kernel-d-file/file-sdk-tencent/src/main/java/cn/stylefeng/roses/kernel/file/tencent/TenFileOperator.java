@@ -2,7 +2,6 @@ package cn.stylefeng.roses.kernel.file.tencent;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.thread.ExecutorBuilder;
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.file.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.enums.BucketAuthEnum;
 import cn.stylefeng.roses.kernel.file.exception.FileException;
@@ -63,7 +62,7 @@ public class TenFileOperator implements FileOperatorApi {
 
         // 4.线程池大小，建议在客户端与 COS 网络充足（例如使用腾讯云的 CVM，同地域上传 COS）的情况下，设置成16或32即可，可较充分的利用网络资源
         // 对于使用公网传输且网络带宽质量不高的情况，建议减小该值，避免因网速过慢，造成请求超时。
-        
+
         //ExecutorService threadPool = Executors.newFixedThreadPool(32); 线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
         ExecutorService threadPool = ExecutorBuilder.create().build();
 
@@ -93,9 +92,7 @@ public class TenFileOperator implements FileOperatorApi {
             return cosClient.doesBucketExist(bucketName);
         } catch (CosClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.TENCENT_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -111,9 +108,7 @@ public class TenFileOperator implements FileOperatorApi {
             }
         } catch (CosClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.TENCENT_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -144,9 +139,7 @@ public class TenFileOperator implements FileOperatorApi {
             cosClient.putObject(bucketName, key, new ByteArrayInputStream(bytes), objectMetadata);
         } catch (CosClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.TENCENT_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR, e.getMessage());
         } finally {
             IoUtil.close(byteArrayInputStream);
         }
@@ -169,9 +162,7 @@ public class TenFileOperator implements FileOperatorApi {
             cosClient.putObject(bucketName, key, inputStream, objectMetadata);
         } catch (CosClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.TENCENT_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR, e.getMessage());
         } finally {
             IoUtil.close(inputStream);
         }
@@ -187,9 +178,7 @@ public class TenFileOperator implements FileOperatorApi {
             return IoUtil.readBytes(cosObjectInput);
         } catch (CosClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.TENCENT_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR, e.getMessage());
         } finally {
             IoUtil.close(cosObjectInput);
         }
@@ -218,9 +207,7 @@ public class TenFileOperator implements FileOperatorApi {
             transferManager.copy(copyObjectRequest, cosClient, null);
         } catch (CosClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.TENCENT_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR, e.getMessage());
         }
     }
 
@@ -234,9 +221,7 @@ public class TenFileOperator implements FileOperatorApi {
             url = cosClient.generatePresignedUrl(presignedUrlRequest);
         } catch (CosClientException e) {
             // 组装提示信息
-            String userTip = FileExceptionEnum.TENCENT_FILE_ERROR.getUserTip();
-            String finalUserTip = StrUtil.format(userTip, e.getMessage());
-            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR.getErrorCode(), finalUserTip);
+            throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR, e.getMessage());
         }
         return url.toString();
     }

@@ -37,8 +37,6 @@ import static cn.stylefeng.roses.kernel.file.constants.FileConstants.*;
  * 1.合同文件场景：文件必须保持原样，合同内容升级不影响已签署合同，业务需要关联文件ID<br>
  * 文件升级不会对之前的数据造成影响
  * 2.UI文件场景：文件升级后业务所有关联的文件全部升级，业务需要关联文件CODE<br>
- * <p>
- * 可能你今天上线，昨天很丑的banner图变好看了~
  *
  * @author majianguo
  * @date 2020/12/27 13:39
@@ -61,7 +59,6 @@ public class SysFileInfoController {
         SysFileInfoResponse fileUploadInfoResult = this.sysFileInfoService.uploadFile(file, sysFileInfoRequest);
         return new SuccessResponseData(fileUploadInfoResult);
     }
-
 
     /**
      * 富文本tinymce上传文件

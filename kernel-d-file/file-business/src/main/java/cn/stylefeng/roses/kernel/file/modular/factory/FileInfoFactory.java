@@ -61,8 +61,7 @@ public class FileInfoFactory {
             bytes = file.getBytes();
             fileOperatorApi.storageFile(DEFAULT_BUCKET_NAME, finalFileName, bytes);
         } catch (IOException e) {
-            String userTip = StrUtil.format(FileExceptionEnum.ERROR_FILE.getUserTip(), e.getMessage());
-            throw new FileException(FileExceptionEnum.ERROR_FILE, userTip);
+            throw new FileException(FileExceptionEnum.ERROR_FILE, e.getMessage());
         }
 
         // 计算文件大小kb
