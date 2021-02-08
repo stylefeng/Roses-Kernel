@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.menu.modular.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenuButton;
-import cn.stylefeng.roses.kernel.system.pojo.SysMenuButtonRequest;
+import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuButtonRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -21,6 +21,15 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      * @date 2021/1/9 11:28
      */
     void add(SysMenuButtonRequest sysMenuButtonRequest);
+
+    /**
+     * 添加系统菜单按钮
+     *
+     * @param sysMenuButtonRequest 菜单按钮请求参数
+     * @author chenjinlong
+     * @date 2021/1/9 11:28
+     */
+    void addDefaultButtons(SysMenuButtonRequest sysMenuButtonRequest);
 
     /**
      * 删除单个系统菜单按钮
@@ -69,7 +78,6 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      */
     PageResult<SysMenuButton> findPage(SysMenuButtonRequest sysMenuButtonRequest);
 
-
     /**
      * 根据菜单id删除该菜单下的所有按钮
      *
@@ -78,14 +86,5 @@ public interface SysMenuButtonService extends IService<SysMenuButton> {
      * @date 2021/1/9 14:45
      */
     void deleteMenuButtonByMenuId(Long menuId);
-
-    /**
-     * 添加系统菜单按钮
-     *
-     * @param sysMenuButtonRequest 菜单按钮请求参数
-     * @author chenjinlong
-     * @date 2021/1/9 11:28
-     */
-    void addDefaultButtons(SysMenuButtonRequest sysMenuButtonRequest);
 
 }

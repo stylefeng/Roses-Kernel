@@ -3,16 +3,17 @@ package cn.stylefeng.roses.kernel.system.pojo.menu.antd;
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * antd通用前端树节点
+ * 菜单树节点，用在新增和修改菜单，下拉选父级时候
  *
  * @author fengshuonan
- * @date 2020/6/9 12:42
+ * @date 2020/4/5 12:03
  */
 @Data
-public class AntdBaseTreeNode implements AbstractTreeNode {
+public class AntdMenuSelectTreeNode implements AbstractTreeNode {
 
     /**
      * 主键
@@ -37,7 +38,7 @@ public class AntdBaseTreeNode implements AbstractTreeNode {
     /**
      * 排序，越小优先级越高
      */
-    private Integer weight;
+    private BigDecimal weight;
 
     /**
      * 子节点
@@ -46,7 +47,7 @@ public class AntdBaseTreeNode implements AbstractTreeNode {
 
     @Override
     public String getNodeId() {
-        return this.id.toString();
+        return id.toString();
     }
 
     @Override
@@ -56,7 +57,6 @@ public class AntdBaseTreeNode implements AbstractTreeNode {
 
     @Override
     public void setChildrenNodes(List childrenNodes) {
-        this.children = children;
+        this.children = childrenNodes;
     }
-
 }

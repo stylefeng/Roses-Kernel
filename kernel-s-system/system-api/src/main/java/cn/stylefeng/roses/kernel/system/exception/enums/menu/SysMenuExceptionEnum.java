@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.exception.enums;
+package cn.stylefeng.roses.kernel.system.exception.enums.menu;
 
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
@@ -20,7 +20,7 @@ public enum SysMenuExceptionEnum implements AbstractExceptionEnum {
     /**
      * 菜单不存在
      */
-    MENU_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "63", "菜单不存在");
+    MENU_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "63", "菜单不存在，菜单id：{}");
 
     private final String errorCode;
 

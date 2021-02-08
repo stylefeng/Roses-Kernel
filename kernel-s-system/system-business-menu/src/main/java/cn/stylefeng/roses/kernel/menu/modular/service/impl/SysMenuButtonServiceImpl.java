@@ -12,8 +12,8 @@ import cn.stylefeng.roses.kernel.menu.modular.mapper.SysMenuButtonMapper;
 import cn.stylefeng.roses.kernel.menu.modular.service.SysMenuButtonService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.SysMenuButtonExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.SysMenuButtonRequest;
+import cn.stylefeng.roses.kernel.system.exception.enums.menu.SysMenuButtonExceptionEnum;
+import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuButtonRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -31,12 +31,19 @@ import java.util.Set;
 @Service
 public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, SysMenuButton> implements SysMenuButtonService {
 
-
     @Override
     public void add(SysMenuButtonRequest sysMenuButtonRequest) {
         SysMenuButton sysMenuButton = new SysMenuButton();
         BeanUtil.copyProperties(sysMenuButtonRequest, sysMenuButton);
         this.save(sysMenuButton);
+    }
+
+    @Override
+    public void addDefaultButtons(SysMenuButtonRequest sysMenuButtonRequest) {
+        Long menuId = sysMenuButtonRequest.getMenuId();
+        // 构建菜单的系统默认按钮
+        List<SysMenuButton> sysMenuButtonList = MenuButtonFactory.createSystemDefaultButton(menuId);
+        this.saveBatch(sysMenuButtonList);
     }
 
     @Override
@@ -64,7 +71,7 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
             this.update(entity, queryWrapper);
         }
     }
-    
+
     @Override
     public void edit(SysMenuButtonRequest sysMenuButtonRequest) {
         SysMenuButton button = this.queryButtonById(sysMenuButtonRequest);
@@ -112,14 +119,6 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
         }
     }
 
-    @Override
-    public void addDefaultButtons(SysMenuButtonRequest sysMenuButtonRequest) {
-        Long menuId = sysMenuButtonRequest.getMenuId();
-        // 构建菜单的系统默认按钮
-        List<SysMenuButton> sysMenuButtonList = MenuButtonFactory.createSystemDefaultButton(menuId);
-        this.saveBatch(sysMenuButtonList);
-    }
-
     /**
      * 根据主键id获取对象
      *
@@ -142,6 +141,14 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
      */
     private LambdaQueryWrapper<SysMenuButton> createWrapper(SysMenuButtonRequest sysMenuButtonRequest) {
         LambdaQueryWrapper<SysMenuButton> queryWrapper = new LambdaQueryWrapper<>();
+
+        // 逻辑删除
+        queryWrapper.eq(SysMenuButton::getDelFlag, YesOrNotEnum.N.getCode());
+
+        if (ObjectUtil.isEmpty(sysMenuButtonRequest)) {
+            return queryWrapper;
+        }
+
         Long buttonId = sysMenuButtonRequest.getButtonId();
         Long menuId = sysMenuButtonRequest.getMenuId();
         String buttonName = sysMenuButtonRequest.getButtonName();
@@ -153,11 +160,7 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
         queryWrapper.like(ObjectUtil.isNotNull(buttonName), SysMenuButton::getButtonName, buttonName);
         queryWrapper.like(ObjectUtil.isNotNull(buttonCode), SysMenuButton::getButtonCode, buttonCode);
 
-        // 逻辑删除
-        queryWrapper.eq(SysMenuButton::getDelFlag, YesOrNotEnum.N.getCode());
-
         return queryWrapper;
     }
-
 
 }

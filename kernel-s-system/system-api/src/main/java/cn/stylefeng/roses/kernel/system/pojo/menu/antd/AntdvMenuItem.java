@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.menu.modular.pojo;
+package cn.stylefeng.roses.kernel.system.pojo.menu.antd;
 
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import lombok.Data;
@@ -47,7 +47,7 @@ public class AntdvMenuItem implements AbstractTreeNode {
     /**
      * 路由信息
      */
-    private AuthorityItem authority;
+    private AntdvMenuAuthorityItem authority;
 
     /**
      * 子菜单集合

@@ -6,13 +6,13 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 系统菜单
+ * 封装antd vue需要的菜单信息，service对外输出的对象
  *
  * @author majianguo
  * @date 2021/1/7 15:18
  */
 @Data
-public class AntdSysMenuResponse {
+public class AntdSysMenuDTO {
 
     /**
      * 主键

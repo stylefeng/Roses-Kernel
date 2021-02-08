@@ -11,7 +11,7 @@ import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.AppServiceApi;
-import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
+import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenusVO;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiIndexMenuTreeNode;
 
 import java.util.*;
@@ -31,11 +31,11 @@ public class LayuiMenusFactory {
      * @author fengshuonan
      * @date 2020/12/27 19:07
      */
-    public static List<LayuiAppIndexMenus> createLayuiAppIndexMenus(List<SysMenu> sysMenuList) {
+    public static List<LayuiAppIndexMenusVO> createLayuiAppIndexMenus(List<SysMenu> sysMenuList) {
 
         String contextPath = HttpServletUtil.getRequest().getContextPath();
 
-        ArrayList<LayuiAppIndexMenus> resultList = new ArrayList<>();
+        ArrayList<LayuiAppIndexMenusVO> resultList = new ArrayList<>();
 
         // 找出用户有多少个应用的菜单
         Set<String> appCodes = new HashSet<>();
@@ -78,11 +78,11 @@ public class LayuiMenusFactory {
             List<LayuiIndexMenuTreeNode> layuiIndexMenuTreeNodeList = new DefaultTreeBuildFactory<LayuiIndexMenuTreeNode>().doTreeBuild(layuiIndexMenuTreeNodes);
 
             // 将appCode和对应的树包装为实体
-            LayuiAppIndexMenus layuiAppIndexMenus = new LayuiAppIndexMenus();
-            layuiAppIndexMenus.setAppCode(appCode);
-            layuiAppIndexMenus.setAppName(getAppNameByAppCode(appCode));
-            layuiAppIndexMenus.setLayuiIndexMenuTreeNodes(layuiIndexMenuTreeNodeList);
-            resultList.add(layuiAppIndexMenus);
+            LayuiAppIndexMenusVO layuiAppIndexMenusVO = new LayuiAppIndexMenusVO();
+            layuiAppIndexMenusVO.setAppCode(appCode);
+            layuiAppIndexMenusVO.setAppName(getAppNameByAppCode(appCode));
+            layuiAppIndexMenusVO.setLayuiIndexMenuTreeNodes(layuiIndexMenuTreeNodeList);
+            resultList.add(layuiAppIndexMenusVO);
         }
 
         return resultList;

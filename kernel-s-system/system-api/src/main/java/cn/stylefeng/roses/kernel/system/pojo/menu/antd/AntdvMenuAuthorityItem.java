@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.menu.modular.pojo;
+package cn.stylefeng.roses.kernel.system.pojo.menu.antd;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @date 2021/1/7 18:16
  */
 @Data
-public class AuthorityItem {
+public class AntdvMenuAuthorityItem {
 
     /**
      * 权限编码

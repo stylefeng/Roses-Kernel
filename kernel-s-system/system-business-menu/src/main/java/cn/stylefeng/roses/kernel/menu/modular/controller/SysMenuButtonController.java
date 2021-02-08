@@ -8,7 +8,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.pojo.SysMenuButtonRequest;
+import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuButtonRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,32 +54,6 @@ public class SysMenuButtonController {
     }
 
     /**
-     * 获取菜单按钮详情
-     *
-     * @param sysMenuButtonRequest 菜单按钮id
-     * @author luojie
-     * @date 2021/1/9 11:53
-     */
-    @GetResource(name = "获取菜单按钮详情", path = "/sysMenuButton/detail")
-    public ResponseData detail(@Validated(SysMenuButtonRequest.detail.class) SysMenuButtonRequest sysMenuButtonRequest) {
-        SysMenuButton detail = sysMenuButtonService.detail(sysMenuButtonRequest);
-        return new SuccessResponseData(detail);
-    }
-
-    /**
-     * 编辑系统菜单按钮
-     *
-     * @param sysMenuButtonRequest 菜单按钮请求参数
-     * @author luojie
-     * @date 2021/1/9 12:00
-     */
-    @PostResource(name = "编辑系统菜单按钮", path = "/sysMenuButton/edit")
-    public ResponseData edit(@RequestBody @Validated(SysMenuButtonRequest.edit.class) SysMenuButtonRequest sysMenuButtonRequest) {
-        sysMenuButtonService.edit(sysMenuButtonRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 删除单个系统菜单按钮
      *
      * @param sysMenuButtonRequest 菜单按钮id
@@ -103,6 +77,32 @@ public class SysMenuButtonController {
     public ResponseData batchDelete(@RequestBody @Validated(SysMenuButtonRequest.batchDelete.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.delBatch(sysMenuButtonRequest);
         return new SuccessResponseData();
+    }
+
+    /**
+     * 编辑系统菜单按钮
+     *
+     * @param sysMenuButtonRequest 菜单按钮请求参数
+     * @author luojie
+     * @date 2021/1/9 12:00
+     */
+    @PostResource(name = "编辑系统菜单按钮", path = "/sysMenuButton/edit")
+    public ResponseData edit(@RequestBody @Validated(SysMenuButtonRequest.edit.class) SysMenuButtonRequest sysMenuButtonRequest) {
+        sysMenuButtonService.edit(sysMenuButtonRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 获取菜单按钮详情
+     *
+     * @param sysMenuButtonRequest 菜单按钮id
+     * @author luojie
+     * @date 2021/1/9 11:53
+     */
+    @GetResource(name = "获取菜单按钮详情", path = "/sysMenuButton/detail")
+    public ResponseData detail(@Validated(SysMenuButtonRequest.detail.class) SysMenuButtonRequest sysMenuButtonRequest) {
+        SysMenuButton detail = sysMenuButtonService.detail(sysMenuButtonRequest);
+        return new SuccessResponseData(detail);
     }
 
     /**

@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Layui首页菜单的节点
+ * Layui首页菜单的节点详情
  *
  * @author fengshuonan
  * @date 2020/12/27 18:36

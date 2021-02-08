@@ -2,12 +2,11 @@ package cn.stylefeng.roses.kernel.menu.modular.service;
 
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.SysMenuRequest;
-import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
-import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenus;
+import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdMenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuDTO;
+import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenusVO;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
-import cn.stylefeng.roses.kernel.system.pojo.menu.other.MenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -74,7 +73,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @author fengshuonan
      * @date 2021/1/6 17:10
      */
-    List<SysMenu> layuiList(SysMenuRequest sysMenuRequest);
+    List<SysMenu> findListWithTreeStructure(SysMenuRequest sysMenuRequest);
 
     /**
      * 获取菜单的树形列表（用于选择上级菜单）（layui版本）
@@ -84,6 +83,43 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2021/1/6 21:47
      */
     List<ZTreeNode> layuiSelectParentMenuTreeList();
+
+    /**
+     * 获取系统菜单树，用于新增，编辑时选择上级节点（antd vue版本，用在新增和编辑菜单选择上级菜单）
+     *
+     * @param sysMenuRequest 查询参数
+     * @return 菜单树列表
+     * @author fengshuonan
+     * @date 2020/3/27 15:56
+     */
+    List<AntdMenuSelectTreeNode> tree(SysMenuRequest sysMenuRequest);
+
+    /**
+     * 获取当前用户首页所有菜单（对应Layui前端的）
+     *
+     * @author fengshuonan
+     * @date 2020/12/27 18:48
+     */
+    List<LayuiAppIndexMenusVO> getLayuiIndexMenus();
+
+    /**
+     * 获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）
+     *
+     * @return 系统所有菜单信息
+     * @author majianguo
+     * @date 2021/1/7 15:24
+     */
+    List<AntdSysMenuDTO> getSystemAllMenusAntdv();
+
+    /**
+     * 获取包含按钮的系统菜单
+     *
+     * @param sysRoleRequest 请求参数
+     * @param lateralFlag    true-不带树形结构，false-返回带树形结构的
+     * @author majianguo
+     * @date 2021/1/9 17:11
+     */
+    List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest, Boolean lateralFlag);
 
     /**
      * 获取当前用户的所有菜单
@@ -101,62 +137,5 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2020/12/27 18:11
      */
     List<SysMenu> getCurrentUserMenus(String appCode);
-
-    /**
-     * 获取当前用户首页所有菜单（对应Layui前端的）
-     *
-     * @author fengshuonan
-     * @date 2020/12/27 18:48
-     */
-    List<LayuiAppIndexMenus> getLayuiIndexMenus();
-
-    /**
-     * 获取某个应用的菜单，用于系统顶部切换菜单（AntDesign前端框架）
-     *
-     * @param appCode 应用编码
-     * @return AntDesign菜单信息结果集
-     * @author fengshuonan
-     * @date 2020/4/17 17:48
-     */
-    List<AntdIndexMenuTreeNode> getAntDVueIndexMenus(String appCode);
-
-    /**
-     * 获取系统菜单树，用于新增，编辑时选择上级节点
-     *
-     * @param sysMenuRequest 查询参数
-     * @return 菜单树列表
-     * @author fengshuonan
-     * @date 2020/3/27 15:56
-     */
-    List<MenuSelectTreeNode> tree(SysMenuRequest sysMenuRequest);
-
-    /**
-     * 获取系统菜单树，用于给角色授权时选择
-     *
-     * @param sysMenuRequest 查询参数
-     * @return 菜单树列表
-     * @author fengshuonan
-     * @date 2020/4/5 15:01
-     */
-    List<MenuSelectTreeNode> treeForGrant(SysMenuRequest sysMenuRequest);
-
-    /**
-     * 获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）
-     *
-     * @return 系统所有菜单信息
-     * @author majianguo
-     * @date 2021/1/7 15:24
-     */
-    List<AntdSysMenuResponse> getSystemAllMenusAntdv();
-
-    /**
-     * 获取包含按钮的系统菜单
-     *
-     * @param sysRoleRequest 请求参数
-     * @param lateralFlag    true-不带树形结构，false-返回带树形结构的
-     * @author majianguo
-     * @date 2021/1/9 17:11
-     */
-    List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest, Boolean lateralFlag);
 
 }

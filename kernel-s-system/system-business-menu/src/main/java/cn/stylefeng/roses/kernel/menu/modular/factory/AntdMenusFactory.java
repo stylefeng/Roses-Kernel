@@ -2,13 +2,13 @@ package cn.stylefeng.roses.kernel.menu.modular.factory;
 
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.menu.modular.entity.SysMenu;
-import cn.stylefeng.roses.kernel.menu.modular.pojo.AntdvMenuItem;
-import cn.stylefeng.roses.kernel.menu.modular.pojo.AuthorityItem;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
-import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdIndexMenuTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuResponse;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdMenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuDTO;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdvMenuAuthorityItem;
+import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdvMenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,37 +27,37 @@ public class AntdMenusFactory {
      * @author fengshuonan
      * @date 2021/1/7 18:17
      */
-    public static List<AntdvMenuItem> createTotalMenus(List<AntdSysMenuResponse> antdSysMenuResponses) {
+    public static List<AntdvMenuItem> createTotalMenus(List<AntdSysMenuDTO> sysMenuRespons) {
 
-        ArrayList<AntdvMenuItem> antdvMenuItems = new ArrayList<>(antdSysMenuResponses.size());
+        ArrayList<AntdvMenuItem> antdvMenuItems = new ArrayList<>(sysMenuRespons.size());
 
         // 实体转化
-        for (AntdSysMenuResponse antdSysMenuResponse : antdSysMenuResponses) {
+        for (AntdSysMenuDTO antdSysMenuDTO : sysMenuRespons) {
             AntdvMenuItem antdvMenuItem = new AntdvMenuItem();
 
             // 填充id pid name用于构建树
-            antdvMenuItem.setMenuId(antdSysMenuResponse.getMenuId());
-            antdvMenuItem.setMenuParentId(antdSysMenuResponse.getMenuParentId());
-            antdvMenuItem.setName(antdSysMenuResponse.getMenuName());
+            antdvMenuItem.setMenuId(antdSysMenuDTO.getMenuId());
+            antdvMenuItem.setMenuParentId(antdSysMenuDTO.getMenuParentId());
+            antdvMenuItem.setName(antdSysMenuDTO.getMenuName());
 
             // 填充路由等信息
-            antdvMenuItem.setRouter(antdSysMenuResponse.getAntdvRouter());
-            antdvMenuItem.setIcon(antdSysMenuResponse.getAntdvIcon());
+            antdvMenuItem.setRouter(antdSysMenuDTO.getAntdvRouter());
+            antdvMenuItem.setIcon(antdSysMenuDTO.getAntdvIcon());
 
             // 填充是否隐藏
-            antdvMenuItem.setInvisible(YesOrNotEnum.N.getCode().equals(antdSysMenuResponse.getVisible()));
+            antdvMenuItem.setInvisible(YesOrNotEnum.N.getCode().equals(antdSysMenuDTO.getVisible()));
 
             // 填充哪个角色绑定了这个菜单
-            List<SimpleRoleInfo> roles = antdSysMenuResponse.getRoles();
-            AuthorityItem authorityItem = new AuthorityItem();
+            List<SimpleRoleInfo> roles = antdSysMenuDTO.getRoles();
+            AntdvMenuAuthorityItem antdvAuthorityItem = new AntdvMenuAuthorityItem();
             if (roles != null && roles.size() > 0) {
                 ArrayList<String> auths = new ArrayList<>();
                 for (SimpleRoleInfo role : roles) {
                     auths.add(role.getRoleCode());
                 }
-                authorityItem.setPermission(auths);
-                authorityItem.setRole(auths);
-                antdvMenuItem.setAuthority(authorityItem);
+                antdvAuthorityItem.setPermission(auths);
+                antdvAuthorityItem.setRole(auths);
+                antdvMenuItem.setAuthority(antdvAuthorityItem);
             }
 
             antdvMenuItems.add(antdvMenuItem);
@@ -82,69 +82,27 @@ public class AntdMenusFactory {
         antdvMenuItem.setName("根节点");
         antdvMenuItem.setMenuId(TreeConstants.DEFAULT_PARENT_ID);
         antdvMenuItem.setMenuParentId(TreeConstants.VIRTUAL_ROOT_PARENT_ID);
+        antdvMenuItem.setInvisible(false);
 
         antdvMenuItem.setAuthority(null);
 
         return antdvMenuItem;
     }
 
-
     /**
-     * 将数据库表的菜单，转化为vue antd admin识别的菜单路由格式
+     * menu实体转化为菜单树节点
      *
      * @author fengshuonan
-     * @date 2020/12/30 20:28
+     * @date 2020/11/23 21:54
      */
-    public static List<AntdIndexMenuTreeNode> convertSysMenuToLoginMenu(List<SysMenu> sysMenuList) {
-        List<AntdIndexMenuTreeNode> antDesignMenuTreeNodeList = new ArrayList<>(sysMenuList.size());
-
-        // 添加根节点
-        antDesignMenuTreeNodeList.add(createRootMenuNode());
-
-        for (SysMenu sysMenu : sysMenuList) {
-            AntdIndexMenuTreeNode antdIndexMenuTreeNode = new AntdIndexMenuTreeNode();
-
-            // 设置菜单id
-            antdIndexMenuTreeNode.setId(sysMenu.getMenuId());
-
-            // 设置父级id
-            antdIndexMenuTreeNode.setPid(sysMenu.getMenuParentId());
-
-            // 菜单名称
-            antdIndexMenuTreeNode.setName(sysMenu.getMenuName());
-
-            // 菜单路由地址
-            antdIndexMenuTreeNode.setPath(sysMenu.getAntdvRouter());
-            antdIndexMenuTreeNode.setRouter(sysMenu.getAntdvRouter());
-
-            AntdIndexMenuTreeNode.Meta mateItem = new AntdIndexMenuTreeNode.Meta();
-
-            // 菜单图标
-            mateItem.setIcon(sysMenu.getAntdvIcon());
-
-            // 设置是否隐藏，true就是隐藏
-            mateItem.setInvisible(YesOrNotEnum.N.getCode().equals(sysMenu.getVisible()));
-            antdIndexMenuTreeNode.setMeta(mateItem);
-
-            antDesignMenuTreeNodeList.add(antdIndexMenuTreeNode);
-        }
-
-        return antDesignMenuTreeNodeList;
-    }
-
-    /**
-     * 创建虚拟的根节点信息
-     *
-     * @author fengshuonan
-     * @date 2020/12/30 20:38
-     */
-    private static AntdIndexMenuTreeNode createRootMenuNode() {
-        AntdIndexMenuTreeNode antdIndexMenuTreeNode = new AntdIndexMenuTreeNode();
-        antdIndexMenuTreeNode.setId(TreeConstants.DEFAULT_PARENT_ID);
-        antdIndexMenuTreeNode.setPid(TreeConstants.VIRTUAL_ROOT_PARENT_ID);
-        antdIndexMenuTreeNode.setName("根虚拟节点");
-        antdIndexMenuTreeNode.setPath("/");
-        return antdIndexMenuTreeNode;
+    public static AntdMenuSelectTreeNode parseMenuBaseTreeNode(SysMenu sysMenu) {
+        AntdMenuSelectTreeNode menuTreeNode = new AntdMenuSelectTreeNode();
+        menuTreeNode.setId(sysMenu.getMenuId());
+        menuTreeNode.setParentId(sysMenu.getMenuParentId());
+        menuTreeNode.setValue(String.valueOf(sysMenu.getMenuId()));
+        menuTreeNode.setTitle(sysMenu.getMenuName());
+        menuTreeNode.setWeight(sysMenu.getMenuSort());
+        return menuTreeNode;
     }
 
 }
