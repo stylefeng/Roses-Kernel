@@ -10,7 +10,7 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
 import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 
 import java.util.*;
@@ -38,7 +38,7 @@ public class UserLoginInfoFactory {
     public static UserLoginInfoDTO userLoginInfoDTO(SysUser sysUser,
                                                     List<SysRoleDTO> roleResponseList,
                                                     DataScopeDTO dataScopeResponse,
-                                                    SysUserOrgResponse userOrgInfo,
+                                                    SysUserOrgDTO userOrgInfo,
                                                     Set<String> resourceUrlsListByCodes,
                                                     Set<String> roleButtonCodes) {
 

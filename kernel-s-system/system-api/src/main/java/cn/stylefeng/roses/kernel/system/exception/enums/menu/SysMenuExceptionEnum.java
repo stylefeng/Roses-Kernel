@@ -15,12 +15,12 @@ public enum SysMenuExceptionEnum implements AbstractExceptionEnum {
     /**
      * 本菜单无法修改应用，非一级菜单，不能改变所属应用
      */
-    CANT_MOVE_APP(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "62", "本菜单无法修改应用，非一级菜单，不能改变所属应用"),
+    CANT_MOVE_APP(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "32", "本菜单无法修改应用，非一级菜单，不能改变所属应用"),
 
     /**
      * 菜单不存在
      */
-    MENU_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "63", "菜单不存在，菜单id：{}");
+    MENU_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "33", "菜单不存在，菜单id：{}");
 
     private final String errorCode;
 

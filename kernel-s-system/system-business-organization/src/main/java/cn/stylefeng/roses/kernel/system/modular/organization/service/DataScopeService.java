@@ -10,7 +10,7 @@ import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.organization.DataScopeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
 import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -53,7 +53,7 @@ public class DataScopeService implements DataScopeApi {
         }
 
         // 获取用户的主要部门信息
-        SysUserOrgResponse sysUserOrgResponse = userOrgServiceApi.getUserOrgInfo(userId);
+        SysUserOrgDTO sysUserOrgResponse = userOrgServiceApi.getUserOrgInfo(userId);
 
         // 获取角色中的数据范围类型
         Set<DataScopeTypeEnum> dataScopeTypeEnums = sysRoles.stream().map(SysRoleDTO::getDataScopeTypeEnum).collect(Collectors.toSet());

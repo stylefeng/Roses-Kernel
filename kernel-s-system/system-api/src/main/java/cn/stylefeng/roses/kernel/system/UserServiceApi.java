@@ -1,8 +1,7 @@
 package cn.stylefeng.roses.kernel.system;
 
-import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
@@ -84,7 +83,7 @@ public interface UserServiceApi {
      * @author fengshuonan
      * @date 2021/1/10 9:56
      */
-    List<OnlineUserResponse> onlineUserList(OnlineUserRequest onlineUserRequest);
+    List<OnlineUserDTO> onlineUserList(OnlineUserRequest onlineUserRequest);
 
     /**
      * 根据用户ID获取用户信息
@@ -93,7 +92,7 @@ public interface UserServiceApi {
      * @author majianguo
      * @date 2021/1/9 19:00
      */
-    SysUserResponse getUserInfoByUserId(Long userId);
+    SysUserDTO getUserInfoByUserId(Long userId);
 
     /**
      * 查询全部用户ID(剔除管理员，和不允许登录)
@@ -104,17 +103,6 @@ public interface UserServiceApi {
      * @date 2021/1/4 22:09
      */
     List<Long> queryAllUserIdList(SysUserRequest sysUserRequest);
-
-    /**
-     * 获取用户信息
-     *
-     * @param userId 用户id
-     * @return 用户信息
-     * @author liuhanqing
-     * @date 2021/1/4 22:09
-     */
-    SysUserDTO getUserInfo(Long userId);
-
 
     /**
      * 根据用户id 判断用户是否存在

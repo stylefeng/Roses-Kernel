@@ -12,7 +12,7 @@ import java.util.Date;
  * @date 2021/1/11 22:30
  */
 @Data
-public class OnlineUserResponse {
+public class OnlineUserDTO {
 
     /**
      * 用户的token

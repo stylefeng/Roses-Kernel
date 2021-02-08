@@ -17,32 +17,32 @@ public enum SysRoleExceptionEnum implements AbstractExceptionEnum {
     /**
      * 角色不存在
      */
-    ROLE_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "71", "角色不存在"),
+    ROLE_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "61", "角色不存在"),
 
     /**
      * 角色编码重复
      */
-    ROLE_CODE_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "72", "角色编码重复，请检查code参数"),
+    ROLE_CODE_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "62", "角色编码重复，请检查code参数"),
 
     /**
      * 角色名称重复
      */
-    ROLE_NAME_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "73", "角色名称重复，请检查name参数"),
+    ROLE_NAME_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "63", "角色名称重复，请检查name参数"),
 
     /**
      * 超级管理员不能被删除
      */
-    SUPER_ADMIN_CANT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "74", "超级管理员不能被删除"),
+    SUPER_ADMIN_CANT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "64", "超级管理员不能被删除"),
 
     /**
      * 超级管理员不能被删除
      */
-    SYSTEM_ROLE_CANT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "75", "系统角色不能被删除"),
+    SYSTEM_ROLE_CANT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "65", "系统角色不能被删除"),
 
     /**
      * 必须选择公司范围集合
      */
-    PLEASE_FILL_DATA_SCOPE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "76", "指定部门类型的数据范围必须选择组织机构");
+    PLEASE_FILL_DATA_SCOPE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "66", "指定部门类型的数据范围必须选择组织机构");
 
     /**
      * 错误编码

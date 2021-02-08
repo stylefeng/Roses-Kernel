@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.factory;
 
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.rule.enums.SexEnum;
-import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.OnlineUserDTO;
 
 /**
  * 当前在线用户的创建工厂
@@ -18,9 +18,9 @@ public class OnlineUserCreateFactory {
      * @author fengshuonan
      * @date 2021/1/11 22:31
      */
-    public static OnlineUserResponse createOnlineUser(LoginUser loginUser) {
+    public static OnlineUserDTO createOnlineUser(LoginUser loginUser) {
 
-        OnlineUserResponse onlineUserResponse = new OnlineUserResponse();
+        OnlineUserDTO onlineUserResponse = new OnlineUserDTO();
 
         onlineUserResponse.setUserId(loginUser.getUserId());
         onlineUserResponse.setAccount(loginUser.getAccount());

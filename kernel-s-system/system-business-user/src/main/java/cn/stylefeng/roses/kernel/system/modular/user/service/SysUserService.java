@@ -4,7 +4,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -20,12 +20,10 @@ import java.util.List;
  */
 public interface SysUserService extends IService<SysUser>, UserServiceApi {
 
-
     /**
      * 新用户注册
      *
      * @param sysUserRequest 请求参数
-     * @return
      * @author chenjinlong
      * @date 2021/1/15 15:17
      */
@@ -39,6 +37,15 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @date 2020/11/21 12:32
      */
     void add(SysUserRequest sysUserRequest);
+
+    /**
+     * 删除系统用户
+     *
+     * @param sysUserRequest 删除参数
+     * @author fengshuonan
+     * @date 2020/11/21 14:54
+     */
+    void del(SysUserRequest sysUserRequest);
 
     /**
      * 编辑用户
@@ -56,7 +63,7 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @author fengshuonan
      * @date 2020/11/21 12:32
      */
-    void updateInfo(SysUserRequest sysUserRequest);
+    void editInfo(SysUserRequest sysUserRequest);
 
     /**
      * 修改状态
@@ -65,7 +72,7 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @author fengshuonan
      * @date 2020/11/21 14:19
      */
-    void changeStatus(SysUserRequest sysUserRequest);
+    void editStatus(SysUserRequest sysUserRequest);
 
     /**
      * 修改密码
@@ -74,7 +81,7 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @author fengshuonan
      * @date 2020/11/21 14:26
      */
-    void updatePassword(SysUserRequest sysUserRequest);
+    void editPassword(SysUserRequest sysUserRequest);
 
     /**
      * 重置密码
@@ -92,7 +99,7 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @author luojie
      * @date 2020/11/6 13:47
      */
-    void updateAvatar(SysUserRequest sysUserRequest);
+    void editAvatar(SysUserRequest sysUserRequest);
 
     /**
      * 授权角色给某个用户
@@ -113,15 +120,6 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
     void grantData(SysUserRequest sysUserRequest);
 
     /**
-     * 删除系统用户
-     *
-     * @param sysUserRequest 删除参数
-     * @author fengshuonan
-     * @date 2020/11/21 14:54
-     */
-    void delete(SysUserRequest sysUserRequest);
-
-    /**
      * 查看用户详情
      *
      * @param sysUserRequest 查看参数
@@ -129,7 +127,7 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @author luojie
      * @date 2020/11/6 13:46
      */
-    SysUserResponse detail(SysUserRequest sysUserRequest);
+    SysUserDTO detail(SysUserRequest sysUserRequest);
 
     /**
      * 查询系统用户
@@ -139,17 +137,7 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @author fengshuonan
      * @date 2020/11/21 15:24
      */
-    PageResult<SysUserResponse> page(SysUserRequest sysUserRequest);
-
-    /**
-     * 用户下拉列表选择
-     *
-     * @param sysUserRequest 查询参数
-     * @return 用户列表集合
-     * @author luojie
-     * @date 2020/11/6 13:47
-     */
-    List<SimpleDict> selector(SysUserRequest sysUserRequest);
+    PageResult<SysUserDTO> findPage(SysUserRequest sysUserRequest);
 
     /**
      * 导出用户
@@ -159,6 +147,15 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @date 2020/11/6 13:47
      */
     void export(HttpServletResponse response);
+
+    /**
+     * 用户选择树数据
+     *
+     * @param sysUserRequest 参数
+     * @author liuhanqing
+     * @date 2021/1/15 11:16
+     */
+    List<UserSelectTreeNode> userSelectTree(SysUserRequest sysUserRequest);
 
     /**
      * 根据账号获取用户
@@ -190,15 +187,6 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
     String getUserAvatarUrl(Long fileId, String token);
 
     /**
-     * 用户选择树数据
-     *
-     * @param sysUserRequest 参数
-     * @author liuhanqing
-     * @date 2021/1/15 11:16
-     */
-    List<UserSelectTreeNode> userSelectTree(SysUserRequest sysUserRequest);
-
-    /**
      * 根据机构id获取用户树节点列表
      *
      * @param orgId 机构id
@@ -206,4 +194,15 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @date 2021/1/15 11:16
      */
     List<UserSelectTreeNode> getUserTreeNodeList(Long orgId);
+
+    /**
+     * 用户下拉列表选择
+     *
+     * @param sysUserRequest 查询参数
+     * @return 用户列表集合
+     * @author luojie
+     * @date 2020/11/6 13:47
+     */
+    List<SimpleDict> selector(SysUserRequest sysUserRequest);
+
 }

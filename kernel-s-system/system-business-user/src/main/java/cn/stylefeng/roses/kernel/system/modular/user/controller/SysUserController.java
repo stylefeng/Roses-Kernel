@@ -35,7 +35,6 @@ public class SysUserController {
     @Resource
     private SysUserRoleService sysUserRoleService;
 
-
     /**
      * 注册用户
      *
@@ -61,6 +60,18 @@ public class SysUserController {
     }
 
     /**
+     * 删除系统用户
+     *
+     * @author luojie
+     * @date 2020/11/6 13:50
+     */
+    @PostResource(name = "系统用户_删除", path = "/sysUser/delete")
+    public ResponseData delete(@RequestBody @Validated(SysUserRequest.delete.class) SysUserRequest sysUserRequest) {
+        sysUserService.del(sysUserRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 编辑系统用户
      *
      * @author luojie
@@ -80,7 +91,7 @@ public class SysUserController {
      */
     @PostResource(name = "系统用户_更新个人信息", path = "/sysUser/updateInfo")
     public ResponseData updateInfo(@RequestBody @Validated(SysUserRequest.updateInfo.class) SysUserRequest sysUserRequest) {
-        sysUserService.updateInfo(sysUserRequest);
+        sysUserService.editInfo(sysUserRequest);
         return new SuccessResponseData();
     }
 
@@ -92,7 +103,7 @@ public class SysUserController {
      */
     @PostResource(name = "系统用户_修改状态", path = "/sysUser/changeStatus")
     public ResponseData changeStatus(@RequestBody @Validated(SysUserRequest.changeStatus.class) SysUserRequest sysUserRequest) {
-        sysUserService.changeStatus(sysUserRequest);
+        sysUserService.editStatus(sysUserRequest);
         return new SuccessResponseData();
     }
 
@@ -104,7 +115,7 @@ public class SysUserController {
      */
     @PostResource(name = "系统用户_修改密码", path = "/sysUser/updatePassword")
     public ResponseData updatePwd(@RequestBody @Validated(SysUserRequest.updatePwd.class) SysUserRequest sysUserRequest) {
-        sysUserService.updatePassword(sysUserRequest);
+        sysUserService.editPassword(sysUserRequest);
         return new SuccessResponseData();
     }
 
@@ -128,7 +139,7 @@ public class SysUserController {
      */
     @PostResource(name = "系统用户_修改头像", path = "/sysUser/updateAvatar")
     public ResponseData updateAvatar(@RequestBody @Validated(SysUserRequest.updateAvatar.class) SysUserRequest sysUserRequest) {
-        sysUserService.updateAvatar(sysUserRequest);
+        sysUserService.editAvatar(sysUserRequest);
         return new SuccessResponseData();
     }
 
@@ -157,18 +168,6 @@ public class SysUserController {
     }
 
     /**
-     * 删除系统用户
-     *
-     * @author luojie
-     * @date 2020/11/6 13:50
-     */
-    @PostResource(name = "系统用户_删除", path = "/sysUser/delete")
-    public ResponseData delete(@RequestBody @Validated(SysUserRequest.delete.class) SysUserRequest sysUserRequest) {
-        sysUserService.delete(sysUserRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 查看系统用户
      *
      * @author luojie
@@ -177,65 +176,6 @@ public class SysUserController {
     @GetResource(name = "系统用户_查看", path = "/sysUser/detail")
     public ResponseData detail(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
         return new SuccessResponseData(sysUserService.detail(sysUserRequest));
-    }
-
-    /**
-     * 查询系统用户
-     *
-     * @author luojie
-     * @date 2020/11/6 13:49
-     */
-    @GetResource(name = "系统用户_查询", path = "/sysUser/page")
-    public ResponseData page(SysUserRequest sysUserRequest) {
-        return new SuccessResponseData(sysUserService.page(sysUserRequest));
-    }
-
-    /**
-     * 获取用户的角色列表
-     *
-     * @author luojie
-     * @date 2020/11/6 13:50
-     */
-    @GetResource(name = "系统用户_获取用户的角色列表", path = "/sysUser/getUserRoles")
-    public ResponseData ownRole(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
-        Long userId = sysUserRequest.getUserId();
-        return new SuccessResponseData(sysUserRoleService.findListByUserId(userId));
-    }
-
-    /**
-     * 获取用户数据范围列表
-     *
-     * @author luojie
-     * @date 2020/11/6 13:51
-     */
-    @GetResource(name = "系统用户_获取用户数据范围列表", path = "/sysUser/getUserDataScope")
-    public ResponseData ownData(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
-        List<Long> userBindDataScope = sysUserService.getUserBindDataScope(sysUserRequest.getUserId());
-        return new SuccessResponseData(userBindDataScope);
-    }
-
-    /**
-     * 用户下拉列表，可以根据姓名搜索
-     *
-     * @param sysUserRequest 请求参数：name 姓名(可选)
-     * @return 返回除超级管理员外的用户列表
-     * @author luojie
-     * @date 2020/11/6 09:49
-     */
-    @GetResource(name = "系统用户_选择器", path = "/sysUser/selector")
-    public ResponseData selector(SysUserRequest sysUserRequest) {
-        return new SuccessResponseData(sysUserService.selector(sysUserRequest));
-    }
-
-    /**
-     * 导出用户
-     *
-     * @author luojie
-     * @date 2020/11/6 13:57
-     */
-    @GetResource(name = "系统用户_导出", path = "/sysUser/export")
-    public void export(HttpServletResponse response) {
-        sysUserService.export(response);
     }
 
     /**
@@ -254,13 +194,73 @@ public class SysUserController {
     }
 
     /**
-     * 获取用户选择树数据
+     * 查询系统用户
+     *
+     * @author luojie
+     * @date 2020/11/6 13:49
+     */
+    @GetResource(name = "系统用户_查询", path = "/sysUser/page")
+    public ResponseData page(SysUserRequest sysUserRequest) {
+        return new SuccessResponseData(sysUserService.findPage(sysUserRequest));
+    }
+
+    /**
+     * 导出用户
+     *
+     * @author luojie
+     * @date 2020/11/6 13:57
+     */
+    @GetResource(name = "系统用户_导出", path = "/sysUser/export")
+    public void export(HttpServletResponse response) {
+        sysUserService.export(response);
+    }
+
+    /**
+     * 获取用户选择树数据（用在系统通知，选择发送人的时候）
      *
      * @author liuhanqing
      * @date 2021/1/15 8:28
      */
-    @GetResource(name = "获取用户选择树数据", path = "/sysUser/getUserSelectTree")
+    @GetResource(name = "获取用户选择树数据（用在系统通知，选择发送人的时候）", path = "/sysUser/getUserSelectTree")
     public SuccessResponseData getUserTree() {
         return new SuccessResponseData(this.sysUserService.userSelectTree(new SysUserRequest()));
     }
+
+    /**
+     * 获取用户数据范围列表
+     *
+     * @author luojie
+     * @date 2020/11/6 13:51
+     */
+    @GetResource(name = "系统用户_获取用户数据范围列表", path = "/sysUser/getUserDataScope")
+    public ResponseData ownData(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
+        List<Long> userBindDataScope = sysUserService.getUserBindDataScope(sysUserRequest.getUserId());
+        return new SuccessResponseData(userBindDataScope);
+    }
+
+    /**
+     * 获取用户的角色列表
+     *
+     * @author luojie
+     * @date 2020/11/6 13:50
+     */
+    @GetResource(name = "系统用户_获取用户的角色列表", path = "/sysUser/getUserRoles")
+    public ResponseData ownRole(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
+        Long userId = sysUserRequest.getUserId();
+        return new SuccessResponseData(sysUserRoleService.findListByUserId(userId));
+    }
+
+    /**
+     * 用户下拉列表，可以根据姓名搜索
+     *
+     * @param sysUserRequest 请求参数：name 姓名(可选)
+     * @return 返回除超级管理员外的用户列表
+     * @author luojie
+     * @date 2020/11/6 09:49
+     */
+    @GetResource(name = "系统用户_选择器", path = "/sysUser/selector")
+    public ResponseData selector(SysUserRequest sysUserRequest) {
+        return new SuccessResponseData(sysUserService.selector(sysUserRequest));
+    }
+
 }

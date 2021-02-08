@@ -15,7 +15,7 @@ public enum SysMenuButtonExceptionEnum implements AbstractExceptionEnum {
     /**
      * 菜单按钮不存在
      */
-    MENU_BUTTON_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "61", "菜单按钮不存在");
+    MENU_BUTTON_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "31", "菜单按钮不存在");
 
     private final String errorCode;
 

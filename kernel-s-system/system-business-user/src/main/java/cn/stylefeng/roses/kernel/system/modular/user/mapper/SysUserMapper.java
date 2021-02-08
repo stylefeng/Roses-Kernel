@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.mapper;
 
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -25,7 +25,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @author fengshuonan
      * @date 2020/11/21 15:16
      */
-    Page<SysUserResponse> findUserPage(@Param("page") Page<SysUser> page, @Param("sysUserRequest") SysUserRequest sysUserRequest);
+    Page<SysUserDTO> findUserPage(@Param("page") Page<SysUser> page, @Param("sysUserRequest") SysUserRequest sysUserRequest);
 
     /**
      * 查询用户列表
@@ -34,6 +34,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @author liuhanqing
      * @date 2021/1/15 11:04
      */
-    List<SysUserResponse> findUserList(@Param("sysUserRequest") SysUserRequest sysUserRequest);
+    List<SysUserDTO> findUserList(@Param("sysUserRequest") SysUserRequest sysUserRequest);
 
 }

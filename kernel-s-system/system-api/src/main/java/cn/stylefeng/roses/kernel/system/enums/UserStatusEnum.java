@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.enums;
 
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
+import cn.stylefeng.roses.kernel.system.exception.enums.user.SysUserExceptionEnum;
 import lombok.Getter;
 
 /**

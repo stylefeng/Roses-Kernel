@@ -23,11 +23,9 @@ public class KaptchaController {
     @Resource
     private CaptchaApi captchaApi;
 
-
     @GetResource(name = "获取图形验证码", path = "/kaptcha", requiredPermission = false, requiredLogin = false)
-    public ResponseData kaptcha() {
+    public ResponseData captcha() {
         return new SuccessResponseData(captchaApi.captcha());
     }
-
 
 }

@@ -3,12 +3,12 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.SysUserOrgExceptionEnum;
+import cn.stylefeng.roses.kernel.system.exception.enums.user.SysUserOrgExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserOrgMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
-import cn.stylefeng.roses.kernel.system.pojo.UserOrgRequest;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgDTO;
+import cn.stylefeng.roses.kernel.system.pojo.user.request.UserOrgRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static cn.stylefeng.roses.kernel.system.exception.enums.SysUserOrgExceptionEnum.EMPLOYEE_MANY_MAIN_NOT_FOUND;
+import static cn.stylefeng.roses.kernel.system.exception.enums.user.SysUserOrgExceptionEnum.EMPLOYEE_MANY_MAIN_NOT_FOUND;
 
 /**
  * 用户组织机构关联信息
@@ -28,7 +28,7 @@ import static cn.stylefeng.roses.kernel.system.exception.enums.SysUserOrgExcepti
 public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, SysUserOrg> implements SysUserOrgService {
 
     @Override
-    public SysUserOrgResponse getUserOrgInfo(Long userId) {
+    public SysUserOrgDTO getUserOrgInfo(Long userId) {
 
         LambdaQueryWrapper<SysUserOrg> sysUserOrgLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysUserOrgLambdaQueryWrapper.eq(SysUserOrg::getUserId, userId);
@@ -38,7 +38,7 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
             throw new SystemModularException(EMPLOYEE_MANY_MAIN_NOT_FOUND);
         } else {
             SysUserOrg sysUserOrg = list.get(0);
-            SysUserOrgResponse sysUserOrgResponse = new SysUserOrgResponse();
+            SysUserOrgDTO sysUserOrgResponse = new SysUserOrgDTO();
             BeanUtil.copyProperties(sysUserOrg, sysUserOrgResponse);
             return sysUserOrgResponse;
         }

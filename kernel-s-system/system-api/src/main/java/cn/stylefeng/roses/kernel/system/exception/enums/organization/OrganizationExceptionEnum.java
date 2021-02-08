@@ -17,22 +17,22 @@ public enum OrganizationExceptionEnum implements AbstractExceptionEnum {
     /**
      * 添加组织架构失败，一级节点只有超级管理员可以添加
      */
-    ADD_ONE_LEVEL_ORGANIZATION_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "41", "添加组织架构失败，一级节点只有超级管理员可以添加"),
+    ADD_ONE_LEVEL_ORGANIZATION_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "54", "添加组织架构失败，一级节点只有超级管理员可以添加"),
 
     /**
      * 添加组织架构失败，数据权限不够
      */
-    ADD_ORG_ERROR_DATA_SCOPE_NOT_ENOUGH(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "42", "添加组织架构失败，数据权限不够"),
+    ADD_ORG_ERROR_DATA_SCOPE_NOT_ENOUGH(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "55", "添加组织架构失败，数据权限不够"),
 
     /**
      * 查询不到组织机构，错误的组织机构ID
      */
-    CANT_FIND_ORG(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "43", "查询不到组织机构，错误的组织机构ID：{}"),
+    CANT_FIND_ORG(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "56", "查询不到组织机构，错误的组织机构ID：{}"),
 
     /**
      * 删除机构失败，该机构下有绑定员工
      */
-    DELETE_ORGANIZATION_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "44", "删除机构失败，该机构下有绑定员工");
+    DELETE_ORGANIZATION_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "57", "删除机构失败，该机构下有绑定员工");
 
     /**
      * 错误编码

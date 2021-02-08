@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.system;
 
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
+import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgDTO;
 
 /**
  * 用户组织机构服务api
@@ -25,6 +25,6 @@ public interface UserOrgServiceApi {
      * @author fengshuonan
      * @date 2020/12/19 22:33
      */
-    SysUserOrgResponse getUserOrgInfo(Long userId);
+    SysUserOrgDTO getUserOrgInfo(Long userId);
 
 }

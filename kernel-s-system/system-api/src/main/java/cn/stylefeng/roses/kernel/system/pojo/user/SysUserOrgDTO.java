@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2020/11/04 11:05
  */
 @Data
-public class SysUserOrgResponse {
+public class SysUserOrgDTO {
 
     /**
      * 主键

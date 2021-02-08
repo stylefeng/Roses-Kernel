@@ -3,7 +3,7 @@
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserMapper">
 
     <!--获取用户分页列表-->
-    <select id="findUserPage" resultType="cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse">
+    <select id="findUserPage" resultType="cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO">
         select
         suser.user_id as userId,
         suser.account as account,
@@ -41,7 +41,7 @@
     </select>
 
     <!--获取用户列表-->
-    <select id="findUserList" resultType="cn.stylefeng.roses.kernel.system.pojo.user.SysUserResponse">
+    <select id="findUserList" resultType="cn.stylefeng.roses.kernel.system.pojo.user.SysUserDTO">
         select
         suser.user_id as userId,
         suser.account as account,
