@@ -40,18 +40,6 @@ public class SysTimersController {
     }
 
     /**
-     * 编辑定时任务
-     *
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    @PostResource(name = "编辑定时任务", path = "/sysTimers/edit")
-    public ResponseData edit(@RequestBody @Validated(SysTimersParam.edit.class) SysTimersParam sysTimersParam) {
-        sysTimersService.edit(sysTimersParam);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 删除定时任务
      *
      * @author stylefeng
@@ -60,6 +48,18 @@ public class SysTimersController {
     @PostResource(name = "删除定时任务", path = "/sysTimers/delete")
     public ResponseData del(@RequestBody @Validated(SysTimersParam.delete.class) SysTimersParam sysTimersParam) {
         sysTimersService.del(sysTimersParam);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 编辑定时任务
+     *
+     * @author stylefeng
+     * @date 2020/6/30 18:26
+     */
+    @PostResource(name = "编辑定时任务", path = "/sysTimers/edit")
+    public ResponseData edit(@RequestBody @Validated(SysTimersParam.edit.class) SysTimersParam sysTimersParam) {
+        sysTimersService.edit(sysTimersParam);
         return new SuccessResponseData();
     }
 

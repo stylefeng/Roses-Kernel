@@ -38,28 +38,24 @@ public class HutoolTimerExeServiceImpl implements TimerExeService {
 
         // 判断任务id是否为空
         if (StrUtil.isBlank(taskId)) {
-            String userTip = StrUtil.format(TimerExceptionEnum.PARAM_HAS_NULL.getUserTip(), "taskId");
-            throw new TimerException(TimerExceptionEnum.PARAM_HAS_NULL, userTip);
+            throw new TimerException(TimerExceptionEnum.PARAM_HAS_NULL, "taskId");
         }
 
         // 判断任务cron表达式是否为空
         if (StrUtil.isBlank(cron)) {
-            String userTip = StrUtil.format(TimerExceptionEnum.PARAM_HAS_NULL.getUserTip(), "cron");
-            throw new TimerException(TimerExceptionEnum.PARAM_HAS_NULL, userTip);
+            throw new TimerException(TimerExceptionEnum.PARAM_HAS_NULL, "cron");
         }
 
         // 判断类名称是否为空
         if (StrUtil.isBlank(className)) {
-            String userTip = StrUtil.format(TimerExceptionEnum.PARAM_HAS_NULL.getUserTip(), "className");
-            throw new TimerException(TimerExceptionEnum.PARAM_HAS_NULL, userTip);
+            throw new TimerException(TimerExceptionEnum.PARAM_HAS_NULL, "className");
         }
 
         // 预加载类看是否存在此定时任务类
         try {
             Class.forName(className);
         } catch (ClassNotFoundException e) {
-            String userTip = StrUtil.format(TimerExceptionEnum.CLASS_NOT_FOUND.getUserTip(), className);
-            throw new TimerException(TimerExceptionEnum.CLASS_NOT_FOUND, userTip);
+            throw new TimerException(TimerExceptionEnum.CLASS_NOT_FOUND, className);
         }
 
         // 定义hutool的任务

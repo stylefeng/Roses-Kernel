@@ -25,15 +25,6 @@ public interface SysTimersService extends IService<SysTimers> {
     void add(SysTimersParam sysTimersParam);
 
     /**
-     * 编辑定时任务
-     *
-     * @param sysTimersParam 编辑参数
-     * @author stylefeng
-     * @date 2020/6/30 18:26
-     */
-    void edit(SysTimersParam sysTimersParam);
-
-    /**
      * 删除定时任务
      *
      * @param sysTimersParam 删除参数
@@ -41,6 +32,15 @@ public interface SysTimersService extends IService<SysTimers> {
      * @date 2020/6/30 18:26
      */
     void del(SysTimersParam sysTimersParam);
+
+    /**
+     * 编辑定时任务
+     *
+     * @param sysTimersParam 编辑参数
+     * @author stylefeng
+     * @date 2020/6/30 18:26
+     */
+    void edit(SysTimersParam sysTimersParam);
 
     /**
      * 启动任务

@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.timer.api.exception;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.timer.api.constants.TimerConstants;
@@ -16,8 +17,8 @@ public class TimerException extends ServiceException {
         super(TimerConstants.TIMER_MODULE_NAME, exception);
     }
 
-    public TimerException(AbstractExceptionEnum exception, String userTip) {
-        super(TimerConstants.TIMER_MODULE_NAME, exception.getErrorCode(), userTip);
+    public TimerException(AbstractExceptionEnum exception, Object... params) {
+        super(TimerConstants.TIMER_MODULE_NAME, exception.getErrorCode(), StrUtil.format(exception.getUserTip(), params));
     }
 
 }

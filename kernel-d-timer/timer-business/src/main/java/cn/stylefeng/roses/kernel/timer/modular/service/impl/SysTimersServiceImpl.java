@@ -3,7 +3,6 @@ package cn.stylefeng.roses.kernel.timer.modular.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.cron.CronUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
@@ -28,8 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +57,19 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
         this.save(sysTimers);
     }
 
+    @Override
+    public void del(SysTimersParam sysTimersParam) {
+
+        // 先停止id为参数id的定时器
+        CronUtil.remove(String.valueOf(sysTimersParam.getTimerId()));
+
+        // 逻辑删除定时任务
+        LambdaUpdateWrapper<SysTimers> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(SysTimers::getDelFlag, YesOrNotEnum.Y.getCode());
+        updateWrapper.eq(SysTimers::getTimerId, sysTimersParam.getTimerId());
+        this.update(updateWrapper);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void edit(SysTimersParam sysTimersParam) {
@@ -80,19 +90,6 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
                     sysTimersParam.getCron(),
                     sysTimersParam.getActionClass());
         }
-    }
-
-    @Override
-    public void del(SysTimersParam sysTimersParam) {
-
-        // 先停止id为参数id的定时器
-        CronUtil.remove(String.valueOf(sysTimersParam.getTimerId()));
-
-        // 逻辑删除定时任务
-        LambdaUpdateWrapper<SysTimers> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.set(SysTimers::getDelFlag, YesOrNotEnum.Y.getCode());
-        updateWrapper.eq(SysTimers::getTimerId, sysTimersParam.getTimerId());
-        this.update(updateWrapper);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -169,8 +166,7 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
     private SysTimers querySysTimers(SysTimersParam sysTimersParam) {
         SysTimers sysTimers = this.getById(sysTimersParam.getTimerId());
         if (ObjectUtil.isEmpty(sysTimers) || sysTimers.getDelFlag().equals(YesOrNotEnum.Y.getCode())) {
-            String userTip = StrUtil.format(TimerExceptionEnum.JOB_DETAIL_NOT_FOUND.getUserTip(), sysTimersParam.getTimerId());
-            throw new TimerException(TimerExceptionEnum.JOB_DETAIL_NOT_FOUND, userTip);
+            throw new TimerException(TimerExceptionEnum.JOB_DETAIL_NOT_FOUND, sysTimersParam.getTimerId());
         }
         return sysTimers;
     }
@@ -185,26 +181,28 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
 
         LambdaQueryWrapper<SysTimers> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (ObjectUtil.isNotNull(sysTimersParam)) {
-            String timerName = sysTimersParam.getTimerName();
-            Integer jobStatus = sysTimersParam.getJobStatus();
-            String actionClass = sysTimersParam.getActionClass();
-
-            // 拼接查询条件-任务名称
-            queryWrapper.like(ObjectUtil.isNotEmpty(timerName), SysTimers::getTimerName, timerName);
-
-            // 拼接查询条件-状态（字典 1运行  2停止）
-            queryWrapper.like(ObjectUtil.isNotNull(jobStatus), SysTimers::getJobStatus, jobStatus);
-
-            // 拼接查询条件-类名
-            queryWrapper.like(ObjectUtil.isNotEmpty(actionClass), SysTimers::getActionClass, actionClass);
-        }
-
         // 查询未删除的
         queryWrapper.ne(SysTimers::getDelFlag, YesOrNotEnum.Y.getCode());
 
         // 按类型升序排列，同类型的排在一起
         queryWrapper.orderByDesc(BaseEntity::getCreateTime);
+
+        if (ObjectUtil.isEmpty(sysTimersParam)) {
+            return queryWrapper;
+        }
+
+        String timerName = sysTimersParam.getTimerName();
+        Integer jobStatus = sysTimersParam.getJobStatus();
+        String actionClass = sysTimersParam.getActionClass();
+
+        // 拼接查询条件-任务名称
+        queryWrapper.like(ObjectUtil.isNotEmpty(timerName), SysTimers::getTimerName, timerName);
+
+        // 拼接查询条件-状态（字典 1运行  2停止）
+        queryWrapper.like(ObjectUtil.isNotNull(jobStatus), SysTimers::getJobStatus, jobStatus);
+
+        // 拼接查询条件-类名
+        queryWrapper.like(ObjectUtil.isNotEmpty(actionClass), SysTimers::getActionClass, actionClass);
 
         return queryWrapper;
     }
