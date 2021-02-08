@@ -134,27 +134,28 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     private LambdaQueryWrapper<SysConfig> createWrapper(SysConfigParam sysConfigParam) {
         LambdaQueryWrapper<SysConfig> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (ObjectUtil.isNotNull(sysConfigParam)) {
-
-            String configName = sysConfigParam.getConfigName();
-            String configCode = sysConfigParam.getConfigCode();
-            String groupCode = sysConfigParam.getGroupCode();
-
-            // 如果名称不为空，则带上名称搜素搜条件
-            queryWrapper.like(ObjectUtil.isNotEmpty(configName), SysConfig::getConfigName, configName);
-
-            // 如果常量编码不为空，则带上常量编码搜素搜条件
-            queryWrapper.like(ObjectUtil.isNotEmpty(configCode), SysConfig::getConfigCode, configCode);
-
-            // 如果分类编码不为空，则带上分类编码
-            queryWrapper.eq(ObjectUtil.isNotEmpty(groupCode), SysConfig::getGroupCode, groupCode);
-        }
-
         // 查询未删除的
         queryWrapper.ne(SysConfig::getDelFlag, YesOrNotEnum.Y.getCode());
 
         // 按类型升序排列，同类型的排在一起
         queryWrapper.orderByDesc(SysConfig::getGroupCode);
+
+        if (ObjectUtil.isEmpty(sysConfigParam)) {
+            return queryWrapper;
+        }
+
+        String configName = sysConfigParam.getConfigName();
+        String configCode = sysConfigParam.getConfigCode();
+        String groupCode = sysConfigParam.getGroupCode();
+
+        // 如果名称不为空，则带上名称搜素搜条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(configName), SysConfig::getConfigName, configName);
+
+        // 如果常量编码不为空，则带上常量编码搜素搜条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(configCode), SysConfig::getConfigCode, configCode);
+
+        // 如果分类编码不为空，则带上分类编码
+        queryWrapper.eq(ObjectUtil.isNotEmpty(groupCode), SysConfig::getGroupCode, groupCode);
 
         return queryWrapper;
     }

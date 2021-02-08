@@ -90,6 +90,13 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     private LambdaQueryWrapper<SysLog> createWrapper(LogManagerRequest logManagerRequest) {
         LambdaQueryWrapper<SysLog> queryWrapper = new LambdaQueryWrapper<>();
 
+        // 根据时间倒序排序
+        queryWrapper.orderByDesc(SysLog::getCreateTime);
+
+        if (ObjectUtil.isEmpty(logManagerRequest)) {
+            return queryWrapper;
+        }
+
         String beginDateTime = logManagerRequest.getBeginDateTime();
         String endDateTime = logManagerRequest.getEndDateTime();
 
@@ -108,9 +115,6 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         queryWrapper.eq(ObjectUtil.isNotNull(userId), SysLog::getUserId, userId);
         queryWrapper.eq(StrUtil.isNotEmpty(clientIp), SysLog::getClientIp, clientIp);
         queryWrapper.eq(StrUtil.isNotEmpty(url), SysLog::getRequestUrl, url);
-
-        // 根据时间倒序排序
-        queryWrapper.orderByDesc(SysLog::getCreateTime);
 
         return queryWrapper;
     }

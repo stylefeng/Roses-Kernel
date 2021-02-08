@@ -131,6 +131,13 @@ public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Trans
     private LambdaQueryWrapper<Translation> createWrapper(TranslationRequest translationRequest) {
         LambdaQueryWrapper<Translation> queryWrapper = new LambdaQueryWrapper<>();
 
+        // 按翻译编码倒序排列
+        queryWrapper.orderByDesc(Translation::getTranCode);
+
+        if (ObjectUtil.isEmpty(translationRequest)) {
+            return queryWrapper;
+        }
+
         Long tranId = translationRequest.getTranId();
         String tranCode = translationRequest.getTranCode();
         String tranName = translationRequest.getTranName();
@@ -141,9 +148,6 @@ public class TranslationServiceImpl extends ServiceImpl<TranslationMapper, Trans
         queryWrapper.like(ObjectUtil.isNotEmpty(tranCode), Translation::getTranCode, tranCode);
         queryWrapper.like(ObjectUtil.isNotEmpty(tranName), Translation::getTranName, tranName);
         queryWrapper.eq(ObjectUtil.isNotEmpty(tranLanguageCode), Translation::getTranLanguageCode, tranLanguageCode);
-
-        // 按翻译编码倒序排列
-        queryWrapper.orderByDesc(Translation::getTranCode);
 
         return queryWrapper;
     }

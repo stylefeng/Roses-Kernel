@@ -222,14 +222,18 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
     private LambdaQueryWrapper<DatabaseInfo> createWrapper(DatabaseInfoRequest databaseInfoRequest) {
         LambdaQueryWrapper<DatabaseInfo> queryWrapper = new LambdaQueryWrapper<>();
 
+        // 查询没被删除的
+        queryWrapper.eq(DatabaseInfo::getDelFlag, YesOrNotEnum.N.getCode());
+
+        if (ObjectUtil.isEmpty(databaseInfoRequest)) {
+            return queryWrapper;
+        }
+
         // 根据名称模糊查询
         String dbName = databaseInfoRequest.getDbName();
 
         // 拼接sql 条件
         queryWrapper.like(ObjectUtil.isNotEmpty(dbName), DatabaseInfo::getDbName, dbName);
-
-        // 查询没被删除的
-        queryWrapper.eq(DatabaseInfo::getDelFlag, YesOrNotEnum.N.getCode());
 
         return queryWrapper;
     }
