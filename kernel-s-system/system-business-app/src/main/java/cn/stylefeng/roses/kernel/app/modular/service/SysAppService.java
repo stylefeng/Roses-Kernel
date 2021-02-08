@@ -26,7 +26,7 @@ package cn.stylefeng.roses.kernel.app.modular.service;
 
 import cn.stylefeng.roses.kernel.app.modular.entity.SysApp;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.system.pojo.SysAppRequest;
+import cn.stylefeng.roses.kernel.system.pojo.app.SysAppRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -67,6 +67,15 @@ public interface SysAppService extends IService<SysApp> {
     void edit(SysAppRequest sysAppParam);
 
     /**
+     * 更新状态
+     *
+     * @param sysAppParam 请求参数
+     * @author fengshuonan
+     * @date 2021/1/6 14:30
+     */
+    void editStatus(SysAppRequest sysAppParam);
+
+    /**
      * 查看系统应用
      *
      * @param sysAppParam 查看参数
@@ -104,14 +113,5 @@ public interface SysAppService extends IService<SysApp> {
      * @date 2020/6/29 16:49
      */
     void updateActiveFlag(SysAppRequest sysAppParam);
-
-    /**
-     * 更新状态
-     *
-     * @param sysAppParam 请求参数
-     * @author fengshuonan
-     * @date 2021/1/6 14:30
-     */
-    void updateStatus(SysAppRequest sysAppParam);
 
 }

@@ -6,7 +6,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.pojo.SysAppRequest;
+import cn.stylefeng.roses.kernel.system.pojo.app.SysAppRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,6 +63,18 @@ public class SysAppController {
     }
 
     /**
+     * 修改应用状态
+     *
+     * @author fengshuonan
+     * @date 2020/6/29 16:49
+     */
+    @PostResource(name = "修改应用状态", path = "/sysApp/updateStatus")
+    public ResponseData updateStatus(@RequestBody @Validated(SysAppRequest.updateStatus.class) SysAppRequest sysAppParam) {
+        sysAppService.editStatus(sysAppParam);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 查看系统应用
      *
      * @author fengshuonan
@@ -104,18 +116,6 @@ public class SysAppController {
     @PostResource(name = "设为默认应用", path = "/sysApp/updateActiveFlag")
     public ResponseData setAsDefault(@RequestBody @Validated(SysAppRequest.updateActiveFlag.class) SysAppRequest sysAppParam) {
         sysAppService.updateActiveFlag(sysAppParam);
-        return new SuccessResponseData();
-    }
-
-    /**
-     * 修改应用状态
-     *
-     * @author fengshuonan
-     * @date 2020/6/29 16:49
-     */
-    @PostResource(name = "修改应用状态", path = "/sysApp/updateStatus")
-    public ResponseData updateStatus(@RequestBody @Validated(SysAppRequest.updateStatus.class) SysAppRequest sysAppParam) {
-        sysAppService.updateStatus(sysAppParam);
         return new SuccessResponseData();
     }
 

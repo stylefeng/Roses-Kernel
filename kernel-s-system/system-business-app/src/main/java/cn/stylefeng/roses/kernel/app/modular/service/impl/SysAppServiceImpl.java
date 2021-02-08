@@ -16,7 +16,7 @@ import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.AppExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.SysAppRequest;
+import cn.stylefeng.roses.kernel.system.pojo.app.SysAppRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -95,6 +95,20 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     }
 
     @Override
+    public void editStatus(SysAppRequest sysAppParam) {
+        SysApp currentApp = this.querySysApp(sysAppParam);
+
+        // 激活状态的不能被禁用
+        if (YesOrNotEnum.Y.getCode().equals(currentApp.getActiveFlag())
+                && StatusEnum.DISABLE.getCode().equals(sysAppParam.getStatusFlag())) {
+            throw new SystemModularException(AppExceptionEnum.CANT_DISABLE);
+        }
+
+        currentApp.setStatusFlag(sysAppParam.getStatusFlag());
+        this.updateById(currentApp);
+    }
+
+    @Override
     public SysApp detail(SysAppRequest sysAppRequest) {
         return this.querySysApp(sysAppRequest);
     }
@@ -129,26 +143,12 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     }
 
     @Override
-    public void updateStatus(SysAppRequest sysAppParam) {
-        SysApp currentApp = this.querySysApp(sysAppParam);
-
-        // 激活状态的不能被禁用
-        if (YesOrNotEnum.Y.getCode().equals(currentApp.getActiveFlag())
-                && StatusEnum.DISABLE.getCode().equals(sysAppParam.getStatusFlag())) {
-            throw new SystemModularException(AppExceptionEnum.CANT_DISABLE);
-        }
-
-        currentApp.setStatusFlag(sysAppParam.getStatusFlag());
-        this.updateById(currentApp);
-    }
-
-    @Override
     public Set<SimpleDict> getAppsByAppCodes(Set<String> appCodes) {
         HashSet<SimpleDict> simpleDicts = new HashSet<>();
 
         LambdaQueryWrapper<SysApp> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(SysApp::getAppCode, appCodes);
-        queryWrapper.select(SysApp::getAppCode, SysApp::getAppId, SysApp::getAppName);
+        queryWrapper.select(SysApp::getAppId, SysApp::getAppCode, SysApp::getAppName);
 
         List<SysApp> list = this.list(queryWrapper);
         for (SysApp sysApp : list) {
@@ -219,25 +219,22 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
      */
     private LambdaQueryWrapper<SysApp> createWrapper(SysAppRequest sysAppRequest) {
         LambdaQueryWrapper<SysApp> queryWrapper = new LambdaQueryWrapper<>();
-        if (ObjectUtil.isNotNull(sysAppRequest)) {
-            // 根据id查询
-            if (ObjectUtil.isNotEmpty(sysAppRequest.getAppId())) {
-                queryWrapper.eq(SysApp::getAppId, sysAppRequest.getAppId());
-            }
-
-            // 根据名称模糊查询
-            if (ObjectUtil.isNotEmpty(sysAppRequest.getAppName())) {
-                queryWrapper.like(SysApp::getAppName, sysAppRequest.getAppName());
-            }
-
-            // 根据编码模糊查询
-            if (ObjectUtil.isNotEmpty(sysAppRequest.getAppCode())) {
-                queryWrapper.like(SysApp::getAppCode, sysAppRequest.getAppCode());
-            }
-        }
 
         // 查询未删除状态的
         queryWrapper.eq(SysApp::getDelFlag, YesOrNotEnum.N.getCode());
+
+        if (ObjectUtil.isEmpty(sysAppRequest)) {
+            return queryWrapper;
+        }
+
+        // 根据id查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(sysAppRequest.getAppId()), SysApp::getAppId, sysAppRequest.getAppId());
+
+        // 根据名称模糊查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(sysAppRequest.getAppName()), SysApp::getAppName, sysAppRequest.getAppName());
+
+        // 根据编码模糊查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(sysAppRequest.getAppCode()), SysApp::getAppCode, sysAppRequest.getAppCode());
 
         return queryWrapper;
     }
