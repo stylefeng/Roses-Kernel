@@ -299,7 +299,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
      * <p>
      * 如果pid是顶级节点，pids就是 [-1],
      * <p>
-     * 如果pid不是顶级节点，pids就是父菜单的pids + [pid] + ,
+     * 如果pid不是顶级节点，pids就是父节点的pids + [pid] + ,
      *
      * @author fengshuonan
      * @date 2020/12/11 上午9:48
