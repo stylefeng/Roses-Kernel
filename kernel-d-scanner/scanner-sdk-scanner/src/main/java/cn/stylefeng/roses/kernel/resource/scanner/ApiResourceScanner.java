@@ -187,8 +187,7 @@ public class ApiResourceScanner implements BeanPostProcessor {
         String className = resourceDefinition.getClassName();
         int controllerIndex = className.indexOf("Controller");
         if (controllerIndex == -1) {
-            String userTip = StrUtil.format(ERROR_CONTROLLER_NAME.getUserTip(), controllerClass.getName());
-            throw new ScannerException(ERROR_CONTROLLER_NAME, userTip);
+            throw new ScannerException(ERROR_CONTROLLER_NAME, controllerClass.getName());
         }
         String modular = className.substring(0, controllerIndex);
         resourceDefinition.setModularCode(modular);
