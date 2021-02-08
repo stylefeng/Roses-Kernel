@@ -35,11 +35,14 @@ public class CaptchaService implements CaptchaApi {
         if (StrUtil.isAllEmpty(verKey, verCode)) {
             return false;
         }
+
         if (!verCode.trim().toLowerCase().equals(cacheOperatorApi.get(verKey))) {
             return false;
         }
+
         //删除缓存中验证码
         cacheOperatorApi.remove(verKey);
+
         return true;
     }
 

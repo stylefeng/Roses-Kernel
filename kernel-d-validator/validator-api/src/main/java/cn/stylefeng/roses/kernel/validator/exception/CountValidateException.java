@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.validator.exception;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.validator.constants.ValidatorConstants;
@@ -12,8 +13,8 @@ import cn.stylefeng.roses.kernel.validator.constants.ValidatorConstants;
  */
 public class CountValidateException extends ServiceException {
 
-    public CountValidateException(AbstractExceptionEnum exception, String userTip) {
-        super(ValidatorConstants.VALIDATOR_MODULE_NAME, exception.getErrorCode(), userTip);
+    public CountValidateException(AbstractExceptionEnum exception, Object... params) {
+        super(ValidatorConstants.VALIDATOR_MODULE_NAME, exception.getErrorCode(), StrUtil.format(exception.getUserTip(), params));
     }
 
     public CountValidateException(AbstractExceptionEnum exception) {

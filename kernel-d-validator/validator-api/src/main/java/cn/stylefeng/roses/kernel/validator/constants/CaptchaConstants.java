@@ -11,6 +11,6 @@ public interface CaptchaConstants {
     /**
      * 验证码 缓存前缀标识
      */
-    String CAPTCHA_CACHE_KEY_PREFIX = "KAPTCHA_KEY";
+    String CAPTCHA_CACHE_KEY_PREFIX = "CAPTCHA_KEY";
 
 }
