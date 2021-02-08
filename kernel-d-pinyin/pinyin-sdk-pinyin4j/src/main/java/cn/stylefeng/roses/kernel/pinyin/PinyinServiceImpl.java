@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.pinyin;
 
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.pinyin.api.PinYinApi;
 import cn.stylefeng.roses.kernel.pinyin.api.exception.PinyinException;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -107,8 +106,7 @@ public class PinyinServiceImpl implements PinYinApi {
             }
             return finalPinyinString.toString();
         } catch (BadHanyuPinyinOutputFormatCombination e1) {
-            String userTip = StrUtil.format(PARSE_ERROR.getUserTip(), e1.getMessage());
-            throw new PinyinException(PARSE_ERROR, userTip);
+            throw new PinyinException(PARSE_ERROR, e1.getMessage());
         }
     }
 
@@ -182,8 +180,7 @@ public class PinyinServiceImpl implements PinYinApi {
                 }
             }
         } catch (BadHanyuPinyinOutputFormatCombination e) {
-            String userTip = StrUtil.format(PARSE_ERROR.getUserTip(), e.getMessage());
-            throw new PinyinException(PARSE_ERROR, userTip);
+            throw new PinyinException(PARSE_ERROR, e.getMessage());
         }
 
         return hanyupinyin.toString();
