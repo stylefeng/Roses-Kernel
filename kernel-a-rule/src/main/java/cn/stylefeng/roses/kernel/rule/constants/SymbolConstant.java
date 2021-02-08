@@ -1,10 +1,10 @@
-package cn.stylefeng.roses.kernel.system.constants;
+package cn.stylefeng.roses.kernel.rule.constants;
 
 /**
  * 符号常量
  *
- * @author majianguo
- * @date 2020/11/5 下午2:32
+ * @author fengshuonan
+ * @date 2021/2/8 11:59
  */
 public interface SymbolConstant {
 
