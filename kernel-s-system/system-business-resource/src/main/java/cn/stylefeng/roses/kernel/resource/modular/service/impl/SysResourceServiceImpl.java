@@ -23,9 +23,8 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
-import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.pojo.resource.LayuiApiResourceTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
+import cn.stylefeng.roses.kernel.system.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResourceResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -59,18 +58,15 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Resource
     private RoleServiceApi roleServiceApi;
 
-    @Resource
-    private UserServiceApi userServiceApi;
-
     @Override
-    public PageResult<SysResource> getResourceList(ResourceRequest resourceRequest) {
+    public PageResult<SysResource> findPage(ResourceRequest resourceRequest) {
         LambdaQueryWrapper<SysResource> wrapper = createWrapper(resourceRequest);
         Page<SysResource> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
     }
 
     @Override
-    public List<SysResource> getMenuResourceList(ResourceRequest resourceRequest) {
+    public List<SysResource> findList(ResourceRequest resourceRequest) {
 
         LambdaQueryWrapper<SysResource> wrapper = createWrapper(resourceRequest);
 
@@ -86,49 +82,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         menuResourceList.add(0, sysResource);
 
         return menuResourceList;
-    }
-
-    @Override
-    public void deleteResourceByProjectCode(String projectCode) {
-        LambdaQueryWrapper<SysResource> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysResource::getProjectCode, projectCode);
-        this.remove(wrapper);
-    }
-
-    @Override
-    public List<LayuiApiResourceTreeNode> getResourceTree() {
-
-        // 1. 获取所有的资源
-        LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysResourceLambdaQueryWrapper.eq(SysResource::getViewFlag, YesOrNotEnum.N.getCode());
-        sysResourceLambdaQueryWrapper.select(SysResource::getAppCode, SysResource::getModularCode, SysResource::getModularName, SysResource::getResourceCode, SysResource::getUrl, SysResource::getResourceName);
-        List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
-
-        // 2. 按应用和模块编码设置map
-        Map<String, Map<String, List<LayuiApiResourceTreeNode>>> appModularResources = divideResources(allResource);
-
-        // 3. 创建模块code和模块name的映射
-        Map<String, String> modularCodeName = createModularCodeName(allResource);
-
-        // 4. 根据map组装资源树
-        return createResourceTree(appModularResources, modularCodeName);
-    }
-
-    @Override
-    public ResourceDefinition getResourceDetail(ResourceRequest resourceRequest) {
-        LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysResourceLambdaQueryWrapper.eq(SysResource::getResourceCode, resourceRequest.getResourceCode());
-        SysResource sysResource = this.getOne(sysResourceLambdaQueryWrapper);
-        if (sysResource != null) {
-
-            // 实体转化为ResourceDefinition
-            ResourceDefinition resourceDefinition = ResourceFactory.createResourceDefinition(sysResource);
-
-            // 填充具体的提示信息
-            return ResourceFactory.fillResourceDetail(resourceDefinition);
-        } else {
-            return null;
-        }
     }
 
     @Override
@@ -214,6 +167,49 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         } else {
             return new DefaultTreeBuildFactory<ResourceTreeNode>().doTreeBuild(res);
         }
+    }
+
+    @Override
+    public List<LayuiApiResourceTreeNode> getApiResourceTree() {
+
+        // 1. 获取所有的资源
+        LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysResourceLambdaQueryWrapper.eq(SysResource::getViewFlag, YesOrNotEnum.N.getCode());
+        sysResourceLambdaQueryWrapper.select(SysResource::getAppCode, SysResource::getModularCode, SysResource::getModularName, SysResource::getResourceCode, SysResource::getUrl, SysResource::getResourceName);
+        List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
+
+        // 2. 按应用和模块编码设置map
+        Map<String, Map<String, List<LayuiApiResourceTreeNode>>> appModularResources = divideResources(allResource);
+
+        // 3. 创建模块code和模块name的映射
+        Map<String, String> modularCodeName = createModularCodeName(allResource);
+
+        // 4. 根据map组装资源树
+        return createResourceTree(appModularResources, modularCodeName);
+    }
+
+    @Override
+    public ResourceDefinition getApiResourceDetail(ResourceRequest resourceRequest) {
+        LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysResourceLambdaQueryWrapper.eq(SysResource::getResourceCode, resourceRequest.getResourceCode());
+        SysResource sysResource = this.getOne(sysResourceLambdaQueryWrapper);
+        if (sysResource != null) {
+
+            // 实体转化为ResourceDefinition
+            ResourceDefinition resourceDefinition = ResourceFactory.createResourceDefinition(sysResource);
+
+            // 填充具体的提示信息
+            return ResourceFactory.fillResourceDetail(resourceDefinition);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void deleteResourceByProjectCode(String projectCode) {
+        LambdaQueryWrapper<SysResource> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysResource::getProjectCode, projectCode);
+        this.remove(wrapper);
     }
 
     @Override
@@ -303,22 +299,18 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     private LambdaQueryWrapper<SysResource> createWrapper(ResourceRequest resourceRequest) {
         LambdaQueryWrapper<SysResource> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (ObjectUtil.isNotNull(resourceRequest)) {
-            // 根据应用编码查询
-            if (ObjectUtil.isNotEmpty(resourceRequest.getAppCode())) {
-                queryWrapper.eq(SysResource::getAppCode, resourceRequest.getAppCode());
-            }
-
-            // 根据资源名称
-            if (ObjectUtil.isNotEmpty(resourceRequest.getResourceName())) {
-                queryWrapper.like(SysResource::getResourceName, resourceRequest.getResourceName());
-            }
-
-            // 根据资源url
-            if (ObjectUtil.isNotEmpty(resourceRequest.getUrl())) {
-                queryWrapper.like(SysResource::getUrl, resourceRequest.getUrl());
-            }
+        if (ObjectUtil.isEmpty(resourceRequest)) {
+            return queryWrapper;
         }
+
+        // 根据应用编码查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(resourceRequest.getAppCode()), SysResource::getAppCode, resourceRequest.getAppCode());
+
+        // 根据资源名称
+        queryWrapper.like(ObjectUtil.isNotEmpty(resourceRequest.getResourceName()), SysResource::getResourceName, resourceRequest.getResourceName());
+
+        // 根据资源url
+        queryWrapper.like(ObjectUtil.isNotEmpty(resourceRequest.getUrl()), SysResource::getUrl, resourceRequest.getUrl());
 
         return queryWrapper;
     }
@@ -411,51 +403,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 modularNode.setParentId(appName);
                 modularNode.setSpread(false);
                 modularNode.setResourceFlag(false);
-                modularNode.setChildren(modularResources.get(modularCode));
-                modularNodes.add(modularNode);
-            }
-
-            // 当前应用下添加模块的资源
-            appNode.setChildren(modularNodes);
-
-            // 添加到最终结果
-            finalTree.add(appNode);
-        }
-
-        return finalTree;
-    }
-
-    /**
-     * 根据归好类的资源，创建资源平级树
-     *
-     * @author majianguo
-     * @date 2021/1/9 15:10
-     */
-    private List<ResourceTreeNode> createResourceLateralTree(Map<String, Map<String, List<ResourceTreeNode>>> appModularResources, Map<String, String> modularCodeName) {
-
-        List<ResourceTreeNode> finalTree = new ArrayList<>();
-
-        // 按应用遍历应用模块资源集合
-        for (String appName : appModularResources.keySet()) {
-
-            // 创建当前应用节点
-            ResourceTreeNode appNode = new ResourceTreeNode();
-            appNode.setCode(appName);
-            appNode.setNodeName(appName);
-            appNode.setResourceFlag(false);
-            appNode.setParentCode(TreeConstants.DEFAULT_PARENT_ID.toString());
-
-            // 遍历当前应用下的模块资源
-            Map<String, List<ResourceTreeNode>> modularResources = appModularResources.get(appName);
-
-            // 创建模块节点
-            ArrayList<ResourceTreeNode> modularNodes = new ArrayList<>();
-            for (String modularCode : modularResources.keySet()) {
-                ResourceTreeNode modularNode = new ResourceTreeNode();
-                modularNode.setCode(modularCode);
-                modularNode.setNodeName(modularCodeName.get(modularCode));
-                modularNode.setResourceFlag(false);
-                modularNode.setParentCode(appName);
                 modularNode.setChildren(modularResources.get(modularCode));
                 modularNodes.add(modularNode);
             }

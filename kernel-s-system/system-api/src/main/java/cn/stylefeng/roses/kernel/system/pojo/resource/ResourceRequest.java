@@ -1,7 +1,8 @@
-package cn.stylefeng.roses.kernel.system.pojo.resource.request;
+package cn.stylefeng.roses.kernel.system.pojo.resource;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotBlank;
  * @author fengshuonan
  * @since 2019-09-10
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ResourceRequest extends BaseRequest {
 

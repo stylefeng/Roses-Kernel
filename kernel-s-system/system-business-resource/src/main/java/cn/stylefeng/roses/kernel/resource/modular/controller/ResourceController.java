@@ -8,7 +8,7 @@ import cn.stylefeng.roses.kernel.resource.modular.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.resource.modular.service.SysResourceService;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
+import cn.stylefeng.roses.kernel.system.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +36,7 @@ public class ResourceController {
      */
     @GetResource(name = "获取资源列表", path = "/resource/pageList")
     public ResponseData pageList(ResourceRequest resourceRequest) {
-        PageResult<SysResource> result = this.sysResourceService.getResourceList(resourceRequest);
+        PageResult<SysResource> result = this.sysResourceService.findPage(resourceRequest);
         return new SuccessResponseData(result);
     }
 
@@ -48,7 +48,7 @@ public class ResourceController {
      */
     @GetResource(name = "获取资源下拉列表", path = "/resource/getMenuResourceList")
     public ResponseData getMenuResourceList(ResourceRequest resourceRequest) {
-        List<SysResource> menuResourceList = this.sysResourceService.getMenuResourceList(resourceRequest);
+        List<SysResource> menuResourceList = this.sysResourceService.findList(resourceRequest);
         return new SuccessResponseData(menuResourceList);
     }
 

@@ -8,7 +8,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.pojo.resource.LayuiApiResourceTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.resource.request.ResourceRequest;
+import cn.stylefeng.roses.kernel.system.pojo.resource.ResourceRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +36,7 @@ public class ApiController {
      */
     @GetResource(name = "获取接口树列表（用于接口文档页面）", path = "/resource/getTree", requiredLogin = false)
     public ResponseData getTree() {
-        List<LayuiApiResourceTreeNode> resourceTree = sysResourceService.getResourceTree();
+        List<LayuiApiResourceTreeNode> resourceTree = sysResourceService.getApiResourceTree();
         return new SuccessResponseData(resourceTree);
     }
 
@@ -48,7 +48,7 @@ public class ApiController {
      */
     @GetResource(name = "获取API详情（用于接口文档页面）", path = "/resource/getDetail", requiredLogin = false)
     public ResponseData getResourceDetail(@Validated(BaseRequest.detail.class) ResourceRequest resourceRequest) {
-        ResourceDefinition resourceDetail = sysResourceService.getResourceDetail(resourceRequest);
+        ResourceDefinition resourceDetail = sysResourceService.getApiResourceDetail(resourceRequest);
         return new SuccessResponseData(resourceDetail);
     }
 
