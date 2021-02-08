@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.auth.api.enums;
 
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import lombok.Getter;
 
@@ -63,8 +62,7 @@ public enum DataScopeTypeEnum {
                 }
             }
         }
-        String userTip = StrUtil.format(DATA_SCOPE_ERROR.getUserTip(), code);
-        throw new AuthException(DATA_SCOPE_ERROR, userTip);
+        throw new AuthException(DATA_SCOPE_ERROR, code);
     }
 
 }

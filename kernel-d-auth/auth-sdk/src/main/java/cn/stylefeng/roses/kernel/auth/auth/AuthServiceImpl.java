@@ -201,8 +201,7 @@ public class AuthServiceImpl implements AuthServiceApi {
 
         // 6. 校验用户是否异常（不是正常状态）
         if (!UserStatusEnum.ENABLE.getCode().equals(userValidateInfo.getUserStatus())) {
-            String userTip = StrUtil.format(AuthExceptionEnum.USER_STATUS_ERROR.getErrorCode(), UserStatusEnum.getCodeMessage(userValidateInfo.getUserStatus()));
-            throw new AuthException(AuthExceptionEnum.USER_STATUS_ERROR.getErrorCode(), userTip);
+            throw new AuthException(AuthExceptionEnum.USER_STATUS_ERROR, UserStatusEnum.getCodeMessage(userValidateInfo.getUserStatus()));
         }
 
         // 7. 获取LoginUser，用于用户的缓存
