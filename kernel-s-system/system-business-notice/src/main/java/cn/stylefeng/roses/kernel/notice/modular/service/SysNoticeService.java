@@ -3,7 +3,7 @@ package cn.stylefeng.roses.kernel.notice.modular.service;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.notice.modular.entity.SysNotice;
 import cn.stylefeng.roses.kernel.system.NoticeServiceApi;
-import cn.stylefeng.roses.kernel.system.pojo.SysNoticeRequest;
+import cn.stylefeng.roses.kernel.system.pojo.notice.SysNoticeRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -26,16 +26,6 @@ public interface SysNoticeService extends IService<SysNotice>, NoticeServiceApi 
     void add(SysNoticeRequest sysNoticeRequest);
 
     /**
-     * 编辑系统应用
-     *
-     * @param sysNoticeRequest 编辑参数
-     * @author liuhanqing
-     * @date 2021/1/9 14:58
-     */
-    void edit(SysNoticeRequest sysNoticeRequest);
-
-
-    /**
      * 删除系统应用
      *
      * @param sysNoticeRequest 删除参数
@@ -43,6 +33,15 @@ public interface SysNoticeService extends IService<SysNotice>, NoticeServiceApi 
      * @date 2021/1/9 14:57
      */
     void del(SysNoticeRequest sysNoticeRequest);
+
+    /**
+     * 编辑系统应用
+     *
+     * @param sysNoticeRequest 编辑参数
+     * @author liuhanqing
+     * @date 2021/1/9 14:58
+     */
+    void edit(SysNoticeRequest sysNoticeRequest);
 
     /**
      * 查看系统应用
@@ -73,6 +72,5 @@ public interface SysNoticeService extends IService<SysNotice>, NoticeServiceApi 
      * @date 2021/1/9 14:56
      */
     List<SysNotice> findList(SysNoticeRequest sysNoticeRequest);
-
 
 }

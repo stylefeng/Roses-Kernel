@@ -14,8 +14,8 @@ import cn.stylefeng.roses.kernel.notice.modular.mapper.SysNoticeMapper;
 import cn.stylefeng.roses.kernel.notice.modular.service.SysNoticeService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.NoticeExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.SysNoticeRequest;
+import cn.stylefeng.roses.kernel.system.exception.enums.notice.NoticeExceptionEnum;
+import cn.stylefeng.roses.kernel.system.pojo.notice.SysNoticeRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -34,32 +34,10 @@ import java.util.List;
 @Service
 public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice> implements SysNoticeService {
 
+    private static final String NOTICE_SCOPE_ALL = "all";
 
-    private static String NOTICE_SCOPE_ALL = "all";
-
-
-    /**
-     * 系统消息api
-     */
     @Resource
     private MessageApi messageApi;
-
-    private void sendMessage(SysNotice sysNotice) {
-        MessageSendRequest message = new MessageSendRequest();
-        // 消息标题
-        message.setMessageTitle(sysNotice.getNoticeTitle());
-        // 消息内容
-        message.setMessageContent(sysNotice.getNoticeSummary());
-        // 消息优先级
-        message.setPriorityLevel(sysNotice.getPriorityLevel());
-        // 消息发送范围
-        message.setReceiveUserIds(sysNotice.getNoticeScope());
-        // 消息业务类型
-        message.setBusinessType(MessageBusinessTypeEnum.SYS_NOTICE.getCode());
-        message.setBusinessId(sysNotice.getNoticeId());
-        message.setMessageSendTime(new Date());
-        messageApi.sendMessage(message);
-    }
 
     @Override
     public void add(SysNoticeRequest sysNoticeRequest) {
@@ -76,33 +54,35 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     }
 
     @Override
-    public void edit(SysNoticeRequest sysNoticeRequest) {
-
-        SysNotice sysNotice = this.querySysNoticeById(sysNoticeRequest);
-        String noticeScope = sysNotice.getNoticeScope();
-        if (StrUtil.isBlank(sysNoticeRequest.getNoticeScope())) {
-            sysNoticeRequest.setNoticeScope(NOTICE_SCOPE_ALL);
-        }
-        // 通知范围不允许修改， 如果通知范围不同抛出异常
-        if (!sysNoticeRequest.getNoticeScope().equals(sysNotice.getNoticeScope())) {
-            throw new SystemModularException(NoticeExceptionEnum.NOTICE_SCOPE_NOT_EDIT);
-        }
-        BeanUtil.copyProperties(sysNoticeRequest, sysNotice);
-
-        sysNotice.setNoticeScope(noticeScope);
-
-        if (this.updateById(sysNotice)) {
-            sendMessage(sysNotice);
-        }
-    }
-
-
-    @Override
     public void del(SysNoticeRequest sysNoticeRequest) {
         SysNotice sysNotice = this.querySysNoticeById(sysNoticeRequest);
         // 逻辑删除
         sysNotice.setDelFlag(YesOrNotEnum.Y.getCode());
         this.updateById(sysNotice);
+    }
+
+    @Override
+    public void edit(SysNoticeRequest sysNoticeRequest) {
+        SysNotice sysNotice = this.querySysNoticeById(sysNoticeRequest);
+
+        // 通知范围不允许修改， 如果通知范围不同抛出异常
+        if (!sysNoticeRequest.getNoticeScope().equals(sysNotice.getNoticeScope())) {
+            throw new SystemModularException(NoticeExceptionEnum.NOTICE_SCOPE_NOT_EDIT);
+        }
+
+        // 获取通知范围，如果为空则设置为all
+        String noticeScope = sysNotice.getNoticeScope();
+        if (StrUtil.isBlank(noticeScope)) {
+            sysNoticeRequest.setNoticeScope(NOTICE_SCOPE_ALL);
+        }
+
+        // 更新属性
+        BeanUtil.copyProperties(sysNoticeRequest, sysNotice);
+
+        // 修改成功后发送信息
+        if (this.updateById(sysNotice)) {
+            sendMessage(sysNotice);
+        }
     }
 
     @Override
@@ -123,7 +103,6 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         LambdaQueryWrapper<SysNotice> wrapper = createWrapper(sysNoticeRequest);
         return this.list(wrapper);
     }
-
 
     /**
      * 获取通知管理
@@ -148,6 +127,13 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     private LambdaQueryWrapper<SysNotice> createWrapper(SysNoticeRequest sysNoticeRequest) {
         LambdaQueryWrapper<SysNotice> queryWrapper = new LambdaQueryWrapper<>();
 
+        // 查询未删除状态的
+        queryWrapper.eq(SysNotice::getDelFlag, YesOrNotEnum.N.getCode());
+
+        if (ObjectUtil.isEmpty(sysNoticeRequest)) {
+            return queryWrapper;
+        }
+
         // 通知id
         Long noticeId = sysNoticeRequest.getNoticeId();
 
@@ -158,10 +144,37 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         queryWrapper.like(ObjectUtil.isNotEmpty(noticeTitle), SysNotice::getNoticeTitle, noticeTitle);
         queryWrapper.eq(ObjectUtil.isNotEmpty(noticeId), SysNotice::getNoticeId, noticeId);
 
-        // 查询未删除状态的
-        queryWrapper.eq(SysNotice::getDelFlag, YesOrNotEnum.N.getCode());
-
         return queryWrapper;
+    }
+
+    /**
+     * 发送消息
+     *
+     * @author fengshuonan
+     * @date 2021/2/8 19:30
+     */
+    private void sendMessage(SysNotice sysNotice) {
+        MessageSendRequest message = new MessageSendRequest();
+
+        // 消息标题
+        message.setMessageTitle(sysNotice.getNoticeTitle());
+
+        // 消息内容
+        message.setMessageContent(sysNotice.getNoticeSummary());
+
+        // 消息优先级
+        message.setPriorityLevel(sysNotice.getPriorityLevel());
+
+        // 消息发送范围
+        message.setReceiveUserIds(sysNotice.getNoticeScope());
+
+        // 消息业务类型
+        message.setBusinessType(MessageBusinessTypeEnum.SYS_NOTICE.getCode());
+
+        message.setBusinessId(sysNotice.getNoticeId());
+        message.setMessageSendTime(new Date());
+
+        messageApi.sendMessage(message);
     }
 
 }

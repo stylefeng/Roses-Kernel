@@ -6,11 +6,12 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.pojo.SysNoticeRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.stylefeng.roses.kernel.system.pojo.notice.SysNoticeRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * 通知管理控制器
@@ -22,9 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @ApiResource(name = "通知管理")
 public class SysNoticeController {
 
-    @Autowired
+    @Resource
     private SysNoticeService sysNoticeService;
-
 
     /**
      * 添加通知管理
@@ -49,7 +49,6 @@ public class SysNoticeController {
         sysNoticeService.edit(sysNoticeParam);
         return new SuccessResponseData();
     }
-
 
     /**
      * 删除通知管理
@@ -95,4 +94,5 @@ public class SysNoticeController {
     public ResponseData list(SysNoticeRequest sysNoticeParam) {
         return new SuccessResponseData(sysNoticeService.findList(sysNoticeParam));
     }
+
 }

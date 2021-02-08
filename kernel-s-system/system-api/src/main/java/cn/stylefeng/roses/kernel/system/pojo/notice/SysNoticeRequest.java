@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.pojo;
+package cn.stylefeng.roses.kernel.system.pojo.notice;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,7 +18,6 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class SysNoticeRequest extends BaseRequest {
-
 
     /**
      * 通知id
