@@ -9,9 +9,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author liuhq
+ * websocket客户端连接管理
+ *
+ * @author liuhanqing
+ * @date 2021/1/24 22:08
  */
 public class WebSocketManager {
+
     private static final ConcurrentHashMap<Long, List<Session>> userIdSessionMap = new ConcurrentHashMap<>();
 
     /**
@@ -97,4 +101,5 @@ public class WebSocketManager {
             sendMessage(userId, message);
         }
     }
+
 }

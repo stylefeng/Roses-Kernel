@@ -19,7 +19,6 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/message/websocket/{userId}")
 public class WebSocketEndpoint {
 
-
     /**
      * 连接建立成功后调用
      *
@@ -30,10 +29,12 @@ public class WebSocketEndpoint {
      */
     @OnOpen
     public void onOpen(@PathParam(value = "userId") Long userId, Session session) {
+
         // 添加到链接管理
         WebSocketManager.add(userId, session);
+
         // 返回消息
-//        session.getAsyncRemote().sendText("WebSocket连接成功");
+        session.getAsyncRemote().sendText("WebSocket连接成功");
     }
 
     /**

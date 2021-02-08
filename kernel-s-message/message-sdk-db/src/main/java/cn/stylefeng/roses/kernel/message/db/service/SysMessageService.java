@@ -77,4 +77,5 @@ public interface SysMessageService extends IService<SysMessage> {
      * @date 2021/1/11 19:21
      */
     Integer findCount(MessageRequest messageRequest);
+
 }

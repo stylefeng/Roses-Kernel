@@ -98,6 +98,16 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
     private LambdaQueryWrapper<SysMessage> createWrapper(MessageRequest messageRequest) {
         LambdaQueryWrapper<SysMessage> queryWrapper = new LambdaQueryWrapper<>();
 
+        // 查询未删除的
+        queryWrapper.ne(SysMessage::getDelFlag, YesOrNotEnum.Y.getCode());
+
+        // 按发送事件倒序
+        queryWrapper.orderByDesc(SysMessage::getMessageSendTime);
+
+        if (ObjectUtil.isEmpty(messageRequest)) {
+            return queryWrapper;
+        }
+
         // 消息标题
         String messageTitle = messageRequest.getMessageTitle();
 
@@ -115,12 +125,6 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
         queryWrapper.eq(ObjectUtil.isNotEmpty(receiveUserId), SysMessage::getReceiveUserId, receiveUserId);
         queryWrapper.eq(ObjectUtil.isNotEmpty(messageType), SysMessage::getMessageType, messageType);
         queryWrapper.eq(ObjectUtil.isNotEmpty(readFlag), SysMessage::getReadFlag, readFlag);
-
-        // 查询未删除的
-        queryWrapper.ne(SysMessage::getDelFlag, YesOrNotEnum.Y.getCode());
-
-        // 按发送事件倒序
-        queryWrapper.orderByDesc(SysMessage::getMessageSendTime);
 
         return queryWrapper;
     }

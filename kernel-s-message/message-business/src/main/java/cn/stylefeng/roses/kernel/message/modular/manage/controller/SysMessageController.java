@@ -10,11 +10,11 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +33,7 @@ public class SysMessageController {
     /**
      * 系统消息api
      */
-    @Autowired
+    @Resource
     private MessageApi messageApi;
 
     /**
@@ -86,7 +86,6 @@ public class SysMessageController {
         return new SuccessResponseData();
     }
 
-
     /**
      * 查看系统消息
      *
@@ -97,7 +96,6 @@ public class SysMessageController {
     public ResponseData detail(@Validated(MessageRequest.detail.class) MessageRequest messageRequest) {
         return new SuccessResponseData(messageApi.messageDetail(messageRequest));
     }
-
 
     /**
      * 分页查询系统消息列表
@@ -120,7 +118,6 @@ public class SysMessageController {
     public ResponseData list(MessageRequest messageRequest) {
         return new SuccessResponseData(messageApi.queryListCurrentUser(messageRequest));
     }
-
 
     /**
      * 系统消息未读数量

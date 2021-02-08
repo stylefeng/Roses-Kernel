@@ -5,8 +5,8 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.message.api.WebsocketApi;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
-import cn.stylefeng.roses.kernel.message.api.pojo.response.MessageResponse;
 import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageSendRequest;
+import cn.stylefeng.roses.kernel.message.api.pojo.response.MessageResponse;
 import cn.stylefeng.roses.kernel.message.websocket.manager.WebSocketManager;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,4 +51,5 @@ public class WebSocketServiceImpl implements WebsocketApi {
             log.error("发送websocket异常", e);
         }
     }
+
 }

@@ -24,14 +24,12 @@
             <version>7.0.0</version>
         </dependency>
 
-
         <!--websocket管理-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>message-business-websocket</artifactId>
             <version>7.0.0</version>
         </dependency>
-
 
         <!--消息默认记录到库中-->
         <dependency>
