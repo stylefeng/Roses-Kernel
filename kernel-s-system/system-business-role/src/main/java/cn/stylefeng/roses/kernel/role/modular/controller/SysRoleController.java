@@ -8,7 +8,6 @@ import cn.stylefeng.roses.kernel.role.modular.service.SysRoleResourceService;
 import cn.stylefeng.roses.kernel.role.modular.service.SysRoleService;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +24,6 @@ import javax.annotation.Resource;
 @RestController
 @ApiResource(name = "系统角色管理")
 public class SysRoleController {
-
-    @Resource
-    private RoleServiceApi roleServiceApi;
 
     @Resource
     private SysRoleService sysRoleService;
@@ -94,19 +90,19 @@ public class SysRoleController {
     }
 
     /**
-     * 授权角色对应的资源
+     * 角色授权资源
      *
      * @author fengshuonan
      * @date 2020/11/22 19:51
      */
-    @PostResource(name = "授权资源", path = "/sysRole/grantResource")
+    @PostResource(name = "角色授权资源", path = "/sysRole/grantResource")
     public ResponseData grantResource(@RequestBody @Validated(SysRoleRequest.grantResource.class) SysRoleRequest sysRoleParam) {
         sysRoleResourceService.grantResource(sysRoleParam);
         return new SuccessResponseData();
     }
 
     /**
-     * 授权角色授权菜单和按钮
+     * 角色授权菜单和按钮
      *
      * @author majianguo
      * @date 2021/1/9 18:04
@@ -130,7 +126,7 @@ public class SysRoleController {
     }
 
     /**
-     * 系统角色下拉（用于授权角色时选择）
+     * 系统角色下拉（用于用户授权角色时选择）
      *
      * @author majianguo
      * @date 2020/11/6 13:49
@@ -149,7 +145,7 @@ public class SysRoleController {
     @GetResource(name = "角色拥有菜单", path = "/sysRole/getRoleMenus")
     public ResponseData getRoleMenus(@Validated(SysRoleRequest.detail.class) SysRoleRequest sysRoleRequest) {
         Long roleId = sysRoleRequest.getRoleId();
-        return new SuccessResponseData(roleServiceApi.getMenuIdsByRoleIds(ListUtil.toList(roleId)));
+        return new SuccessResponseData(sysRoleService.getMenuIdsByRoleIds(ListUtil.toList(roleId)));
     }
 
     /**

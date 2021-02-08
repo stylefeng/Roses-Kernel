@@ -9,7 +9,7 @@ import cn.stylefeng.roses.kernel.auth.api.prop.LoginUserPropExpander;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
 
@@ -36,7 +36,7 @@ public class UserLoginInfoFactory {
      * @date 2020/12/26 17:53
      */
     public static UserLoginInfoDTO userLoginInfoDTO(SysUser sysUser,
-                                                    List<SysRoleResponse> roleResponseList,
+                                                    List<SysRoleDTO> roleResponseList,
                                                     DataScopeDTO dataScopeResponse,
                                                     SysUserOrgResponse userOrgInfo,
                                                     Set<String> resourceUrlsListByCodes,
@@ -64,7 +64,7 @@ public class UserLoginInfoFactory {
         // 填充用户角色信息
         if (!roleResponseList.isEmpty()) {
             ArrayList<SimpleRoleInfo> simpleRoleInfos = new ArrayList<>();
-            for (SysRoleResponse sysRoleResponse : roleResponseList) {
+            for (SysRoleDTO sysRoleResponse : roleResponseList) {
                 SimpleRoleInfo simpleRoleInfo = new SimpleRoleInfo();
                 BeanUtil.copyProperties(sysRoleResponse, simpleRoleInfo);
                 simpleRoleInfos.add(simpleRoleInfo);

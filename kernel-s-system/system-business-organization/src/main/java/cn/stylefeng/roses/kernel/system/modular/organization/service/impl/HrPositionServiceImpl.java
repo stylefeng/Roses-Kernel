@@ -10,7 +10,7 @@ import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.PositionExceptionEnum;
+import cn.stylefeng.roses.kernel.system.exception.enums.organization.PositionExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrPositionMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;

@@ -3,8 +3,9 @@ package cn.stylefeng.roses.kernel.role.modular.service;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.role.modular.entity.SysRole;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
+import cn.stylefeng.roses.kernel.system.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  * @author majianguo
  * @date 2020/11/5 上午11:12
  */
-public interface SysRoleService extends IService<SysRole> {
+public interface SysRoleService extends IService<SysRole>, RoleServiceApi {
 
     /**
      * 添加系统角色
@@ -52,7 +53,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @author majianguo
      * @date 2020/11/5 上午11:14
      */
-    SysRoleResponse detail(SysRoleRequest sysRoleRequest);
+    SysRoleDTO detail(SysRoleRequest sysRoleRequest);
 
     /**
      * 查询系统角色
@@ -73,6 +74,14 @@ public interface SysRoleService extends IService<SysRole> {
      * @date 2020/11/5 上午11:13
      */
     List<SimpleDict> findList(SysRoleRequest sysRoleRequest);
+
+    /**
+     * 授权菜单和按钮
+     *
+     * @author majianguo
+     * @date 2021/1/9 18:13
+     */
+    void grantMenuAndButton(SysRoleRequest sysRoleMenuButtonRequest);
 
     /**
      * 授权数据范围（组织机构）
@@ -102,21 +111,4 @@ public interface SysRoleService extends IService<SysRole> {
      */
     List<Long> getRoleDataScope(SysRoleRequest sysRoleRequest);
 
-    /**
-     * 根据角色id获取角色名称
-     *
-     * @param roleId 角色id
-     * @return 角色名称
-     * @author majianguo
-     * @date 2020/11/5 上午11:15
-     */
-    String getNameByRoleId(Long roleId);
-
-    /**
-     * 授权菜单和按钮
-     *
-     * @author majianguo
-     * @date 2021/1/9 18:13
-     */
-    void grantMenuAndButton(SysRoleRequest sysRoleMenuButtonRequest);
 }

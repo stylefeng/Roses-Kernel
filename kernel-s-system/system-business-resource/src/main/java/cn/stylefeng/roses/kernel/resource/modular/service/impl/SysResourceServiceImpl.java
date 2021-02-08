@@ -25,7 +25,7 @@ import cn.stylefeng.roses.kernel.system.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.pojo.resource.LayuiApiResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.resource.ResourceRequest;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResourceResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleResourceDTO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -109,11 +109,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
 
         // 查询当前角色已有的接口
-        List<SysRoleResourceResponse> resourceList = roleServiceApi.getRoleResourceList(Collections.singletonList(roleId));
+        List<SysRoleResourceDTO> resourceList = roleServiceApi.getRoleResourceList(Collections.singletonList(roleId));
 
         // 该角色已拥有权限
-        Map<String, SysRoleResourceResponse> alreadyHave = new HashMap<>(resourceList.size());
-        for (SysRoleResourceResponse sysRoleResponse : resourceList) {
+        Map<String, SysRoleResourceDTO> alreadyHave = new HashMap<>(resourceList.size());
+        for (SysRoleResourceDTO sysRoleResponse : resourceList) {
             alreadyHave.put(sysRoleResponse.getResourceCode(), sysRoleResponse);
         }
 
@@ -144,7 +144,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             for (SysResource resource : entry.getValue()) {
                 ResourceTreeNode subItem = new ResourceTreeNode();
                 // 判断是否已经拥有
-                SysRoleResourceResponse resourceResponse = alreadyHave.get(resource.getResourceCode());
+                SysRoleResourceDTO resourceResponse = alreadyHave.get(resource.getResourceCode());
                 if (ObjectUtil.isEmpty(resourceResponse)) {
                     subItem.setChecked(false);
                 } else {

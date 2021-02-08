@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system;
 
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
 
 import java.util.List;
 
@@ -26,6 +26,6 @@ public interface DataScopeApi {
      * @author majianguo
      * @date 2020/11/5 上午11:44
      */
-    DataScopeDTO getDataScope(Long userId, List<SysRoleResponse> sysRoles);
+    DataScopeDTO getDataScope(Long userId, List<SysRoleDTO> sysRoles);
 
 }

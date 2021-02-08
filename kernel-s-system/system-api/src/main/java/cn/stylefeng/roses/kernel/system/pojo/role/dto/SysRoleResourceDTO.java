@@ -1,7 +1,8 @@
-package cn.stylefeng.roses.kernel.system.pojo.role.response;
+package cn.stylefeng.roses.kernel.system.pojo.role.dto;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 角色资源关联
@@ -9,8 +10,9 @@ import lombok.Data;
  * @author fengshuonan
  * @date 2020/11/5 下午4:30
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class SysRoleResourceResponse extends BaseEntity {
+public class SysRoleResourceDTO extends BaseEntity {
 
     /**
      * 主键

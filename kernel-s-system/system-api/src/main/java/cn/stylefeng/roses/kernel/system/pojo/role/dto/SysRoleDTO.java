@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.pojo.role.response;
+package cn.stylefeng.roses.kernel.system.pojo.role.dto;
 
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SysRoleResponse extends BaseRequest {
+public class SysRoleDTO extends BaseRequest {
 
     /**
      * 主键

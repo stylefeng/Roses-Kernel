@@ -33,9 +33,9 @@ import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuDTO;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenusVO;
 import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleMenuButtonDTO;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleMenuDTO;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuButtonResponse;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -291,19 +291,19 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 查询所有已有的权限
         // 所有已有的菜单权限
-        List<SysRoleMenuResponse> roleMenuList = roleServiceApi.getRoleMenuList(Collections.singletonList(sysRoleRequest.getRoleId()));
+        List<SysRoleMenuDTO> roleMenuList = roleServiceApi.getRoleMenuList(Collections.singletonList(sysRoleRequest.getRoleId()));
         // 转换成map方便后续处理
-        Map<Long, SysRoleMenuResponse> roleMenuMap = new HashMap<>();
-        for (SysRoleMenuResponse sysRoleMenuResponse : roleMenuList) {
+        Map<Long, SysRoleMenuDTO> roleMenuMap = new HashMap<>();
+        for (SysRoleMenuDTO sysRoleMenuResponse : roleMenuList) {
             roleMenuMap.put(sysRoleMenuResponse.getMenuId(), sysRoleMenuResponse);
         }
 
         // 所有的按钮权限
-        List<SysRoleMenuButtonResponse> roleMenuButtonList = roleServiceApi.getRoleMenuButtonList(Collections.singletonList(sysRoleRequest.getRoleId()));
+        List<SysRoleMenuButtonDTO> roleMenuButtonList = roleServiceApi.getRoleMenuButtonList(Collections.singletonList(sysRoleRequest.getRoleId()));
 
         // 转换成map方便后续处理
-        Map<Long, SysRoleMenuButtonResponse> roleMenuButtonMap = new HashMap<>();
-        for (SysRoleMenuButtonResponse buttonResponse : roleMenuButtonList) {
+        Map<Long, SysRoleMenuButtonDTO> roleMenuButtonMap = new HashMap<>();
+        for (SysRoleMenuButtonDTO buttonResponse : roleMenuButtonList) {
             roleMenuButtonMap.put(buttonResponse.getButtonId(), buttonResponse);
         }
 
@@ -315,7 +315,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             menuTree.setName(sysMenu.getMenuName());
             menuTree.setPid(sysMenu.getMenuParentId());
             // 判断是否已经有了
-            SysRoleMenuResponse roleMenuResponse = roleMenuMap.get(sysMenu.getMenuId());
+            SysRoleMenuDTO roleMenuResponse = roleMenuMap.get(sysMenu.getMenuId());
             if (ObjectUtil.isEmpty(roleMenuResponse)) {
                 menuTree.setChecked(false);
             } else {
@@ -335,7 +335,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                     buttonTree.setButtonCode(menuButton.getButtonCode());
                     buttonTree.setMenuFlag(false);
                     // 判断是否已经拥有
-                    SysRoleMenuButtonResponse buttonResponse = roleMenuButtonMap.get(menuButton.getButtonId());
+                    SysRoleMenuButtonDTO buttonResponse = roleMenuButtonMap.get(menuButton.getButtonId());
                     if (ObjectUtil.isNotEmpty(buttonResponse)) {
                         buttonTree.setChecked(true);
                         menuTree.setChecked(true);

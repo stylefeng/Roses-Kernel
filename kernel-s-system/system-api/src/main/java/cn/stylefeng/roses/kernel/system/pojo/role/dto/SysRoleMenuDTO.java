@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.pojo.role.response;
+package cn.stylefeng.roses.kernel.system.pojo.role.dto;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2021/1/9 18:07
  */
 @Data
-public class SysRoleMenuResponse {
+public class SysRoleMenuDTO {
 
     /**
      * 主键

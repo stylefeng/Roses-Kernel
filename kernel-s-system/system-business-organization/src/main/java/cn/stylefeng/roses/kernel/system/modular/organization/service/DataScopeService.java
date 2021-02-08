@@ -9,7 +9,7 @@ import cn.stylefeng.roses.kernel.system.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.organization.DataScopeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgResponse;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class DataScopeService implements DataScopeApi {
     private DbOperatorApi dbOperatorApi;
 
     @Override
-    public DataScopeDTO getDataScope(Long userId, List<SysRoleResponse> sysRoles) {
+    public DataScopeDTO getDataScope(Long userId, List<SysRoleDTO> sysRoles) {
 
         // 初始化返回结果
         DataScopeDTO dataScopeResponse = new DataScopeDTO();
@@ -56,7 +56,7 @@ public class DataScopeService implements DataScopeApi {
         SysUserOrgResponse sysUserOrgResponse = userOrgServiceApi.getUserOrgInfo(userId);
 
         // 获取角色中的数据范围类型
-        Set<DataScopeTypeEnum> dataScopeTypeEnums = sysRoles.stream().map(SysRoleResponse::getDataScopeTypeEnum).collect(Collectors.toSet());
+        Set<DataScopeTypeEnum> dataScopeTypeEnums = sysRoles.stream().map(SysRoleDTO::getDataScopeTypeEnum).collect(Collectors.toSet());
         dataScopeResponse.setDataScopeTypeEnums(dataScopeTypeEnums);
 
         // 1.根据数据范围类型的不同，填充角色拥有的 organizationIds 和 userIds 范围
@@ -69,7 +69,7 @@ public class DataScopeService implements DataScopeApi {
         if (dataScopeTypeEnums.contains(DataScopeTypeEnum.DEFINE)) {
 
             // 获取角色对应的组织机构范围
-            List<Long> roleIds = sysRoles.stream().map(SysRoleResponse::getRoleId).collect(Collectors.toList());
+            List<Long> roleIds = sysRoles.stream().map(SysRoleDTO::getRoleId).collect(Collectors.toList());
             List<Long> orgIds = roleServiceApi.getRoleDataScopes(roleIds);
             organizationIds.addAll(orgIds);
         }

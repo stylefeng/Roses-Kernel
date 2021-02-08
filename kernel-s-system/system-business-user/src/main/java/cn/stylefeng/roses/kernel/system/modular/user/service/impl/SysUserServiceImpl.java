@@ -41,7 +41,7 @@ import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
 import cn.stylefeng.roses.kernel.system.pojo.organization.HrOrganizationDTO;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.pojo.user.*;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
@@ -427,7 +427,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 2. 获取用户角色信息
         List<Long> roleIds = sysUserRoleService.findRoleIdsByUserId(userId);
-        List<SysRoleResponse> roleResponseList = roleServiceApi.getRolesByIds(roleIds);
+        List<SysRoleDTO> roleResponseList = roleServiceApi.getRolesByIds(roleIds);
 
         // 3. 获取用户的数据范围
         DataScopeDTO dataScopeResponse = dataScopeApi.getDataScope(userId, roleResponseList);

@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.system;
 
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuButtonResponse;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleMenuResponse;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResourceResponse;
-import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleMenuButtonDTO;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleMenuDTO;
+import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleResourceDTO;
 
 import java.util.List;
 import java.util.Set;
@@ -24,7 +24,7 @@ public interface RoleServiceApi {
      * @author fengshuonan
      * @date 2020/11/21 9:17
      */
-    List<SysRoleResponse> getRolesByIds(List<Long> roleIds);
+    List<SysRoleDTO> getRolesByIds(List<Long> roleIds);
 
     /**
      * 获取角色对应的组织机构范围集合
@@ -64,7 +64,7 @@ public interface RoleServiceApi {
      * @author majianguo
      * @date 2020/11/5 上午11:17
      */
-    List<SysRoleResourceResponse> getRoleResourceList(List<Long> roleIdList);
+    List<SysRoleResourceDTO> getRoleResourceList(List<Long> roleIdList);
 
     /**
      * 获取角色对应的按钮编码集合
@@ -83,7 +83,7 @@ public interface RoleServiceApi {
      * @author majianguo
      * @date 2021/1/9 17:33
      */
-    List<SysRoleMenuResponse> getRoleMenuList(List<Long> roleIdList);
+    List<SysRoleMenuDTO> getRoleMenuList(List<Long> roleIdList);
 
     /**
      * 获取角色拥有的菜单按钮
@@ -92,6 +92,6 @@ public interface RoleServiceApi {
      * @author majianguo
      * @date 2021/1/9 17:33
      */
-    List<SysRoleMenuButtonResponse> getRoleMenuButtonList(List<Long> roleIdList);
+    List<SysRoleMenuButtonDTO> getRoleMenuButtonList(List<Long> roleIdList);
 
 }

@@ -7,7 +7,7 @@ import cn.stylefeng.roses.kernel.role.modular.entity.SysRoleDataScope;
 import cn.stylefeng.roses.kernel.role.modular.mapper.SysRoleDataScopeMapper;
 import cn.stylefeng.roses.kernel.role.modular.service.SysRoleDataScopeService;
 import cn.stylefeng.roses.kernel.system.RoleDataScopeServiceApi;
-import cn.stylefeng.roses.kernel.system.pojo.SysRoleDataScopeRequest;
+import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleDataScopeRequest;
 import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
