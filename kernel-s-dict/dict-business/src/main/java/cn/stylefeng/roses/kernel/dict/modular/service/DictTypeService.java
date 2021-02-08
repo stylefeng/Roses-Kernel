@@ -26,6 +26,15 @@ public interface DictTypeService extends IService<SysDictType> {
     void add(DictTypeRequest dictTypeRequest);
 
     /**
+     * 删除字典类型
+     *
+     * @param dictTypeRequest 字典类型请求
+     * @author fengshuonan
+     * @date 2020/10/29 18:55
+     */
+    void del(DictTypeRequest dictTypeRequest);
+
+    /**
      * 修改字典类型
      *
      * @param dictTypeRequest 字典类型请求
@@ -44,13 +53,13 @@ public interface DictTypeService extends IService<SysDictType> {
     void editStatus(DictTypeRequest dictTypeRequest);
 
     /**
-     * 删除字典类型
+     * 查询-详情-按实体对象
      *
-     * @param dictTypeRequest 字典类型请求
-     * @author fengshuonan
-     * @date 2020/10/29 18:55
+     * @param dictTypeRequest 参数对象
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
      */
-    void del(DictTypeRequest dictTypeRequest);
+    SysDictType detail(DictTypeRequest dictTypeRequest);
 
     /**
      * 获取字典类型列表
@@ -81,31 +90,4 @@ public interface DictTypeService extends IService<SysDictType> {
      * @date 2020/10/29 18:56
      */
     boolean validateCodeAvailable(DictTypeRequest dictTypeRequest);
-
-    /**
-     * 获取字典详情
-     *
-     * @param dictTypeId 类型id
-     * @author huangyao
-     * @date 2021/1/10 17:27
-     */
-    SysDictType findDetail(Long dictTypeId);
-
-    /**
-     * 查询-详情-按实体对象
-     *
-     * @param dictTypeRequest 参数对象
-     * @author chenjinlong
-     * @date 2021/1/26 12:52
-     */
-    SysDictType detailBy(DictTypeRequest dictTypeRequest);
-
-    /**
-     * 查询-列表-按实体对象
-     *
-     * @param dictTypeRequest 参数对象
-     * @author chenjinlong
-     * @date 2021/1/26 12:52
-     */
-    List<SysDictType> listBy(DictTypeRequest dictTypeRequest);
 }

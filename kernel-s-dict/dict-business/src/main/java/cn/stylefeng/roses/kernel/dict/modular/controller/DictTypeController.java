@@ -13,7 +13,6 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -45,6 +44,18 @@ public class DictTypeController {
     }
 
     /**
+     * 删除字典类型
+     *
+     * @author fengshuonan
+     * @date 2018/7/25 下午12:36
+     */
+    @PostResource(name = "删除字典类型", path = "/dictType/deleteDictType", requiredPermission = false)
+    public ResponseData deleteDictType(@RequestBody @Validated(DictTypeRequest.delete.class) DictTypeRequest dictTypeRequest) {
+        this.dictTypeService.del(dictTypeRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 修改字典类型
      *
      * @author fengshuonan
@@ -69,52 +80,14 @@ public class DictTypeController {
     }
 
     /**
-     * 删除字典类型
-     *
-     * @author fengshuonan
-     * @date 2018/7/25 下午12:36
-     */
-    @PostResource(name = "删除字典类型", path = "/dictType/deleteDictType", requiredPermission = false)
-    public ResponseData deleteDictType(@RequestBody @Validated(DictTypeRequest.delete.class) DictTypeRequest dictTypeRequest) {
-        this.dictTypeService.del(dictTypeRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 获取字典类型详情
      *
      * @author fengshuonan
      * @date 2021/1/13 11:25
      */
     @GetResource(name = "获取字典类型详情", path = "/dictType/getDictDetail", requiredPermission = false)
-    public ResponseData getDictDetail(@RequestParam("dictTypeId") Long dictTypeId) {
-        SysDictType detail = this.dictTypeService.findDetail(dictTypeId);
-        return new SuccessResponseData(detail);
-    }
-
-    /**
-     * 获取字典类型详情
-     *
-     * @author fengshuonan
-     * @date 2021/1/13 11:25
-     */
-    @GetResource(name = "获取系统配置字典类型详情", path = "/dictType/getConfigDictTypeDetail", requiredPermission = false)
-    public ResponseData getConfigDictTypeDetail(DictTypeRequest dictTypeRequest) {
-        dictTypeRequest.setDictTypeCode(DictConstants.CONFIG_GROUP_DICT_TYPE_CODE);
-        SysDictType detail = this.dictTypeService.detailBy(dictTypeRequest);
-        return new SuccessResponseData(detail);
-    }
-
-    /**
-     * 获取字典类型详情
-     *
-     * @author fengshuonan
-     * @date 2021/1/13 11:25
-     */
-    @GetResource(name = "获取语种字典类型型详情", path = "/dictType/getTranslationDetail", requiredPermission = false)
-    public ResponseData getTranslationDetail(DictTypeRequest dictTypeRequest) {
-        dictTypeRequest.setDictTypeCode(DictConstants.LANGUAGES_DICT_TYPE_CODE);
-        SysDictType detail = this.dictTypeService.detailBy(dictTypeRequest);
+    public ResponseData getDictDetail(@RequestBody @Validated(BaseRequest.detail.class) DictTypeRequest dictTypeRequest) {
+        SysDictType detail = this.dictTypeService.detail(dictTypeRequest);
         return new SuccessResponseData(detail);
     }
 
@@ -152,6 +125,33 @@ public class DictTypeController {
     public ResponseData validateCodeAvailable(@Validated(DictTypeRequest.validateCode.class) DictTypeRequest dictTypeRequest) {
         boolean flag = this.dictTypeService.validateCodeAvailable(dictTypeRequest);
         return new SuccessResponseData(flag);
+    }
+
+
+    /**
+     * 获取字典类型详情
+     *
+     * @author fengshuonan
+     * @date 2021/1/13 11:25
+     */
+    @GetResource(name = "获取系统配置字典类型详情", path = "/dictType/getConfigDictTypeDetail", requiredPermission = false)
+    public ResponseData getConfigDictTypeDetail(DictTypeRequest dictTypeRequest) {
+        dictTypeRequest.setDictTypeCode(DictConstants.CONFIG_GROUP_DICT_TYPE_CODE);
+        SysDictType detail = this.dictTypeService.detail(dictTypeRequest);
+        return new SuccessResponseData(detail);
+    }
+
+    /**
+     * 获取字典类型详情
+     *
+     * @author fengshuonan
+     * @date 2021/1/13 11:25
+     */
+    @GetResource(name = "获取语种字典类型型详情", path = "/dictType/getTranslationDetail", requiredPermission = false)
+    public ResponseData getTranslationDetail(DictTypeRequest dictTypeRequest) {
+        dictTypeRequest.setDictTypeCode(DictConstants.LANGUAGES_DICT_TYPE_CODE);
+        SysDictType detail = this.dictTypeService.detail(dictTypeRequest);
+        return new SuccessResponseData(detail);
     }
 
 }
