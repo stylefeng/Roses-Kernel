@@ -15,7 +15,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.AppExceptionEnum;
+import cn.stylefeng.roses.kernel.system.exception.enums.app.AppExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.app.SysAppRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;

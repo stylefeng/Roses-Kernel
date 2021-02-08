@@ -12,7 +12,7 @@ import cn.stylefeng.roses.kernel.loginlog.modular.mapper.SysLoginLogMapper;
 import cn.stylefeng.roses.kernel.loginlog.modular.service.SysLoginLogService;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
-import cn.stylefeng.roses.kernel.system.exception.enums.AppExceptionEnum;
+import cn.stylefeng.roses.kernel.system.exception.enums.log.LogExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.SysLoginLogRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,6 +27,26 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLoginLog> implements SysLoginLogService {
+
+    @Override
+    public void del(SysLoginLogRequest sysLoginLogRequest) {
+        SysLoginLog sysLoginLog = this.querySysLoginLogById(sysLoginLogRequest);
+        this.removeById(sysLoginLog.getLlgId());
+    }
+
+    @Override
+    public SysLoginLog detail(SysLoginLogRequest sysLoginLogRequest) {
+        LambdaQueryWrapper<SysLoginLog> queryWrapper = this.createWrapper(sysLoginLogRequest);
+        return this.getOne(queryWrapper, false);
+    }
+
+    @Override
+    public PageResult<SysLoginLog> findPage(SysLoginLogRequest sysLoginLogRequest) {
+        LambdaQueryWrapper<SysLoginLog> wrapper = createWrapper(sysLoginLogRequest);
+        wrapper.orderByDesc(SysLoginLog::getCreateTime);
+        Page<SysLoginLog> page = this.page(PageFactory.defaultPage(), wrapper);
+        return PageResultFactory.createPageResult(page);
+    }
 
     @Override
     public void add(SysLoginLogRequest sysLoginLogRequest) {
@@ -84,26 +104,6 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
         this.remove(null);
     }
 
-    @Override
-    public void del(SysLoginLogRequest sysLoginLogRequest) {
-        SysLoginLog sysLoginLog = this.querySysLoginLogById(sysLoginLogRequest);
-        this.removeById(sysLoginLog.getLlgId());
-    }
-
-    @Override
-    public SysLoginLog detail(SysLoginLogRequest sysLoginLogRequest) {
-        LambdaQueryWrapper<SysLoginLog> queryWrapper = this.createWrapper(sysLoginLogRequest);
-        return this.getOne(queryWrapper, false);
-    }
-
-    @Override
-    public PageResult<SysLoginLog> page(SysLoginLogRequest sysLoginLogRequest) {
-        LambdaQueryWrapper<SysLoginLog> wrapper = createWrapper(sysLoginLogRequest);
-        wrapper.orderByDesc(SysLoginLog::getCreateTime);
-        Page<SysLoginLog> page = this.page(PageFactory.defaultPage(), wrapper);
-        return PageResultFactory.createPageResult(page);
-    }
-
     /**
      * 获取详细信息
      *
@@ -113,7 +113,7 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
     private SysLoginLog querySysLoginLogById(SysLoginLogRequest sysLoginLogRequest) {
         SysLoginLog sysLoginLog = this.getById(sysLoginLogRequest.getLlgId());
         if (ObjectUtil.isNull(sysLoginLog)) {
-            throw new ServiceException(AppExceptionEnum.APP_NOT_EXIST);
+            throw new ServiceException(LogExceptionEnum.LOG_NOT_EXIST);
         }
         return sysLoginLog;
     }
@@ -126,6 +126,10 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
      */
     private LambdaQueryWrapper<SysLoginLog> createWrapper(SysLoginLogRequest sysLoginLogRequest) {
         LambdaQueryWrapper<SysLoginLog> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (ObjectUtil.isEmpty(sysLoginLogRequest)) {
+            return queryWrapper;
+        }
 
         // SQL条件拼接
         queryWrapper.eq(StrUtil.isNotBlank(sysLoginLogRequest.getLlgName()), SysLoginLog::getLlgName, sysLoginLogRequest.getLlgName());

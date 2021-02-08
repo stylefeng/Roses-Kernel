@@ -24,7 +24,6 @@ public class SysLoginLogController {
     @Resource
     private SysLoginLogService sysLoginLogService;
 
-
     /**
      * 清空登录日志
      *
@@ -36,7 +35,6 @@ public class SysLoginLogController {
         sysLoginLogService.deleteAll();
         return new SuccessResponseData();
     }
-
 
     /**
      * 查询登录日志详情
@@ -57,8 +55,7 @@ public class SysLoginLogController {
      */
     @GetResource(name = "分页查询登录日志", path = "/loginLog/page")
     public ResponseData page(SysLoginLogRequest sysLoginLogRequest) {
-        return new SuccessResponseData(sysLoginLogService.page(sysLoginLogRequest));
+        return new SuccessResponseData(sysLoginLogService.findPage(sysLoginLogRequest));
     }
-
 
 }

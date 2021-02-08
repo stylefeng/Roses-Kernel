@@ -11,7 +11,7 @@ import cn.stylefeng.roses.kernel.system.pojo.SysLoginLogRequest;
 public interface LoginLogServiceApi {
 
     /**
-     * 添加日志
+     * 添加登录日志
      *
      * @param sysLoginLogRequest 参数
      * @author chenjinlong
@@ -20,7 +20,7 @@ public interface LoginLogServiceApi {
     void add(SysLoginLogRequest sysLoginLogRequest);
 
     /**
-     * 登录成功
+     * 增加登录成功日志
      *
      * @param userId 用户id
      * @author chenjinlong
@@ -29,7 +29,7 @@ public interface LoginLogServiceApi {
     void loginSuccess(Long userId);
 
     /**
-     * 登录失败
+     * 增加登录失败日志
      *
      * @param userId     用户id
      * @param llgMessage 错误信息
@@ -39,7 +39,7 @@ public interface LoginLogServiceApi {
     void loginFail(Long userId, String llgMessage);
 
     /**
-     * 登出成功
+     * 增加退出成功日志
      *
      * @param userId 用户id
      * @author chenjinlong
@@ -48,7 +48,7 @@ public interface LoginLogServiceApi {
     void loginOutSuccess(Long userId);
 
     /**
-     * 登出失败
+     * 增加退出失败日志
      *
      * @param userId 用户id
      * @author chenjinlong
@@ -57,10 +57,11 @@ public interface LoginLogServiceApi {
     void loginOutFail(Long userId);
 
     /**
-     * 清空
+     * 清空登录日志
      *
      * @author chenjinlong
      * @date 2021/1/13 10:55
      */
     void deleteAll();
+
 }
