@@ -17,12 +17,12 @@ public enum PositionExceptionEnum implements AbstractExceptionEnum {
     /**
      * 找不到职务
      */
-    CANT_FIND_POSITION(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "31", "查询不到组该职务，错误的职务ID：{}"),
+    CANT_FIND_POSITION(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "51", "查询不到组该职务，错误的职务ID：{}"),
 
     /**
      * 职务删除失败
      */
-    CANT_DELETE_POSITION(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "32", "职务删除失败，该职务下有关联人员");
+    CANT_DELETE_POSITION(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "52", "职务删除失败，该职务下有关联人员");
 
     /**
      * 错误编码

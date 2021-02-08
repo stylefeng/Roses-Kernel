@@ -41,12 +41,12 @@ public enum NoticeExceptionEnum implements AbstractExceptionEnum {
     /**
      * 通知不存在
      */
-    NOTICE_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "91", "通知不存在，id为：{}"),
+    NOTICE_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "31", "通知不存在，id为：{}"),
 
     /**
      * 通知范围不允许修改
      */
-    NOTICE_SCOPE_NOT_EDIT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "92", "通知范围不允许修改");
+    NOTICE_SCOPE_NOT_EDIT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "32", "通知范围不允许修改");
 
     /**
      * 错误编码

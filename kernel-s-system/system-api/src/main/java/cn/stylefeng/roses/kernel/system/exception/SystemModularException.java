@@ -17,10 +17,6 @@ public class SystemModularException extends ServiceException {
         super(SystemConstants.SYSTEM_MODULE_NAME, exception.getErrorCode(), StrUtil.format(exception.getUserTip(), params));
     }
 
-    public SystemModularException(AbstractExceptionEnum exception, String userTip) {
-        super(SystemConstants.SYSTEM_MODULE_NAME, exception.getErrorCode(), userTip);
-    }
-
     public SystemModularException(AbstractExceptionEnum exception) {
         super(SystemConstants.SYSTEM_MODULE_NAME, exception);
     }

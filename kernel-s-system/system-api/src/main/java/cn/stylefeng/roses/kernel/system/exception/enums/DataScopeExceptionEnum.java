@@ -17,17 +17,17 @@ public enum DataScopeExceptionEnum implements AbstractExceptionEnum {
     /**
      * 操作失败，当前用户没有该数据的数据权限
      */
-    DATA_SCOPE_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "61", "操作失败，当前用户没有该数据的数据权限，当前数据范围是：{}"),
+    DATA_SCOPE_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "21", "操作失败，当前用户没有该数据的数据权限，当前数据范围是：{}"),
 
     /**
      * 用户id为空
      */
-    USER_ID_EMPTY_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "62", "获取数据范围失败，用户id为空"),
+    USER_ID_EMPTY_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "22", "获取数据范围失败，用户id为空"),
 
     /**
      * 用户角色为空
      */
-    ROLE_EMPTY_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "63", "获取数据范围失败，用户角色为空，userId：{}");
+    ROLE_EMPTY_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "23", "获取数据范围失败，用户角色为空，userId：{}");
 
     /**
      * 错误编码

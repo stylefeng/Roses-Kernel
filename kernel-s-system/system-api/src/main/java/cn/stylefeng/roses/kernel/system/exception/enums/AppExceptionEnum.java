@@ -41,22 +41,22 @@ public enum AppExceptionEnum implements AbstractExceptionEnum {
     /**
      * 默认激活的系统只能有一个
      */
-    APP_ACTIVE_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "71", "默认激活的系统只能有一个，请检查active参数"),
+    APP_ACTIVE_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "11", "默认激活的系统只能有一个，请检查active参数"),
 
     /**
      * 应用不存在
      */
-    APP_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "72", "应用不存在"),
+    APP_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "12", "应用不存在"),
 
     /**
      * 该应用下有菜单
      */
-    APP_CANNOT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "75", "该应用下有菜单，无法删除"),
+    APP_CANNOT_DELETE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "13", "该应用下有菜单，无法删除"),
 
     /**
      * 激活的应用不能被禁用
      */
-    CANT_DISABLE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "76", "激活的应用不能被禁用");
+    CANT_DISABLE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "14", "激活的应用不能被禁用");
 
     /**
      * 错误编码

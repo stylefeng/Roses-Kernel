@@ -17,13 +17,6 @@
 
     <dependencies>
 
-        <!--资源扫描器的api-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>scanner-api</artifactId>
-            <version>7.0.0</version>
-        </dependency>
-
         <!--参数校验模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
@@ -35,6 +28,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>config-api</artifactId>
+            <version>7.0.0</version>
+        </dependency>
+
+        <!--资源扫描器的api-->
+        <!--ResourceServiceApi需要用scanner-api的ResourceDefinition相关类-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>scanner-api</artifactId>
             <version>7.0.0</version>
         </dependency>
 

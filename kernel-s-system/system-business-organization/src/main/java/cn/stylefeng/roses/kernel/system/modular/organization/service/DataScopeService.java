@@ -1,13 +1,12 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
 import cn.stylefeng.roses.kernel.system.DataScopeApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
-import cn.stylefeng.roses.kernel.system.exception.DataScopeException;
+import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.DataScopeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeResponse;
 import cn.stylefeng.roses.kernel.system.pojo.role.response.SysRoleResponse;
@@ -50,8 +49,7 @@ public class DataScopeService implements DataScopeApi {
         Set<Long> organizationIds = new HashSet<>();
 
         if (userId == null) {
-            String userTip = StrUtil.format(DataScopeExceptionEnum.USER_ID_EMPTY_ERROR.getUserTip(), userId);
-            throw new DataScopeException(DataScopeExceptionEnum.USER_ID_EMPTY_ERROR, userTip);
+            throw new SystemModularException(DataScopeExceptionEnum.USER_ID_EMPTY_ERROR, userId);
         }
 
         // 获取用户的主要部门信息

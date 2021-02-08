@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.system.enums;
 
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.SysUserExceptionEnum;
 import lombok.Getter;
@@ -81,8 +80,7 @@ public enum UserStatusEnum {
         if (ENABLE.getCode().equals(code) || DISABLE.getCode().equals(code) || FREEZE.getCode().equals(code)) {
             return;
         }
-        String userTip = StrUtil.format(SysUserExceptionEnum.REQUEST_USER_STATUS_ERROR.getUserTip(), code);
-        throw new SystemModularException(SysUserExceptionEnum.REQUEST_USER_STATUS_ERROR, userTip);
+        throw new SystemModularException(SysUserExceptionEnum.REQUEST_USER_STATUS_ERROR, code);
     }
 
 }

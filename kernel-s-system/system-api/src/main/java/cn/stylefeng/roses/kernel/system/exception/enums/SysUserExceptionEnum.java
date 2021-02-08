@@ -41,62 +41,62 @@ public enum SysUserExceptionEnum implements AbstractExceptionEnum {
     /**
      * 用户不存在
      */
-    USER_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "51", "{} 用户不存在"),
+    USER_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "81", "{} 用户不存在"),
 
     /**
      * 账号已存在
      */
-    USER_ACCOUNT_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "52", "账号已存在，请检查account参数"),
+    USER_ACCOUNT_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "82", "账号已存在，请检查account参数"),
 
     /**
      * 原密码错误
      */
-    USER_PWD_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "53", "原密码错误，请重新输入"),
+    USER_PWD_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "83", "原密码错误，请重新输入"),
 
     /**
      * 新密码与原密码相同
      */
-    USER_PWD_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "54", "新密码与原密码相同，请更换新密码"),
+    USER_PWD_REPEAT(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "84", "新密码与原密码相同，请更换新密码"),
 
     /**
      * 不能删除超级管理员
      */
-    USER_CAN_NOT_DELETE_ADMIN(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "55", "不能删除超级管理员"),
+    USER_CAN_NOT_DELETE_ADMIN(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "85", "不能删除超级管理员"),
 
     /**
      * 不能修改超级管理员状态
      */
-    USER_CAN_NOT_UPDATE_ADMIN(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "56", "不能修改超级管理员状态"),
+    USER_CAN_NOT_UPDATE_ADMIN(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "86", "不能修改超级管理员状态"),
 
     /**
      * 请求状态值为空
      */
-    REQUEST_USER_STATUS__EMPTY(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "57", "请求状态值为空"),
+    REQUEST_USER_STATUS__EMPTY(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "87", "请求状态值为空"),
 
     /**
      * 请求状值为非正确状态值
      */
-    REQUEST_USER_STATUS_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "58", "请求状态值不合法，用户状态参数不合法，参数值：{}"),
+    REQUEST_USER_STATUS_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "88", "请求状态值不合法，用户状态参数不合法，参数值：{}"),
 
     /**
      * 更新用户状态错误
      */
-    UPDATE_USER_STATUS_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "59", "更新用户状态错误，更新生效数量0"),
+    UPDATE_USER_STATUS_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "89", "更新用户状态错误，更新生效数量0"),
 
     /**
      * 当前用户未分配菜单
      */
-    USER_NOT_HAVE_MENUS(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "60", "当前用户未分配菜单"),
+    USER_NOT_HAVE_MENUS(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "810", "当前用户未分配菜单"),
 
     /**
      * 用户未绑定角色
      */
-    USER_NOT_BIND_ROLE(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "61", "用户未绑定角色"),
+    USER_NOT_BIND_ROLE(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "811", "用户未绑定角色"),
 
     /**
      * 系统错误，账号存在多个
      */
-    ACCOUNT_HAVE_MANY(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "62", "系统错误，账号存在多个，账号为：{}");
+    ACCOUNT_HAVE_MANY(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "812", "系统错误，账号存在多个，账号为：{}");
 
     /**
      * 错误编码

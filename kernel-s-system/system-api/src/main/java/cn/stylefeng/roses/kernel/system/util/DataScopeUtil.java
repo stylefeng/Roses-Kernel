@@ -1,7 +1,6 @@
 package cn.stylefeng.roses.kernel.system.util;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
@@ -131,8 +130,7 @@ public class DataScopeUtil {
     public static void quickValidateDataScope(Long organizationId) {
         boolean validateResult = validateDataScopeByOrganizationId(organizationId);
         if (!validateResult) {
-            String userTip = StrUtil.format(DataScopeExceptionEnum.DATA_SCOPE_ERROR.getUserTip(), DataScopeUtil.getDataScopeTip());
-            throw new SystemModularException(DataScopeExceptionEnum.DATA_SCOPE_ERROR, userTip);
+            throw new SystemModularException(DataScopeExceptionEnum.DATA_SCOPE_ERROR, DataScopeUtil.getDataScopeTip());
         }
     }
 

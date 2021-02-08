@@ -19,16 +19,6 @@ public interface SystemConstants {
     String SYSTEM_EXCEPTION_STEP_CODE = "18";
 
     /**
-     * pids系列字段，每个id的左分隔符
-     */
-    String PID_LEFT_DIVIDE_SYMBOL = "[";
-
-    /**
-     * pids系列字段，每个id的右分隔符
-     */
-    String PID_RIGHT_DIVIDE_SYMBOL = "]";
-
-    /**
      * 默认的系统版本号
      */
     String DEFAULT_SYSTEM_VERSION = "20210101";
@@ -47,10 +37,5 @@ public interface SystemConstants {
      * 默认的系统的名称
      */
     String DEFAULT_SYSTEM_NAME = "Guns快速开发平台";
-
-    /**
-     * 超级管理员角色编码
-     */
-    //String SYSTEM_ADMIN_ROLE_CODE = "superAdmin";
 
 }

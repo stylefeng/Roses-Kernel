@@ -12,6 +12,7 @@ import cn.stylefeng.roses.kernel.db.api.context.DbOperatorContext;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.constants.SymbolConstant;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
@@ -22,7 +23,6 @@ import cn.stylefeng.roses.kernel.system.RoleDataScopeServiceApi;
 import cn.stylefeng.roses.kernel.system.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.UserServiceApi;
-import cn.stylefeng.roses.kernel.system.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.OrganizationExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
@@ -294,9 +294,9 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
             // 获取pids值
             String pids = hrOrganization.getOrgPids();
             // 去掉所有的左中括号
-            pids = StrUtil.removeAll(pids, SystemConstants.PID_LEFT_DIVIDE_SYMBOL);
+            pids = StrUtil.removeAll(pids, SymbolConstant.LEFT_SQUARE_BRACKETS);
             // 去掉所有的右中括号
-            pids = StrUtil.removeAll(pids, SystemConstants.PID_RIGHT_DIVIDE_SYMBOL);
+            pids = StrUtil.removeAll(pids, SymbolConstant.RIGHT_SQUARE_BRACKETS);
             // 按逗号分割这个字符串，得到pid的数组
             String[] finalPidArray = pids.split(StrUtil.COMMA);
 
@@ -376,8 +376,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     private HrOrganization queryOrganization(HrOrganizationRequest hrOrganizationRequest) {
         HrOrganization hrOrganization = this.getById(hrOrganizationRequest.getOrgId());
         if (ObjectUtil.isEmpty(hrOrganization)) {
-            String userTip = StrUtil.format(OrganizationExceptionEnum.CANT_FIND_ORG.getUserTip(), hrOrganizationRequest.getOrgId());
-            throw new SystemModularException(OrganizationExceptionEnum.CANT_FIND_ORG, userTip);
+            throw new SystemModularException(OrganizationExceptionEnum.CANT_FIND_ORG, hrOrganizationRequest.getOrgId());
         }
         return hrOrganization;
     }
@@ -393,14 +392,14 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         // 如果是一级节点（一级节点的pid是0）
         if (hrOrganization.getOrgParentId().equals(TreeConstants.DEFAULT_PARENT_ID)) {
             // 设置一级节点的pid为[0],
-            hrOrganization.setOrgPids(SystemConstants.PID_LEFT_DIVIDE_SYMBOL + TreeConstants.DEFAULT_PARENT_ID + SystemConstants.PID_RIGHT_DIVIDE_SYMBOL + ",");
+            hrOrganization.setOrgPids(SymbolConstant.LEFT_SQUARE_BRACKETS + TreeConstants.DEFAULT_PARENT_ID + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA);
         } else {
             // 获取父组织机构
             HrOrganization parentOrganization = this.getById(hrOrganization.getOrgParentId());
 
             // 设置本节点的父ids为 (上一个节点的pids + (上级节点的id) )
             hrOrganization.setOrgPids(
-                    parentOrganization.getOrgPids() + SystemConstants.PID_LEFT_DIVIDE_SYMBOL + parentOrganization.getOrgId() + SystemConstants.PID_RIGHT_DIVIDE_SYMBOL + ",");
+                    parentOrganization.getOrgPids() + SymbolConstant.LEFT_SQUARE_BRACKETS + parentOrganization.getOrgId() + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA);
         }
     }
 
