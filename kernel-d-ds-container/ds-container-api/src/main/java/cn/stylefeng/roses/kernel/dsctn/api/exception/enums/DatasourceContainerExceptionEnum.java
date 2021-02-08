@@ -60,19 +60,9 @@ public enum DatasourceContainerExceptionEnum implements AbstractExceptionEnum {
     INIT_DATASOURCE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "09", "初始化数据源异常"),
 
     /**
-     * 修改数据源失败，所传参数数据源不存在
-     */
-    EDIT_DATASOURCE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "10", "修改数据源失败，所传参数数据源不存在，id={}"),
-
-    /**
      * 修改数据源失败，不能修改数据源名称
      */
     EDIT_DATASOURCE_NAME_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "10", "修改数据源失败，不能修改数据源名称，原名称为={}"),
-
-    /**
-     * 删除数据源失败，原数据不存在
-     */
-    DELETE_DATASOURCE_NOT_EXISTED_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "10", "修改数据源失败，不能修改数据源名称，原名称为={}"),
 
     /**
      * 租户数据源不能删除
@@ -80,9 +70,9 @@ public enum DatasourceContainerExceptionEnum implements AbstractExceptionEnum {
     TENANT_DATASOURCE_CANT_DELETE(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "11", "租户数据源不能删除"),
 
     /**
-     * 主数据源不能删除
+     * 数据源信息不存在
      */
-    MASTER_DATASOURCE_CANT_DELETE(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "12", "主数据源不能删除，会导致当前程序崩溃");
+    DATASOURCE_INFO_NOT_EXISTED(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "12", "数据源信息不存在，数据源id为：{}");
 
     /**
      * 错误编码

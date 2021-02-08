@@ -9,11 +9,11 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
+import cn.stylefeng.roses.kernel.dsctn.api.pojo.request.DatabaseInfoRequest;
 import cn.stylefeng.roses.kernel.dsctn.context.DataSourceContext;
 import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
 import cn.stylefeng.roses.kernel.dsctn.modular.factory.DruidPropertiesFactory;
 import cn.stylefeng.roses.kernel.dsctn.modular.mapper.DatabaseInfoMapper;
-import cn.stylefeng.roses.kernel.dsctn.api.pojo.request.DatabaseInfoRequest;
 import cn.stylefeng.roses.kernel.dsctn.modular.service.DatabaseInfoService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import com.alibaba.druid.pool.DruidDataSource;
@@ -51,7 +51,8 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         validateConnection(databaseInfoRequest);
 
         // 数据库中插入记录
-        DatabaseInfo entity = parseEntity(databaseInfoRequest);
+        DatabaseInfo entity = new DatabaseInfo();
+        BeanUtil.copyProperties(databaseInfoRequest, entity);
         this.save(entity);
 
         // 往数据源容器文中添加数据源
@@ -60,38 +61,9 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void edit(DatabaseInfoRequest databaseInfoRequest) {
-
-        DatabaseInfo oldEntity = this.getById(databaseInfoRequest.getDbId());
-        if (oldEntity == null) {
-            throw new DatasourceContainerException(EDIT_DATASOURCE_ERROR, databaseInfoRequest.getDbId());
-        }
-
-        // 不能修改数据源的名称
-        if (!databaseInfoRequest.getDbName().equals(oldEntity.getDbName())) {
-            throw new DatasourceContainerException(EDIT_DATASOURCE_NAME_ERROR, oldEntity.getDbName());
-        }
-
-        // 判断数据库连接是否可用
-        validateConnection(databaseInfoRequest);
-
-        // 更新库中的记录
-        BeanUtil.copyProperties(databaseInfoRequest, oldEntity);
-        this.updateById(oldEntity);
-
-        // 往数据源容器文中添加数据源
-        addDataSourceToContext(oldEntity, true);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
     public void del(DatabaseInfoRequest databaseInfoRequest) {
 
-        DatabaseInfo databaseInfo = this.getById(databaseInfoRequest.getDbId());
-        if (databaseInfo == null) {
-            String userTip = StrUtil.format(DELETE_DATASOURCE_NOT_EXISTED_ERROR.getUserTip(), databaseInfoRequest.getDbId());
-            throw new DatasourceContainerException(DELETE_DATASOURCE_NOT_EXISTED_ERROR, userTip);
-        }
+        DatabaseInfo databaseInfo = this.queryDatabaseInfoById(databaseInfoRequest);
 
         // 如果是租户数据库不能删除
         if (databaseInfo.getDbName().startsWith(TENANT_DB_PREFIX)) {
@@ -100,7 +72,7 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
 
         // 不能删除主数据源
         if (MASTER_DATASOURCE_NAME.equals(databaseInfo.getDbName())) {
-            throw new DatasourceContainerException(MASTER_DATASOURCE_CANT_DELETE);
+            throw new DatasourceContainerException(DATASOURCE_INFO_NOT_EXISTED);
         }
 
         // 删除库中的数据源记录
@@ -111,6 +83,28 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
 
         // 删除容器中的数据源记录
         DataSourceContext.removeDataSource(databaseInfo.getDbName());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(DatabaseInfoRequest databaseInfoRequest) {
+
+        DatabaseInfo databaseInfo = this.queryDatabaseInfoById(databaseInfoRequest);
+
+        // 不能修改数据源的名称
+        if (!databaseInfoRequest.getDbName().equals(databaseInfo.getDbName())) {
+            throw new DatasourceContainerException(EDIT_DATASOURCE_NAME_ERROR, databaseInfo.getDbName());
+        }
+
+        // 判断数据库连接是否可用
+        validateConnection(databaseInfoRequest);
+
+        // 更新库中的记录
+        BeanUtil.copyProperties(databaseInfoRequest, databaseInfo);
+        this.updateById(databaseInfo);
+
+        // 往数据源容器文中添加数据源
+        addDataSourceToContext(databaseInfo, true);
     }
 
     @Override
@@ -139,14 +133,9 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
 
     @Override
     public DatabaseInfo detail(DatabaseInfoRequest databaseInfoRequest) {
-
-        DatabaseInfo oldEntity = this.getById(databaseInfoRequest.getDbId());
-        if (oldEntity == null) {
-            throw new DatasourceContainerException(EDIT_DATASOURCE_ERROR, databaseInfoRequest.getDbId());
-        }
-
-        oldEntity.setPassword("***");
-        return oldEntity;
+        DatabaseInfo databaseInfo = this.queryDatabaseInfoById(databaseInfoRequest);
+        databaseInfo.setPassword("***");
+        return databaseInfo;
     }
 
     /**
@@ -172,18 +161,6 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
                 }
             }
         }
-    }
-
-    /**
-     * param转化为实体
-     *
-     * @author fengshuonan
-     * @date 2020/11/1 21:50
-     */
-    private DatabaseInfo parseEntity(DatabaseInfoRequest param) {
-        DatabaseInfo entity = new DatabaseInfo();
-        BeanUtil.copyProperties(param, entity);
-        return entity;
     }
 
     /**
@@ -222,6 +199,19 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         }
     }
 
+    /**
+     * 查询数据库信息通过id
+     *
+     * @author fengshuonan
+     * @date 2021/2/8 9:53
+     */
+    private DatabaseInfo queryDatabaseInfoById(DatabaseInfoRequest databaseInfoRequest) {
+        DatabaseInfo databaseInfo = this.getById(databaseInfoRequest.getDbId());
+        if (databaseInfo == null) {
+            throw new DatasourceContainerException(DATASOURCE_INFO_NOT_EXISTED, databaseInfoRequest.getDbId());
+        }
+        return databaseInfo;
+    }
 
     /**
      * 创建wrapper
@@ -239,8 +229,7 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         queryWrapper.like(ObjectUtil.isNotEmpty(dbName), DatabaseInfo::getDbName, dbName);
 
         // 查询没被删除的
-        queryWrapper.eq(DatabaseInfo::getDelFlag, YesOrNotEnum.N);
-
+        queryWrapper.eq(DatabaseInfo::getDelFlag, YesOrNotEnum.N.getCode());
 
         return queryWrapper;
     }

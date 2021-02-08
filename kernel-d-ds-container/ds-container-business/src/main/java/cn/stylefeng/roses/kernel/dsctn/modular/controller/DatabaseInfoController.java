@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.dsctn.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
 import cn.stylefeng.roses.kernel.dsctn.api.pojo.request.DatabaseInfoRequest;
+import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
 import cn.stylefeng.roses.kernel.dsctn.modular.service.DatabaseInfoService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
@@ -43,18 +43,6 @@ public class DatabaseInfoController {
     }
 
     /**
-     * 编辑数据源
-     *
-     * @author fengshuonan
-     * @date 2020/11/1 22:16
-     */
-    @PostResource(name = "编辑数据源", path = "/databaseInfo/edit")
-    public ResponseData edit(@RequestBody @Validated(DatabaseInfoRequest.edit.class) DatabaseInfoRequest databaseInfoRequest) {
-        databaseInfoService.edit(databaseInfoRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 删除数据源
      *
      * @author fengshuonan
@@ -63,6 +51,18 @@ public class DatabaseInfoController {
     @PostResource(name = "删除数据源", path = "/databaseInfo/delete")
     public ResponseData del(@RequestBody @Validated(DatabaseInfoRequest.delete.class) DatabaseInfoRequest databaseInfoRequest) {
         databaseInfoService.del(databaseInfoRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 编辑数据源
+     *
+     * @author fengshuonan
+     * @date 2020/11/1 22:16
+     */
+    @PostResource(name = "编辑数据源", path = "/databaseInfo/edit")
+    public ResponseData edit(@RequestBody @Validated(DatabaseInfoRequest.edit.class) DatabaseInfoRequest databaseInfoRequest) {
+        databaseInfoService.edit(databaseInfoRequest);
         return new SuccessResponseData();
     }
 

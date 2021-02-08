@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.dsctn.modular.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
 import cn.stylefeng.roses.kernel.dsctn.api.pojo.request.DatabaseInfoRequest;
+import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -25,15 +25,6 @@ public interface DatabaseInfoService extends IService<DatabaseInfo> {
     void add(DatabaseInfoRequest databaseInfoRequest);
 
     /**
-     * 编辑数据库信息
-     *
-     * @param databaseInfoRequest 编辑参数
-     * @author fengshuonan
-     * @date 2020/11/1 21:47
-     */
-    void edit(DatabaseInfoRequest databaseInfoRequest);
-
-    /**
      * 删除，删除会导致某些用该数据源的service操作失败
      *
      * @param databaseInfoRequest 删除参数
@@ -42,6 +33,14 @@ public interface DatabaseInfoService extends IService<DatabaseInfo> {
      */
     void del(DatabaseInfoRequest databaseInfoRequest);
 
+    /**
+     * 编辑数据库信息
+     *
+     * @param databaseInfoRequest 编辑参数
+     * @author fengshuonan
+     * @date 2020/11/1 21:47
+     */
+    void edit(DatabaseInfoRequest databaseInfoRequest);
 
     /**
      * 查询数据库信息详情
@@ -70,6 +69,5 @@ public interface DatabaseInfoService extends IService<DatabaseInfo> {
      * @date 2021/2/2 21:21
      */
     List<DatabaseInfo> findList(DatabaseInfoRequest databaseInfoRequest);
-
 
 }
