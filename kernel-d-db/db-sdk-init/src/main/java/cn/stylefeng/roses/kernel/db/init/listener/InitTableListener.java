@@ -31,7 +31,7 @@ public class InitTableListener implements ApplicationListener<ApplicationReadyEv
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return Ordered.LOWEST_PRECEDENCE - 200;
     }
 
 }
