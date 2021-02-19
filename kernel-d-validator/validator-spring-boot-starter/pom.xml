@@ -17,13 +17,6 @@
 
     <dependencies>
 
-        <!--计数校验器在线管理-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-business-count</artifactId>
-            <version>7.0.0</version>
-        </dependency>
-
         <!--黑名单和白名单限制-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>

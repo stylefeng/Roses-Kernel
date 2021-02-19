@@ -1,1 +1,0 @@
-package cn.stylefeng.roses.kernel.validator.modular.enums;
