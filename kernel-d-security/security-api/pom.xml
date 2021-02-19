@@ -6,30 +6,21 @@
 
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>roses-kernel</artifactId>
+        <artifactId>kernel-d-security</artifactId>
         <version>7.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>kernel-d-validator</artifactId>
+    <artifactId>security-api</artifactId>
 
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>validator-api</module>
-        <module>validator-sdk-count</module>
-        <module>validator-sdk-black-white</module>
-        <module>validator-business-count</module>
-        <module>validator-sdk-captcha</module>
-        <module>validator-spring-boot-starter</module>
-    </modules>
+    <packaging>jar</packaging>
 
     <dependencies>
 
-        <!-- 开发规则 -->
+        <!--config模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>kernel-a-rule</artifactId>
+            <artifactId>config-api</artifactId>
             <version>7.0.0</version>
         </dependency>
 

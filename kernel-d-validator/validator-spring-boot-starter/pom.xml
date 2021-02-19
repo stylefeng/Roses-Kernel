@@ -38,13 +38,6 @@
             <version>7.0.0</version>
         </dependency>
 
-        <!--XSS安全过滤器-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-sdk-xss</artifactId>
-            <version>7.0.0</version>
-        </dependency>
-
         <!-- captcha图形验证码 -->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>

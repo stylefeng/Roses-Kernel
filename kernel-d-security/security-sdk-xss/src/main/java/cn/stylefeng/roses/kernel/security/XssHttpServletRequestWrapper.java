@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kemel.xss;
+package cn.stylefeng.roses.kernel.security;
 
 
 import cn.hutool.core.util.ObjectUtil;

@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.stylefeng.roses.kernel.security.starter.GunsSecurityAutoConfiguration,\
+  cn.stylefeng.roses.kernel.security.starter.GunsXssAutoConfiguration

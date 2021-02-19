@@ -1,7 +1,7 @@
-package cn.stylefeng.roses.kemel.xss;
+package cn.stylefeng.roses.kernel.security;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.stylefeng.roses.kemel.xss.prop.XssProperties;
+import cn.stylefeng.roses.kernel.security.prop.XssProperties;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.*;

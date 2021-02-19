@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kemel.xss.prop;
+package cn.stylefeng.roses.kernel.security.prop;
 
 import lombok.Data;
 

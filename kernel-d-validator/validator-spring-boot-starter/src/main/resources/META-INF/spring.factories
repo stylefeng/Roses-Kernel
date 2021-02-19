@@ -1,4 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 cn.stylefeng.roses.kernel.validator.starter.ValidatorAutoConfiguration,\
-cn.stylefeng.roses.kernel.validator.starter.MethodArgumentResolverAutoConfiguration,\
-cn.stylefeng.roses.kernel.validator.starter.XssFilterAutoConfiguration
+cn.stylefeng.roses.kernel.validator.starter.MethodArgumentResolverAutoConfiguration

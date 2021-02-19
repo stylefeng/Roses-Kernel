@@ -6,26 +6,30 @@
 
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>kernel-d-validator</artifactId>
+        <artifactId>roses-kernel</artifactId>
         <version>7.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>validator-sdk-xss</artifactId>
+    <artifactId>kernel-d-security</artifactId>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>security-api</module>
+        <module>security-sdk-xss</module>
+        <module>security-spring-boot-starter</module>
+    </modules>
 
     <dependencies>
 
-        <!--校验模块的api-->
+        <!-- 开发规则 -->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-api</artifactId>
+            <artifactId>kernel-a-rule</artifactId>
             <version>7.0.0</version>
         </dependency>
 
-        <!--web模块-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
     </dependencies>
+
 </project>

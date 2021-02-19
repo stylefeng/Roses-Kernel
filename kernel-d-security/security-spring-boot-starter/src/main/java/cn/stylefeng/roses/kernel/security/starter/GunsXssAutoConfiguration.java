@@ -1,9 +1,9 @@
-package cn.stylefeng.roses.kernel.validator.starter;
+package cn.stylefeng.roses.kernel.security.starter;
 
-import cn.stylefeng.roses.kemel.xss.XssFilter;
-import cn.stylefeng.roses.kemel.xss.XssJacksonDeserializer;
-import cn.stylefeng.roses.kemel.xss.prop.XssProperties;
-import cn.stylefeng.roses.kernel.validator.expander.XssConfigExpander;
+import cn.stylefeng.roses.kernel.security.XssFilter;
+import cn.stylefeng.roses.kernel.security.XssJacksonDeserializer;
+import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
+import cn.stylefeng.roses.kernel.security.prop.XssProperties;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,7 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
  * @date 2021/1/13 23:05
  */
 @Configuration
-public class XssFilterAutoConfiguration {
+public class GunsXssAutoConfiguration {
 
     /**
      * XSS Filter过滤器，用来过滤param之类的传参
@@ -58,8 +58,8 @@ public class XssFilterAutoConfiguration {
      */
     private XssProperties createProperties() {
         XssProperties xssProperties = new XssProperties();
-        xssProperties.setUrlPatterns(XssConfigExpander.getUrlPatterns());
-        xssProperties.setUrlExclusion(XssConfigExpander.getUrlExclusion());
+        xssProperties.setUrlPatterns(SecurityConfigExpander.getUrlPatterns());
+        xssProperties.setUrlExclusion(SecurityConfigExpander.getUrlExclusion());
         return xssProperties;
     }
 
