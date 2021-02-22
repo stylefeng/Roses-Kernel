@@ -156,7 +156,34 @@ public class HttpServletUtil {
         } else {
             return null;
         }
+    }
 
+    /**
+     * 判断当前请求是否是普通请求
+     * <p>
+     * 定义：普通请求为网页请求，Accept中包含类似text/html的标识
+     *
+     * @return ture-是普通请求
+     * @author fengshuonan
+     * @date 2021/2/22 22:37
+     */
+    public static Boolean getNormalRequestFlag(HttpServletRequest request) {
+        return request.getHeader("Accept") == null
+                || request.getHeader("Accept").toLowerCase().contains("text/html");
+    }
+
+    /**
+     * 判断当前请求是否是json请求
+     * <p>
+     * 定义：json请求为网页请求，Accept中包含类似 application/json 的标识
+     *
+     * @return ture-是json请求
+     * @author fengshuonan
+     * @date 2021/2/22 22:37
+     */
+    public static Boolean getJsonRequestFlag(HttpServletRequest request) {
+        return request.getHeader("Accept") == null
+                || request.getHeader("Accept").toLowerCase().contains("application/json");
     }
 
 }
