@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-validator</artifactId>
-        <version>7.0.0</version>
+        <version>7.0.1</version>
     </parent>
 
     <artifactId>validator-sdk-count</artifactId>
@@ -18,19 +18,19 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
         <!--缓存模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-api</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-memory</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
         <!--web模块-->

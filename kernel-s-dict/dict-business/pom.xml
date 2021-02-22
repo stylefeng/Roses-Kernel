@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-s-dict</artifactId>
-        <version>7.0.0</version>
+        <version>7.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>dict-api</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
         <!--资源api模块-->
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
         <!--参数校验模块-->
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
         <!--数据库sdk-->
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>db-sdk-init</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
         <!--数据库sdk-->
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>db-sdk-mp</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
         <!--中文转首字母转化-->
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>pinyin-sdk-pinyin4j</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
         <!--web模块-->

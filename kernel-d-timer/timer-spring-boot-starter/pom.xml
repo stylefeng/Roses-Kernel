@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-timer</artifactId>
-        <version>7.0.0</version>
+        <version>7.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,14 +21,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>timer-business</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
         <!--hutool简单定时任务的实现-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>timer-sdk-hutool</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
         </dependency>
 
     </dependencies>

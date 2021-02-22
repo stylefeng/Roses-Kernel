@@ -115,7 +115,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         SysSms sysSms = new SysSms();
         sysSms.setCreateTime(nowDate);
         sysSms.setInvalidTime(invalidate);
-        sysSms.setPhone(sysSmsSendParam.getPhone());
+        sysSms.setPhoneNumber(sysSmsSendParam.getPhone());
         sysSms.setStatusFlag(SmsSendStatusEnum.WAITING.getCode());
         sysSms.setSource(sysSmsSendParam.getSmsSendSourceEnum().getCode());
         sysSms.setTemplateCode(sysSmsSendParam.getTemplateCode());
@@ -141,7 +141,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
         // 查询有没有这条记录
         LambdaQueryWrapper<SysSms> smsQueryWrapper = new LambdaQueryWrapper<>();
-        smsQueryWrapper.eq(SysSms::getPhone, sysSmsVerifyParam.getPhone())
+        smsQueryWrapper.eq(SysSms::getPhoneNumber, sysSmsVerifyParam.getPhone())
                 .and(f -> f.eq(SysSms::getSource, sysSmsVerifyParam.getSmsSendSourceEnum().getCode()))
                 .and(f -> f.eq(SysSms::getTemplateCode, sysSmsVerifyParam.getTemplateCode()));
         smsQueryWrapper.orderByDesc(SysSms::getCreateTime);
@@ -187,7 +187,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
             // 根据手机号模糊查询
             if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getPhone())) {
-                queryWrapper.like(SysSms::getPhone, sysSmsInfoParam.getPhone());
+                queryWrapper.like(SysSms::getPhoneNumber, sysSmsInfoParam.getPhone());
             }
 
             // 根据发送状态查询（字典 0 未发送，1 发送成功，2 发送失败，3 失效）

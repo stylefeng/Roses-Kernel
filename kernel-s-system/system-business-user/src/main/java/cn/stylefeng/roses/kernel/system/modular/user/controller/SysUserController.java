@@ -89,7 +89,7 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:50
      */
-    @PostResource(name = "系统用户_更新个人信息", path = "/sysUser/updateInfo")
+    @PostResource(name = "系统用户_更新个人信息", path = "/sysUser/updateInfo", requiredPermission = false)
     public ResponseData updateInfo(@RequestBody @Validated(SysUserRequest.updateInfo.class) SysUserRequest sysUserRequest) {
         sysUserService.editInfo(sysUserRequest);
         return new SuccessResponseData();
@@ -113,7 +113,7 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:50
      */
-    @PostResource(name = "系统用户_修改密码", path = "/sysUser/updatePassword")
+    @PostResource(name = "系统用户_修改密码", path = "/sysUser/updatePassword", requiredPermission = false)
     public ResponseData updatePwd(@RequestBody @Validated(SysUserRequest.updatePwd.class) SysUserRequest sysUserRequest) {
         sysUserService.editPassword(sysUserRequest);
         return new SuccessResponseData();
@@ -137,7 +137,7 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:48
      */
-    @PostResource(name = "系统用户_修改头像", path = "/sysUser/updateAvatar")
+    @PostResource(name = "系统用户_修改头像", path = "/sysUser/updateAvatar", requiredPermission = false)
     public ResponseData updateAvatar(@RequestBody @Validated(SysUserRequest.updateAvatar.class) SysUserRequest sysUserRequest) {
         sysUserService.editAvatar(sysUserRequest);
         return new SuccessResponseData();

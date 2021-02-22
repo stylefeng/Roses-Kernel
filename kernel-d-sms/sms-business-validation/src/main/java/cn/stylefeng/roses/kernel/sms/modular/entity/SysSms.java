@@ -34,8 +34,8 @@ public class SysSms extends BaseEntity implements Serializable {
     /**
      * 手机号
      */
-    @TableField("phone")
-    private String phone;
+    @TableField("phone_number")
+    private String phoneNumber;
 
     /**
      * 短信验证码

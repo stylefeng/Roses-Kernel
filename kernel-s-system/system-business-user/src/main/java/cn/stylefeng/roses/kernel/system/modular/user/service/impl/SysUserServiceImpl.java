@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
+import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
@@ -14,6 +15,7 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.FileInfoApi;
+import cn.stylefeng.roses.kernel.file.constants.FileConstants;
 import cn.stylefeng.roses.kernel.office.api.OfficeExcelApi;
 import cn.stylefeng.roses.kernel.office.api.pojo.report.ExcelExportParam;
 import cn.stylefeng.roses.kernel.rule.enums.TreeNodeEnum;
@@ -131,6 +133,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = new SysUser();
         BeanUtil.copyProperties(sysUserRequest, sysUser);
         SysUserCreateFactory.fillAddSysUser(sysUser);
+
+        // 设置用户默认头像
+        sysUser.setAvatar(FileConstants.DEFAULT_AVATAR_FILE_ID);
 
         // 保存用户
         this.save(sysUser);
@@ -471,6 +476,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 2. 获取用户角色信息
         List<Long> roleIds = sysUserRoleService.findRoleIdsByUserId(userId);
+        if (ObjectUtil.isEmpty(roleIds)) {
+            throw new SystemModularException(AuthExceptionEnum.ROLE_IS_EMPTY);
+        }
         List<SysRoleDTO> roleResponseList = roleServiceApi.getRolesByIds(roleIds);
 
         // 3. 获取用户的数据范围
