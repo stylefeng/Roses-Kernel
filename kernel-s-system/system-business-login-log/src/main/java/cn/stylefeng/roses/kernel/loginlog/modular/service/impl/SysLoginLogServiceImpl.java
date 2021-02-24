@@ -12,6 +12,7 @@ import cn.stylefeng.roses.kernel.loginlog.modular.mapper.SysLoginLogMapper;
 import cn.stylefeng.roses.kernel.loginlog.modular.service.SysLoginLogService;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
+import cn.stylefeng.roses.kernel.system.LoginLogServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.enums.log.LogExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.loginlog.SysLoginLogRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -26,7 +27,7 @@ import org.springframework.stereotype.Service;
  * @date 2020/3/13 16:15
  */
 @Service
-public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLoginLog> implements SysLoginLogService {
+public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLoginLog> implements SysLoginLogService, LoginLogServiceApi {
 
     @Override
     public void del(SysLoginLogRequest sysLoginLogRequest) {
@@ -100,7 +101,7 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
     }
 
     @Override
-    public void deleteAll() {
+    public void delAll() {
         this.remove(null);
     }
 
