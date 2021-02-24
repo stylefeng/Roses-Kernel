@@ -33,4 +33,14 @@ public interface CacheConstants {
      */
     Long DEFAULT_CACHE_TIMEOUT = 1000L * 60 * 10;
 
+    /**
+     * 默认object对象缓存的缓存前缀
+     */
+    String DEFAULT_OBJECT_CACHE_PREFIX = "DEFAULT:OBJECTS:";
+
+    /**
+     * 默认String对象缓存的缓存前缀
+     */
+    String DEFAULT_STRING_CACHE_PREFIX = "DEFAULT:STRINGS:";
+
 }

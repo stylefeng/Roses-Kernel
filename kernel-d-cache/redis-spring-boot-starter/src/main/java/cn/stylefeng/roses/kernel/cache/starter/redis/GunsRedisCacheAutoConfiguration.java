@@ -1,5 +1,7 @@
 package cn.stylefeng.roses.kernel.cache.starter.redis;
 
+import cn.stylefeng.roses.kernel.cache.operator.DefaultRedisCacheOperator;
+import cn.stylefeng.roses.kernel.cache.operator.DefaultStringRedisCacheOperator;
 import cn.stylefeng.roses.kernel.cache.serializer.FastJson2JsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,6 +64,28 @@ public class GunsRedisCacheAutoConfiguration {
         template.setHashValueSerializer(new StringRedisSerializer());
         template.afterPropertiesSet();
         return template;
+    }
+
+    /**
+     * 创建默认的value是string类型的redis缓存
+     *
+     * @author fengshuonan
+     * @date 2021/1/31 20:39
+     */
+    @Bean
+    public DefaultStringRedisCacheOperator defaultStringRedisCacheOperator(RedisTemplate<String, String> stringRedisTemplate) {
+        return new DefaultStringRedisCacheOperator(stringRedisTemplate);
+    }
+
+    /**
+     * 创建默认的value是object类型的redis缓存
+     *
+     * @author fengshuonan
+     * @date 2021/1/31 20:39
+     */
+    @Bean
+    public DefaultRedisCacheOperator defaultRedisCacheOperator(RedisTemplate<String, Object> objectRedisTemplate) {
+        return new DefaultRedisCacheOperator(objectRedisTemplate);
     }
 
 }
