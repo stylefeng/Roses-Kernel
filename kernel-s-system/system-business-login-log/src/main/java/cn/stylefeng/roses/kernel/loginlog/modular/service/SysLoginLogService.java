@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author chenjinlong
  * @date 2021/1/13 10:56
  */
-public interface SysLoginLogService extends IService<SysLoginLog>, LoginLogServiceApi {
+public interface SysLoginLogService extends IService<SysLoginLog> {
 
     /**
      * 删除
@@ -22,6 +22,14 @@ public interface SysLoginLogService extends IService<SysLoginLog>, LoginLogServi
      * @date 2021/1/13 10:55
      */
     void del(SysLoginLogRequest sysLoginLogRequest);
+
+    /**
+     * 清空登录日志
+     *
+     * @author chenjinlong
+     * @date 2021/1/13 10:55
+     */
+    void delAll();
 
     /**
      * 查看相信
