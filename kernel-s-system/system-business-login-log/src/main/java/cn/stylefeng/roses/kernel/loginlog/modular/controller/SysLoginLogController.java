@@ -32,7 +32,7 @@ public class SysLoginLogController {
      */
     @GetResource(name = "清空登录日志", path = "/loginLog/deleteAll")
     public ResponseData deleteAll() {
-        sysLoginLogService.deleteAll();
+        sysLoginLogService.delAll();
         return new SuccessResponseData();
     }
 
