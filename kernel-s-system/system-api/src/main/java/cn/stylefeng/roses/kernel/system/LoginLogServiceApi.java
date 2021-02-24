@@ -56,12 +56,4 @@ public interface LoginLogServiceApi {
      */
     void loginOutFail(Long userId);
 
-    /**
-     * 清空登录日志
-     *
-     * @author chenjinlong
-     * @date 2021/1/13 10:55
-     */
-    void deleteAll();
-
 }
