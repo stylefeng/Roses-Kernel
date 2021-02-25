@@ -5,10 +5,12 @@ import cn.stylefeng.roses.kernel.dict.api.constants.DictConstants;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.TreeDictInfo;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
+import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import org.springframework.validation.annotation.Validated;
@@ -38,8 +40,8 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:35
      */
-    @PostResource(name = "添加字典", path = "/dict/addDict", requiredPermission = false)
-    public ResponseData addDict(@RequestBody @Validated(DictRequest.add.class) DictRequest dictRequest) {
+    @PostResource(name = "添加字典", path = "/dict/add", requiredPermission = false)
+    public ResponseData add(@RequestBody @Validated(DictRequest.add.class) DictRequest dictRequest) {
         this.dictService.add(dictRequest);
         return new SuccessResponseData();
     }
@@ -50,8 +52,8 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:35
      */
-    @PostResource(name = "删除字典", path = "/dict/deleteDict", requiredPermission = false)
-    public ResponseData deleteDict(@RequestBody @Validated(DictRequest.delete.class) DictRequest dictRequest) {
+    @PostResource(name = "删除字典", path = "/dict/delete", requiredPermission = false)
+    public ResponseData delete(@RequestBody @Validated(DictRequest.delete.class) DictRequest dictRequest) {
         this.dictService.del(dictRequest);
         return new SuccessResponseData();
     }
@@ -62,8 +64,8 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:35
      */
-    @PostResource(name = "修改字典", path = "/dict/updateDict", requiredPermission = false)
-    public ResponseData updateDict(@RequestBody @Validated(DictRequest.edit.class) DictRequest dictRequest) {
+    @PostResource(name = "修改字典", path = "/dict/edit", requiredPermission = false)
+    public ResponseData edit(@RequestBody @Validated(DictRequest.edit.class) DictRequest dictRequest) {
         this.dictService.edit(dictRequest);
         return new SuccessResponseData();
     }
@@ -74,9 +76,9 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:35
      */
-    @GetResource(name = "获取字典详情", path = "/dict/getDictDetail", requiredPermission = false)
-    public ResponseData getDictDetail(@RequestParam("dictId") Long dictId) {
-        SysDict detail = this.dictService.detail(dictId);
+    @GetResource(name = "获取字典详情", path = "/dict/detail", requiredPermission = false)
+    public ResponseData detail(@Validated(BaseRequest.detail.class) DictRequest dictRequest) {
+        SysDict detail = this.dictService.detail(dictRequest);
         return new SuccessResponseData(detail);
     }
 
@@ -86,10 +88,9 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:35
      */
-    @GetResource(name = "获取字典列表", path = "/dict/getDictList", requiredPermission = false)
-    public ResponseData getDictList(DictRequest dictRequest) {
-        List<SysDict> sysDictList = this.dictService.findList(dictRequest);
-        return new SuccessResponseData(sysDictList);
+    @GetResource(name = "获取字典列表", path = "/dict/list", requiredPermission = false)
+    public ResponseData list(DictRequest dictRequest) {
+        return new SuccessResponseData(this.dictService.findList(dictRequest));
     }
 
     /**
@@ -98,25 +99,11 @@ public class DictController {
      * @author fengshuonan
      * @date 2020/10/29 16:35
      */
-    @GetResource(name = "获取字典列表", path = "/dict/getDictListPage", requiredPermission = false)
-    public ResponseData getDictListPage(DictRequest dictRequest) {
-        PageResult<SysDict> page = this.dictService.findPage(dictRequest);
-        return new SuccessResponseData(page);
+    @GetResource(name = "获取字典列表", path = "/dict/page", requiredPermission = false)
+    public ResponseData page(DictRequest dictRequest) {
+        return new SuccessResponseData(this.dictService.findPage(dictRequest));
     }
 
-    /**
-     * 获取字典下拉列表，用在新增和修改字典，选择字典的父级
-     * <p>
-     * 当传参数dictId是，查询结果会排除参数dictId字典的所有子级和dictId字典本身
-     *
-     * @author fengshuonan
-     * @date 2020/12/11 16:35
-     */
-    @GetResource(name = "获取字典列表(排除下级)", path = "/dict/getDictListExcludeSub", requiredPermission = false)
-    public ResponseData getDictListExcludeSub(@RequestParam(value = "dictId", required = false) Long dictId) {
-        List<SysDict> sysDictList = this.dictService.getDictListExcludeSub(dictId);
-        return new SuccessResponseData(sysDictList);
-    }
 
     /**
      * 获取树形字典列表（antdv在用）
@@ -128,18 +115,6 @@ public class DictController {
     public ResponseData getDictTreeList(@Validated(DictRequest.treeList.class) DictRequest dictRequest) {
         List<TreeDictInfo> treeDictList = this.dictService.getTreeDictList(dictRequest);
         return new SuccessResponseData(treeDictList);
-    }
-
-    /**
-     * code校验，校验code是否重复
-     *
-     * @author fengshuonan
-     * @date 2020/10/29 16:36
-     */
-    @GetResource(name = "code校验", path = "/dict/validateCodeAvailable", requiredPermission = false)
-    public ResponseData validateCodeAvailable(@Validated(DictRequest.validateAvailable.class) DictRequest dictRequest) {
-        boolean flag = this.dictService.validateCodeAvailable(dictRequest);
-        return new SuccessResponseData(flag);
     }
 
     /**
