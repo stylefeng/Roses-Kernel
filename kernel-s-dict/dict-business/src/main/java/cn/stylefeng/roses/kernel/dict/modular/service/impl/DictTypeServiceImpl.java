@@ -38,9 +38,6 @@ import java.util.List;
 public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType> implements DictTypeService {
 
     @Resource
-    private DictService dictService;
-
-    @Resource
     private PinYinApi pinYinApi;
 
     @Override
@@ -49,17 +46,11 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
         // 如果是系统级字典，只允许管理员操作
         validateSystemTypeClassOperate(dictTypeRequest);
 
-        // 模型转化
         SysDictType sysDictType = new SysDictType();
         BeanUtil.copyProperties(dictTypeRequest, sysDictType);
-
-        // 设置初始状态
         sysDictType.setStatusFlag(StatusEnum.ENABLE.getCode());
-        sysDictType.setDelFlag(YesOrNotEnum.N.getCode());
-
-        // 设置首字母拼音
         sysDictType.setDictTypeNamePinyin(pinYinApi.parseEveryPinyinFirstLetter(sysDictType.getDictTypeName()));
-        this.baseMapper.insert(sysDictType);
+        this.save(sysDictType);
     }
 
     @Override
@@ -69,18 +60,10 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
         // 如果是系统级字典，只允许管理员操作
         validateSystemTypeClassOperate(dictTypeRequest);
 
-        // 获取字典类型
-        SysDictType oldSysDictType = querySysDictType(dictTypeRequest);
+        SysDictType sysDictType = this.querySysDictType(dictTypeRequest);
+        sysDictType.setDelFlag(YesOrNotEnum.Y.getCode());
+        this.updateById(sysDictType);
 
-        // 字典类型删除
-        oldSysDictType.setDelFlag(YesOrNotEnum.Y.getCode());
-        this.baseMapper.updateById(oldSysDictType);
-
-        // 逻辑删除所有改类型下的字典
-        LambdaUpdateWrapper<SysDict> lambdaQueryWrapper = new LambdaUpdateWrapper<>();
-        lambdaQueryWrapper.eq(SysDict::getDictTypeCode, oldSysDictType.getDictTypeCode());
-        lambdaQueryWrapper.set(SysDict::getDelFlag, YesOrNotEnum.Y.getCode());
-        dictService.update(lambdaQueryWrapper);
     }
 
     @Override
@@ -89,18 +72,13 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
         // 如果是系统级字典，只允许管理员操作
         validateSystemTypeClassOperate(dictTypeRequest);
 
-        // 获取字典类型
-        SysDictType oldSysDictType = querySysDictType(dictTypeRequest);
-
-        // 模型转化
-        BeanUtil.copyProperties(dictTypeRequest, oldSysDictType);
-
-        // 不能修改字典编码
-        oldSysDictType.setDictTypeCode(null);
-
+        // 更新数据
+        SysDictType sysDictType = this.querySysDictType(dictTypeRequest);
+        BeanUtil.copyProperties(dictTypeRequest, sysDictType);
+        sysDictType.setDictTypeCode(null);
         // 设置首字母拼音
-        oldSysDictType.setDictTypeNamePinyin(pinYinApi.parseEveryPinyinFirstLetter(oldSysDictType.getDictTypeName()));
-        this.updateById(oldSysDictType);
+        sysDictType.setDictTypeNamePinyin(pinYinApi.parseEveryPinyinFirstLetter(sysDictType.getDictTypeName()));
+        this.updateById(sysDictType);
     }
 
     @Override
@@ -110,59 +88,28 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
         // 如果是系统级字典，只允许管理员操作
         validateSystemTypeClassOperate(dictTypeRequest);
 
-        // 获取字典类型
-        SysDictType oldSysDictType = querySysDictType(dictTypeRequest);
-
-        // 修改状态
+        // 更新数据
+        SysDictType oldSysDictType = this.querySysDictType(dictTypeRequest);
         oldSysDictType.setStatusFlag(dictTypeRequest.getStatusFlag());
-
-        // 修改所有本类型下的字典状态
-        LambdaUpdateWrapper<SysDict> lambdaQueryWrapper = new LambdaUpdateWrapper<>();
-        lambdaQueryWrapper.eq(SysDict::getDictTypeCode, oldSysDictType.getDictTypeCode());
-        lambdaQueryWrapper.eq(SysDict::getDelFlag, YesOrNotEnum.N.getCode());
-        lambdaQueryWrapper.set(SysDict::getStatusFlag, dictTypeRequest.getStatusFlag());
-        dictService.update(lambdaQueryWrapper);
-
-        // 更新字典类型
         this.updateById(oldSysDictType);
     }
 
     @Override
     public SysDictType detail(DictTypeRequest dictTypeRequest) {
-        List<SysDictType> list = this.findList(dictTypeRequest);
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
+        return this.getOne(this.createWrapper(dictTypeRequest), false);
     }
 
     @Override
     public List<SysDictType> findList(DictTypeRequest dictTypeRequest) {
-        LambdaQueryWrapper<SysDictType> queryWrapper = this.createWrapper(dictTypeRequest);
-        return this.list(queryWrapper);
+        return this.list(this.createWrapper(dictTypeRequest));
     }
 
     @Override
     public PageResult<SysDictType> findPage(DictTypeRequest dictTypeRequest) {
-        LambdaQueryWrapper<SysDictType> queryWrapper = this.createWrapper(dictTypeRequest);
-        Page<SysDictType> page = this.page(PageFactory.defaultPage(), queryWrapper);
+        Page<SysDictType> page = this.page(PageFactory.defaultPage(), this.createWrapper(dictTypeRequest));
         return PageResultFactory.createPageResult(page);
     }
 
-    @Override
-    public boolean validateCodeAvailable(DictTypeRequest dictTypeRequest) {
-
-        LambdaQueryWrapper<SysDictType> wrapper = new LambdaQueryWrapper<>();
-
-        wrapper.eq(SysDictType::getDictTypeCode, dictTypeRequest.getDictTypeCode());
-
-        if (ObjectUtil.isNotEmpty(dictTypeRequest.getDictTypeId())) {
-            wrapper.and(i -> i.ne(SysDictType::getDictTypeId, dictTypeRequest.getDictTypeId()));
-        }
-
-        Integer selectCount = this.baseMapper.selectCount(wrapper);
-        return selectCount <= 0;
-    }
 
     /**
      * 校验dictTypeClass是否是系统字典，如果是系统字典只能超级管理员操作
@@ -198,23 +145,20 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, SysDictType
      * @author fengshuonan
      * @date 2021/1/24 22:03
      */
-    private LambdaQueryWrapper<SysDictType> createWrapper(DictTypeRequest translationRequest) {
+    private LambdaQueryWrapper<SysDictType> createWrapper(DictTypeRequest dictTypeRequest) {
         LambdaQueryWrapper<SysDictType> queryWrapper = new LambdaQueryWrapper<>();
 
-        // 查询未删除的
-        queryWrapper.eq(SysDictType::getDelFlag, YesOrNotEnum.N.getCode());
+        Long dictTypeId = dictTypeRequest.getDictTypeId();
+        String dictTypeCode = dictTypeRequest.getDictTypeCode();
+        String dictTypeName = dictTypeRequest.getDictTypeName();
 
-        if (ObjectUtil.isEmpty(translationRequest)) {
-            return queryWrapper;
-        }
-
-        Long dictTypeId = translationRequest.getDictTypeId();
-        String dictTypeCode = translationRequest.getDictTypeCode();
-        String dictTypeName = translationRequest.getDictTypeName();
-
+        // SQL拼接
         queryWrapper.eq(ObjectUtil.isNotNull(dictTypeId), SysDictType::getDictTypeId, dictTypeId);
         queryWrapper.eq(ObjectUtil.isNotNull(dictTypeCode), SysDictType::getDictTypeCode, dictTypeCode);
         queryWrapper.like(ObjectUtil.isNotNull(dictTypeName), SysDictType::getDictTypeName, dictTypeName);
+
+        // 查询未删除的
+        queryWrapper.eq(SysDictType::getDelFlag, YesOrNotEnum.N.getCode());
 
         return queryWrapper;
     }
