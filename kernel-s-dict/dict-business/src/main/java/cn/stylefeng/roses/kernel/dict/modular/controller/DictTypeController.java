@@ -37,8 +37,8 @@ public class DictTypeController {
      * @author fengshuonan
      * @date 2018/7/25 下午12:36
      */
-    @PostResource(name = "添加字典类型", path = "/dictType/addDictType", requiredPermission = false)
-    public ResponseData addDictType(@RequestBody @Validated(DictTypeRequest.add.class) DictTypeRequest dictTypeRequest) {
+    @PostResource(name = "添加字典类型", path = "/dictType/add", requiredPermission = false)
+    public ResponseData add(@RequestBody @Validated(DictTypeRequest.add.class) DictTypeRequest dictTypeRequest) {
         this.dictTypeService.add(dictTypeRequest);
         return new SuccessResponseData();
     }
@@ -49,8 +49,8 @@ public class DictTypeController {
      * @author fengshuonan
      * @date 2018/7/25 下午12:36
      */
-    @PostResource(name = "删除字典类型", path = "/dictType/deleteDictType", requiredPermission = false)
-    public ResponseData deleteDictType(@RequestBody @Validated(DictTypeRequest.delete.class) DictTypeRequest dictTypeRequest) {
+    @PostResource(name = "删除字典类型", path = "/dictType/delete", requiredPermission = false)
+    public ResponseData delete(@RequestBody @Validated(DictTypeRequest.delete.class) DictTypeRequest dictTypeRequest) {
         this.dictTypeService.del(dictTypeRequest);
         return new SuccessResponseData();
     }
@@ -61,8 +61,8 @@ public class DictTypeController {
      * @author fengshuonan
      * @date 2018/7/25 下午12:36
      */
-    @PostResource(name = "修改字典类型", path = "/dictType/updateDictType", requiredPermission = false)
-    public ResponseData updateDictType(@RequestBody @Validated(DictTypeRequest.edit.class) DictTypeRequest dictTypeRequest) {
+    @PostResource(name = "修改字典类型", path = "/dictType/edit", requiredPermission = false)
+    public ResponseData edit(@RequestBody @Validated(DictTypeRequest.edit.class) DictTypeRequest dictTypeRequest) {
         this.dictTypeService.edit(dictTypeRequest);
         return new SuccessResponseData();
     }
@@ -85,8 +85,8 @@ public class DictTypeController {
      * @author fengshuonan
      * @date 2021/1/13 11:25
      */
-    @GetResource(name = "获取字典类型详情", path = "/dictType/getDictDetail", requiredPermission = false)
-    public ResponseData getDictDetail(@RequestBody @Validated(BaseRequest.detail.class) DictTypeRequest dictTypeRequest) {
+    @GetResource(name = "获取字典类型详情", path = "/dictType/detail", requiredPermission = false)
+    public ResponseData detail(@Validated(BaseRequest.detail.class) DictTypeRequest dictTypeRequest) {
         SysDictType detail = this.dictTypeService.detail(dictTypeRequest);
         return new SuccessResponseData(detail);
     }
@@ -97,10 +97,9 @@ public class DictTypeController {
      * @author fengshuonan
      * @date 2020/10/30 21:46
      */
-    @GetResource(name = "获取字典类型列表", path = "/dictType/getDictTypeList", requiredPermission = false)
-    public ResponseData getDictTypeList(DictTypeRequest dictTypeRequest) {
-        List<SysDictType> sysDictTypeList = dictTypeService.findList(dictTypeRequest);
-        return new SuccessResponseData(sysDictTypeList);
+    @GetResource(name = "获取字典类型列表", path = "/dictType/list", requiredPermission = false)
+    public ResponseData list(DictTypeRequest dictTypeRequest) {
+        return new SuccessResponseData(dictTypeService.findList(dictTypeRequest));
     }
 
     /**
@@ -109,24 +108,10 @@ public class DictTypeController {
      * @author fengshuonan
      * @date 2020/10/30 21:46
      */
-    @GetResource(name = "获取字典类型列表(分页)", path = "/dictType/getDictTypePageList", requiredPermission = false)
-    public ResponseData getDictTypePageList(DictTypeRequest dictTypeRequest) {
-        PageResult<SysDictType> dictTypePageList = dictTypeService.findPage(dictTypeRequest);
-        return new SuccessResponseData(dictTypePageList);
+    @GetResource(name = "获取字典类型列表(分页)", path = "/dictType/page", requiredPermission = false)
+    public ResponseData page(DictTypeRequest dictTypeRequest) {
+        return new SuccessResponseData(dictTypeService.findPage(dictTypeRequest));
     }
-
-    /**
-     * code校验
-     *
-     * @author fengshuonan
-     * @date 2020/10/30 21:53
-     */
-    @GetResource(name = "code校验", path = "/dictType/validateCodeAvailable", requiredPermission = false)
-    public ResponseData validateCodeAvailable(@Validated(DictTypeRequest.validateCode.class) DictTypeRequest dictTypeRequest) {
-        boolean flag = this.dictTypeService.validateCodeAvailable(dictTypeRequest);
-        return new SuccessResponseData(flag);
-    }
-
 
     /**
      * 获取字典类型详情
