@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.loginlog.modular.service.impl;
+package cn.stylefeng.roses.kernel.system.loginlog.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -6,14 +6,14 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.loginlog.modular.constants.LoginLogConstant;
-import cn.stylefeng.roses.kernel.loginlog.modular.entity.SysLoginLog;
-import cn.stylefeng.roses.kernel.loginlog.modular.mapper.SysLoginLogMapper;
-import cn.stylefeng.roses.kernel.loginlog.modular.service.SysLoginLogService;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.LoginLogServiceApi;
 import cn.stylefeng.roses.kernel.system.exception.enums.log.LogExceptionEnum;
+import cn.stylefeng.roses.kernel.system.loginlog.modular.constants.LoginLogConstant;
+import cn.stylefeng.roses.kernel.system.loginlog.modular.entity.SysLoginLog;
+import cn.stylefeng.roses.kernel.system.loginlog.modular.mapper.SysLoginLogMapper;
+import cn.stylefeng.roses.kernel.system.loginlog.modular.service.SysLoginLogService;
 import cn.stylefeng.roses.kernel.system.pojo.loginlog.SysLoginLogRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

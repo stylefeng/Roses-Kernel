@@ -1,6 +1,6 @@
-package cn.stylefeng.roses.kernel.loginlog.modular.mapper;
+package cn.stylefeng.roses.kernel.system.loginlog.modular.mapper;
 
-import cn.stylefeng.roses.kernel.loginlog.modular.entity.SysLoginLog;
+import cn.stylefeng.roses.kernel.system.loginlog.modular.entity.SysLoginLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

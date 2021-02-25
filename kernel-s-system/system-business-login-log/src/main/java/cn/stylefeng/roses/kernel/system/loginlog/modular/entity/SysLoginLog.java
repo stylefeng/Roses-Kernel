@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.loginlog.modular.entity;
+package cn.stylefeng.roses.kernel.system.loginlog.modular.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

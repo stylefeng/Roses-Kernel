@@ -1,8 +1,7 @@
-package cn.stylefeng.roses.kernel.loginlog.modular.service;
+package cn.stylefeng.roses.kernel.system.loginlog.modular.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.loginlog.modular.entity.SysLoginLog;
-import cn.stylefeng.roses.kernel.system.LoginLogServiceApi;
+import cn.stylefeng.roses.kernel.system.loginlog.modular.entity.SysLoginLog;
 import cn.stylefeng.roses.kernel.system.pojo.loginlog.SysLoginLogRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 

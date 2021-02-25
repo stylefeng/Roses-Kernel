@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.loginlog.modular.constants;
+package cn.stylefeng.roses.kernel.system.loginlog.modular.constants;
 
 /**
  * 登录日志常量
