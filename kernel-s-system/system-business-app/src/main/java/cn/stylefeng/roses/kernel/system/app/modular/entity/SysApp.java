@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.app.modular.entity;
+package cn.stylefeng.roses.kernel.system.app.modular.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.FieldFill;

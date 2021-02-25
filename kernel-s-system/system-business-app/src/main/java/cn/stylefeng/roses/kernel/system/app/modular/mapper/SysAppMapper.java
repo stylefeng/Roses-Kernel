@@ -1,6 +1,6 @@
-package cn.stylefeng.roses.kernel.app.modular.mapper;
+package cn.stylefeng.roses.kernel.system.app.modular.mapper;
 
-import cn.stylefeng.roses.kernel.app.modular.entity.SysApp;
+import cn.stylefeng.roses.kernel.system.app.modular.entity.SysApp;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

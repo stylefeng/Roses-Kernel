@@ -1,11 +1,11 @@
-package cn.stylefeng.roses.kernel.app.modular.controller;
+package cn.stylefeng.roses.kernel.system.app.modular.controller;
 
-import cn.stylefeng.roses.kernel.app.modular.service.SysAppService;
 import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import cn.stylefeng.roses.kernel.system.app.modular.service.SysAppService;
 import cn.stylefeng.roses.kernel.system.pojo.app.SysAppRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;

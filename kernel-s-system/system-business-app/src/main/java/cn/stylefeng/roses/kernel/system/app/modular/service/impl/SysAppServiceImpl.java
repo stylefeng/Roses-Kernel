@@ -1,10 +1,7 @@
-package cn.stylefeng.roses.kernel.app.modular.service.impl;
+package cn.stylefeng.roses.kernel.system.app.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.stylefeng.roses.kernel.app.modular.entity.SysApp;
-import cn.stylefeng.roses.kernel.app.modular.mapper.SysAppMapper;
-import cn.stylefeng.roses.kernel.app.modular.service.SysAppService;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -14,6 +11,9 @@ import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.MenuServiceApi;
+import cn.stylefeng.roses.kernel.system.app.modular.entity.SysApp;
+import cn.stylefeng.roses.kernel.system.app.modular.mapper.SysAppMapper;
+import cn.stylefeng.roses.kernel.system.app.modular.service.SysAppService;
 import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.exception.enums.app.AppExceptionEnum;
 import cn.stylefeng.roses.kernel.system.pojo.app.SysAppRequest;
