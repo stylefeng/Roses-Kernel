@@ -6,10 +6,10 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.rule.enums.SexEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
-import cn.stylefeng.roses.kernel.system.enums.UserStatusEnum;
-import cn.stylefeng.roses.kernel.system.expander.SystemConfigExpander;
+import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
+import cn.stylefeng.roses.kernel.system.api.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
 
 /**
  * 用户信息填充，用于创建和修改用户时，添加一些基础信息

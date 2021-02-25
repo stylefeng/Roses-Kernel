@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuMapper">
 
-    <resultMap id="systemMenuAndRole" type="cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuDTO">
+    <resultMap id="systemMenuAndRole" type="cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO">
         <id column="menu_id" property="menuId"/>
         <result column="menu_parent_id" property="menuParentId"/>
         <result column="menu_name" property="menuName"/>

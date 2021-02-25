@@ -8,10 +8,10 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import cn.stylefeng.roses.kernel.auth.api.prop.LoginUserPropExpander;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
-import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgDTO;
-import cn.stylefeng.roses.kernel.system.pojo.user.UserLoginInfoDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.DataScopeDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
 
 import java.util.*;
 

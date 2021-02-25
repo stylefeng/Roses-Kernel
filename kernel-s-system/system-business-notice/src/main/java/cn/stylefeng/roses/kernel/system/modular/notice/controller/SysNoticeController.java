@@ -6,7 +6,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.modular.notice.service.SysNoticeService;
-import cn.stylefeng.roses.kernel.system.pojo.notice.SysNoticeRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.notice.SysNoticeRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

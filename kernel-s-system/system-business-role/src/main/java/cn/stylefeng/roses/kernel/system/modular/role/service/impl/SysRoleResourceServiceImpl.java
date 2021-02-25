@@ -3,7 +3,7 @@ package cn.stylefeng.roses.kernel.system.modular.role.service.impl;
 import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRoleResource;
 import cn.stylefeng.roses.kernel.system.modular.role.mapper.SysRoleResourceMapper;
 import cn.stylefeng.roses.kernel.system.modular.role.service.SysRoleResourceService;
-import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

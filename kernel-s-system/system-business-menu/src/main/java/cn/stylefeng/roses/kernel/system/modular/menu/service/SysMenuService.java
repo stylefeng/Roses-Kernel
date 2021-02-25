@@ -2,12 +2,12 @@ package cn.stylefeng.roses.kernel.system.modular.menu.service;
 
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
-import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuRequest;
-import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdMenuSelectTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuDTO;
-import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiAppIndexMenusVO;
-import cn.stylefeng.roses.kernel.system.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
-import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiAppIndexMenusVO;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

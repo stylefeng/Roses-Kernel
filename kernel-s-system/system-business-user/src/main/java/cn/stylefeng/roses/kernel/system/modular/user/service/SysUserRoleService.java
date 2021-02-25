@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
-import cn.stylefeng.roses.kernel.system.pojo.user.request.SysUserRequest;
-import cn.stylefeng.roses.kernel.system.pojo.user.request.UserRoleRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.request.UserRoleRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

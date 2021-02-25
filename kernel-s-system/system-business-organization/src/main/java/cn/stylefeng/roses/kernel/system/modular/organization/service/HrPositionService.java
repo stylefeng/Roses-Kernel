@@ -2,7 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
-import cn.stylefeng.roses.kernel.system.pojo.organization.HrPositionRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

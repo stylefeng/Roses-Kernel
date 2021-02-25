@@ -7,7 +7,7 @@ import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
-import cn.stylefeng.roses.kernel.system.pojo.user.request.OnlineUserRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 

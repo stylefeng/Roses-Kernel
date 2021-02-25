@@ -2,10 +2,10 @@ package cn.stylefeng.roses.kernel.system.modular.role.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
-import cn.stylefeng.roses.kernel.system.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
-import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
-import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

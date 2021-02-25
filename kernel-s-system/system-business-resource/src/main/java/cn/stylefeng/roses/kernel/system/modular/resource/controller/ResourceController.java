@@ -8,8 +8,8 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
-import cn.stylefeng.roses.kernel.system.pojo.resource.ResourceRequest;
-import cn.stylefeng.roses.kernel.system.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;

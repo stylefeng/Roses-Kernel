@@ -18,7 +18,7 @@ import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsInfoParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsSendParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsVerifyParam;
 import cn.stylefeng.roses.kernel.sms.modular.service.SysSmsInfoService;
-import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.validator.CaptchaApi;
 import cn.stylefeng.roses.kernel.validator.exception.enums.ValidatorExceptionEnum;
 import com.alibaba.fastjson.JSON;

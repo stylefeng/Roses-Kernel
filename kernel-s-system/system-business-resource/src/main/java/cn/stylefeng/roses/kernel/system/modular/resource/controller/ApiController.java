@@ -7,8 +7,8 @@ import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
-import cn.stylefeng.roses.kernel.system.pojo.resource.LayuiApiResourceTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.resource.ResourceRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.LayuiApiResourceTreeNode;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 

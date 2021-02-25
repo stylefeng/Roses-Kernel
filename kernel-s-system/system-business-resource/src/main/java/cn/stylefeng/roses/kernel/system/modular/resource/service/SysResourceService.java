@@ -4,8 +4,8 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.resource.LayuiApiResourceTreeNode;
-import cn.stylefeng.roses.kernel.system.pojo.resource.ResourceRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.LayuiApiResourceTreeNode;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

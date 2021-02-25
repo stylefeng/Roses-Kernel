@@ -2,15 +2,15 @@ package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
-import cn.stylefeng.roses.kernel.system.DataScopeApi;
-import cn.stylefeng.roses.kernel.system.RoleServiceApi;
-import cn.stylefeng.roses.kernel.system.UserOrgServiceApi;
-import cn.stylefeng.roses.kernel.system.UserServiceApi;
-import cn.stylefeng.roses.kernel.system.exception.SystemModularException;
-import cn.stylefeng.roses.kernel.system.exception.enums.organization.DataScopeExceptionEnum;
-import cn.stylefeng.roses.kernel.system.pojo.organization.DataScopeDTO;
-import cn.stylefeng.roses.kernel.system.pojo.role.dto.SysRoleDTO;
-import cn.stylefeng.roses.kernel.system.pojo.user.SysUserOrgDTO;
+import cn.stylefeng.roses.kernel.system.api.DataScopeApi;
+import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.api.UserOrgServiceApi;
+import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
+import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.api.exception.enums.organization.DataScopeExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.DataScopeDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

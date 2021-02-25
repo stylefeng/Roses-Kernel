@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.mapper;
 
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
-import cn.stylefeng.roses.kernel.system.pojo.menu.antd.AntdSysMenuDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;

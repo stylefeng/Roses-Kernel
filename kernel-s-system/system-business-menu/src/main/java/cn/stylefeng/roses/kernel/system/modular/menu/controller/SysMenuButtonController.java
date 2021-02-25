@@ -8,7 +8,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuButtonService;
-import cn.stylefeng.roses.kernel.system.pojo.menu.SysMenuButtonRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuButtonRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
