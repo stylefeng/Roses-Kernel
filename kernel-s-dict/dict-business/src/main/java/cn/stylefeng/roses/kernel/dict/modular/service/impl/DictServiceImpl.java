@@ -13,6 +13,7 @@ import cn.stylefeng.roses.kernel.dict.api.exception.DictException;
 import cn.stylefeng.roses.kernel.dict.api.exception.enums.DictExceptionEnum;
 import cn.stylefeng.roses.kernel.dict.api.pojo.dict.request.ParentIdsUpdateRequest;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
+import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.mapper.DictMapper;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.TreeDictInfo;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
@@ -50,119 +51,56 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
     @Resource
     private PinYinApi pinYinApi;
 
-    @Resource
-    private DictMapper dictMapper;
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void add(DictRequest dictRequest) {
-
-        // 如果父节点为空，则填充为默认的父节点id
-        if (dictRequest.getDictParentId() == null) {
-            dictRequest.setDictParentId(DictConstants.DEFAULT_DICT_PARENT_ID);
-        }
-
-        // 如果父节点不为空，并且不是-1，则判断父节点存不存在，防止脏数据
-        else {
-            if (!DictConstants.DEFAULT_DICT_PARENT_ID.equals(dictRequest.getDictParentId())) {
-                DictRequest tempParam = new DictRequest();
-                tempParam.setDictId(dictRequest.getDictParentId());
-                this.querySysDict(tempParam);
-            }
-        }
-
-        // 赋值pids
-        setPids(dictRequest);
-
-        // dto转化为实体
         SysDict sysDict = new SysDict();
         BeanUtil.copyProperties(dictRequest, sysDict);
-
-        // dictId是自动生成
-        sysDict.setDictId(null);
-
-        // 设置状态启用
+        sysDict.setDictParentId(DictConstants.DEFAULT_DICT_PARENT_ID);
+        sysDict.setDictPids(StrUtil.BRACKET_START + DictConstants.DEFAULT_DICT_PARENT_ID + StrUtil.BRACKET_END + StrUtil.COMMA);
         sysDict.setStatusFlag(StatusEnum.ENABLE.getCode());
-        sysDict.setDelFlag(YesOrNotEnum.N.getCode());
-
-        // 设置拼音
         sysDict.setDictNamePinyin(pinYinApi.parseEveryPinyinFirstLetter(sysDict.getDictName()));
-
-        this.baseMapper.insert(sysDict);
+        this.save(sysDict);
     }
 
     @Override
     public void del(DictRequest dictRequest) {
-        //删除自己和下级
-        dictMapper.deleteSub(dictRequest.getDictId());
+        SysDict sysDict = this.querySysDict(dictRequest);
+        sysDict.setDelFlag(YesOrNotEnum.Y.getCode());
+        this.updateById(sysDict);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(DictRequest dictRequest) {
 
-        SysDict oldSysDict = this.querySysDict(dictRequest);
+        SysDict sysDict = this.querySysDict(dictRequest);
+        BeanUtil.copyProperties(dictRequest, sysDict);
 
         // 不能修改字典类型和编码
-        dictRequest.setDictTypeCode(null);
-        dictRequest.setDictCode(null);
+        sysDict.setDictTypeCode(null);
+        sysDict.setDictCode(null);
+        sysDict.setDictNamePinyin(pinYinApi.parseEveryPinyinFirstLetter(sysDict.getDictName()));
 
-        // 赋值pids，如果更新了pid，则字典的子pid都要更新
-        setPids(dictRequest);
-        if (!oldSysDict.getDictParentId().equals(dictRequest.getDictParentId())) {
-            updateSubPids(dictRequest, oldSysDict);
-        }
-
-        // model转化为entity
-        BeanUtil.copyProperties(dictRequest, oldSysDict, CopyOptions.create().setIgnoreNullValue(true));
-
-        // 设置拼音
-        oldSysDict.setDictNamePinyin(pinYinApi.parseEveryPinyinFirstLetter(oldSysDict.getDictName()));
-
-        this.updateById(oldSysDict);
+        this.updateById(sysDict);
     }
 
     @Override
-    public SysDict detail(Long dictId) {
-        SysDict dict = this.baseMapper.detail(dictId);
-        // 获取父节点字典名称
-        if (dict.getDictParentId().equals(TreeConstants.DEFAULT_PARENT_ID)) {
-            dict.setParentName("顶级");
-        } else {
-            SysDict parentDict = this.getById(dict.getDictParentId());
-            dict.setParentName(ObjectUtil.isNotEmpty(parentDict) ? parentDict.getDictName() : "");
-        }
-        return dict;
+    public SysDict detail(DictRequest dictRequest) {
+        return this.getOne(this.createWrapper(dictRequest), false);
     }
 
     @Override
     public List<SysDict> findList(DictRequest dictRequest) {
-        if (dictRequest == null) {
-            dictRequest = new DictRequest();
-        }
-
-        return baseMapper.findPage(null, dictRequest);
+        return this.list(this.createWrapper(dictRequest));
     }
 
     @Override
     public PageResult<SysDict> findPage(DictRequest dictRequest) {
-        if (dictRequest == null) {
-            dictRequest = new DictRequest();
-        }
-
-        Page<SysDict> page = PageFactory.defaultPage();
-        List<SysDict> list = baseMapper.findPage(page, dictRequest);
-        page.setRecords(list);
+        Page<SysDict> page = this.page(PageFactory.defaultPage(), this.createWrapper(dictRequest));
         return PageResultFactory.createPageResult(page);
     }
 
-    @Override
-    public List<SysDict> getDictListExcludeSub(Long dictId) {
-        if (dictId != null) {
-            return dictMapper.getDictListExcludeSub(dictId);
-        }
-        return this.list();
-    }
 
     @Override
     public List<TreeDictInfo> getTreeDictList(DictRequest dictRequest) {
@@ -186,25 +124,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
 
         // 构建菜单树
         return new DefaultTreeBuildFactory<TreeDictInfo>().doTreeBuild(treeDictInfos);
-    }
-
-    @Override
-    public boolean validateCodeAvailable(DictRequest dictRequest) {
-
-        // 判断编码是否重复
-        LambdaQueryWrapper<SysDict> codeRepeatWrapper = new LambdaQueryWrapper<>();
-        codeRepeatWrapper.eq(SysDict::getDictCode, dictRequest.getDictCode());
-
-        // 如果传了字典id代表是编辑字典
-        if (ObjectUtil.isNotEmpty(dictRequest.getDictId())) {
-            codeRepeatWrapper.and(i -> i.ne(SysDict::getDictId, dictRequest.getDictId()));
-        }
-
-        // 如果重复，抛出异常
-        int codeCount = this.baseMapper.selectCount(codeRepeatWrapper);
-
-        // 如果是小于等于0，则这个编码可以用
-        return codeCount <= 0;
     }
 
     @Override
@@ -260,65 +179,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
     }
 
     /**
-     * 批量修改pids的请求
-     *
-     * @author fengshuonan
-     * @date 2020/12/26 12:19
-     */
-    private static ParentIdsUpdateRequest createParenIdsUpdateRequest(String newParentIds, String oldParentIds) {
-        ParentIdsUpdateRequest parentIdsUpdateRequest = new ParentIdsUpdateRequest();
-        parentIdsUpdateRequest.setNewParentIds(newParentIds);
-        parentIdsUpdateRequest.setOldParentIds(oldParentIds);
-        parentIdsUpdateRequest.setUpdateTime(new Date());
-        parentIdsUpdateRequest.setUpdateUser(LoginContext.me().getLoginUser().getUserId());
-        return parentIdsUpdateRequest;
-    }
-
-    /**
-     * 修改pids，如果pids字段发生了变化，则子字典的所有pids都要变化
-     *
-     * @author fengshuonan
-     * @date 2020/12/11 上午9:48
-     */
-    private void updateSubPids(DictRequest dictRequest, SysDict oldSysDict) {
-
-        // 被替换的表达式，也就是通过这个条件匹配当前修改的字典的所有子字典，包含子字典的字典（ pids + [pid] + , ）
-        String beReplacedRegex = oldSysDict.getDictPids()
-                + SymbolConstant.LEFT_SQUARE_BRACKETS + oldSysDict.getDictId() + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
-
-        // 新的表达式
-        String newReplace = dictRequest.getDictPids();
-
-        // 更新所有子字典的pids字段
-        ParentIdsUpdateRequest parentIdsUpdateRequest = createParenIdsUpdateRequest(newReplace, beReplacedRegex);
-        dictMapper.updateSubPids(parentIdsUpdateRequest);
-    }
-
-    /**
-     * 给pids赋值
-     * <p>
-     * 如果pid是顶级节点，pids就是 [-1],
-     * <p>
-     * 如果pid不是顶级节点，pids就是父节点的pids + [pid] + ,
-     *
-     * @author fengshuonan
-     * @date 2020/12/11 上午9:48
-     */
-    private void setPids(DictRequest dictRequest) {
-        Long dictParentId = dictRequest.getDictParentId();
-        if (DictConstants.DEFAULT_DICT_PARENT_ID.equals(dictParentId)) {
-            String pids = SymbolConstant.LEFT_SQUARE_BRACKETS + DictConstants.DEFAULT_DICT_PARENT_ID + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
-            dictRequest.setDictPids(pids);
-        } else {
-            SysDict parentSysDict = dictMapper.selectById(dictParentId);
-            if (parentSysDict != null) {
-                String pids = parentSysDict.getDictPids() + SymbolConstant.LEFT_SQUARE_BRACKETS + dictRequest.getDictParentId() + SymbolConstant.RIGHT_SQUARE_BRACKETS + SymbolConstant.COMMA;
-                dictRequest.setDictPids(pids);
-            }
-        }
-    }
-
-    /**
      * 获取详细信息
      *
      * @author chenjinlong
@@ -340,6 +200,9 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
      */
     private LambdaQueryWrapper<SysDict> createWrapper(DictRequest dictRequest) {
         LambdaQueryWrapper<SysDict> queryWrapper = new LambdaQueryWrapper<>();
+
+        // SQL拼接
+        queryWrapper.eq(ObjectUtil.isNotNull(dictRequest.getDictId()), SysDict::getDictId, dictRequest.getDictId());
         queryWrapper.eq(StrUtil.isNotBlank(dictRequest.getDictTypeCode()), SysDict::getDictTypeCode, dictRequest.getDictTypeCode());
         queryWrapper.eq(StrUtil.isNotBlank(dictRequest.getDictCode()), SysDict::getDictCode, dictRequest.getDictCode());
         queryWrapper.like(StrUtil.isNotBlank(dictRequest.getDictName()), SysDict::getDictName, dictRequest.getDictName());

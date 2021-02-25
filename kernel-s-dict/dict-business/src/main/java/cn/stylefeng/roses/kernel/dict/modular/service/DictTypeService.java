@@ -81,13 +81,4 @@ public interface DictTypeService extends IService<SysDictType> {
      */
     PageResult<SysDictType> findPage(DictTypeRequest dictTypeRequest);
 
-    /**
-     * code校验重复
-     *
-     * @param dictTypeRequest 字典类型请求
-     * @return true-没有重复，false-有重复的
-     * @author fengshuonan
-     * @date 2020/10/29 18:56
-     */
-    boolean validateCodeAvailable(DictTypeRequest dictTypeRequest);
 }

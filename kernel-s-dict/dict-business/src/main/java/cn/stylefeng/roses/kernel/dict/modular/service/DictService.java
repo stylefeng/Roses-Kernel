@@ -47,12 +47,12 @@ public interface DictService extends IService<SysDict>, DictApi {
     /**
      * 查询字典详情
      *
-     * @param dictId 字典id
+     * @param dictRequest 字典id
      * @return 字典的详情
      * @author fengshuonan
      * @date 2020/10/30 16:15
      */
-    SysDict detail(Long dictId);
+    SysDict detail(DictRequest dictRequest);
 
     /**
      * 获取字典列表
@@ -75,16 +75,6 @@ public interface DictService extends IService<SysDict>, DictApi {
     PageResult<SysDict> findPage(DictRequest dictRequest);
 
     /**
-     * 获取字典下拉列表，用在新增和修改字典，选择字典的父级
-     * <p>
-     * 当传参数dictId是，查询结果会排除参数dictId字典的所有子级和dictId字典本身
-     *
-     * @author fengshuonan
-     * @date 2020/12/11 16:35
-     */
-    List<SysDict> getDictListExcludeSub(Long dictId);
-
-    /**
      * 获取树形字典列表（antdv在用）
      *
      * @param dictRequest 查询条件
@@ -94,14 +84,5 @@ public interface DictService extends IService<SysDict>, DictApi {
      */
     List<TreeDictInfo> getTreeDictList(DictRequest dictRequest);
 
-    /**
-     * 字典的code校验重复
-     *
-     * @param dictRequest 查询条件
-     * @return true-code没有重复，false-code存在重复
-     * @author fengshuonan
-     * @date 2020/10/29 18:50
-     */
-    boolean validateCodeAvailable(DictRequest dictRequest);
 
 }
