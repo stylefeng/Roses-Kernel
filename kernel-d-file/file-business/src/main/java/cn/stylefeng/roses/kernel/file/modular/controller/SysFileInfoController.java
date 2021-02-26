@@ -82,7 +82,7 @@ public class SysFileInfoController {
      * @author fengshuonan
      * @date 2020/11/29 11:29
      */
-    @GetResource(name = "私有文件预览", path = FILE_PRIVATE_PREVIEW_URL, requiredPermission = false)
+    @GetResource(name = "私有文件预览", path = FileConstants.FILE_PRIVATE_PREVIEW_URL, requiredPermission = false)
     public void privatePreview(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
         HttpServletResponse response = HttpServletUtil.getResponse();
         sysFileInfoRequest.setSecretFlag(YesOrNotEnum.Y.getCode());
@@ -95,7 +95,7 @@ public class SysFileInfoController {
      * @author majianguo
      * @date 2020/12/27 13:17
      */
-    @GetResource(name = "公有文件预览", path = FILE_PUBLIC_PREVIEW_URL, requiredPermission = false, requiredLogin = false)
+    @GetResource(name = "公有文件预览", path = FileConstants.FILE_PUBLIC_PREVIEW_URL, requiredPermission = false, requiredLogin = false)
     public void publicPreview(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
         HttpServletResponse response = HttpServletUtil.getResponse();
         sysFileInfoRequest.setSecretFlag(YesOrNotEnum.N.getCode());
@@ -108,7 +108,7 @@ public class SysFileInfoController {
      * @author fengshuonan
      * @date 2020/11/29 11:29
      */
-    @GetResource(name = "文件预览，通过bucketName和objectName", path = FILE_PREVIEW_BY_OBJECT_NAME, requiredPermission = false)
+    @GetResource(name = "文件预览，通过bucketName和objectName", path = FileConstants.FILE_PREVIEW_BY_OBJECT_NAME, requiredPermission = false)
     public void previewByBucketNameObjectName(@Validated(SysFileInfoRequest.previewByObjectName.class) SysFileInfoRequest sysFileInfoRequest) {
         HttpServletResponse response = HttpServletUtil.getResponse();
         sysFileInfoService.previewByBucketAndObjName(sysFileInfoRequest, response);

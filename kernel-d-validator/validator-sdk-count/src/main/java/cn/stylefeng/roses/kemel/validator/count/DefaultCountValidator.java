@@ -2,11 +2,11 @@ package cn.stylefeng.roses.kemel.validator.count;
 
 import cn.hutool.core.convert.Convert;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
+import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
 import cn.stylefeng.roses.kernel.validator.api.CountValidatorApi;
+import cn.stylefeng.roses.kernel.validator.api.constants.ValidatorConstants;
 import cn.stylefeng.roses.kernel.validator.api.exception.CountValidateException;
 import cn.stylefeng.roses.kernel.validator.api.exception.enums.CountValidateExceptionEnum;
-
-import static cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants.CACHE_DELIMITER;
 
 /**
  * 默认的计数校验器
@@ -29,10 +29,10 @@ public class DefaultCountValidator implements CountValidatorApi {
         long currentTimeSeconds = System.currentTimeMillis() / 1000;
 
         // 上一次操作时间秒数的缓存key COUNT_VALIDATE:key:RECORD_SECONDS
-        String recordTimeSecondsKey = COUNT_VALIDATE_CACHE_KEY_PREFIX + CACHE_DELIMITER + key + CACHE_DELIMITER + RECORD_TIME_SECONDS;
+        String recordTimeSecondsKey = ValidatorConstants.COUNT_VALIDATE_CACHE_KEY_PREFIX + CacheConstants.CACHE_DELIMITER + key + CacheConstants.CACHE_DELIMITER + ValidatorConstants.RECORD_TIME_SECONDS;
 
         // 上一次执行次数的记录缓存key COUNT_VALIDATE:key:COUNT_NUMBER
-        String countNumberKey = COUNT_VALIDATE_CACHE_KEY_PREFIX + CACHE_DELIMITER + key + CACHE_DELIMITER + COUNT_NUMBER;
+        String countNumberKey = ValidatorConstants.COUNT_VALIDATE_CACHE_KEY_PREFIX + CacheConstants.CACHE_DELIMITER + key + CacheConstants.CACHE_DELIMITER + ValidatorConstants.COUNT_NUMBER;
 
         // 获取缓存中上一次操作时间秒数
         Object recordTimeSecondsObject = cacheOperatorApi.get(recordTimeSecondsKey);
