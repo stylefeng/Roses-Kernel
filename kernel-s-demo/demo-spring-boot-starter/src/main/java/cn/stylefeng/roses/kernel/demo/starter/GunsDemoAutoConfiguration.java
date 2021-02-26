@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.demo.starter;
 
-import cn.stylefeng.roses.kernel.demo.DemoProfileSqlInterceptor;
+import cn.stylefeng.roses.kernel.demo.interceptor.DemoProfileSqlInterceptor;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
