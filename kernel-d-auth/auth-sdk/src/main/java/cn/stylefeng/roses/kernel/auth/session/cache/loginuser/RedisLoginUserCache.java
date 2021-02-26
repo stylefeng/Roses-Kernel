@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.auth.session.cache.loginuser;
 
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import cn.stylefeng.roses.kernel.cache.AbstractRedisCacheOperator;
+import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import static cn.stylefeng.roses.kernel.auth.api.constants.AuthConstants.LOGGED_TOKEN_PREFIX;

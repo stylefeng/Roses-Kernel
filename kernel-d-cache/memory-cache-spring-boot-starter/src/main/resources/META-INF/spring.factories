@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.stylefeng.roses.kernel.cache.starter.memory.GunsMemoryCacheAutoConfiguration
+  cn.stylefeng.roses.kernel.cache.memory.starter.GunsMemoryCacheAutoConfiguration

@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.cache;
+package cn.stylefeng.roses.kernel.cache.memory;
 
 import cn.hutool.cache.impl.CacheObj;
 import cn.hutool.cache.impl.TimedCache;

@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.auth.session.cache.logintoken;
 
-import cn.stylefeng.roses.kernel.cache.AbstractRedisCacheOperator;
+import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Set;

@@ -1,8 +1,8 @@
-package cn.stylefeng.roses.kernel.cache.operator;
+package cn.stylefeng.roses.kernel.cache.memory.operator;
 
 import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kernel.cache.AbstractMemoryCacheOperator;
 import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
+import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
 
 /**
  * 默认内存缓存的实现，value存放String类型

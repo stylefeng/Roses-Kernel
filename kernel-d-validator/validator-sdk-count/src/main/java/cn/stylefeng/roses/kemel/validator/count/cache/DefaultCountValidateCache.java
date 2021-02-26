@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kemel.validator.count.cache;
 
 import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kernel.cache.AbstractMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
 
 import static cn.stylefeng.roses.kernel.validator.api.constants.ValidatorConstants.COUNT_VALIDATE_CACHE_KEY_PREFIX;
 

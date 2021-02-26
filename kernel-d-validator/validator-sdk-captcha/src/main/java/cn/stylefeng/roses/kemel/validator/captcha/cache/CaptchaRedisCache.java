@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kemel.validator.captcha.cache;
 
 import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kernel.cache.AbstractMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
 
 import static cn.stylefeng.roses.kernel.validator.api.constants.CaptchaConstants.CAPTCHA_CACHE_KEY_PREFIX;
 

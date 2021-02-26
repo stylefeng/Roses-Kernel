@@ -1,10 +1,10 @@
-package cn.stylefeng.roses.kernel.cache.starter.memory;
+package cn.stylefeng.roses.kernel.cache.memory.starter;
 
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
-import cn.stylefeng.roses.kernel.cache.operator.DefaultMemoryCacheOperator;
-import cn.stylefeng.roses.kernel.cache.operator.DefaultStringMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.cache.memory.operator.DefaultMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.cache.memory.operator.DefaultStringMemoryCacheOperator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

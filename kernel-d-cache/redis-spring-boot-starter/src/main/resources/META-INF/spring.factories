@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.stylefeng.roses.kernel.cache.starter.redis.GunsRedisCacheAutoConfiguration
+  cn.stylefeng.roses.kernel.cache.redis.starter.GunsRedisCacheAutoConfiguration

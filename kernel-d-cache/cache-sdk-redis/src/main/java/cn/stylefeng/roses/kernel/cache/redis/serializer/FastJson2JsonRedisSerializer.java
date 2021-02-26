@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.cache.serializer;
+package cn.stylefeng.roses.kernel.cache.redis.serializer;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;

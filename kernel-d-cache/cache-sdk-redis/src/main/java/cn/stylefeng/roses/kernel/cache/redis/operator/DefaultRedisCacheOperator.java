@@ -1,7 +1,7 @@
-package cn.stylefeng.roses.kernel.cache.operator;
+package cn.stylefeng.roses.kernel.cache.redis.operator;
 
-import cn.stylefeng.roses.kernel.cache.AbstractRedisCacheOperator;
 import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
+import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**

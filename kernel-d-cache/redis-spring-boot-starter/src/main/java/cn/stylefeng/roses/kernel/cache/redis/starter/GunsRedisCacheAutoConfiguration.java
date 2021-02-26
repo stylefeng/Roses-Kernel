@@ -1,8 +1,8 @@
-package cn.stylefeng.roses.kernel.cache.starter.redis;
+package cn.stylefeng.roses.kernel.cache.redis.starter;
 
-import cn.stylefeng.roses.kernel.cache.operator.DefaultRedisCacheOperator;
-import cn.stylefeng.roses.kernel.cache.operator.DefaultStringRedisCacheOperator;
-import cn.stylefeng.roses.kernel.cache.serializer.FastJson2JsonRedisSerializer;
+import cn.stylefeng.roses.kernel.cache.redis.operator.DefaultRedisCacheOperator;
+import cn.stylefeng.roses.kernel.cache.redis.operator.DefaultStringRedisCacheOperator;
+import cn.stylefeng.roses.kernel.cache.redis.serializer.FastJson2JsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
