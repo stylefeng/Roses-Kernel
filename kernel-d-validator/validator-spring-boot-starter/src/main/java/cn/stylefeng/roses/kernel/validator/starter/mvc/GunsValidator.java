@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.validator.starter.mvc;
 
-import cn.stylefeng.roses.kernel.validator.context.RequestGroupContext;
+import cn.stylefeng.roses.kernel.validator.api.context.RequestGroupContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.Errors;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;

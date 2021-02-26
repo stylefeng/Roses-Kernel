@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.validator.starter.mvc;
 
-import cn.stylefeng.roses.kernel.validator.context.RequestParamContext;
+import cn.stylefeng.roses.kernel.validator.api.context.RequestParamContext;
 import org.springframework.core.Conventions;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;

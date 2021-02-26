@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.api.pojo.role.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
-import cn.stylefeng.roses.kernel.validator.validators.unique.TableUniqueValue;
+import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

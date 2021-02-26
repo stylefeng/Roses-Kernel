@@ -23,8 +23,8 @@ import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
-import cn.stylefeng.roses.kernel.validator.CaptchaApi;
-import cn.stylefeng.roses.kernel.validator.exception.enums.ValidatorExceptionEnum;
+import cn.stylefeng.roses.kernel.validator.api.CaptchaApi;
+import cn.stylefeng.roses.kernel.validator.api.exception.enums.ValidatorExceptionEnum;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
