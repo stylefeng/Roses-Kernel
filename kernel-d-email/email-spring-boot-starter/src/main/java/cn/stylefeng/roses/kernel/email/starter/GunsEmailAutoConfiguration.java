@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.email.starter;
 
 import cn.hutool.extra.mail.MailAccount;
-import cn.stylefeng.roses.kernel.email.JavaMailSender;
 import cn.stylefeng.roses.kernel.email.api.MailSenderApi;
 import cn.stylefeng.roses.kernel.email.api.expander.EmailConfigExpander;
+import cn.stylefeng.roses.kernel.email.jdk.JavaMailSender;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

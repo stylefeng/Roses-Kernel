@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.email;
+package cn.stylefeng.roses.kernel.email.jdk;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
