@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.message.modular.manage.controller;
+package cn.stylefeng.roses.kernel.message.modular;
 
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.message.api.MessageApi;

@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.message.modular.websocket.controller;
+package cn.stylefeng.roses.kernel.message.modular.websocket;
 
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
