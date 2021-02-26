@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.api;
 
-import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
-import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceUrlParam;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceUrlParam;
 
 import java.util.List;
 import java.util.Set;

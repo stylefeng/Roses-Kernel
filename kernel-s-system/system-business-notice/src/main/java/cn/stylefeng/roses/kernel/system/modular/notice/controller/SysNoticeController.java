@@ -1,12 +1,12 @@
 package cn.stylefeng.roses.kernel.system.modular.notice.controller;
 
-import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.modular.notice.service.SysNoticeService;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.notice.SysNoticeRequest;
+import cn.stylefeng.roses.kernel.system.modular.notice.service.SysNoticeService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

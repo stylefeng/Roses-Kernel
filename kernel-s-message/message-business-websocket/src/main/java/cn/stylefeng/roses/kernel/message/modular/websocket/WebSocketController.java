@@ -2,10 +2,10 @@ package cn.stylefeng.roses.kernel.message.modular.websocket;
 
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import org.springframework.web.bind.annotation.RestController;
 
 /**

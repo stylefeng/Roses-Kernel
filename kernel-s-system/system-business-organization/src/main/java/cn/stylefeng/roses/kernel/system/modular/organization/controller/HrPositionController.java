@@ -1,13 +1,13 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.controller;
 
-import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
-import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionRequest;
+import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

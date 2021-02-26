@@ -1,18 +1,18 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.controller;
 
-import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
-import cn.stylefeng.roses.kernel.system.modular.menu.factory.AntdMenusFactory;
-import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdvMenuItem;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.modular.menu.factory.AntdMenusFactory;
+import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,14 +1,14 @@
 package cn.stylefeng.roses.kernel.system.modular.role.controller;
 
 import cn.hutool.core.collection.ListUtil;
-import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.modular.role.service.SysRoleResourceService;
 import cn.stylefeng.roses.kernel.system.modular.role.service.SysRoleService;
-import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

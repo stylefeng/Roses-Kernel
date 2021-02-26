@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.system.modular.resource.cache;
 
-import cn.stylefeng.roses.kernel.resource.api.pojo.resource.ResourceDefinition;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.factory.ResourceFactory;
 import org.springframework.stereotype.Component;

@@ -1,14 +1,14 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.resource.api.annotation.ApiResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.resource.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuButtonRequest;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuButtonService;
-import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuButtonRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
