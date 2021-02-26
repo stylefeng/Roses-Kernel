@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.log.modular.requestapi.aop;
+package cn.stylefeng.roses.kernel.log.requestapi;
 
 import cn.stylefeng.roses.kernel.log.api.LogRecordApi;
 import cn.stylefeng.roses.kernel.log.api.constants.LogConstants;

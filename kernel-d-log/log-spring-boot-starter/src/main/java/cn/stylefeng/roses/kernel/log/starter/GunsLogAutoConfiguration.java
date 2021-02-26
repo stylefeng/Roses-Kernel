@@ -13,7 +13,7 @@ import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
 import cn.stylefeng.roses.kernel.log.db.service.impl.SysLogServiceImpl;
 import cn.stylefeng.roses.kernel.log.file.FileLogManagerServiceImpl;
 import cn.stylefeng.roses.kernel.log.file.FileLogRecordServiceImpl;
-import cn.stylefeng.roses.kernel.log.modular.requestapi.aop.RequestApiLogRecordAop;
+import cn.stylefeng.roses.kernel.log.requestapi.RequestApiLogRecordAop;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;

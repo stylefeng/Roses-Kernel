@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.log.modular.manage.controller;
+package cn.stylefeng.roses.kernel.log.manage;
 
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
