@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.security;
+package cn.stylefeng.roses.kernel.security.xss;
 
 
 import cn.hutool.core.util.ObjectUtil;

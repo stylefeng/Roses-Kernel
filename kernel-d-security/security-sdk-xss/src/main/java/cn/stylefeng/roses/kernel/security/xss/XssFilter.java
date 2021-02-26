@@ -1,7 +1,7 @@
-package cn.stylefeng.roses.kernel.security;
+package cn.stylefeng.roses.kernel.security.xss;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.stylefeng.roses.kernel.security.prop.XssProperties;
+import cn.stylefeng.roses.kernel.security.xss.prop.XssProperties;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.*;

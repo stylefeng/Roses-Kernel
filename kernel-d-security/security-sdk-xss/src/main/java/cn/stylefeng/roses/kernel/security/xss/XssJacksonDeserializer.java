@@ -1,9 +1,9 @@
-package cn.stylefeng.roses.kernel.security;
+package cn.stylefeng.roses.kernel.security.xss;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HtmlUtil;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
-import cn.stylefeng.roses.kernel.security.prop.XssProperties;
+import cn.stylefeng.roses.kernel.security.xss.prop.XssProperties;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
