@@ -1,6 +1,6 @@
-package cn.stylefeng.roses.kernel.file;
+package cn.stylefeng.roses.kernel.file.api;
 
-import cn.stylefeng.roses.kernel.file.enums.BucketAuthEnum;
+import cn.stylefeng.roses.kernel.file.api.enums.BucketAuthEnum;
 
 import java.io.InputStream;
 

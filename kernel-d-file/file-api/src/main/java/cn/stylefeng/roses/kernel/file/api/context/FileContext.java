@@ -1,7 +1,7 @@
-package cn.stylefeng.roses.kernel.file.context;
+package cn.stylefeng.roses.kernel.file.api.context;
 
 import cn.hutool.extra.spring.SpringUtil;
-import cn.stylefeng.roses.kernel.file.FileOperatorApi;
+import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 
 /**
  * 文件操作api的上下文

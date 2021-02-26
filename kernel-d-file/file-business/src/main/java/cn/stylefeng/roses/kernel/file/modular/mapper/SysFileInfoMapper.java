@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.file.modular.mapper;
 
+import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
+import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse;
+import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
-import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
-import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoListResponse;
-import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;

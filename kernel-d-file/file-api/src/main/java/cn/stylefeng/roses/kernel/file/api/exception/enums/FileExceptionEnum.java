@@ -1,6 +1,6 @@
-package cn.stylefeng.roses.kernel.file.exception.enums;
+package cn.stylefeng.roses.kernel.file.api.exception.enums;
 
-import cn.stylefeng.roses.kernel.file.constants.FileConstants;
+import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import lombok.Getter;

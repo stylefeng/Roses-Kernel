@@ -1,9 +1,9 @@
-package cn.stylefeng.roses.kernel.file.expander;
+package cn.stylefeng.roses.kernel.file.api.expander;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
-import cn.stylefeng.roses.kernel.file.constants.FileConstants;
-import cn.stylefeng.roses.kernel.file.pojo.props.LocalFileProperties;
+import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
+import cn.stylefeng.roses.kernel.file.api.pojo.props.LocalFileProperties;
 
 /**
  * 文件相关的配置获取

@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.file.starter;
 
-import cn.stylefeng.roses.kernel.file.FileOperatorApi;
-import cn.stylefeng.roses.kernel.file.expander.FileConfigExpander;
+import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
+import cn.stylefeng.roses.kernel.file.api.expander.FileConfigExpander;
+import cn.stylefeng.roses.kernel.file.api.pojo.props.LocalFileProperties;
 import cn.stylefeng.roses.kernel.file.local.LocalFileOperator;
-import cn.stylefeng.roses.kernel.file.pojo.props.LocalFileProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

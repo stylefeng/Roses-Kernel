@@ -2,11 +2,11 @@ package cn.stylefeng.roses.kernel.file.tencent;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.thread.ExecutorBuilder;
-import cn.stylefeng.roses.kernel.file.FileOperatorApi;
-import cn.stylefeng.roses.kernel.file.enums.BucketAuthEnum;
-import cn.stylefeng.roses.kernel.file.exception.FileException;
-import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
-import cn.stylefeng.roses.kernel.file.pojo.props.TenCosProperties;
+import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
+import cn.stylefeng.roses.kernel.file.api.enums.BucketAuthEnum;
+import cn.stylefeng.roses.kernel.file.api.exception.FileException;
+import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.api.pojo.props.TenCosProperties;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;

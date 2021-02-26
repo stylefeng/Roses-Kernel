@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.file.constants;
+package cn.stylefeng.roses.kernel.file.api.constants;
 
 /**
  * 文件模块的常量

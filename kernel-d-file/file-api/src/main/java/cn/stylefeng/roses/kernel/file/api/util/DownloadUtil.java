@@ -1,11 +1,11 @@
-package cn.stylefeng.roses.kernel.file.util;
+package cn.stylefeng.roses.kernel.file.api.util;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.stylefeng.roses.kernel.file.exception.FileException;
-import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.api.exception.FileException;
+import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletOutputStream;

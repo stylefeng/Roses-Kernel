@@ -1,9 +1,9 @@
 package cn.stylefeng.roses.kernel.file.modular.controller;
 
-import cn.stylefeng.roses.kernel.file.constants.FileConstants;
+import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
+import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
+import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
-import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
-import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
@@ -23,8 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static cn.stylefeng.roses.kernel.file.constants.FileConstants.*;
 
 /**
  * 文件信息管理

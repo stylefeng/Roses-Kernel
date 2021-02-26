@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.file.util;
+package cn.stylefeng.roses.kernel.file.api.util;
 
 import cn.hutool.core.util.StrUtil;
 

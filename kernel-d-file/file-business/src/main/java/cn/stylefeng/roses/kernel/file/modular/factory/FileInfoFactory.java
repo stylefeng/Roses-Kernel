@@ -6,21 +6,21 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import cn.stylefeng.roses.kernel.file.FileOperatorApi;
-import cn.stylefeng.roses.kernel.file.enums.FileLocationEnum;
-import cn.stylefeng.roses.kernel.file.enums.FileStatusEnum;
-import cn.stylefeng.roses.kernel.file.exception.FileException;
-import cn.stylefeng.roses.kernel.file.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
+import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
+import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
+import cn.stylefeng.roses.kernel.file.api.exception.FileException;
+import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
-import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import static cn.stylefeng.roses.kernel.file.constants.FileConstants.DEFAULT_BUCKET_NAME;
-import static cn.stylefeng.roses.kernel.file.constants.FileConstants.FILE_POSTFIX_SEPARATOR;
+import static cn.stylefeng.roses.kernel.file.api.constants.FileConstants.DEFAULT_BUCKET_NAME;
+import static cn.stylefeng.roses.kernel.file.api.constants.FileConstants.FILE_POSTFIX_SEPARATOR;
 
 /**
  * 文件信息组装工厂

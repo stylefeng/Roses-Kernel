@@ -1,6 +1,6 @@
-package cn.stylefeng.roses.kernel.file;
+package cn.stylefeng.roses.kernel.file.api;
 
-import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
+import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 
 /**
  * 获取文件信息的api

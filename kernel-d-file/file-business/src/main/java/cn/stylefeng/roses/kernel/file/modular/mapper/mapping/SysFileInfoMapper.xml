@@ -4,7 +4,7 @@
 
     <!--  根据附件IDS查询附件信息  -->
     <select id="getFileInfoListByFileIds"
-            resultType="cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse">
+            resultType="cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse">
         SELECT file.file_id          AS fileId,
                file.file_code        AS fileCode,
                file.file_version     AS fileVersion,
@@ -25,7 +25,7 @@
     </select>
 
     <!--  附件列表  -->
-    <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoListResponse">
+    <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse">
         SELECT file.file_id        AS fileId,
             file.file_code         AS fileCode,
             file.secret_flag       AS secretFlag,

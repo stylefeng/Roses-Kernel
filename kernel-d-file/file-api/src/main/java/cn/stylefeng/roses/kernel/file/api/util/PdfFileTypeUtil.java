@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.file.util;
+package cn.stylefeng.roses.kernel.file.api.util;
 
 import cn.hutool.core.util.StrUtil;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * pdf文件类型识别工具
- *      
+ *
  * @author majianguo
  * @date 2020/12/27 13:06
  */

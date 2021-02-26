@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.file.modular.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
+import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse;
+import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
-import cn.stylefeng.roses.kernel.file.pojo.request.SysFileInfoRequest;
-import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoListResponse;
-import cn.stylefeng.roses.kernel.file.pojo.response.SysFileInfoResponse;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
