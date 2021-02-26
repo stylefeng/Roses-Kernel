@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.sms.starter;
 
-import cn.stylefeng.roses.kernel.aliyun.AliyunSmsSender;
-import cn.stylefeng.roses.kernel.aliyun.msign.impl.MapBasedMultiSignManager;
+import cn.stylefeng.roses.kernel.sms.aliyun.AliyunSmsSender;
+import cn.stylefeng.roses.kernel.sms.aliyun.msign.impl.MapBasedMultiSignManager;
 import cn.stylefeng.roses.kernel.sms.api.SmsSenderApi;
 import cn.stylefeng.roses.kernel.sms.api.expander.SmsConfigExpander;
 import cn.stylefeng.roses.kernel.sms.api.pojo.AliyunSmsProperties;

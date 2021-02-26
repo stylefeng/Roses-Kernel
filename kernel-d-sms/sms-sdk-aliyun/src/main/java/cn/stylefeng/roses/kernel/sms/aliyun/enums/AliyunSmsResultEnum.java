@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.aliyun.enums;
+package cn.stylefeng.roses.kernel.sms.aliyun.enums;
 
 
 import lombok.Getter;

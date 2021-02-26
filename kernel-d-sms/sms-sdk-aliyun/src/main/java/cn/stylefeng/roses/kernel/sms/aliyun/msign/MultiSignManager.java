@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.aliyun.msign;
+package cn.stylefeng.roses.kernel.sms.aliyun.msign;
 
 /**
  * 多个签名的缓存管理，为了打破一个签名发送次数的限制

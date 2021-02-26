@@ -1,9 +1,9 @@
-package cn.stylefeng.roses.kernel.aliyun;
+package cn.stylefeng.roses.kernel.sms.aliyun;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.aliyun.enums.AliyunSmsResultEnum;
-import cn.stylefeng.roses.kernel.aliyun.msign.MultiSignManager;
+import cn.stylefeng.roses.kernel.sms.aliyun.enums.AliyunSmsResultEnum;
+import cn.stylefeng.roses.kernel.sms.aliyun.msign.MultiSignManager;
 import cn.stylefeng.roses.kernel.sms.api.SmsSenderApi;
 import cn.stylefeng.roses.kernel.sms.api.exception.SmsException;
 import cn.stylefeng.roses.kernel.sms.api.exception.enums.SmsExceptionEnum;

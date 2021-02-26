@@ -1,7 +1,7 @@
-package cn.stylefeng.roses.kernel.aliyun.msign.impl;
+package cn.stylefeng.roses.kernel.sms.aliyun.msign.impl;
 
 import cn.hutool.log.Log;
-import cn.stylefeng.roses.kernel.aliyun.msign.MultiSignManager;
+import cn.stylefeng.roses.kernel.sms.aliyun.msign.MultiSignManager;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
