@@ -25,15 +25,15 @@ import cn.stylefeng.roses.kernel.system.api.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.organization.OrganizationExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.layui.LayuiOrganizationTreeNode;
+import cn.stylefeng.roses.kernel.system.api.util.DataScopeUtil;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.modular.organization.factory.AntdvOrganizationFactory;
 import cn.stylefeng.roses.kernel.system.modular.organization.factory.LayuiOrganizationFactory;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrOrganizationMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
-import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationDTO;
-import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationRequest;
-import cn.stylefeng.roses.kernel.system.api.pojo.organization.layui.LayuiOrganizationTreeNode;
-import cn.stylefeng.roses.kernel.system.api.util.DataScopeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -407,13 +407,11 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         LambdaQueryWrapper<HrOrganization> queryWrapper = this.createWrapper(hrOrganizationRequest);
 
         // 数据范围过滤
-        // 如果是超级管理员并且数据范围是所有则不过滤数据范围
+        // 如果是超级管理员，或者数据范围权限是所有，则不过滤数据范围
         boolean needToDataScope = true;
-        if (LoginContext.me().getSuperAdminFlag()) {
-            Set<DataScopeTypeEnum> dataScopeTypes = LoginContext.me().getLoginUser().getDataScopeTypeEnums();
-            if (dataScopeTypes != null && dataScopeTypes.contains(DataScopeTypeEnum.ALL)) {
-                needToDataScope = false;
-            }
+        Set<DataScopeTypeEnum> dataScopeTypes = LoginContext.me().getLoginUser().getDataScopeTypeEnums();
+        if (LoginContext.me().getSuperAdminFlag() || (dataScopeTypes != null && dataScopeTypes.contains(DataScopeTypeEnum.ALL))) {
+            needToDataScope = false;
         }
 
         // 过滤数据范围的SQL拼接
