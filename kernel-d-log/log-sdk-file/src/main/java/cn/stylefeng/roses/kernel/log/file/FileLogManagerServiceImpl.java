@@ -64,12 +64,12 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
         }
 
         // 文件日志，必须有开始时间,否则文件太多太大
-        if (ObjectUtil.isEmpty(logManagerParam.getBeginDateTime())) {
+        if (ObjectUtil.isEmpty(logManagerParam.getBeginDate())) {
             throw new LogException(BEGIN_DATETIME_NOT_EXIST);
         }
 
         // 获取文件路径
-        String filePath = getLogPath(logManagerParam.getAppName(), logManagerParam.getBeginDateTime());
+        String filePath = getLogPath(logManagerParam.getAppName(), logManagerParam.getBeginDate());
 
         // 文件当前指针
         long filePointer = 0L;
@@ -107,17 +107,17 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
         }
 
         // 删除操作,必须有appName
-        if (ObjectUtil.isEmpty(logManagerParam.getBeginDateTime())) {
+        if (ObjectUtil.isEmpty(logManagerParam.getBeginDate())) {
             throw new LogException(BEGIN_DATETIME_NOT_EXIST);
         }
 
         // 文件日志，必须有结束时间,否则文件太多太大
-        if (ObjectUtil.isEmpty(logManagerParam.getEndDateTime())) {
+        if (ObjectUtil.isEmpty(logManagerParam.getEndDate())) {
             throw new LogException(END_DATETIME_NOT_EXIST);
         }
 
         // 计算开始和结束两个时间之间的所有日期
-        List<String> dates = getIntervalDate(logManagerParam.getBeginDateTime(), logManagerParam.getEndDateTime());
+        List<String> dates = getIntervalDate(logManagerParam.getBeginDate(), logManagerParam.getEndDate());
 
         // 查找每一天的日志
         for (String date : dates) {
@@ -141,12 +141,12 @@ public class FileLogManagerServiceImpl implements LogManagerApi {
         }
 
         // 文件日志，必须有开始时间,否则文件太多太大
-        if (ObjectUtil.isEmpty(logManagerRequest.getBeginDateTime())) {
+        if (ObjectUtil.isEmpty(logManagerRequest.getBeginDate())) {
             throw new LogException(BEGIN_DATETIME_NOT_EXIST);
         }
 
         // 获取文件路径
-        String filePath = getLogPath(logManagerRequest.getAppName(), logManagerRequest.getBeginDateTime());
+        String filePath = getLogPath(logManagerRequest.getAppName(), logManagerRequest.getBeginDate());
         return this.readLog(filePath, logManagerRequest.getLogId());
     }
 

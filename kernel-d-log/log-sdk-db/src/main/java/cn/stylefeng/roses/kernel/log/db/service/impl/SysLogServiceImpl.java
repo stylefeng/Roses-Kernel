@@ -7,18 +7,19 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.exception.LogException;
+import cn.stylefeng.roses.kernel.log.api.exception.enums.LogExceptionEnum;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.db.entity.SysLog;
 import cn.stylefeng.roses.kernel.log.db.mapper.SysLogMapper;
 import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static cn.stylefeng.roses.kernel.log.api.exception.enums.LogExceptionEnum.LOG_NOT_EXISTED;
 
 /**
  * 日志记录 service接口实现类
@@ -45,7 +46,12 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 
     @Override
     public void delAll(LogManagerRequest logManagerRequest) {
-        this.remove(null);
+        LambdaUpdateWrapper<SysLog> queryWrapper = new LambdaUpdateWrapper<>();
+
+        queryWrapper.between(SysLog::getCreateTime, logManagerRequest.getBeginDate() + " 00:00:00", logManagerRequest.getEndDate() + " 23:59:59");
+        queryWrapper.eq(SysLog::getAppName, logManagerRequest.getAppName());
+
+        this.remove(queryWrapper);
     }
 
     @Override
@@ -76,7 +82,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     private SysLog querySysLogById(LogManagerRequest logManagerRequest) {
         SysLog sysLog = this.getById(logManagerRequest.getLogId());
         if (sysLog == null) {
-            throw new LogException(LOG_NOT_EXISTED, logManagerRequest.getLogId());
+            throw new LogException(LogExceptionEnum.LOG_NOT_EXISTED, logManagerRequest.getLogId());
         }
         return sysLog;
     }
@@ -97,8 +103,8 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
             return queryWrapper;
         }
 
-        String beginDateTime = logManagerRequest.getBeginDateTime();
-        String endDateTime = logManagerRequest.getEndDateTime();
+        String beginDateTime = logManagerRequest.getBeginDate();
+        String endDateTime = logManagerRequest.getEndDate();
 
         // SQL条件拼接
         String name = logManagerRequest.getLogName();
@@ -108,10 +114,10 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         String clientIp = logManagerRequest.getClientIp();
         String url = logManagerRequest.getRequestUrl();
 
-        queryWrapper.between(!StrUtil.isAllBlank(beginDateTime, endDateTime), SysLog::getCreateTime, beginDateTime, endDateTime);
-        queryWrapper.eq(StrUtil.isNotEmpty(name), SysLog::getLogName, name);
-        queryWrapper.eq(StrUtil.isNotEmpty(appName), SysLog::getAppName, appName);
-        queryWrapper.eq(StrUtil.isNotEmpty(serverIp), SysLog::getServerIp, serverIp);
+        queryWrapper.between(StrUtil.isAllNotBlank(beginDateTime, endDateTime), SysLog::getCreateTime, beginDateTime + " 00:00:00", endDateTime + " 23:59:59");
+        queryWrapper.like(StrUtil.isNotEmpty(name), SysLog::getLogName, name);
+        queryWrapper.like(StrUtil.isNotEmpty(appName), SysLog::getAppName, appName);
+        queryWrapper.like(StrUtil.isNotEmpty(serverIp), SysLog::getServerIp, serverIp);
         queryWrapper.eq(ObjectUtil.isNotNull(userId), SysLog::getUserId, userId);
         queryWrapper.eq(StrUtil.isNotEmpty(clientIp), SysLog::getClientIp, clientIp);
         queryWrapper.eq(StrUtil.isNotEmpty(url), SysLog::getRequestUrl, url);

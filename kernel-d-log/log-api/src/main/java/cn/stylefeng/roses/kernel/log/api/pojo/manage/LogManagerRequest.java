@@ -25,13 +25,13 @@ public class LogManagerRequest extends BaseRequest {
      * 查询的起始时间
      */
     @NotBlank(message = "起始时间不能为空", groups = {delete.class})
-    private String beginDateTime;
+    private String beginDate;
 
     /**
      * 查询日志的结束时间
      */
     @NotBlank(message = "结束时间不能为空", groups = {delete.class})
-    private String endDateTime;
+    private String endDate;
 
     /**
      * 日志的名称，一般为业务名称

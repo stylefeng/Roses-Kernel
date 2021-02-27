@@ -66,7 +66,7 @@ public class LogManagerController {
      */
     @PostResource(name = "删除日志", path = "/logManager/delete")
     public ResponseData delete(@RequestBody @Validated(LogManagerRequest.delete.class) LogManagerRequest logManagerRequest) {
-        logManagerApi.del(logManagerRequest);
+        sysLogService.delAll(logManagerRequest);
         return new SuccessResponseData();
     }
 
