@@ -62,6 +62,26 @@
             <version>7.0.1</version>
         </dependency>
 
+        <!--缓存api-->
+        <!--用户的查询会使用缓存-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>cache-sdk-memory</artifactId>
+            <version>7.0.1</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>cache-sdk-redis</artifactId>
+            <version>7.0.1</version>
+            <optional>true</optional>
+        </dependency>
+
         <!--数据库sdk-->
         <!--数据库dao框架-->
         <dependency>

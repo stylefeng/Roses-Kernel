@@ -11,6 +11,7 @@ import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -109,6 +110,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private OrganizationServiceApi organizationServiceApi;
 
+    @Resource
+    private CacheOperatorApi<SysUserDTO> sysUserCacheOperatorApi;
+
     @Override
     public void register(SysUserRequest sysUserRequest) {
         SysUser sysUser = new SysUser();
@@ -175,6 +179,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 删除该用户对应的用户-数据范围表关联信息
         sysUserDataScopeService.delByUserId(userId);
+
+        // 清除缓存中的用户信息
+        sysUserCacheOperatorApi.remove(String.valueOf(userId));
     }
 
     @Override
@@ -199,6 +206,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 更新用户员工信息
         sysUserOrgService.edit(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+
+        // 清除缓存中的用户信息
+        sysUserCacheOperatorApi.remove(String.valueOf(sysUser.getUserId()));
     }
 
     @Override
@@ -209,6 +219,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUserCreateFactory.fillUpdateInfo(sysUserRequest, sysUser);
 
         this.updateById(sysUser);
+
+        // 清除缓存中的用户信息
+        sysUserCacheOperatorApi.remove(String.valueOf(sysUser.getUserId()));
     }
 
     @Override
@@ -236,6 +249,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             log.error(SysUserExceptionEnum.UPDATE_USER_STATUS_ERROR.getUserTip());
             throw new SystemModularException(SysUserExceptionEnum.UPDATE_USER_STATUS_ERROR);
         }
+
+        // 清除缓存中的用户信息
+        sysUserCacheOperatorApi.remove(String.valueOf(sysUser.getUserId()));
     }
 
     @Override
@@ -291,6 +307,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SimpleUserInfo simpleUserInfo = loginUser.getSimpleUserInfo();
         simpleUserInfo.setAvatar(fileId);
         sessionManagerApi.updateSession(LoginContext.me().getToken(), loginUser);
+
+        // 清除缓存中的用户信息
+        sysUserCacheOperatorApi.remove(String.valueOf(sysUser.getUserId()));
     }
 
     @Override
@@ -569,9 +588,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public SysUserDTO getUserInfoByUserId(Long userId) {
+
+        // 从缓存查询用户
+        SysUserDTO sysUserDTO = sysUserCacheOperatorApi.get(String.valueOf(userId));
+        if (sysUserDTO != null) {
+            return sysUserDTO;
+        }
+
         SysUser sysUser = this.getById(userId);
         if (ObjectUtil.isNotEmpty(sysUser)) {
-            return BeanUtil.copyProperties(sysUser, SysUserDTO.class);
+            SysUserDTO result = BeanUtil.copyProperties(sysUser, SysUserDTO.class);
+            sysUserCacheOperatorApi.put(String.valueOf(userId), result);
+            return result;
         }
         return null;
     }
@@ -618,10 +646,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @date 2020/3/26 9:54
      */
     private SysUser querySysUser(SysUserRequest sysUserRequest) {
+
+        // 先从缓存中获取用户信息
+        String userIdKey = String.valueOf(sysUserRequest.getUserId());
+        SysUserDTO sysUserDTO = sysUserCacheOperatorApi.get(userIdKey);
+        if (sysUserDTO != null) {
+            SysUser tempUser = new SysUser();
+            BeanUtil.copyProperties(sysUserDTO, tempUser);
+            return tempUser;
+        }
+
         SysUser sysUser = this.getById(sysUserRequest.getUserId());
         if (ObjectUtil.isNull(sysUser)) {
             throw new SystemModularException(SysUserExceptionEnum.USER_NOT_EXIST, sysUserRequest.getUserId());
         }
+
+        // 放入缓存
+        SysUserDTO sysUserDTOCache = new SysUserDTO();
+        BeanUtil.copyProperties(sysUser, sysUserDTOCache);
+        sysUserCacheOperatorApi.put(userIdKey, sysUserDTOCache);
+
         return sysUser;
     }
 

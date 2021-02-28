@@ -53,9 +53,15 @@
         </dependency>
 
         <!--用户管理的业务-->
+        <!--默认使用内存缓存-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-user</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>cache-sdk-memory</artifactId>
             <version>7.0.1</version>
         </dependency>
 

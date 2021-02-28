@@ -38,4 +38,14 @@ public interface SystemConstants {
      */
     String DEFAULT_SYSTEM_NAME = "Guns快速开发平台";
 
+    /**
+     * 用户缓存的前缀
+     */
+    String USER_CACHE_PREFIX = "user:";
+
+    /**
+     * 用户缓存过期时间(1小时)
+     */
+    Long USER_CACHE_TIMEOUT_SECONDS = 3600L;
+
 }
