@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.log.db.wrapper;
+package cn.stylefeng.roses.kernel.log.manage.wrapper;
 
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
@@ -20,6 +20,9 @@ public class LogInfoWrapper implements BaseWrapper<LogRecordDTO> {
     @Override
     public Map<String, Object> doWrap(LogRecordDTO beWrappedModel) {
 
+        if (beWrappedModel.getUserId() == null) {
+            return new HashMap<>();
+        }
         UserServiceApi userServiceApi = SpringUtil.getBean(UserServiceApi.class);
         SysUserDTO sysUserDTO = userServiceApi.getUserInfoByUserId(beWrappedModel.getUserId());
 

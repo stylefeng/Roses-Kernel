@@ -40,6 +40,22 @@
             <version>7.0.1</version>
         </dependency>
 
+        <!--system的api-->
+        <!--查询用户-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-api</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+
+        <!--包装器模块-->
+        <!--包装结果-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>wrapper-api</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+
         <!--数据库sdk-->
         <!--数据库dao框架-->
         <dependency>

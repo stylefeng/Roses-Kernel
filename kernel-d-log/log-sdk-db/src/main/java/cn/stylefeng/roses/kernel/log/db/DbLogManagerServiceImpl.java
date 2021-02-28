@@ -8,11 +8,10 @@ import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.log.db.entity.SysLog;
 import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
-import cn.stylefeng.roses.kernel.log.db.wrapper.LogInfoWrapper;
-import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,13 +35,23 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
     }
 
     @Override
-    @Wrapper(LogInfoWrapper.class)
     public PageResult<LogRecordDTO> findPage(LogManagerRequest logManagerRequest) {
         PageResult<SysLog> sysLogPageResult = this.sysLogService.findPage(logManagerRequest);
 
         // 分页类型转换
         PageResult<LogRecordDTO> logRecordDTOPageResult = new PageResult<>();
         BeanUtil.copyProperties(sysLogPageResult, logRecordDTOPageResult);
+
+        // 转化数组
+        List<SysLog> rows = sysLogPageResult.getRows();
+        ArrayList<LogRecordDTO> newRows = new ArrayList<>();
+        for (SysLog row : rows) {
+            LogRecordDTO logRecordDTO = new LogRecordDTO();
+            BeanUtil.copyProperties(row, logRecordDTO);
+            newRows.add(logRecordDTO);
+        }
+        logRecordDTOPageResult.setRows(newRows);
+
         return logRecordDTOPageResult;
     }
 
