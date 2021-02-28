@@ -8,6 +8,8 @@ import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.log.db.entity.SysLog;
 import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
+import cn.stylefeng.roses.kernel.log.db.wrapper.LogInfoWrapper;
+import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -34,6 +36,7 @@ public class DbLogManagerServiceImpl implements LogManagerApi {
     }
 
     @Override
+    @Wrapper(LogInfoWrapper.class)
     public PageResult<LogRecordDTO> findPage(LogManagerRequest logManagerRequest) {
         PageResult<SysLog> sysLogPageResult = this.sysLogService.findPage(logManagerRequest);
 
