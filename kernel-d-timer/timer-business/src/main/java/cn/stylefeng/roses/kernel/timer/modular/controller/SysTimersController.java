@@ -7,6 +7,8 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.timer.modular.param.SysTimersParam;
 import cn.stylefeng.roses.kernel.timer.modular.service.SysTimersService;
+import cn.stylefeng.roses.kernel.timer.modular.wrapper.TimerWrapper;
+import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -105,6 +107,7 @@ public class SysTimersController {
      * @date 2020/6/30 18:26
      */
     @GetResource(name = "分页查询定时任务", path = "/sysTimers/page")
+    @Wrapper(TimerWrapper.class)
     public ResponseData page(SysTimersParam sysTimersParam) {
         return new SuccessResponseData(sysTimersService.findPage(sysTimersParam));
     }
