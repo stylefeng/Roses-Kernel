@@ -3,12 +3,16 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserDataScopeExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserOrgExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserDataScope;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserDataScopeMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserDataScopeService;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.UserDataScopeRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,10 +72,11 @@ public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMap
 
     @Override
     public void delByUserId(Long userId) {
-        UserDataScopeRequest userDataScopeRequest = new UserDataScopeRequest();
-        userDataScopeRequest.setUserId(userId);
-        LambdaQueryWrapper<SysUserDataScope> queryWrapper = this.createQueryWrapper(userDataScopeRequest);
-        this.remove(queryWrapper);
+        if (ObjectUtil.isNotEmpty(userId)) {
+            LambdaQueryWrapper<SysUserDataScope> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(SysUserDataScope::getUserId, userId);
+            this.remove(queryWrapper);
+        }
     }
 
     @Override
@@ -83,8 +88,7 @@ public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMap
 
     @Override
     public SysUserDataScope detail(UserDataScopeRequest userDataScopeRequest) {
-        LambdaQueryWrapper<SysUserDataScope> queryWrapper = this.createQueryWrapper(userDataScopeRequest);
-        return this.getOne(queryWrapper, false);
+        return this.getOne(this.createQueryWrapper(userDataScopeRequest), false);
     }
 
     @Override
@@ -109,7 +113,11 @@ public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMap
      * @date 2021/2/3 15:02
      */
     private SysUserDataScope querySysUserRoleById(UserDataScopeRequest userDataScopeRequest) {
-        return this.getById(userDataScopeRequest.getUserDataScopeId());
+        SysUserDataScope sysUserDataScope = this.getById(userDataScopeRequest.getUserDataScopeId());
+        if (ObjectUtil.isEmpty(sysUserDataScope)) {
+            throw new SystemModularException(SysUserDataScopeExceptionEnum.USER_DATA_SCOPE_NOT_EXIST, sysUserDataScope.getUserDataScopeId());
+        }
+        return sysUserDataScope;
     }
 
     /**
