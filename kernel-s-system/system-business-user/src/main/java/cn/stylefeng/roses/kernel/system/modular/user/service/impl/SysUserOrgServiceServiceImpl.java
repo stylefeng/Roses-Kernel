@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserOrgExceptionEnum.EMPLOYEE_MANY_MAIN_NOT_FOUND;
 
 /**
  * 用户组织机构关联信息
@@ -28,20 +27,17 @@ import static cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserO
 public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, SysUserOrg> implements SysUserOrgService {
 
     @Override
-    public SysUserOrgDTO getUserOrgInfo(Long userId) {
+    public SysUserOrgDTO getUserOrgByUserId(Long userId) {
 
-        LambdaQueryWrapper<SysUserOrg> sysUserOrgLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysUserOrgLambdaQueryWrapper.eq(SysUserOrg::getUserId, userId);
-
-        List<SysUserOrg> list = this.list(sysUserOrgLambdaQueryWrapper);
-        if (list.size() != 1) {
-            throw new SystemModularException(EMPLOYEE_MANY_MAIN_NOT_FOUND);
-        } else {
-            SysUserOrg sysUserOrg = list.get(0);
-            SysUserOrgDTO sysUserOrgResponse = new SysUserOrgDTO();
-            BeanUtil.copyProperties(sysUserOrg, sysUserOrgResponse);
-            return sysUserOrgResponse;
+        UserOrgRequest userOrgRequest = new UserOrgRequest();
+        userOrgRequest.setUserId(userId);
+        SysUserOrg sysUserOrg = this.detail(userOrgRequest);
+        if(ObjectUtil.isEmpty(sysUserOrg)){
+            throw new SystemModularException(SysUserOrgExceptionEnum.EMPLOYEE_MANY_MAIN_NOT_FOUND);
         }
+        SysUserOrgDTO sysUserOrgDTO = new SysUserOrgDTO();
+        BeanUtil.copyProperties(sysUserOrg, sysUserOrgDTO);
+        return sysUserOrgDTO;
     }
 
 
@@ -84,22 +80,16 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(Long userId, Long orgId, Long positionId) {
-        UserOrgRequest userOrgResponse = new UserOrgRequest();
-        userOrgResponse.setUserId(userId);
-        userOrgResponse.setOrgId(orgId);
-        userOrgResponse.setPositionId(positionId);
-
         // 删除已有
         this.delByUserId(userId);
-
+        // 新增
         this.add(userId, orgId, positionId);
     }
 
 
     @Override
     public SysUserOrg detail(UserOrgRequest userOrgResponse) {
-        LambdaQueryWrapper<SysUserOrg> queryWrapper = this.createWrapper(userOrgResponse);
-        return this.getOne(queryWrapper, false);
+        return this.getOne( this.createWrapper(userOrgResponse), false);
     }
 
     @Override
