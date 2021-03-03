@@ -69,7 +69,7 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
     }
 
     @Override
-    public void updateStatus(HrPositionRequest hrPositionRequest) {
+    public void changeStatus(HrPositionRequest hrPositionRequest) {
         HrPosition sysPosition = this.querySysPositionById(hrPositionRequest);
         sysPosition.setStatusFlag(hrPositionRequest.getStatusFlag());
         this.updateById(sysPosition);
@@ -82,8 +82,7 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
 
     @Override
     public List<HrPosition> findList(HrPositionRequest hrPositionRequest) {
-        LambdaQueryWrapper<HrPosition> wrapper = this.createWrapper(hrPositionRequest);
-        return this.list(wrapper);
+        return this.list(this.createWrapper(hrPositionRequest));
     }
 
     @Override
@@ -119,16 +118,6 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
     private LambdaQueryWrapper<HrPosition> createWrapper(HrPositionRequest hrPositionRequest) {
         LambdaQueryWrapper<HrPosition> queryWrapper = new LambdaQueryWrapper<>();
 
-        // 查询未删除状态的
-        queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
-
-        // 根据排序升序排列，序号越小越在前
-        queryWrapper.orderByAsc(HrPosition::getPositionSort);
-
-        if (ObjectUtil.isEmpty(hrPositionRequest)) {
-            return queryWrapper;
-        }
-
         Long positionId = hrPositionRequest.getPositionId();
         String positionName = hrPositionRequest.getPositionName();
         String positionCode = hrPositionRequest.getPositionCode();
@@ -137,6 +126,11 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
         queryWrapper.eq(ObjectUtil.isNotNull(positionId), HrPosition::getPositionId, positionId);
         queryWrapper.like(StrUtil.isNotEmpty(positionName), HrPosition::getPositionName, positionName);
         queryWrapper.eq(StrUtil.isNotEmpty(positionCode), HrPosition::getPositionCode, positionCode);
+
+        // 查询未删除状态的
+        queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
+        // 根据排序升序排列
+        queryWrapper.orderByAsc(HrPosition::getPositionSort);
 
         return queryWrapper;
     }

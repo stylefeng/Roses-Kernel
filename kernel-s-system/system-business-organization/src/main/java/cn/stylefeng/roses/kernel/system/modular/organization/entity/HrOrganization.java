@@ -61,7 +61,7 @@ public class HrOrganization extends BaseEntity {
     /**
      * 状态：1-启用，2-禁用
      */
-    @TableField("status_flag")
+    @TableField(value = "status_flag",fill = FieldFill.INSERT)
     private Integer statusFlag;
 
     /**

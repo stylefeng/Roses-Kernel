@@ -71,7 +71,7 @@ public class HrPositionController {
      */
     @PostResource(name = "更新职位状态", path = "/hrPosition/updateStatus")
     public ResponseData updateStatus(@RequestBody @Validated(BaseRequest.updateStatus.class) HrPositionRequest hrPositionRequest) {
-        hrPositionService.updateStatus(hrPositionRequest);
+        hrPositionService.changeStatus(hrPositionRequest);
         return new SuccessResponseData();
     }
 
