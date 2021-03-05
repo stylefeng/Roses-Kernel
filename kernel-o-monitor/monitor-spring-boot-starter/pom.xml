@@ -17,10 +17,17 @@
 
     <dependencies>
 
-        <!--监控模块的业务-->
+        <!--系统监控-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>monitor-sdk-system-info</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+
+        <!--prometheus监控-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>monitor-sdk-prometheus</artifactId>
             <version>7.0.1</version>
         </dependency>
 

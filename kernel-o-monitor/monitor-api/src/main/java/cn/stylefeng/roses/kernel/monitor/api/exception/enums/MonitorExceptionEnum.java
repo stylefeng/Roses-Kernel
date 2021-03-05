@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.monitor.api.exception.enums;
 
-import cn.stylefeng.roses.kernel.monitor.api.constants.MonitorConstants;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import lombok.Getter;
@@ -15,9 +14,10 @@ import lombok.Getter;
 public enum MonitorExceptionEnum implements AbstractExceptionEnum {
 
     /**
-     * 演示环境无法操作
+     * prometheus配置异常
      */
-    DEMO_OPERATE(RuleConstants.BUSINESS_ERROR_TYPE_CODE + MonitorConstants.MONITOR_EXCEPTION_STEP_CODE + "01", "演示环境无法操作！");
+    PROMETHEUS_CONFIG_ERROR(RuleConstants.THIRD_ERROR_TYPE_CODE + RuleConstants.RULE_EXCEPTION_STEP_CODE + "02", "prometheus配置异常，具体信息为：{}");
+
 
     /**
      * 错误编码
