@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.db.mp.fieldfill;
 
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
+import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,11 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
             // 设置createTime（BaseEntity)
             setFieldValByName(CREATE_TIME, new Date(), metaObject);
 
-            // 设置删除标记，默认N，未删除
+            // 设置删除标记 默认N-删除
             setFieldValByName(DEL_FLAG, YesOrNotEnum.N.getCode(), metaObject);
 
+            // 设置状态字段 默认1-启用
+            setFieldValByName(STATUS_FLAG, StatusEnum.ENABLE.getCode(), metaObject);
 
         } catch (ReflectionException e) {
             log.warn("CustomMetaObjectHandler处理过程中无相关字段，不做处理");

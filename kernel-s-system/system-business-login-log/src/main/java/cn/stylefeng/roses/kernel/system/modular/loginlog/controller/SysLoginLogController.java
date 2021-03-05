@@ -6,6 +6,8 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.loginlog.SysLoginLogRequest;
 import cn.stylefeng.roses.kernel.system.modular.loginlog.service.SysLoginLogService;
+import cn.stylefeng.roses.kernel.system.modular.loginlog.wrapper.SysLoginLogWrapper;
+import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,6 +56,7 @@ public class SysLoginLogController {
      * @date 2021/1/13 17:51
      */
     @GetResource(name = "分页查询登录日志", path = "/loginLog/page")
+    @Wrapper(SysLoginLogWrapper.class)
     public ResponseData page(SysLoginLogRequest sysLoginLogRequest) {
         return new SuccessResponseData(sysLoginLogService.findPage(sysLoginLogRequest));
     }

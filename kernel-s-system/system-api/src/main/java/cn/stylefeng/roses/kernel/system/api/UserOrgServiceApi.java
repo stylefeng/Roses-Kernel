@@ -25,6 +25,6 @@ public interface UserOrgServiceApi {
      * @author fengshuonan
      * @date 2020/12/19 22:33
      */
-    SysUserOrgDTO getUserOrgInfo(Long userId);
+    SysUserOrgDTO getUserOrgByUserId(Long userId);
 
 }

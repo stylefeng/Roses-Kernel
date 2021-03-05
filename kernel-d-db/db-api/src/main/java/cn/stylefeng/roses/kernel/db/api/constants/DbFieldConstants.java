@@ -38,4 +38,10 @@ public interface DbFieldConstants {
      */
     String DEL_FLAG = "delFlag";
 
+    /**
+     * 数据状态的字段
+     * 状态：1-启用，2-禁用
+     */
+    String STATUS_FLAG = "statusFlag";
+
 }

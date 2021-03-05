@@ -149,7 +149,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
     @Override
     public HrOrganization detail(HrOrganizationRequest hrOrganizationRequest) {
-        return this.queryOrganization(hrOrganizationRequest);
+        return this.getOne(this.createWrapper(hrOrganizationRequest), false);
     }
 
     @Override
@@ -387,7 +387,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         } else {
             // 获取父组织机构
             HrOrganizationRequest hrOrganizationRequest = new HrOrganizationRequest();
-            hrOrganizationRequest.setOrgId(hrOrganization.getOrgId());
+            hrOrganizationRequest.setOrgId(hrOrganization.getOrgParentId());
             HrOrganization parentOrganization = this.queryOrganization(hrOrganizationRequest);
 
             // 设置本节点的父ids为 (上一个节点的pids + (上级节点的id) )

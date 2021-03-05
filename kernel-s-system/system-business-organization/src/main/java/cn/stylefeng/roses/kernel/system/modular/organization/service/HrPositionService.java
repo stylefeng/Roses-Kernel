@@ -43,13 +43,13 @@ public interface HrPositionService extends IService<HrPosition> {
     void edit(HrPositionRequest hrPositionRequest);
 
     /**
-     * 更新装填
+     * 更新状态
      *
      * @param hrPositionRequest 请求参数
      * @author chenjinlong
      * @date 2020/11/18 23:00
      */
-    void updateStatus(HrPositionRequest hrPositionRequest);
+    void changeStatus(HrPositionRequest hrPositionRequest);
 
     /**
      * 查看详情

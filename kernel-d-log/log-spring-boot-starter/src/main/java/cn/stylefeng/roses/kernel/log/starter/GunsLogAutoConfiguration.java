@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.log.starter;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.SystemUtil;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
+import cn.stylefeng.roses.kernel.log.api.LogRecordApi;
 import cn.stylefeng.roses.kernel.log.api.enums.LogSaveTypeEnum;
 import cn.stylefeng.roses.kernel.log.api.expander.LogConfigExpander;
 import cn.stylefeng.roses.kernel.log.api.pojo.log.SysLogProperties;
@@ -67,7 +68,7 @@ public class GunsLogAutoConfiguration {
      * 日志存储类型：db-数据库，file-文件，默认存储在数据库中
      *
      * @param sysLogProperties 系统日志配置文件
-     * @param sysLogService 系统日志service
+     * @param sysLogService    系统日志service
      * @author liuhanqing
      * @date 2020/12/20 13:02
      */
@@ -120,6 +121,17 @@ public class GunsLogAutoConfiguration {
 
         // 其他情况用数据库存储日志
         return new DbLogManagerServiceImpl();
+    }
+
+    /**
+     * 日志记录的api
+     *
+     * @author fengshuonan
+     * @date 2021/3/4 22:16
+     */
+    @Bean
+    public LogRecordApi logRecordApi(SysLogServiceImpl sysLogService) {
+        return new DbLogRecordServiceImpl(new LogManagerThreadPool(), sysLogService);
     }
 
 }

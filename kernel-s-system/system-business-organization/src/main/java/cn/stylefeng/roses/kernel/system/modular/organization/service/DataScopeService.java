@@ -53,7 +53,7 @@ public class DataScopeService implements DataScopeApi {
         }
 
         // 获取用户的主要部门信息
-        SysUserOrgDTO sysUserOrgResponse = userOrgServiceApi.getUserOrgInfo(userId);
+        SysUserOrgDTO sysUserOrgResponse = userOrgServiceApi.getUserOrgByUserId(userId);
 
         // 获取角色中的数据范围类型
         Set<DataScopeTypeEnum> dataScopeTypeEnums = sysRoles.stream().map(SysRoleDTO::getDataScopeTypeEnum).collect(Collectors.toSet());

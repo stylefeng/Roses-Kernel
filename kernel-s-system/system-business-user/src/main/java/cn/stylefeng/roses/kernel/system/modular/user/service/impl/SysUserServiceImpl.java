@@ -159,7 +159,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         // 获取被授权用户的所属机构
-        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgInfo(sysUser.getUserId());
+        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgByUserId(sysUser.getUserId());
         Long organizationId = userOrgInfo.getOrgId();
 
         // 判断当前用户有无该用户的权限
@@ -318,7 +318,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.querySysUser(sysUserRequest);
 
         // 获取要授权角色的用户的所属机构
-        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgInfo(sysUser.getUserId());
+        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgByUserId(sysUser.getUserId());
         Long organizationId = userOrgInfo.getOrgId();
 
         // 判断当前用户有无该用户的权限
@@ -334,7 +334,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.querySysUser(sysUserRequest);
 
         // 获取被授权用户的所属机构
-        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgInfo(sysUser.getUserId());
+        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgByUserId(sysUser.getUserId());
         Long organizationId = userOrgInfo.getOrgId();
 
         // 判断当前用户有无该用户的权限
@@ -352,7 +352,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         BeanUtil.copyProperties(sysUser, sysUserResponse);
 
         // 获取用户组织绑定信息
-        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgInfo(sysUser.getUserId());
+        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgByUserId(sysUser.getUserId());
         sysUserResponse.setOrgId(userOrgInfo.getOrgId());
         sysUserResponse.setPositionId(userOrgInfo.getPositionId());
 
@@ -504,7 +504,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         DataScopeDTO dataScopeResponse = dataScopeApi.getDataScope(userId, roleResponseList);
 
         // 4. 获取用户的组织机构和职位信息
-        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgInfo(userId);
+        SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgByUserId(userId);
 
         // 5. 获取用户的所有资源url
         List<String> resourceCodeList = roleServiceApi.getRoleResourceCodeList(roleIds);
