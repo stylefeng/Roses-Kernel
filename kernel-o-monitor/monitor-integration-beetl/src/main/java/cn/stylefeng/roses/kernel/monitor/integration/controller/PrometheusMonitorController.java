@@ -22,17 +22,14 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 项目监控
+ * 来自prometheus的监控
  *
  * @author chenli
  * @date 2020/12/30 16:40
  */
 @Controller
-@ApiResource(name = "项目监控")
-public class MonitorController {
-
-    @Resource
-    private SystemHardwareInfoHolder systemHardwareInfoHolder;
+@ApiResource(name = "来自prometheus的监控")
+public class PrometheusMonitorController {
 
     @Value("${spring.application.name}")
     private String name;
@@ -45,29 +42,6 @@ public class MonitorController {
 
     @Resource
     private PrometheusApi service;
-
-    /**
-     * 系统硬件信息页面
-     *
-     * @author fengshuonan
-     * @date 2018/12/24 22:43
-     */
-    @GetResource(name = "服务器监控", path = "/view/monitor/systemInfo")
-    public String systemInfo(Model model) {
-        model.addAttribute("server", systemHardwareInfoHolder.getSystemHardwareInfo());
-        return "/modular/system/monitor/systemInfo.html";
-    }
-
-    /**
-     * druid sql监控页面
-     *
-     * @author chenli
-     * @date 2021/1/4 16:32
-     */
-    @GetResource(name = "SQL监控", path = "/view/monitor/druid")
-    public String druidInfo() {
-        return "/modular/system/monitor/druid.html";
-    }
 
     /**
      * tomcat监控页面
