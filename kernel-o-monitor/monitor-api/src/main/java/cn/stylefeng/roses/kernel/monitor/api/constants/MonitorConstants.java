@@ -24,11 +24,6 @@ public interface MonitorConstants {
     String MONITOR_PROMETHEUS_QUERY = "query";
 
     /**
-     * prometheus查询区间向量命令
-     */
-    String MONITOR_PROMETHEUS_QUERY_RANGE = "query_range";
-
-    /**
      * prometheus查询开始时间
      */
     String MONITOR_PROMETHEUS_START = "start";
@@ -42,4 +37,10 @@ public interface MonitorConstants {
      * prometheus查询步长
      */
     String MONITOR_PROMETHEUS_STEP = "step";
+
+    /**
+     * prometheus查询区间向量命令
+     */
+    String PROMETHEUS_QUERY_RANGE = "query_range";
+
 }
