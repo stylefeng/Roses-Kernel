@@ -60,6 +60,11 @@ public class SysUserDTO {
     private String phone;
 
     /**
+     * 密码
+     */
+    private String password;
+
+    /**
      * 电话
      */
     private String tel;
