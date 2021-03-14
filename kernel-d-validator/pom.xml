@@ -17,9 +17,6 @@
 
     <modules>
         <module>validator-api</module>
-        <module>validator-sdk-count</module>
-        <module>validator-sdk-black-white</module>
-        <module>validator-sdk-captcha</module>
         <module>validator-spring-boot-starter</module>
     </modules>
 

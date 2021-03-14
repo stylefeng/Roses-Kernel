@@ -47,6 +47,14 @@
             <version>7.0.1</version>
         </dependency>
 
+        <!--安全模块模块-->
+        <!--发送短信前的验证码校验，防止暴力发送短信-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>security-api</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+
         <!--数据库sdk-->
         <!--数据库dao框架-->
         <dependency>

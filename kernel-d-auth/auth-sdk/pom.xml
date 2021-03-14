@@ -32,6 +32,14 @@
             <version>7.0.1</version>
         </dependency>
 
+        <!--安全模块的api-->
+        <!--需要用到校验验证码的接口-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>security-api</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+
         <!--system业务模块的api-->
         <!--登录和鉴权需要用到用户相关的接口-->
         <dependency>

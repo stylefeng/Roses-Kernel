@@ -62,6 +62,14 @@
             <version>7.0.1</version>
         </dependency>
 
+        <!--安全模块api-->
+        <!--用在图形验证码-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>security-api</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+
         <!--缓存api-->
         <!--用户的查询会使用缓存-->
         <dependency>

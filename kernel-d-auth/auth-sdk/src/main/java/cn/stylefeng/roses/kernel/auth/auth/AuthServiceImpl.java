@@ -18,12 +18,12 @@ import cn.stylefeng.roses.kernel.jwt.api.exception.enums.JwtExceptionEnum;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
+import cn.stylefeng.roses.kernel.security.api.CaptchaApi;
 import cn.stylefeng.roses.kernel.system.api.LoginLogServiceApi;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
-import cn.stylefeng.roses.kernel.validator.api.CaptchaApi;
 import cn.stylefeng.roses.kernel.validator.api.exception.enums.ValidatorExceptionEnum;
 import org.springframework.stereotype.Service;
 

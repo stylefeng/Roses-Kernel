@@ -8,43 +8,43 @@
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-security</artifactId>
         <version>7.0.1</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>security-spring-boot-starter</artifactId>
-
-    <packaging>jar</packaging>
+    <artifactId>security-sdk-captcha</artifactId>
 
     <dependencies>
 
-        <!--xss模块-->
+        <!--安全模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>security-sdk-xss</artifactId>
+            <artifactId>security-api</artifactId>
             <version>7.0.1</version>
         </dependency>
 
-        <!--图形验证码模块-->
+        <!--web模块-->
         <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>security-sdk-captcha</artifactId>
-            <version>7.0.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--count模块-->
+        <!--缓存模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>security-sdk-count</artifactId>
+            <artifactId>cache-api</artifactId>
             <version>7.0.1</version>
         </dependency>
-
-        <!--黑白名单校验-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>security-sdk-black-white</artifactId>
+            <artifactId>cache-sdk-memory</artifactId>
             <version>7.0.1</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>cache-sdk-redis</artifactId>
+            <version>7.0.1</version>
+            <optional>true</optional>
         </dependency>
 
     </dependencies>
-
 </project>
