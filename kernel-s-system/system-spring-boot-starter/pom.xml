@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-s-system</artifactId>
-        <version>7.0.1</version>
+        <version>7.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,35 +21,35 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-app</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--菜单管理的业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-menu</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--组织机构管理的业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-organization</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--资源管理的业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-resource</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--角色管理的业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-role</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--用户管理的业务-->
@@ -57,26 +57,26 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-user</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-memory</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--通知管理的业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-notice</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--登录日志的业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-login-log</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
     </dependencies>

@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-security</artifactId>
-        <version>7.0.1</version>
+        <version>7.0.2</version>
     </parent>
 
     <artifactId>security-sdk-count</artifactId>
@@ -18,19 +18,19 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>security-api</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--缓存模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-api</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-memory</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--web模块-->

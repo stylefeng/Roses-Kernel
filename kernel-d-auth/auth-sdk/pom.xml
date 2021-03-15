@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-auth</artifactId>
-        <version>7.0.1</version>
+        <version>7.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>auth-api</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--资源模块的api-->
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--安全模块的api-->
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>security-api</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--system业务模块的api-->
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-api</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--jwt模块的api-->
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>jwt-api</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
         <!--web模块-->
@@ -72,18 +72,18 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-api</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-memory</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-redis</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
             <scope>provided</scope>
         </dependency>
 
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>message-api</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
 
     </dependencies>
