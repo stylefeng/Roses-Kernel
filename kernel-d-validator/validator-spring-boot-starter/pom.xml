@@ -17,25 +17,17 @@
 
     <dependencies>
 
-        <!--黑名单和白名单限制-->
+        <!--参数校验api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-sdk-black-white</artifactId>
+            <artifactId>validator-api</artifactId>
             <version>7.0.1</version>
         </dependency>
 
-        <!--技术校验器，为了限制某个数据一定时间内的反问频次-->
+        <!--web模块-->
         <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-sdk-count</artifactId>
-            <version>7.0.1</version>
-        </dependency>
-
-        <!-- captcha图形验证码 -->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-sdk-captcha</artifactId>
-            <version>7.0.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
     </dependencies>
