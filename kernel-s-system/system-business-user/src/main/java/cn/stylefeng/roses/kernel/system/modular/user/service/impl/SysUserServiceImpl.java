@@ -205,14 +205,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long sysUserId = sysUser.getUserId();
 
         // 更新用户员工信息
-        sysUserOrgService.edit(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        sysUserOrgService.edit(sysUserId, sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
 
         // 清除缓存中的用户信息
-        sysUserCacheOperatorApi.remove(String.valueOf(sysUser.getUserId()));
+        sysUserCacheOperatorApi.remove(String.valueOf(sysUserId));
     }
 
     @Override
     public void editInfo(SysUserRequest sysUserRequest) {
+
+        // 获取当前登录用户的id
+        sysUserRequest.setUserId(LoginContext.me().getLoginUser().getUserId());
         SysUser sysUser = this.querySysUser(sysUserRequest);
 
         // 填充更新用户的信息

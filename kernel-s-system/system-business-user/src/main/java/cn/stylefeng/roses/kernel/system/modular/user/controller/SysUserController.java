@@ -84,18 +84,6 @@ public class SysUserController {
     }
 
     /**
-     * 更新用户个人信息
-     *
-     * @author luojie
-     * @date 2020/11/6 13:50
-     */
-    @PostResource(name = "系统用户_更新个人信息", path = "/sysUser/updateInfo", requiredPermission = false)
-    public ResponseData updateInfo(@RequestBody @Validated(SysUserRequest.updateInfo.class) SysUserRequest sysUserRequest) {
-        sysUserService.editInfo(sysUserRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 修改状态
      *
      * @author luojie
@@ -108,18 +96,6 @@ public class SysUserController {
     }
 
     /**
-     * 修改密码
-     *
-     * @author luojie
-     * @date 2020/11/6 13:50
-     */
-    @PostResource(name = "系统用户_修改密码", path = "/sysUser/updatePassword", requiredPermission = false)
-    public ResponseData updatePwd(@RequestBody @Validated(SysUserRequest.updatePwd.class) SysUserRequest sysUserRequest) {
-        sysUserService.editPassword(sysUserRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 重置密码
      *
      * @author luojie
@@ -128,18 +104,6 @@ public class SysUserController {
     @PostResource(name = "系统用户_重置密码", path = "/sysUser/resetPwd")
     public ResponseData resetPwd(@RequestBody @Validated(SysUserRequest.resetPwd.class) SysUserRequest sysUserRequest) {
         sysUserService.resetPassword(sysUserRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
-     * 修改头像
-     *
-     * @author luojie
-     * @date 2020/11/6 13:48
-     */
-    @PostResource(name = "系统用户_修改头像", path = "/sysUser/updateAvatar", requiredPermission = false)
-    public ResponseData updateAvatar(@RequestBody @Validated(SysUserRequest.updateAvatar.class) SysUserRequest sysUserRequest) {
-        sysUserService.editAvatar(sysUserRequest);
         return new SuccessResponseData();
     }
 
