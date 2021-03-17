@@ -110,25 +110,14 @@ public class HrOrganizationController {
     }
 
     /**
-     * 获取全部系统组织机构树（antd vue版本，用于新增，编辑组织机构时选择上级节点）
+     * 获取全部系统组织机构树（用于新增，编辑组织机构时选择上级节点，用于获取用户管理界面左侧组织机构树）
      *
      * @author chenjinlong
      * @date 2021/01/05 15:55
      */
     @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/tree")
-    public ResponseData tree(HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.treeAntdv(hrOrganizationRequest));
-    }
-
-    /**
-     * 获取全部系统组织机构树（layui版本，用于新增，编辑组织机构时选择上级节点）
-     *
-     * @author chenjinlong
-     * @date 2021/01/05 15:55
-     */
-    @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/treeLayui")
-    public ResponseData treeLayui(HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.treeLayui(hrOrganizationRequest));
+    public ResponseData organizationTree(HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData(hrOrganizationService.organizationTree(hrOrganizationRequest));
     }
 
     /**

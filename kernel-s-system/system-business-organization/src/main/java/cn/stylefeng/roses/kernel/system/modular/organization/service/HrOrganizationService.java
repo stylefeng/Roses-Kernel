@@ -1,12 +1,11 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.rule.tree.factory.node.DefaultTreeNode;
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.api.OrganizationServiceApi;
-import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationRequest;
-import cn.stylefeng.roses.kernel.system.api.pojo.organization.layui.LayuiOrganizationTreeNode;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.OrganizationTreeNode;
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -87,24 +86,14 @@ public interface HrOrganizationService extends IService<HrOrganization>, Organiz
     List<HrOrganization> findList(HrOrganizationRequest hrOrganizationRequest);
 
     /**
-     * 获取全部系统组织机构树（antd vue版本，用于新增，编辑组织机构时选择上级节点）
-     *
-     * @param hrOrganizationRequest 查询参数
-     * @return 系统组织机构树
-     * @author fengshuonan
-     * @date 2020/11/6 13:41
-     */
-    List<DefaultTreeNode> treeAntdv(HrOrganizationRequest hrOrganizationRequest);
-
-    /**
-     * 获取全部系统组织机构树（layui版本，用于新增，编辑组织机构时选择上级节点）
+     * 获取全部系统组织机构树（用于新增，编辑组织机构时选择上级节点，用于获取用户管理界面左侧组织机构树）
      *
      * @param hrOrganizationRequest 查询参数
      * @return 系统组织机构树
      * @author chenjinlong
      * @date 2020/11/6 13:41
      */
-    List<LayuiOrganizationTreeNode> treeLayui(HrOrganizationRequest hrOrganizationRequest);
+    List<OrganizationTreeNode> organizationTree(HrOrganizationRequest hrOrganizationRequest);
 
     /**
      * 获取ztree形式的组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）

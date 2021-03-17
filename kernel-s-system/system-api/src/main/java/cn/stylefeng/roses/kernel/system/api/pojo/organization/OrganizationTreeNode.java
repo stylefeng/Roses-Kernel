@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.api.pojo.organization.layui;
+package cn.stylefeng.roses.kernel.system.api.pojo.organization;
 
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import cn.stylefeng.roses.kernel.rule.tree.xmtree.base.AbstractXmSelectNode;
@@ -7,13 +7,13 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Layui 机构树
+ * 组织机构树节点
  *
  * @author chenjinlong
  * @date 2020/12/27 18:36
  */
 @Data
-public class LayuiOrganizationTreeNode implements AbstractTreeNode, AbstractXmSelectNode {
+public class OrganizationTreeNode implements AbstractTreeNode, AbstractXmSelectNode {
 
     /**
      * 父id，一级节点父id是0
@@ -38,7 +38,7 @@ public class LayuiOrganizationTreeNode implements AbstractTreeNode, AbstractXmSe
     /**
      * 子节点的集合
      */
-    private List<LayuiOrganizationTreeNode> children;
+    private List<OrganizationTreeNode> children;
 
     @Override
     public String getNodeId() {

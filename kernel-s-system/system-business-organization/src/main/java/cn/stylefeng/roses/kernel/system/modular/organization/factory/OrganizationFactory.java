@@ -1,8 +1,8 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.factory;
 
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.OrganizationTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
-import cn.stylefeng.roses.kernel.system.api.pojo.organization.layui.LayuiOrganizationTreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author chenjinlong
  * @date 2021/1/6 21:03
  */
-public class LayuiOrganizationFactory {
+public class OrganizationFactory {
 
     /**
      * 实体转换
@@ -23,8 +23,8 @@ public class LayuiOrganizationFactory {
      * @author chenjinlong
      * @date 2021/1/5 21:07
      */
-    public static LayuiOrganizationTreeNode parseOrganizationTreeNode(HrOrganization hrOrganization) {
-        LayuiOrganizationTreeNode treeNode = new LayuiOrganizationTreeNode();
+    public static OrganizationTreeNode parseOrganizationTreeNode(HrOrganization hrOrganization) {
+        OrganizationTreeNode treeNode = new OrganizationTreeNode();
         treeNode.setId(hrOrganization.getOrgId());
         treeNode.setParentId(hrOrganization.getOrgParentId());
         treeNode.setTitle(hrOrganization.getOrgName());

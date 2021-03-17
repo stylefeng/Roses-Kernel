@@ -17,7 +17,6 @@ import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
-import cn.stylefeng.roses.kernel.rule.tree.factory.node.DefaultTreeNode;
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.api.RoleDataScopeServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
@@ -27,11 +26,10 @@ import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.organization.OrganizationExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationRequest;
-import cn.stylefeng.roses.kernel.system.api.pojo.organization.layui.LayuiOrganizationTreeNode;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.OrganizationTreeNode;
 import cn.stylefeng.roses.kernel.system.api.util.DataScopeUtil;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
-import cn.stylefeng.roses.kernel.system.modular.organization.factory.AntdvOrganizationFactory;
-import cn.stylefeng.roses.kernel.system.modular.organization.factory.LayuiOrganizationFactory;
+import cn.stylefeng.roses.kernel.system.modular.organization.factory.OrganizationFactory;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrOrganizationMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -166,35 +164,20 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     }
 
     @Override
-    public List<DefaultTreeNode> treeAntdv(HrOrganizationRequest hrOrganizationRequest) {
+    public List<OrganizationTreeNode> organizationTree(HrOrganizationRequest hrOrganizationRequest) {
+
         // 定义返回结果
-        List<DefaultTreeNode> treeNodeList = CollectionUtil.newArrayList();
-
-        // 组装节点
-        List<HrOrganization> list = this.findListByDataScope(hrOrganizationRequest);
-        for (HrOrganization hrOrganization : list) {
-            DefaultTreeNode defaultTreeNode = AntdvOrganizationFactory.parseTreeNode(hrOrganization);
-            treeNodeList.add(defaultTreeNode);
-        }
-
-        // 构建树并返回
-        return new DefaultTreeBuildFactory<DefaultTreeNode>().doTreeBuild(treeNodeList);
-    }
-
-    @Override
-    public List<LayuiOrganizationTreeNode> treeLayui(HrOrganizationRequest hrOrganizationRequest) {
-        // 定义返回结果
-        List<LayuiOrganizationTreeNode> treeNodeList = CollectionUtil.newArrayList();
+        List<OrganizationTreeNode> treeNodeList = CollectionUtil.newArrayList();
 
         // 组装节点
         List<HrOrganization> hrOrganizationList = this.findListByDataScope(hrOrganizationRequest);
         for (HrOrganization hrOrganization : hrOrganizationList) {
-            LayuiOrganizationTreeNode treeNode = LayuiOrganizationFactory.parseOrganizationTreeNode(hrOrganization);
+            OrganizationTreeNode treeNode = OrganizationFactory.parseOrganizationTreeNode(hrOrganization);
             treeNodeList.add(treeNode);
         }
 
         // 构建树并返回
-        return new DefaultTreeBuildFactory<LayuiOrganizationTreeNode>().doTreeBuild(treeNodeList);
+        return new DefaultTreeBuildFactory<OrganizationTreeNode>().doTreeBuild(treeNodeList);
     }
 
     @Override
@@ -206,7 +189,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         // 获取所有组织机构列表
         LambdaQueryWrapper<HrOrganization> wrapper = createWrapper(hrOrganizationRequest);
         List<HrOrganization> list = this.list(wrapper);
-        List<ZTreeNode> zTreeNodes = LayuiOrganizationFactory.parseZTree(list);
+        List<ZTreeNode> zTreeNodes = OrganizationFactory.parseZTree(list);
 
         // 获取角色目前绑定的组织机构范围
         List<Long> roleDataScopes = roleServiceApi.getRoleDataScopes(ListUtil.toList(roleId));
