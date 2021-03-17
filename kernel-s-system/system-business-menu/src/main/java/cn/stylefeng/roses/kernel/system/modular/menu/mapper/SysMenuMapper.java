@@ -1,8 +1,9 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.mapper;
 
-import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,6 +24,6 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @author majianguo
      * @date 2021/1/7 15:27
      */
-    List<AntdSysMenuDTO> getSystemAllMenus();
+    List<AntdSysMenuDTO> getSystemAllMenus(@Param("menuIdList") List<Long> menuIdList);
 
 }

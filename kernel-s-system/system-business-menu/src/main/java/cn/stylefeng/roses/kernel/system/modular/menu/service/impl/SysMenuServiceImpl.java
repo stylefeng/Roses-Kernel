@@ -21,13 +21,6 @@ import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.menu.SysMenuExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserExceptionEnum;
-import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
-import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
-import cn.stylefeng.roses.kernel.system.modular.menu.factory.AntdMenusFactory;
-import cn.stylefeng.roses.kernel.system.modular.menu.factory.LayuiMenusFactory;
-import cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuMapper;
-import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuButtonService;
-import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
@@ -36,6 +29,13 @@ import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiMenuAndButtonTr
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleMenuButtonDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleMenuDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
+import cn.stylefeng.roses.kernel.system.modular.menu.factory.AntdMenusFactory;
+import cn.stylefeng.roses.kernel.system.modular.menu.factory.LayuiMenusFactory;
+import cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuMapper;
+import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuButtonService;
+import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -249,8 +249,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<AntdSysMenuDTO> getSystemAllMenusAntdv() {
-        return this.baseMapper.getSystemAllMenus();
+    public List<AntdSysMenuDTO> getLeftMenusAntdv() {
+
+        // 如果是超级管理员，则获取所有的菜单
+        if (LoginContext.me().getSuperAdminFlag()) {
+            return this.baseMapper.getSystemAllMenus(null);
+        }
+
+        // 获取当前用户的所有菜单
+        List<Long> menuIdList = getCurrentUserMenuIds();
+        return this.baseMapper.getSystemAllMenus(menuIdList);
     }
 
     @Override

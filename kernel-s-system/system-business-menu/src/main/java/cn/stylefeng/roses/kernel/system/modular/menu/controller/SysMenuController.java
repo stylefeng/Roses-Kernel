@@ -81,7 +81,7 @@ public class SysMenuController {
     }
 
     /**
-     * 菜单列表，不带树形结构（layui的菜单管理界面的列表用）
+     * Layui版本--菜单列表，不带树形结构（菜单管理界面的列表用）
      *
      * @author fengshuonan
      * @date 2021/1/6 17:09
@@ -92,53 +92,7 @@ public class SysMenuController {
     }
 
     /**
-     * 菜单列表，带树形结构（antd vue的菜单管理界面的列表用）
-     *
-     * @author fengshuonan
-     * @date 2020/3/20 21:23
-     */
-    @GetResource(name = "系统菜单列表（树）", path = "/sysMenu/list")
-    public ResponseData list(SysMenuRequest sysMenuRequest) {
-        return new SuccessResponseData(sysMenuService.findListWithTreeStructure(sysMenuRequest));
-    }
-
-    /**
-     * 获取系统菜单树，用于新增，编辑时选择上级节点（layui版本，用在新增和编辑菜单选择上级菜单）
-     *
-     * @author fengshuonan
-     * @date 2021/1/6 17:09
-     */
-    @GetResource(name = "获取菜单的树形列表（用于选择上级菜单）（layui版本）", path = "/sysMenu/layuiSelectParentMenuTreeList")
-    public List<ZTreeNode> layuiSelectParentMenuTreeList() {
-        return sysMenuService.layuiSelectParentMenuTreeList();
-    }
-
-    /**
-     * 获取系统菜单树，用于新增，编辑时选择上级节点（antd vue版本，用在新增和编辑菜单选择上级菜单）
-     *
-     * @author fengshuonan
-     * @date 2020/3/27 15:55
-     */
-    @GetResource(name = "获取系统菜单树，用于新增，编辑时选择上级节点", path = "/sysMenu/tree")
-    public ResponseData tree(SysMenuRequest sysMenuRequest) {
-        return new SuccessResponseData(sysMenuService.tree(sysMenuRequest));
-    }
-
-    /**
-     * 获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）
-     *
-     * @author majianguo
-     * @date 2021/1/7 15:17
-     */
-    @GetResource(name = "获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）", path = "/sysMenu/getSystemAllMenusAntdv", requiredPermission = false)
-    public ResponseData getSystemAllMenusAntdv() {
-        List<AntdSysMenuDTO> sysMenuResponses = sysMenuService.getSystemAllMenusAntdv();
-        List<AntdvMenuItem> totalMenus = AntdMenusFactory.createTotalMenus(sysMenuResponses);
-        return new SuccessResponseData(totalMenus);
-    }
-
-    /**
-     * 获取系统菜单和按钮的树，用于角色分配菜单按钮（layui版本使用）
+     * Layui版本--获取系统菜单和按钮的树，用于角色分配菜单按钮
      *
      * @author majianguo
      * @date 2021/1/9 17:10
@@ -149,7 +103,53 @@ public class SysMenuController {
     }
 
     /**
-     * 获取系统菜单和按钮的树，用于角色分配菜单按钮（antd vue版本使用）
+     * Layui版本--获取系统菜单树，用于新增，编辑时选择上级节点（用在新增和编辑菜单选择上级菜单）
+     *
+     * @author fengshuonan
+     * @date 2021/1/6 17:09
+     */
+    @GetResource(name = "获取菜单的树形列表（用于选择上级菜单）（layui版本）", path = "/sysMenu/layuiSelectParentMenuTreeList")
+    public List<ZTreeNode> layuiSelectParentMenuTreeList() {
+        return sysMenuService.layuiSelectParentMenuTreeList();
+    }
+
+    /**
+     * AntdVue版本--获取系统左侧菜单（适用于登录后获取左侧菜单）
+     *
+     * @author majianguo
+     * @date 2021/1/7 15:17
+     */
+    @GetResource(name = "获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）", path = "/sysMenu/getLeftMenusAntdv", requiredPermission = false)
+    public ResponseData getLeftMenusAntdv() {
+        List<AntdSysMenuDTO> sysMenuResponses = sysMenuService.getLeftMenusAntdv();
+        List<AntdvMenuItem> totalMenus = AntdMenusFactory.createTotalMenus(sysMenuResponses);
+        return new SuccessResponseData(totalMenus);
+    }
+
+    /**
+     * AntdVue版本--菜单列表，带树形结构（菜单管理界面的列表用）
+     *
+     * @author fengshuonan
+     * @date 2020/3/20 21:23
+     */
+    @GetResource(name = "系统菜单列表（树）", path = "/sysMenu/list")
+    public ResponseData list(SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData(sysMenuService.findListWithTreeStructure(sysMenuRequest));
+    }
+
+    /**
+     * AntdVue版本--获取系统菜单树，用于新增，编辑时选择上级节点（用在新增和编辑菜单选择上级菜单）
+     *
+     * @author fengshuonan
+     * @date 2020/3/27 15:55
+     */
+    @GetResource(name = "获取系统菜单树，用于新增，编辑时选择上级节点", path = "/sysMenu/tree")
+    public ResponseData tree(SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData(sysMenuService.tree(sysMenuRequest));
+    }
+
+    /**
+     * AntdVue版本--获取系统菜单和按钮的树，用于角色分配菜单按钮
      *
      * @author majianguo
      * @date 2021/1/9 17:10

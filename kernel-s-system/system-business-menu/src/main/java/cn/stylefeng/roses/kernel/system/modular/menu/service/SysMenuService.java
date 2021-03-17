@@ -1,13 +1,13 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.service;
 
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
-import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiAppIndexMenusVO;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -109,7 +109,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @author majianguo
      * @date 2021/1/7 15:24
      */
-    List<AntdSysMenuDTO> getSystemAllMenusAntdv();
+    List<AntdSysMenuDTO> getLeftMenusAntdv();
 
     /**
      * 获取包含按钮的系统菜单

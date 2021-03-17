@@ -18,19 +18,25 @@
 
     <select id="getSystemAllMenus" resultMap="systemMenuAndRole">
         SELECT sm.menu_id,
-               sm.menu_parent_id,
-               sm.menu_name,
-               sm.antdv_router,
-               sm.antdv_icon,
-               sm.visible,
-               sr.role_id,
-               sr.role_name,
-               sr.role_code
+        sm.menu_parent_id,
+        sm.menu_name,
+        sm.antdv_router,
+        sm.antdv_icon,
+        sm.visible,
+        sr.role_id,
+        sr.role_name,
+        sr.role_code
         FROM sys_menu sm
-                 LEFT JOIN sys_role_menu srm ON sm.menu_id = srm.menu_id
-                 LEFT JOIN sys_role sr ON srm.role_id = sr.role_id
+        LEFT JOIN sys_role_menu srm ON sm.menu_id = srm.menu_id
+        LEFT JOIN sys_role sr ON srm.role_id = sr.role_id
         WHERE sm.del_flag = 'N'
-          AND sm.status_flag = 1
+        AND sm.status_flag = 1
+        <if test="menuIdList != null and menuIdList.size() > 0">
+            and sm.menu_id in
+            <foreach collection="menuIdList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
 </mapper>
