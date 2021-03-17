@@ -72,13 +72,6 @@
             <version>7.0.2</version>
         </dependency>
 
-        <!--登录日志的业务-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>log-business-login-log</artifactId>
-            <version>7.0.2</version>
-        </dependency>
-
     </dependencies>
 
 </project>

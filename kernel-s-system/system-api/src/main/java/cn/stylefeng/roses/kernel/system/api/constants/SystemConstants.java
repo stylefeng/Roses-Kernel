@@ -48,4 +48,14 @@ public interface SystemConstants {
      */
     Long USER_CACHE_TIMEOUT_SECONDS = 3600L;
 
+    /**
+     * 超级管理员的角色编码
+     */
+    String SUPER_ADMIN_ROLE_CODE = "superAdmin";
+
+    /**
+     * 初始化超级管理员的监听器顺序
+     */
+    Integer SUPER_ADMIN_INIT_LISTENER_SORT = 400;
+
 }
