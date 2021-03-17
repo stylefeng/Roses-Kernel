@@ -6,21 +6,21 @@
 
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>kernel-s-system</artifactId>
+        <artifactId>kernel-d-log</artifactId>
         <version>7.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>system-business-login-log</artifactId>
+    <artifactId>log-business-login-log</artifactId>
 
     <packaging>jar</packaging>
 
     <dependencies>
 
-        <!--系统管理的api-->
+        <!--日志管理的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-api</artifactId>
+            <artifactId>log-api</artifactId>
             <version>7.0.2</version>
         </dependency>
 

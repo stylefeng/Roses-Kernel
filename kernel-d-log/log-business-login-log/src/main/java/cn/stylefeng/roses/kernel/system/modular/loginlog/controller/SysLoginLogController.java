@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.system.modular.loginlog.controller;
 
+import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.system.api.pojo.loginlog.SysLoginLogRequest;
 import cn.stylefeng.roses.kernel.system.modular.loginlog.service.SysLoginLogService;
 import cn.stylefeng.roses.kernel.system.modular.loginlog.wrapper.SysLoginLogWrapper;
 import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;

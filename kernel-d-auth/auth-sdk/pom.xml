@@ -24,6 +24,14 @@
             <version>7.0.2</version>
         </dependency>
 
+        <!--日志记录模块的api-->
+        <!--记录登录日志用-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>log-api</artifactId>
+            <version>7.0.2</version>
+        </dependency>
+
         <!--资源模块的api-->
         <!--权限校验等功能，需要用到资源模块的接口-->
         <dependency>

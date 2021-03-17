@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.api.pojo.loginlog;
+package cn.stylefeng.roses.kernel.log.api.pojo.loginlog;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
@@ -62,4 +62,5 @@ public class SysLoginLogRequest extends BaseRequest {
      * 结束时间
      */
     private String endTime;
+
 }

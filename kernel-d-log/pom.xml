@@ -17,6 +17,7 @@
 
     <modules>
         <module>log-api</module>
+        <module>log-business-login-log</module>
         <module>log-business-manage</module>
         <module>log-business-requestapi</module>
         <module>log-sdk-db</module>

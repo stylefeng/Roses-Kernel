@@ -1,6 +1,7 @@
-package cn.stylefeng.roses.kernel.system.api;
+package cn.stylefeng.roses.kernel.log.api;
 
-import cn.stylefeng.roses.kernel.system.api.pojo.loginlog.SysLoginLogRequest;
+
+import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogRequest;
 
 /**
  * 登录日志api接口
