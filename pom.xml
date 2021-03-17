@@ -46,7 +46,7 @@
         <!--动态代码执行-->
         <module>kernel-d-groovy</module>
 
-        <!--文件操作模块-->
+        <!--多语言模块-->
         <module>kernel-d-i18n</module>
 
         <!--jwt模块，用于token校验-->
