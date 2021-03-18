@@ -18,13 +18,13 @@ import org.springframework.context.annotation.Configuration;
 
 
 /**
- * 校验器自动配置
+ * 计数器和黑白名单自动配置
  *
  * @author fengshuonan
  * @date 2020/12/1 21:44
  */
 @Configuration
-public class ValidatorAutoConfiguration {
+public class CounterAutoConfiguration {
 
     /**
      * 黑名单校验
