@@ -20,7 +20,7 @@
  * 3.请保留源码和相关描述文件的项目出处，作者声明等。
  * 4.分发源码时候，请注明软件出处 https://gitee.com/stylefeng/guns
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
- * 6.若您的项目无法满足以上几点，可申请商业授权，获取Guns商业授权许可，请在官网购买授权，地址为 https://www.stylefeng.cn
+ * 6.若您的项目无法满足以上几点，可申请商业授权
  */
 package cn.stylefeng.roses.kernel.rule.constants;
 
