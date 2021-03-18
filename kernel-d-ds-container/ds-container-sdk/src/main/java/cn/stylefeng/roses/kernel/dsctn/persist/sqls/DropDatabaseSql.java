@@ -18,7 +18,7 @@ public class DropDatabaseSql extends AbstractSql {
 
     @Override
     protected String sqlServer() {
-        return "";
+        return "DROP DATABASE ?;";
     }
 
     @Override
@@ -28,6 +28,6 @@ public class DropDatabaseSql extends AbstractSql {
 
     @Override
     protected String oracle() {
-        return "";
+        return "DROP DATABASE ?;";
     }
 }

@@ -32,6 +32,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
         ConfigurableEnvironment environment = applicationEnvironmentPreparedEvent.getApplicationContext().getEnvironment();
 
         // 获取数据库连接配置
+        String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
         String dataSourceUrl = environment.getProperty("spring.datasource.url");
         String dataSourceUsername = environment.getProperty("spring.datasource.username");
         String dataSourcePassword = environment.getProperty("spring.datasource.password");
@@ -80,7 +81,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
             assert dataSourceUrl != null;
             // 手动创建数据源
             dmDataSource = new DriverManagerDataSource();
-            dmDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            dmDataSource.setDriverClassName(driverClassName);
             dmDataSource.setUrl(dataSourceUrl);
             dmDataSource.setUsername(dataSourceUsername);
             dmDataSource.setPassword(dataSourcePassword);

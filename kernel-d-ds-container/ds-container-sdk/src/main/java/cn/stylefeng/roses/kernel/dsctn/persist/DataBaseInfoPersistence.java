@@ -80,6 +80,7 @@ public class DataBaseInfoPersistence {
             PreparedStatement preparedStatement = conn.prepareStatement(new AddDatabaseInfoSql().getSql(druidProperties.getUrl()));
 
             preparedStatement.setLong(1, IdWorker.getId());
+
             preparedStatement.setString(2, MASTER_DATASOURCE_NAME);
             preparedStatement.setString(3, druidProperties.getDriverClassName());
             preparedStatement.setString(4, druidProperties.getUrl());
