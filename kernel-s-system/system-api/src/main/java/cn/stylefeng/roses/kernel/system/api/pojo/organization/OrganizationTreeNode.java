@@ -36,6 +36,11 @@ public class OrganizationTreeNode implements AbstractTreeNode, AbstractXmSelectN
     private boolean spread = true;
 
     /**
+     * 是否选中
+     */
+    private boolean selected = false;
+
+    /**
      * 子节点的集合
      */
     private List<OrganizationTreeNode> children;
@@ -67,7 +72,7 @@ public class OrganizationTreeNode implements AbstractTreeNode, AbstractXmSelectN
 
     @Override
     public Boolean getSelected() {
-        return false;
+        return this.selected;
     }
 
     @Override

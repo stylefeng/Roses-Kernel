@@ -176,6 +176,20 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
             treeNodeList.add(treeNode);
         }
 
+        // 设置树节点上，用户绑定的组织机构数据范围
+        if (hrOrganizationRequest.getUserId() != null) {
+            List<Long> orgIds = userServiceApi.getUserBindDataScope(hrOrganizationRequest.getUserId());
+            if (ObjectUtil.isNotEmpty(orgIds)) {
+                for (OrganizationTreeNode organizationTreeNode : treeNodeList) {
+                    for (Long orgId : orgIds) {
+                        if (organizationTreeNode.getId().equals(orgId)) {
+                            organizationTreeNode.setSelected(true);
+                        }
+                    }
+                }
+            }
+        }
+
         // 构建树并返回
         return new DefaultTreeBuildFactory<OrganizationTreeNode>().doTreeBuild(treeNodeList);
     }

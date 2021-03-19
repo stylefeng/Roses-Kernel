@@ -81,9 +81,21 @@ public class HrOrganizationRequest extends BaseRequest {
     private Long roleId;
 
     /**
+     * 用户id（作为查询条件）
+     */
+    @NotNull(message = "用户id不能为空", groups = userOrgScopeQuery.class)
+    private Long userId;
+
+    /**
      * 组织机构树zTree形式
      */
     public @interface orgZTree {
+    }
+
+    /**
+     * 查询用户的数据范围
+     */
+    public @interface userOrgScopeQuery {
     }
 
 }

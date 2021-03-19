@@ -121,6 +121,17 @@ public class HrOrganizationController {
     }
 
     /**
+     * 获取组织机构树（用于用户绑定数据范围，可以渲染是否选中信息）
+     *
+     * @author fengshuonan
+     * @date 2021/3/19 22:20
+     */
+    @GetResource(name = "获取组织机构树(用于用户绑定数据范围)", path = "/hrOrganization/treeOrgScope")
+    public ResponseData organizationTreeOrgScope(@Validated(value = HrOrganizationRequest.userOrgScopeQuery.class) HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData(hrOrganizationService.organizationTree(hrOrganizationRequest));
+    }
+
+    /**
      * 获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）（layui版本）
      *
      * @author fengshuonan
