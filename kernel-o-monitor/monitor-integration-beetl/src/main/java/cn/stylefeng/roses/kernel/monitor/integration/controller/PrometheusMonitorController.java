@@ -4,14 +4,12 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.monitor.api.PrometheusApi;
 import cn.stylefeng.roses.kernel.monitor.api.constants.MonitorConstants;
 import cn.stylefeng.roses.kernel.monitor.api.pojo.prometheus.PromResultInfo;
-import cn.stylefeng.roses.kernel.monitor.system.holder.SystemHardwareInfoHolder;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -86,7 +84,7 @@ public class PrometheusMonitorController {
      */
     @GetResource(name = "jvm监控数据", path = "/view/monitor/getJvmInfo")
     @ResponseBody
-    public String jvmInfo(@RequestParam("id") String id, @RequestParam("area") String area) {
+    public String jvmInfo(@RequestParam(value = "id",required = false) String id, @RequestParam(value = "area",required = false) String area) {
         Map<String, Object> metricMap = getMetricInfos(getPromQl(id, area), "jvm_", "", "");
         return JSON.toJSONString(metricMap);
     }

@@ -20,7 +20,7 @@
         <!--监控的自动配置-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>monitor-spring-boot-starter</artifactId>
+            <artifactId>monitor-sdk-prometheus</artifactId>
             <version>7.0.1</version>
         </dependency>
 
