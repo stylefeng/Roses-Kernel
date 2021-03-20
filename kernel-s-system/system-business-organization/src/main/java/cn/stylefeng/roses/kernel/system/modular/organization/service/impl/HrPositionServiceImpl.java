@@ -102,7 +102,7 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
      */
     private HrPosition querySysPositionById(HrPositionRequest hrPositionRequest) {
         HrPosition hrPosition = this.getById(hrPositionRequest.getPositionId());
-        if (ObjectUtil.isEmpty(hrPosition)) {
+        if (ObjectUtil.isEmpty(hrPosition) || YesOrNotEnum.Y.getCode().equals(hrPosition.getDelFlag())) {
             throw new SystemModularException(PositionExceptionEnum.CANT_FIND_POSITION, hrPositionRequest.getPositionId());
         }
         return hrPosition;
