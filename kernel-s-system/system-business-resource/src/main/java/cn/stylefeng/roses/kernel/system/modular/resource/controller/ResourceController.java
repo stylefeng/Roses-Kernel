@@ -53,25 +53,25 @@ public class ResourceController {
     }
 
     /**
-     * 获取资源平级树列表，用于分配接口权限（适用于layui版本）
+     * Layui版本--获取资源树列表，用于角色分配接口权限
      *
      * @author majianguo
      * @date 2021/1/9 15:07
      */
-    @GetResource(name = "获取资源平级树列表，用于分配接口权限", path = "/resource/getLateralTree")
+    @GetResource(name = "Layui版本--获取资源树列表，用于角色分配接口权限", path = "/resource/getRoleResourceTree")
     public List<ResourceTreeNode> getLateralTree(SysRoleRequest sysRoleRequest) {
-        return sysResourceService.getResourceTree(sysRoleRequest.getRoleId(), true);
+        return sysResourceService.getResourceTree(sysRoleRequest.getRoleId(), false);
     }
 
     /**
-     * 获取资源树列表，用于分配接口权限（适用于antd vue版本）
+     * AntdVue版本--获取资源树列表，用于角色分配接口权限
      *
      * @author majianguo
      * @date 2021/1/9 15:07
      */
-    @GetResource(name = "获取资源树列表，用于分配接口权限", path = "/resource/getLateralTreeChildren")
+    @GetResource(name = "AntdVue版本--获取资源树列表，用于角色分配接口权限", path = "/resource/getRoleResourceTreeAntdv")
     public ResponseData getLateralTreeChildren(SysRoleRequest sysRoleRequest) {
-        List<ResourceTreeNode> resourceLateralTree = sysResourceService.getResourceTree(sysRoleRequest.getRoleId(), false);
+        List<ResourceTreeNode> resourceLateralTree = sysResourceService.getResourceTree(sysRoleRequest.getRoleId(), true);
         return new SuccessResponseData(resourceLateralTree);
     }
 

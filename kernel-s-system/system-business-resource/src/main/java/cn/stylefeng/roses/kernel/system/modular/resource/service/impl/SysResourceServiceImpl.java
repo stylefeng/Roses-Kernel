@@ -85,7 +85,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public List<ResourceTreeNode> getResourceTree(Long roleId, Boolean lateralFlag) {
+    public List<ResourceTreeNode> getResourceTree(Long roleId, Boolean treeBuildFlag) {
 
         List<ResourceTreeNode> res = new ArrayList<>();
 
@@ -162,10 +162,10 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         }
 
         // 根据map组装资源树
-        if (lateralFlag) {
-            return res;
-        } else {
+        if (treeBuildFlag) {
             return new DefaultTreeBuildFactory<ResourceTreeNode>().doTreeBuild(res);
+        } else {
+            return res;
         }
     }
 

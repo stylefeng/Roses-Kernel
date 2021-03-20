@@ -41,14 +41,14 @@ public interface SysResourceService extends IService<SysResource> {
     List<SysResource> findList(ResourceRequest resourceRequest);
 
     /**
-     * 获取平级树节点列表
+     * 获取资源平级树列表，用于分配接口权限
      *
-     * @param roleId      角色id
-     * @param lateralFlag true-不带树形结构，false-返回带树形结构的
+     * @param roleId        角色id
+     * @param treeBuildFlag true-带树形结构，false-不组装树形结构的
      * @author majianguo
      * @date 2021/1/9 15:08
      */
-    List<ResourceTreeNode> getResourceTree(Long roleId, Boolean lateralFlag);
+    List<ResourceTreeNode> getResourceTree(Long roleId, Boolean treeBuildFlag);
 
     /**
      * 获取资源树列表，用于生成api接口
