@@ -42,7 +42,12 @@ public enum SysRoleExceptionEnum implements AbstractExceptionEnum {
     /**
      * 必须选择公司范围集合
      */
-    PLEASE_FILL_DATA_SCOPE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "66", "指定部门类型的数据范围必须选择组织机构");
+    PLEASE_FILL_DATA_SCOPE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "66", "指定部门类型的数据范围必须选择组织机构"),
+
+    /**
+     * 超级管理员角色编码不能被修改
+     */
+    SUPER_ADMIN_ROLE_CODE_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "67", "超级管理员角色编码不能被修改");
 
     /**
      * 错误编码

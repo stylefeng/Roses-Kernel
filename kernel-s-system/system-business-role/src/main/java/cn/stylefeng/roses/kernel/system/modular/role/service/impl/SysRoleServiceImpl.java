@@ -17,6 +17,7 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
+import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.role.SysRoleExceptionEnum;
 import cn.stylefeng.roses.kernel.system.modular.role.entity.*;
@@ -114,6 +115,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void edit(SysRoleRequest sysRoleRequest) {
         SysRole sysRole = this.querySysRole(sysRoleRequest);
+
+        // 不能修改超级管理员编码
+        if (SystemConstants.SUPER_ADMIN_ROLE_CODE.equals(sysRole.getRoleCode())) {
+            if (!sysRole.getRoleCode().equals(sysRoleRequest.getRoleCode())) {
+                throw new SystemModularException(SysRoleExceptionEnum.SUPER_ADMIN_ROLE_CODE_ERROR);
+            }
+        }
+
+        // 拷贝属性
         BeanUtil.copyProperties(sysRoleRequest, sysRole);
 
         // 不能修改状态，用修改状态接口修改状态
