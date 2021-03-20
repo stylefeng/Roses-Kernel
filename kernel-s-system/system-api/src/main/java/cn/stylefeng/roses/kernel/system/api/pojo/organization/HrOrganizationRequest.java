@@ -77,25 +77,25 @@ public class HrOrganizationRequest extends BaseRequest {
     /**
      * 角色id
      */
-    @NotNull(message = "角色id不能为空", groups = orgZTree.class)
+    @NotNull(message = "角色id不能为空", groups = roleBindOrgScope.class)
     private Long roleId;
 
     /**
      * 用户id（作为查询条件）
      */
-    @NotNull(message = "用户id不能为空", groups = userOrgScopeQuery.class)
+    @NotNull(message = "用户id不能为空", groups = userBindOrgScope.class)
     private Long userId;
 
     /**
      * 组织机构树zTree形式
      */
-    public @interface orgZTree {
+    public @interface roleBindOrgScope {
     }
 
     /**
      * 查询用户的数据范围
      */
-    public @interface userOrgScopeQuery {
+    public @interface userBindOrgScope {
     }
 
 }
