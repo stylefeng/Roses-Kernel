@@ -50,7 +50,7 @@ public class SysMenuRequest extends BaseRequest {
      */
     @NotBlank(message = "菜单的编码不能为空", groups = {add.class, edit.class})
     @TableUniqueValue(
-            message = "菜单的编码不能为空",
+            message = "菜单的编码存在重复",
             groups = {add.class, edit.class},
             tableName = "sys_menu",
             columnName = "menu_code",
