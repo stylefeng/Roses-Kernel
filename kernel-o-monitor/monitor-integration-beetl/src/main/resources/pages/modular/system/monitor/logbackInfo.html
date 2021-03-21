@@ -83,7 +83,8 @@
             request.dataObject = {
                 level: level,
                 isRate: 'irate',
-                rateMetric: 'logback_events_total'
+                rateMetric: 'logback_events_total',
+                timeInterval: '[5m]'
             };
             request.setAsync(true);
             request.start();
