@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.db.api.exception;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.constants.DbConstants;
 import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
@@ -38,6 +39,10 @@ public class DaoException extends ServiceException {
 
     public DaoException(AbstractExceptionEnum exception) {
         super(DbConstants.DB_MODULE_NAME, exception);
+    }
+
+    public DaoException(AbstractExceptionEnum exception, Object... params) {
+        super(DbConstants.DB_MODULE_NAME, exception.getErrorCode(), StrUtil.format(exception.getUserTip(), params));
     }
 
 }

@@ -59,6 +59,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
         String dataSourceUrl = environment.getProperty("spring.datasource.url");
         String dataSourceUsername = environment.getProperty("spring.datasource.username");
         String dataSourcePassword = environment.getProperty("spring.datasource.password");
+        String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
 
         // flyway的配置
         String enabledStr = environment.getProperty("spring.flyway.enabled");
@@ -78,7 +79,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
         }
 
         // 如果有为空的配置，终止执行
-        if (ObjectUtil.hasEmpty(dataSourceUrl, dataSourceUsername, dataSourcePassword)) {
+        if (ObjectUtil.hasEmpty(dataSourceUrl, dataSourceUsername, dataSourcePassword, driverClassName)) {
             throw new DaoException(FlywayExceptionEnum.DB_CONFIG_ERROR);
         }
 
@@ -104,7 +105,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
             assert dataSourceUrl != null;
             // 手动创建数据源
             dmDataSource = new DriverManagerDataSource();
-            dmDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            dmDataSource.setDriverClassName(driverClassName);
             dmDataSource.setUrl(dataSourceUrl);
             dmDataSource.setUsername(dataSourceUsername);
             dmDataSource.setPassword(dataSourcePassword);
@@ -128,7 +129,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
 
         } catch (Exception e) {
             log.error("flyway初始化失败", e);
-            throw new DaoException(FlywayExceptionEnum.FLYWAY_MIGRATE_ERROR);
+            throw new DaoException(FlywayExceptionEnum.FLYWAY_MIGRATE_ERROR, e.getMessage());
         }
     }
 
