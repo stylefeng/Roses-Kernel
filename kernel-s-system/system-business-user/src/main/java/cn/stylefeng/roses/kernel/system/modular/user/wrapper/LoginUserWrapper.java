@@ -27,16 +27,10 @@ package cn.stylefeng.roses.kernel.system.modular.user.wrapper;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
-import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import cn.stylefeng.roses.kernel.system.api.pojo.login.LoginDetailsResponse;
-import cn.stylefeng.roses.kernel.system.api.pojo.login.details.SimpleAuthDetail;
-import cn.stylefeng.roses.kernel.system.api.pojo.login.details.SimpleUserDetail;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import cn.stylefeng.roses.kernel.wrapper.api.BaseWrapper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,38 +44,12 @@ public class LoginUserWrapper implements BaseWrapper<LoginUser> {
     @Override
     public Map<String, Object> doWrap(LoginUser loginUser) {
         SysUserService sysUserService = SpringUtil.getBean(SysUserService.class);
-
         LoginDetailsResponse loginDetailsResponse = new LoginDetailsResponse();
-
-        // 获取用户详细信息
-        SimpleUserInfo simpleUserInfo = loginUser.getSimpleUserInfo();
-
-        // 获取用户角色信息
-        List<SimpleRoleInfo> simpleRoleInfoList = loginUser.getSimpleRoleInfoList();
-
-        // 组装用户信息
-        SimpleUserDetail simpleUserDetail = new SimpleUserDetail();
-        simpleUserDetail.setUserId(loginUser.getUserId());
-        simpleUserDetail.setName(simpleUserInfo.getRealName());
 
         // 设置头像，并获取头像的url
         Long avatarFileId = loginUser.getSimpleUserInfo().getAvatar();
         String userAvatarUrl = sysUserService.getUserAvatarUrl(avatarFileId, loginUser.getToken());
-
-        simpleUserDetail.setAvatar(userAvatarUrl);
-        loginDetailsResponse.setUser(simpleUserDetail);
-
-        // 组装权限
-        ArrayList<SimpleAuthDetail> authInfos = new ArrayList<>();
-        for (SimpleRoleInfo simpleRoleInfo : simpleRoleInfoList) {
-            SimpleAuthDetail simpleAuthDetail = new SimpleAuthDetail();
-            simpleAuthDetail.setId(simpleRoleInfo.getRoleCode());
-            // todo 没有按钮信息
-            simpleAuthDetail.setOperation(null);
-            authInfos.add(simpleAuthDetail);
-        }
-        loginDetailsResponse.setAuthorities(authInfos);
-        loginDetailsResponse.setRoles(authInfos);
+        loginDetailsResponse.setAvatarUrl(userAvatarUrl);
 
         // 登录人的ws-url
         loginDetailsResponse.setWsUrl(loginUser.getWsUrl());

@@ -24,13 +24,9 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.login;
 
-import cn.stylefeng.roses.kernel.system.api.pojo.login.details.SimpleAuthDetail;
-import cn.stylefeng.roses.kernel.system.api.pojo.login.details.SimpleUserDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 /**
  * 登录人详细信息
@@ -44,23 +40,13 @@ import java.util.List;
 public class LoginDetailsResponse {
 
     /**
-     * 用户基本信息
-     */
-    private SimpleUserDetail user;
-
-    /**
-     * 权限信息（对应后台的resource）
-     */
-    private List<SimpleAuthDetail> authorities;
-
-    /**
-     * 角色信息
-     */
-    private List<SimpleAuthDetail> roles;
-
-    /**
      * 登录人的ws-url
      */
     private String wsUrl;
+
+    /**
+     * 头像地址
+     */
+    private String avatarUrl;
 
 }
