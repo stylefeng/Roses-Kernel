@@ -91,6 +91,9 @@
         <!--系统消息模块-->
         <module>kernel-s-message</module>
 
+        <!--mongodb模块-->
+        <module>kernel-d-mongodb</module>
+
         <!--系统管理基础业务-->
         <module>kernel-s-system</module>
 
