@@ -26,16 +26,17 @@ package cn.stylefeng.roses.kernel.system.modular.user.factory;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import cn.stylefeng.roses.kernel.auth.api.prop.LoginUserPropExpander;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
-import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.DataScopeDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
+import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 
 import java.util.*;
 
@@ -125,6 +126,9 @@ public class UserLoginInfoFactory {
 
         // 设置用户的登录时间
         loginUser.setLoginTime(new Date());
+
+        // 设置登录用户token
+        loginUser.setToken(LoginContext.me().getToken());
 
         // 响应dto
         userLoginInfoDTO.setLoginUser(loginUser);
