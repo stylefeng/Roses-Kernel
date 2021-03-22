@@ -34,8 +34,8 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
-import cn.stylefeng.roses.kernel.system.api.pojo.login.LoginDetailsResponse;
-import cn.stylefeng.roses.kernel.system.modular.user.factory.LoginResponseFactory;
+import cn.stylefeng.roses.kernel.system.modular.user.wrapper.LoginUserWrapper;
+import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -82,25 +82,13 @@ public class LoginController {
     }
 
     /**
-     * 用户登陆并返回详情
-     *
-     * @author fengshuonan
-     * @date 2021/3/17 17:24
-     */
-    @PostResource(name = "用户登陆并返回详情", path = "/loginWithDetail", requiredLogin = false, requiredPermission = false)
-    public ResponseData loginWithDetail(@RequestBody @Validated LoginRequest loginRequest) {
-        LoginResponse loginResponse = authServiceApi.login(loginRequest);
-        LoginDetailsResponse loginDetail = LoginResponseFactory.createLoginDetail(loginResponse);
-        return new SuccessResponseData(loginDetail);
-    }
-
-    /**
      * 获取当前用户的用户信息
      *
      * @author fengshuonan
      * @date 2021/3/17 17:37
      */
     @GetResource(name = "获取当前用户的用户信息", path = "/getCurrentLoginUserInfo", requiredPermission = false)
+    @Wrapper(LoginUserWrapper.class)
     public ResponseData getCurrentLoginUserInfo() {
         LoginUser loginUser = LoginContext.me().getLoginUser();
         return new SuccessResponseData(loginUser);

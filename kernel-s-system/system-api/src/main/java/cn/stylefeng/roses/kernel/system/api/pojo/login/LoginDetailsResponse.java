@@ -33,10 +33,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * 登陆信息详情相应结果
+ * 登录人详细信息
  *
- * @author majianguo
- * @date 2021/1/7 11:59
+ * @author fengshuonan
+ * @date 2021/3/22 21:27
  */
 @Data
 @AllArgsConstructor
@@ -44,24 +44,14 @@ import java.util.List;
 public class LoginDetailsResponse {
 
     /**
-     * 登录人的token
-     */
-    private String token;
-
-    /**
-     * 到期时间
-     */
-    private Long expireAt;
-
-    /**
      * 用户基本信息
      */
     private SimpleUserDetail user;
 
     /**
-     * 权限信息
+     * 权限信息（对应后台的resource）
      */
-    private List<SimpleAuthDetail> permissions;
+    private List<SimpleAuthDetail> authorities;
 
     /**
      * 角色信息

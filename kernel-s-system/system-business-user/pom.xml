@@ -70,6 +70,14 @@
             <version>7.0.2</version>
         </dependency>
 
+        <!--包装器模块-->
+        <!--包装结果-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>wrapper-api</artifactId>
+            <version>7.0.2</version>
+        </dependency>
+
         <!--缓存api-->
         <!--用户的查询会使用缓存-->
         <dependency>
