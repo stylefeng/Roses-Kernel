@@ -281,6 +281,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 SysMenu::getAntdvRouter,
                 SysMenu::getAntdvComponent,
                 SysMenu::getVisible,
+                SysMenu::getAntdvUidUrl,
                 SysMenu::getMenuId,
                 SysMenu::getMenuParentId);
         wrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode());

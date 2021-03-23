@@ -150,6 +150,12 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     private String antdvLinkUrl;
 
     /**
+     * 用于非菜单显示页面的重定向url设置
+     */
+    @TableField("antdv_uid_url")
+    private String antdvUidUrl;
+
+    /**
      * 是否删除：Y-被删除，N-未删除
      */
     @TableField(value = "del_flag", fill = FieldFill.INSERT)

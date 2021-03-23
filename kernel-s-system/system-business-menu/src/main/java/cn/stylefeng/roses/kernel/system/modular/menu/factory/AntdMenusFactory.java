@@ -93,7 +93,7 @@ public class AntdMenusFactory {
                 antdvMenuItem.setPath(sysMenu.getAntdvRouter());
                 antdvMenuItem.setComponent(sysMenu.getAntdvComponent());
                 antdvMenuItem.setHide(YesOrNotEnum.N.getCode().equals(sysMenu.getVisible()));
-                antdvMenuItem.setUid(null);
+                antdvMenuItem.setUid(sysMenu.getAntdvUidUrl());
                 if (ObjectUtil.isNotEmpty(sysMenu.getChildren())) {
                     antdvMenuItem.setChildren(doModelTransfer(sysMenu.getChildren()));
                 }
