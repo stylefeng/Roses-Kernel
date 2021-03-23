@@ -39,6 +39,7 @@ import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -89,7 +90,7 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/3/17 17:24
      */
-    @GetResource(name = "登出", path = "/logout", requiredPermission = false)
+    @ApiResource(name = "登出", path = "/logout", requiredPermission = false, method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseData logoutPage() {
         authServiceApi.logout();
         return new SuccessResponseData();
