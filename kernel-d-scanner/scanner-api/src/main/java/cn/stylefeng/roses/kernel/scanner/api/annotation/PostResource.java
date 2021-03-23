@@ -78,6 +78,11 @@ public @interface PostResource {
     boolean requiredPermission() default true;
 
     /**
+     * 是否需要请求解密，响应加密 (true-需要,false-不需要)
+     */
+    boolean requiredEncryption() default false;
+
+    /**
      * 是否是视图类型：true-是，false-否
      * 如果是视图类型，url需要以 '/view' 开头，
      * 视图类型的接口会渲染出html界面，而不是json数据，
