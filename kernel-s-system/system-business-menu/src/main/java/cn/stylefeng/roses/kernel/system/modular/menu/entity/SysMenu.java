@@ -159,7 +159,7 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
      * 子节点（表中不存在，用于构造树）
      */
     @TableField(exist = false)
-    private List children;
+    private List<SysMenu> children;
 
     /**
      * 应用名称

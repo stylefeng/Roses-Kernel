@@ -24,58 +24,52 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.menu.antd;
 
-import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import lombok.Data;
 
 import java.util.List;
 
 /**
- * 封装antd vue需要的菜单信息，service对外输出的对象
+ * 封装antd vue需要的dto
  *
- * @author majianguo
- * @date 2021/1/7 15:18
+ * @author fengshuonan
+ * @date 2021/3/23 21:26
  */
 @Data
 public class AntdSysMenuDTO {
 
     /**
-     * 主键
-     */
-    private Long menuId;
-
-    /**
-     * 父id，顶级节点的父id是-1
-     */
-    private Long menuParentId;
-
-    /**
      * 菜单的名称
      */
-    private String menuName;
+    private String title;
 
     /**
-     * 路由地址，浏览器显示的URL，例如/menu，适用于antd vue版本
+     * 菜单的图标
      */
-    private String antdvRouter;
+    private String icon;
 
     /**
-     * 图标，适用于antd vue版本
+     * 路由地址(要以/开头)，必填
      */
-    private String antdvIcon;
+    private String path;
 
     /**
-     * 是否显示，Y-显示，N-不显示
+     * 组件地址(组件要放在view目录下)，父级可以省略
      */
-    private String visible;
+    private String component;
 
     /**
-     * 子节点（表中不存在，用于构造树）
+     * 为true只注册路由不显示在左侧菜单(比如独立的添加页面)
      */
-    private List children;
+    private Boolean hide;
 
     /**
-     * 菜单可以被那些角色访问
+     * 比如修改页面不在侧边栏，打开后侧边栏就没有选中了，这个可以配置选中地址
      */
-    private List<SimpleRoleInfo> roles;
+    private String uid;
+
+    /**
+     * 子级
+     */
+    private List<AntdSysMenuDTO> children;
 
 }

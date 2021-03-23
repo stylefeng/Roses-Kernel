@@ -275,14 +275,27 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<AntdSysMenuDTO> getLeftMenusAntdv() {
 
+        LambdaQueryWrapper<SysMenu> wrapper = this.createWrapper(new SysMenuRequest());
+        wrapper.select(SysMenu::getMenuName,
+                SysMenu::getAntdvIcon,
+                SysMenu::getAntdvRouter,
+                SysMenu::getAntdvComponent,
+                SysMenu::getVisible,
+                SysMenu::getMenuId,
+                SysMenu::getMenuParentId);
+        wrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode());
+
         // 如果是超级管理员，则获取所有的菜单
         if (LoginContext.me().getSuperAdminFlag()) {
-            return this.baseMapper.getSystemAllMenus(null);
+            List<SysMenu> totalList = this.list(wrapper);
+            return AntdMenusFactory.createTotalMenus(totalList);
         }
 
         // 获取当前用户的所有菜单
         List<Long> menuIdList = getCurrentUserMenuIds();
-        return this.baseMapper.getSystemAllMenus(menuIdList);
+        wrapper.in(SysMenu::getMenuId, menuIdList);
+        List<SysMenu> customList = this.list(wrapper);
+        return AntdMenusFactory.createTotalMenus(customList);
     }
 
     @Override

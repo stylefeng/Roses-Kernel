@@ -32,10 +32,8 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
-import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdvMenuItem;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
-import cn.stylefeng.roses.kernel.system.modular.menu.factory.AntdMenusFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -146,8 +144,7 @@ public class SysMenuController {
     @GetResource(name = "获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）", path = "/sysMenu/getLeftMenusAntdv", requiredPermission = false)
     public ResponseData getLeftMenusAntdv() {
         List<AntdSysMenuDTO> sysMenuResponses = sysMenuService.getLeftMenusAntdv();
-        List<AntdvMenuItem> totalMenus = AntdMenusFactory.createTotalMenus(sysMenuResponses);
-        return new SuccessResponseData(totalMenus);
+        return new SuccessResponseData(sysMenuResponses);
     }
 
     /**
