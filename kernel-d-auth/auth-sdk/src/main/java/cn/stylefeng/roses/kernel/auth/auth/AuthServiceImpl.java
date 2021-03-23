@@ -234,6 +234,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         // 8. 生成用户的token
         DefaultJwtPayload defaultJwtPayload = new DefaultJwtPayload(loginUser.getUserId(), loginUser.getAccount(), loginRequest.getRememberMe());
         String jwtToken = JwtContext.me().generateTokenDefaultPayload(defaultJwtPayload);
+        loginUser.setToken(jwtToken);
 
         synchronized (SESSION_OPERATE_LOCK) {
 
