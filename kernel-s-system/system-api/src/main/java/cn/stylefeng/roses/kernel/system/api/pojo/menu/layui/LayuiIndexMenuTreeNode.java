@@ -36,7 +36,7 @@ import java.util.List;
  * @date 2020/12/27 18:36
  */
 @Data
-public class LayuiIndexMenuTreeNode implements AbstractTreeNode {
+public class LayuiIndexMenuTreeNode implements AbstractTreeNode<LayuiIndexMenuTreeNode> {
 
     /**
      * 应用编码
@@ -84,7 +84,7 @@ public class LayuiIndexMenuTreeNode implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<LayuiIndexMenuTreeNode> childrenNodes) {
         this.children = childrenNodes;
     }
 

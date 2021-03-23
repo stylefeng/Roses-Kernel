@@ -38,7 +38,7 @@ import java.util.List;
  * @date 2020/10/30 11:05
  */
 @Data
-public class TreeDictInfo implements AbstractTreeNode {
+public class TreeDictInfo implements AbstractTreeNode<TreeDictInfo> {
 
     /**
      * 字典id
@@ -84,7 +84,7 @@ public class TreeDictInfo implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List linkedList) {
+    public void setChildrenNodes(List<TreeDictInfo> linkedList) {
         this.children = linkedList;
     }
 

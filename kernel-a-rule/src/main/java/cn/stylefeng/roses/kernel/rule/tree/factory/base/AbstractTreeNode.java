@@ -32,7 +32,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/10/15 14:31
  */
-public interface AbstractTreeNode {
+public interface AbstractTreeNode<T> {
 
     /**
      * 获取节点id
@@ -59,6 +59,6 @@ public interface AbstractTreeNode {
      * @author fengshuonan
      * @date 2020/10/15 15:28
      */
-    void setChildrenNodes(List childrenNodes);
+    void setChildrenNodes(List<T> childrenNodes);
 
 }

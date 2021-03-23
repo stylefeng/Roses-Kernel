@@ -45,7 +45,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("sys_menu")
-public class SysMenu extends BaseEntity implements AbstractTreeNode {
+public class SysMenu extends BaseEntity implements AbstractTreeNode<SysMenu> {
 
     /**
      * 主键
@@ -190,7 +190,7 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<SysMenu> childrenNodes) {
         this.children = childrenNodes;
     }
 

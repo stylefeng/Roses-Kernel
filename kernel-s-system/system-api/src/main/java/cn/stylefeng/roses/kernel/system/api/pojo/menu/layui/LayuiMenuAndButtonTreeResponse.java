@@ -36,7 +36,7 @@ import java.util.List;
  * @date 2021/1/9 16:59
  */
 @Data
-public class LayuiMenuAndButtonTreeResponse implements AbstractTreeNode {
+public class LayuiMenuAndButtonTreeResponse implements AbstractTreeNode<LayuiMenuAndButtonTreeResponse> {
 
     /**
      * 节点ID
@@ -71,7 +71,7 @@ public class LayuiMenuAndButtonTreeResponse implements AbstractTreeNode {
     /**
      * 子节点集合
      */
-    private List children;
+    private List<LayuiMenuAndButtonTreeResponse> children;
 
     @Override
     public String getNodeId() {
@@ -84,7 +84,7 @@ public class LayuiMenuAndButtonTreeResponse implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<LayuiMenuAndButtonTreeResponse> childrenNodes) {
         this.children = childrenNodes;
     }
 }

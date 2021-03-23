@@ -36,7 +36,7 @@ import java.util.List;
  * @date 2021/1/7 18:09
  */
 @Data
-public class AntdvMenuItem implements AbstractTreeNode {
+public class AntdvMenuItem implements AbstractTreeNode<AntdvMenuItem> {
 
     /**
      * 主键
@@ -89,7 +89,7 @@ public class AntdvMenuItem implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<AntdvMenuItem> childrenNodes) {
         this.children = childrenNodes;
     }
 

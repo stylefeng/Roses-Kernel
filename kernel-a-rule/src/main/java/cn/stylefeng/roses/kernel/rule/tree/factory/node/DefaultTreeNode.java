@@ -39,7 +39,7 @@ import java.util.List;
  * @date 2020/10/15 14:39
  */
 @Data
-public class DefaultTreeNode implements AbstractTreeNode {
+public class DefaultTreeNode implements AbstractTreeNode<DefaultTreeNode> {
 
     /**
      * 节点id
@@ -87,7 +87,7 @@ public class DefaultTreeNode implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<DefaultTreeNode> childrenNodes) {
         this.children = childrenNodes;
     }
 
