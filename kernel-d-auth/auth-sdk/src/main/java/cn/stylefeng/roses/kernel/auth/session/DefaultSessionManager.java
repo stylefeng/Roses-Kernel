@@ -193,12 +193,10 @@ public class DefaultSessionManager implements SessionManagerApi {
     @Override
     public void destroySessionCookie() {
         // 如果开启了cookie存储会话信息，则需要给HttpServletResponse添加一个cookie
-        if (AuthConfigExpander.getSessionAddToCookie()) {
-            String sessionCookieName = AuthConfigExpander.getSessionCookieName();
-            Cookie cookie = sessionCookieCreator.createCookie(sessionCookieName, null, 0);
-            HttpServletResponse response = HttpServletUtil.getResponse();
-            response.addCookie(cookie);
-        }
+        String sessionCookieName = AuthConfigExpander.getSessionCookieName();
+        Cookie cookie = sessionCookieCreator.createCookie(sessionCookieName, null, 0);
+        HttpServletResponse response = HttpServletUtil.getResponse();
+        response.addCookie(cookie);
     }
 
     @Override

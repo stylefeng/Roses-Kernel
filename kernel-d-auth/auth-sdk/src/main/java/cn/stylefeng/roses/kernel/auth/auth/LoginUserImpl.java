@@ -72,17 +72,15 @@ public class LoginUserImpl implements LoginUserApi {
         }
 
         // 3. 从cookie中获取token
-        if (AuthConfigExpander.getSessionAddToCookie()) {
-            String sessionCookieName = AuthConfigExpander.getSessionCookieName();
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null && cookies.length > 0) {
-                for (Cookie cookie : cookies) {
+        String sessionCookieName = AuthConfigExpander.getSessionCookieName();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null && cookies.length > 0) {
+            for (Cookie cookie : cookies) {
 
-                    // 如果cookie有对应的值，并且不为空
-                    if (sessionCookieName.equals(cookie.getName())
-                            && StrUtil.isNotBlank(cookie.getValue())) {
-                        return cookie.getValue();
-                    }
+                // 如果cookie有对应的值，并且不为空
+                if (sessionCookieName.equals(cookie.getName())
+                        && StrUtil.isNotBlank(cookie.getValue())) {
+                    return cookie.getValue();
                 }
             }
         }
