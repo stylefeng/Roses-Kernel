@@ -64,7 +64,21 @@ public class LoginController {
      * @date 2021/3/17 17:23
      */
     @PostResource(name = "登陆", path = "/login", requiredLogin = false, requiredPermission = false)
-    public ResponseData doAuth(@RequestBody @Validated LoginRequest loginRequest) {
+    public ResponseData login(@RequestBody @Validated LoginRequest loginRequest) {
+        loginRequest.setCreateCookie(true);
+        LoginResponse loginResponse = authServiceApi.login(loginRequest);
+        return new SuccessResponseData(loginResponse.getToken());
+    }
+
+    /**
+     * 用户登陆(提供给分离版用的接口，不会写cookie)
+     *
+     * @author fengshuonan
+     * @date 2021/3/17 17:23
+     */
+    @PostResource(name = "登陆（分离版）", path = "/loginApi", requiredLogin = false, requiredPermission = false)
+    public ResponseData loginApi(@RequestBody @Validated LoginRequest loginRequest) {
+        loginRequest.setCreateCookie(false);
         LoginResponse loginResponse = authServiceApi.login(loginRequest);
         return new SuccessResponseData(loginResponse.getToken());
     }

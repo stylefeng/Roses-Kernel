@@ -83,7 +83,7 @@ public class DefaultSessionManager implements SessionManagerApi {
     }
 
     @Override
-    public void createSession(String token, LoginUser loginUser) {
+    public void createSession(String token, LoginUser loginUser, Boolean createCookie) {
 
         // 装配用户信息的缓存
         loginUserCache.put(token, loginUser, sessionExpiredSeconds);
@@ -97,7 +97,7 @@ public class DefaultSessionManager implements SessionManagerApi {
         allPlaceLoginTokenCache.put(loginUser.getUserId().toString(), theUserTokens);
 
         // 如果开启了cookie存储会话信息，则需要给HttpServletResponse添加一个cookie
-        if (AuthConfigExpander.getSessionAddToCookie()) {
+        if (createCookie) {
             String sessionCookieName = AuthConfigExpander.getSessionCookieName();
             Cookie cookie = sessionCookieCreator.createCookie(sessionCookieName, token, Convert.toInt(AuthConfigExpander.getAuthJwtTimeoutSeconds()));
             HttpServletResponse response = HttpServletUtil.getResponse();
