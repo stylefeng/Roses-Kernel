@@ -39,6 +39,7 @@ import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -64,7 +65,21 @@ public class LoginController {
      * @date 2021/3/17 17:23
      */
     @PostResource(name = "登陆", path = "/login", requiredLogin = false, requiredPermission = false)
-    public ResponseData doAuth(@RequestBody @Validated LoginRequest loginRequest) {
+    public ResponseData login(@RequestBody @Validated LoginRequest loginRequest) {
+        loginRequest.setCreateCookie(true);
+        LoginResponse loginResponse = authServiceApi.login(loginRequest);
+        return new SuccessResponseData(loginResponse.getToken());
+    }
+
+    /**
+     * 用户登陆(提供给分离版用的接口，不会写cookie)
+     *
+     * @author fengshuonan
+     * @date 2021/3/17 17:23
+     */
+    @PostResource(name = "登陆（分离版）", path = "/loginApi", requiredLogin = false, requiredPermission = false)
+    public ResponseData loginApi(@RequestBody @Validated LoginRequest loginRequest) {
+        loginRequest.setCreateCookie(false);
         LoginResponse loginResponse = authServiceApi.login(loginRequest);
         return new SuccessResponseData(loginResponse.getToken());
     }
@@ -75,7 +90,7 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/3/17 17:24
      */
-    @GetResource(name = "登出", path = "/logout", requiredPermission = false)
+    @ApiResource(name = "登出", path = "/logout", requiredPermission = false, method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseData logoutPage() {
         authServiceApi.logout();
         return new SuccessResponseData();

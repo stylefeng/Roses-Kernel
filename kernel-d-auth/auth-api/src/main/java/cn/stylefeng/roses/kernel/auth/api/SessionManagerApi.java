@@ -45,10 +45,11 @@ public interface SessionManagerApi {
      *
      * @param token     用户登录的token
      * @param loginUser 登录的用户
+     * @param loginUser 登录的用户
      * @author fengshuonan
      * @date 2020/10/19 16:47
      */
-    void createSession(String token, LoginUser loginUser);
+    void createSession(String token, LoginUser loginUser, Boolean createCookie);
 
     /**
      * 更新当前会话的loginUser对象的内容

@@ -36,7 +36,7 @@ import java.util.List;
  * @date 2021/1/14 21:51
  */
 @Data
-public class LayuiApiResourceTreeNode implements AbstractTreeNode {
+public class LayuiApiResourceTreeNode implements AbstractTreeNode<LayuiApiResourceTreeNode> {
 
     /**
      * 资源的上级编码
@@ -82,7 +82,7 @@ public class LayuiApiResourceTreeNode implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<LayuiApiResourceTreeNode> childrenNodes) {
         this.children = childrenNodes;
     }
 

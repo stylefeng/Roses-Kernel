@@ -45,7 +45,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("sys_menu")
-public class SysMenu extends BaseEntity implements AbstractTreeNode {
+public class SysMenu extends BaseEntity implements AbstractTreeNode<SysMenu> {
 
     /**
      * 主键
@@ -150,6 +150,12 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     private String antdvLinkUrl;
 
     /**
+     * 用于非菜单显示页面的重定向url设置
+     */
+    @TableField("antdv_uid_url")
+    private String antdvUidUrl;
+
+    /**
      * 是否删除：Y-被删除，N-未删除
      */
     @TableField(value = "del_flag", fill = FieldFill.INSERT)
@@ -159,7 +165,7 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
      * 子节点（表中不存在，用于构造树）
      */
     @TableField(exist = false)
-    private List children;
+    private List<SysMenu> children;
 
     /**
      * 应用名称
@@ -184,7 +190,7 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<SysMenu> childrenNodes) {
         this.children = childrenNodes;
     }
 

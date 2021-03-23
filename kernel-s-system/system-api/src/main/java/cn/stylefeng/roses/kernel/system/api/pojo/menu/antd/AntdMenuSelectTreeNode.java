@@ -37,7 +37,7 @@ import java.util.List;
  * @date 2020/4/5 12:03
  */
 @Data
-public class AntdMenuSelectTreeNode implements AbstractTreeNode {
+public class AntdMenuSelectTreeNode implements AbstractTreeNode<AntdMenuSelectTreeNode> {
 
     /**
      * 主键
@@ -67,7 +67,7 @@ public class AntdMenuSelectTreeNode implements AbstractTreeNode {
     /**
      * 子节点
      */
-    private List children;
+    private List<AntdMenuSelectTreeNode> children;
 
     @Override
     public String getNodeId() {
@@ -80,7 +80,7 @@ public class AntdMenuSelectTreeNode implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<AntdMenuSelectTreeNode> childrenNodes) {
         this.children = childrenNodes;
     }
 }

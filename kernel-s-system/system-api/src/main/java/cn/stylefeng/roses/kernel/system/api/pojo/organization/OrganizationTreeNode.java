@@ -37,7 +37,7 @@ import java.util.List;
  * @date 2020/12/27 18:36
  */
 @Data
-public class OrganizationTreeNode implements AbstractTreeNode, AbstractXmSelectNode {
+public class OrganizationTreeNode implements AbstractTreeNode<OrganizationTreeNode>, AbstractXmSelectNode {
 
     /**
      * 父id，一级节点父id是0
@@ -80,7 +80,7 @@ public class OrganizationTreeNode implements AbstractTreeNode, AbstractXmSelectN
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<OrganizationTreeNode> childrenNodes) {
         this.children = childrenNodes;
     }
 

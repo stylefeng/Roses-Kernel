@@ -36,7 +36,7 @@ import java.util.List;
  * @date 2020/3/26 14:29
  */
 @Data
-public class ResourceTreeNode implements AbstractTreeNode {
+public class ResourceTreeNode implements AbstractTreeNode<ResourceTreeNode> {
 
     /**
      * 资源id
@@ -69,7 +69,7 @@ public class ResourceTreeNode implements AbstractTreeNode {
     /**
      * 子节点集合
      */
-    private List children;
+    private List<ResourceTreeNode> children;
 
     @Override
     public String getNodeId() {
@@ -82,7 +82,7 @@ public class ResourceTreeNode implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<ResourceTreeNode> childrenNodes) {
         this.children = childrenNodes;
     }
 }

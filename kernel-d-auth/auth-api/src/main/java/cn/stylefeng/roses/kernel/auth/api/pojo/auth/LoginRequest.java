@@ -67,4 +67,9 @@ public class LoginRequest extends BaseRequest {
      */
     private String verCode;
 
+    /**
+     * 是否写入cookie会话信息
+     */
+    private Boolean createCookie = false;
+
 }
