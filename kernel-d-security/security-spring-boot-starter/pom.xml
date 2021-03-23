@@ -45,6 +45,13 @@
             <version>7.0.2</version>
         </dependency>
 
+        <!--请求响应加密解密模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>security-sdk-request-encrypt-and-decode</artifactId>
+            <version>7.0.2</version>
+        </dependency>
+
     </dependencies>
 
 </project>
