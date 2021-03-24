@@ -6,10 +6,13 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.Mode;
+import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.symmetric.AES;
+import cn.hutool.crypto.symmetric.SM4;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.security.request.encrypt.constants.EncryptionConstants;
 import cn.stylefeng.roses.kernel.security.request.encrypt.exception.EncryptionException;
@@ -109,6 +112,26 @@ public class EncryptionRequestBodyAdvice implements RequestBodyAdvice {
                             // 使用私钥解密出返回加密数据的key和请求的内容
                             RSA rsa = new RSA(EncryptionConstants.PRIVATE_KEY, EncryptionConstants.PUBLIC_KEY);
 
+                            // 先使用SM4解密出请求的json
+                            String objectString = jsonObject.getString("data");
+                            if (StrUtil.isBlank(objectString)) {
+                                // 请求json解析异常
+                                throw new EncryptionException(EncryptionExceptionEnum.REQUEST_JSON_PARSE_ERROR);
+                            }
+
+                            String sm4Key = SecureUtil.md5(DateUtil.format(new Date(), "yyyyMMdd"));
+                            SM4 sm4 = new SM4(Mode.ECB, Padding.PKCS5Padding, HexUtil.decodeHex(sm4Key));
+                            try {
+                                String decryptStr = sm4.decryptStr(objectString);
+                                jsonObject = JSON.parseObject(decryptStr);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                log.error(e.getMessage());
+                                // 解密失败
+                                throw new EncryptionException(EncryptionExceptionEnum.RSA_DECRYPT_ERROR);
+
+                            }
+
                             // 请求中RSA公钥加密后的key  用于将返回的内容AES加密
                             String key = jsonObject.getString("key");
 
@@ -124,6 +147,7 @@ public class EncryptionRequestBodyAdvice implements RequestBodyAdvice {
                             try {
                                 // 使用 RSA 私钥解密请求中公钥加密后的key
                                 aesKey = rsa.decryptStr(key, KeyType.PrivateKey, CharsetUtil.CHARSET_UTF_8);
+                                log.info("本次请求数据AES加密的KEY为：" + aesKey);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 log.error(e.getMessage());
@@ -139,6 +163,7 @@ public class EncryptionRequestBodyAdvice implements RequestBodyAdvice {
                             try {
                                 // 使用aes解密请求的内容
                                 reqData = aes.decryptStr(data);
+                                log.info(StrUtil.format("本次请求的内容：{}", reqData));
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 log.error(e.getMessage());
