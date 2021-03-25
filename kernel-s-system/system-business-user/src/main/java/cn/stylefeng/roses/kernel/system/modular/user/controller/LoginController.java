@@ -34,8 +34,8 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
-import cn.stylefeng.roses.kernel.system.modular.user.wrapper.LoginUserWrapper;
-import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
+import cn.stylefeng.roses.kernel.system.api.pojo.login.CurrentUserInfoResponse;
+import cn.stylefeng.roses.kernel.system.modular.user.factory.UserLoginInfoFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -103,10 +103,13 @@ public class LoginController {
      * @date 2021/3/17 17:37
      */
     @GetResource(name = "获取当前用户的用户信息", path = "/getCurrentLoginUserInfo", requiredPermission = false)
-    @Wrapper(LoginUserWrapper.class)
     public ResponseData getCurrentLoginUserInfo() {
         LoginUser loginUser = LoginContext.me().getLoginUser();
-        return new SuccessResponseData(loginUser);
+
+        // 转化返回结果
+        CurrentUserInfoResponse currentUserInfoResponse = UserLoginInfoFactory.parseUserInfo(loginUser);
+
+        return new SuccessResponseData(currentUserInfoResponse);
     }
 
 }

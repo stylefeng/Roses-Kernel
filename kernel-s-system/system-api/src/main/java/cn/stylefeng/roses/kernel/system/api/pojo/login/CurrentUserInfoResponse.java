@@ -28,6 +28,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 /**
  * 登录人详细信息
  *
@@ -37,7 +39,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDetailsResponse {
+public class CurrentUserInfoResponse {
+
+    /**
+     * 用户主键id
+     */
+    private Long userId;
+
+    /**
+     * 公司/组织id
+     */
+    private Long organizationId;
 
     /**
      * 登录人的ws-url
@@ -45,8 +57,23 @@ public class LoginDetailsResponse {
     private String wsUrl;
 
     /**
-     * 头像地址
+     * 昵称
      */
-    private String avatarUrl;
+    private String nickname;
+
+    /**
+     * 用户头像（url）
+     */
+    private String avatar;
+
+    /**
+     * 用户拥有的资源权限
+     */
+    private Set<String> authorities;
+
+    /**
+     * 用户拥有的角色编码
+     */
+    private Set<String> roles;
 
 }

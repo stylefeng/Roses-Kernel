@@ -31,13 +31,16 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import cn.stylefeng.roses.kernel.auth.api.prop.LoginUserPropExpander;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.login.CurrentUserInfoResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.DataScopeDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
+import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 组装当前登录用户的信息
@@ -129,6 +132,45 @@ public class UserLoginInfoFactory {
         // 响应dto
         userLoginInfoDTO.setLoginUser(loginUser);
         return userLoginInfoDTO;
+    }
+
+    /**
+     * 转化为当前登陆用户信息的详情
+     *
+     * @author fengshuonan
+     * @date 2021/3/25 10:06
+     */
+    public static CurrentUserInfoResponse parseUserInfo(LoginUser loginUser) {
+
+        SysUserService sysUserService = SpringUtil.getBean(SysUserService.class);
+        CurrentUserInfoResponse currentUserInfoResponse = new CurrentUserInfoResponse();
+
+        // 设置用户id
+        currentUserInfoResponse.setUserId(loginUser.getUserId());
+
+        // 设置组织id
+        currentUserInfoResponse.setOrganizationId(loginUser.getOrganizationId());
+
+        // 登录人的ws-url
+        currentUserInfoResponse.setWsUrl(loginUser.getWsUrl());
+
+        // 设置用户昵称
+        currentUserInfoResponse.setNickname(loginUser.getSimpleUserInfo().getNickName());
+
+        // 设置头像，并获取头像的url
+        Long avatarFileId = loginUser.getSimpleUserInfo().getAvatar();
+        String userAvatarUrl = sysUserService.getUserAvatarUrl(avatarFileId, loginUser.getToken());
+        currentUserInfoResponse.setAvatar(userAvatarUrl);
+
+        // 设置角色
+        List<SimpleRoleInfo> simpleRoleInfoList = loginUser.getSimpleRoleInfoList();
+        Set<String> roleCodes = simpleRoleInfoList.stream().map(SimpleRoleInfo::getRoleCode).collect(Collectors.toSet());
+        currentUserInfoResponse.setRoles(roleCodes);
+
+        // 设置用户拥有的按钮权限
+        currentUserInfoResponse.setAuthorities(loginUser.getButtonCodes());
+
+        return currentUserInfoResponse;
     }
 
 }
