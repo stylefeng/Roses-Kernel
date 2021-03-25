@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.system.api.pojo.user.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.api.validators.date.DateValue;
+import cn.stylefeng.roses.kernel.validator.api.validators.phone.PhoneValue;
 import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
 import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
 import lombok.Data;
@@ -34,7 +35,6 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -86,7 +86,6 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 姓名
      */
-    @NotBlank(message = "姓名不能为空", groups = {add.class, edit.class, updateInfo.class})
     private String realName;
 
     /**
@@ -98,7 +97,7 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 生日
      */
-    @DateValue(message = "生日格式不正确", groups = {add.class, edit.class})
+    @DateValue(required = false, message = "生日格式不正确", groups = {add.class, edit.class})
     private String birthday;
 
     /**
@@ -116,8 +115,7 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 手机
      */
-    @NotNull(message = "手机号码不能为空", groups = {add.class, edit.class, reg.class})
-    @Size(min = 11, max = 11, message = "手机号码格式错误，不是11位", groups = {add.class, edit.class, reg.class})
+    @PhoneValue(required = false, message = "手机号码格式错误", groups = {add.class, edit.class, reg.class})
     private String phone;
 
     /**
@@ -146,7 +144,6 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 用户所属机构的职务
      */
-    @NotNull(message = "用户职务不能为空", groups = {add.class, edit.class})
     private Long positionId;
 
     /**

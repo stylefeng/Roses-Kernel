@@ -25,8 +25,9 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
+import cn.stylefeng.roses.kernel.system.api.PositionServiceApi;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionRequest;
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -37,7 +38,7 @@ import java.util.List;
  * @author chenjinlong
  * @date 2020/11/04 11:07
  */
-public interface HrPositionService extends IService<HrPosition> {
+public interface HrPositionService extends IService<HrPosition>, PositionServiceApi {
 
     /**
      * 添加职位

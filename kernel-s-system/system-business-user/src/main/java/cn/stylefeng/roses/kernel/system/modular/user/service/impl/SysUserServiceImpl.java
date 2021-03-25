@@ -169,7 +169,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         this.save(sysUser);
 
         // 更新用户员工信息
-        sysUserOrgService.add(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        if (null == sysUserRequest.getPositionId()) {
+            sysUserOrgService.add(sysUser.getUserId(), sysUserRequest.getOrgId());
+        }else {
+            sysUserOrgService.add(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        }
     }
 
     @Override
@@ -229,7 +233,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long sysUserId = sysUser.getUserId();
 
         // 更新用户员工信息
-        sysUserOrgService.edit(sysUserId, sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        if (null == sysUserRequest.getPositionId()) {
+            sysUserOrgService.edit(sysUser.getUserId(), sysUserRequest.getOrgId());
+        }else {
+            sysUserOrgService.edit(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        }
 
         // 清除缓存中的用户信息
         sysUserCacheOperatorApi.remove(String.valueOf(sysUserId));

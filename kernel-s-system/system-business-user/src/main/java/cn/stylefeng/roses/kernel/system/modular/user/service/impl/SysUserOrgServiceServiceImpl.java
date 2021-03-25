@@ -73,6 +73,14 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
     }
 
     @Override
+    public void add(Long userId, Long orgId) {
+        SysUserOrg sysUserOrg = new SysUserOrg();
+        sysUserOrg.setUserId(userId);
+        sysUserOrg.setOrgId(orgId);
+        this.save(sysUserOrg);
+    }
+
+    @Override
     public void add(Long userId, Long orgId, Long positionId) {
         SysUserOrg sysUserOrg = new SysUserOrg();
         sysUserOrg.setUserId(userId);
@@ -99,6 +107,17 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
         SysUserOrg sysUserOrg = this.querySysUserOrgById(userOrgResponse);
         BeanUtil.copyProperties(userOrgResponse, sysUserOrg);
         this.updateById(sysUserOrg);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(Long userId, Long orgId) {
+
+        // 删除已有绑定的组织机构
+        this.delByUserId(userId);
+
+        // 新增组织机构绑定
+        this.add(userId, orgId);
     }
 
     @Override

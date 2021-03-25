@@ -25,8 +25,8 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service;
 
 import cn.stylefeng.roses.kernel.system.api.UserOrgServiceApi;
-import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.UserOrgRequest;
+import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -53,7 +53,17 @@ public interface SysUserOrgService extends IService<SysUserOrg>, UserOrgServiceA
      *
      * @param userId     用户id
      * @param orgId      机构id
-     * @param positionId 部门id
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void add(Long userId, Long orgId);
+
+    /**
+     * 新增
+     *
+     * @param userId     用户id
+     * @param orgId      机构id
+     * @param positionId 职位id
      * @author chenjinlong
      * @date 2021/1/26 12:52
      */
@@ -91,7 +101,17 @@ public interface SysUserOrgService extends IService<SysUserOrg>, UserOrgServiceA
      *
      * @param userId     用户id
      * @param orgId      机构id
-     * @param positionId 部门id
+     * @author chenjinlong
+     * @date 2021/1/26 12:52
+     */
+    void edit(Long userId, Long orgId);
+
+    /**
+     * 修改
+     *
+     * @param userId     用户id
+     * @param orgId      机构id
+     * @param positionId 职位id
      * @author chenjinlong
      * @date 2021/1/26 12:52
      */

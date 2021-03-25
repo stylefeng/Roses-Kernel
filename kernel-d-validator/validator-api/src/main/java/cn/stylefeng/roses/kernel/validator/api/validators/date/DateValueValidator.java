@@ -51,17 +51,22 @@ public class DateValueValidator implements ConstraintValidator<DateValue, String
     @Override
     public boolean isValid(String dateValue, ConstraintValidatorContext context) {
 
-        // 如果是必填的
-        if (required && StrUtil.isEmpty(dateValue)) {
-            return false;
+        if (StrUtil.isEmpty(dateValue)) {
+            // 校验是不是必填
+            if (required) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            try {
+                // 校验日期格式
+                DateUtil.parse(dateValue, format);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
 
-        try {
-            // 校验格式
-            DateUtil.parse(dateValue, format);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 }
