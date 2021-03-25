@@ -104,6 +104,11 @@ public class SysUserDTO {
     private Long positionId;
 
     /**
+     * 职务名称
+     */
+    private String positionName;
+
+    /**
      * 状态
      */
     private Integer statusFlag;

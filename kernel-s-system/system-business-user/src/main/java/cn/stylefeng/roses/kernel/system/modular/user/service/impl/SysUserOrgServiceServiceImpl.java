@@ -28,11 +28,11 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserOrgExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.request.UserOrgRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserOrgMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.request.UserOrgRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -56,7 +56,7 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
         UserOrgRequest userOrgRequest = new UserOrgRequest();
         userOrgRequest.setUserId(userId);
         SysUserOrg sysUserOrg = this.detail(userOrgRequest);
-        if(ObjectUtil.isEmpty(sysUserOrg)){
+        if (ObjectUtil.isEmpty(sysUserOrg)) {
             throw new SystemModularException(SysUserOrgExceptionEnum.EMPLOYEE_MANY_MAIN_NOT_FOUND);
         }
         SysUserOrgDTO sysUserOrgDTO = new SysUserOrgDTO();
@@ -104,16 +104,18 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(Long userId, Long orgId, Long positionId) {
-        // 删除已有
+
+        // 删除已有绑定的组织机构
         this.delByUserId(userId);
-        // 新增
+
+        // 新增组织机构绑定
         this.add(userId, orgId, positionId);
     }
 
 
     @Override
     public SysUserOrg detail(UserOrgRequest userOrgResponse) {
-        return this.getOne( this.createWrapper(userOrgResponse), false);
+        return this.getOne(this.createWrapper(userOrgResponse), false);
     }
 
     @Override
