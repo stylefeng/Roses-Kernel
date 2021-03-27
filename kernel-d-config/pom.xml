@@ -17,7 +17,7 @@
 
     <modules>
         <module>config-api</module>
-        <module>config-sdk-db</module>
+        <module>config-sdk-map</module>
         <module>config-business</module>
         <module>config-spring-boot-starter</module>
     </modules>

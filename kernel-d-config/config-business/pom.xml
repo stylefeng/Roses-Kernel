@@ -20,7 +20,7 @@
         <!--系统配置表的sdk-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>config-sdk-db</artifactId>
+            <artifactId>config-sdk-map</artifactId>
             <version>7.0.2</version>
         </dependency>
 
