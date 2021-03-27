@@ -27,14 +27,11 @@ package cn.stylefeng.roses.kernel.config.modular.listener;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.db.DbUtil;
 import cn.hutool.db.Entity;
-import cn.hutool.db.handler.EntityListHandler;
-import cn.hutool.db.sql.SqlExecutor;
 import cn.stylefeng.roses.kernel.config.ConfigContainer;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
 import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
-import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
-import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.config.modular.factory.SysConfigDataFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
 import org.springframework.context.ApplicationListener;
@@ -62,8 +59,6 @@ import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExcepti
 @Slf4j
 public class ConfigInitListener implements ApplicationListener<ApplicationContextInitializedEvent>, Ordered {
 
-    private static final String CONFIG_LIST_SQL = "select config_code, config_value from sys_config where status_flag = ? and del_flag = ?";
-
     @Override
     public int getOrder() {
         return Ordered.HIGHEST_PRECEDENCE + 100;
@@ -87,6 +82,7 @@ public class ConfigInitListener implements ApplicationListener<ApplicationContex
         String dataSourceUrl = environment.getProperty("spring.datasource.url");
         String dataSourceUsername = environment.getProperty("spring.datasource.username");
         String dataSourcePassword = environment.getProperty("spring.datasource.password");
+        String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
 
         // 如果有为空的配置，终止执行
         if (ObjectUtil.hasEmpty(dataSourceUrl, dataSourceUsername, dataSourcePassword)) {
@@ -95,12 +91,12 @@ public class ConfigInitListener implements ApplicationListener<ApplicationContex
 
         Connection conn = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(driverClassName);
             assert dataSourceUrl != null;
             conn = DriverManager.getConnection(dataSourceUrl, dataSourceUsername, dataSourcePassword);
 
             // 获取sys_config表的数据
-            List<Entity> entityList = SqlExecutor.query(conn, CONFIG_LIST_SQL, new EntityListHandler(), StatusEnum.ENABLE.getCode(), YesOrNotEnum.N.getCode());
+            List<Entity> entityList = SysConfigDataFactory.getSysConfigDataApi(dataSourceUrl).getConfigs(conn);
 
             // 将查询到的参数配置添加到缓存
             if (ObjectUtil.isNotEmpty(entityList)) {
@@ -117,4 +113,5 @@ public class ConfigInitListener implements ApplicationListener<ApplicationContex
         }
 
     }
+
 }
