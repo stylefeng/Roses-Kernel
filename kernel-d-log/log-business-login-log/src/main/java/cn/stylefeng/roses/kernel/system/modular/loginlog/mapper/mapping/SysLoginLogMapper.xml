@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.loginlog.mapper.SysLoginLogMapper">
 
+    <select id="customFindPage" resultType="cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogDto" parameterType="cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogRequest">
+        select a.llg_id as llgId,a.llg_name as llgName,a.llg_succeed as llgSucceed,a.llg_message as llgMessage,a.llg_ip_address as llgIpAddress ,a.user_id as userId,a.create_time as createTime,b.real_name as userName
+        from sys_login_log a
+        left join sys_user b on a.user_id = b.user_id
+        where 1=1
+        <if test="sysLoginLogRequest.llgName != null and sysLoginLogRequest.llgName != ''">
+            and a.llg_name like CONCAT('%',#{sysLoginLogRequest.llgName},'%')
+        </if>
+        <if test="sysLoginLogRequest.beginTime != null and sysLoginLogRequest.beginTime != '' and sysLoginLogRequest.endTime != null and sysLoginLogRequest.endTime != ''">
+            and a.create_time <![CDATA[ >= ]]> #{sysLoginLogRequest.beginTime} and a.create_time <![CDATA[ <= ]]>
+            #{sysLoginLogRequest.endTime}
+        </if>
+    </select>
+
 </mapper>
