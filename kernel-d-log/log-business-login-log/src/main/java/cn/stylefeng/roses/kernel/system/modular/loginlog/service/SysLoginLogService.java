@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.loginlog.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogDto;
 import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogRequest;
 import cn.stylefeng.roses.kernel.system.modular.loginlog.entity.SysLoginLog;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -70,6 +71,6 @@ public interface SysLoginLogService extends IService<SysLoginLog> {
      * @author chenjinlong
      * @date 2021/1/13 10:57
      */
-    PageResult<SysLoginLog> findPage(SysLoginLogRequest sysLoginLogRequest);
+    PageResult<SysLoginLogDto> findPage(SysLoginLogRequest sysLoginLogRequest);
 
 }

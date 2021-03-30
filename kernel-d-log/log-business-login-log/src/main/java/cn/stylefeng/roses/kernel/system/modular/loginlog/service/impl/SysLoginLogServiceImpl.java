@@ -31,6 +31,7 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LoginLogServiceApi;
+import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogDto;
 import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogRequest;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
@@ -66,10 +67,8 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
     }
 
     @Override
-    public PageResult<SysLoginLog> findPage(SysLoginLogRequest sysLoginLogRequest) {
-        LambdaQueryWrapper<SysLoginLog> wrapper = createWrapper(sysLoginLogRequest);
-        wrapper.orderByDesc(SysLoginLog::getCreateTime);
-        Page<SysLoginLog> page = this.page(PageFactory.defaultPage(), wrapper);
+    public PageResult<SysLoginLogDto> findPage(SysLoginLogRequest sysLoginLogRequest) {
+        Page<SysLoginLogDto> page = baseMapper.customFindPage(PageFactory.defaultPage(), sysLoginLogRequest);
         return PageResultFactory.createPageResult(page);
     }
 

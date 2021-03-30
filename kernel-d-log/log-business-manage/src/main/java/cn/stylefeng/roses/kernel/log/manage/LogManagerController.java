@@ -104,6 +104,7 @@ public class LogManagerController {
      * @date 2021/1/11 17:36
      */
     @GetResource(name = "查看日志详情", path = "/logManager/detail")
+    @Wrapper(LogInfoWrapper.class)
     public ResponseData detail(@Validated(LogManagerRequest.detail.class) LogManagerRequest logManagerRequest) {
         return new SuccessResponseData(logManagerApi.detail(logManagerRequest));
     }
