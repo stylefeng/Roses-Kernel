@@ -11,45 +11,37 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>security-spring-boot-starter</artifactId>
+    <artifactId>security-sdk-request-encrypt-and-decode</artifactId>
 
     <packaging>jar</packaging>
 
     <dependencies>
 
-        <!--xss模块-->
+        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15to18 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15to18</artifactId>
+            <version>1.68</version>
+        </dependency>
+
+        <!--安全模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>security-sdk-xss</artifactId>
+            <artifactId>security-api</artifactId>
             <version>7.0.2</version>
         </dependency>
 
-        <!--图形验证码模块-->
+        <!--scanner api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>security-sdk-captcha</artifactId>
+            <artifactId>scanner-api</artifactId>
             <version>7.0.2</version>
         </dependency>
 
-        <!--count模块-->
+        <!--web模块-->
         <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>security-sdk-count</artifactId>
-            <version>7.0.2</version>
-        </dependency>
-
-        <!--黑白名单校验-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>security-sdk-black-white</artifactId>
-            <version>7.0.2</version>
-        </dependency>
-
-        <!--请求响应加密解密模块-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>security-sdk-request-encrypt-and-decode</artifactId>
-            <version>7.0.2</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
     </dependencies>
