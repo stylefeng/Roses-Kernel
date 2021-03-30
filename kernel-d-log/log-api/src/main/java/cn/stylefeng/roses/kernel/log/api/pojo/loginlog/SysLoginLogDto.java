@@ -6,6 +6,13 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
+
+/**
+ * 登录日志的dto
+ *
+ * @author fengshuonan
+ * @date 2021/3/30 20:51
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SysLoginLogDto extends BaseRequest {
@@ -59,4 +66,5 @@ public class SysLoginLogDto extends BaseRequest {
      * 结束时间
      */
     private String endTime;
+
 }

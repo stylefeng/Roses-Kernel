@@ -39,6 +39,12 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface SysLoginLogMapper extends BaseMapper<SysLoginLog> {
 
+    /**
+     * 分页查询登录日志
+     *
+     * @author fengshuonan
+     * @date 2021/3/30 20:52
+     */
     Page<SysLoginLogDto> customFindPage(@Param("page") Page page, @Param("sysLoginLogRequest") SysLoginLogRequest sysLoginLogRequest);
 
 }
