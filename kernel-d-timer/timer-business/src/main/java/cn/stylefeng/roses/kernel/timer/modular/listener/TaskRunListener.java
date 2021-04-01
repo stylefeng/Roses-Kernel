@@ -30,6 +30,7 @@ import cn.stylefeng.roses.kernel.timer.api.enums.TimerJobStatusEnum;
 import cn.stylefeng.roses.kernel.timer.modular.entity.SysTimers;
 import cn.stylefeng.roses.kernel.timer.modular.param.SysTimersParam;
 import cn.stylefeng.roses.kernel.timer.modular.service.SysTimersService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
@@ -42,6 +43,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2021/1/12 20:40
  */
+@Slf4j
 public class TaskRunListener implements ApplicationListener<ApplicationStartedEvent>, Ordered {
 
     @Override
@@ -60,7 +62,12 @@ public class TaskRunListener implements ApplicationListener<ApplicationStartedEv
 
         // 添加定时任务到调度器
         for (SysTimers sysTimers : list) {
-            timerExeService.startTimer(String.valueOf(sysTimers.getTimerId()), sysTimers.getCron(), sysTimers.getActionClass());
+            try {
+                timerExeService.startTimer(String.valueOf(sysTimers.getTimerId()), sysTimers.getCron(), sysTimers.getActionClass());
+            } catch (Exception exception) {
+                // 遇到错误直接略过这个定时器（可能多个项目公用库）
+                log.error("定时器初始化遇到错误，略过该定时器！", exception);
+            }
         }
     }
 
