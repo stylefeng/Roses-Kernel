@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.auth.auth;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginUserHolder;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
@@ -92,6 +93,12 @@ public class LoginUserImpl implements LoginUserApi {
     @Override
     public LoginUser getLoginUser() throws AuthException {
 
+        // 先从ThreadLocal中获取
+        LoginUser currentUser = LoginUserHolder.get();
+        if (currentUser != null) {
+            return currentUser;
+        }
+
         // 获取用户的token
         String token = getToken();
 
@@ -108,6 +115,12 @@ public class LoginUserImpl implements LoginUserApi {
 
     @Override
     public LoginUser getLoginUserNullable() {
+
+        // 先从ThreadLocal中获取
+        LoginUser currentUser = LoginUserHolder.get();
+        if (currentUser != null) {
+            return currentUser;
+        }
 
         // 获取用户的token
         String token = null;
