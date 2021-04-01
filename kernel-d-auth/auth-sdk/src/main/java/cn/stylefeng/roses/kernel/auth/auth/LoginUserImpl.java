@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginUserHolder;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
+import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
@@ -37,8 +38,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-
-import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.TOKEN_GET_ERROR;
 
 /**
  * 当前登陆用户的接口实现
@@ -87,7 +86,7 @@ public class LoginUserImpl implements LoginUserApi {
         }
 
         // 获取不到token，直接告诉用户
-        throw new AuthException(TOKEN_GET_ERROR);
+        throw new AuthException(AuthExceptionEnum.TOKEN_GET_ERROR);
     }
 
     @Override
@@ -107,7 +106,7 @@ public class LoginUserImpl implements LoginUserApi {
 
         // session为空抛出异常
         if (session == null) {
-            throw new AuthException(TOKEN_GET_ERROR);
+            throw new AuthException(AuthExceptionEnum.AUTH_EXPIRED_ERROR);
         }
 
         return session;
