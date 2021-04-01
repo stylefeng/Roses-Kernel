@@ -32,6 +32,7 @@ import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
 import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
 import cn.stylefeng.roses.kernel.config.modular.factory.SysConfigDataFactory;
+import cn.stylefeng.roses.kernel.rule.context.ApplicationPropertiesContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
 import org.springframework.context.ApplicationListener;
@@ -76,7 +77,11 @@ public class ConfigInitListener implements ApplicationListener<ApplicationContex
         // 初始化Config Api
         ConfigContext.setConfigApi(new ConfigContainer());
 
+        // 获取environment参数
         ConfigurableEnvironment environment = applicationContextInitializedEvent.getApplicationContext().getEnvironment();
+
+        // 初始化ApplicationPropertiesContext
+        ApplicationPropertiesContext.getInstance().initConfigs(environment);
 
         // 获取数据库连接配置
         String dataSourceUrl = environment.getProperty("spring.datasource.url");
