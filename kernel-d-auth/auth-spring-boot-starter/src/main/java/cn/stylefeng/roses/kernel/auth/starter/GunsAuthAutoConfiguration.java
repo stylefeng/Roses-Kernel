@@ -38,6 +38,7 @@ import cn.stylefeng.roses.kernel.auth.session.DefaultSessionManager;
 import cn.stylefeng.roses.kernel.auth.session.cache.logintoken.MemoryLoginTokenCache;
 import cn.stylefeng.roses.kernel.auth.session.cache.loginuser.MemoryLoginUserCache;
 import cn.stylefeng.roses.kernel.auth.session.cookie.DefaultSessionCookieCreator;
+import cn.stylefeng.roses.kernel.auth.session.timer.ClearInvalidLoginUserCacheTimer;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
 import cn.stylefeng.roses.kernel.jwt.JwtTokenOperator;
@@ -160,6 +161,17 @@ public class GunsAuthAutoConfiguration {
     public SessionManagerApi sessionManagerApi(CacheOperatorApi<LoginUser> loginUserCache, CacheOperatorApi<Set<String>> allPlaceLoginTokenCache) {
         Long sessionExpiredSeconds = AuthConfigExpander.getSessionExpiredSeconds();
         return new DefaultSessionManager(loginUserCache, allPlaceLoginTokenCache, sessionExpiredSeconds, sessionCookieCreator());
+    }
+
+    /**
+     * 清空无用登录用户缓存的定时任务
+     *
+     * @author fengshuonan
+     * @date 2021/3/30 11:32
+     */
+    @Bean
+    public ClearInvalidLoginUserCacheTimer clearInvalidLoginUserCacheTimer() {
+        return new ClearInvalidLoginUserCacheTimer(loginUserCache(), allPlaceLoginTokenCache());
     }
 
 }

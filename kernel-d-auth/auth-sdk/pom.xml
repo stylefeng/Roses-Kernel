@@ -24,6 +24,14 @@
             <version>7.0.2</version>
         </dependency>
 
+        <!--定时任务的api-->
+        <!--用来自动清理过期的登录用户缓存-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>timer-api</artifactId>
+            <version>7.0.2</version>
+        </dependency>
+
         <!--日志记录模块的api-->
         <!--记录登录日志用-->
         <dependency>
