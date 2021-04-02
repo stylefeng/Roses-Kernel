@@ -46,7 +46,7 @@ public enum AuthExceptionEnum implements AbstractExceptionEnum {
     /**
      * jwt token解析失败，可能用户写错了token，或者用户随意写的token，导致jwt无法解析
      */
-    TOKEN_PARSE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "02", "TOKEN解析失败，请传递正常TOKEN"),
+    TOKEN_PARSE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "01", "TOKEN解析失败，请传递正常TOKEN"),
 
     /**
      * 登陆时，账号或密码为空
