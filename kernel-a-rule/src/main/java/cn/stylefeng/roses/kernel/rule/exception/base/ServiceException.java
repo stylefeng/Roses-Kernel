@@ -70,8 +70,8 @@ public class ServiceException extends RuntimeException {
      */
     public ServiceException(String moduleName, String errorCode, String userTip) {
         super(userTip);
-        this.errorCode = moduleName;
-        this.moduleName = errorCode;
+        this.errorCode = errorCode;
+        this.moduleName = moduleName;
         this.userTip = userTip;
     }
 
