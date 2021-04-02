@@ -118,4 +118,9 @@ public class SysUserDTO {
      */
     private List<Long> grantRoleIdList;
 
+    /**
+     * 是否是超级管理员，超级管理员可以拥有所有权限（Y-是，N-否）
+     */
+    private String superAdminFlag;
+
 }
