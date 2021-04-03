@@ -35,9 +35,7 @@ import org.springframework.context.ApplicationListener;
 import java.util.List;
 
 /**
- * 初始化系统配置表
- * <p>
- * 当spring装配好配置后，就去数据库读constants
+ * 初始化多语言翻译详
  *
  * @author fengshuonan
  * @date 2021/1/24 19:36
@@ -51,12 +49,13 @@ public class TranslationDictInitListener implements ApplicationListener<Applicat
         TranslationPersistenceApi tanTranslationPersistenceApi = SpringUtil.getBean(TranslationPersistenceApi.class);
         TranslationApi translationApi = SpringUtil.getBean(TranslationApi.class);
 
-        // 从数据库读取字典
+        // 从数据库读取翻译字典
         List<TranslationDict> allTranslationDict = tanTranslationPersistenceApi.getAllTranslationDict();
         if (allTranslationDict != null) {
             translationApi.init(allTranslationDict);
             log.info("初始化所有的翻译字典" + allTranslationDict.size() + "条！");
         }
+
     }
 
 }
