@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>mongodb-api</artifactId>
+    <artifactId>mongodb-integration-beetl</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -17,16 +17,18 @@
     </properties>
 
     <dependencies>
-        <!--文件对象使用-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!--查询流程信息，需要用到分页相关类-->
+        <!--资源api模块-->
+        <!--用在资源控制器，资源扫描上-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>db-api</artifactId>
+            <artifactId>scanner-api</artifactId>
+            <version>7.0.2</version>
+        </dependency>
+
+        <!--Mongodb file自动配置-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>mongodb-spring-boot-starter</artifactId>
             <version>7.0.2</version>
         </dependency>
     </dependencies>

@@ -15,6 +15,8 @@
         <module>mongodb-api</module>
         <module>mongodb-sdk-springboot</module>
         <module>mongodb-spring-boot-starter</module>
+        <module>mongodb-sdk-file</module>
+        <module>mongodb-integration-beetl</module>
     </modules>
 
     <properties>
