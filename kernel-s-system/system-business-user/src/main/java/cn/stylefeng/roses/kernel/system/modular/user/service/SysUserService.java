@@ -27,10 +27,10 @@ package cn.stylefeng.roses.kernel.system.modular.user.service;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
-import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -228,5 +228,13 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @date 2020/11/6 13:47
      */
     List<SimpleDict> selector(SysUserRequest sysUserRequest);
+
+    /**
+     * 批量删除用户
+     *
+     * @author fengshuonan
+     * @date 2021/4/7 16:13
+     */
+    void batchDelete(SysUserRequest sysUserRequest);
 
 }

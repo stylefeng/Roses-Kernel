@@ -96,6 +96,18 @@ public class SysUserController {
     }
 
     /**
+     * 批量删除系统用户
+     *
+     * @author fengshuonan
+     * @date 2021/4/7 16:12
+     */
+    @PostResource(name = "系统用户_批量删除系统用户", path = "/sysUser/batchDelete")
+    public ResponseData batchDelete(@RequestBody @Validated(SysUserRequest.batchDelete.class) SysUserRequest sysUserRequest) {
+        sysUserService.batchDelete(sysUserRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 编辑系统用户
      *
      * @author luojie

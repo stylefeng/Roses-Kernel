@@ -34,6 +34,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -154,6 +155,12 @@ public class SysUserRequest extends BaseRequest {
     private Integer statusFlag;
 
     /**
+     * 用户id集合(用在批量删除)
+     */
+    @NotEmpty(message = "用户id集合不能为空", groups = batchDelete.class)
+    private List<Long> userIds;
+
+    /**
      * 参数校验分组：修改密码
      */
     public @interface updatePwd {
@@ -211,6 +218,12 @@ public class SysUserRequest extends BaseRequest {
      * 参数校验分组：注册用户
      */
     public @interface reg {
+    }
+
+    /**
+     * 参数校验分组：批量删除
+     */
+    public @interface batchDelete {
     }
 
 }

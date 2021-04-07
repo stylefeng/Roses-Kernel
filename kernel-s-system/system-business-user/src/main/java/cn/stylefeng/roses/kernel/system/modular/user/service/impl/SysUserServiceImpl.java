@@ -171,7 +171,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 更新用户员工信息
         if (null == sysUserRequest.getPositionId()) {
             sysUserOrgService.add(sysUser.getUserId(), sysUserRequest.getOrgId());
-        }else {
+        } else {
             sysUserOrgService.add(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
         }
     }
@@ -235,7 +235,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 更新用户员工信息
         if (null == sysUserRequest.getPositionId()) {
             sysUserOrgService.edit(sysUser.getUserId(), sysUserRequest.getOrgId());
-        }else {
+        } else {
             sysUserOrgService.edit(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
         }
 
@@ -522,6 +522,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         return results;
+    }
+
+    @Override
+    public void batchDelete(SysUserRequest sysUserRequest) {
+        List<Long> userIds = sysUserRequest.getUserIds();
+        for (Long userId : userIds) {
+            SysUserRequest tempRequest = new SysUserRequest();
+            tempRequest.setUserId(userId);
+            this.del(tempRequest);
+        }
     }
 
     @Override
