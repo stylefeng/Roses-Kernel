@@ -35,10 +35,10 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.organization.PositionExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionRequest;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrPositionMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
-import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -115,6 +115,16 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
 
         Page<HrPosition> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
+    }
+
+    @Override
+    public void batchDel(HrPositionRequest hrPositionRequest) {
+        List<Long> positionIds = hrPositionRequest.getPositionIds();
+        for (Long userId : positionIds) {
+            HrPositionRequest tempRequest = new HrPositionRequest();
+            tempRequest.setPositionId(userId);
+            this.del(tempRequest);
+        }
     }
 
     /**

@@ -220,12 +220,6 @@ public class SysUserRequest extends BaseRequest {
     public @interface reg {
     }
 
-    /**
-     * 参数校验分组：批量删除
-     */
-    public @interface batchDelete {
-    }
-
 }
 
 

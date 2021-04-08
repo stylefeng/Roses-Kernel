@@ -106,4 +106,13 @@ public interface HrPositionService extends IService<HrPosition>, PositionService
      */
     PageResult<HrPosition> findPage(HrPositionRequest hrPositionRequest);
 
+    /**
+     * 批量删除系统职位
+     *
+     * @param hrPositionRequest 请求参数
+     * @author fengshuonan
+     * @date 2021/4/8 13:51
+     */
+    void batchDel(HrPositionRequest hrPositionRequest);
+
 }
