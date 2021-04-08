@@ -163,6 +163,10 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
 
         // 查询未删除状态的
         queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
+
+        // 查询未禁用的
+        queryWrapper.eq(HrPosition::getStatusFlag, StatusEnum.ENABLE.getCode());
+
         // 根据排序升序排列
         queryWrapper.orderByAsc(HrPosition::getPositionSort);
 
