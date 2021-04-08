@@ -82,7 +82,7 @@ public class HrPositionController {
      * @date 2021/4/8 13:50
      */
     @PostResource(name = "批量删除系统职位", path = "/hrPosition/batchDelete")
-    public ResponseData batchDelete(@RequestBody @Validated(HrPositionRequest.delete.class) HrPositionRequest hrPositionRequest) {
+    public ResponseData batchDelete(@RequestBody @Validated(HrPositionRequest.batchDelete.class) HrPositionRequest hrPositionRequest) {
         hrPositionService.batchDel(hrPositionRequest);
         return new SuccessResponseData();
     }
