@@ -58,10 +58,11 @@ public interface TimerExeService {
      * @param taskId    任务id
      * @param cron      cron表达式
      * @param className 类的全名，必须是TimerAction的子类
+     * @param params    自定义参数
      * @author stylefeng
      * @date 2020/7/1 13:51
      */
-    void startTimer(String taskId, String cron, String className);
+    void startTimer(String taskId, String cron, String className, String params);
 
     /**
      * 停止一个定时器

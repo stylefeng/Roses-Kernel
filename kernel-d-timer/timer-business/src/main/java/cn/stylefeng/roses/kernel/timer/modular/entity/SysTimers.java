@@ -65,6 +65,12 @@ public class SysTimers extends BaseEntity {
     private String cron;
 
     /**
+     * 参数
+     */
+    @TableField("params")
+    private String params;
+
+    /**
      * 状态：1-运行，2-停止
      */
     @TableField("job_status")

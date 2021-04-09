@@ -38,7 +38,7 @@ public class SystemHardwareInfoHolder implements TimerAction {
     private SystemHardwareCalculator systemHardwareCalculator = null;
 
     @Override
-    public void action() {
+    public void action(String params) {
         SystemHardwareCalculator newInfo = new SystemHardwareCalculator();
         newInfo.calc();
         systemHardwareCalculator = newInfo;

@@ -37,9 +37,10 @@ public interface TimerAction {
     /**
      * 任务执行的具体内容
      *
+     * @param params 任务参数
      * @author stylefeng
      * @date 2020/6/28 21:29
      */
-    void action();
+    void action(String params);
 
 }

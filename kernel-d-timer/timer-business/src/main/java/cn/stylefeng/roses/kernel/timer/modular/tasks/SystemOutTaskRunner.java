@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.timer.modular.tasks;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.timer.api.TimerAction;
 import org.springframework.stereotype.Component;
 
@@ -37,8 +38,8 @@ import org.springframework.stereotype.Component;
 public class SystemOutTaskRunner implements TimerAction {
 
     @Override
-    public void action() {
-        System.out.println("这是一个定时任务测试的程序，一直输出这行内容！");
+    public void action(String params) {
+        System.out.println(StrUtil.format("这是一个定时任务测试的程序，一直输出这行内容！这个是参数: {}", params));
     }
 
 }

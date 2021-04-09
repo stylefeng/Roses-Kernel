@@ -63,7 +63,7 @@ public class TaskRunListener implements ApplicationListener<ApplicationStartedEv
         // 添加定时任务到调度器
         for (SysTimers sysTimers : list) {
             try {
-                timerExeService.startTimer(String.valueOf(sysTimers.getTimerId()), sysTimers.getCron(), sysTimers.getActionClass());
+                timerExeService.startTimer(String.valueOf(sysTimers.getTimerId()), sysTimers.getCron(), sysTimers.getActionClass(), sysTimers.getParams());
             } catch (Exception exception) {
                 // 遇到错误直接略过这个定时器（可能多个项目公用库）
                 log.error("定时器初始化遇到错误，略过该定时器！", exception);

@@ -58,7 +58,7 @@ public class HutoolTimerExeServiceImpl implements TimerExeService {
     }
 
     @Override
-    public void startTimer(String taskId, String cron, String className) {
+    public void startTimer(String taskId, String cron, String className, String params) {
 
         // 判断任务id是否为空
         if (StrUtil.isBlank(taskId)) {
@@ -86,7 +86,7 @@ public class HutoolTimerExeServiceImpl implements TimerExeService {
         Task task = () -> {
             try {
                 TimerAction timerAction = (TimerAction) SpringUtil.getBean(Class.forName(className));
-                timerAction.action();
+                timerAction.action(params);
             } catch (ClassNotFoundException e) {
                 log.error("任务执行异常：{}", e.getMessage());
             }

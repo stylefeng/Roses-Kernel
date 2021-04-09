@@ -33,7 +33,7 @@ public class ClearInvalidLoginUserCacheTimer implements TimerAction {
     }
 
     @Override
-    public void action() {
+    public void action(String params) {
         Collection<String> allOnlineUsers = allPlaceLoginTokenCache.getAllKeys();
         if (ObjectUtil.isNotEmpty(allOnlineUsers)) {
             for (String userId : allOnlineUsers) {

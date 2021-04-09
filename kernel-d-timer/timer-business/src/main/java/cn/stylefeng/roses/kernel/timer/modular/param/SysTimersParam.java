@@ -72,6 +72,11 @@ public class SysTimersParam extends BaseRequest {
     private Integer jobStatus;
 
     /**
+     * 参数
+     */
+    private String params;
+
+    /**
      * 备注信息
      */
     private String remark;
