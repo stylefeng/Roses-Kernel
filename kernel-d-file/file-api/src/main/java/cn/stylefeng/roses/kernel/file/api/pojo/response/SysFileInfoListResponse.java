@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.file.api.pojo.response;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 附件列表返回类
@@ -115,5 +116,15 @@ public class SysFileInfoListResponse implements Serializable {
      * 创建人姓名
      */
     private String createUserName;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 创建人姓名
+     */
+    private String realName;
 
 }
