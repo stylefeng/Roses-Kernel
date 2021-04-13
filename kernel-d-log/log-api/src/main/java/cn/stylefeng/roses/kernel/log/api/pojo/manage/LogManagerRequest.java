@@ -29,6 +29,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 日志管理的查询参数
@@ -43,6 +44,7 @@ public class LogManagerRequest extends BaseRequest {
     /**
      * 单条日志id
      */
+    @NotNull(message = "日志id不能为空", groups = {detail.class})
     private Long logId;
 
     /**

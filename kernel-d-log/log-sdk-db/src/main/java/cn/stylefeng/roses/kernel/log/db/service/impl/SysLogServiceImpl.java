@@ -137,7 +137,9 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         Long userId = logManagerRequest.getUserId();
         String clientIp = logManagerRequest.getClientIp();
         String url = logManagerRequest.getRequestUrl();
+        Long logId = logManagerRequest.getLogId();
 
+        queryWrapper.eq(ObjectUtil.isNotEmpty(logId), SysLog::getLogId, logId);
         queryWrapper.between(StrUtil.isAllNotBlank(beginDateTime, endDateTime), SysLog::getCreateTime, beginDateTime + " 00:00:00", endDateTime + " 23:59:59");
         queryWrapper.like(StrUtil.isNotEmpty(name), SysLog::getLogContent, name);
         queryWrapper.like(StrUtil.isNotEmpty(appName), SysLog::getAppName, appName);
