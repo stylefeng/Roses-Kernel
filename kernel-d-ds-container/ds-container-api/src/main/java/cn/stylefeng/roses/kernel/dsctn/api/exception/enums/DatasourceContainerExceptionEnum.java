@@ -96,7 +96,12 @@ public enum DatasourceContainerExceptionEnum implements AbstractExceptionEnum {
     /**
      * 数据源信息不存在
      */
-    DATASOURCE_INFO_NOT_EXISTED(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "12", "数据源信息不存在，数据源id为：{}");
+    DATASOURCE_INFO_NOT_EXISTED(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "12", "数据源信息不存在，数据源id为：{}"),
+
+    /**
+     * 主数据源不能删除
+     */
+    MASTER_DATASOURCE_CANT_DELETE(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "13", "主数据源不能删除！");
 
     /**
      * 错误编码

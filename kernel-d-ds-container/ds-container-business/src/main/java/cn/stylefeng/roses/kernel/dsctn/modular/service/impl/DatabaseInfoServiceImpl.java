@@ -96,7 +96,7 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
 
         // 不能删除主数据源
         if (MASTER_DATASOURCE_NAME.equals(databaseInfo.getDbName())) {
-            throw new DatasourceContainerException(DATASOURCE_INFO_NOT_EXISTED);
+            throw new DatasourceContainerException(MASTER_DATASOURCE_CANT_DELETE);
         }
 
         // 删除库中的数据源记录
