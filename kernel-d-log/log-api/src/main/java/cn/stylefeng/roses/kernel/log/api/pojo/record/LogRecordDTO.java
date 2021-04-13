@@ -126,4 +126,9 @@ public class LogRecordDTO {
      */
     private String clientOs;
 
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
 }
