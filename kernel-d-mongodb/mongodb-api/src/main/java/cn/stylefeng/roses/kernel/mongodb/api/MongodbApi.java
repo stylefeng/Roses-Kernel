@@ -33,7 +33,7 @@ import java.util.Optional;
  * @author huziyang
  * @date 2021/03/20 16:24
  */
-public interface MongodbApi<T,ID> {
+public interface MongodbApi<T, ID> {
 
     /**
      * 新增数据

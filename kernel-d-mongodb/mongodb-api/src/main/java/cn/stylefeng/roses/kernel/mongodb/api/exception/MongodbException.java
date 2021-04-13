@@ -29,7 +29,7 @@ import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 
 /**
- * 系统配置表的异常
+ * Mongodb模块的异常
  *
  * @author fengshuonan
  * @date 2021/13/17 23:59

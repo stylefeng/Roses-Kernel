@@ -38,7 +38,6 @@ import org.springframework.stereotype.Controller;
 @ApiResource(name = "MongoDB文件管理界面渲染控制器")
 public class ModelViewController {
 
-
     /**
      * 文件管理视图
      *

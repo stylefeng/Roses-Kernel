@@ -32,7 +32,6 @@ package cn.stylefeng.roses.kernel.mongodb.api.constants;
  */
 public interface MongodbConstants {
 
-
     /**
      * mongodb模块的名称
      */
@@ -42,4 +41,5 @@ public interface MongodbConstants {
      * 异常枚举的步进值
      */
     String MONGODB_EXCEPTION_STEP_CODE = "70";
+
 }

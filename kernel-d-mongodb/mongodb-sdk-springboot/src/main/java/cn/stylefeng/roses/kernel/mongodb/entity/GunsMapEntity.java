@@ -29,6 +29,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +48,6 @@ public class GunsMapEntity {
     @Id
     private String _id;
 
-    private Map<String,Object> data = new HashMap<>();
-
+    private Map<String, Object> data = new HashMap<>();
 
 }

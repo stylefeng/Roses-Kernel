@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.mongodb.api;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Optional;
 
 /**
@@ -34,7 +35,7 @@ import java.util.Optional;
  * @author huziyang
  * @date 2021/03/30 11:06
  */
-public interface MongoFileApi<T,ID> {
+public interface MongoFileApi<T, ID> {
 
     /**
      * 保存文件
@@ -45,7 +46,6 @@ public interface MongoFileApi<T,ID> {
      * @date 2021/03/30 11:06
      */
     T saveFile(MultipartFile file);
-
 
     /**
      * 根据id删除文件
@@ -66,7 +66,6 @@ public interface MongoFileApi<T,ID> {
      */
     Optional<T> getFileById(ID id);
 
-
     /**
      * 分页获取文件列表
      *
@@ -76,6 +75,5 @@ public interface MongoFileApi<T,ID> {
      * @date 2021/03/30 11:06
      */
     PageResult<T> getFilesByPage(T fileDocument);
-
 
 }

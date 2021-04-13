@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -54,7 +55,7 @@ import java.util.Optional;
 public class MongoFileController {
 
     @Resource
-    private MongoFileApi<MongoFileEntity,String> mongoFileApi;
+    private MongoFileApi<MongoFileEntity, String> mongoFileApi;
 
     /**
      * 新增文件
@@ -63,7 +64,7 @@ public class MongoFileController {
      * @date 2021/03/31 17:28
      */
     @PostResource(name = "Mongodb文件新增", path = "/view/mongodb/file/add")
-    public ResponseData mongodbFileAdd(@RequestPart("file")  MultipartFile file) {
+    public ResponseData mongodbFileAdd(@RequestPart("file") MultipartFile file) {
         return new SuccessResponseData(mongoFileApi.saveFile(file));
     }
 
@@ -99,12 +100,12 @@ public class MongoFileController {
     @GetResource(name = "Mongodb文件下载", path = "/view/mongodb/file/down")
     public ResponseEntity mongodbFileDown(@RequestParam String id) throws UnsupportedEncodingException {
         Optional<MongoFileEntity> file = mongoFileApi.getFileById(id);
-        if(file.isPresent()){
+        if (file.isPresent()) {
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=" + URLEncoder.encode(file.get().getName() , "utf-8"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=" + URLEncoder.encode(file.get().getName(), "utf-8"))
                     .header(HttpHeaders.CONTENT_TYPE, "application/octet-stream")
                     .body(file.get().getContent());
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found");
         }
     }
