@@ -59,7 +59,7 @@ public class MongodbConfig {
 <dependency>
   <groupId>cn.stylefeng.roses</groupId>
   <artifactId>mongodb-integration-beetl</artifactId>
-  <version>7.0.2</version>
+  <version>${current.roses.version}</version>
 </dependency>
 ```
 

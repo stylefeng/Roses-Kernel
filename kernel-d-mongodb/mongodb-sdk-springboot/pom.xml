@@ -5,7 +5,7 @@
     <parent>
         <artifactId>kernel-d-mongodb</artifactId>
         <groupId>cn.stylefeng.roses</groupId>
-        <version>7.0.2</version>
+        <version>7.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>mongodb-api</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <!--SpringBoot 与 MongoDB 整合-->
