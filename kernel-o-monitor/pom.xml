@@ -18,7 +18,7 @@
     <modules>
         <module>monitor-api</module>
         <module>monitor-integration-beetl</module>
-        <module>monitor-sdk-system-info</module>
+        <module>monitor-business-system-info</module>
         <module>monitor-spring-boot-starter</module>
         <module>monitor-sdk-prometheus</module>
     </modules>

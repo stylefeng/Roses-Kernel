@@ -20,7 +20,7 @@
         <!--系统监控-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>monitor-sdk-system-info</artifactId>
+            <artifactId>monitor-business-system-info</artifactId>
             <version>7.0.3</version>
         </dependency>
 
