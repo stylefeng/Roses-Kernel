@@ -32,6 +32,7 @@ import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNod
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,22 @@ public class AntdMenusFactory {
         menuTreeNode.setTitle(sysMenu.getMenuName());
         menuTreeNode.setWeight(sysMenu.getMenuSort());
         return menuTreeNode;
+    }
+
+    /**
+     * 添加根节点
+     *
+     * @author fengshuonan
+     * @date 2021/4/16 15:52
+     */
+    public static AntdMenuSelectTreeNode createRootNode() {
+        AntdMenuSelectTreeNode antdMenuSelectTreeNode = new AntdMenuSelectTreeNode();
+        antdMenuSelectTreeNode.setId(-1L);
+        antdMenuSelectTreeNode.setParentId(-2L);
+        antdMenuSelectTreeNode.setTitle("根节点");
+        antdMenuSelectTreeNode.setValue(String.valueOf(antdMenuSelectTreeNode.getId()));
+        antdMenuSelectTreeNode.setWeight(new BigDecimal(-1));
+        return antdMenuSelectTreeNode;
     }
 
     /**

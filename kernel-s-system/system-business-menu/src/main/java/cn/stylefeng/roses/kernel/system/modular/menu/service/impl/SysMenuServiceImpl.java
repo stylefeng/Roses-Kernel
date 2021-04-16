@@ -243,13 +243,18 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<AntdMenuSelectTreeNode> tree(SysMenuRequest sysMenuRequest) {
         List<AntdMenuSelectTreeNode> menuTreeNodeList = CollectionUtil.newArrayList();
 
+        // 添加根节点
+        AntdMenuSelectTreeNode rootNode = AntdMenusFactory.createRootNode();
+        menuTreeNodeList.add(rootNode);
+
         LambdaQueryWrapper<SysMenu> wrapper = createWrapper(sysMenuRequest);
         this.list(wrapper).forEach(sysMenu -> {
             AntdMenuSelectTreeNode menuTreeNode = AntdMenusFactory.parseMenuBaseTreeNode(sysMenu);
             menuTreeNodeList.add(menuTreeNode);
         });
 
-        return new DefaultTreeBuildFactory<AntdMenuSelectTreeNode>().doTreeBuild(menuTreeNodeList);
+        // -2是根节点的上级
+        return new DefaultTreeBuildFactory<AntdMenuSelectTreeNode>("-2").doTreeBuild(menuTreeNodeList);
     }
 
     @Override
