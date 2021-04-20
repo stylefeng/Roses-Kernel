@@ -45,6 +45,9 @@
             <if test="sysFileInfoRequest.fileOriginName != null and sysFileInfoRequest.fileOriginName != '' ">
                 AND file.file_origin_name LIKE CONCAT('%',#{sysFileInfoRequest.fileOriginName},'%')
             </if>
+            <if test="sysFileInfoRequest.fileLocation != null and sysFileInfoRequest.fileLocation != '' ">
+                AND file.file_location = #{sysFileInfoRequest.fileLocation}
+            </if>
         </where>
     </select>
 

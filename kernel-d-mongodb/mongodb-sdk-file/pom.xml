@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>kernel-d-mongodb</artifactId>
+        <groupId>cn.stylefeng.roses</groupId>
+        <version>7.0.3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mongodb-sdk-file</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+
+        <!--auth模块的api-->
+        <!--记录日志时候，有可能需要记录当前登录用户id-->
+        <!--如果不要记录当前登录用户id时就不用本模块，所以optional=true-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>auth-api</artifactId>
+            <version>7.0.3</version>
+            <optional>true</optional>
+        </dependency>
+
+
+        <!--MongoDB模块的api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>mongodb-api</artifactId>
+            <version>7.0.3</version>
+        </dependency>
+
+        <!--SpringBoot 与 MongoDB 整合-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>

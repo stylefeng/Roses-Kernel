@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-file</artifactId>
-        <version>7.0.2</version>
+        <version>7.0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,14 +21,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <!--config模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>config-api</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <!--servlet-->

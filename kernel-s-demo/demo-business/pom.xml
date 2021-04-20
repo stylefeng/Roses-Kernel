@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-s-demo</artifactId>
-        <version>7.0.2</version>
+        <version>7.0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,14 +21,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>demo-api</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <!--dao相关框架-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>db-sdk-mp</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
     </dependencies>

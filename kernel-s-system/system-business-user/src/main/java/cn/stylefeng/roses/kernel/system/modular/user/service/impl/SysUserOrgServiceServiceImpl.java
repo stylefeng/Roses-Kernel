@@ -1,14 +1,38 @@
+/*
+ * Copyright [2020-2030] [https://www.stylefeng.cn]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意以下几点：
+ *
+ * 1.请不要删除和修改根目录下的LICENSE文件。
+ * 2.请不要删除和修改Guns源码头部的版权声明。
+ * 3.请保留源码和相关描述文件的项目出处，作者声明等。
+ * 4.分发源码时候，请注明软件出处 https://gitee.com/stylefeng/guns
+ * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
+ * 6.若您的项目无法满足以上几点，可申请商业授权
+ */
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserOrgExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.request.UserOrgRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserOrgMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.request.UserOrgRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -32,7 +56,7 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
         UserOrgRequest userOrgRequest = new UserOrgRequest();
         userOrgRequest.setUserId(userId);
         SysUserOrg sysUserOrg = this.detail(userOrgRequest);
-        if(ObjectUtil.isEmpty(sysUserOrg)){
+        if (ObjectUtil.isEmpty(sysUserOrg)) {
             throw new SystemModularException(SysUserOrgExceptionEnum.EMPLOYEE_MANY_MAIN_NOT_FOUND);
         }
         SysUserOrgDTO sysUserOrgDTO = new SysUserOrgDTO();
@@ -45,6 +69,14 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
     public void add(UserOrgRequest userOrgResponse) {
         SysUserOrg sysUserOrg = new SysUserOrg();
         BeanUtil.copyProperties(userOrgResponse, sysUserOrg);
+        this.save(sysUserOrg);
+    }
+
+    @Override
+    public void add(Long userId, Long orgId) {
+        SysUserOrg sysUserOrg = new SysUserOrg();
+        sysUserOrg.setUserId(userId);
+        sysUserOrg.setOrgId(orgId);
         this.save(sysUserOrg);
     }
 
@@ -79,17 +111,30 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void edit(Long userId, Long orgId, Long positionId) {
-        // 删除已有
+    public void edit(Long userId, Long orgId) {
+
+        // 删除已有绑定的组织机构
         this.delByUserId(userId);
-        // 新增
+
+        // 新增组织机构绑定
+        this.add(userId, orgId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(Long userId, Long orgId, Long positionId) {
+
+        // 删除已有绑定的组织机构
+        this.delByUserId(userId);
+
+        // 新增组织机构绑定
         this.add(userId, orgId, positionId);
     }
 
 
     @Override
     public SysUserOrg detail(UserOrgRequest userOrgResponse) {
-        return this.getOne( this.createWrapper(userOrgResponse), false);
+        return this.getOne(this.createWrapper(userOrgResponse), false);
     }
 
     @Override

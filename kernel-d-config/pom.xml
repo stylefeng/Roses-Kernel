@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>roses-kernel</artifactId>
-        <version>7.0.2</version>
+        <version>7.0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -17,7 +17,7 @@
 
     <modules>
         <module>config-api</module>
-        <module>config-sdk-db</module>
+        <module>config-sdk-map</module>
         <module>config-business</module>
         <module>config-spring-boot-starter</module>
     </modules>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>kernel-a-rule</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
     </dependencies>

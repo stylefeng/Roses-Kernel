@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-security</artifactId>
-        <version>7.0.2</version>
+        <version>7.0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,28 +21,35 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>security-sdk-xss</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <!--图形验证码模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>security-sdk-captcha</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <!--count模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>security-sdk-count</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <!--黑白名单校验-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>security-sdk-black-white</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
+        </dependency>
+
+        <!--请求响应加密解密模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>security-sdk-request-encrypt-and-decode</artifactId>
+            <version>7.0.3</version>
         </dependency>
 
     </dependencies>

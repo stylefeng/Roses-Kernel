@@ -27,7 +27,9 @@ package cn.stylefeng.roses.kernel.auth.auth;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginUserHolder;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
+import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
@@ -36,8 +38,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-
-import static cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum.TOKEN_GET_ERROR;
 
 /**
  * 当前登陆用户的接口实现
@@ -72,27 +72,31 @@ public class LoginUserImpl implements LoginUserApi {
         }
 
         // 3. 从cookie中获取token
-        if (AuthConfigExpander.getSessionAddToCookie()) {
-            String sessionCookieName = AuthConfigExpander.getSessionCookieName();
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null && cookies.length > 0) {
-                for (Cookie cookie : cookies) {
+        String sessionCookieName = AuthConfigExpander.getSessionCookieName();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null && cookies.length > 0) {
+            for (Cookie cookie : cookies) {
 
-                    // 如果cookie有对应的值，并且不为空
-                    if (sessionCookieName.equals(cookie.getName())
-                            && StrUtil.isNotBlank(cookie.getValue())) {
-                        return cookie.getValue();
-                    }
+                // 如果cookie有对应的值，并且不为空
+                if (sessionCookieName.equals(cookie.getName())
+                        && StrUtil.isNotBlank(cookie.getValue())) {
+                    return cookie.getValue();
                 }
             }
         }
 
         // 获取不到token，直接告诉用户
-        throw new AuthException(TOKEN_GET_ERROR);
+        throw new AuthException(AuthExceptionEnum.TOKEN_GET_ERROR);
     }
 
     @Override
     public LoginUser getLoginUser() throws AuthException {
+
+        // 先从ThreadLocal中获取
+        LoginUser currentUser = LoginUserHolder.get();
+        if (currentUser != null) {
+            return currentUser;
+        }
 
         // 获取用户的token
         String token = getToken();
@@ -102,7 +106,7 @@ public class LoginUserImpl implements LoginUserApi {
 
         // session为空抛出异常
         if (session == null) {
-            throw new AuthException(TOKEN_GET_ERROR);
+            throw new AuthException(AuthExceptionEnum.AUTH_EXPIRED_ERROR);
         }
 
         return session;
@@ -110,6 +114,12 @@ public class LoginUserImpl implements LoginUserApi {
 
     @Override
     public LoginUser getLoginUserNullable() {
+
+        // 先从ThreadLocal中获取
+        LoginUser currentUser = LoginUserHolder.get();
+        if (currentUser != null) {
+            return currentUser;
+        }
 
         // 获取用户的token
         String token = null;

@@ -41,7 +41,7 @@ import java.util.List;
  */
 @ToString
 @EqualsAndHashCode
-public class ZTreeNode implements AbstractTreeNode {
+public class ZTreeNode implements AbstractTreeNode<ZTreeNode> {
 
     /**
      * 节点id
@@ -88,7 +88,7 @@ public class ZTreeNode implements AbstractTreeNode {
      */
     @Getter
     @Setter
-    private List children;
+    private List<ZTreeNode> children;
 
     /**
      * 创建ztree的父级节点
@@ -118,7 +118,7 @@ public class ZTreeNode implements AbstractTreeNode {
     }
 
     @Override
-    public void setChildrenNodes(List childrenNodes) {
+    public void setChildrenNodes(List<ZTreeNode> childrenNodes) {
         this.children = childrenNodes;
     }
 

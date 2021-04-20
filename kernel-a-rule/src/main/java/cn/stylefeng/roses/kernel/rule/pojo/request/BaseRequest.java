@@ -123,4 +123,10 @@ public class BaseRequest implements Serializable {
     public @interface updateStatus {
     }
 
+    /**
+     * 参数校验分组：批量删除
+     */
+    public @interface batchDelete {
+    }
+
 }

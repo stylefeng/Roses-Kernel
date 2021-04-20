@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-o-monitor</artifactId>
-        <version>7.0.2</version>
+        <version>7.0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -20,15 +20,15 @@
         <!--系统监控-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>monitor-sdk-system-info</artifactId>
-            <version>7.0.2</version>
+            <artifactId>monitor-business-system-info</artifactId>
+            <version>7.0.3</version>
         </dependency>
 
         <!--prometheus监控-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>monitor-sdk-prometheus</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
     </dependencies>

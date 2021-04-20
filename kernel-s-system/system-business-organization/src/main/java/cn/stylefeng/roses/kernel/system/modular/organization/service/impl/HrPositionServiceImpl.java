@@ -1,3 +1,27 @@
+/*
+ * Copyright [2020-2030] [https://www.stylefeng.cn]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意以下几点：
+ *
+ * 1.请不要删除和修改根目录下的LICENSE文件。
+ * 2.请不要删除和修改Guns源码头部的版权声明。
+ * 3.请保留源码和相关描述文件的项目出处，作者声明等。
+ * 4.分发源码时候，请注明软件出处 https://gitee.com/stylefeng/guns
+ * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
+ * 6.若您的项目无法满足以上几点，可申请商业授权
+ */
 package cn.stylefeng.roses.kernel.system.modular.organization.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -11,10 +35,10 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.organization.PositionExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionRequest;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrPositionMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
-import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -93,6 +117,16 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
         return PageResultFactory.createPageResult(page);
     }
 
+    @Override
+    public void batchDel(HrPositionRequest hrPositionRequest) {
+        List<Long> positionIds = hrPositionRequest.getPositionIds();
+        for (Long userId : positionIds) {
+            HrPositionRequest tempRequest = new HrPositionRequest();
+            tempRequest.setPositionId(userId);
+            this.del(tempRequest);
+        }
+    }
+
     /**
      * 根据主键id获取对象信息
      *
@@ -102,7 +136,7 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
      */
     private HrPosition querySysPositionById(HrPositionRequest hrPositionRequest) {
         HrPosition hrPosition = this.getById(hrPositionRequest.getPositionId());
-        if (ObjectUtil.isEmpty(hrPosition)) {
+        if (ObjectUtil.isEmpty(hrPosition) || YesOrNotEnum.Y.getCode().equals(hrPosition.getDelFlag())) {
             throw new SystemModularException(PositionExceptionEnum.CANT_FIND_POSITION, hrPositionRequest.getPositionId());
         }
         return hrPosition;
@@ -129,6 +163,10 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
 
         // 查询未删除状态的
         queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
+
+        // 查询未禁用的
+        queryWrapper.eq(HrPosition::getStatusFlag, StatusEnum.ENABLE.getCode());
+
         // 根据排序升序排列
         queryWrapper.orderByAsc(HrPosition::getPositionSort);
 

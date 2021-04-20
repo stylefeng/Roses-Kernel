@@ -17,9 +17,11 @@
         suser.tel as tel,
         suser.status_flag as statusFlag,
         suorg.org_id as orgId,
-        suorg.position_id as positionId
+        suorg.position_id as positionId,
+        hpos.position_name as positionName
         from sys_user suser
         left join sys_user_org suorg on suser.user_id = suorg.user_id
+        left join hr_position hpos on suorg.position_id = hpos.position_id
         <where>
             <if test="sysUserRequest.realName != null and sysUserRequest.realName != ''">
                 and suser.real_name like concat('%',#{sysUserRequest.realName},'%')
@@ -55,9 +57,11 @@
         suser.tel as tel,
         suser.status_flag as statusFlag,
         suorg.org_id as orgId,
-        suorg.position_id as positionId
+        suorg.position_id as positionId,
+        hpos.position_name as positionName
         from sys_user suser
         left join sys_user_org suorg on suser.user_id = suorg.user_id
+        left join hr_position hpos on suorg.position_id = hpos.position_id
         <where>
             <if test="sysUserRequest.realName != null and sysUserRequest.realName != ''">
                 and suser.real_name like concat('%',#{sysUserRequest.realName},'%')

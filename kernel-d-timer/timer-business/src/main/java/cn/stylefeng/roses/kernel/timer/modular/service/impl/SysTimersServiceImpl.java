@@ -1,3 +1,27 @@
+/*
+ * Copyright [2020-2030] [https://www.stylefeng.cn]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意以下几点：
+ *
+ * 1.请不要删除和修改根目录下的LICENSE文件。
+ * 2.请不要删除和修改Guns源码头部的版权声明。
+ * 3.请保留源码和相关描述文件的项目出处，作者声明等。
+ * 4.分发源码时候，请注明软件出处 https://gitee.com/stylefeng/guns
+ * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
+ * 6.若您的项目无法满足以上几点，可申请商业授权
+ */
 package cn.stylefeng.roses.kernel.timer.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -5,6 +29,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.cron.CronUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.http.HtmlUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
@@ -46,6 +71,8 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
 
     @Override
     public void add(SysTimersParam sysTimersParam) {
+        // 还原被转义的HTML特殊字符
+        unescapeHtml(sysTimersParam);
 
         // 将dto转为实体
         SysTimers sysTimers = new SysTimers();
@@ -73,6 +100,8 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void edit(SysTimersParam sysTimersParam) {
+        // 还原被转义的HTML特殊字符
+        unescapeHtml(sysTimersParam);
 
         // 更新库中记录
         SysTimers oldTimer = this.querySysTimers(sysTimersParam);
@@ -85,10 +114,7 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
         // 如果任务正在运行，则停掉这个任务，从新运行任务
         if (jobStatus.equals(TimerJobStatusEnum.RUNNING.getCode())) {
             CronUtil.remove(String.valueOf(oldTimer.getTimerId()));
-            timerExeService.startTimer(
-                    String.valueOf(sysTimersParam.getTimerId()),
-                    sysTimersParam.getCron(),
-                    sysTimersParam.getActionClass());
+            timerExeService.startTimer(String.valueOf(sysTimersParam.getTimerId()), sysTimersParam.getCron(), sysTimersParam.getActionClass(), sysTimersParam.getParams());
         }
     }
 
@@ -98,13 +124,12 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
 
         // 更新库中的状态
         LambdaUpdateWrapper<SysTimers> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.set(SysTimers::getJobStatus, TimerJobStatusEnum.RUNNING.getCode())
-                .eq(SysTimers::getTimerId, sysTimersParam.getTimerId());
+        wrapper.set(SysTimers::getJobStatus, TimerJobStatusEnum.RUNNING.getCode()).eq(SysTimers::getTimerId, sysTimersParam.getTimerId());
         this.update(wrapper);
 
         // 添加定时任务调度
         SysTimers sysTimers = this.querySysTimers(sysTimersParam);
-        timerExeService.startTimer(String.valueOf(sysTimers.getTimerId()), sysTimers.getCron(), sysTimers.getActionClass());
+        timerExeService.startTimer(String.valueOf(sysTimers.getTimerId()), sysTimers.getCron(), sysTimers.getActionClass(), sysTimers.getParams());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -113,8 +138,7 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
 
         // 更新库中的状态
         LambdaUpdateWrapper<SysTimers> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.set(SysTimers::getJobStatus, TimerJobStatusEnum.STOP.getCode())
-                .eq(SysTimers::getTimerId, sysTimersParam.getTimerId());
+        wrapper.set(SysTimers::getJobStatus, TimerJobStatusEnum.STOP.getCode()).eq(SysTimers::getTimerId, sysTimersParam.getTimerId());
         this.update(wrapper);
 
         // 关闭定时任务调度
@@ -205,6 +229,19 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
         queryWrapper.like(ObjectUtil.isNotEmpty(actionClass), SysTimers::getActionClass, actionClass);
 
         return queryWrapper;
+    }
+
+    /**
+     * 还原被转义的HTML特殊字符
+     *
+     * @param sysTimersParam 定时任务参数
+     * @author luojie
+     * @date 2021/04/09 21:40
+     */
+    private void unescapeHtml(SysTimersParam sysTimersParam) {
+        String params = sysTimersParam.getParams();
+        params = HtmlUtil.unescape(params);
+        sysTimersParam.setParams(params);
     }
 
 }

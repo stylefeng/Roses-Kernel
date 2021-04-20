@@ -155,24 +155,6 @@ public class AuthServiceImpl implements AuthServiceApi {
         // 2. 校验用户token是否正确，校验失败会抛出异常
         this.validateToken(token);
 
-        // 3. 如果token校验通过，获取token的payload，以及是否开启了记住我功能
-        DefaultJwtPayload defaultPayload = JwtContext.me().getDefaultPayload(token);
-        Boolean rememberMe = defaultPayload.getRememberMe();
-
-        // 4. 获取用户的当前会话信息
-        LoginUser loginUser = sessionManagerApi.getSession(token);
-
-        // 5. 如果开了记住我，但是会话为空，则创建一次会话信息
-        if (rememberMe && loginUser == null) {
-            UserLoginInfoDTO userLoginInfo = userServiceApi.getUserLoginInfo(defaultPayload.getAccount());
-            sessionManagerApi.createSession(token, userLoginInfo.getLoginUser());
-        }
-
-        // 6. 如果会话信息为空，则判定此次校验失败
-        if (loginUser == null) {
-            throw new AuthException(AUTH_EXPIRED_ERROR);
-        }
-
     }
 
     /**
@@ -234,6 +216,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         // 8. 生成用户的token
         DefaultJwtPayload defaultJwtPayload = new DefaultJwtPayload(loginUser.getUserId(), loginUser.getAccount(), loginRequest.getRememberMe());
         String jwtToken = JwtContext.me().generateTokenDefaultPayload(defaultJwtPayload);
+        loginUser.setToken(jwtToken);
 
         synchronized (SESSION_OPERATE_LOCK) {
 
@@ -241,7 +224,7 @@ public class AuthServiceImpl implements AuthServiceApi {
             loginUser.setWsUrl(WebSocketConfigExpander.getWebSocketWsUrl());
 
             // 9. 缓存用户信息，创建会话
-            sessionManagerApi.createSession(jwtToken, loginUser);
+            sessionManagerApi.createSession(jwtToken, loginUser, loginRequest.getCreateCookie());
 
             // 10. 如果开启了单账号单端在线，则踢掉已经上线的该用户
             if (AuthConfigExpander.getSingleAccountLoginFlag()) {

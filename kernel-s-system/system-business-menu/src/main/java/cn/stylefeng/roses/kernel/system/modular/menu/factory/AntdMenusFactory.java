@@ -1,15 +1,38 @@
+/*
+ * Copyright [2020-2030] [https://www.stylefeng.cn]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意以下几点：
+ *
+ * 1.请不要删除和修改根目录下的LICENSE文件。
+ * 2.请不要删除和修改Guns源码头部的版权声明。
+ * 3.请保留源码和相关描述文件的项目出处，作者声明等。
+ * 4.分发源码时候，请注明软件出处 https://gitee.com/stylefeng/guns
+ * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
+ * 6.若您的项目无法满足以上几点，可申请商业授权
+ */
 package cn.stylefeng.roses.kernel.system.modular.menu.factory;
 
-import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
-import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
-import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdvMenuAuthorityItem;
-import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdvMenuItem;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,66 +50,13 @@ public class AntdMenusFactory {
      * @author fengshuonan
      * @date 2021/1/7 18:17
      */
-    public static List<AntdvMenuItem> createTotalMenus(List<AntdSysMenuDTO> sysMenuRespons) {
-
-        ArrayList<AntdvMenuItem> antdvMenuItems = new ArrayList<>(sysMenuRespons.size());
-
-        // 实体转化
-        for (AntdSysMenuDTO antdSysMenuDTO : sysMenuRespons) {
-            AntdvMenuItem antdvMenuItem = new AntdvMenuItem();
-
-            // 填充id pid name用于构建树
-            antdvMenuItem.setMenuId(antdSysMenuDTO.getMenuId());
-            antdvMenuItem.setMenuParentId(antdSysMenuDTO.getMenuParentId());
-            antdvMenuItem.setName(antdSysMenuDTO.getMenuName());
-
-            // 填充路由等信息
-            antdvMenuItem.setRouter(antdSysMenuDTO.getAntdvRouter());
-            antdvMenuItem.setIcon(antdSysMenuDTO.getAntdvIcon());
-
-            // 填充是否隐藏
-            antdvMenuItem.setInvisible(YesOrNotEnum.N.getCode().equals(antdSysMenuDTO.getVisible()));
-
-            // 填充哪个角色绑定了这个菜单
-            List<SimpleRoleInfo> roles = antdSysMenuDTO.getRoles();
-            AntdvMenuAuthorityItem antdvAuthorityItem = new AntdvMenuAuthorityItem();
-            if (roles != null && roles.size() > 0) {
-                ArrayList<String> auths = new ArrayList<>();
-                for (SimpleRoleInfo role : roles) {
-                    auths.add(role.getRoleCode());
-                }
-                antdvAuthorityItem.setPermission(auths);
-                antdvAuthorityItem.setRole(auths);
-                antdvMenuItem.setAuthority(antdvAuthorityItem);
-            }
-
-            antdvMenuItems.add(antdvMenuItem);
-        }
-
-        // 加入根节点
-        antdvMenuItems.add(createAntdVMenuRoot());
+    public static List<AntdSysMenuDTO> createTotalMenus(List<SysMenu> sysMenuList) {
 
         // 构造菜单树
-        return new DefaultTreeBuildFactory<AntdvMenuItem>(TreeConstants.VIRTUAL_ROOT_PARENT_ID.toString()).doTreeBuild(antdvMenuItems);
-    }
+        List<SysMenu> treeStructMenu = new DefaultTreeBuildFactory<SysMenu>(TreeConstants.DEFAULT_PARENT_ID.toString()).doTreeBuild(sysMenuList);
 
-    /**
-     * 创建虚拟根节点
-     *
-     * @author fengshuonan
-     * @date 2020/12/30 20:38
-     */
-    private static AntdvMenuItem createAntdVMenuRoot() {
-        AntdvMenuItem antdvMenuItem = new AntdvMenuItem();
-        antdvMenuItem.setRouter("root");
-        antdvMenuItem.setName("根节点");
-        antdvMenuItem.setMenuId(TreeConstants.DEFAULT_PARENT_ID);
-        antdvMenuItem.setMenuParentId(TreeConstants.VIRTUAL_ROOT_PARENT_ID);
-        antdvMenuItem.setInvisible(false);
-
-        antdvMenuItem.setAuthority(null);
-
-        return antdvMenuItem;
+        // 模型转化
+        return doModelTransfer(treeStructMenu);
     }
 
     /**
@@ -103,6 +73,52 @@ public class AntdMenusFactory {
         menuTreeNode.setTitle(sysMenu.getMenuName());
         menuTreeNode.setWeight(sysMenu.getMenuSort());
         return menuTreeNode;
+    }
+
+    /**
+     * 添加根节点
+     *
+     * @author fengshuonan
+     * @date 2021/4/16 15:52
+     */
+    public static AntdMenuSelectTreeNode createRootNode() {
+        AntdMenuSelectTreeNode antdMenuSelectTreeNode = new AntdMenuSelectTreeNode();
+        antdMenuSelectTreeNode.setId(-1L);
+        antdMenuSelectTreeNode.setParentId(-2L);
+        antdMenuSelectTreeNode.setTitle("根节点");
+        antdMenuSelectTreeNode.setValue(String.valueOf(antdMenuSelectTreeNode.getId()));
+        antdMenuSelectTreeNode.setWeight(new BigDecimal(-1));
+        return antdMenuSelectTreeNode;
+    }
+
+    /**
+     * 模型转化
+     *
+     * @author fengshuonan
+     * @date 2021/3/23 21:40
+     */
+    private static List<AntdSysMenuDTO> doModelTransfer(List<SysMenu> sysMenuList) {
+        if (ObjectUtil.isEmpty(sysMenuList)) {
+            return null;
+        } else {
+            ArrayList<AntdSysMenuDTO> resultMenus = new ArrayList<>();
+
+            for (SysMenu sysMenu : sysMenuList) {
+                AntdSysMenuDTO antdvMenuItem = new AntdSysMenuDTO();
+                antdvMenuItem.setTitle(sysMenu.getMenuName());
+                antdvMenuItem.setIcon(sysMenu.getAntdvIcon());
+                antdvMenuItem.setPath(sysMenu.getAntdvRouter());
+                antdvMenuItem.setComponent(sysMenu.getAntdvComponent());
+                antdvMenuItem.setHide(YesOrNotEnum.N.getCode().equals(sysMenu.getVisible()));
+                antdvMenuItem.setUid(sysMenu.getAntdvUidUrl());
+                if (ObjectUtil.isNotEmpty(sysMenu.getChildren())) {
+                    antdvMenuItem.setChildren(doModelTransfer(sysMenu.getChildren()));
+                }
+                resultMenus.add(antdvMenuItem);
+            }
+
+            return resultMenus;
+        }
     }
 
 }

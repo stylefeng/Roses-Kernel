@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-ds-container</artifactId>
-        <version>7.0.2</version>
+        <version>7.0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>ds-container-api</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <!--数据库操作模块的api-->
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>db-api</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <!-- aop -->

@@ -2,41 +2,5 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuMapper">
 
-    <resultMap id="systemMenuAndRole" type="cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO">
-        <id column="menu_id" property="menuId"/>
-        <result column="menu_parent_id" property="menuParentId"/>
-        <result column="menu_name" property="menuName"/>
-        <result column="antdv_router" property="antdvRouter"/>
-        <result column="antdv_icon" property="antdvIcon"/>
-        <result column="visible" property="visible"/>
-        <collection property="roles" ofType="cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo">
-            <id column="role_id" property="roleId"/>
-            <result column="role_name" property="roleName"/>
-            <result column="role_code" property="roleCode"/>
-        </collection>
-    </resultMap>
-
-    <select id="getSystemAllMenus" resultMap="systemMenuAndRole">
-        SELECT sm.menu_id,
-        sm.menu_parent_id,
-        sm.menu_name,
-        sm.antdv_router,
-        sm.antdv_icon,
-        sm.visible,
-        sr.role_id,
-        sr.role_name,
-        sr.role_code
-        FROM sys_menu sm
-        LEFT JOIN sys_role_menu srm ON sm.menu_id = srm.menu_id
-        LEFT JOIN sys_role sr ON srm.role_id = sr.role_id
-        WHERE sm.del_flag = 'N'
-        AND sm.status_flag = 1
-        <if test="menuIdList != null and menuIdList.size() > 0">
-            and sm.menu_id in
-            <foreach collection="menuIdList" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-    </select>
 
 </mapper>
