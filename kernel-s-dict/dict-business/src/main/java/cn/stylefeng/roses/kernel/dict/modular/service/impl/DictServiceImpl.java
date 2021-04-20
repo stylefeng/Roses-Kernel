@@ -25,26 +25,22 @@
 package cn.stylefeng.roses.kernel.dict.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.dict.api.constants.DictConstants;
 import cn.stylefeng.roses.kernel.dict.api.exception.DictException;
 import cn.stylefeng.roses.kernel.dict.api.exception.enums.DictExceptionEnum;
-import cn.stylefeng.roses.kernel.dict.api.pojo.dict.request.ParentIdsUpdateRequest;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.mapper.DictMapper;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.TreeDictInfo;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictRequest;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictService;
+import cn.stylefeng.roses.kernel.dict.modular.service.DictTypeService;
 import cn.stylefeng.roses.kernel.pinyin.api.PinYinApi;
-import cn.stylefeng.roses.kernel.rule.constants.SymbolConstant;
-import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
@@ -58,7 +54,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -74,6 +69,9 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
 
     @Resource
     private PinYinApi pinYinApi;
+
+    @Resource
+    private DictTypeService dictTypeService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -224,6 +222,14 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
      */
     private LambdaQueryWrapper<SysDict> createWrapper(DictRequest dictRequest) {
         LambdaQueryWrapper<SysDict> queryWrapper = new LambdaQueryWrapper<>();
+
+        // 如果传递了dictTypeId，先把dictTypeId转化为字典类型编码
+        if (ObjectUtil.isNotEmpty(dictRequest.getDictTypeId())) {
+            SysDictType sysDictType = dictTypeService.getById(dictRequest.getDictTypeId());
+            if (sysDictType != null) {
+                dictRequest.setDictTypeCode(sysDictType.getDictTypeCode());
+            }
+        }
 
         // SQL拼接
         queryWrapper.eq(ObjectUtil.isNotNull(dictRequest.getDictId()), SysDict::getDictId, dictRequest.getDictId());
