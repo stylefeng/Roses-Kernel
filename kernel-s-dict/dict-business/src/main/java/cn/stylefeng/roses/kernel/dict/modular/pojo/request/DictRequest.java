@@ -130,6 +130,11 @@ public class DictRequest extends BaseRequest {
     private String dictPids;
 
     /**
+     * 字典类型id，用在作为查询条件
+     */
+    private Long dictTypeId;
+
+    /**
      * 获取树形列表
      */
     public @interface treeList {
