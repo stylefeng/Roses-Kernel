@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.roses.kernel.seata.order.mapper.OrderMapper">
+
+  <insert id="insertOrder" parameterType="cn.stylefeng.roses.kernel.seata.order.entity.Order">
+    insert into order(
+		<if test="productId != null and productId != ''">product_id,</if>
+        <if test="userId != null and userId != ''">user_id,</if>
+        <if test="prodPrice != null and prodPrice != ''">prod_price,</if>
+        <if test="prodNumber != null and prodNumber != ''">prod_number,</if>
+        <if test="totalAmount != null and totalAmount != ''">total_amount,</if>
+        <if test="payStatus != null and payStatus != ''">pay_status,</if>
+        <if test="createUser != null and createUser != ''">create_user,</if>
+        <if test="createTime != null and createTime != ''">create_time</if>
+        <if test="updateUser != null and updateUser != ''">update_user,</if>
+        <if test="updateTime != null and updateTime != ''">update_time,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+    )values(
+        <if test="productId != null and productId != ''">#{productId},</if>
+        <if test="userId != null and userId != ''">#{userId},</if>
+        <if test="prodPrice != null and prodPrice != ''">#{prodPrice},</if>
+        <if test="prodNumber != null and prodNumber != ''">#{prodNumber},</if>
+        <if test="totalAmount != null and totalAmount != ''">#{totalAmount},</if>
+        <if test="payStatus != null and payStatus != ''">#{payStatus},</if>
+        <if test="createUser != null and createUser != ''">#{createUser},</if>
+        <if test="createTime != null and createTime != ''">#{createTime}</if>
+        <if test="updateUser != null and updateUser != ''">#{updateUser},</if>
+        <if test="updateTime != null and updateTime != ''">#{updateTime},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+	)
+  </insert>
+
+  <select id="selectById" resultType="cn.stylefeng.roses.kernel.seata.order.entity.Order">
+    select * from order
+    where order_id = #{orderId}
+  </select>
+
+</mapper>
