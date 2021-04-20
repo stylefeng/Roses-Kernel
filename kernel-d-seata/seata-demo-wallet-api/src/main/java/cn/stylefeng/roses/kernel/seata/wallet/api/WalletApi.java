@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.seata.wallet.api;
 
 /**
- * 用户钱包api
+ * 用户钱包 api
  *
  * @author wangyl
- * @date 2021-04-10 8:56:48
+ * @date 2021/04/10 16:42
  */
 public interface WalletApi {
 

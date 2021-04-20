@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.seata.api;
 
 /**
- * 仓储api
+ * 仓储 api
  *
  * @author wangyl
- * @date 2021-04-11 9:52:31
+ * @date 2021/04/10 16:42
  */
 public interface StorageApi {
 
