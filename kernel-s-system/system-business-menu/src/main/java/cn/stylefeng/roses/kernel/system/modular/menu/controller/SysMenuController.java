@@ -142,8 +142,8 @@ public class SysMenuController {
      * @date 2021/1/7 15:17
      */
     @GetResource(name = "获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）", path = "/sysMenu/getLeftMenusAntdv", requiredPermission = false)
-    public ResponseData getLeftMenusAntdv() {
-        List<AntdSysMenuDTO> sysMenuResponses = sysMenuService.getLeftMenusAntdv();
+    public ResponseData getLeftMenusAntdv(SysMenuRequest sysMenuRequest) {
+        List<AntdSysMenuDTO> sysMenuResponses = sysMenuService.getLeftMenusAntdv(sysMenuRequest);
         return new SuccessResponseData(sysMenuResponses);
     }
 

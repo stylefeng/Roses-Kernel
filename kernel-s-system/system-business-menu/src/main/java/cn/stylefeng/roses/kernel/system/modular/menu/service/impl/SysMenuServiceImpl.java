@@ -278,30 +278,19 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<AntdSysMenuDTO> getLeftMenusAntdv() {
+    public List<AntdSysMenuDTO> getLeftMenusAntdv(SysMenuRequest sysMenuRequest) {
 
-        LambdaQueryWrapper<SysMenu> wrapper = this.createWrapper(new SysMenuRequest());
-        wrapper.select(SysMenu::getMenuName,
-                SysMenu::getAntdvIcon,
-                SysMenu::getAntdvRouter,
-                SysMenu::getAntdvComponent,
-                SysMenu::getVisible,
-                SysMenu::getAntdvUidUrl,
-                SysMenu::getMenuId,
-                SysMenu::getMenuParentId);
-        wrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode());
+        String appCode = sysMenuRequest.getAppCode();
 
-        // 如果是超级管理员，则获取所有的菜单
-        if (LoginContext.me().getSuperAdminFlag()) {
-            List<SysMenu> totalList = this.list(wrapper);
-            return AntdMenusFactory.createTotalMenus(totalList);
+        // 获取默认激活的应用
+        if (ObjectUtil.isEmpty(appCode)) {
+            appCode = appServiceApi.getActiveAppCode();
         }
 
-        // 获取当前用户的所有菜单
-        List<Long> menuIdList = getCurrentUserMenuIds();
-        wrapper.in(SysMenu::getMenuId, menuIdList);
-        List<SysMenu> customList = this.list(wrapper);
-        return AntdMenusFactory.createTotalMenus(customList);
+        // 获取应用对应的菜单
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCode);
+
+        return AntdMenusFactory.createTotalMenus(currentUserMenus);
     }
 
     @Override
@@ -417,22 +406,28 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<SysMenu> getCurrentUserMenus(String appCode) {
 
-        // 获取当前用户所有的菜单id
-        List<Long> menuIdList = getCurrentUserMenuIds();
-
-        // 当前用户没有菜单
-        if (menuIdList.isEmpty()) {
-            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_HAVE_MENUS);
-        }
-
-        // 获取菜单列表
+        // 菜单查询条件
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysMenu::getMenuId, menuIdList).eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode()).eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode()).orderByAsc(SysMenu::getMenuSort);
+        queryWrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode())
+                .eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode())
+                .orderByAsc(SysMenu::getMenuSort);
 
         // 如果应用编码不为空，则拼接应用编码
         if (StrUtil.isNotBlank(appCode)) {
             queryWrapper.eq(SysMenu::getAppCode, appCode);
         }
+
+        // 如果是超级管理员，则获取所有的菜单
+        if (LoginContext.me().getSuperAdminFlag()) {
+            return this.list(queryWrapper);
+        }
+
+        // 非超级管理员，获取当前用户所有的菜单id
+        List<Long> menuIdList = getCurrentUserMenuIds();
+        if (menuIdList.isEmpty()) {
+            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_HAVE_MENUS);
+        }
+        queryWrapper.in(SysMenu::getMenuId, menuIdList);
 
         return this.list(queryWrapper);
     }

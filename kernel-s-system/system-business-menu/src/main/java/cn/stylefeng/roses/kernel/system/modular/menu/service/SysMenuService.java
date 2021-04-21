@@ -133,7 +133,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @author majianguo
      * @date 2021/1/7 15:24
      */
-    List<AntdSysMenuDTO> getLeftMenusAntdv();
+    List<AntdSysMenuDTO> getLeftMenusAntdv(SysMenuRequest sysMenuRequest);
 
     /**
      * 获取包含按钮的系统菜单

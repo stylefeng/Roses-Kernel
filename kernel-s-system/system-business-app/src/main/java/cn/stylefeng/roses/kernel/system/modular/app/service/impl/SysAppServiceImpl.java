@@ -37,10 +37,10 @@ import cn.stylefeng.roses.kernel.system.api.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.app.AppExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppRequest;
 import cn.stylefeng.roses.kernel.system.modular.app.entity.SysApp;
 import cn.stylefeng.roses.kernel.system.modular.app.mapper.SysAppMapper;
 import cn.stylefeng.roses.kernel.system.modular.app.service.SysAppService;
-import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -259,6 +259,9 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
 
         // 根据编码模糊查询
         queryWrapper.like(ObjectUtil.isNotEmpty(sysAppRequest.getAppCode()), SysApp::getAppCode, sysAppRequest.getAppCode());
+
+        // 根据激活状态
+        queryWrapper.eq(ObjectUtil.isNotEmpty(sysAppRequest.getStatusFlag()), SysApp::getActiveFlag, sysAppRequest.getActiveFlag());
 
         return queryWrapper;
     }
