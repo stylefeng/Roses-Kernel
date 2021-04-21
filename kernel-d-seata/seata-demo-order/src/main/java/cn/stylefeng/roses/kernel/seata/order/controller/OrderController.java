@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.seata.order.controller;
 import cn.stylefeng.roses.kernel.seata.order.entity.Order;
 import cn.stylefeng.roses.kernel.seata.order.service.OrderService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 
@@ -24,8 +25,8 @@ public class OrderController {
      * @date 2021/4/20 20:11
      */
     @GetMapping("/create")
-    public Order create(String userId, String commodityCode, int orderCount) {
-        return orderService.create(userId, commodityCode, orderCount);
+    public Order create(@RequestParam("userId") String userId, @RequestParam("commodityCode") String commodityCode, @RequestParam("orderCount") Integer orderCount){
+        return orderService.create(userId,commodityCode,orderCount);
     }
 
 }

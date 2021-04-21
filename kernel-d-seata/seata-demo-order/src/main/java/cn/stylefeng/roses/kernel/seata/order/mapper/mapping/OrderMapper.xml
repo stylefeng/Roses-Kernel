@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.seata.order.mapper.OrderMapper">
 
+  <!-- 新增订单 -->
   <insert id="insertOrder" parameterType="cn.stylefeng.roses.kernel.seata.order.entity.Order">
     insert into order(
 		<if test="productId != null and productId != ''">product_id,</if>
@@ -30,6 +31,7 @@
 	)
   </insert>
 
+  <!-- 根据ID查询订单 -->
   <select id="selectById" resultType="cn.stylefeng.roses.kernel.seata.order.entity.Order">
     select * from order
     where order_id = #{orderId}

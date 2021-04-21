@@ -9,8 +9,10 @@ package cn.stylefeng.roses.kernel.seata.wallet.api;
 public interface WalletApi {
 
     /**
-     * 从用户账户中借出
+     * 从用户账户中扣除余额
+     * @param userId 用户ID
+     * @param money 消费金额
      */
-    void debit(String userId, int money);
+    void debit(String userId, Integer money);
 
 }

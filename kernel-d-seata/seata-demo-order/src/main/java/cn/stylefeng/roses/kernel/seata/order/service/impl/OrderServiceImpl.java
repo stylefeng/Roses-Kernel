@@ -6,24 +6,32 @@ import cn.stylefeng.roses.kernel.seata.order.entity.Order;
 import cn.stylefeng.roses.kernel.seata.order.mapper.OrderMapper;
 import cn.stylefeng.roses.kernel.seata.order.service.OrderService;
 import io.seata.spring.annotation.GlobalTransactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
+/**
+ * 订单 业务层
+ *
+ * @author wangyl
+ * @date 2021/04/21 08:33
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
+    @Resource
     private StorageConsumer storageConsumer;
-    @Autowired
+    @Resource
     private WalletConsumer walletConsumer;
-    @Autowired
+    @Resource
     private OrderMapper orderMapper;
 
     /**
-     * 分布式事务跨库操作，起始位置，使用@GlobalTransactional注解修饰
-     * @param userId
-     * @param commodityCode
-     * @param orderCount
+     * 分布式事务跨库操作
+     * @param userId 用户ID
+     * @param commodityCode 商品编码
+     * @param orderCount 购买数量
+     * @GlobalTransactional 修饰分布式事务起始方法
      * @return
      */
     @GlobalTransactional(rollbackFor = Exception.class)
