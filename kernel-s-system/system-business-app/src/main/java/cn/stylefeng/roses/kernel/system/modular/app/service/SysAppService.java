@@ -25,8 +25,8 @@
 package cn.stylefeng.roses.kernel.system.modular.app.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.system.modular.app.entity.SysApp;
 import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppRequest;
+import cn.stylefeng.roses.kernel.system.modular.app.entity.SysApp;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -113,5 +113,13 @@ public interface SysAppService extends IService<SysApp> {
      * @date 2020/6/29 16:49
      */
     void updateActiveFlag(SysAppRequest sysAppParam);
+
+    /**
+     * 获取用户的顶部app导航列表
+     *
+     * @author fengshuonan
+     * @date 2021/4/21 15:34
+     */
+    List<SysApp> getUserTopAppList();
 
 }

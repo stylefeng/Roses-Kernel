@@ -30,12 +30,14 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppRequest;
+import cn.stylefeng.roses.kernel.system.modular.app.entity.SysApp;
 import cn.stylefeng.roses.kernel.system.modular.app.service.SysAppService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 系统应用控制器
@@ -141,6 +143,18 @@ public class SysAppController {
     public ResponseData setAsDefault(@RequestBody @Validated(SysAppRequest.updateActiveFlag.class) SysAppRequest sysAppParam) {
         sysAppService.updateActiveFlag(sysAppParam);
         return new SuccessResponseData();
+    }
+
+    /**
+     * 获取应用列表，用于顶部应用列表
+     *
+     * @author fengshuonan
+     * @date 2021/4/21 15:31
+     */
+    @GetResource(name = "获取应用列表，用于顶部应用列表", path = "/sysMenu/getTopAppList")
+    public ResponseData getTopAppList() {
+        List<SysApp> userTopAppList = sysAppService.getUserTopAppList();
+        return new SuccessResponseData(userTopAppList);
     }
 
 }

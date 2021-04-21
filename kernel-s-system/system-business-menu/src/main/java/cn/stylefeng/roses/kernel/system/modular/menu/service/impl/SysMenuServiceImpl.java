@@ -280,15 +280,19 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<AntdSysMenuDTO> getLeftMenusAntdv(SysMenuRequest sysMenuRequest) {
 
-        String appCode = sysMenuRequest.getAppCode();
-
-        // 获取默认激活的应用
-        if (ObjectUtil.isEmpty(appCode)) {
-            appCode = appServiceApi.getActiveAppCode();
+        // 不分应用查询菜单
+        List<SysMenu> currentUserMenus = null;
+        if (sysMenuRequest.getTotalMenus() != null && sysMenuRequest.getTotalMenus()) {
+            currentUserMenus = this.getCurrentUserMenus(null);
         }
-
-        // 获取应用对应的菜单
-        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCode);
+        // 根据应用查询菜单
+        else {
+            String appCode = sysMenuRequest.getAppCode();
+            if (ObjectUtil.isEmpty(appCode)) {
+                appCode = appServiceApi.getActiveAppCode();
+            }
+            currentUserMenus = this.getCurrentUserMenus(appCode);
+        }
 
         return AntdMenusFactory.createTotalMenus(currentUserMenus);
     }
@@ -440,6 +444,23 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         List<SysMenu> list = this.list(wrapper);
         return !list.isEmpty();
+    }
+
+    @Override
+    public List<String> getUserAppCodeList() {
+
+        LambdaQueryWrapper<SysMenu> queryWrapper = createWrapper(null);
+        queryWrapper.select(SysMenu::getAppCode);
+        queryWrapper.groupBy(SysMenu::getAppCode);
+
+        // 非超级管理员获取自己的菜单
+        if (!LoginContext.me().getSuperAdminFlag()) {
+            List<Long> currentUserMenuIds = this.getCurrentUserMenuIds();
+            queryWrapper.in(SysMenu::getMenuId, currentUserMenuIds);
+        }
+
+        List<SysMenu> list = this.list(queryWrapper);
+        return list.stream().map(SysMenu::getAppCode).collect(Collectors.toList());
     }
 
     /**

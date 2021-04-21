@@ -167,6 +167,25 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     }
 
     @Override
+    public List<SysApp> getUserTopAppList() {
+
+        // 获取用户拥有的appCode列表
+        List<String> userAppCodeList = menuApi.getUserAppCodeList();
+
+        // 根据appCode获取对应的app详情
+        LambdaQueryWrapper<SysApp> wrapper = this.createWrapper(null);
+        wrapper.in(SysApp::getAppCode, userAppCodeList);
+
+        // 仅查询code和name
+        wrapper.select(SysApp::getAppName, SysApp::getAppCode);
+
+        // 根据激活顺序排序
+        wrapper.orderByDesc(SysApp::getActiveFlag);
+
+        return this.list(wrapper);
+    }
+
+    @Override
     public Set<SimpleDict> getAppsByAppCodes(Set<String> appCodes) {
         HashSet<SimpleDict> simpleDicts = new HashSet<>();
 

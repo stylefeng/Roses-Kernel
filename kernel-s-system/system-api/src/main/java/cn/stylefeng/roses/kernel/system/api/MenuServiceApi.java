@@ -24,6 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.system.api;
 
+import java.util.List;
+
 /**
  * 菜单api
  *
@@ -41,5 +43,13 @@ public interface MenuServiceApi {
      * @date 2020/11/24 21:37
      */
     boolean hasMenu(String appCode);
+
+    /**
+     * 获取当前用户所拥有菜单对应的appCode列表
+     *
+     * @author fengshuonan
+     * @date 2021/4/21 15:40
+     */
+    List<String> getUserAppCodeList();
 
 }
