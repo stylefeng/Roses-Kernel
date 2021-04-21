@@ -1,8 +1,9 @@
 package cn.stylefeng.roses.kernel.seata.order.controller;
 
+import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.seata.order.entity.Order;
 import cn.stylefeng.roses.kernel.seata.order.service.OrderService;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
@@ -13,6 +14,7 @@ import javax.annotation.Resource;
  * @author wangyl
  * @date 2021/04/10 16:42
  */
+@ApiResource(name = "订单接口（测试seata）")
 public class OrderController {
 
     @Resource
@@ -24,9 +26,9 @@ public class OrderController {
      * @author wangyl
      * @date 2021/4/20 20:11
      */
-    @GetMapping("/create")
-    public Order create(@RequestParam("userId") String userId, @RequestParam("commodityCode") String commodityCode, @RequestParam("orderCount") Integer orderCount){
-        return orderService.create(userId,commodityCode,orderCount);
+    @GetResource(name = "创建订单", path = "/order/create", requiredPermission = false, requiredLogin = false)
+    public Order create(@RequestParam("userId") String userId, @RequestParam("commodityCode") String commodityCode, @RequestParam("orderCount") Integer orderCount) {
+        return orderService.create(userId, commodityCode, orderCount);
     }
 
 }

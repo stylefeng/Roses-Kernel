@@ -10,8 +10,11 @@ public interface WalletApi {
 
     /**
      * 从用户账户中扣除余额
+     *
      * @param userId 用户ID
-     * @param money 消费金额
+     * @param money  消费金额
+     * @author wangyl
+     * @date 2021/4/21 9:44
      */
     void debit(String userId, Integer money);
 

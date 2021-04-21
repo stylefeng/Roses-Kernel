@@ -21,29 +21,28 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private StorageConsumer storageConsumer;
+
     @Resource
     private WalletConsumer walletConsumer;
+
     @Resource
     private OrderMapper orderMapper;
 
-    /**
-     * 分布式事务跨库操作
-     * @param userId 用户ID
-     * @param commodityCode 商品编码
-     * @param orderCount 购买数量
-     * @GlobalTransactional 修饰分布式事务起始方法
-     * @return
-     */
     @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public Order create(String userId, String commodityCode, int orderCount) {
         Order order = new Order();
+
         //保存订单
         orderMapper.insertOrder(order);
+
         //扣减商品库存
-        storageConsumer.deduct(commodityCode,orderCount);
+        storageConsumer.deduct(commodityCode, orderCount);
+
         //扣用户钱
-        walletConsumer.debit(userId,order.getTotalAmount());
+        walletConsumer.debit(userId, order.getTotalAmount());
+
         return order;
     }
+
 }
