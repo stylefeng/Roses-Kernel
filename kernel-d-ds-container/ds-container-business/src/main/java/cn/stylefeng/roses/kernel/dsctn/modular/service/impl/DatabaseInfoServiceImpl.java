@@ -168,13 +168,13 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
      * @author fengshuonan
      * @date 2020/11/1 21:50
      */
-    private void validateConnection(DatabaseInfoRequest param) {
+    public void validateConnection(DatabaseInfoRequest param) {
         Connection conn = null;
         try {
             Class.forName(param.getJdbcDriver());
             conn = DriverManager.getConnection(param.getJdbcUrl(), param.getUsername(), param.getPassword());
         } catch (Exception e) {
-            throw new DatasourceContainerException(VALIDATE_DATASOURCE_ERROR, param.getJdbcUrl());
+            throw new DatasourceContainerException(VALIDATE_DATASOURCE_ERROR, param.getJdbcUrl(), e.getMessage());
         } finally {
             if (conn != null) {
                 try {

@@ -71,7 +71,7 @@ public enum DatasourceContainerExceptionEnum implements AbstractExceptionEnum {
     /**
      * 检验数据库连接失败
      */
-    VALIDATE_DATASOURCE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "07", "检验数据库连接失败，请检查连接是否可用，url为：{}"),
+    VALIDATE_DATASOURCE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DatasourceContainerConstants.DS_CTN_EXCEPTION_STEP_CODE + "07", "检验数据库连接失败，请检查连接是否可用，url为：{}，异常为：{}"),
 
     /**
      * 添加数据源失败，当前环境已经存在同名数据源

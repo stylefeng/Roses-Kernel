@@ -79,6 +79,18 @@ public class DatabaseInfo extends BaseEntity {
     private String password;
 
     /**
+     * 状态标识：1-正常，2-无法连接
+     */
+    @TableField("status_flag")
+    private Integer statusFlag;
+
+    /**
+     * 无法连接原因
+     */
+    @TableField("error_description")
+    private String errorDescription;
+
+    /**
      * 备注，摘要
      */
     @TableField("remarks")

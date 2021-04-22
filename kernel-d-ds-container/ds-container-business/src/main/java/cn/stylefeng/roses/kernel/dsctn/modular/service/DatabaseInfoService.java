@@ -94,4 +94,13 @@ public interface DatabaseInfoService extends IService<DatabaseInfo> {
      */
     List<DatabaseInfo> findList(DatabaseInfoRequest databaseInfoRequest);
 
+    /**
+     * 校验数据库连接的正确性
+     *
+     * @param param 参数
+     * @author fengshuonan
+     * @date 2021/4/22 10:46
+     */
+    void validateConnection(DatabaseInfoRequest param);
+
 }
