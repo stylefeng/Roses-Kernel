@@ -74,9 +74,14 @@ public class DataSourceStatusCheckTimer implements TimerAction {
             } catch (Exception exception) {
                 // 如果有错误信息，将错误信息存储到表中
                 String errorMessage = exception.getMessage();
-                databaseInfo.setStatusFlag(DataSourceStatusEnum.ERROR.getCode());
-                databaseInfo.setErrorDescription(errorMessage);
-                databaseInfoService.updateById(databaseInfo);
+
+                // 如果当前非错误状态则更新状态
+                if (!DataSourceStatusEnum.ERROR.getCode().equals(databaseInfo.getStatusFlag())) {
+                    databaseInfo.setStatusFlag(DataSourceStatusEnum.ERROR.getCode());
+                    databaseInfo.setErrorDescription(errorMessage);
+                    databaseInfoService.updateById(databaseInfo);
+                }
+
                 continue;
             }
 
