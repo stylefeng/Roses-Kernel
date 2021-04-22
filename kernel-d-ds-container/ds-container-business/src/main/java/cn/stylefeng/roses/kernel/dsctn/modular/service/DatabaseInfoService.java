@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.dsctn.modular.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dsctn.api.DataSourceApi;
 import cn.stylefeng.roses.kernel.dsctn.api.pojo.request.DatabaseInfoRequest;
 import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -37,7 +38,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2020/11/1 21:46
  */
-public interface DatabaseInfoService extends IService<DatabaseInfo> {
+public interface DatabaseInfoService extends IService<DatabaseInfo>, DataSourceApi {
 
     /**
      * 新增数据库信息

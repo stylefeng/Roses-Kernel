@@ -33,6 +33,7 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
+import cn.stylefeng.roses.kernel.dsctn.api.pojo.DataSourceDto;
 import cn.stylefeng.roses.kernel.dsctn.api.pojo.request.DatabaseInfoRequest;
 import cn.stylefeng.roses.kernel.dsctn.context.DataSourceContext;
 import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
@@ -162,12 +163,7 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         return databaseInfo;
     }
 
-    /**
-     * 判断数据库连接是否可用
-     *
-     * @author fengshuonan
-     * @date 2020/11/1 21:50
-     */
+    @Override
     public void validateConnection(DatabaseInfoRequest param) {
         Connection conn = null;
         try {
@@ -184,6 +180,17 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
                 }
             }
         }
+    }
+
+    @Override
+    public DataSourceDto getDataSourceInfoById(Long dbId) {
+        DataSourceDto dataSourceDto = new DataSourceDto();
+
+        DatabaseInfoRequest databaseInfoRequest = new DatabaseInfoRequest();
+        databaseInfoRequest.setDbId(dbId);
+        DatabaseInfo databaseInfo = this.queryDatabaseInfoById(databaseInfoRequest);
+        BeanUtil.copyProperties(databaseInfo, dataSourceDto);
+        return dataSourceDto;
     }
 
     /**
@@ -263,5 +270,4 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
 
         return queryWrapper;
     }
-
 }

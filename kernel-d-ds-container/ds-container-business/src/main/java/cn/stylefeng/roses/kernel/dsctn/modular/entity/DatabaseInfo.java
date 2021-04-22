@@ -79,6 +79,12 @@ public class DatabaseInfo extends BaseEntity {
     private String password;
 
     /**
+     * 数据库的schema名称，每种数据库的schema意义都不同
+     */
+    @TableField("schema_name")
+    private String schemaName;
+
+    /**
      * 状态标识：1-正常，2-无法连接
      */
     @TableField("status_flag")
