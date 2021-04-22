@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -100,6 +101,18 @@ public class DatabaseInfoController {
     public ResponseData findPage(DatabaseInfoRequest databaseInfoRequest) {
         PageResult<DatabaseInfo> pageResult = databaseInfoService.findPage(databaseInfoRequest);
         return new SuccessResponseData(pageResult);
+    }
+
+    /**
+     * 查询所有数据源列表
+     *
+     * @author fengshuonan
+     * @date 2020/11/1 22:18
+     */
+    @GetResource(name = "查询所有数据源列表", path = "/databaseInfo/list")
+    public ResponseData findList(DatabaseInfoRequest databaseInfoRequest) {
+        List<DatabaseInfo> databaseInfos = databaseInfoService.findList(databaseInfoRequest);
+        return new SuccessResponseData(databaseInfos);
     }
 
     /**

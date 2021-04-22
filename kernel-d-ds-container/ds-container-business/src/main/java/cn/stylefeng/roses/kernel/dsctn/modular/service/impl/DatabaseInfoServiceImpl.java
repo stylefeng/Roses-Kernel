@@ -258,6 +258,9 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         // 拼接sql 条件
         queryWrapper.like(ObjectUtil.isNotEmpty(dbName), DatabaseInfo::getDbName, dbName);
 
+        // 拼接状态条件
+        queryWrapper.eq(ObjectUtil.isNotEmpty(databaseInfoRequest.getStatusFlag()), DatabaseInfo::getStatusFlag, databaseInfoRequest.getStatusFlag());
+
         return queryWrapper;
     }
 

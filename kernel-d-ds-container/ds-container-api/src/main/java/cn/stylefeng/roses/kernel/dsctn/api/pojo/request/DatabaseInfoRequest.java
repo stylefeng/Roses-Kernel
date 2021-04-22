@@ -88,6 +88,11 @@ public class DatabaseInfoRequest extends BaseRequest {
     private String password;
 
     /**
+     * 状态标识：1-正常，2-无法连接
+     */
+    private Integer statusFlag;
+
+    /**
      * 备注，摘要
      */
     private String remarks;
