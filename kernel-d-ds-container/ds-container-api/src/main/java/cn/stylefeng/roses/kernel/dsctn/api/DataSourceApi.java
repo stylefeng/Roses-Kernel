@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.dsctn.api;
 
+import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
 import cn.stylefeng.roses.kernel.dsctn.api.pojo.DataSourceDto;
 
 /**
@@ -15,6 +16,7 @@ public interface DataSourceApi {
      *
      * @param dbId 数据库连接id
      * @return 数据库连接信息
+     * @throws DatasourceContainerException 找不到对应的dbId会抛出异常
      * @author fengshuonan
      * @date 2021/4/22 14:21
      */

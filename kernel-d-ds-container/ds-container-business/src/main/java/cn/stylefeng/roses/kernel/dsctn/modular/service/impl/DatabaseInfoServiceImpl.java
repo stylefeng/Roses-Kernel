@@ -152,7 +152,14 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
     @Override
     public List<DatabaseInfo> findList(DatabaseInfoRequest databaseInfoRequest) {
         LambdaQueryWrapper<DatabaseInfo> wrapper = createWrapper(databaseInfoRequest);
-        return this.list(wrapper);
+        List<DatabaseInfo> list = this.list(wrapper);
+
+        // 更新密码
+        for (DatabaseInfo record : list) {
+            record.setPassword("***");
+        }
+
+        return list;
     }
 
 
