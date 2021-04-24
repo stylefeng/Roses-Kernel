@@ -42,7 +42,9 @@ public class CreateDatabaseSql extends AbstractSql {
 
     @Override
     protected String sqlServer() {
-        return "";
+        return "if not exists (select * from sysobjects where name=? and xtype='U')\n" +
+                "    create table ? ;" +
+                "go";
     }
 
     @Override
