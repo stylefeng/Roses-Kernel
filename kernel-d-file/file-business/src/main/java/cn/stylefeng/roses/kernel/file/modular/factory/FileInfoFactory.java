@@ -79,11 +79,17 @@ public class FileInfoFactory {
         // 生成文件的最终名称
         String finalFileName = fileId + FILE_POSTFIX_SEPARATOR + fileSuffix;
 
+        // 桶名
+        String fileBucket = DEFAULT_BUCKET_NAME;
+
         // 存储文件
         byte[] bytes;
         try {
             bytes = file.getBytes();
-            fileOperatorApi.storageFile(DEFAULT_BUCKET_NAME, finalFileName, bytes);
+            if (StrUtil.isNotEmpty(sysFileInfoRequest.getFileBucket())) {
+                fileBucket = sysFileInfoRequest.getFileBucket();
+            }
+            fileOperatorApi.storageFile(fileBucket, finalFileName, bytes);
         } catch (IOException e) {
             throw new FileException(FileExceptionEnum.ERROR_FILE, e.getMessage());
         }
@@ -96,9 +102,8 @@ public class FileInfoFactory {
 
         // 封装存储文件信息（上传替换公共信息）
         SysFileInfo sysFileInfo = new SysFileInfo();
-        sysFileInfo.setFileId(fileId);
         sysFileInfo.setFileLocation(FileLocationEnum.LOCAL.getCode());
-        sysFileInfo.setFileBucket(DEFAULT_BUCKET_NAME);
+        sysFileInfo.setFileBucket(fileBucket);
         sysFileInfo.setFileObjectName(finalFileName);
         sysFileInfo.setFileOriginName(originalFilename);
         sysFileInfo.setFileSuffix(fileSuffix);
