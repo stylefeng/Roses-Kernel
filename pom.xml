@@ -127,7 +127,7 @@
         <rocketmq.version>4.5.2</rocketmq.version>
         <easy.captcha>1.6.2</easy.captcha>
         <groovy.version>3.0.7</groovy.version>
-        <oshi.version>3.9.1</oshi.version>
+        <oshi.version>5.7.1</oshi.version>
     </properties>
 
     <dependencyManagement>
