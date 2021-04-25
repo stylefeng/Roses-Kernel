@@ -18,12 +18,12 @@ public class AddDatabaseInfoSql extends AbstractSql {
 
     @Override
     protected String sqlServer() {
-        return "INSERT INTO [sys_database_info] ([db_id], [db_name], [jdbc_driver], [username], [password], [jdbc_url], [remarks], [create_time]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO [sys_database_info] ([db_id], [db_name], [jdbc_driver], [jdbc_url], [username], [password], [remarks], [create_time]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     }
 
     @Override
     protected String pgSql() {
-        return "INSERT INTO sys_database_info(db_id, db_name, jdbc_driver, username, password, jdbc_url, remarks, create_time) VALUES (?, ?, ?, ?, ?, ?, ?, to_timestamp(?,'YYYY-MM-DD HH24:MI:SS'))";
+        return "INSERT INTO sys_database_info(db_id, db_name, jdbc_driver, jdbc_url, username, password,  remarks, create_time) VALUES (?, ?, ?, ?, ?, ?, ?, to_timestamp(?,'YYYY-MM-DD HH24:MI:SS'))";
     }
 
     @Override
