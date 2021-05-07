@@ -66,6 +66,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
         String locations = environment.getProperty("spring.flyway.locations");
         String baselineOnMigrateStr = environment.getProperty("spring.flyway.baseline-on-migrate");
         String outOfOrderStr = environment.getProperty("spring.flyway.out-of-order");
+        String placeholder = environment.getProperty("spring.flyway.placeholder-replacement");
 
         // 是否开启flyway，默认false.
         boolean enabled = false;
@@ -100,6 +101,12 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
             outOfOrder = Boolean.parseBoolean(outOfOrderStr);
         }
 
+        // 是否开启占位符
+        boolean enablePlaceholder = true;
+        if(StrUtil.isNotBlank(placeholder)){
+            enablePlaceholder = Boolean.parseBoolean(placeholder);
+        }
+
         DriverManagerDataSource dmDataSource = null;
         try {
             assert dataSourceUrl != null;
@@ -122,6 +129,10 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
 
                     // 是否允许无序的迁移 开发环境最好开启 , 生产环境关闭
                     .outOfOrder(outOfOrder)
+
+                    // 是否开启占位符
+                    .placeholderReplacement(enablePlaceholder)
+
                     .load();
 
             // 执行迁移
