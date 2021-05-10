@@ -76,6 +76,21 @@ public class BaseRequest implements Serializable {
     private Map<String, Object> otherParams;
 
     /**
+     * 唯一请求号
+     */
+    private String requestNo;
+
+    /**
+     * 业务节点id
+     */
+    private String spanId;
+
+    /**
+     * 当前登录用户的token
+     */
+    private String token;
+
+    /**
      * 参数校验分组：分页
      */
     public @interface page {
