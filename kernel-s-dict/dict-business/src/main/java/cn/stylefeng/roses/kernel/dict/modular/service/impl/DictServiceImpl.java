@@ -76,6 +76,10 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void add(DictRequest dictRequest) {
+
+        // 校验字典重复
+        this.validateRepeat(dictRequest, false);
+
         SysDict sysDict = new SysDict();
         BeanUtil.copyProperties(dictRequest, sysDict);
         sysDict.setDictParentId(DictConstants.DEFAULT_DICT_PARENT_ID);
@@ -95,6 +99,9 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(DictRequest dictRequest) {
+
+        // 校验字典重复
+        this.validateRepeat(dictRequest, true);
 
         SysDict sysDict = this.querySysDict(dictRequest);
         BeanUtil.copyProperties(dictRequest, sysDict);
@@ -239,6 +246,42 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, SysDict> implements
 
         queryWrapper.ne(SysDict::getDelFlag, YesOrNotEnum.Y.getCode());
         return queryWrapper;
+    }
+
+    /**
+     * 检查添加和编辑字典是否有重复的编码和名称
+     *
+     * @author fengshuonan
+     * @date 2021/5/12 16:58
+     */
+    private void validateRepeat(DictRequest dictRequest, boolean editFlag) {
+
+        // 检验同字典类型下是否有一样的编码
+        LambdaQueryWrapper<SysDict> sysDictLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysDictLambdaQueryWrapper.eq(SysDict::getDictTypeCode, dictRequest.getDictTypeCode());
+        sysDictLambdaQueryWrapper.eq(SysDict::getDictCode, dictRequest.getDictCode());
+        if (editFlag) {
+            sysDictLambdaQueryWrapper.ne(SysDict::getDictId, dictRequest.getDictId());
+        }
+        sysDictLambdaQueryWrapper.ne(SysDict::getDelFlag, YesOrNotEnum.Y.getCode());
+        int count = this.count(sysDictLambdaQueryWrapper);
+        if (count > 0) {
+            throw new DictException(DictExceptionEnum.DICT_CODE_REPEAT, dictRequest.getDictTypeCode(), dictRequest.getDictCode());
+        }
+
+        // 检验同字典类型下是否有一样的名称
+        LambdaQueryWrapper<SysDict> dictNameWrapper = new LambdaQueryWrapper<>();
+        dictNameWrapper.eq(SysDict::getDictTypeCode, dictRequest.getDictTypeCode());
+        dictNameWrapper.eq(SysDict::getDictName, dictRequest.getDictName());
+        if (editFlag) {
+            dictNameWrapper.ne(SysDict::getDictId, dictRequest.getDictId());
+        }
+        dictNameWrapper.ne(SysDict::getDelFlag, YesOrNotEnum.Y.getCode());
+        int dictNameCount = this.count(dictNameWrapper);
+        if (dictNameCount > 0) {
+            throw new DictException(DictExceptionEnum.DICT_NAME_REPEAT, dictRequest.getDictTypeCode(), dictRequest.getDictCode());
+        }
+
     }
 
 }

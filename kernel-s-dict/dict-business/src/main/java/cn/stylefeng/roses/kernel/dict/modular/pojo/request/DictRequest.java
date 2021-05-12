@@ -26,7 +26,6 @@ package cn.stylefeng.roses.kernel.dict.modular.pojo.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
-import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -54,26 +53,12 @@ public class DictRequest extends BaseRequest {
      * 字典编码
      */
     @NotBlank(message = "字典编码不能为空", groups = {add.class, edit.class, validateAvailable.class})
-    @TableUniqueValue(
-            message = "字典编码存在重复",
-            groups = {add.class, edit.class},
-            tableName = "sys_dict",
-            columnName = "dict_code",
-            idFieldName = "dict_id",
-            excludeLogicDeleteItems = true)
     private String dictCode;
 
     /**
      * 字典名称
      */
     @NotBlank(message = "字典名称不能为空", groups = {add.class, edit.class})
-    @TableUniqueValue(
-            message = "字典名称存在重复",
-            groups = {add.class, edit.class},
-            tableName = "sys_dict",
-            columnName = "dict_name",
-            idFieldName = "dict_id",
-            excludeLogicDeleteItems = true)
     private String dictName;
 
     /**
