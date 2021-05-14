@@ -30,12 +30,10 @@ import cn.stylefeng.roses.kernel.db.api.factory.DruidDatasourceFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
 import cn.stylefeng.roses.kernel.dsctn.context.DataSourceContext;
+import cn.stylefeng.roses.kernel.rule.listener.ContextInitializedListener;
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -50,7 +48,7 @@ import static cn.stylefeng.roses.kernel.dsctn.api.exception.enums.DatasourceCont
  * @date 2020/11/1 0:02
  */
 @Slf4j
-public class DataSourceInitListener implements ApplicationListener<ApplicationContextInitializedEvent>, Ordered {
+public class DataSourceInitListener extends ContextInitializedListener implements Ordered {
 
     @Override
     public int getOrder() {
@@ -58,15 +56,9 @@ public class DataSourceInitListener implements ApplicationListener<ApplicationCo
     }
 
     @Override
-    public void onApplicationEvent(ApplicationContextInitializedEvent applicationContextInitializedEvent) {
+    public void eventCallback(ApplicationContextInitializedEvent event) {
 
-        // 如果是配置中心的上下文略过，spring cloud环境environment会读取不到
-        ConfigurableApplicationContext applicationContext = applicationContextInitializedEvent.getApplicationContext();
-        if (applicationContext instanceof AnnotationConfigApplicationContext) {
-            return;
-        }
-
-        ConfigurableEnvironment environment = applicationContextInitializedEvent.getApplicationContext().getEnvironment();
+        ConfigurableEnvironment environment = event.getApplicationContext().getEnvironment();
 
         // 获取数据库连接配置
         String dataSourceDriver = environment.getProperty("spring.datasource.driver-class-name");
@@ -100,4 +92,5 @@ public class DataSourceInitListener implements ApplicationListener<ApplicationCo
         }
 
     }
+
 }

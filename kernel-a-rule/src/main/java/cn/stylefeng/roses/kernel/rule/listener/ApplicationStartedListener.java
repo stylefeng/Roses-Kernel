@@ -22,39 +22,43 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.system.starter.listener;
+package cn.stylefeng.roses.kernel.rule.listener;
 
-import cn.stylefeng.roses.kernel.rule.listener.ApplicationReadyListener;
-import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
-import cn.stylefeng.roses.kernel.system.starter.init.InitAdminService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.core.Ordered;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.annotation.Resource;
 
 /**
- * 项目启动后初始化超级管理员
+ * application 启动后状态的监听器
  *
  * @author fengshuonan
- * @date 2020/12/17 21:44
+ * @date 2021/5/14 20:28
  */
-@Component
 @Slf4j
-public class SuperAdminInitListener extends ApplicationReadyListener implements Ordered {
-
-    @Resource
-    private InitAdminService initAdminService;
+public abstract class ApplicationStartedListener implements ApplicationListener<ApplicationStartedEvent> {
 
     @Override
-    public void eventCallback(ApplicationReadyEvent event) {
-        initAdminService.initSuperAdmin();
+    public void onApplicationEvent(ApplicationStartedEvent event) {
+
+        // 如果是配置中心的上下文略过，spring cloud环境environment会读取不到
+        ConfigurableApplicationContext applicationContext = event.getApplicationContext();
+        if (applicationContext instanceof AnnotationConfigApplicationContext) {
+            return;
+        }
+
+        // 执行具体业务
+        this.eventCallback(event);
     }
 
-    @Override
-    public int getOrder() {
-        return SystemConstants.SUPER_ADMIN_INIT_LISTENER_SORT;
-    }
+    /**
+     * 监听器具体的业务逻辑
+     *
+     * @author fengshuonan
+     * @date 2021/5/14 20:17
+     */
+    public abstract void eventCallback(ApplicationStartedEvent event);
 
 }

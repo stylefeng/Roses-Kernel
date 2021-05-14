@@ -28,9 +28,9 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.i18n.api.TranslationApi;
 import cn.stylefeng.roses.kernel.i18n.api.TranslationPersistenceApi;
 import cn.stylefeng.roses.kernel.i18n.api.pojo.TranslationDict;
+import cn.stylefeng.roses.kernel.rule.listener.ApplicationStartedListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 
 import java.util.List;
 
@@ -41,10 +41,10 @@ import java.util.List;
  * @date 2021/1/24 19:36
  */
 @Slf4j
-public class TranslationDictInitListener implements ApplicationListener<ApplicationStartedEvent> {
+public class TranslationDictInitListener extends ApplicationStartedListener {
 
     @Override
-    public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
+    public void eventCallback(ApplicationStartedEvent event) {
 
         TranslationPersistenceApi tanTranslationPersistenceApi = SpringUtil.getBean(TranslationPersistenceApi.class);
         TranslationApi translationApi = SpringUtil.getBean(TranslationApi.class);
@@ -55,7 +55,6 @@ public class TranslationDictInitListener implements ApplicationListener<Applicat
             translationApi.init(allTranslationDict);
             log.info("初始化所有的翻译字典" + allTranslationDict.size() + "条！");
         }
-
     }
 
 }

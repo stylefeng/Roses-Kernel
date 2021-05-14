@@ -33,11 +33,9 @@ import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
 import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
 import cn.stylefeng.roses.kernel.config.modular.factory.SysConfigDataFactory;
 import cn.stylefeng.roses.kernel.rule.context.ApplicationPropertiesContext;
+import cn.stylefeng.roses.kernel.rule.listener.ContextInitializedListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -58,7 +56,7 @@ import static cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExcepti
  * @date 2020/6/6 23:39
  */
 @Slf4j
-public class ConfigInitListener implements ApplicationListener<ApplicationContextInitializedEvent>, Ordered {
+public class ConfigInitListener extends ContextInitializedListener implements Ordered {
 
     @Override
     public int getOrder() {
@@ -66,19 +64,13 @@ public class ConfigInitListener implements ApplicationListener<ApplicationContex
     }
 
     @Override
-    public void onApplicationEvent(ApplicationContextInitializedEvent applicationContextInitializedEvent) {
-
-        // 如果是配置中心的上下文略过，spring cloud环境environment会读取不到
-        ConfigurableApplicationContext applicationContext = applicationContextInitializedEvent.getApplicationContext();
-        if (applicationContext instanceof AnnotationConfigApplicationContext) {
-            return;
-        }
+    public void eventCallback(ApplicationContextInitializedEvent event) {
 
         // 初始化Config Api
         ConfigContext.setConfigApi(new ConfigContainer());
 
         // 获取environment参数
-        ConfigurableEnvironment environment = applicationContextInitializedEvent.getApplicationContext().getEnvironment();
+        ConfigurableEnvironment environment = event.getApplicationContext().getEnvironment();
 
         // 初始化ApplicationPropertiesContext
         ApplicationPropertiesContext.getInstance().initConfigs(environment);
@@ -116,7 +108,6 @@ public class ConfigInitListener implements ApplicationListener<ApplicationContex
         } finally {
             DbUtil.close(conn);
         }
-
     }
 
 }

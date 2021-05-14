@@ -28,10 +28,10 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.exception.DaoException;
 import cn.stylefeng.roses.kernel.db.api.exception.enums.FlywayExceptionEnum;
+import cn.stylefeng.roses.kernel.rule.listener.ContextInitializedListener;
 import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -45,15 +45,14 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
  * @date 2021/1/17 21:14
  */
 @Slf4j
-public class FlywayInitListener implements ApplicationListener<ApplicationContextInitializedEvent>, Ordered {
+public class FlywayInitListener extends ContextInitializedListener implements Ordered {
 
     private static final String FLYWAY_LOCATIONS = "classpath:db/migration";
 
     @Override
-    public void onApplicationEvent(ApplicationContextInitializedEvent applicationEnvironmentPreparedEvent) {
+    public void eventCallback(ApplicationContextInitializedEvent event) {
 
-
-        ConfigurableEnvironment environment = applicationEnvironmentPreparedEvent.getApplicationContext().getEnvironment();
+        ConfigurableEnvironment environment = event.getApplicationContext().getEnvironment();
 
         // 获取数据库连接配置
         String dataSourceUrl = environment.getProperty("spring.datasource.url");
@@ -103,7 +102,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
 
         // 是否开启占位符
         boolean enablePlaceholder = true;
-        if(StrUtil.isNotBlank(placeholder)){
+        if (StrUtil.isNotBlank(placeholder)) {
             enablePlaceholder = Boolean.parseBoolean(placeholder);
         }
 
@@ -142,6 +141,7 @@ public class FlywayInitListener implements ApplicationListener<ApplicationContex
             log.error("flyway初始化失败", e);
             throw new DaoException(FlywayExceptionEnum.FLYWAY_MIGRATE_ERROR, e.getMessage());
         }
+
     }
 
     @Override

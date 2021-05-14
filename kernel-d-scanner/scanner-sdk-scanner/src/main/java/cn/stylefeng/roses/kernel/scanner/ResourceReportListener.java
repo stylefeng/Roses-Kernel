@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.scanner;
 
+import cn.stylefeng.roses.kernel.rule.listener.ApplicationReadyListener;
 import cn.stylefeng.roses.kernel.scanner.api.ResourceCollectorApi;
 import cn.stylefeng.roses.kernel.scanner.api.ResourceReportApi;
 import cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants;
@@ -33,9 +34,7 @@ import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.scanner.ScannerProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.Ordered;
 
 import java.util.Map;
@@ -47,16 +46,12 @@ import java.util.Map;
  * @date 2020/10/19 22:27
  */
 @Slf4j
-public class ResourceReportListener implements ApplicationListener<ApplicationReadyEvent>, Ordered {
+public class ResourceReportListener extends ApplicationReadyListener implements Ordered {
 
     @Override
-    public void onApplicationEvent(ApplicationReadyEvent event) {
+    public void eventCallback(ApplicationReadyEvent event) {
 
-        // 如果是配置中心的上下文略过，spring cloud环境environment会读取不到
         ConfigurableApplicationContext applicationContext = event.getApplicationContext();
-        if (applicationContext instanceof AnnotationConfigApplicationContext) {
-            return;
-        }
 
         // 获取有没有开资源扫描开关
         ScannerProperties scannerProperties = applicationContext.getBean(ScannerProperties.class);

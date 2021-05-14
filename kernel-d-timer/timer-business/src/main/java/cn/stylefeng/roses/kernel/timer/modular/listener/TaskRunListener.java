@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.timer.modular.listener;
 
 import cn.hutool.extra.spring.SpringUtil;
+import cn.stylefeng.roses.kernel.rule.listener.ApplicationStartedListener;
 import cn.stylefeng.roses.kernel.timer.api.TimerExeService;
 import cn.stylefeng.roses.kernel.timer.api.enums.TimerJobStatusEnum;
 import cn.stylefeng.roses.kernel.timer.modular.entity.SysTimers;
@@ -32,7 +33,6 @@ import cn.stylefeng.roses.kernel.timer.modular.param.SysTimersParam;
 import cn.stylefeng.roses.kernel.timer.modular.service.SysTimersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 
 import java.util.List;
@@ -44,10 +44,10 @@ import java.util.List;
  * @date 2021/1/12 20:40
  */
 @Slf4j
-public class TaskRunListener implements ApplicationListener<ApplicationStartedEvent>, Ordered {
+public class TaskRunListener extends ApplicationStartedListener implements Ordered {
 
     @Override
-    public void onApplicationEvent(ApplicationStartedEvent event) {
+    public void eventCallback(ApplicationStartedEvent event) {
 
         SysTimersService sysTimersService = SpringUtil.getBean(SysTimersService.class);
         TimerExeService timerExeService = SpringUtil.getBean(TimerExeService.class);
@@ -69,10 +69,12 @@ public class TaskRunListener implements ApplicationListener<ApplicationStartedEv
                 log.error("定时器初始化遇到错误，略过该定时器！", exception);
             }
         }
+
     }
 
     @Override
     public int getOrder() {
         return LOWEST_PRECEDENCE - 300;
     }
+
 }
