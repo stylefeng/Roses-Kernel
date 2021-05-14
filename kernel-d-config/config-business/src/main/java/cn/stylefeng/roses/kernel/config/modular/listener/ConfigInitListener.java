@@ -108,7 +108,7 @@ public class ConfigInitListener implements ApplicationListener<ApplicationContex
                 entityList.forEach(sysConfig -> ConfigContext.me().putConfig(sysConfig.getStr("config_code"), sysConfig.getStr("config_value")));
             }
         } catch (ClassNotFoundException e) {
-            log.error("初始化系统配置表失败，找不到com.mysql.cj.jdbc.Driver类", e);
+            log.error("初始化系统配置表失败，找不到{}类 : {}",driverClassName,e);
             throw new ConfigException(ConfigExceptionEnum.CLASS_NOT_FOUND_ERROR);
         } catch (SQLException sqlException) {
             log.error("初始化系统配置表失败，执行查询语句失败", sqlException);
