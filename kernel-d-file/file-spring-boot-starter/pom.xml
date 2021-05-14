@@ -21,14 +21,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>file-business</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--文件sdk的实现，默认用本地存文件-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>file-sdk-local</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
     </dependencies>

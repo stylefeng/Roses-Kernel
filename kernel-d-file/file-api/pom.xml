@@ -21,14 +21,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--config模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>config-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--servlet-->

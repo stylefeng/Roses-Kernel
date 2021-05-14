@@ -21,33 +21,33 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-business-manage</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--接口请求日志记录-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-business-requestapi</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--日志默认记录到库中-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-sdk-db</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-sdk-file</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--登录日志的业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-business-login-log</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
     </dependencies>

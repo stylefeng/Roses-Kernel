@@ -21,7 +21,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>file-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--auth模块的api-->
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>auth-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--minio客户端-->

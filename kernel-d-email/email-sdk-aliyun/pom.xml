@@ -21,7 +21,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>email-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--阿里云邮件发送的sdk-->
