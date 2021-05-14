@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-log</artifactId>
-        <version>7.0.3</version>
+        <version>7.0.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-api</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
 
 
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>auth-api</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
 
         <!--config模块的api-->
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>config-api</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
 
     </dependencies>

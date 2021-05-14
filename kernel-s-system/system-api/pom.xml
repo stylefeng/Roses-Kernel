@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-s-system</artifactId>
-        <version>7.0.3</version>
+        <version>7.0.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,14 +21,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
 
         <!--config模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>config-api</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
 
         <!--资源扫描器的api-->
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
 
         <!--auth模块的api-->
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>auth-api</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
 
         <!--web-->

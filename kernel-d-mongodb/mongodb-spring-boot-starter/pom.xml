@@ -5,7 +5,7 @@
     <parent>
         <artifactId>kernel-d-mongodb</artifactId>
         <groupId>cn.stylefeng.roses</groupId>
-        <version>7.0.3</version>
+        <version>7.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,14 +21,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>mongodb-sdk-springboot</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
 
         <!--MongoDB文件管理模块的sdk-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>mongodb-sdk-file</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
     </dependencies>
 

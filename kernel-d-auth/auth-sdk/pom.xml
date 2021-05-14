@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-auth</artifactId>
-        <version>7.0.3</version>
+        <version>7.0.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>auth-api</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--定时任务的api-->
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>timer-api</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--日志记录模块的api-->
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>log-api</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--资源模块的api-->
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--安全模块的api-->
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>security-api</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--system业务模块的api-->
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-api</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--jwt模块的api-->
@@ -69,7 +69,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>jwt-api</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--web模块-->
@@ -88,18 +88,18 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-api</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-memory</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-redis</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>message-api</artifactId>
-            <version>7.0.3</version>
+            <version>${roses.version}</version>
         </dependency>
 
     </dependencies>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>kernel-d-mongodb</artifactId>
         <groupId>cn.stylefeng.roses</groupId>
-        <version>7.0.3</version>
+        <version>7.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,14 +22,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
 
         <!--Mongodb file自动配置-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>mongodb-spring-boot-starter</artifactId>
-            <version>7.0.3</version>
+            <version>7.0.4</version>
         </dependency>
     </dependencies>
 
