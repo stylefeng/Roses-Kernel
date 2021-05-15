@@ -13,13 +13,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Pgsql数据库的系统配置表获取
+ * Oracle数据库的系统配置表获取
  *
  * @author AndrewFeng
  * @date 2021/5/14 21:18
  */
 @Slf4j
-public class PgsqlSysConfigData implements SysConfigDataApi {
+public class OracleSysConfigData implements SysConfigDataApi {
 
     @Override
     public List<Entity> getConfigs(Connection conn) throws SQLException {
