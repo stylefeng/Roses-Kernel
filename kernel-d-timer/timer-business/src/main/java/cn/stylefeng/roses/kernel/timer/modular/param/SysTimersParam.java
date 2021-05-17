@@ -82,6 +82,11 @@ public class SysTimersParam extends BaseRequest {
     private String remark;
 
     /**
+     * 是否删除标记
+     */
+    private String delFlag;
+
+    /**
      * 启用定时任务
      */
     public @interface startTimer {

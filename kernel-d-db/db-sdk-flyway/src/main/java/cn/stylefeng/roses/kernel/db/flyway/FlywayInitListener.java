@@ -47,7 +47,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Slf4j
 public class FlywayInitListener extends ContextInitializedListener implements Ordered {
 
-    private static final String FLYWAY_LOCATIONS = "classpath:db/migration";
+    private static final String FLYWAY_LOCATIONS = "classpath:db/migration/mysql";
 
     @Override
     public void eventCallback(ApplicationContextInitializedEvent event) {
@@ -55,10 +55,10 @@ public class FlywayInitListener extends ContextInitializedListener implements Or
         ConfigurableEnvironment environment = event.getApplicationContext().getEnvironment();
 
         // 获取数据库连接配置
+        String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
         String dataSourceUrl = environment.getProperty("spring.datasource.url");
         String dataSourceUsername = environment.getProperty("spring.datasource.username");
         String dataSourcePassword = environment.getProperty("spring.datasource.password");
-        String driverClassName = environment.getProperty("spring.datasource.driver-class-name");
 
         // flyway的配置
         String enabledStr = environment.getProperty("spring.flyway.enabled");

@@ -42,16 +42,16 @@ public class DropDatabaseSql extends AbstractSql {
 
     @Override
     protected String sqlServer() {
-        return "";
+        return "DROP DATABASE ?;";
     }
 
     @Override
     protected String pgSql() {
-        return "";
+        return "DROP DATABASE ?;";
     }
 
     @Override
     protected String oracle() {
-        return "";
+        return "DROP DATASPACE ?;";
     }
 }
