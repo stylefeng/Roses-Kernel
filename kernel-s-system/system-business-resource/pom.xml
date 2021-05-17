@@ -32,6 +32,21 @@
             <version>7.0.4</version>
         </dependency>
 
+        <!--缓存api-->
+        <!--缓存资源扫描的资源-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>cache-sdk-memory</artifactId>
+            <version>7.0.4</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>cache-sdk-redis</artifactId>
+            <version>7.0.4</version>
+            <optional>true</optional>
+        </dependency>
+
         <!--参数校验模块-->
         <!--用在控制器，参数校验-->
         <dependency>

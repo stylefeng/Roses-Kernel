@@ -22,39 +22,40 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.scanner.api.constants;
+package cn.stylefeng.roses.kernel.system.starter;
+
+import cn.hutool.cache.CacheUtil;
+import cn.hutool.cache.impl.TimedCache;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
+import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
+import cn.stylefeng.roses.kernel.system.modular.resource.cache.MemoryResourceCache;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Map;
 
 /**
- * 资源扫描模块的常量
+ * 资源缓存自动配置
  *
  * @author fengshuonan
- * @date 2020/11/3 13:50
+ * @date 2021/5/17 16:44
  */
-public interface ScannerConstants {
+@Configuration
+public class GunsResourceCacheAutoConfiguration {
 
     /**
-     * 资源模块的名称
+     * 资源缓存
+     *
+     * @author fengshuonan
+     * @date 2021/5/17 16:44
      */
-    String RESOURCE_MODULE_NAME = "kernel-d-scanner";
-
-    /**
-     * 异常枚举的步进值
-     */
-    String RESOURCE_EXCEPTION_STEP_CODE = "17";
-
-    /**
-     * 资源前缀标识
-     */
-    String RESOURCE_CACHE_KEY = "GUNS_RESOURCE_CACHES:";
-
-    /**
-     * 资源汇报的监听器的顺序
-     */
-    Integer REPORT_RESOURCE_LISTENER_SORT = 200;
-
-    /**
-     * 视图类型的控制器url路径开头
-     */
-    String VIEW_CONTROLLER_PATH_START_WITH = "/view";
+    @Bean
+    @ConditionalOnMissingBean(name = "resourceCache")
+    public CacheOperatorApi<Map<String, ResourceDefinition>> resourceCache() {
+        TimedCache<String, Map<String, ResourceDefinition>> timedCache = CacheUtil.newTimedCache(CacheConstants.NONE_EXPIRED_TIME);
+        return new MemoryResourceCache(timedCache);
+    }
 
 }

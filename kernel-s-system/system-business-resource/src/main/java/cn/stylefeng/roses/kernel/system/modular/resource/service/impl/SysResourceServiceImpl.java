@@ -28,6 +28,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -44,7 +45,6 @@ import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.LayuiApiResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleResourceDTO;
-import cn.stylefeng.roses.kernel.system.modular.resource.cache.ResourceCache;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.factory.ResourceFactory;
 import cn.stylefeng.roses.kernel.system.modular.resource.mapper.SysResourceMapper;
@@ -77,10 +77,10 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     private SysResourceMapper resourceMapper;
 
     @Resource
-    private ResourceCache resourceCache;
-
-    @Resource
     private RoleServiceApi roleServiceApi;
+
+    @Resource(name = "resourceCache")
+    private CacheOperatorApi<Map<String, ResourceDefinition>> resourceCache;
 
     @Override
     public PageResult<SysResource> findPage(ResourceRequest resourceRequest) {
@@ -252,9 +252,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
         //获取当前应用的所有资源
         ArrayList<SysResource> allResources = new ArrayList<>();
+        ArrayList<ResourceDefinition> resourceDefinitionArrayList = new ArrayList<>();
         for (Map.Entry<String, Map<String, ResourceDefinition>> appModularResources : resourceDefinitions.entrySet()) {
             Map<String, ResourceDefinition> value = appModularResources.getValue();
             for (Map.Entry<String, ResourceDefinition> modularResources : value.entrySet()) {
+                resourceDefinitionArrayList.add(modularResources.getValue());
                 SysResource resource = ResourceFactory.createResource(modularResources.getValue());
                 allResources.add(resource);
             }
@@ -264,7 +266,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         this.saveBatch(allResources, allResources.size());
 
         //将资源存入缓存一份
-        resourceCache.saveResourcesToCache(allResources);
+        Map<String, ResourceDefinition> resourceDefinitionMap = ResourceFactory.orderedResourceDefinition(resourceDefinitionArrayList);
+        resourceCache.put(projectCode, resourceDefinitionMap);
     }
 
     @Override

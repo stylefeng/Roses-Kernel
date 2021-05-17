@@ -24,50 +24,35 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.resource.cache;
 
+import cn.hutool.cache.impl.TimedCache;
+import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
-import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
-import cn.stylefeng.roses.kernel.system.modular.resource.factory.ResourceFactory;
-import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+
 
 /**
- * 资源缓存
+ * 基于内存的资源缓存
  *
  * @author fengshuonan
- * @date 2019-09-10-17:29
+ * @date 2021/5/17 16:05
  */
-@Component
-public class ResourceCache {
-
-    private final List<ResourceDefinition> resourceDefinitions = new ArrayList<>();
+public class MemoryResourceCache extends AbstractMemoryCacheOperator<Map<String, ResourceDefinition>> {
 
     /**
-     * 保存资源存储到缓存
+     * TimedCache的key是appCode，value的key是资源url，value是ResourceDefinition
      *
      * @author fengshuonan
-     * @date 2020/11/24 20:06
+     * @date 2021/5/17 16:06
      */
-    public void saveResourcesToCache(List<SysResource> sysResources) {
-        if (sysResources == null || sysResources.size() == 0) {
-            return;
-        }
-
-        for (SysResource sysResource : sysResources) {
-            ResourceDefinition resourceDefinition = ResourceFactory.createResourceDefinition(sysResource);
-            resourceDefinitions.add(resourceDefinition);
-        }
+    public MemoryResourceCache(TimedCache<String, Map<String, ResourceDefinition>> timedCache) {
+        super(timedCache);
     }
 
-    /**
-     * 获取缓存的所有资源
-     *
-     * @author fengshuonan
-     * @date 2020/12/9 14:22
-     */
-    public List<ResourceDefinition> getAllCaches() {
-        return resourceDefinitions;
+    @Override
+    public String getCommonKeyPrefix() {
+        return ScannerConstants.RESOURCE_CACHE_KEY;
     }
 
 }

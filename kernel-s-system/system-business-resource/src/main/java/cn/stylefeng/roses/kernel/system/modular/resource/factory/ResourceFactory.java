@@ -36,6 +36,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -189,6 +191,28 @@ public class ResourceFactory {
             }
         }
         return fieldMetadataSet;
+    }
+
+    /**
+     * 将资源的集合整理成一个map，key是url，value是ResourceDefinition
+     *
+     * @author fengshuonan
+     * @date 2021/5/17 16:21
+     */
+    public static Map<String, ResourceDefinition> orderedResourceDefinition(List<ResourceDefinition> sysResourceList) {
+
+        HashMap<String, ResourceDefinition> result = new HashMap<>();
+
+        if (ObjectUtil.isEmpty(sysResourceList)) {
+            return result;
+        }
+
+        for (ResourceDefinition sysResource : sysResourceList) {
+            String url = sysResource.getUrl();
+            result.put(url,sysResource);
+        }
+
+        return result;
     }
 
 }
