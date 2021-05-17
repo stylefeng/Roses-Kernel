@@ -27,12 +27,12 @@ package cn.stylefeng.roses.kernel.cache.redis.starter;
 import cn.stylefeng.roses.kernel.cache.redis.operator.DefaultRedisCacheOperator;
 import cn.stylefeng.roses.kernel.cache.redis.operator.DefaultStringRedisCacheOperator;
 import cn.stylefeng.roses.kernel.cache.redis.serializer.FastJson2JsonRedisSerializer;
+import cn.stylefeng.roses.kernel.cache.redis.util.CreateRedisTemplateUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * 基于redis缓存的默认配置，默认提供两个RedisTemplate工具类，其他的各个模块自行配置
@@ -62,14 +62,7 @@ public class GunsRedisCacheAutoConfiguration {
      */
     @Bean
     public RedisTemplate<String, Object> objectRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(redisConnectionFactory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(fastJson2JsonRedisSerializer());
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(fastJson2JsonRedisSerializer());
-        template.afterPropertiesSet();
-        return template;
+        return CreateRedisTemplateUtil.createObject(redisConnectionFactory);
     }
 
     /**
@@ -80,14 +73,8 @@ public class GunsRedisCacheAutoConfiguration {
      */
     @Bean
     public RedisTemplate<String, String> gunsStringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(redisConnectionFactory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(new StringRedisSerializer());
-        template.afterPropertiesSet();
-        return template;
+        return CreateRedisTemplateUtil.createString(redisConnectionFactory);
+
     }
 
     /**
