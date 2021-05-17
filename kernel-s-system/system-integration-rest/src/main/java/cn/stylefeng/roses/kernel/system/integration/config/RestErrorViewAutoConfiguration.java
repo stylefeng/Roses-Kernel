@@ -1,6 +1,8 @@
 package cn.stylefeng.roses.kernel.system.integration.config;
 
 import cn.stylefeng.roses.kernel.system.integration.ErrorStaticJsonView;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2021/5/17 11:16
  */
 @Configuration
+@AutoConfigureBefore(ErrorMvcAutoConfiguration.class)
 public class RestErrorViewAutoConfiguration {
 
     /**
