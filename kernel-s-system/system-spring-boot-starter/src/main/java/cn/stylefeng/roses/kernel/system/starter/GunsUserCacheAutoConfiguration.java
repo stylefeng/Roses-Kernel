@@ -44,7 +44,7 @@ import org.springframework.context.annotation.Configuration;
 public class GunsUserCacheAutoConfiguration {
 
     /**
-     * 用户的缓存
+     * 用户的缓存，非在线用户缓存，此缓存为了加快查看用户相关操作
      *
      * @author fengshuonan
      * @date 2021/2/28 10:30
