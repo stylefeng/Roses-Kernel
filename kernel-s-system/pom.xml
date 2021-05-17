@@ -24,6 +24,8 @@
         <module>system-business-role</module>
         <module>system-business-menu</module>
         <module>system-business-notice</module>
+        <module>system-integration-beetl</module>
+        <module>system-integration-rest</module>
         <module>system-spring-boot-starter</module>
     </modules>
 

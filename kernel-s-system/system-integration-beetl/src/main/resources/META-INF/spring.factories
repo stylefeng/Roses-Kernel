@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.stylefeng.roses.kernel.system.integration.config.BeetlErrorViewAutoConfiguration,\
+  cn.stylefeng.roses.kernel.system.integration.config.BeetlAutoConfiguration

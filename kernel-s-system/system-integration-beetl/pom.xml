@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.stylefeng.roses</groupId>
+        <artifactId>kernel-s-system</artifactId>
+        <version>7.0.4</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>system-integration-beetl</artifactId>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!-- 系统管理自动配置 -->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-spring-boot-starter</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!-- 字典管理模块 -->
+        <!-- beetl的Tag有用到字典相关实体 -->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>dict-spring-boot-starter</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!-- 多语言翻译 -->
+        <!-- CustomBeetlGroupUtilConfiguration用到快速翻译工具 -->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>i18n-spring-boot-starter</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--硬件信息获取-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>monitor-spring-boot-starter</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--多数据源配置-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>ds-container-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!-- beet模板引擎 -->
+        <dependency>
+            <groupId>com.ibeetl</groupId>
+            <artifactId>beetl</artifactId>
+            <version>${beetl.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

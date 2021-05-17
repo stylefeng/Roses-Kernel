@@ -129,6 +129,7 @@
         <easy.captcha>1.6.2</easy.captcha>
         <groovy.version>3.0.7</groovy.version>
         <oshi.version>5.7.1</oshi.version>
+        <beetl.version>3.3.2.RELEASE</beetl.version>
     </properties>
 
     <dependencyManagement>
