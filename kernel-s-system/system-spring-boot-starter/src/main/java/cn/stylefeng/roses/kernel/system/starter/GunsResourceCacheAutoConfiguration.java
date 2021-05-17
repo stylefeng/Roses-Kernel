@@ -34,8 +34,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Map;
-
 /**
  * 资源缓存自动配置
  *
@@ -53,8 +51,8 @@ public class GunsResourceCacheAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(name = "resourceCache")
-    public CacheOperatorApi<Map<String, ResourceDefinition>> resourceCache() {
-        TimedCache<String, Map<String, ResourceDefinition>> timedCache = CacheUtil.newTimedCache(CacheConstants.NONE_EXPIRED_TIME);
+    public CacheOperatorApi<ResourceDefinition> resourceCache() {
+        TimedCache<String, ResourceDefinition> timedCache = CacheUtil.newTimedCache(CacheConstants.NONE_EXPIRED_TIME);
         return new MemoryResourceCache(timedCache);
     }
 

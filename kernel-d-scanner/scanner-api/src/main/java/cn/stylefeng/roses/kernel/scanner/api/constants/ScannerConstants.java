@@ -45,7 +45,7 @@ public interface ScannerConstants {
     /**
      * 资源前缀标识
      */
-    String RESOURCE_CACHE_KEY = "GUNS_RESOURCE_CACHES:";
+    String RESOURCE_CACHE_KEY = "GUNS_RESOURCE_CACHES";
 
     /**
      * 资源汇报的监听器的顺序

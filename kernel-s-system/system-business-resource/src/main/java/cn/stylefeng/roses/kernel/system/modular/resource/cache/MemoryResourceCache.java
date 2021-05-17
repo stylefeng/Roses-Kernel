@@ -29,8 +29,6 @@ import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
 import cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 
-import java.util.Map;
-
 
 /**
  * 基于内存的资源缓存
@@ -38,15 +36,15 @@ import java.util.Map;
  * @author fengshuonan
  * @date 2021/5/17 16:05
  */
-public class MemoryResourceCache extends AbstractMemoryCacheOperator<Map<String, ResourceDefinition>> {
+public class MemoryResourceCache extends AbstractMemoryCacheOperator<ResourceDefinition> {
 
     /**
-     * TimedCache的key是appCode，value的key是资源url，value是ResourceDefinition
+     * TimedCache的key是资源url，value是ResourceDefinition
      *
      * @author fengshuonan
      * @date 2021/5/17 16:06
      */
-    public MemoryResourceCache(TimedCache<String, Map<String, ResourceDefinition>> timedCache) {
+    public MemoryResourceCache(TimedCache<String, ResourceDefinition> timedCache) {
         super(timedCache);
     }
 

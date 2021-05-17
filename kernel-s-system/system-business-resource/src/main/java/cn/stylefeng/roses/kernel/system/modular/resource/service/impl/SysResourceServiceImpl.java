@@ -80,7 +80,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     private RoleServiceApi roleServiceApi;
 
     @Resource(name = "resourceCache")
-    private CacheOperatorApi<Map<String, ResourceDefinition>> resourceCache;
+    private CacheOperatorApi<ResourceDefinition> resourceCache;
 
     @Override
     public PageResult<SysResource> findPage(ResourceRequest resourceRequest) {
@@ -267,7 +267,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
         //将资源存入缓存一份
         Map<String, ResourceDefinition> resourceDefinitionMap = ResourceFactory.orderedResourceDefinition(resourceDefinitionArrayList);
-        resourceCache.put(projectCode, resourceDefinitionMap);
+        for (Map.Entry<String, ResourceDefinition> entry : resourceDefinitionMap.entrySet()) {
+            resourceCache.put(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override

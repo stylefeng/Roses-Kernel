@@ -24,12 +24,10 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.resource.cache;
 
-import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
+import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisHashCacheOperator;
 import cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import java.util.Map;
 
 
 /**
@@ -38,18 +36,24 @@ import java.util.Map;
  * @author fengshuonan
  * @date 2021/5/17 16:05
  */
-public class RedisResourceCache extends AbstractRedisCacheOperator<Map<String, ResourceDefinition>> {
+public class RedisResourceCache extends AbstractRedisHashCacheOperator<ResourceDefinition> {
 
     /**
-     * RedisTemplate的key是appCode，value的key是资源url，value是ResourceDefinition
+     * RedisTemplate的key是资源url，value是ResourceDefinition
      *
      * @author fengshuonan
      * @date 2021/5/17 16:06
      */
-    public RedisResourceCache(RedisTemplate<String, Map<String, ResourceDefinition>> redisTemplate) {
+    public RedisResourceCache(RedisTemplate<String, ResourceDefinition> redisTemplate) {
         super(redisTemplate);
     }
 
+    /**
+     * hash结构的key
+     *
+     * @author fengshuonan
+     * @date 2021/5/17 17:34
+     */
     @Override
     public String getCommonKeyPrefix() {
         return ScannerConstants.RESOURCE_CACHE_KEY;
