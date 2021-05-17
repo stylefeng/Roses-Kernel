@@ -49,11 +49,11 @@ public class CreateDatabaseSql extends AbstractSql {
 
     @Override
     protected String pgSql() {
-        return "";
+        return "CREATE DATABASE ?;";
     }
 
     @Override
     protected String oracle() {
-        return "";
+        return "create tablespace ? datafile '/opt/oracle/guns.dbf' size 500m autoextend on next 5m maxsize unlimited;";
     }
 }
