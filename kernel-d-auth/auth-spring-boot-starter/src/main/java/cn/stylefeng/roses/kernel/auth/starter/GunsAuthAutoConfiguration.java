@@ -170,6 +170,7 @@ public class GunsAuthAutoConfiguration {
      * @date 2021/3/30 11:32
      */
     @Bean
+    @ConditionalOnMissingBean(ClearInvalidLoginUserCacheTimer.class)
     public ClearInvalidLoginUserCacheTimer clearInvalidLoginUserCacheTimer() {
         return new ClearInvalidLoginUserCacheTimer(loginUserCache(), allPlaceLoginTokenCache());
     }
