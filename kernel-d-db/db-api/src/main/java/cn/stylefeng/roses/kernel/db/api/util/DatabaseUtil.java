@@ -142,6 +142,8 @@ public class DatabaseUtil {
 
     /**
      * 获取数据库名称
+     * <p>
+     * oracle的数据库会直接返回username作为数据库名称，这里需要注意一下，如果用户名不是数据库名则返回不准确
      *
      * @author fengshuonan
      * @date 2021/5/19 10:39
@@ -149,24 +151,17 @@ public class DatabaseUtil {
     private static String getDbName(DruidProperties druidProperties) {
 
         if (druidProperties.getUrl().contains("oracle")) {
-
             // 如果是oracle，直接返回username
             return druidProperties.getUsername();
-
         } else if (druidProperties.getUrl().contains("postgresql")) {
-
             // postgresql，直接返回最后一个/后边的字符
             int first = druidProperties.getUrl().lastIndexOf("/") + 1;
             return druidProperties.getUrl().substring(first);
-
         } else if (druidProperties.getUrl().contains("sqlserver")) {
-
             // sqlserver，直接返回最后一个=后边的字符
             int first = druidProperties.getUrl().lastIndexOf("=") + 1;
             return druidProperties.getUrl().substring(first);
-
         } else {
-
             // mysql，返回/和?之间的字符
             String jdbcUrl = druidProperties.getUrl();
             int first = jdbcUrl.lastIndexOf("/") + 1;
