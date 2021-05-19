@@ -22,12 +22,13 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.dsctn.persist.sqls;
+package cn.stylefeng.roses.kernel.db.api.sqladapter.database;
 
+import cn.stylefeng.roses.kernel.db.api.sqladapter.AbstractSql;
 import lombok.Getter;
 
 /**
- * 创建数据库的sql
+ * 创建数据库的sql，可用在租户的创建
  *
  * @author fengshuonan
  * @date 2019-07-16-13:06

@@ -22,8 +22,9 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.dict.modular.db.init;
+package cn.stylefeng.roses.kernel.dict.modular.init;
 
+import cn.stylefeng.roses.kernel.db.api.sqladapter.AbstractSql;
 import cn.stylefeng.roses.kernel.db.init.actuator.DbInitializer;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDict;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ import org.springframework.stereotype.Component;
  *
  * @author majianguo
  * @date 2020/12/9 上午11:02
- * @see cn.stylefeng.roses.kernel.dsctn.persist.sqls.AbstractSql
+ * @see AbstractSql
  */
 @Component
 public class DictInitializer extends DbInitializer {

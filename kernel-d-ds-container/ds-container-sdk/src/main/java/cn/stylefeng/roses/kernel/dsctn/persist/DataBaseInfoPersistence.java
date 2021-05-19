@@ -28,9 +28,9 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
-import cn.stylefeng.roses.kernel.dsctn.persist.sqls.AddDatabaseInfoSql;
-import cn.stylefeng.roses.kernel.dsctn.persist.sqls.DatabaseListSql;
-import cn.stylefeng.roses.kernel.dsctn.persist.sqls.DeleteDatabaseInfoSql;
+import cn.stylefeng.roses.kernel.dsctn.persist.sqladapter.AddDatabaseInfoSql;
+import cn.stylefeng.roses.kernel.dsctn.persist.sqladapter.DatabaseListSql;
+import cn.stylefeng.roses.kernel.dsctn.persist.sqladapter.DeleteDatabaseInfoSql;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 

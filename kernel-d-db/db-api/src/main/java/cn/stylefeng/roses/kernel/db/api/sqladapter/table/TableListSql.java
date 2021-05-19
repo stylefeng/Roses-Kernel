@@ -22,8 +22,9 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.dsctn.persist.sqls;
+package cn.stylefeng.roses.kernel.db.api.sqladapter.table;
 
+import cn.stylefeng.roses.kernel.db.api.sqladapter.AbstractSql;
 import lombok.Getter;
 
 /**
@@ -73,4 +74,5 @@ public class TableListSql extends AbstractSql {
                 "left join user_tab_comments co on ut.table_name = co.table_name\n" +
                 "where tablespace_name is not null and  user= ?";
     }
+
 }

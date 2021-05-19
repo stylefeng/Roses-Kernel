@@ -22,12 +22,12 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.dsctn.persist.sqls;
+package cn.stylefeng.roses.kernel.db.api.sqladapter;
 
 import cn.stylefeng.roses.kernel.db.api.enums.DbTypeEnum;
 
 /**
- * 异构sql获取
+ * 异构sql获取基类，通过继承此类，编写使用不同数据库的sql
  *
  * @author fengshuonan
  * @date 2020/10/31 23:44

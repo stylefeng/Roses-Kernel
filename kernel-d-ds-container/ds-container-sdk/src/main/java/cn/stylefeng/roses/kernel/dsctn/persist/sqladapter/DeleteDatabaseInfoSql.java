@@ -22,36 +22,37 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.dsctn.persist.sqls;
+package cn.stylefeng.roses.kernel.dsctn.persist.sqladapter;
 
+import cn.stylefeng.roses.kernel.db.api.sqladapter.AbstractSql;
 import lombok.Getter;
 
 /**
- * 数据源列表sql
+ * 删除数据源sql
  *
  * @author fengshuonan
  * @date 2019-07-16-13:06
  */
 @Getter
-public class DatabaseListSql extends AbstractSql {
+public class DeleteDatabaseInfoSql extends AbstractSql {
 
     @Override
     protected String mysql() {
-        return "select db_name, jdbc_driver, jdbc_url, username, password from sys_database_info where del_flag = 'N'";
+        return "DELETE from sys_database_info where db_name = ?";
     }
 
     @Override
     protected String sqlServer() {
-        return "select db_name,jdbc_driver,jdbc_url,username,password from sys_database_info";
+        return "DELETE from sys_database_info where db_name = ?";
     }
 
     @Override
     protected String pgSql() {
-        return "select db_name,jdbc_driver,jdbc_url,username,password from sys_database_info";
+        return "DELETE from sys_database_info where db_name = ?";
     }
 
     @Override
     protected String oracle() {
-        return "select db_name,jdbc_driver,jdbc_url,username,password from sys_database_info";
+        return "DELETE from sys_database_info where db_name = ?";
     }
 }

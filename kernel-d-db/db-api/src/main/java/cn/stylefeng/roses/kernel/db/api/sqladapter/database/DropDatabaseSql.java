@@ -22,12 +22,13 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.dsctn.persist.sqls;
+package cn.stylefeng.roses.kernel.db.api.sqladapter.database;
 
+import cn.stylefeng.roses.kernel.db.api.sqladapter.AbstractSql;
 import lombok.Getter;
 
 /**
- * 删除数据库的sql
+ * 数据库删除，可用在租户的删除
  *
  * @author fengshuonan
  * @date 2020/9/4
@@ -54,4 +55,5 @@ public class DropDatabaseSql extends AbstractSql {
     protected String oracle() {
         return "DROP DATASPACE ?;";
     }
+
 }

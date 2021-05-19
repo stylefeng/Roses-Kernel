@@ -1,5 +1,6 @@
-package cn.stylefeng.roses.kernel.dsctn.persist.sqls;
+package cn.stylefeng.roses.kernel.dsctn.persist.sqladapter;
 
+import cn.stylefeng.roses.kernel.db.api.sqladapter.AbstractSql;
 import lombok.Getter;
 
 /**
