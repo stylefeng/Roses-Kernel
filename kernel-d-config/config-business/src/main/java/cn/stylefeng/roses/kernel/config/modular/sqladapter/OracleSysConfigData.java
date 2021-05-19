@@ -28,7 +28,7 @@ public class OracleSysConfigData implements SysConfigDataApi {
 
     @Override
     public String getConfigListSql() {
-        return "select config_code, config_value from sys_config where status_flag = ? and del_flag = ?";
+        return "select config_code as \"config_code\", config_value as \"config_value\" from sys_config where status_flag = ? and del_flag = ?";
     }
 
 }
