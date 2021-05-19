@@ -3,7 +3,6 @@ package cn.stylefeng.roses.kernel.db.api.util;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.exception.DaoException;
 import cn.stylefeng.roses.kernel.db.api.exception.enums.DatabaseExceptionEnum;
-import cn.stylefeng.roses.kernel.db.api.pojo.db.DatabaseInfoDTO;
 import cn.stylefeng.roses.kernel.db.api.pojo.db.TableFieldInfo;
 import cn.stylefeng.roses.kernel.db.api.pojo.db.TableInfo;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
@@ -34,21 +33,21 @@ public class DatabaseUtil {
      * @author fengshuonan
      * @date 2021/5/19 10:35
      */
-    public static List<TableInfo> selectTables(DatabaseInfoDTO dbInfo) {
+    public static List<TableInfo> selectTables(DruidProperties druidProperties) {
         List<TableInfo> tables = new ArrayList<>();
         try {
-            Class.forName(dbInfo.getJdbcDriver());
+            Class.forName(druidProperties.getDriverClassName());
             Connection conn = DriverManager.getConnection(
-                    dbInfo.getJdbcUrl(), dbInfo.getUsername(), dbInfo.getPassword());
+                    druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
 
             // 获取数据库名称
-            String dbName = getDbName(dbInfo);
+            String dbName = getDbName(druidProperties);
 
             // 构造查询语句
-            PreparedStatement preparedStatement = conn.prepareStatement(new TableListSql().getSql(dbInfo.getJdbcUrl()));
+            PreparedStatement preparedStatement = conn.prepareStatement(new TableListSql().getSql(druidProperties.getUrl()));
 
             // 拼接设置数据库名称
-            if (!dbInfo.getJdbcUrl().contains("sqlserver") && !dbInfo.getJdbcUrl().contains("postgresql")) {
+            if (!druidProperties.getUrl().contains("sqlserver") && !druidProperties.getUrl().contains("postgresql")) {
                 preparedStatement.setString(1, dbName);
             }
 
@@ -73,25 +72,25 @@ public class DatabaseUtil {
      * 查询某个表的所有字段
      *
      * @author fengshuonan
-     * @Date 2019-05-04 20:31
+     * @date 2021/5/19 11:01
      */
-    public static List<TableFieldInfo> getTableFields(DatabaseInfoDTO dbInfo, String tableName) {
+    public static List<TableFieldInfo> getTableFields(DruidProperties druidProperties, String tableName) {
         ArrayList<TableFieldInfo> fieldList = new ArrayList<>();
         try {
-            Class.forName(dbInfo.getJdbcDriver());
+            Class.forName(druidProperties.getDriverClassName());
             Connection conn = DriverManager.getConnection(
-                    dbInfo.getJdbcUrl(), dbInfo.getUsername(), dbInfo.getPassword());
+                    druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
 
-            PreparedStatement preparedStatement = conn.prepareStatement(new TableFieldListSql().getSql(dbInfo.getJdbcUrl()));
+            PreparedStatement preparedStatement = conn.prepareStatement(new TableFieldListSql().getSql(druidProperties.getUrl()));
 
-            if (dbInfo.getJdbcUrl().contains("oracle")) {
+            if (druidProperties.getUrl().contains("oracle")) {
                 preparedStatement.setString(1, tableName);
-            } else if (dbInfo.getJdbcUrl().contains("postgresql")) {
+            } else if (druidProperties.getUrl().contains("postgresql")) {
                 preparedStatement.setString(1, tableName);
-            } else if (dbInfo.getJdbcUrl().contains("sqlserver")) {
+            } else if (druidProperties.getUrl().contains("sqlserver")) {
                 preparedStatement.setString(1, tableName);
             } else {
-                String dbName = getDbName(dbInfo);
+                String dbName = getDbName(druidProperties);
                 preparedStatement.setString(1, tableName);
                 preparedStatement.setString(2, dbName);
             }
@@ -147,32 +146,33 @@ public class DatabaseUtil {
      * @author fengshuonan
      * @date 2021/5/19 10:39
      */
-    private static String getDbName(DatabaseInfoDTO dbInfo) {
+    private static String getDbName(DruidProperties druidProperties) {
 
-        if (dbInfo.getJdbcUrl().contains("oracle")) {
+        if (druidProperties.getUrl().contains("oracle")) {
 
             // 如果是oracle，直接返回username
-            return dbInfo.getUsername();
+            return druidProperties.getUsername();
 
-        } else if (dbInfo.getJdbcUrl().contains("postgresql")) {
+        } else if (druidProperties.getUrl().contains("postgresql")) {
 
             // postgresql，直接返回最后一个/后边的字符
-            int first = dbInfo.getJdbcUrl().lastIndexOf("/") + 1;
-            return dbInfo.getJdbcUrl().substring(first);
+            int first = druidProperties.getUrl().lastIndexOf("/") + 1;
+            return druidProperties.getUrl().substring(first);
 
-        } else if (dbInfo.getJdbcUrl().contains("sqlserver")) {
+        } else if (druidProperties.getUrl().contains("sqlserver")) {
 
             // sqlserver，直接返回最后一个=后边的字符
-            int first = dbInfo.getJdbcUrl().lastIndexOf("=") + 1;
-            return dbInfo.getJdbcUrl().substring(first);
+            int first = druidProperties.getUrl().lastIndexOf("=") + 1;
+            return druidProperties.getUrl().substring(first);
 
         } else {
 
             // mysql，返回/和?之间的字符
-            String jdbcUrl = dbInfo.getJdbcUrl();
+            String jdbcUrl = druidProperties.getUrl();
             int first = jdbcUrl.lastIndexOf("/") + 1;
             int last = jdbcUrl.indexOf("?");
             return jdbcUrl.substring(first, last);
         }
     }
+
 }

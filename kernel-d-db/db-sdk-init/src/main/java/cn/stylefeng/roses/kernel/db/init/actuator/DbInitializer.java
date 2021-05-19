@@ -29,6 +29,10 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.exception.enums.DbInitEnum;
+import cn.stylefeng.roses.kernel.db.api.pojo.db.TableFieldInfo;
+import cn.stylefeng.roses.kernel.db.api.pojo.db.TableInfo;
+import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
+import cn.stylefeng.roses.kernel.db.api.util.DatabaseUtil;
 import cn.stylefeng.roses.kernel.db.init.util.SqlExe;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import com.alibaba.fastjson.JSON;
@@ -36,10 +40,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -66,6 +70,9 @@ public abstract class DbInitializer {
         this.fieldValidatorExceptionFlag = fieldValidatorExceptionFlag;
     }
 
+    @Resource
+    private DruidProperties druidProperties;
+
     /**
      * 初始化数据库
      *
@@ -89,7 +96,7 @@ public abstract class DbInitializer {
      */
     private void initTable() {
 
-        //校验参数
+        // 校验参数
         String tableName = this.getTableName();
         String tableInitSql = this.getTableInitSql();
         if (ObjectUtil.isEmpty(tableName) || ObjectUtil.isEmpty(tableInitSql)) {
@@ -98,16 +105,17 @@ public abstract class DbInitializer {
             }
         }
 
-        //列出数据库中所有的表
-        List<Map<String, Object>> tables = SqlExe.selectList("SHOW TABLES");
+        // 列出数据库中所有的表
+        List<TableInfo> tableInfos = DatabaseUtil.selectTables(druidProperties);
         boolean haveSmsTableFlag = false;
-        for (Map<String, Object> tableInfo : tables) {
-            if (tableInfo.containsValue(tableName.toUpperCase()) || tableInfo.containsValue(tableName.toLowerCase())) {
+        for (TableInfo tableInfo : tableInfos) {
+            if (tableInfo.getTableName().equalsIgnoreCase(tableName)) {
                 haveSmsTableFlag = true;
+                break;
             }
         }
 
-        //判断数据库中是否有这张表，如果没有就初始化
+        // 判断数据库中是否有这张表，如果没有就初始化
         if (!haveSmsTableFlag) {
             SqlExe.update(tableInitSql);
             log.info("初始化" + getTableName() + "成功！");
@@ -123,16 +131,8 @@ public abstract class DbInitializer {
      */
     private void fieldsValidate() {
 
-        //校验参数
-        String sql = this.showColumnsSql();
-        if (ObjectUtil.isEmpty(sql)) {
-            if (fieldValidatorExceptionFlag) {
-                throw new ServiceException(DbInitEnum.INIT_TABLE_EMPTY_PARAMS);
-            }
-        }
-
         //检查数据库中的字段，是否和实体字段一致
-        List<Map<String, Object>> tableFields = SqlExe.selectList(sql);
+        List<TableFieldInfo> tableFields = DatabaseUtil.getTableFields(druidProperties, getTableName());
         if (tableFields != null && !tableFields.isEmpty()) {
 
             //用于保存实体中不存在的字段的名称集合
@@ -140,11 +140,8 @@ public abstract class DbInitializer {
 
             //反射获取字段的所有字段名称
             List<String> classFields = this.getClassFields();
-            for (Map<String, Object> tableField : tableFields) {
-                String fieldName = (String) tableField.get("COLUMN_NAME");
-                if (fieldName == null) {
-                    fieldName = (String) tableField.get("Field");
-                }
+            for (TableFieldInfo tableField : tableFields) {
+                String fieldName = tableField.getColumnName();
                 if (!classFields.contains(fieldName.toLowerCase())) {
                     fieldsNotInClass.add(fieldName);
                 }
@@ -183,16 +180,6 @@ public abstract class DbInitializer {
         }
 
         return filedNamesUnderlineCase;
-    }
-
-    /**
-     * 获取表的字段
-     *
-     * @author stylefeng
-     * @date 2018/7/29 22:49
-     */
-    private String showColumnsSql() {
-        return "SHOW COLUMNS FROM " + this.getTableName();
     }
 
     /**
