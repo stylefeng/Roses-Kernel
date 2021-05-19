@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.config.modular.data;
+package cn.stylefeng.roses.kernel.config.modular.sqladapter;
 
 import cn.hutool.db.Entity;
 import cn.hutool.db.handler.EntityListHandler;

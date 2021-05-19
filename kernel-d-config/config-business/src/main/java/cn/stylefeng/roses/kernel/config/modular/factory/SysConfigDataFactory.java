@@ -1,10 +1,10 @@
 package cn.stylefeng.roses.kernel.config.modular.factory;
 
 import cn.stylefeng.roses.kernel.config.api.SysConfigDataApi;
-import cn.stylefeng.roses.kernel.config.modular.data.MssqlSysConfigData;
-import cn.stylefeng.roses.kernel.config.modular.data.MysqlSysConfigData;
-import cn.stylefeng.roses.kernel.config.modular.data.OracleSysConfigData;
-import cn.stylefeng.roses.kernel.config.modular.data.PgsqlSysConfigData;
+import cn.stylefeng.roses.kernel.config.modular.sqladapter.MssqlSysConfigData;
+import cn.stylefeng.roses.kernel.config.modular.sqladapter.MysqlSysConfigData;
+import cn.stylefeng.roses.kernel.config.modular.sqladapter.OracleSysConfigData;
+import cn.stylefeng.roses.kernel.config.modular.sqladapter.PgsqlSysConfigData;
 import cn.stylefeng.roses.kernel.rule.enums.DbTypeEnum;
 import cn.stylefeng.roses.kernel.rule.util.DatabaseTypeUtil;
 

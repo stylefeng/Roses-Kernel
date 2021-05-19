@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.config.modular.data;
+package cn.stylefeng.roses.kernel.config.modular.sqladapter;
 
 import cn.hutool.db.Entity;
 import cn.hutool.db.handler.EntityListHandler;
@@ -13,13 +13,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Pgsql数据库的系统配置表获取
+ * Mysql数据库的系统配置表获取
  *
- * @author AndrewFeng
- * @date 2021/5/14 21:18
+ * @author fengshuonan
+ * @date 2021/3/27 21:18
  */
 @Slf4j
-public class PgsqlSysConfigData implements SysConfigDataApi {
+public class MysqlSysConfigData implements SysConfigDataApi {
 
     @Override
     public List<Entity> getConfigs(Connection conn) throws SQLException {
