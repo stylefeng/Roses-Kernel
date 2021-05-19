@@ -74,14 +74,10 @@ public abstract class DbInitializer {
      */
     public void dbInit() {
 
-        /**
-         * 初始化表
-         */
+        // 初始化表
         initTable();
 
-        /**
-         * 校验实体和对应表结构是否有不一致的
-         */
+        // 校验实体和对应表结构是否有不一致的
         fieldsValidate();
     }
 
