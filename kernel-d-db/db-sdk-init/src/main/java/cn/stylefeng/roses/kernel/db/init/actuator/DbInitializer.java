@@ -71,6 +71,7 @@ public abstract class DbInitializer {
     }
 
     @Resource
+    @Getter
     private DruidProperties druidProperties;
 
     /**

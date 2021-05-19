@@ -2,5 +2,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   cn.stylefeng.roses.kernel.db.starter.GunsDataSourceAutoConfiguration,\
   cn.stylefeng.roses.kernel.db.starter.GunsDruidPropertiesAutoConfiguration,\
   cn.stylefeng.roses.kernel.db.starter.GunsMyBatisPlusAutoConfiguration,\
-  cn.stylefeng.roses.kernel.db.starter.GunsDbInitListenerAutoConfiguration,\
   cn.stylefeng.roses.kernel.db.starter.GunsDruidMonitorAutoConfiguration
