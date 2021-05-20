@@ -83,7 +83,12 @@ public enum ValidatorExceptionEnum implements AbstractExceptionEnum {
     /**
      * 验证码错误
      */
-    CAPTCHA_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "09", "验证码错误");
+    CAPTCHA_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "09", "验证码错误"),
+
+    /**
+     * 数据库唯一性校验错误，sql执行错误
+     */
+    UNIQUE_VALIDATE_SQL_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + ValidatorConstants.VALIDATOR_EXCEPTION_STEP_CODE + "10", "数据库唯一性校验错误，sql执行错误，具体信息：{}");
 
     /**
      * 错误编码

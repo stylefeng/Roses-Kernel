@@ -46,7 +46,14 @@ public class TableUniqueValueService {
      * @date 2020/11/4 15:08
      */
     public static boolean getFiledUniqueFlag(UniqueValidateParam uniqueValidateParam) {
+        try {
+            return doValidate(uniqueValidateParam);
+        } catch (Exception exception) {
+            throw new ParamValidateException(ValidatorExceptionEnum.UNIQUE_VALIDATE_SQL_ERROR, exception.getMessage());
+        }
+    }
 
+    private static boolean doValidate(UniqueValidateParam uniqueValidateParam) {
         DbOperatorApi dbOperatorApi = DbOperatorContext.me();
 
         int resultCount = 0;
@@ -65,7 +72,7 @@ public class TableUniqueValueService {
         // 不排除当前记录，排除逻辑删除的内容
         if (!uniqueValidateParam.getExcludeCurrentRecord()
                 && uniqueValidateParam.getExcludeLogicDeleteItems()) {
-            String sqlTemplate = "select count(*) from {} where {} = {0}  and ({} is null || {} <> '{}')";
+            String sqlTemplate = "select count(*) from {} where {} = {0}  and ({} is null or {} <> '{}')";
             String finalSql = StrUtil.format(sqlTemplate,
                     uniqueValidateParam.getTableName(),
                     uniqueValidateParam.getColumnName(),
@@ -94,7 +101,7 @@ public class TableUniqueValueService {
             // id判空
             paramIdValidate(uniqueValidateParam);
 
-            String sqlTemplate = "select count(*) from {} where {} = {0} and {} <> {1} and ({} is null || {} <> '{}')";
+            String sqlTemplate = "select count(*) from {} where {} = {0} and {} <> {1} and ({} is null or {} <> '{}')";
             String finalSql = StrUtil.format(sqlTemplate,
                     uniqueValidateParam.getTableName(),
                     uniqueValidateParam.getColumnName(),
@@ -107,9 +114,8 @@ public class TableUniqueValueService {
 
         // 如果大于0，代表不是唯一的当前校验的值
         return resultCount <= 0;
-
-
     }
+
 
     /**
      * 几个参数的为空校验
