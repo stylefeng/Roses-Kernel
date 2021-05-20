@@ -252,20 +252,6 @@ public class SysFileInfoController {
     }
 
     /**
-     * 确认替换附件
-     * <p>
-     * 在替换接口替换文件以后，需要调用本接口替换操作才会生效
-     *
-     * @author majianguo
-     * @date 2020/12/27 13:18
-     */
-    @PostResource(name = "确认替换附件", path = "/sysFileInfo/confirmReplaceFile", requiredPermission = false)
-    public ResponseData confirmReplaceFile(@RequestBody List<Long> fileIdList) {
-        this.sysFileInfoService.confirmReplaceFile(fileIdList);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 查看详情文件信息表
      *
      * @author fengshuonan

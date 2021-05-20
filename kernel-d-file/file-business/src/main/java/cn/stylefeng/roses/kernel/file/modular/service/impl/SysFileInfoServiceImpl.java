@@ -296,26 +296,6 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void confirmReplaceFile(List<Long> fileIdList) {
-
-        // 获取所有附件信息的code集合
-        if (fileIdList == null || fileIdList.size() == 0) {
-            throw new FileException(FileExceptionEnum.FILE_IDS_EMPTY);
-        }
-        List<Long> fileCodeList = this.baseMapper.getFileCodeByFileIds(fileIdList);
-        if (fileCodeList == null || fileCodeList.size() == 0) {
-            return;
-        }
-
-        // 修改该codes下所有附件删除状态为Y
-        this.baseMapper.updateDelFlagByFileCodes(fileCodeList, YesOrNotEnum.Y.getCode());
-
-        // 修改当前fileIds下所有附件删除状态为N
-        this.baseMapper.updateDelFlagByFileIds(fileIdList, YesOrNotEnum.N.getCode());
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
     public SysFileInfoResponse versionBack(SysFileInfoRequest sysFileInfoRequest) {
 
         LambdaQueryWrapper<SysFileInfo> queryWrapper = new LambdaQueryWrapper<>();

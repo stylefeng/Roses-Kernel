@@ -132,15 +132,6 @@ public interface SysFileInfoService extends IService<SysFileInfo> {
     void preview(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response);
 
     /**
-     * 替换附件回调
-     *
-     * @param fileIdList 文件id列表
-     * @author majianguo
-     * @date 2020/12/27 12:52
-     */
-    void confirmReplaceFile(List<Long> fileIdList);
-
-    /**
      * 版本回退
      *
      * @author majianguo

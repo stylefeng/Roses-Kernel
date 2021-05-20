@@ -51,33 +51,4 @@ public interface SysFileInfoMapper extends BaseMapper<SysFileInfo> {
      */
     List<SysFileInfoListResponse> fileInfoList(@Param("page") Page<SysFileInfoListResponse> page, @Param("sysFileInfoRequest") SysFileInfoRequest sysFileInfoRequest);
 
-    /**
-     * 获取所有附件信息的code集合
-     *
-     * @param fileIdList 文件ID列表
-     * @author majianguo
-     * @date 2020/12/27 12:57
-     */
-    List<Long> getFileCodeByFileIds(@Param("fileIdList") List<Long> fileIdList);
-
-    /**
-     * 修改fielCodes下所有附件状态
-     *
-     * @param fileCodeList 文件CODE列表
-     * @param delFlag      是否删除
-     * @author majianguo
-     * @date 2020/12/27 12:56
-     */
-    void updateDelFlagByFileCodes(@Param("fileCodeList") List<Long> fileCodeList, @Param("delFlag") String delFlag);
-
-    /**
-     * 修改fileIds下所有附件状态
-     *
-     * @param fileIdList 文件ID列表
-     * @param delFlag    是否删除
-     * @author majianguo
-     * @date 2020/12/27 12:56
-     */
-    void updateDelFlagByFileIds(@Param("fileIdList") List<Long> fileIdList, @Param("delFlag") String delFlag);
-
 }
