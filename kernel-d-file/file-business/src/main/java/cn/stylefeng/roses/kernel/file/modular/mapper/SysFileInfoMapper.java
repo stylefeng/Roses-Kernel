@@ -26,7 +26,6 @@ package cn.stylefeng.roses.kernel.file.modular.mapper;
 
 import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
 import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse;
-import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -43,15 +42,6 @@ import java.util.List;
  * @date 2020/6/7 22:15
  */
 public interface SysFileInfoMapper extends BaseMapper<SysFileInfo> {
-
-    /**
-     * 根据附件IDS查询附件信息
-     *
-     * @param fileIdList 文件ID列表
-     * @author majianguo
-     * @date 2020/12/27 12:57
-     */
-    List<SysFileInfoResponse> getFileInfoListByFileIds(@Param("fileIdList") List<Long> fileIdList);
 
     /**
      * 附件列表（有分页）

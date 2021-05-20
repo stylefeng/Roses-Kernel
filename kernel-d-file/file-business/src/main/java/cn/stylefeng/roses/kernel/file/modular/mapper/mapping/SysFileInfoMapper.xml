@@ -2,53 +2,66 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.file.modular.mapper.SysFileInfoMapper">
 
-    <!--  根据附件IDS查询附件信息  -->
-    <select id="getFileInfoListByFileIds"
-            resultType="cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse">
-        SELECT file.file_id          AS fileId,
-               file.file_code        AS fileCode,
-               file.file_version     AS fileVersion,
-               file.file_status      AS fileStatus,
-               file.file_origin_name AS fileOriginName,
-               file.file_suffix      AS fileSuffix,
-               file.file_size_kb     AS fileSizeKb,
-               file.file_size_info   AS fileSizeInfo,
-               file.secret_flag      AS secretFlag,
-               file.file_object_name AS fileObjectName,
-               file.create_time      AS createTime
-        FROM sys_file_info file
-        WHERE file.del_flag = "N"
-        AND file.file_id IN
-        <foreach collection="fileIdList" separator="," open="(" close=")" item="fileId">
-            #{fileId}
-        </foreach>
-    </select>
-
-    <!--  附件列表  -->
-    <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse">
+    <!--文件列表sql-->
+    <sql id="file_list_mysql">
         SELECT file.file_id        AS fileId,
             file.file_code         AS fileCode,
             file.secret_flag       AS secretFlag,
             file.file_bucket       AS fileBucket,
-            file.file_object_name AS fileObjectName,
+            file.file_object_name  AS fileObjectName,
             file.file_location     AS fileLocation,
             file.file_origin_name  AS fileOriginName,
             file.file_suffix       AS fileSuffix,
             file.file_size_info    AS fileSizeInfo,
             file.file_version      AS fileVersion,
-            user.real_name   AS createUserName,
+            user.real_name         AS createUserName,
             file.create_time       AS createTime,
             file.del_flag          AS delFlag
         FROM sys_file_info file
         LEFT JOIN sys_user user ON user.user_id = file.create_user
         <where>
             <if test="sysFileInfoRequest.fileOriginName != null and sysFileInfoRequest.fileOriginName != '' ">
-                AND file.file_origin_name LIKE CONCAT('%',#{sysFileInfoRequest.fileOriginName},'%')
+                AND file.file_origin_name LIKE CONCAT('%', #{sysFileInfoRequest.fileOriginName}, '%')
             </if>
             <if test="sysFileInfoRequest.fileLocation != null and sysFileInfoRequest.fileLocation != '' ">
                 AND file.file_location = #{sysFileInfoRequest.fileLocation}
             </if>
         </where>
+    </sql>
+
+    <!--文件列表sql oracle版本-->
+    <sql id="file_list_oracle">
+        SELECT fileinfo.file_id        AS fileId,
+            fileinfo.file_code         AS fileCode,
+            fileinfo.secret_flag       AS secretFlag,
+            fileinfo.file_bucket       AS fileBucket,
+            fileinfo.file_object_name  AS fileObjectName,
+            fileinfo.file_location     AS fileLocation,
+            fileinfo.file_origin_name  AS fileOriginName,
+            fileinfo.file_suffix       AS fileSuffix,
+            fileinfo.file_size_info    AS fileSizeInfo,
+            fileinfo.file_version      AS fileVersion,
+            suser.real_name            AS createUserName,
+            fileinfo.create_time       AS createTime,
+            fileinfo.del_flag          AS delFlag
+        FROM sys_file_info fileinfo
+        LEFT JOIN sys_user suser ON suser.user_id = fileinfo.create_user
+        <where>
+            <if test="sysFileInfoRequest.fileOriginName != null and sysFileInfoRequest.fileOriginName != '' ">
+                AND fileinfo.file_origin_name like '%' || #{sysFileInfoRequest.fileOriginName} || '%'
+            </if>
+            <if test="sysFileInfoRequest.fileLocation != null and sysFileInfoRequest.fileLocation != '' ">
+                AND fileinfo.file_location = #{sysFileInfoRequest.fileLocation}
+            </if>
+        </where>
+    </sql>
+
+    <!--  附件列表 mysql版本 -->
+    <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse">
+        <include refid="file_list_mysql"></include>
+    </select>
+    <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse" databaseId="oracle">
+        <include refid="file_list_oracle"></include>
     </select>
 
     <!--  获取所有附件信息的code集合  -->

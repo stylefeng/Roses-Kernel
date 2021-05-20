@@ -208,7 +208,11 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     public PageResult<SysFileInfoListResponse> fileInfoListPage(SysFileInfoRequest sysFileInfoRequest) {
         Page<SysFileInfoListResponse> page = PageFactory.defaultPage();
         List<SysFileInfoListResponse> list = this.baseMapper.fileInfoList(page, sysFileInfoRequest);
-        return PageResultFactory.createPageResult(page.setRecords(list));
+
+        // 排除defaultAvatar.png这个图片,这个是默认头像
+        List<SysFileInfoListResponse> newList = list.stream().filter(i -> !i.getFileOriginName().equals("defaultAvatar.png")).collect(Collectors.toList());
+
+        return PageResultFactory.createPageResult(page.setRecords(newList));
     }
 
     @Override
@@ -216,7 +220,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
         // 获取文件信息
         List<Long> fileIdList = Arrays.stream(fileIds.split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-        List<SysFileInfoResponse> fileInfoResponseList = this.baseMapper.getFileInfoListByFileIds(fileIdList);
+        List<SysFileInfoResponse> fileInfoResponseList = this.getFileInfoListByFileIds(fileIdList);
 
         // 输出流等信息
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -260,7 +264,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     @Override
     public List<SysFileInfoResponse> getFileInfoListByFileIds(String fileIds) {
         List<Long> fileIdList = Arrays.stream(fileIds.split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-        return this.baseMapper.getFileInfoListByFileIds(fileIdList);
+        return this.getFileInfoListByFileIds(fileIdList);
     }
 
     @Override
@@ -365,6 +369,20 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     @Override
     public SysFileInfo detail(SysFileInfoRequest sysFileInfoRequest) {
         return this.querySysFileInfo(sysFileInfoRequest);
+    }
+
+    @Override
+    public List<SysFileInfoResponse> getFileInfoListByFileIds(List<Long> fileIdList) {
+        LambdaQueryWrapper<SysFileInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(SysFileInfo::getFileId, fileIdList);
+        List<SysFileInfo> list = this.list(wrapper);
+
+        // bean转化
+        return list.stream().map(i -> {
+            SysFileInfoResponse sysFileInfoResponse = new SysFileInfoResponse();
+            BeanUtil.copyProperties(i, sysFileInfoResponse);
+            return sysFileInfoResponse;
+        }).collect(Collectors.toList());
     }
 
     @Override

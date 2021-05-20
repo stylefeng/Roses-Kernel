@@ -168,4 +168,13 @@ public interface SysFileInfoService extends IService<SysFileInfo> {
      */
     SysFileInfo detail(SysFileInfoRequest sysFileInfoRequest);
 
+    /**
+     * 根据附件IDS查询附件信息
+     *
+     * @param fileIdList 文件ID列表
+     * @author majianguo
+     * @date 2020/12/27 12:57
+     */
+    List<SysFileInfoResponse> getFileInfoListByFileIds(List<Long> fileIdList);
+
 }
