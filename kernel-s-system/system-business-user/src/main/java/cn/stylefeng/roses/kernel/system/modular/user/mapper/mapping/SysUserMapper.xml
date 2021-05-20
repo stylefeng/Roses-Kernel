@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserMapper">
 
-    <!--获取用户分页列表-->
-    <select id="findUserPage" resultType="cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO">
+    <!--用户列表sql-->
+    <sql id="user_list_mysql">
         select
         suser.user_id as userId,
         suser.account as account,
@@ -33,52 +33,66 @@
                 and suser.status_flag like concat('%',#{sysUserRequest.statusFlag},'%')
             </if>
             <if test="sysUserRequest.orgId != null and sysUserRequest.orgId != ''">
-                and suorg.org_id in(select org_id from hr_organization where org_pids like CONCAT('%[',#{sysUserRequest.orgId},']%') or
-                org_id=#{sysUserRequest.orgId})
+                and suorg.org_id in(select org_id from hr_organization where org_pids like CONCAT('%[',#{sysUserRequest.orgId},']%') or org_id=#{sysUserRequest.orgId})
             </if>
             and suser.del_flag = 'N'
             order by suser.create_time desc
         </where>
+    </sql>
 
+    <!--用户列表 oracle版本-->
+    <sql id="user_list_oracle">
+        select
+        suser.user_id as userId,
+        suser.account as account,
+        suser.nick_name as nickName,
+        suser.real_name as realName,
+        suser.avatar as avatar,
+        suser.birthday as birthday,
+        suser.sex as sex,
+        suser.email as email,
+        suser.phone as phone,
+        suser.tel as tel,
+        suser.status_flag as statusFlag,
+        suorg.org_id as orgId,
+        suorg.position_id as positionId,
+        hpos.position_name as positionName
+        from sys_user suser
+        left join sys_user_org suorg on suser.user_id = suorg.user_id
+        left join hr_position hpos on suorg.position_id = hpos.position_id
+        <where>
+            <if test="sysUserRequest.realName != null and sysUserRequest.realName != ''">
+                and suser.real_name  like '%' || #{sysUserRequest.realName} || '%'
+            </if>
+            <if test="sysUserRequest.account != null and sysUserRequest.account != ''">
+                and suser.account  like '%' || #{sysUserRequest.account} || '%'
+            </if>
+            <if test="sysUserRequest.statusFlag != null and sysUserRequest.statusFlag != ''">
+                and suser.status_flag  like '%' || #{sysUserRequest.statusFlag} || '%'
+            </if>
+            <if test="sysUserRequest.orgId != null and sysUserRequest.orgId != ''">
+                and suorg.org_id in(select org_id from hr_organization where org_pids  like '%' || #{sysUserRequest.orgId} || '%' or org_id = #{sysUserRequest.orgId})
+            </if>
+            and suser.del_flag = 'N'
+            order by suser.create_time desc
+        </where>
+    </sql>
+
+
+    <!--获取用户分页列表-->
+    <select id="findUserPage" resultType="cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO">
+        <include refid="user_list_mysql"></include>
+    </select>
+    <select id="findUserPage" resultType="cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO" databaseId="oracle">
+        <include refid="user_list_oracle"></include>
     </select>
 
     <!--获取用户列表-->
     <select id="findUserList" resultType="cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO">
-        select
-        suser.user_id as userId,
-        suser.account as account,
-        suser.nick_name as nickName,
-        suser.real_name as realName,
-        suser.avatar as avatar,
-        suser.birthday as birthday,
-        suser.sex as sex,
-        suser.email as email,
-        suser.phone as phone,
-        suser.tel as tel,
-        suser.status_flag as statusFlag,
-        suorg.org_id as orgId,
-        suorg.position_id as positionId,
-        hpos.position_name as positionName
-        from sys_user suser
-        left join sys_user_org suorg on suser.user_id = suorg.user_id
-        left join hr_position hpos on suorg.position_id = hpos.position_id
-        <where>
-            <if test="sysUserRequest.realName != null and sysUserRequest.realName != ''">
-                and suser.real_name like concat('%',#{sysUserRequest.realName},'%')
-            </if>
-            <if test="sysUserRequest.account != null and sysUserRequest.account != ''">
-                and suser.account like concat('%',#{sysUserRequest.account},'%')
-            </if>
-            <if test="sysUserRequest.statusFlag != null and sysUserRequest.statusFlag != ''">
-                and suser.status_flag like concat('%',#{sysUserRequest.statusFlag},'%')
-            </if>
-            <if test="sysUserRequest.orgId != null and sysUserRequest.orgId != ''">
-                and suorg.org_id in(select org_id from hr_organization where org_pids like CONCAT('%[',#{sysUserRequest.orgId},']%') or
-                org_id=#{sysUserRequest.orgId})
-            </if>
-            and suser.del_flag = 'N'
-            order by suser.create_time desc
-        </where>
-
+        <include refid="user_list_mysql"></include>
     </select>
+    <select id="findUserList" resultType="cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO" databaseId="oracle">
+        <include refid="user_list_oracle"></include>
+    </select>
+
 </mapper>
