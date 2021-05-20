@@ -155,17 +155,16 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
         Long positionId = hrPositionRequest.getPositionId();
         String positionName = hrPositionRequest.getPositionName();
         String positionCode = hrPositionRequest.getPositionCode();
+        Integer statusFlag = hrPositionRequest.getStatusFlag();
 
         // SQL条件拼接
         queryWrapper.eq(ObjectUtil.isNotNull(positionId), HrPosition::getPositionId, positionId);
         queryWrapper.like(StrUtil.isNotEmpty(positionName), HrPosition::getPositionName, positionName);
         queryWrapper.eq(StrUtil.isNotEmpty(positionCode), HrPosition::getPositionCode, positionCode);
+        queryWrapper.eq(ObjectUtil.isNotNull(statusFlag), HrPosition::getStatusFlag, statusFlag);
 
         // 查询未删除状态的
         queryWrapper.eq(HrPosition::getDelFlag, YesOrNotEnum.N.getCode());
-
-        // 查询未禁用的
-        queryWrapper.eq(HrPosition::getStatusFlag, StatusEnum.ENABLE.getCode());
 
         // 根据排序升序排列
         queryWrapper.orderByAsc(HrPosition::getPositionSort);
