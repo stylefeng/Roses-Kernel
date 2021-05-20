@@ -24,12 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.loginlog.mapper;
 
-import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogDto;
-import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogRequest;
 import cn.stylefeng.roses.kernel.system.modular.loginlog.entity.SysLoginLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 系统应用mapper接口
@@ -38,13 +34,5 @@ import org.apache.ibatis.annotations.Param;
  * @date 2020/3/13 16:17
  */
 public interface SysLoginLogMapper extends BaseMapper<SysLoginLog> {
-
-    /**
-     * 分页查询登录日志
-     *
-     * @author fengshuonan
-     * @date 2021/3/30 20:52
-     */
-    Page<SysLoginLogDto> customFindPage(@Param("page") Page page, @Param("sysLoginLogRequest") SysLoginLogRequest sysLoginLogRequest);
 
 }

@@ -25,6 +25,8 @@
 package cn.stylefeng.roses.kernel.system.modular.loginlog.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
@@ -35,7 +37,9 @@ import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogDto;
 import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogRequest;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
+import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.log.LogExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.modular.loginlog.constants.LoginLogConstant;
 import cn.stylefeng.roses.kernel.system.modular.loginlog.entity.SysLoginLog;
 import cn.stylefeng.roses.kernel.system.modular.loginlog.mapper.SysLoginLogMapper;
@@ -45,6 +49,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * 系统应用service接口实现类
  *
@@ -53,6 +61,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLoginLog> implements SysLoginLogService, LoginLogServiceApi {
+
+    @Resource
+    private UserServiceApi userServiceApi;
 
     @Override
     public void del(SysLoginLogRequest sysLoginLogRequest) {
@@ -68,8 +79,23 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
 
     @Override
     public PageResult<SysLoginLogDto> findPage(SysLoginLogRequest sysLoginLogRequest) {
-        Page<SysLoginLogDto> page = baseMapper.customFindPage(PageFactory.defaultPage(), sysLoginLogRequest);
-        return PageResultFactory.createPageResult(page);
+        LambdaQueryWrapper<SysLoginLog> wrapper = this.createWrapper(sysLoginLogRequest);
+        Page<SysLoginLog> page = this.page(PageFactory.defaultPage(), wrapper);
+
+        ArrayList<SysLoginLogDto> sysLoginLogDtos = new ArrayList<>();
+        for (SysLoginLog record : page.getRecords()) {
+            SysLoginLogDto sysLoginLogDto = new SysLoginLogDto();
+            BeanUtil.copyProperties(record, sysLoginLogDto);
+
+            // 填充用户姓名
+            SysUserDTO userInfoByUserId = userServiceApi.getUserInfoByUserId(sysLoginLogDto.getUserId());
+            if (userInfoByUserId != null) {
+                sysLoginLogDto.setUserName(userInfoByUserId.getRealName());
+            }
+            sysLoginLogDtos.add(sysLoginLogDto);
+        }
+
+        return PageResultFactory.createPageResult(sysLoginLogDtos, page.getTotal(), Convert.toInt(page.getSize()), Convert.toInt(page.getCurrent()));
     }
 
     @Override
@@ -155,10 +181,19 @@ public class SysLoginLogServiceImpl extends ServiceImpl<SysLoginLogMapper, SysLo
             return queryWrapper;
         }
 
+        Date beginDate = null;
+        if (StrUtil.isNotBlank(sysLoginLogRequest.getBeginTime())) {
+            beginDate = DateUtil.parseDate(sysLoginLogRequest.getBeginTime()).toJdkDate();
+        }
+        Date endDate = null;
+        if (StrUtil.isNotBlank(sysLoginLogRequest.getEndTime())) {
+            endDate = DateUtil.parseDate(sysLoginLogRequest.getEndTime()).toJdkDate();
+        }
+
         // SQL条件拼接
         queryWrapper.eq(StrUtil.isNotBlank(sysLoginLogRequest.getLlgName()), SysLoginLog::getLlgName, sysLoginLogRequest.getLlgName());
-        queryWrapper.ge(StrUtil.isNotBlank(sysLoginLogRequest.getBeginTime()), SysLoginLog::getCreateTime, sysLoginLogRequest.getBeginTime());
-        queryWrapper.le(StrUtil.isNotBlank(sysLoginLogRequest.getEndTime()), SysLoginLog::getCreateTime, sysLoginLogRequest.getEndTime());
+        queryWrapper.ge(StrUtil.isNotBlank(sysLoginLogRequest.getBeginTime()), SysLoginLog::getCreateTime, beginDate);
+        queryWrapper.le(StrUtil.isNotBlank(sysLoginLogRequest.getEndTime()), SysLoginLog::getCreateTime, endDate);
 
         return queryWrapper;
     }

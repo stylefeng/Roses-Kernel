@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.log.db.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
@@ -42,6 +43,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -130,6 +132,15 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         String beginDateTime = logManagerRequest.getBeginDate();
         String endDateTime = logManagerRequest.getEndDate();
 
+        Date beginDate = null;
+        Date endDate = null;
+        if (StrUtil.isNotBlank(beginDateTime)) {
+            beginDate = DateUtil.parseDate(beginDateTime + " 00:00:00").toJdkDate();
+        }
+        if (StrUtil.isNotBlank(endDateTime)) {
+            endDate = DateUtil.parseDate(endDateTime + " 23:59:59").toJdkDate();
+        }
+
         // SQL条件拼接
         String name = logManagerRequest.getLogName();
         String appName = logManagerRequest.getAppName();
@@ -140,7 +151,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         Long logId = logManagerRequest.getLogId();
 
         queryWrapper.eq(ObjectUtil.isNotEmpty(logId), SysLog::getLogId, logId);
-        queryWrapper.between(StrUtil.isAllNotBlank(beginDateTime, endDateTime), SysLog::getCreateTime, beginDateTime + " 00:00:00", endDateTime + " 23:59:59");
+        queryWrapper.between(ObjectUtil.isAllNotEmpty(beginDate, endDate), SysLog::getCreateTime, beginDate, endDate);
         queryWrapper.like(StrUtil.isNotEmpty(name), SysLog::getLogContent, name);
         queryWrapper.like(StrUtil.isNotEmpty(appName), SysLog::getAppName, appName);
         queryWrapper.like(StrUtil.isNotEmpty(serverIp), SysLog::getServerIp, serverIp);
