@@ -41,7 +41,7 @@ public enum MessageExceptionEnum implements AbstractExceptionEnum {
     /**
      * 发送系统消息时，传入的参数中receiveUserIds不合法
      */
-    ERROR_RECEIVE_USER_IDS(RuleConstants.BUSINESS_ERROR_TYPE_CODE + MessageConstants.MESSAGE_EXCEPTION_STEP_CODE + "01", "接收用户id字符串不合法！"),
+    ERROR_RECEIVE_USER_IDS(RuleConstants.BUSINESS_ERROR_TYPE_CODE + MessageConstants.MESSAGE_EXCEPTION_STEP_CODE + "01", "接收用户id字符串不合法！系统无人可接收消息！"),
 
     /**
      * 消息记录不存在

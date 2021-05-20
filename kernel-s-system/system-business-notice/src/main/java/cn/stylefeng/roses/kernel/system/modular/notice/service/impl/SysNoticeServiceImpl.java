@@ -36,10 +36,10 @@ import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageSendRequest;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.notice.NoticeExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.notice.SysNoticeRequest;
 import cn.stylefeng.roses.kernel.system.modular.notice.entity.SysNotice;
 import cn.stylefeng.roses.kernel.system.modular.notice.mapper.SysNoticeMapper;
 import cn.stylefeng.roses.kernel.system.modular.notice.service.SysNoticeService;
-import cn.stylefeng.roses.kernel.system.api.pojo.notice.SysNoticeRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -198,7 +198,12 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         message.setBusinessId(sysNotice.getNoticeId());
         message.setMessageSendTime(new Date());
 
-        messageApi.sendMessage(message);
+        try {
+            messageApi.sendMessage(message);
+        } catch (Exception exception) {
+            // 发送失败打印异常
+            log.error("发送消息失败:", exception);
+        }
     }
 
 }

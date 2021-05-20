@@ -38,8 +38,8 @@ import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import cn.stylefeng.roses.kernel.message.api.exception.MessageException;
 import cn.stylefeng.roses.kernel.message.api.exception.enums.MessageExceptionEnum;
 import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageRequest;
-import cn.stylefeng.roses.kernel.message.api.pojo.response.MessageResponse;
 import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageSendRequest;
+import cn.stylefeng.roses.kernel.message.api.pojo.response.MessageResponse;
 import cn.stylefeng.roses.kernel.message.db.entity.SysMessage;
 import cn.stylefeng.roses.kernel.message.db.service.SysMessageService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
@@ -76,11 +76,13 @@ public class MessageDbServiceImpl implements MessageApi {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void sendMessage(MessageSendRequest messageSendRequest) {
+
         String receiveUserIds = messageSendRequest.getReceiveUserIds();
-        // 获取当前登录人
         LoginUser loginUser = LoginContext.me().getLoginUser();
+
         List<SysMessage> sendMsgList = new ArrayList<>();
         List<Long> userIds;
+
         // 发送所有人判断
         if (MessageConstants.RECEIVE_ALL_USER_FLAG.equals(receiveUserIds)) {
             // 查询所有用户
@@ -89,6 +91,8 @@ public class MessageDbServiceImpl implements MessageApi {
             String[] userIdArr = receiveUserIds.split(",");
             userIds = Convert.toList(Long.class, userIdArr);
         }
+
+        // 无人可发，不发送
         if (userIds == null || userIds.isEmpty()) {
             throw new MessageException(MessageExceptionEnum.ERROR_RECEIVE_USER_IDS);
         }
