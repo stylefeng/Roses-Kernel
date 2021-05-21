@@ -79,7 +79,7 @@ public class DruidDatasourceFactory {
         dataSource.setMaxPoolPreparedStatementPerConnectionSize(druidProperties.getMaxPoolPreparedStatementPerConnectionSize());
 
         // 检测连接是否有效的sql
-        if (StrUtil.isEmpty(druidProperties.getUrl())) {
+        if (StrUtil.isNotEmpty(druidProperties.getUrl())) {
             dataSource.setValidationQuery(getValidateQueryByUrl(druidProperties.getUrl()));
         }
 
