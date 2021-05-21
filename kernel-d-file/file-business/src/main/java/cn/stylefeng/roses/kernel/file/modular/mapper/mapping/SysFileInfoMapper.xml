@@ -64,38 +64,4 @@
         <include refid="file_list_oracle"></include>
     </select>
 
-    <!--  获取所有附件信息的code集合  -->
-    <select id="getFileCodeByFileIds" resultType="java.lang.Long">
-        SELECT
-        file.file_code
-        FROM
-        sys_file_info file
-        WHERE
-        file.file_id IN
-        <foreach collection="fileIdList" open="(" close=")" separator="," item="fileId">
-            #{fileId}
-        </foreach>
-        GROUP BY file.file_code
-    </select>
-
-    <!--  修改fileCodes下所有附件状态  -->
-    <update id="updateDelFlagByFileCodes">
-        UPDATE sys_file_info file
-        SET file.del_flag = #{delFlag}
-        WHERE file.file_code IN
-        <foreach collection="fileCodeList" open="(" close=")" separator="," item="fileCode">
-            #{fileCode}
-        </foreach>
-    </update>
-
-    <!--  修改fileIds下所有附件状态  -->
-    <update id="updateDelFlagByFileIds">
-        UPDATE sys_file_info file
-        SET file.del_flag = #{delFlag}
-        WHERE file.file_id IN
-        <foreach collection="fileIdList" open="(" close=")" separator="," item="fileId">
-            #{fileId}
-        </foreach>
-    </update>
-
 </mapper>
