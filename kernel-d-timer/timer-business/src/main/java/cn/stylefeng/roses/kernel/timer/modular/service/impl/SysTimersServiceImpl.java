@@ -223,7 +223,7 @@ public class SysTimersServiceImpl extends ServiceImpl<SysTimersMapper, SysTimers
         queryWrapper.like(ObjectUtil.isNotEmpty(timerName), SysTimers::getTimerName, timerName);
 
         // 拼接查询条件-状态（字典 1运行  2停止）
-        queryWrapper.like(ObjectUtil.isNotNull(jobStatus), SysTimers::getJobStatus, jobStatus);
+        queryWrapper.eq(ObjectUtil.isNotNull(jobStatus), SysTimers::getJobStatus, jobStatus);
 
         // 拼接查询条件-类名
         queryWrapper.like(ObjectUtil.isNotEmpty(actionClass), SysTimers::getActionClass, actionClass);
