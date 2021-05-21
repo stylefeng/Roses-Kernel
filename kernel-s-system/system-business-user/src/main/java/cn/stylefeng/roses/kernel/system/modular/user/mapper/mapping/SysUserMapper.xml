@@ -33,7 +33,7 @@
                 and suser.status_flag like concat('%',#{sysUserRequest.statusFlag},'%')
             </if>
             <if test="sysUserRequest.orgId != null and sysUserRequest.orgId != ''">
-                and suorg.org_id in(select org_id from hr_organization where org_pids like CONCAT('%[',#{sysUserRequest.orgId},']%') or org_id=#{sysUserRequest.orgId})
+                and suorg.org_id in(select org_id from hr_organization where org_pids like CONCAT('%$[',#{sysUserRequest.orgId},'$]%') or org_id=#{sysUserRequest.orgId}) escape '$'
             </if>
             and suser.del_flag = 'N'
             order by suser.create_time desc
