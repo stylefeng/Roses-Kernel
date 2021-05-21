@@ -4,27 +4,27 @@
 
     <!--文件列表sql-->
     <sql id="file_list_mysql">
-        SELECT file.file_id        AS fileId,
-            file.file_code         AS fileCode,
-            file.secret_flag       AS secretFlag,
-            file.file_bucket       AS fileBucket,
-            file.file_object_name  AS fileObjectName,
-            file.file_location     AS fileLocation,
-            file.file_origin_name  AS fileOriginName,
-            file.file_suffix       AS fileSuffix,
-            file.file_size_info    AS fileSizeInfo,
-            file.file_version      AS fileVersion,
-            user.real_name         AS createUserName,
-            file.create_time       AS createTime,
-            file.del_flag          AS delFlag
-        FROM sys_file_info file
-        LEFT JOIN sys_user user ON user.user_id = file.create_user
+        SELECT fileinfo.file_id        AS fileId,
+            fileinfo.file_code         AS fileCode,
+            fileinfo.secret_flag       AS secretFlag,
+            fileinfo.file_bucket       AS fileBucket,
+            fileinfo.file_object_name  AS fileObjectName,
+            fileinfo.file_location     AS fileLocation,
+            fileinfo.file_origin_name  AS fileOriginName,
+            fileinfo.file_suffix       AS fileSuffix,
+            fileinfo.file_size_info    AS fileSizeInfo,
+            fileinfo.file_version      AS fileVersion,
+            suser.real_name            AS createUserName,
+            fileinfo.create_time       AS createTime,
+            fileinfo.del_flag          AS delFlag
+        FROM sys_file_info fileinfo
+        LEFT JOIN sys_user suser ON suser.user_id = fileinfo.create_user
         <where>
             <if test="sysFileInfoRequest.fileOriginName != null and sysFileInfoRequest.fileOriginName != '' ">
-                AND file.file_origin_name LIKE CONCAT('%', #{sysFileInfoRequest.fileOriginName}, '%')
+                AND fileinfo.file_origin_name LIKE CONCAT('%', #{sysFileInfoRequest.fileOriginName}, '%')
             </if>
             <if test="sysFileInfoRequest.fileLocation != null and sysFileInfoRequest.fileLocation != '' ">
-                AND file.file_location = #{sysFileInfoRequest.fileLocation}
+                AND fileinfo.file_location = #{sysFileInfoRequest.fileLocation}
             </if>
         </where>
     </sql>
