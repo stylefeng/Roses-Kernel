@@ -2,16 +2,4 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.role.mapper.SysRoleMenuButtonMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="cn.stylefeng.roses.kernel.system.modular.role.entity.SysRoleMenuButton">
-        <id column="role_button_id" property="roleButtonId"/>
-        <result column="role_id" property="roleId"/>
-        <result column="button_id" property="buttonId"/>
-        <result column="button_code" property="buttonCode"/>
-        <result column="create_time" property="createTime"/>
-        <result column="create_user" property="createUser"/>
-        <result column="update_time" property="updateTime"/>
-        <result column="update_user" property="updateUser"/>
-    </resultMap>
-
 </mapper>
