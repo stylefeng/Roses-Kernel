@@ -76,26 +76,26 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
 
     @Override
     public SysMessage detail(MessageRequest messageRequest) {
-        LambdaQueryWrapper<SysMessage> queryWrapper = this.createWrapper(messageRequest);
+        LambdaQueryWrapper<SysMessage> queryWrapper = this.createWrapper(messageRequest, true);
         return this.getOne(queryWrapper, false);
     }
 
     @Override
     public PageResult<SysMessage> findPage(MessageRequest messageRequest) {
-        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageRequest);
+        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageRequest, true);
         Page<SysMessage> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
     }
 
     @Override
     public List<SysMessage> findList(MessageRequest messageRequest) {
-        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageRequest);
+        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageRequest, true);
         return this.list(wrapper);
     }
 
     @Override
     public Integer findCount(MessageRequest messageRequest) {
-        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageRequest);
+        LambdaQueryWrapper<SysMessage> wrapper = createWrapper(messageRequest, false);
         return this.count(wrapper);
     }
 
@@ -119,14 +119,16 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
      * @author liuhanqing
      * @date 2021/1/8 14:16
      */
-    private LambdaQueryWrapper<SysMessage> createWrapper(MessageRequest messageRequest) {
+    private LambdaQueryWrapper<SysMessage> createWrapper(MessageRequest messageRequest, boolean needOrderBy) {
         LambdaQueryWrapper<SysMessage> queryWrapper = new LambdaQueryWrapper<>();
 
         // 查询未删除的
         queryWrapper.ne(SysMessage::getDelFlag, YesOrNotEnum.Y.getCode());
 
         // 按发送事件倒序
-        queryWrapper.orderByDesc(SysMessage::getMessageSendTime);
+        if (needOrderBy) {
+            queryWrapper.orderByDesc(SysMessage::getMessageSendTime);
+        }
 
         if (ObjectUtil.isEmpty(messageRequest)) {
             return queryWrapper;
