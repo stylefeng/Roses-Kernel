@@ -60,7 +60,7 @@
         <!--用户名称的首字母转换等-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>pinyin-sdk-pinyin4j</artifactId>
+            <artifactId>pinyin-spring-boot-starter</artifactId>
             <version>7.0.4</version>
         </dependency>
 
