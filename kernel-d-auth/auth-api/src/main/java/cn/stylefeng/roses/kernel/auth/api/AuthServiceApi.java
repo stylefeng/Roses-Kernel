@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.auth.api;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
+import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginWithTokenRequest;
 
 /**
  * 认证服务的接口，包括基本的登录退出操作和校验token等操作
@@ -54,6 +55,25 @@ public interface AuthServiceApi {
      * @date 2020/10/26 14:40
      */
     LoginResponse loginWithUserName(String username);
+
+    /**
+     * 登录（通过账号和sso后的token），一般用在单点登录
+     *
+     * @param username 账号
+     * @param caToken  sso登录成功后的会话
+     * @author fengshuonan
+     * @date 2021/5/25 22:44
+     */
+    LoginResponse loginWithUserNameAndCaToken(String username, String caToken);
+
+    /**
+     * 通过token进行登录，一般用在单点登录服务
+     *
+     * @param loginWithTokenRequest 请求
+     * @author fengshuonan
+     * @date 2021/5/25 22:44
+     */
+    LoginResponse LoginWithToken(LoginWithTokenRequest loginWithTokenRequest);
 
     /**
      * 当前登录人退出登录

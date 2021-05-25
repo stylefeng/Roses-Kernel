@@ -22,66 +22,33 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.auth.api.pojo.auth;
+package cn.stylefeng.roses.kernel.auth.starter;
 
-import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import lombok.Data;
+import cn.stylefeng.roses.kernel.auth.api.pojo.SsoProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 
 /**
- * 登录操作的响应结果
+ * 单点配置
  *
  * @author fengshuonan
- * @date 2020/10/19 14:17
+ * @date 2021/5/25 22:29
  */
-@Data
-public class LoginResponse {
+@Configuration
+public class GunsSsoAutoConfiguration {
 
     /**
-     * 登录人的信息
-     */
-    private LoginUser loginUser;
-
-    /**
-     * 登录人的token
-     */
-    private String token;
-
-    /**
-     * 到期时间
-     */
-    private Long expireAt;
-
-    /**
-     * 使用单点登录
-     */
-    private Boolean ssoLogin;
-
-    /**
-     * 单点登录的loginCode
-     */
-    private String ssoLoginCode;
-
-    /**
-     * 用于普通登录的组装
+     * 单点的开关配置
      *
      * @author fengshuonan
-     * @date 2021/5/25 22:31
+     * @date 2021/5/25 22:29
      */
-    public LoginResponse(LoginUser loginUser, String token, Long expireAt) {
-        this.loginUser = loginUser;
-        this.token = token;
-        this.expireAt = expireAt;
-    }
-
-    /**
-     * 用于单点登录，返回用户loginCode
-     *
-     * @author fengshuonan
-     * @date 2021/5/25 22:31
-     */
-    public LoginResponse(String loginCode) {
-        this.ssoLogin = true;
-        this.ssoLoginCode = loginCode;
+    @Bean
+    @ConfigurationProperties(prefix = "sso")
+    public SsoProperties ssoProperties() {
+        return new SsoProperties();
     }
 
 }

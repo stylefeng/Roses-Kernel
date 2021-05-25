@@ -96,7 +96,27 @@ public enum AuthExceptionEnum implements AbstractExceptionEnum {
     /**
      * 用户角色未绑定，登录失败
      */
-    ROLE_IS_EMPTY(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "12", "用户角色未绑定，登录失败");
+    ROLE_IS_EMPTY(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "12", "用户角色未绑定，登录失败"),
+
+    /**
+     * SSO登录获取loginCode失败
+     */
+    SSO_LOGIN_CODE_GET_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "13", "登录失败,具体信息为：{}"),
+
+    /**
+     * SSO使用token登录时，token解析异常
+     */
+    SSO_TOKEN_PARSE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "14", "token解析异常：{}"),
+
+    /**
+     * SSO使用token登录时，解析token中的用户信息错误，用户信息为空
+     */
+    SSO_TOKEN_GET_USER_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "15", "解析token中的用户信息错误，用户信息为空"),
+
+    /**
+     * SSO使用token登录时，解密token出错
+     */
+    SSO_TOKEN_DECRYPT_USER_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "16", "解密token出错:{}");
 
     /**
      * 错误编码

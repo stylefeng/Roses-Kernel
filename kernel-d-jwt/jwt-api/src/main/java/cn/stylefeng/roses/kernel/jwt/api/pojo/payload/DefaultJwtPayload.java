@@ -64,6 +64,13 @@ public class DefaultJwtPayload {
     private Long expirationDate;
 
     /**
+     * 单点认证中心的用户会话id，一般为一个uuid
+     * <p>
+     * 用来校验单点中心是否有本用户的会话
+     */
+    private String caToken;
+
+    /**
      * 其他载体信息
      */
     private Map<String, Object> others;
@@ -71,11 +78,12 @@ public class DefaultJwtPayload {
     public DefaultJwtPayload() {
     }
 
-    public DefaultJwtPayload(Long userId, String account, boolean rememberMe) {
+    public DefaultJwtPayload(Long userId, String account, boolean rememberMe, String caToken) {
         this.userId = userId;
         this.account = account;
         this.uuid = IdUtil.fastUUID();
         this.rememberMe = rememberMe;
+        this.caToken = caToken;
     }
 
 }

@@ -28,6 +28,7 @@ import cn.stylefeng.roses.kernel.auth.api.AuthServiceApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
+import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginWithTokenRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
@@ -81,6 +82,18 @@ public class LoginController {
     public ResponseData loginApi(@RequestBody @Validated LoginRequest loginRequest) {
         loginRequest.setCreateCookie(false);
         LoginResponse loginResponse = authServiceApi.login(loginRequest);
+        return new SuccessResponseData(loginResponse.getToken());
+    }
+
+    /**
+     * 基于token登录，适用于单点登录
+     *
+     * @author fengshuonan
+     * @date 2021/5/25 22:36
+     */
+    @PostResource(name = "适用于单点登录", path = "/loginWithToken", requiredLogin = false, requiredPermission = false)
+    public ResponseData loginWithToken(@RequestBody @Validated LoginWithTokenRequest loginWithTokenRequest) {
+        LoginResponse loginResponse = authServiceApi.LoginWithToken(loginWithTokenRequest);
         return new SuccessResponseData(loginResponse.getToken());
     }
 

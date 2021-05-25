@@ -77,4 +77,49 @@ public interface AuthConstants {
      */
     String KAPTCHA_SESSION_KEY = "KAPTCHA_SESSION_KEY";
 
+    /**
+     * 默认解析jwt的秘钥（用于解析sso传过来的token）
+     */
+    String SYS_AUTH_SSO_JWT_SECRET = "aabbccdd";
+
+    /**
+     * 默认解密sso单点中jwt中payload的秘钥
+     */
+    String SYS_AUTH_SSO_DECRYPT_DATA_SECRET = "EDPpR/BQfEFJiXKgxN8Uno4OnNMGcIJW1F777yySCPA=";
+
+    /**
+     * 是否开启sso远程会话校验
+     */
+    Boolean SYS_AUTH_SSO_SESSION_VALIDATE_SWITCH = false;
+
+    /**
+     * 用于远程session校验redis的host
+     */
+    String SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_HOST = "localhost";
+
+    /**
+     * 用于远程session校验redis的端口
+     */
+    Integer SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_PORT = 6379;
+
+    /**
+     * 用于远程session校验redis的数据库index
+     */
+    Integer SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_DB_INDEX = 2;
+
+    /**
+     * 用于远程session校验redis的缓存前缀
+     */
+    String SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_CACHE_PREFIX = "CA:USER:TOKEN:";
+
+    /**
+     * SSO的默认地址
+     */
+    String SYS_AUTH_SSO_HOST = "http://localhost:8888";
+
+    /**
+     * sso获取loginCode的url
+     */
+    String SYS_AUTH_SSO_GET_LOGIN_CODE = "/sso/getLoginCode";
+
 }

@@ -144,4 +144,95 @@ public class AuthConfigExpander {
         return ConfigContext.me().getSysConfigValueWithDefault("SYS_SESSION_COOKIE_NAME", String.class, DEFAULT_AUTH_HEADER_NAME);
     }
 
+    /**
+     * 默认解析jwt的秘钥（用于解析sso传过来的token）
+     *
+     * @author fengshuonan
+     * @date 2021/5/25 22:39
+     */
+    public static String getSsoJwtSecret() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_AUTH_SSO_JWT_SECRET", String.class, SYS_AUTH_SSO_JWT_SECRET);
+    }
+
+    /**
+     * 默认解析sso加密的数据的秘钥
+     *
+     * @author fengshuonan
+     * @date 2021/5/25 22:39
+     */
+    public static String getSsoDataDecryptSecret() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_AUTH_SSO_DECRYPT_DATA_SECRET", String.class, SYS_AUTH_SSO_DECRYPT_DATA_SECRET);
+    }
+
+    /**
+     * 获取是否开启sso远程会话校验，当系统对接sso后，如需同时校验sso的会话是否存在则开启此开关
+     *
+     * @return true-开启远程校验，false-关闭远程校验
+     * @author fengshuonan
+     * @date 2021/5/25 22:39
+     */
+    public static Boolean getSsoSessionValidateSwitch() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_AUTH_SSO_SESSION_VALIDATE_SWITCH", Boolean.class, SYS_AUTH_SSO_SESSION_VALIDATE_SWITCH);
+    }
+
+    /**
+     * sso会话远程校验，redis的host
+     *
+     * @author fengshuonan
+     * @date 2021/5/25 22:39
+     */
+    public static String getSsoSessionValidateRedisHost() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_HOST", String.class, SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_HOST);
+    }
+
+    /**
+     * sso会话远程校验，redis的端口
+     *
+     * @author fengshuonan
+     * @date 2021/5/25 22:39
+     */
+    public static Integer getSsoSessionValidateRedisPort() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_PORT", Integer.class, SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_PORT);
+    }
+
+    /**
+     * sso会话远程校验，redis的密码
+     *
+     * @author fengshuonan
+     * @date 2021/5/25 22:39
+     */
+    public static String getSsoSessionValidateRedisPassword() {
+        return ConfigContext.me().getConfigValueNullable("SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_PASSWORD", String.class);
+    }
+
+    /**
+     * sso会话远程校验，redis的db
+     *
+     * @author fengshuonan
+     * @date 2021/5/25 22:39
+     */
+    public static Integer getSsoSessionValidateRedisDbIndex() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_DB_INDEX", Integer.class, SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_DB_INDEX);
+    }
+
+    /**
+     * sso会话远程校验，redis的缓存前缀
+     *
+     * @author fengshuonan
+     * @date 2021/5/25 22:39
+     */
+    public static String getSsoSessionValidateRedisCachePrefix() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_CACHE_PREFIX", String.class, SYS_AUTH_SSO_SESSION_VALIDATE_REDIS_CACHE_PREFIX);
+    }
+
+    /**
+     * 获取SSO服务器的地址
+     *
+     * @author fengshuonan
+     * @date 2021/5/25 22:39
+     */
+    public static String getSsoUrl() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_AUTH_SSO_HOST", String.class, SYS_AUTH_SSO_HOST);
+    }
+
 }

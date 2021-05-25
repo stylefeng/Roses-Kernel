@@ -68,7 +68,7 @@
         <!--token用的jwt token-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>jwt-api</artifactId>
+            <artifactId>jwt-sdk</artifactId>
             <version>${roses.version}</version>
         </dependency>
 
