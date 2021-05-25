@@ -82,7 +82,7 @@ public class LoginController {
     public ResponseData loginApi(@RequestBody @Validated LoginRequest loginRequest) {
         loginRequest.setCreateCookie(false);
         LoginResponse loginResponse = authServiceApi.login(loginRequest);
-        return new SuccessResponseData(loginResponse.getToken());
+        return new SuccessResponseData(loginResponse);
     }
 
     /**
