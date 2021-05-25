@@ -184,7 +184,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         message.setMessageTitle(sysNotice.getNoticeTitle());
 
         // 消息内容
-        message.setMessageContent(sysNotice.getNoticeSummary());
+        message.setMessageContent(sysNotice.getNoticeContent());
 
         // 消息优先级
         message.setPriorityLevel(sysNotice.getPriorityLevel());
