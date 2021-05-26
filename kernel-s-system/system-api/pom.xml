@@ -47,6 +47,14 @@
             <version>7.0.4</version>
         </dependency>
 
+        <!--字典的api-->
+        <!--多语言类型，存在于字典表-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>dict-api</artifactId>
+            <version>7.0.3</version>
+        </dependency>
+
         <!--web-->
         <!--ResourcePersistenceApi会用到web，用在提供feign接口时-->
         <dependency>

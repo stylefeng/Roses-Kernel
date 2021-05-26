@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.roses.kernel.system.modular.resource.mapper.ApiGroupMapper">
+
+    <update id="updateSubPids" parameterType="cn.stylefeng.roses.kernel.dict.api.pojo.dict.request.ParentIdsUpdateRequest">
+        UPDATE
+            api_group
+        SET group_pids  = replace(group_pids, #{paramCondition.oldParentIds}, #{paramCondition.newParentIds}),
+            update_time = #{paramCondition.updateTime},
+            update_user = #{paramCondition.updateUser}
+        WHERE group_pids LIKE CONCAT('%', #{paramCondition.oldParentIds}, '%')
+    </update>
+</mapper>

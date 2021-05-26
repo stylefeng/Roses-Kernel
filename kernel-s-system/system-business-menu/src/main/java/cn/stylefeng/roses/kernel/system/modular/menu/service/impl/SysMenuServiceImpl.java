@@ -449,7 +449,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<String> getUserAppCodeList() {
 
-        LambdaQueryWrapper<SysMenu> queryWrapper = createWrapper(null);
+        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.select(SysMenu::getAppCode);
         queryWrapper.groupBy(SysMenu::getAppCode);
 

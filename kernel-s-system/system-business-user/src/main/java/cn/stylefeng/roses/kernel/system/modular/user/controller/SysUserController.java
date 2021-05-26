@@ -222,7 +222,7 @@ public class SysUserController {
      * @date 2021/1/15 8:28
      */
     @GetResource(name = "获取用户选择树数据（用在系统通知，选择发送人的时候）", path = "/sysUser/getUserSelectTree")
-    public SuccessResponseData getUserTree() {
+    public ResponseData getUserTree() {
         return new SuccessResponseData(this.sysUserService.userSelectTree(new SysUserRequest()));
     }
 
