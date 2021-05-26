@@ -41,15 +41,6 @@ import java.util.List;
 public interface DatabaseInfoService extends IService<DatabaseInfo>, DataSourceApi {
 
     /**
-     * 新增数据库信息
-     *
-     * @param databaseInfoRequest 新增参数
-     * @author fengshuonan
-     * @date 2020/11/1 21:47
-     */
-    void add(DatabaseInfoRequest databaseInfoRequest);
-
-    /**
      * 删除，删除会导致某些用该数据源的service操作失败
      *
      * @param databaseInfoRequest 删除参数

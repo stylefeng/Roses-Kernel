@@ -128,6 +128,11 @@ public class LoginUser implements Serializable {
      */
     private String tranLanguageCode = RuleConstants.CHINES_TRAN_LANGUAGE_CODE;
 
+    /**
+     * 租户的编码
+     */
+    private String tenantCode;
+
     public String getWsUrl() {
         AtomicReference<String> returnUrl = new AtomicReference<>(StrUtil.EMPTY);
         Optional.ofNullable(this.wsUrl).ifPresent(url -> {
