@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.db.api.util;
 
+import cn.hutool.core.io.IoUtil;
 import cn.stylefeng.roses.kernel.db.api.exception.DaoException;
 import cn.stylefeng.roses.kernel.db.api.exception.enums.DatabaseExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +30,10 @@ public class SqlRunUtil {
      * @date 2021/5/19 10:52
      */
     public static void runClassPathSql(String classpathFileName, String driverClassName, String url, String username, String password) {
+        Connection conn = null;
         try {
             Class.forName(driverClassName);
-            Connection conn = DriverManager.getConnection(url, username, password);
+            conn = DriverManager.getConnection(url, username, password);
 
             ClassPathResource classPathResource = new ClassPathResource(classpathFileName);
             EncodedResource encodedResource = new EncodedResource(classPathResource, "utf-8");
@@ -39,8 +41,9 @@ public class SqlRunUtil {
         } catch (Exception e) {
             log.error("执行sql错误！", e);
             throw new DaoException(DatabaseExceptionEnum.SQL_EXEC_ERROR, e.getMessage());
+        } finally {
+            IoUtil.close(conn);
         }
-
     }
 
     /**
@@ -50,9 +53,10 @@ public class SqlRunUtil {
      * @date 2021/5/19 10:52
      */
     public static void runFileSystemSql(SqlSessionFactory sqlSessionFactory, String sqlPath) {
+        Connection conn = null;
         try {
             SqlSession sqlSession = sqlSessionFactory.openSession();
-            Connection conn = sqlSession.getConnection();
+            conn = sqlSession.getConnection();
 
             FileSystemResource classPathResource = new FileSystemResource(sqlPath);
             EncodedResource encodedResource = new EncodedResource(classPathResource, "GBK");
@@ -60,6 +64,8 @@ public class SqlRunUtil {
         } catch (Exception e) {
             log.error("执行sql错误！", e);
             throw new DaoException(DatabaseExceptionEnum.SQL_EXEC_ERROR, e.getMessage());
+        } finally {
+            IoUtil.close(conn);
         }
     }
 

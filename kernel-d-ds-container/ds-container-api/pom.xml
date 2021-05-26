@@ -24,7 +24,6 @@
             <version>${roses.version}</version>
         </dependency>
 
-
     </dependencies>
 
 </project>

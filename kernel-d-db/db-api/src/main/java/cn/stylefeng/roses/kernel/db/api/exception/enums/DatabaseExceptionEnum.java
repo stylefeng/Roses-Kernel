@@ -58,7 +58,12 @@ public enum DatabaseExceptionEnum implements AbstractExceptionEnum {
     /**
      * sql执行错误
      */
-    SQL_EXEC_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DbConstants.DB_EXCEPTION_STEP_CODE + "04", "sql执行错误，具体信息：{}");
+    SQL_EXEC_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DbConstants.DB_EXCEPTION_STEP_CODE + "04", "sql执行错误，具体信息：{}"),
+
+    /**
+     * 查询所有库错误
+     */
+    DATABASE_LIST_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + DbConstants.DB_EXCEPTION_STEP_CODE + "05", "查询所有库错误，具体信息：{}");
 
 
     /**

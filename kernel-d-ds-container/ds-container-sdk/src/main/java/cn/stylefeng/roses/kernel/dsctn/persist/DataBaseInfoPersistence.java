@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.dsctn.persist;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import cn.stylefeng.roses.kernel.dsctn.api.exception.DatasourceContainerException;
@@ -66,9 +67,10 @@ public class DataBaseInfoPersistence {
      */
     public Map<String, DruidProperties> getAllDataBaseInfo() {
         Map<String, DruidProperties> dataSourceList = new HashMap<>(16);
+        Connection conn = null;
         try {
             Class.forName(druidProperties.getDriverClassName());
-            Connection conn = DriverManager.getConnection(
+            conn = DriverManager.getConnection(
                     druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
 
             PreparedStatement preparedStatement = conn.prepareStatement(new DatabaseListSql().getSql(druidProperties.getUrl()));
@@ -86,6 +88,8 @@ public class DataBaseInfoPersistence {
             log.error("查询数据源信息错误！", exception);
             String userTip = StrUtil.format(QUERY_DBS_DAO_ERROR.getUserTip(), exception.getMessage());
             throw new DatasourceContainerException(QUERY_DBS_DAO_ERROR, userTip);
+        } finally {
+            IoUtil.close(conn);
         }
     }
 
@@ -96,9 +100,10 @@ public class DataBaseInfoPersistence {
      * @date 2020/10/31 23:55
      */
     public void createMasterDatabaseInfo() {
+        Connection conn = null;
         try {
             Class.forName(druidProperties.getDriverClassName());
-            Connection conn = DriverManager.getConnection(
+            conn = DriverManager.getConnection(
                     druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
 
             PreparedStatement preparedStatement = conn.prepareStatement(new AddDatabaseInfoSql().getSql(druidProperties.getUrl()));
@@ -119,6 +124,8 @@ public class DataBaseInfoPersistence {
             log.error("初始化master的databaseInfo信息错误！", exception);
             String userTip = StrUtil.format(INSERT_DBS_DAO_ERROR.getUserTip(), exception.getMessage());
             throw new DatasourceContainerException(INSERT_DBS_DAO_ERROR, userTip);
+        } finally {
+            IoUtil.close(conn);
         }
     }
 
@@ -129,9 +136,10 @@ public class DataBaseInfoPersistence {
      * @date 2020/10/31 23:55
      */
     public void deleteMasterDatabaseInfo() {
+        Connection conn = null;
         try {
             Class.forName(druidProperties.getDriverClassName());
-            Connection conn = DriverManager.getConnection(
+            conn = DriverManager.getConnection(
                     druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
 
             PreparedStatement preparedStatement = conn.prepareStatement(new DeleteDatabaseInfoSql().getSql(druidProperties.getUrl()));
@@ -142,6 +150,8 @@ public class DataBaseInfoPersistence {
             log.info("删除master的databaseInfo信息失败！", exception);
             String userTip = StrUtil.format(DELETE_DBS_DAO_ERROR.getUserTip(), exception.getMessage());
             throw new DatasourceContainerException(DELETE_DBS_DAO_ERROR, userTip);
+        } finally {
+            IoUtil.close(conn);
         }
     }
 

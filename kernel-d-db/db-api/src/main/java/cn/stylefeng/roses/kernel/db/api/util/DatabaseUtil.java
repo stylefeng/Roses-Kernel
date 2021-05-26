@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.db.api.util;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.exception.DaoException;
 import cn.stylefeng.roses.kernel.db.api.exception.enums.DatabaseExceptionEnum;
@@ -7,8 +8,10 @@ import cn.stylefeng.roses.kernel.db.api.pojo.db.TableFieldInfo;
 import cn.stylefeng.roses.kernel.db.api.pojo.db.TableInfo;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import cn.stylefeng.roses.kernel.db.api.sqladapter.database.CreateDatabaseSql;
+import cn.stylefeng.roses.kernel.db.api.sqladapter.database.GetDatabasesSql;
 import cn.stylefeng.roses.kernel.db.api.sqladapter.table.TableFieldListSql;
 import cn.stylefeng.roses.kernel.db.api.sqladapter.table.TableListSql;
+import cn.stylefeng.roses.kernel.dsctn.api.constants.DatasourceContainerConstants;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -28,6 +31,39 @@ import java.util.List;
 public class DatabaseUtil {
 
     /**
+     * 获取数据库中的所有数据库列表
+     *
+     * @author fengshuonan
+     * @date 2021/5/26 20:42
+     */
+    public static List<String> getDatabases(DruidProperties druidProperties) {
+        Connection conn = null;
+        List<String> databasesList = new ArrayList<>();
+        try {
+            Class.forName(druidProperties.getDriverClassName());
+            conn = DriverManager.getConnection(
+                    druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
+            PreparedStatement preparedStatement = conn.prepareStatement(new GetDatabasesSql().getSql(druidProperties.getUrl()));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String database = resultSet.getString("database");
+                if (StrUtil.isNotBlank(database)) {
+                    if (StrUtil.startWith(database, DatasourceContainerConstants.TENANT_DB_PREFIX)) {
+                        database = database.replaceAll(DatasourceContainerConstants.TENANT_DB_PREFIX, "");
+                        databasesList.add(database);
+                    }
+                }
+            }
+            return databasesList;
+        } catch (Exception e) {
+            log.error("查询所有库错误！", e);
+            throw new DaoException(DatabaseExceptionEnum.DATABASE_LIST_ERROR, e.getMessage());
+        } finally {
+            IoUtil.close(conn);
+        }
+    }
+
+    /**
      * 查询某个数据库连接的所有表
      *
      * @author fengshuonan
@@ -35,9 +71,10 @@ public class DatabaseUtil {
      */
     public static List<TableInfo> selectTables(DruidProperties druidProperties) {
         List<TableInfo> tables = new ArrayList<>();
+        Connection conn = null;
         try {
             Class.forName(druidProperties.getDriverClassName());
-            Connection conn = DriverManager.getConnection(
+            conn = DriverManager.getConnection(
                     druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
 
             // 获取数据库名称
@@ -65,6 +102,8 @@ public class DatabaseUtil {
         } catch (Exception ex) {
             log.error("查询所有表错误！", ex);
             throw new DaoException(DatabaseExceptionEnum.TABLE_LIST_ERROR, ex.getMessage());
+        } finally {
+            IoUtil.close(conn);
         }
     }
 
@@ -76,9 +115,10 @@ public class DatabaseUtil {
      */
     public static List<TableFieldInfo> getTableFields(DruidProperties druidProperties, String tableName) {
         ArrayList<TableFieldInfo> fieldList = new ArrayList<>();
+        Connection conn = null;
         try {
             Class.forName(druidProperties.getDriverClassName());
-            Connection conn = DriverManager.getConnection(
+            conn = DriverManager.getConnection(
                     druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
 
             PreparedStatement preparedStatement = conn.prepareStatement(new TableFieldListSql().getSql(druidProperties.getUrl()));
@@ -111,6 +151,8 @@ public class DatabaseUtil {
         } catch (Exception ex) {
             log.error("查询表的所有字段错误！", ex);
             throw new DaoException(DatabaseExceptionEnum.FIELD_GET_ERROR, ex.getMessage());
+        } finally {
+            IoUtil.close(conn);
         }
     }
 
@@ -121,9 +163,10 @@ public class DatabaseUtil {
      * @date 2021/5/19 10:39
      */
     public static void createDatabase(DruidProperties druidProperties, String databaseName) {
+        Connection conn = null;
         try {
             Class.forName(druidProperties.getDriverClassName());
-            Connection conn = DriverManager.getConnection(druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
+            conn = DriverManager.getConnection(druidProperties.getUrl(), druidProperties.getUsername(), druidProperties.getPassword());
 
             //创建sql
             String sql = new CreateDatabaseSql().getSql(druidProperties.getUrl());
@@ -137,6 +180,8 @@ public class DatabaseUtil {
         } catch (Exception ex) {
             log.error("执行sql出现问题！", ex);
             throw new DaoException(DatabaseExceptionEnum.CREATE_DATABASE_ERROR, ex.getMessage());
+        } finally {
+            IoUtil.close(conn);
         }
     }
 
