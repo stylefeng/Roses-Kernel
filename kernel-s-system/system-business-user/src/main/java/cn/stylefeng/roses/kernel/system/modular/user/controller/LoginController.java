@@ -86,7 +86,7 @@ public class LoginController {
     }
 
     /**
-     * 基于token登录，适用于单点登录
+     * 基于token登录，适用于单点登录，将caToken请求过来，进行解析，并创建本系统可以识别的token
      *
      * @author fengshuonan
      * @date 2021/5/25 22:36
