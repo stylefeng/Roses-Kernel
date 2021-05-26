@@ -40,6 +40,7 @@ import cn.stylefeng.roses.kernel.dsctn.modular.entity.DatabaseInfo;
 import cn.stylefeng.roses.kernel.dsctn.modular.factory.DruidPropertiesFactory;
 import cn.stylefeng.roses.kernel.dsctn.modular.mapper.DatabaseInfoMapper;
 import cn.stylefeng.roses.kernel.dsctn.modular.service.DatabaseInfoService;
+import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -56,7 +57,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static cn.stylefeng.roses.kernel.dsctn.api.constants.DatasourceContainerConstants.MASTER_DATASOURCE_NAME;
-import static cn.stylefeng.roses.kernel.dsctn.api.constants.DatasourceContainerConstants.TENANT_DB_PREFIX;
 import static cn.stylefeng.roses.kernel.dsctn.api.exception.enums.DatasourceContainerExceptionEnum.*;
 
 /**
@@ -91,7 +91,7 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
         DatabaseInfo databaseInfo = this.queryDatabaseInfoById(databaseInfoRequest);
 
         // 如果是租户数据库不能删除
-        if (databaseInfo.getDbName().startsWith(TENANT_DB_PREFIX)) {
+        if (databaseInfo.getDbName().startsWith(RuleConstants.TENANT_DB_PREFIX)) {
             throw new DatasourceContainerException(TENANT_DATASOURCE_CANT_DELETE);
         }
 

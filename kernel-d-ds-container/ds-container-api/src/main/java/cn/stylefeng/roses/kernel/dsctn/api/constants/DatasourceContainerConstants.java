@@ -52,9 +52,4 @@ public interface DatasourceContainerConstants {
      */
     int MULTI_DATA_SOURCE_EXCHANGE_AOP = 1;
 
-    /**
-     * 租户数据源标识前缀
-     */
-    String TENANT_DB_PREFIX = "sys_tenant_db_";
-
 }

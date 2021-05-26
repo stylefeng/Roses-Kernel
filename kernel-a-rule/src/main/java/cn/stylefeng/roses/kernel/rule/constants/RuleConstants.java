@@ -82,4 +82,9 @@ public interface RuleConstants {
      */
     String CHINES_TRAN_LANGUAGE_CODE = "chinese";
 
+    /**
+     * 租户数据源标识前缀
+     */
+    String TENANT_DB_PREFIX = "sys_tenant_db_";
+
 }

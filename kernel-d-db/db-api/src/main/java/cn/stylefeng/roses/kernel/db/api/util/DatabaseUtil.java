@@ -11,7 +11,7 @@ import cn.stylefeng.roses.kernel.db.api.sqladapter.database.CreateDatabaseSql;
 import cn.stylefeng.roses.kernel.db.api.sqladapter.database.GetDatabasesSql;
 import cn.stylefeng.roses.kernel.db.api.sqladapter.table.TableFieldListSql;
 import cn.stylefeng.roses.kernel.db.api.sqladapter.table.TableListSql;
-import cn.stylefeng.roses.kernel.dsctn.api.constants.DatasourceContainerConstants;
+import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -48,8 +48,8 @@ public class DatabaseUtil {
             while (resultSet.next()) {
                 String database = resultSet.getString("database");
                 if (StrUtil.isNotBlank(database)) {
-                    if (StrUtil.startWith(database, DatasourceContainerConstants.TENANT_DB_PREFIX)) {
-                        database = database.replaceAll(DatasourceContainerConstants.TENANT_DB_PREFIX, "");
+                    if (StrUtil.startWith(database, RuleConstants.TENANT_DB_PREFIX)) {
+                        database = database.replaceAll(RuleConstants.TENANT_DB_PREFIX, "");
                         databasesList.add(database);
                     }
                 }
