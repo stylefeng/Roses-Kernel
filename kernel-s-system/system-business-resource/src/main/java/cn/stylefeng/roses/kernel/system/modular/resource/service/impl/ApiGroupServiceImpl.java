@@ -75,6 +75,10 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
         apiGroupLambdaQueryWrapper.like(ApiGroup::getGroupPids, SymbolConstant.LEFT_SQUARE_BRACKETS + apiGroup.getGroupId() + SymbolConstant.RIGHT_SQUARE_BRACKETS);
         List<ApiGroup> apiGroups = this.list(apiGroupLambdaQueryWrapper);
 
+        // 把分组本身加入进去
+        apiGroups.add(apiGroup);
+
+        // 获取所有分组ID
         Set<Long> apiGroupIdSet = null;
         if (ObjectUtil.isNotEmpty(apiGroups)) {
             apiGroupIdSet = apiGroups.stream().map(ApiGroup::getGroupId).collect(Collectors.toSet());
@@ -159,6 +163,51 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
     @Override
     public List<ApiGroupTreeWrapper> peersTree(ApiGroupRequest apiGroupRequest) {
         // 结果
+        List<ApiGroupTreeWrapper> allApiGroupTreeWrapperList = new ArrayList<>();
+
+        // 查询所有分组
+        LambdaQueryWrapper<ApiGroup> wrapper = new LambdaQueryWrapper<>();
+        if (ObjectUtil.isNotEmpty(apiGroupRequest.getGroupId())) {
+            wrapper.notLike(ApiGroup::getGroupPids, SymbolConstant.LEFT_SQUARE_BRACKETS + apiGroupRequest.getGroupId() + SymbolConstant.RIGHT_SQUARE_BRACKETS);
+            wrapper.ne(ApiGroup::getGroupId, apiGroupRequest.getGroupId());
+        }
+        List<ApiGroup> apiGroups = this.list(wrapper);
+
+        if (ObjectUtil.isNotEmpty(apiGroups)) {
+            for (ApiGroup apiGroup : apiGroups) {
+                ApiGroupTreeWrapper item = new ApiGroupTreeWrapper();
+                item.setId(apiGroup.getGroupId());
+                item.setPid(apiGroup.getGroupPid());
+                item.setName(apiGroup.getGroupName());
+                item.setType(NodeTypeEnums.LEAF_NODE.getType());
+                item.setSort(apiGroup.getGroupSort());
+                item.setData(apiGroup);
+                item.setSlotsValue();
+                allApiGroupTreeWrapperList.add(item);
+            }
+        }
+
+        // 查询所有资源
+        List<ApiResource> apiResourceList = this.apiResourceService.list();
+        if (ObjectUtil.isNotEmpty(apiResourceList)) {
+            for (ApiResource apiResource : apiResourceList) {
+                ApiGroupTreeWrapper item = new ApiGroupTreeWrapper();
+                item.setId(apiResource.getApiResourceId());
+                item.setPid(apiResource.getGroupId());
+                item.setName(apiResource.getApiAlias());
+                item.setType(NodeTypeEnums.DATA_NODE.getType());
+                item.setSort(apiResource.getResourceSort());
+                item.setData(apiResource);
+                item.setSlotsValue();
+                allApiGroupTreeWrapperList.add(item);
+            }
+        }
+        return allApiGroupTreeWrapperList;
+    }
+
+    @Override
+    public List<ApiGroupTreeWrapper> groupTree(ApiGroupRequest apiGroupRequest) {
+        // 结果
         List<ApiGroupTreeWrapper> apiGroupTreeWrapperList = new ArrayList<>();
 
         // 查询所有分组
@@ -183,22 +232,7 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
             }
         }
 
-        // 查询所有资源
-        List<ApiResource> apiResourceList = this.apiResourceService.list();
-        if (ObjectUtil.isNotEmpty(apiResourceList)) {
-            for (ApiResource apiResource : apiResourceList) {
-                ApiGroupTreeWrapper item = new ApiGroupTreeWrapper();
-                item.setId(apiResource.getApiResourceId());
-                item.setPid(apiResource.getGroupId());
-                item.setName(apiResource.getApiAlias());
-                item.setType(NodeTypeEnums.DATA_NODE.getType());
-                item.setSort(apiResource.getResourceSort());
-                item.setData(apiResource);
-                item.setSlotsValue();
-                apiGroupTreeWrapperList.add(item);
-            }
-        }
-        return apiGroupTreeWrapperList;
+        return this.createTree(apiGroupTreeWrapperList);
     }
 
     @Override

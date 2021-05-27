@@ -89,4 +89,13 @@ public interface ApiGroupService extends IService<ApiGroup> {
      * @date 2021/5/22 上午11:11
      **/
     List<ApiGroupTreeWrapper> peersTree(ApiGroupRequest apiGroupRequest);
+
+    /**
+     * 获取分组树
+     *
+     * @return {@link List< ApiGroupTreeWrapper>}
+     * @author majianguo
+     * @date 2021/5/27 下午2:49
+     **/
+    List<ApiGroupTreeWrapper> groupTree(ApiGroupRequest apiGroupRequest);
 }

@@ -23,14 +23,14 @@ public class ApiResourceRequest extends BaseRequest {
     /**
      * 接口信息主键
      */
-    @NotNull(message = "接口信息主键不能为空", groups = {detail.class, edit.class, delete.class, record.class})
+    @NotNull(message = "接口信息主键不能为空", groups = {detail.class, reset.class, edit.class, delete.class, record.class})
     @ChineseDescription("接口信息主键")
     private Long apiResourceId;
 
     /**
      * 资源分组数据主键
      */
-    @NotNull(message = "资源分组数据主键不能为空", groups = {add.class, edit.class})
+    @NotNull(message = "资源分组数据主键不能为空", groups = {add.class, edit.class, reset.class})
     @ChineseDescription("资源分组数据主键")
     private Long groupId;
 
@@ -64,7 +64,7 @@ public class ApiResourceRequest extends BaseRequest {
     /**
      * 资源唯一编码,关联sys_resource表的code
      */
-    @NotBlank(message = "资源唯一编码,关联sys_resource表的code不能为空", groups = {add.class, allField.class})
+    @NotBlank(message = "资源唯一编码,关联sys_resource表的code不能为空", groups = {add.class, reset.class, allField.class})
     @ChineseDescription("资源唯一编码,关联sys_resource表的code")
     private String resourceCode;
 
@@ -123,6 +123,13 @@ public class ApiResourceRequest extends BaseRequest {
      * 全部字段
      */
     public @interface allField {
+
+    }
+
+    /**
+     * 重置
+     */
+    public @interface reset {
 
     }
 }

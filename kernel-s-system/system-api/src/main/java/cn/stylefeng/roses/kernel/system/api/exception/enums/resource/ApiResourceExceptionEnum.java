@@ -24,6 +24,11 @@ public enum ApiResourceExceptionEnum implements AbstractExceptionEnum {
      */
     OPERATIONS_RESOURCE_NODESNOT_ALLOWED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "02", "不允许对资源节点进行操作"),
 
+    /**
+     * 不允许添加视图资源
+     */
+    ADDING_VIEW_RESOURCES_NOT_ALLOWED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "03", "不允许添加视图资源"),
+
     ;
 
     /**

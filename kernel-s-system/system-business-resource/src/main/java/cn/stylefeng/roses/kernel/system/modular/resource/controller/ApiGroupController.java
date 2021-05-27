@@ -110,6 +110,19 @@ public class ApiGroupController {
     }
 
     /**
+     * 获取分组树
+     *
+     * @return {@link ResponseData}
+     * @author majianguo
+     * @date 2021/5/22 上午11:00
+     **/
+    @GetResource(name = "获取分组树", path = "/apiGroup/groupTree")
+    public ResponseData groupTree(ApiGroupRequest apiGroupRequest) {
+        List<ApiGroupTreeWrapper> apiGroupTreeWrapperList = apiGroupService.groupTree(apiGroupRequest);
+        return new SuccessResponseData(apiGroupTreeWrapperList);
+    }
+
+    /**
      * 获取树(平级)
      *
      * @return {@link ResponseData}

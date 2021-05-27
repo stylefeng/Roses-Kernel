@@ -63,6 +63,18 @@ public class ApiResourceController {
     }
 
     /**
+     * 重置
+     *
+     * @return {@link cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData}
+     * @author majianguo
+     * @date 2021/5/27 下午3:33
+     **/
+    @PostResource(name = "编辑", path = "/apiResource/reset")
+    public ResponseData reset(@RequestBody @Validated(ApiResourceRequest.reset.class) ApiResourceRequest apiResourceRequest) {
+        return new SuccessResponseData(apiResourceService.reset(apiResourceRequest));
+    }
+
+    /**
      * 请求记录
      *
      * @author majianguo
@@ -106,7 +118,6 @@ public class ApiResourceController {
     public ResponseData page(ApiResourceRequest apiResourceRequest) {
         return new SuccessResponseData(apiResourceService.findPage(apiResourceRequest));
     }
-
 
     /**
      * 查询该资源所有字段

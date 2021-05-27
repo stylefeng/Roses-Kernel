@@ -27,6 +27,7 @@ import cn.stylefeng.roses.kernel.system.modular.resource.service.ApiResourceServ
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -71,19 +72,26 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
 
         List<SysResource> resourceList = new ArrayList<>();
 
-        // 根据资源CODE查询资源信息
+        // 资源查询条件
         LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysResourceLambdaQueryWrapper.eq(SysResource::getResourceCode, apiResourceRequest.getResourceCode());
-        SysResource sysResources = sysResourceService.getOne(sysResourceLambdaQueryWrapper);
 
         // 如果是控制器名称，则查询模块下的所有资源
         if (!apiResourceRequest.getResourceCode().contains("$")) {
-            sysResourceLambdaQueryWrapper.clear();
             sysResourceLambdaQueryWrapper.eq(SysResource::getModularCode, apiResourceRequest.getResourceCode());
             sysResourceLambdaQueryWrapper.eq(SysResource::getViewFlag, YesOrNotEnum.N.getCode());
             List<SysResource> sysResourceList = sysResourceService.list(sysResourceLambdaQueryWrapper);
             resourceList.addAll(sysResourceList);
         } else {
+
+            // 根据资源CODE查询资源信息
+            sysResourceLambdaQueryWrapper.eq(SysResource::getResourceCode, apiResourceRequest.getResourceCode());
+            SysResource sysResources = sysResourceService.getOne(sysResourceLambdaQueryWrapper);
+
+            // 如果是视图就报错
+            if (YesOrNotEnum.Y.getCode().equals(sysResources.getViewFlag())) {
+                throw new SystemModularException(ApiResourceExceptionEnum.ADDING_VIEW_RESOURCES_NOT_ALLOWED);
+            }
+
             resourceList.add(sysResources);
         }
 
@@ -115,7 +123,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
             apiResource.setResourceCode(sysResource.getResourceCode());
 
             // 设置排序
-            if (ObjectUtil.isNotEmpty(apiResourceRequest.getResourceSort())) {
+            if (ObjectUtil.isEmpty(apiResourceRequest.getResourceSort())) {
                 index = index.add(BigDecimal.ONE);
                 apiResource.setResourceSort(index);
             }
@@ -132,7 +140,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
             // 处理所有请求字段
             if (ObjectUtil.isNotEmpty(fillResourceDetail.getParamFieldDescriptions())) {
                 for (FieldMetadata fieldMetadata : fillResourceDetail.getParamFieldDescriptions()) {
-                    ApiResourceField conversion = this.conversion(apiResource.getApiResourceId(), fieldMetadata);
+                    ApiResourceField conversion = this.conversion(sysResource, apiResource.getApiResourceId(), fieldMetadata);
                     conversion.setFieldLocation("request");
                     apiResourceFieldList.add(conversion);
                 }
@@ -141,7 +149,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
             // 处理所有响应字段
             if (ObjectUtil.isNotEmpty(fillResourceDetail.getResponseFieldDescriptions())) {
                 for (FieldMetadata fieldDescription : fillResourceDetail.getResponseFieldDescriptions()) {
-                    ApiResourceField conversion = this.conversion(apiResource.getApiResourceId(), fieldDescription);
+                    ApiResourceField conversion = this.conversion(sysResource, apiResource.getApiResourceId(), fieldDescription);
                     conversion.setFieldLocation("response");
                     apiResourceFieldList.add(conversion);
                 }
@@ -167,6 +175,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void edit(ApiResourceRequest apiResourceRequest) {
 
         // 查询旧数据
@@ -283,19 +292,32 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         if (ObjectUtil.isNotEmpty(fillResourceDetail.getParamFieldDescriptions())) {
             // 处理所有请求字段
             for (FieldMetadata fieldMetadata : fillResourceDetail.getParamFieldDescriptions()) {
-                ApiResourceField conversion = this.conversion(null, fieldMetadata);
+                ApiResourceField conversion = this.conversion(sysResources, null, fieldMetadata);
                 conversion.setFieldLocation("request");
                 apiResourceFieldList.add(conversion);
             }
 
             // 处理所有响应字段
             for (FieldMetadata fieldDescription : fillResourceDetail.getResponseFieldDescriptions()) {
-                ApiResourceField conversion = this.conversion(null, fieldDescription);
+                ApiResourceField conversion = this.conversion(sysResources, null, fieldDescription);
                 conversion.setFieldLocation("response");
                 apiResourceFieldList.add(conversion);
             }
         }
         return apiResourceFieldList;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ApiResource reset(ApiResourceRequest apiResourceRequest) {
+        // 删除原有的
+        this.del(apiResourceRequest);
+
+        // 新增一个新的
+        this.add(apiResourceRequest);
+
+        // 查询并返回结果
+        return this.getById(apiResourceRequest.getApiResourceId());
     }
 
     @Override
@@ -355,13 +377,13 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
     }
 
     /**
-     * 转换
+     * 转换字段信息
      *
      * @return {@link ApiResourceField}
      * @author majianguo
      * @date 2021/5/22 下午2:44
      **/
-    private ApiResourceField conversion(Long apiResourceId, FieldMetadata fieldMetadata) {
+    private ApiResourceField conversion(SysResource sysResource, Long apiResourceId, FieldMetadata fieldMetadata) {
         ApiResourceField item = new ApiResourceField();
         item.setApiResourceId(apiResourceId);
         item.setFieldCode(fieldMetadata.getFieldName());
@@ -373,16 +395,43 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         }
 
         // 是否必填
-        Set<String> annotations = fieldMetadata.getAnnotations();
-        if (ObjectUtil.isNotEmpty(annotations)) {
-            for (String annotationName : annotations) {
-                if ("NotBlank".equalsIgnoreCase(annotationName) || "NotNull".equalsIgnoreCase(annotationName)) {
-                    item.setFieldRequired(YesOrNotEnum.Y.getCode());
-                }
-            }
-        }
+        item.setFieldRequired(this.isRequired(sysResource, fieldMetadata) ? YesOrNotEnum.Y.getCode() : YesOrNotEnum.N.getCode());
+
+        // 字段校验消息
         item.setFieldValidationMsg(fieldMetadata.getValidationMessages());
 
         return item;
+    }
+
+    /**
+     * 是否必填
+     *
+     * @author majianguo
+     * @date 2021/5/27 下午3:15
+     **/
+    private boolean isRequired(SysResource sysResource, FieldMetadata fieldMetadata) {
+        Set<String> annotations = fieldMetadata.getAnnotations();
+        if (ObjectUtil.isNotEmpty(annotations)) {
+            // 资源校验注解
+            Set<String> validateGroups = JSON.parseObject(sysResource.getValidateGroups(), Set.class, Feature.SupportAutoType);
+            if (ObjectUtil.isNotEmpty(validateGroups)) {
+                // 注解分组
+                Map<String, Set<String>> groupValidationMessage = fieldMetadata.getGroupValidationMessage();
+                for (String annotationName : annotations) {
+                    if ("NotBlank".equalsIgnoreCase(annotationName) || "NotNull".equalsIgnoreCase(annotationName)) {
+                        // 查询注解的所有分组，判断当前资源是否符合
+                        Set<String> annotationGroups = groupValidationMessage.keySet();
+                        for (String group : annotationGroups) {
+                            // 当前分组在资源校验注解中，则设置必填
+                            if (validateGroups.contains(group)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }
