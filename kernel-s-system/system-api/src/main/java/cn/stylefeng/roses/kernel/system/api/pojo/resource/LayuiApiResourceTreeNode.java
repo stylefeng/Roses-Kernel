@@ -27,7 +27,9 @@ package cn.stylefeng.roses.kernel.system.api.pojo.resource;
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用于渲染api资源树（layui插件）
@@ -67,9 +69,20 @@ public class LayuiApiResourceTreeNode implements AbstractTreeNode<LayuiApiResour
     private Boolean resourceFlag;
 
     /**
+     * 图标
+     */
+    private Map<String, String> slots = new HashMap<>();
+
+    /**
      * 子节点的集合
      */
     private List<LayuiApiResourceTreeNode> children;
+
+    public void setSlotsValue() {
+        if (resourceFlag) {
+            slots.put("icon", "resource");
+        }
+    }
 
     @Override
     public String getNodeId() {

@@ -377,6 +377,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             resourceTreeNode.setId(sysResource.getResourceCode());
             resourceTreeNode.setParentId(sysResource.getModularCode());
             resourceTreeNode.setSpread(false);
+            resourceTreeNode.setSlotsValue();
             resourceTreeNodes.add(resourceTreeNode);
 
             modularResource.put(sysResource.getModularCode(), resourceTreeNodes);
@@ -418,6 +419,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             appNode.setTitle(appName);
             appNode.setSpread(true);
             appNode.setResourceFlag(false);
+            appNode.setSlotsValue();
             appNode.setParentId(TreeConstants.DEFAULT_PARENT_ID.toString());
 
             // 遍历当前应用下的模块资源
@@ -433,6 +435,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 modularNode.setSpread(false);
                 modularNode.setResourceFlag(false);
                 modularNode.setChildren(modularResources.get(modularCode));
+                modularNode.setSlotsValue();
                 modularNodes.add(modularNode);
             }
 
