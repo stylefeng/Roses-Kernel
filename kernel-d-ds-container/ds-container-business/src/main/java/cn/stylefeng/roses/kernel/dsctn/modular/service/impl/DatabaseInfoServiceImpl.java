@@ -86,6 +86,21 @@ public class DatabaseInfoServiceImpl extends ServiceImpl<DatabaseInfoMapper, Dat
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public void deleteByDatasourceCode(String datasourceCode) {
+
+        LambdaQueryWrapper<DatabaseInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(DatabaseInfo::getDbName, datasourceCode);
+        DatabaseInfo databaseInfo = this.getOne(wrapper, false);
+
+        // 删除数据源信息
+        this.removeById(databaseInfo.getDbId());
+
+        // 删除容器中的数据源记录
+        DataSourceContext.removeDataSource(datasourceCode);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void del(DatabaseInfoRequest databaseInfoRequest) {
 
         DatabaseInfo databaseInfo = this.queryDatabaseInfoById(databaseInfoRequest);

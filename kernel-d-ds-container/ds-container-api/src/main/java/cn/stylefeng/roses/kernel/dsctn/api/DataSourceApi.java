@@ -32,4 +32,13 @@ public interface DataSourceApi {
      */
     void add(DatabaseInfoRequest databaseInfoRequest);
 
+    /**
+     * 通过数据源编码删除数据源
+     *
+     * @param datasourceCode 数据源编码
+     * @author fengshuonan
+     * @date 2021/5/27 10:06
+     */
+    void deleteByDatasourceCode(String datasourceCode);
+
 }
