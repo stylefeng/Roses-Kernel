@@ -72,4 +72,9 @@ public class LoginRequest extends BaseRequest {
      */
     private Boolean createCookie = false;
 
+    /**
+     * 租户编码
+     */
+    private String tenantCode;
+
 }

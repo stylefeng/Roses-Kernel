@@ -297,6 +297,9 @@ public class AuthServiceImpl implements AuthServiceApi {
         String jwtToken = JwtContext.me().generateTokenDefaultPayload(defaultJwtPayload);
         loginUser.setToken(jwtToken);
 
+        // 如果包含租户编码，则放到loginUser中
+        loginUser.setTenantCode(loginRequest.getTenantCode());
+
         synchronized (SESSION_OPERATE_LOCK) {
 
             // 9.1 获取ws-url 保存到用户信息中
