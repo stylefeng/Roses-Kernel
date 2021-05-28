@@ -71,8 +71,8 @@ public class ApiGroupController {
      * @date 2021/05/21 15:03
      */
     @PostResource(name = "编辑树节点排序", path = "/apiGroup/editTreeSort")
-    public ResponseData editTreeSort(@RequestBody @Validated(TreeSortRequest.edit.class) List<TreeSortRequest> treeSortRequestList) {
-        apiGroupService.editTreeSort(treeSortRequestList);
+    public ResponseData editTreeSort(@RequestBody @Validated(ApiGroupRequest.treeSort.class) ApiGroupRequest apiGroupRequest) {
+        apiGroupService.editTreeSort(apiGroupRequest.getTreeSortRequestList());
         return new SuccessResponseData();
     }
 

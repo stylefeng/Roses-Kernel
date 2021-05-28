@@ -45,4 +45,11 @@ public class TreeSortRequest extends BaseRequest {
     @ChineseDescription("节点排序")
     @NotNull(message = "节点排序不能为空", groups = {edit.class})
     private BigDecimal nodeSort;
+
+    /**
+     * 树排序
+     */
+    public @interface treeSort {
+
+    }
 }

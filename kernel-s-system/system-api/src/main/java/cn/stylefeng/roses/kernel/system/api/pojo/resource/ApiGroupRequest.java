@@ -4,8 +4,10 @@ import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 接口分组封装类
@@ -46,6 +48,10 @@ public class ApiGroupRequest extends BaseRequest {
     @NotNull(message = "分组名称不能为空", groups = {add.class, edit.class})
     private java.math.BigDecimal groupSort;
 
+    @Valid
+    @NotNull(message = "分组名称不能为空", groups = {treeSort.class})
+    private List<TreeSortRequest> treeSortRequestList;
+
     /**
      * 创建时间
      */
@@ -66,4 +72,10 @@ public class ApiGroupRequest extends BaseRequest {
      */
     private Long updateUser;
 
+    /**
+     * 树排序
+     */
+    public @interface treeSort {
+
+    }
 }
