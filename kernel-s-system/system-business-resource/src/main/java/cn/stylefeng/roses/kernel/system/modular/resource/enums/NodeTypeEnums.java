@@ -14,7 +14,7 @@ public enum NodeTypeEnums {
     /**
      * 叶子节点
      */
-    LEAF_NODE("1", "根节点"),
+    LEAF_NODE("1", "叶子节点"),
 
     /**
      * 数据节点

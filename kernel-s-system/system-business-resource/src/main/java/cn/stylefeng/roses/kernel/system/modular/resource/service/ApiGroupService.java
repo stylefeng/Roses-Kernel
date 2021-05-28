@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.system.modular.resource.service;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupTreeWrapper;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.TreeSortRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiGroup;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -98,4 +99,12 @@ public interface ApiGroupService extends IService<ApiGroup> {
      * @date 2021/5/27 下午2:49
      **/
     List<ApiGroupTreeWrapper> groupTree(ApiGroupRequest apiGroupRequest);
+
+    /**
+     * 编辑树节点排序
+     *
+     * @author majianguo
+     * @date 2021/5/28 下午5:27
+     **/
+    void editTreeSort(List<TreeSortRequest> treeSortRequestList);
 }

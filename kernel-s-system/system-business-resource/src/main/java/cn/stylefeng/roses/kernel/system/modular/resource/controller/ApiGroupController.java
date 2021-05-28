@@ -7,6 +7,7 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupTreeWrapper;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.TreeSortRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.ApiGroupService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,6 +61,18 @@ public class ApiGroupController {
     @PostResource(name = "编辑", path = "/apiGroup/edit")
     public ResponseData edit(@RequestBody @Validated(ApiGroupRequest.edit.class) ApiGroupRequest apiGroupRequest) {
         apiGroupService.edit(apiGroupRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 编辑树节点排序
+     *
+     * @author majianguo
+     * @date 2021/05/21 15:03
+     */
+    @PostResource(name = "编辑树节点排序", path = "/apiGroup/editTreeSort")
+    public ResponseData editTreeSort(@RequestBody @Validated(TreeSortRequest.edit.class) List<TreeSortRequest> treeSortRequestList) {
+        apiGroupService.editTreeSort(treeSortRequestList);
         return new SuccessResponseData();
     }
 

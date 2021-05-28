@@ -13,6 +13,7 @@ import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.resource.ApiGroupExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupTreeWrapper;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.TreeSortRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiGroup;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResourceField;
@@ -233,6 +234,49 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
         }
 
         return this.createTree(apiGroupTreeWrapperList);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void editTreeSort(List<TreeSortRequest> treeSortRequestList) {
+
+        // 所有叶子节点
+        List<ApiGroup> apiGroupList = new ArrayList<>();
+
+        // 所有数据节点
+        List<ApiResource> apiResourceList = new ArrayList<>();
+
+        // 处理数据
+        for (TreeSortRequest treeSortRequest : treeSortRequestList) {
+            if (NodeTypeEnums.LEAF_NODE.getType().equals(treeSortRequest.getNodeType())) {
+                ApiGroup item = new ApiGroup();
+                item.setGroupId(treeSortRequest.getNodeId());
+                item.setGroupPid(treeSortRequest.getNodePid());
+                item.setGroupSort(treeSortRequest.getNodeSort());
+                apiGroupList.add(item);
+            } else {
+                ApiResource item = new ApiResource();
+                item.setApiResourceId(treeSortRequest.getNodeId());
+                item.setGroupId(treeSortRequest.getNodePid());
+                item.setResourceSort(treeSortRequest.getNodeSort());
+                apiResourceList.add(item);
+            }
+        }
+
+        // 处理所有叶子节点
+        if (ObjectUtil.isNotEmpty(apiGroupList)) {
+            for (ApiGroup apiGroup : apiGroupList) {
+                ApiGroup oldApiGroup = this.getById(apiGroup.getGroupId());
+                this.setPids(apiGroup);
+                this.updatePids(apiGroup, oldApiGroup);
+            }
+            this.updateBatchById(apiGroupList);
+        }
+
+        // 处理所有数据节点
+        if (ObjectUtil.isNotEmpty(apiResourceList)) {
+            this.apiResourceService.updateBatchById(apiResourceList);
+        }
     }
 
     @Override
