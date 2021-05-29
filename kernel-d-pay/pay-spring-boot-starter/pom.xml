@@ -3,19 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>roses-kernel</artifactId>
+        <artifactId>kernel-d-pay</artifactId>
         <groupId>cn.stylefeng.roses</groupId>
         <version>7.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>kernel-d-pay</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>pay-api</module>
-        <module>pay-sdk-alipay</module>
-        <module>pay-spring-boot-starter</module>
-    </modules>
+    <artifactId>pay-spring-boot-starter</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -23,13 +17,12 @@
     </properties>
 
     <dependencies>
-
-        <!-- 开发规则 -->
+        <!--alipay api模块的sdk-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>kernel-a-rule</artifactId>
+            <artifactId>pay-sdk-alipay</artifactId>
             <version>7.0.4</version>
         </dependency>
-
     </dependencies>
+
 </project>
