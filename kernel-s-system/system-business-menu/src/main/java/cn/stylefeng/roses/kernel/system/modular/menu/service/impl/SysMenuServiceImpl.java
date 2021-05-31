@@ -39,6 +39,7 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.rule.util.ProjectUtil;
 import cn.stylefeng.roses.kernel.system.api.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
@@ -419,6 +420,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 如果应用编码不为空，则拼接应用编码
         if (StrUtil.isNotBlank(appCode)) {
             queryWrapper.eq(SysMenu::getAppCode, appCode);
+        }
+
+        // 如果是不分离版本，则筛选一下不需要显示的菜单
+        if (!ProjectUtil.getSeparationFlag()) {
+            queryWrapper.eq(SysMenu::getLayuiVisible, YesOrNotEnum.Y.getCode());
         }
 
         // 如果是超级管理员，则获取所有的菜单

@@ -10,7 +10,6 @@ import cn.stylefeng.roses.kernel.message.api.MessageApi;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiAppIndexMenusVO;
-import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiIndexMenuTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
@@ -18,7 +17,6 @@ import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,10 +57,6 @@ public class IndexService {
 
         // 渲染首页的菜单
         List<LayuiAppIndexMenusVO> layuiAppIndexMenus = sysMenuService.getLayuiIndexMenus();
-
-        // 将个人信息菜单单独去除掉
-        this.removePersonalMenu(layuiAppIndexMenus);
-
         renderMap.put("layuiAppIndexMenus", layuiAppIndexMenus);
 
         // 获取首页的头像
@@ -117,29 +111,6 @@ public class IndexService {
         renderMap.put("avatar", sysUserService.getUserAvatarUrl(simpleUserInfo.getAvatar()));
 
         return renderMap;
-    }
-
-    /**
-     * 去除个人信息菜单显示
-     *
-     * @author fengshuonan
-     * @date 2021/5/14 16:30
-     */
-    private void removePersonalMenu(List<LayuiAppIndexMenusVO> layuiAppIndexMenusVOS) {
-
-        ArrayList<LayuiIndexMenuTreeNode> menus = new ArrayList<>();
-
-        for (LayuiAppIndexMenusVO layuiAppIndexMenusVO : layuiAppIndexMenusVOS) {
-            if (layuiAppIndexMenusVO.getAppCode().equals("system")) {
-                List<LayuiIndexMenuTreeNode> layuiIndexMenuTreeNodes = layuiAppIndexMenusVO.getLayuiIndexMenuTreeNodes();
-                for (LayuiIndexMenuTreeNode layuiIndexMenuTreeNode : layuiIndexMenuTreeNodes) {
-                    if (!layuiIndexMenuTreeNode.getMenuName().equals("个人信息")) {
-                        menus.add(layuiIndexMenuTreeNode);
-                    }
-                }
-                layuiAppIndexMenusVO.setLayuiIndexMenuTreeNodes(menus);
-            }
-        }
     }
 
 }

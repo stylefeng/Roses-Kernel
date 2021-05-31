@@ -91,13 +91,6 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode<SysMenu> {
     private String appCode;
 
     /**
-     * 是否可见：Y-是，N-否
-     */
-    @TableField("visible")
-    @ChineseDescription("是否可见：Y-是，N-否")
-    private String visible;
-
-    /**
      * 排序
      */
     @TableField("menu_sort")
@@ -131,6 +124,13 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode<SysMenu> {
     @TableField("layui_icon")
     @ChineseDescription("菜单的图标，适用于layui-beetl版本")
     private String layuiIcon;
+
+    /**
+     * 是否可见(layui版用)：Y-是，N-否
+     */
+    @TableField("layui_visible")
+    @ChineseDescription("是否显示")
+    private String layuiVisible;
 
     /**
      * 路由地址，浏览器显示的URL，例如/menu，适用于antd vue版本
@@ -173,6 +173,13 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode<SysMenu> {
     @TableField("antdv_uid_url")
     @ChineseDescription("用于非菜单显示页面的重定向url设置")
     private String antdvUidUrl;
+
+    /**
+     * 是否可见(分离版用)：Y-是，N-否
+     */
+    @TableField("antdv_visible")
+    @ChineseDescription("是否可见")
+    private String antdvVisible;
 
     /**
      * 是否删除：Y-被删除，N-未删除
