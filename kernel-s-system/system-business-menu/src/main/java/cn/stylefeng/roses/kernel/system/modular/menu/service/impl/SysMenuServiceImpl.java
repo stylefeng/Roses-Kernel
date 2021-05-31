@@ -39,7 +39,6 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
-import cn.stylefeng.roses.kernel.rule.util.ProjectUtil;
 import cn.stylefeng.roses.kernel.system.api.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
@@ -262,7 +261,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<LayuiAppIndexMenusVO> getLayuiIndexMenus() {
 
         // 获取当前用户所有菜单
-        List<SysMenu> currentUserMenus = this.getCurrentUserMenus();
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, true);
 
         // 组装每个应用的菜单树
         List<LayuiAppIndexMenusVO> layuiAppIndexMenuVOS = LayuiMenusFactory.createLayuiAppIndexMenus(currentUserMenus);
@@ -284,7 +283,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 不分应用查询菜单
         List<SysMenu> currentUserMenus = null;
         if (sysMenuRequest.getTotalMenus() != null && sysMenuRequest.getTotalMenus()) {
-            currentUserMenus = this.getCurrentUserMenus(null);
+            currentUserMenus = this.getCurrentUserMenus(null, false);
         }
         // 根据应用查询菜单
         else {
@@ -292,7 +291,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             if (ObjectUtil.isEmpty(appCode)) {
                 appCode = appServiceApi.getActiveAppCode();
             }
-            currentUserMenus = this.getCurrentUserMenus(appCode);
+            currentUserMenus = this.getCurrentUserMenus(appCode, false);
         }
 
         return AntdMenusFactory.createTotalMenus(currentUserMenus);
@@ -404,12 +403,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<SysMenu> getCurrentUserMenus() {
-        return getCurrentUserMenus(null);
-    }
-
-    @Override
-    public List<SysMenu> getCurrentUserMenus(String appCode) {
+    public List<SysMenu> getCurrentUserMenus(String appCode, Boolean layuiVisibleFlag) {
 
         // 菜单查询条件
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
@@ -423,7 +417,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
 
         // 如果是不分离版本，则筛选一下不需要显示的菜单
-        if (!ProjectUtil.getSeparationFlag()) {
+        if (layuiVisibleFlag != null && layuiVisibleFlag) {
             queryWrapper.eq(SysMenu::getLayuiVisible, YesOrNotEnum.Y.getCode());
         }
 

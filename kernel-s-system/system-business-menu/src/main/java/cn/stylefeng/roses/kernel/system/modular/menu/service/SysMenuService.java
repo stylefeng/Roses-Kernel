@@ -146,20 +146,13 @@ public interface SysMenuService extends IService<SysMenu> {
     List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest, Boolean lateralFlag);
 
     /**
-     * 获取当前用户的所有菜单
-     *
-     * @author fengshuonan
-     * @date 2020/12/27 18:11
-     */
-    List<SysMenu> getCurrentUserMenus();
-
-    /**
      * 获取当前用户的某个应用下的菜单
      *
-     * @param appCode 应用编码
+     * @param appCode          应用编码
+     * @param layuiVisibleFlag layui版本查询查询条件，如果穿true，则会带上layui_visible为Y的查询条件
      * @author fengshuonan
      * @date 2020/12/27 18:11
      */
-    List<SysMenu> getCurrentUserMenus(String appCode);
+    List<SysMenu> getCurrentUserMenus(String appCode, Boolean layuiVisibleFlag);
 
 }
