@@ -24,6 +24,14 @@
             <version>7.0.4</version>
         </dependency>
 
+        <!--资源api模块-->
+        <!--用在资源控制器，资源扫描上-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>scanner-api</artifactId>
+            <version>7.0.4</version>
+        </dependency>
+
     </dependencies>
 
 </project>

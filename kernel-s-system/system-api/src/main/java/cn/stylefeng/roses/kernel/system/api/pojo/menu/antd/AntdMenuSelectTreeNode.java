@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.api.pojo.menu.antd;
 
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -42,31 +43,37 @@ public class AntdMenuSelectTreeNode implements AbstractTreeNode<AntdMenuSelectTr
     /**
      * 主键
      */
+    @ChineseDescription("主键")
     private Long id;
 
     /**
      * 父id
      */
+    @ChineseDescription("父id")
     private Long parentId;
 
     /**
      * 名称
      */
+    @ChineseDescription("名称")
     private String title;
 
     /**
      * 值
      */
+    @ChineseDescription("值")
     private String value;
 
     /**
      * 排序，越小优先级越高
      */
+    @ChineseDescription("排序，越小优先级越高")
     private BigDecimal weight;
 
     /**
      * 子节点
      */
+    @ChineseDescription("子节点")
     private List<AntdMenuSelectTreeNode> children;
 
     @Override

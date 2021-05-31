@@ -106,7 +106,7 @@ public class SysAppController {
      * @author fengshuonan
      * @date 2020/3/26 9:49
      */
-    @GetResource(name = "查看系统应用", path = "/sysApp/detail")
+    @GetResource(name = "查看系统应用", path = "/sysApp/detail", responseClass = SysApp.class)
     public ResponseData detail(@Validated(SysAppRequest.detail.class) SysAppRequest sysAppParam) {
         return new SuccessResponseData(sysAppService.detail(sysAppParam));
     }
@@ -117,7 +117,7 @@ public class SysAppController {
      * @author fengshuonan
      * @date 2020/4/19 14:55
      */
-    @GetResource(name = "系统应用列表", path = "/sysApp/list")
+    @GetResource(name = "系统应用列表", path = "/sysApp/list", responseClass = SysApp.class)
     public ResponseData list(SysAppRequest sysAppParam) {
         return new SuccessResponseData(sysAppService.findList(sysAppParam));
     }

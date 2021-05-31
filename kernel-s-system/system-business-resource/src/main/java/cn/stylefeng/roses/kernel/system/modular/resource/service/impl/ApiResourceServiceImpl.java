@@ -189,6 +189,8 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
 
         // 更新接口资源数据
         BeanUtil.copyProperties(apiResourceRequest, apiResource);
+
+        // 去掉排序字段
         this.updateById(apiResource);
 
         // 删除所有的字段数据
@@ -310,10 +312,15 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ApiResource reset(ApiResourceRequest apiResourceRequest) {
+
+        ApiResource oldApiResource = this.getById(apiResourceRequest.getApiResourceId());
+
         // 删除原有的
         this.del(apiResourceRequest);
 
+
         // 新增一个新的
+        apiResourceRequest.setResourceSort(oldApiResource.getResourceSort());
         this.add(apiResourceRequest);
 
         // 查询并返回结果

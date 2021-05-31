@@ -376,6 +376,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             resourceTreeNode.setTitle(sysResource.getResourceName());
             resourceTreeNode.setId(sysResource.getResourceCode());
             resourceTreeNode.setParentId(sysResource.getModularCode());
+            resourceTreeNode.setUrl(sysResource.getUrl());
             resourceTreeNode.setSpread(false);
             resourceTreeNode.setSlotsValue();
             resourceTreeNodes.add(resourceTreeNode);

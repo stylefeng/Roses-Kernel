@@ -30,6 +30,7 @@ import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -50,73 +51,97 @@ public class LoginUser implements Serializable {
     /**
      * 用户主键id
      */
+    @ChineseDescription("用户主键id")
     private Long userId;
 
     /**
      * 账号
      */
+    @ChineseDescription("账号")
     private String account;
 
     /**
      * 超级管理员标识，true-是超级管理员
      */
+    @ChineseDescription("超级管理员标识，true-是超级管理员")
     private Boolean superAdmin;
 
     /**
      * 用户基本信息
      */
+    @ChineseDescription("用户基本信息")
     private SimpleUserInfo simpleUserInfo;
 
     /**
      * 用户角色信息
      */
+    @ChineseDescription("用户角色信息")
     private List<SimpleRoleInfo> simpleRoleInfoList;
 
     /**
      * 公司/组织id
      */
+    @ChineseDescription("公司/组织id")
     private Long organizationId;
 
     /**
      * 职务信息
      */
+    @ChineseDescription("职务信息")
     private Long positionId;
 
     /**
-     * 用户数据范围信息
+     * 用户数据范围枚举
      */
+    @ChineseDescription("用户数据范围枚举")
     private Set<DataScopeTypeEnum> dataScopeTypeEnums;
+
+    /**
+     * 用户数据范围用户信息
+     */
+    @ChineseDescription("用户数据范围用户信息")
     private Set<Long> dataScopeUserIds;
+
+    /**
+     * 用户数据范围组织信息
+     */
+    @ChineseDescription("用户数据范围组织信息")
     private Set<Long> dataScopeOrganizationIds;
 
     /**
      * 可用资源集合
      */
+    @ChineseDescription("可用资源集合")
     private Set<String> resourceUrls;
 
     /**
      * 用户拥有的按钮编码集合
      */
+    @ChineseDescription("用户拥有的按钮编码集合")
     private Set<String> buttonCodes;
 
     /**
      * 登录的时间
      */
+    @ChineseDescription("登录的时间")
     private Date loginTime;
 
     /**
      * 用户的token，当返回用户会话信息时候回带token
      */
+    @ChineseDescription("用户的token，当返回用户会话信息时候回带token")
     private String token;
 
     /**
      * 其他信息，Dict为Map的拓展
      */
+    @ChineseDescription("其他信息，Dict为Map的拓展")
     private Dict otherInfos;
 
     /**
      * 用户的ws-url
      */
+    @ChineseDescription("用户的ws-url")
     private String wsUrl;
 
     /**
@@ -126,11 +151,13 @@ public class LoginUser implements Serializable {
      * <p>
      * 默认语种是中文
      */
+    @ChineseDescription("当前用户语种的标识")
     private String tranLanguageCode = RuleConstants.CHINES_TRAN_LANGUAGE_CODE;
 
     /**
      * 租户的编码
      */
+    @ChineseDescription("租户的编码")
     private String tenantCode;
 
     public String getWsUrl() {

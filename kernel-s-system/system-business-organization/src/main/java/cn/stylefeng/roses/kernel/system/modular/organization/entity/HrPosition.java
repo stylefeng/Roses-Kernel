@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.system.modular.organization.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import cn.stylefeng.roses.kernel.rule.tree.xmtree.base.AbstractXmSelectNode;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -51,42 +52,49 @@ public class HrPosition extends BaseEntity implements AbstractXmSelectNode {
      * 主键
      */
     @TableId("position_id")
+    @ChineseDescription("主键")
     private Long positionId;
 
     /**
      * 职位名称
      */
     @TableField("position_name")
+    @ChineseDescription("职位名称")
     private String positionName;
 
     /**
      * 职位编码
      */
     @TableField("position_code")
+    @ChineseDescription("职位编码")
     private String positionCode;
 
     /**
      * 排序
      */
     @TableField("position_sort")
+    @ChineseDescription("排序")
     private BigDecimal positionSort;
 
     /**
      * 状态：1-启用，2-禁用
      */
     @TableField("status_flag")
+    @ChineseDescription("状态：1-启用，2-禁用")
     private Integer statusFlag;
 
     /**
      * 职位备注
      */
     @TableField("position_remark")
+    @ChineseDescription("职位备注")
     private String positionRemark;
 
     /**
      * 删除标记：Y-已删除，N-未删除
      */
     @TableField(value = "del_flag", fill = FieldFill.INSERT)
+    @ChineseDescription("删除标记：Y-已删除，N-未删除")
     private String delFlag;
 
     @Override

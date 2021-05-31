@@ -8,6 +8,7 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupTreeWrapper;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.TreeSortRequest;
+import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiGroup;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.ApiGroupService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -82,7 +83,7 @@ public class ApiGroupController {
      * @author majianguo
      * @date 2021/05/21 15:03
      */
-    @GetResource(name = "查看详情", path = "/apiGroup/detail")
+    @GetResource(name = "查看详情", path = "/apiGroup/detail", responseClass = ApiGroup.class)
     public ResponseData detail(@Validated(ApiGroupRequest.detail.class) ApiGroupRequest apiGroupRequest) {
         return new SuccessResponseData(apiGroupService.detail(apiGroupRequest));
     }
@@ -93,7 +94,7 @@ public class ApiGroupController {
      * @author majianguo
      * @date 2021/05/21 15:03
      */
-    @GetResource(name = "获取列表", path = "/apiGroup/list")
+    @GetResource(name = "获取列表", path = "/apiGroup/list", responseClass = ApiGroup.class)
     public ResponseData list(ApiGroupRequest apiGroupRequest) {
         return new SuccessResponseData(apiGroupService.findList(apiGroupRequest));
     }
@@ -104,7 +105,7 @@ public class ApiGroupController {
      * @author majianguo
      * @date 2021/05/21 15:03
      */
-    @GetResource(name = "分页查询", path = "/apiGroup/page")
+    @GetResource(name = "分页查询", path = "/apiGroup/page", responseClass = ApiGroup.class)
     public ResponseData page(ApiGroupRequest apiGroupRequest) {
         return new SuccessResponseData(apiGroupService.findPage(apiGroupRequest));
     }
@@ -116,7 +117,7 @@ public class ApiGroupController {
      * @author majianguo
      * @date 2021/5/22 上午11:00
      **/
-    @GetResource(name = "获取树", path = "/apiGroup/tree")
+    @GetResource(name = "获取树", path = "/apiGroup/tree", responseClass = ApiGroupTreeWrapper.class)
     public ResponseData tree(ApiGroupRequest apiGroupRequest) {
         List<ApiGroupTreeWrapper> apiGroupTreeWrapperList = apiGroupService.tree(apiGroupRequest);
         return new SuccessResponseData(apiGroupTreeWrapperList);
@@ -129,7 +130,7 @@ public class ApiGroupController {
      * @author majianguo
      * @date 2021/5/22 上午11:00
      **/
-    @GetResource(name = "获取分组树", path = "/apiGroup/groupTree")
+    @GetResource(name = "获取分组树", path = "/apiGroup/groupTree", responseClass = ApiGroupTreeWrapper.class)
     public ResponseData groupTree(ApiGroupRequest apiGroupRequest) {
         List<ApiGroupTreeWrapper> apiGroupTreeWrapperList = apiGroupService.groupTree(apiGroupRequest);
         return new SuccessResponseData(apiGroupTreeWrapperList);
@@ -142,7 +143,7 @@ public class ApiGroupController {
      * @author majianguo
      * @date 2021/5/22 上午11:00
      **/
-    @GetResource(name = "获取树", path = "/apiGroup/peersTree")
+    @GetResource(name = "获取树", path = "/apiGroup/peersTree", responseClass = ApiGroupTreeWrapper.class)
     public ResponseData peersTree(ApiGroupRequest apiGroupRequest) {
         List<ApiGroupTreeWrapper> apiGroupTreeWrapperList = apiGroupService.peersTree(apiGroupRequest);
         return new SuccessResponseData(apiGroupTreeWrapperList);

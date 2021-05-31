@@ -31,6 +31,7 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionRequest;
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrPositionService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -117,7 +118,7 @@ public class HrPositionController {
      * @author chenjinlong
      * @date 2020/11/04 11:07
      */
-    @GetResource(name = "查看详情系统职位", path = "/hrPosition/detail")
+    @GetResource(name = "查看详情系统职位", path = "/hrPosition/detail", responseClass = HrPosition.class)
     public ResponseData detail(@Validated(HrPositionRequest.detail.class) HrPositionRequest hrPositionRequest) {
         return new SuccessResponseData(hrPositionService.detail(hrPositionRequest));
     }
@@ -128,7 +129,7 @@ public class HrPositionController {
      * @author chenjinlong
      * @date 2020/11/04 11:07
      */
-    @GetResource(name = "分页查询系统职位", path = "/hrPosition/page")
+    @GetResource(name = "分页查询系统职位", path = "/hrPosition/page", responseClass = HrPosition.class)
     public ResponseData page(HrPositionRequest hrPositionRequest) {
         return new SuccessResponseData(hrPositionService.findPage(hrPositionRequest));
     }
@@ -139,7 +140,7 @@ public class HrPositionController {
      * @author chenjinlong
      * @date 2020/11/04 11:07
      */
-    @GetResource(name = "获取全部系统职位", path = "/hrPosition/list")
+    @GetResource(name = "获取全部系统职位", path = "/hrPosition/list", responseClass = HrPosition.class)
     public ResponseData list(HrPositionRequest hrPositionRequest) {
         return new SuccessResponseData(hrPositionService.findList(hrPositionRequest));
     }

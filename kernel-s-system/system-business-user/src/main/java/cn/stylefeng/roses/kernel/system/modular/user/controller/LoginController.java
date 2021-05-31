@@ -65,7 +65,7 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/3/17 17:23
      */
-    @PostResource(name = "登陆", path = "/login", requiredLogin = false, requiredPermission = false)
+    @PostResource(name = "登陆", path = "/login", requiredLogin = false, requiredPermission = false, responseClass = String.class)
     public ResponseData login(@RequestBody @Validated LoginRequest loginRequest) {
         loginRequest.setCreateCookie(true);
         LoginResponse loginResponse = authServiceApi.login(loginRequest);
@@ -78,7 +78,7 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/3/17 17:23
      */
-    @PostResource(name = "登陆（分离版）", path = "/loginApi", requiredLogin = false, requiredPermission = false)
+    @PostResource(name = "登陆（分离版）", path = "/loginApi", requiredLogin = false, requiredPermission = false, responseClass = LoginResponse.class)
     public ResponseData loginApi(@RequestBody @Validated LoginRequest loginRequest) {
         loginRequest.setCreateCookie(false);
         LoginResponse loginResponse = authServiceApi.login(loginRequest);
@@ -91,7 +91,7 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/5/25 22:36
      */
-    @PostResource(name = "适用于单点登录", path = "/loginWithToken", requiredLogin = false, requiredPermission = false)
+    @PostResource(name = "适用于单点登录", path = "/loginWithToken", requiredLogin = false, requiredPermission = false, responseClass = String.class)
     public ResponseData loginWithToken(@RequestBody @Validated LoginWithTokenRequest loginWithTokenRequest) {
         LoginResponse loginResponse = authServiceApi.LoginWithToken(loginWithTokenRequest);
         return new SuccessResponseData(loginResponse.getToken());
@@ -115,7 +115,7 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/3/17 17:37
      */
-    @GetResource(name = "获取当前用户的用户信息", path = "/getCurrentLoginUserInfo", requiredPermission = false)
+    @GetResource(name = "获取当前用户的用户信息", path = "/getCurrentLoginUserInfo", requiredPermission = false, responseClass = CurrentUserInfoResponse.class)
     public ResponseData getCurrentLoginUserInfo() {
         LoginUser loginUser = LoginContext.me().getLoginUser();
 

@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.api.pojo.app;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
 import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
 import lombok.Data;
@@ -47,6 +48,7 @@ public class SysAppRequest extends BaseRequest {
      * 主键
      */
     @NotNull(message = "appId不能为空", groups = {edit.class, delete.class, detail.class, updateActiveFlag.class, updateStatus.class})
+    @ChineseDescription("主键")
     private Long appId;
 
     /**
@@ -60,6 +62,7 @@ public class SysAppRequest extends BaseRequest {
             columnName = "app_name",
             idFieldName = "app_id",
             excludeLogicDeleteItems = true)
+    @ChineseDescription("名称不能为空")
     private String appName;
 
     /**
@@ -73,11 +76,13 @@ public class SysAppRequest extends BaseRequest {
             columnName = "app_code",
             idFieldName = "app_id",
             excludeLogicDeleteItems = true)
+    @ChineseDescription("编码不能为空")
     private String appCode;
 
     /**
      * 是否默认激活：Y-是，N-否，激活的应用下的菜单会在首页默认展开
      */
+    @ChineseDescription("是否默认激活：Y-是，N-否，激活的应用下的菜单会在首页默认展开")
     private String activeFlag;
 
     /**
@@ -85,6 +90,7 @@ public class SysAppRequest extends BaseRequest {
      */
     @NotNull(message = "状态为空", groups = {updateStatus.class})
     @StatusValue(groups = updateStatus.class)
+    @ChineseDescription("状态：1-启用，2-禁用")
     private Integer statusFlag;
 
     /**

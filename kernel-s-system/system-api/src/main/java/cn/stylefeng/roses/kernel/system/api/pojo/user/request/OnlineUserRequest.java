@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.user.request;
 
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -42,11 +43,13 @@ public class OnlineUserRequest {
      * 用户的token
      */
     @NotBlank(message = "参数token不能为空")
+    @ChineseDescription("用户的token")
     private String token;
 
     /**
      * 用户账号
      */
+    @ChineseDescription("用户账号")
     private String account;
 
 }

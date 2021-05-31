@@ -31,6 +31,8 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.OrganizationTreeNode;
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -106,7 +108,7 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    @GetResource(name = "查看详情系统组织机构", path = "/hrOrganization/detail")
+    @GetResource(name = "查看详情系统组织机构", path = "/hrOrganization/detail", responseClass = HrOrganization.class)
     public ResponseData detail(@Validated(HrOrganizationRequest.detail.class) HrOrganizationRequest hrOrganizationRequest) {
         return new SuccessResponseData(hrOrganizationService.detail(hrOrganizationRequest));
     }
@@ -117,7 +119,7 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    @GetResource(name = "分页查询系统组织机构", path = "/hrOrganization/page")
+    @GetResource(name = "分页查询系统组织机构", path = "/hrOrganization/page", responseClass = HrOrganization.class)
     public ResponseData page(HrOrganizationRequest hrOrganizationRequest) {
         return new SuccessResponseData(hrOrganizationService.findPage(hrOrganizationRequest));
     }
@@ -128,7 +130,7 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    @GetResource(name = "获取全部系统组织机构", path = "/hrOrganization/list")
+    @GetResource(name = "获取全部系统组织机构", path = "/hrOrganization/list", responseClass = HrOrganization.class)
     public ResponseData list(HrOrganizationRequest hrOrganizationRequest) {
         return new SuccessResponseData(hrOrganizationService.findList(hrOrganizationRequest));
     }
@@ -139,7 +141,7 @@ public class HrOrganizationController {
      * @author chenjinlong
      * @date 2021/01/05 15:55
      */
-    @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/tree")
+    @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/tree", responseClass = OrganizationTreeNode.class)
     public ResponseData organizationTree(HrOrganizationRequest hrOrganizationRequest) {
         return new SuccessResponseData(hrOrganizationService.organizationTree(hrOrganizationRequest));
     }
@@ -150,7 +152,7 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2021/3/19 22:20
      */
-    @GetResource(name = "获取组织机构树(用于用户绑定数据范围)", path = "/hrOrganization/userBindOrgScope")
+    @GetResource(name = "获取组织机构树(用于用户绑定数据范围)", path = "/hrOrganization/userBindOrgScope", responseClass = OrganizationTreeNode.class)
     public ResponseData userBindOrgScope(@Validated(HrOrganizationRequest.userBindOrgScope.class) HrOrganizationRequest hrOrganizationRequest) {
         return new SuccessResponseData(hrOrganizationService.organizationTree(hrOrganizationRequest));
     }
@@ -161,7 +163,7 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2021/1/9 18:37
      */
-    @GetResource(name = "Layui版本--获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）", path = "/hrOrganization/roleBindOrgScope")
+    @GetResource(name = "Layui版本--获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）", path = "/hrOrganization/roleBindOrgScope", responseClass = ZTreeNode.class)
     public List<ZTreeNode> roleBindOrgScope(@Validated(HrOrganizationRequest.roleBindOrgScope.class) HrOrganizationRequest hrOrganizationRequest) {
         return hrOrganizationService.orgZTree(hrOrganizationRequest, false);
     }
@@ -172,7 +174,7 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2021/1/9 18:37
      */
-    @GetResource(name = "AntdVue版本--获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）", path = "/hrOrganization/roleBindOrgScopeAntdv")
+    @GetResource(name = "AntdVue版本--获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）", path = "/hrOrganization/roleBindOrgScopeAntdv", responseClass = ZTreeNode.class)
     public ResponseData roleBindOrgScopeAntdv(@Validated(HrOrganizationRequest.roleBindOrgScope.class) HrOrganizationRequest hrOrganizationRequest) {
         List<ZTreeNode> zTreeNodes = hrOrganizationService.orgZTree(hrOrganizationRequest, true);
         return new SuccessResponseData(zTreeNodes);

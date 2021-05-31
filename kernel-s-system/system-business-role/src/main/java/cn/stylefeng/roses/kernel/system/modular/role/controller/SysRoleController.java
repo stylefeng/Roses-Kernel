@@ -25,12 +25,15 @@
 package cn.stylefeng.roses.kernel.system.modular.role.controller;
 
 import cn.hutool.core.collection.ListUtil;
+import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
 import cn.stylefeng.roses.kernel.system.modular.role.service.SysRoleResourceService;
 import cn.stylefeng.roses.kernel.system.modular.role.service.SysRoleService;
 import org.springframework.validation.annotation.Validated;
@@ -97,7 +100,7 @@ public class SysRoleController {
      * @author majianguo
      * @date 2020/11/5 上午10:50
      */
-    @GetResource(name = "角色查看", path = "/sysRole/detail")
+    @GetResource(name = "角色查看", path = "/sysRole/detail", responseClass = SysRoleDTO.class)
     public ResponseData detail(@Validated(SysRoleRequest.detail.class) SysRoleRequest sysRoleRequest) {
         return new SuccessResponseData(sysRoleService.detail(sysRoleRequest));
     }
@@ -108,7 +111,7 @@ public class SysRoleController {
      * @author majianguo
      * @date 2020/11/5 上午10:19
      */
-    @GetResource(name = "查询角色", path = "/sysRole/page")
+    @GetResource(name = "查询角色", path = "/sysRole/page", responseClass = SysRole.class)
     public ResponseData page(SysRoleRequest sysRoleRequest) {
         return new SuccessResponseData(sysRoleService.findPage(sysRoleRequest));
     }
@@ -155,7 +158,7 @@ public class SysRoleController {
      * @author majianguo
      * @date 2020/11/6 13:49
      */
-    @GetResource(name = "角色下拉", path = "/sysRole/dropDown")
+    @GetResource(name = "角色下拉", path = "/sysRole/dropDown", responseClass = SimpleDict.class)
     public ResponseData dropDown() {
         return new SuccessResponseData(sysRoleService.dropDown());
     }
@@ -166,7 +169,7 @@ public class SysRoleController {
      * @author majianguo
      * @date 2020/11/5 上午10:58
      */
-    @GetResource(name = "角色拥有菜单", path = "/sysRole/getRoleMenus")
+    @GetResource(name = "角色拥有菜单", path = "/sysRole/getRoleMenus", responseClass = Long.class)
     public ResponseData getRoleMenus(@Validated(SysRoleRequest.detail.class) SysRoleRequest sysRoleRequest) {
         Long roleId = sysRoleRequest.getRoleId();
         return new SuccessResponseData(sysRoleService.getMenuIdsByRoleIds(ListUtil.toList(roleId)));
@@ -178,7 +181,7 @@ public class SysRoleController {
      * @author majianguo
      * @date 2020/11/5 上午10:59
      */
-    @GetResource(name = "角色拥有数据", path = "/sysRole/getRoleDataScope")
+    @GetResource(name = "角色拥有数据", path = "/sysRole/getRoleDataScope", responseClass = Long.class)
     public ResponseData getRoleDataScope(@Validated(SysRoleRequest.detail.class) SysRoleRequest sysRoleRequest) {
         return new SuccessResponseData(sysRoleService.getRoleDataScope(sysRoleRequest));
     }

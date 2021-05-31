@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.system.api.pojo.organization;
 
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import cn.stylefeng.roses.kernel.rule.tree.xmtree.base.AbstractXmSelectNode;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
 
 import java.util.List;
@@ -42,31 +43,37 @@ public class OrganizationTreeNode implements AbstractTreeNode<OrganizationTreeNo
     /**
      * 父id，一级节点父id是0
      */
+    @ChineseDescription("父id，一级节点父id是0")
     private Long parentId;
 
     /**
      * 节点名称
      */
+    @ChineseDescription("节点名称")
     private String title;
 
     /**
      * 节点值
      */
+    @ChineseDescription("节点值")
     private Long id;
 
     /**
      * 是否展开状态 不展开-false 展开-true
      */
+    @ChineseDescription("是否展开状态 不展开-false 展开-true")
     private boolean spread = true;
 
     /**
      * 是否选中
      */
+    @ChineseDescription("是否选中")
     private boolean selected = false;
 
     /**
      * 子节点的集合
      */
+    @ChineseDescription("子节点的集合")
     private List<OrganizationTreeNode> children;
 
     @Override

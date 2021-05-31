@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.system.api.pojo.user;
 import cn.hutool.core.collection.IterUtil;
 import cn.stylefeng.roses.kernel.rule.enums.TreeNodeEnum;
 import cn.stylefeng.roses.kernel.rule.tree.factory.node.DefaultTreeNode;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -45,21 +46,25 @@ public class UserSelectTreeNode extends DefaultTreeNode {
     /**
      * 节点类型：org: 机构  user: 用户
      */
+    @ChineseDescription("节点类型：org: 机构  user: 用户")
     private String nodeType;
 
     /**
      * 节点值
      */
+    @ChineseDescription("节点值")
     private String value;
 
     /**
      * 是否被选中
      */
+    @ChineseDescription("是否被选中")
     private Boolean selected = false;
 
     /**
      * 是否禁用
      */
+    @ChineseDescription("是否禁用")
     private Boolean disabled = false;
 
     public Boolean getDisabled() {

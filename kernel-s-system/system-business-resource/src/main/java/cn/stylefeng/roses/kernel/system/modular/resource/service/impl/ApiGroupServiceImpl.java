@@ -9,6 +9,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.dict.api.pojo.dict.request.ParentIdsUpdateRequest;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.constants.SymbolConstant;
+import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.resource.ApiGroupExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupRequest;
@@ -17,12 +18,14 @@ import cn.stylefeng.roses.kernel.system.api.pojo.resource.TreeSortRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiGroup;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResourceField;
+import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.enums.NodeEnums;
 import cn.stylefeng.roses.kernel.system.modular.resource.enums.NodeTypeEnums;
 import cn.stylefeng.roses.kernel.system.modular.resource.mapper.ApiGroupMapper;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.ApiGroupService;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.ApiResourceFieldService;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.ApiResourceService;
+import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -48,6 +51,9 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
 
     @Autowired
     private ApiResourceFieldService apiResourceFieldService;
+
+    @Autowired
+    private SysResourceService sysResourceService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -166,6 +172,15 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
         // 结果
         List<ApiGroupTreeWrapper> allApiGroupTreeWrapperList = new ArrayList<>();
 
+        //　查询所有资源信息
+        Map<String, SysResource> stringSysResourceMap = new HashMap<>();
+        LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysResourceLambdaQueryWrapper.eq(SysResource::getViewFlag, YesOrNotEnum.N.getCode());
+        List<SysResource> sysResources = this.sysResourceService.list(sysResourceLambdaQueryWrapper);
+        for (SysResource sysResource : sysResources) {
+            stringSysResourceMap.put(sysResource.getResourceCode(), sysResource);
+        }
+
         // 查询所有分组
         LambdaQueryWrapper<ApiGroup> wrapper = new LambdaQueryWrapper<>();
         if (ObjectUtil.isNotEmpty(apiGroupRequest.getGroupId())) {
@@ -200,6 +215,10 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
                 item.setSort(apiResource.getResourceSort());
                 item.setData(apiResource);
                 item.setSlotsValue();
+                SysResource sysResource = stringSysResourceMap.get(apiResource.getResourceCode());
+                if (ObjectUtil.isNotEmpty(sysResource)) {
+                    item.setUrl(sysResource.getUrl());
+                }
                 allApiGroupTreeWrapperList.add(item);
             }
         }

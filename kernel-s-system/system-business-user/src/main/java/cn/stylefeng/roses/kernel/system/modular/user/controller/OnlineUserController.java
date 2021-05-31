@@ -30,6 +30,7 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.OnlineUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,7 +61,7 @@ public class OnlineUserController {
      * @author fengshuonan
      * @date 2021/1/11 22:53
      */
-    @GetResource(name = "当前在线用户列表", path = "/sysUser/onlineUserList")
+    @GetResource(name = "当前在线用户列表", path = "/sysUser/onlineUserList",responseClass = OnlineUserDTO.class)
     public ResponseData onlineUserList(OnlineUserRequest onlineUserRequest) {
         return new SuccessResponseData(sysUserService.onlineUserList(onlineUserRequest));
     }

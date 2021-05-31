@@ -32,6 +32,8 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.UserSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
@@ -173,7 +175,7 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:50
      */
-    @GetResource(name = "系统用户_查看", path = "/sysUser/detail")
+    @GetResource(name = "系统用户_查看", path = "/sysUser/detail", responseClass = SysUserDTO.class)
     public ResponseData detail(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
         return new SuccessResponseData(sysUserService.detail(sysUserRequest));
     }
@@ -184,7 +186,7 @@ public class SysUserController {
      * @author fengshuonan
      * @date 2021/1/1 19:01
      */
-    @GetResource(name = "获取当前登录用户的信息", path = "/sysUser/currentUserInfo", requiredPermission = false)
+    @GetResource(name = "获取当前登录用户的信息", path = "/sysUser/currentUserInfo", requiredPermission = false,responseClass = SysUserDTO.class)
     public ResponseData currentUserInfo() {
         LoginUser loginUser = LoginContext.me().getLoginUser();
 
@@ -199,7 +201,7 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:49
      */
-    @GetResource(name = "系统用户_查询", path = "/sysUser/page")
+    @GetResource(name = "系统用户_查询", path = "/sysUser/page",responseClass = SysUserDTO.class)
     public ResponseData page(SysUserRequest sysUserRequest) {
         return new SuccessResponseData(sysUserService.findPage(sysUserRequest));
     }
@@ -221,7 +223,7 @@ public class SysUserController {
      * @author liuhanqing
      * @date 2021/1/15 8:28
      */
-    @GetResource(name = "获取用户选择树数据（用在系统通知，选择发送人的时候）", path = "/sysUser/getUserSelectTree")
+    @GetResource(name = "获取用户选择树数据（用在系统通知，选择发送人的时候）", path = "/sysUser/getUserSelectTree",responseClass = UserSelectTreeNode.class)
     public ResponseData getUserTree() {
         return new SuccessResponseData(this.sysUserService.userSelectTree(new SysUserRequest()));
     }

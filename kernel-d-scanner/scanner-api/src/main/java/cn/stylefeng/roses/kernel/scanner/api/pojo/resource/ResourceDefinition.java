@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.scanner.api.pojo.resource;
 
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -42,16 +43,19 @@ public class ResourceDefinition implements Serializable {
     /**
      * 应用的标识
      */
+    @ChineseDescription("应用的标识")
     private String appCode;
 
     /**
      * 资源的标识
      */
+    @ChineseDescription("资源的标识")
     private String resourceCode;
 
     /**
      * 资源名称
      */
+    @ChineseDescription("资源名称")
     private String resourceName;
 
     /**
@@ -61,31 +65,37 @@ public class ResourceDefinition implements Serializable {
      *
      * @since 2.2.12
      */
+    @ChineseDescription("项目编码")
     private String projectCode;
 
     /**
      * 控制器类名称
      */
+    @ChineseDescription("控制器类名称")
     private String className;
 
     /**
      * 控制器中的方法名称
      */
+    @ChineseDescription("控制器中的方法名称")
     private String methodName;
 
     /**
      * 资源所属模块
      */
+    @ChineseDescription("资源所属模块")
     private String modularCode;
 
     /**
      * 模块中文名称
      */
+    @ChineseDescription("模块中文名称")
     private String modularName;
 
     /**
      * 初始化资源的机器的ip地址
      */
+    @ChineseDescription("初始化资源的机器的ip地址")
     private String ipAddress;
 
     /**
@@ -94,51 +104,61 @@ public class ResourceDefinition implements Serializable {
      * 视图类型的接口会渲染出html界面，而不是json数据，
      * 视图层一般会在前后端不分离项目出现
      */
+    @ChineseDescription("是否是视图类型")
     private Boolean viewFlag;
 
     /**
      * 资源的请求路径
      */
+    @ChineseDescription("资源的请求路径")
     private String url;
 
     /**
      * http请求方法
      */
+    @ChineseDescription("http请求方法")
     private String httpMethod;
 
     /**
      * 是否需要登录
      */
+    @ChineseDescription("是否需要登录")
     private Boolean requiredLoginFlag;
 
     /**
      * 是否需要鉴权
      */
+    @ChineseDescription("是否需要鉴权")
     private Boolean requiredPermissionFlag;
 
     /**
      * 需要进行参数校验的分组
      */
+    @ChineseDescription("需要进行参数校验的分组")
     private Set<String> validateGroups;
 
     /**
      * 接口参数的字段描述
      */
+    @ChineseDescription("接口参数的字段描述")
     private Set<FieldMetadata> paramFieldDescriptions;
 
     /**
      * 接口返回结果的字段描述
      */
+    @ChineseDescription("接口返回结果的字段描述")
     private Set<FieldMetadata> responseFieldDescriptions;
 
     /**
      * 资源添加日期
      */
+    @ChineseDescription("资源添加日期")
     private Date createTime;
 
     /**
      * 创建人
      */
+    @ChineseDescription("创建人")
     private String createUser;
 
 }

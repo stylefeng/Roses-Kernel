@@ -58,7 +58,7 @@ public class ApiController {
      * @author fengshuonan
      * @date 2020/12/18 15:50
      */
-    @GetResource(name = "获取接口树列表（用于接口文档页面）", path = "/resource/getTree", requiredLogin = false)
+    @GetResource(name = "获取接口树列表（用于接口文档页面）", path = "/resource/getTree", requiredLogin = false, responseClass = LayuiApiResourceTreeNode.class)
     public ResponseData getTree() {
         List<LayuiApiResourceTreeNode> resourceTree = sysResourceService.getApiResourceTree();
         return new SuccessResponseData(resourceTree);
@@ -70,7 +70,7 @@ public class ApiController {
      * @author fengshuonan
      * @date 2020/12/18 15:50
      */
-    @GetResource(name = "获取API详情（用于接口文档页面）", path = "/resource/getDetail", requiredLogin = false)
+    @GetResource(name = "获取API详情（用于接口文档页面）", path = "/resource/getDetail", requiredLogin = false, responseClass = ResourceDefinition.class)
     public ResponseData getResourceDetail(@Validated(BaseRequest.detail.class) ResourceRequest resourceRequest) {
         ResourceDefinition resourceDetail = sysResourceService.getApiResourceDetail(resourceRequest);
         return new SuccessResponseData(resourceDetail);

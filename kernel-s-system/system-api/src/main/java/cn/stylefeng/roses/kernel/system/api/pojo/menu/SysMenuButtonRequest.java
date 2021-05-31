@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.api.pojo.menu;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,24 +49,28 @@ public class SysMenuButtonRequest extends BaseRequest {
      * 主键
      */
     @NotNull(message = "按钮id不能为空", groups = {edit.class, detail.class, delete.class})
+    @ChineseDescription("主键")
     private Long buttonId;
 
     /**
      * 菜单按钮主键集合
      */
     @NotEmpty(message = "菜单按钮主键集合不能为空", groups = {batchDelete.class})
+    @ChineseDescription("菜单按钮主键集合")
     private Set<@NotNull(message = "菜单按钮主键集合不能为空", groups = {batchDelete.class}) Long> buttonIds;
 
     /**
      * 菜单id，按钮需要挂在菜单下
      */
     @NotNull(message = "菜单id不能为空", groups = {add.class, edit.class, list.class, def.class})
+    @ChineseDescription("菜单id，按钮需要挂在菜单下")
     private Long menuId;
 
     /**
      * 按钮的名称
      */
     @NotBlank(message = "按钮名称不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("按钮的名称")
     private String buttonName;
 
     /**
@@ -79,6 +84,7 @@ public class SysMenuButtonRequest extends BaseRequest {
             columnName = "button_code",
             idFieldName = "button_id",
             excludeLogicDeleteItems = true)
+    @ChineseDescription("按钮的编码")
     private String buttonCode;
 
     /**

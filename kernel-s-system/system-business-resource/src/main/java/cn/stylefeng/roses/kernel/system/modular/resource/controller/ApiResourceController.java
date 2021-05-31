@@ -6,6 +6,7 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiResourceRequest;
+import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResourceField;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.ApiResourceService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,7 +70,7 @@ public class ApiResourceController {
      * @author majianguo
      * @date 2021/5/27 下午3:33
      **/
-    @PostResource(name = "编辑", path = "/apiResource/reset")
+    @PostResource(name = "编辑", path = "/apiResource/reset", responseClass = cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource.class)
     public ResponseData reset(@RequestBody @Validated(ApiResourceRequest.reset.class) ApiResourceRequest apiResourceRequest) {
         return new SuccessResponseData(apiResourceService.reset(apiResourceRequest));
     }
@@ -80,7 +81,7 @@ public class ApiResourceController {
      * @author majianguo
      * @date 2021/05/21 15:03
      */
-    @PostResource(name = "请求记录", path = "/apiResource/record")
+    @PostResource(name = "请求记录", path = "/apiResource/record", responseClass = cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource.class)
     public ResponseData record(@RequestBody @Validated(ApiResourceRequest.record.class) ApiResourceRequest apiResourceRequest) {
         cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource apiResource = apiResourceService.record(apiResourceRequest);
         return new SuccessResponseData(apiResource);
@@ -92,7 +93,7 @@ public class ApiResourceController {
      * @author majianguo
      * @date 2021/05/21 15:03
      */
-    @GetResource(name = "查看详情", path = "/apiResource/detail")
+    @GetResource(name = "查看详情", path = "/apiResource/detail", responseClass = cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource.class)
     public ResponseData detail(@Validated(ApiResourceRequest.detail.class) ApiResourceRequest apiResourceRequest) {
         return new SuccessResponseData(apiResourceService.detail(apiResourceRequest));
     }
@@ -103,7 +104,7 @@ public class ApiResourceController {
      * @author majianguo
      * @date 2021/05/21 15:03
      */
-    @GetResource(name = "获取列表", path = "/apiResource/list")
+    @GetResource(name = "获取列表", path = "/apiResource/list", responseClass = cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource.class)
     public ResponseData list(ApiResourceRequest apiResourceRequest) {
         return new SuccessResponseData(apiResourceService.findList(apiResourceRequest));
     }
@@ -114,7 +115,7 @@ public class ApiResourceController {
      * @author majianguo
      * @date 2021/05/21 15:03
      */
-    @GetResource(name = "分页查询", path = "/apiResource/page")
+    @GetResource(name = "分页查询", path = "/apiResource/page", responseClass = cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource.class)
     public ResponseData page(ApiResourceRequest apiResourceRequest) {
         return new SuccessResponseData(apiResourceService.findPage(apiResourceRequest));
     }
@@ -125,7 +126,7 @@ public class ApiResourceController {
      * @author majianguo
      * @date 2021/05/21 15:03
      */
-    @GetResource(name = "查询该资源所有字段", path = "/apiResource/allField")
+    @GetResource(name = "查询该资源所有字段", path = "/apiResource/allField", responseClass = ApiResourceField.class)
     public ResponseData allField(@Validated(ApiResourceRequest.allField.class) ApiResourceRequest apiResourceRequest) {
         return new SuccessResponseData(apiResourceService.allField(apiResourceRequest));
     }

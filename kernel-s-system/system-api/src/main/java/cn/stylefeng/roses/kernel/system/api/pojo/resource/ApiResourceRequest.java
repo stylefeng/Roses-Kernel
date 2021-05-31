@@ -83,7 +83,6 @@ public class ApiResourceRequest extends BaseRequest {
     /**
      * 资源排序
      */
-    @NotNull(message = "接口自定义名称不能为空", groups = {edit.class})
     @ChineseDescription("资源排序")
     private java.math.BigDecimal resourceSort;
 

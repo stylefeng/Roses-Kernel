@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.security.api.pojo;
 
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Builder;
 import lombok.Data;
 
@@ -40,11 +41,13 @@ public class EasyCaptcha {
     /**
      * 缓存Key
      */
+    @ChineseDescription("缓存Key")
     private String verKey;
 
     /**
      * Base64 图形验证码
      */
+    @ChineseDescription("Base64 图形验证码")
     private String verImage;
 
 }

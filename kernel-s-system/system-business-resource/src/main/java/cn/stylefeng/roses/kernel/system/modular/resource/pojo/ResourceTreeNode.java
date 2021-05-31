@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.resource.pojo;
 
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
 
 import java.util.List;
@@ -41,16 +42,19 @@ public class ResourceTreeNode implements AbstractTreeNode<ResourceTreeNode> {
     /**
      * 资源id
      */
+    @ChineseDescription("资源id")
     private String code;
 
     /**
      * 父级资源id
      */
+    @ChineseDescription("父级资源id")
     private String parentCode;
 
     /**
      * 资源名称
      */
+    @ChineseDescription("资源名称")
     private String nodeName;
 
     /**
@@ -59,16 +63,19 @@ public class ResourceTreeNode implements AbstractTreeNode<ResourceTreeNode> {
      * true-是资源标识
      * false-虚拟节点，不是一个具体资源
      */
+    @ChineseDescription("是否是资源标识")
     private Boolean resourceFlag;
 
     /**
      * 能否选择
      */
+    @ChineseDescription("能否选择")
     private Boolean checked;
 
     /**
      * 子节点集合
      */
+    @ChineseDescription("子节点集合")
     private List<ResourceTreeNode> children;
 
     @Override

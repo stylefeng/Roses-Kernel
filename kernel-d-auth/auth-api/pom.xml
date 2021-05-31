@@ -32,6 +32,13 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--资源扫描的api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>scanner-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

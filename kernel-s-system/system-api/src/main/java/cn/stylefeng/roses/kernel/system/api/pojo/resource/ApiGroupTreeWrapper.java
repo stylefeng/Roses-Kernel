@@ -53,6 +53,11 @@ public class ApiGroupTreeWrapper implements AbstractTreeNode<ApiGroupTreeWrapper
     private BigDecimal sort;
 
     /**
+     * 节点URL
+     */
+    private String url;
+
+    /**
      * 图标
      */
     private Map<String, String> slots = new HashMap<>();

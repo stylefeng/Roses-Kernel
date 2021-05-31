@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.api.pojo.user.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.validator.api.validators.date.DateValue;
 import cn.stylefeng.roses.kernel.validator.api.validators.phone.PhoneValue;
 import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
@@ -52,6 +53,7 @@ public class SysUserRequest extends BaseRequest {
      * 主键
      */
     @NotNull(message = "userId不能为空", groups = {edit.class, delete.class, detail.class, grantRole.class, grantData.class, resetPwd.class, changeStatus.class})
+    @ChineseDescription("主键")
     private Long userId;
 
     /**
@@ -65,86 +67,101 @@ public class SysUserRequest extends BaseRequest {
             columnName = "account",
             idFieldName = "user_id",
             excludeLogicDeleteItems = true)
+    @ChineseDescription("账号")
     private String account;
 
     /**
      * 原密码
      */
     @NotBlank(message = "原密码不能为空", groups = {updatePwd.class, reg.class})
+    @ChineseDescription("原密码")
     private String password;
 
     /**
      * 新密码
      */
     @NotBlank(message = "新密码不能为空", groups = {updatePwd.class})
+    @ChineseDescription("新密码")
     private String newPassword;
 
     /**
      * 昵称
      */
+    @ChineseDescription("昵称")
     private String nickName;
 
     /**
      * 姓名
      */
+    @ChineseDescription("姓名")
     private String realName;
 
     /**
      * 头像
      */
     @NotNull(message = "头像不能为空", groups = {updateAvatar.class})
+    @ChineseDescription("头像")
     private Long avatar;
 
     /**
      * 生日
      */
     @DateValue(required = false, message = "生日格式不正确", groups = {add.class, edit.class})
+    @ChineseDescription("生日")
     private String birthday;
 
     /**
      * 性别（M-男，F-女）
      */
     @NotNull(message = "性别不能为空", groups = {updateInfo.class})
+    @ChineseDescription("性别（M-男，F-女）")
     private String sex;
 
     /**
      * 邮箱
      */
     @Email(message = "邮箱格式错误", groups = {updateInfo.class, reg.class})
+    @ChineseDescription("邮箱")
     private String email;
 
     /**
      * 手机
      */
     @PhoneValue(required = false, message = "手机号码格式错误", groups = {add.class, edit.class, reg.class})
+    @ChineseDescription("手机")
     private String phone;
 
     /**
      * 电话
      */
+    @ChineseDescription("电话")
     private String tel;
 
     /**
      * 授权角色，角色id集合
      */
     @NotNull(message = "授权角色不能为空", groups = {grantRole.class})
+    @ChineseDescription("授权角色，角色id集合")
     private List<Long> grantRoleIdList;
 
     /**
      * 授权数据范围，组织机构id集合
      */
     @NotNull(message = "授权数据不能为空", groups = {grantData.class})
+    @ChineseDescription("授权数据范围，组织机构id集合")
     private List<Long> grantOrgIdList;
 
     /**
      * 用户所属机构
      */
     @NotNull(message = "用户所属机构不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("用户所属机构")
     private Long orgId;
 
     /**
      * 用户所属机构的职务
      */
+    @ChineseDescription("用户所属机构的职务")
     private Long positionId;
 
     /**
@@ -152,12 +169,14 @@ public class SysUserRequest extends BaseRequest {
      */
     @NotNull(message = "状态不能为空", groups = updateStatus.class)
     @StatusValue(message = "状态不正确", groups = updateStatus.class)
+    @ChineseDescription("状态（字典 1正常 2冻结）")
     private Integer statusFlag;
 
     /**
      * 用户id集合(用在批量删除)
      */
     @NotEmpty(message = "用户id集合不能为空", groups = batchDelete.class)
+    @ChineseDescription("用户id集合(用在批量删除)")
     private List<Long> userIds;
 
     /**

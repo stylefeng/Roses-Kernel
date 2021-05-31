@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.auth.api.pojo.auth;
 
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
 
 /**
@@ -39,26 +40,31 @@ public class LoginResponse {
     /**
      * 登录人的信息
      */
+    @ChineseDescription("登录人的信息")
     private LoginUser loginUser;
 
     /**
      * 登录人的token
      */
+    @ChineseDescription("登录人的token")
     private String token;
 
     /**
      * 到期时间
      */
+    @ChineseDescription("到期时间")
     private Long expireAt;
 
     /**
      * 使用单点登录
      */
+    @ChineseDescription("使用单点登录")
     private Boolean ssoLogin;
 
     /**
      * 单点登录的loginCode
      */
+    @ChineseDescription("单点登录的loginCode")
     private String ssoLoginCode;
 
     /**
