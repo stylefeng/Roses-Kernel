@@ -24,9 +24,9 @@
  */
 package cn.stylefeng.roses.kemel.security.blackwhite.cache;
 
-import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
 import cn.stylefeng.roses.kernel.security.api.constants.CounterConstants;
+import org.springframework.data.redis.core.RedisTemplate;
 
 
 /**
@@ -35,10 +35,10 @@ import cn.stylefeng.roses.kernel.security.api.constants.CounterConstants;
  * @author fengshuonan
  * @date 2020/11/15 15:26
  */
-public class WhiteListRedisCache extends AbstractMemoryCacheOperator<Long> {
+public class WhiteListRedisCache extends AbstractRedisCacheOperator<Long> {
 
-    public WhiteListRedisCache(TimedCache<String, Long> timedCache) {
-        super(timedCache);
+    public WhiteListRedisCache(RedisTemplate<String, Long> redisTemplate) {
+        super(redisTemplate);
     }
 
     @Override

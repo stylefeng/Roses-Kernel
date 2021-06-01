@@ -24,9 +24,9 @@
  */
 package cn.stylefeng.roses.kemel.security.captcha.cache;
 
-import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
 import cn.stylefeng.roses.kernel.security.api.constants.CaptchaConstants;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 图形验证码缓存
@@ -34,10 +34,10 @@ import cn.stylefeng.roses.kernel.security.api.constants.CaptchaConstants;
  * @author chenjinlong
  * @date 2021/1/15 13:44
  */
-public class CaptchaRedisCache extends AbstractMemoryCacheOperator<Long> {
+public class CaptchaRedisCache extends AbstractRedisCacheOperator<Long> {
 
-    public CaptchaRedisCache(TimedCache<String, Long> timedCache) {
-        super(timedCache);
+    public CaptchaRedisCache(RedisTemplate<String, Long> redisTemplate) {
+        super(redisTemplate);
     }
 
     @Override
