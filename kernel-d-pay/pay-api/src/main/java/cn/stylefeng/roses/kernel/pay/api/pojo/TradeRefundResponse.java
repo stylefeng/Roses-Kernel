@@ -25,7 +25,10 @@
 package cn.stylefeng.roses.kernel.pay.api.pojo;
 
 import cn.stylefeng.roses.kernel.pay.api.constants.PayConstants;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 退款响应
@@ -37,7 +40,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TradeRefundResponse{
+public class TradeRefundResponse {
 
     /**
      * 退款状态码
@@ -88,12 +91,12 @@ public class TradeRefundResponse{
      * 初始化一个新创建的 TradeRefundResponse对象
      *
      * @param code 状态码
-     * @param msg 描述
+     * @param msg  描述
      * @param data 对象值
      * @author huziyang
      * @date 2021/04/20 20:43
      */
-    public TradeRefundResponse(String code, String msg, Object data){
+    public TradeRefundResponse(String code, String msg, Object data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -102,16 +105,15 @@ public class TradeRefundResponse{
     /**
      * 返回错误信息
      *
-     * @param msg 描述
+     * @param msg  描述
      * @param data 对象值
      * @return TradeRefundResponse对象
      * @author huziyang
      * @date 2021/04/20 20:43
      */
-    public static TradeRefundResponse error(String msg, Object data){
-        return new TradeRefundResponse(PayConstants.REFUND_ERROR_CODE,msg,data);
+    public static TradeRefundResponse error(String msg, Object data) {
+        return new TradeRefundResponse(PayConstants.REFUND_ERROR_CODE, msg, data);
     }
-
 
     /**
      * 返回错误信息
@@ -121,9 +123,8 @@ public class TradeRefundResponse{
      * @author huziyang
      * @date 2021/04/20 20:43
      */
-    public static TradeRefundResponse error(String msg){
-        return error(msg,null);
+    public static TradeRefundResponse error(String msg) {
+        return error(msg, null);
     }
-
 
 }

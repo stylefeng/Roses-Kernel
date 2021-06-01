@@ -38,42 +38,39 @@ public interface AlipayService {
     /**
      * PC网页支付
      *
-     * @param orderName 订单名称
+     * @param orderName  订单名称
      * @param outTradeNo 商家订单编号
-     * @param total 金额
-     * @param returnUrl 付款完成后跳转页面
+     * @param total      金额
+     * @param returnUrl  付款完成后跳转页面
      * @return 支付页面
      * @author huziyang
      * @date 2021/04/20 20:43
      */
     String page(String orderName, String outTradeNo, String total, String returnUrl);
 
-
     /**
      * 手机支付
      *
-     * @param orderName 订单名称
+     * @param orderName  订单名称
      * @param outTradeNo 商家订单编号
-     * @param total 金额
-     * @param quitUrl 中途退出时返回的页面
-     * @param returnUrl 付款完成后跳转页面
+     * @param total      金额
+     * @param quitUrl    中途退出时返回的页面
+     * @param returnUrl  付款完成后跳转页面
      * @return 支付页面
      * @author huziyang
      * @date 2021/04/20 20:43
      */
     String wap(String orderName, String outTradeNo, String total, String quitUrl, String returnUrl);
 
-
     /**
      * 退款
      *
-     * @param outTradeNo 商家订单编号
+     * @param outTradeNo   商家订单编号
      * @param refundAmount 退款金额
      * @return 退款结果
      * @author huziyang
      * @date 2021/04/20 20:43
      */
     TradeRefundResponse refund(String outTradeNo, String refundAmount);
-
 
 }

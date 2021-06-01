@@ -42,7 +42,6 @@ public interface PayConstants {
      */
     String PAY_EXCEPTION_STEP_CODE = "80";
 
-
     /**
      * 退款成功的返回码
      */

@@ -49,6 +49,5 @@ public class GunsPayAutoConfiguration {
         return new AlipayServiceImpl();
     }
 
-
 }
 

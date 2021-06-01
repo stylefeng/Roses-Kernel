@@ -11,18 +11,15 @@
 
     <artifactId>pay-spring-boot-starter</artifactId>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
     <dependencies>
+
         <!--alipay api模块的sdk-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>pay-sdk-alipay</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
+
     </dependencies>
 
 </project>

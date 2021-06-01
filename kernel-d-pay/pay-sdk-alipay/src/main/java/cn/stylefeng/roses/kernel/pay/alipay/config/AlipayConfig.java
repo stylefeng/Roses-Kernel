@@ -48,7 +48,7 @@ public class AlipayConfig implements ApplicationRunner {
 
     /**
      * 私钥
-      */
+     */
     @Value("${alipay.merchantPrivateKey}")
     private String merchantPrivateKey;
 
@@ -131,6 +131,5 @@ public class AlipayConfig implements ApplicationRunner {
         config.encryptKey = this.encryptKey;
         return config;
     }
-
 
 }

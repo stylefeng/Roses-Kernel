@@ -33,4 +33,5 @@ package cn.stylefeng.roses.kernel.pay.alipay.constants;
 public interface AlipayConstants {
 
     String ALIPAY_REFUND_SUCCESS_CODE = "10000";
+
 }

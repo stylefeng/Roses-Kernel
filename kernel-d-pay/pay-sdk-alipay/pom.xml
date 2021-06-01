@@ -11,25 +11,20 @@
 
     <artifactId>pay-sdk-alipay</artifactId>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
     <dependencies>
 
         <!--支付模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>pay-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--阿里支付sdk-->
         <dependency>
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-easysdk</artifactId>
-            <version>2.2.0</version>
+            <version>${alipay.version}</version>
         </dependency>
 
     </dependencies>
