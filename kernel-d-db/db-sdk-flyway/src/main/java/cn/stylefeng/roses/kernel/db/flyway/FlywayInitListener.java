@@ -59,6 +59,15 @@ public class FlywayInitListener extends ContextInitializedListener implements Or
         String dataSourceUrl = environment.getProperty("spring.datasource.url");
         String dataSourceUsername = environment.getProperty("spring.datasource.username");
         String dataSourcePassword = environment.getProperty("spring.datasource.password");
+        // 判断是否开启 sharding jdbc
+        Boolean isEnableShardingDb = environment.getProperty("spring.shardingsphere.enabled", Boolean.class);
+        if (ObjectUtil.isNotNull(isEnableShardingDb) && isEnableShardingDb){
+            //读取 sharding jdbc 主库配置
+            dataSourceUrl = environment.getProperty("spring.shardingsphere.datasource.m0.url");
+            dataSourceUsername = environment.getProperty("spring.shardingsphere.datasource.m0.username");
+            dataSourcePassword = environment.getProperty("spring.shardingsphere.datasource.m0.password");
+            driverClassName = environment.getProperty("spring.shardingsphere.datasource.m0.driver-class-name");
+        }
 
         // flyway的配置
         String enabledStr = environment.getProperty("spring.flyway.enabled");
