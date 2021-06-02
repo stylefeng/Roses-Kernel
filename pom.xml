@@ -103,6 +103,9 @@
         <!-- 分布式事务seata -->
         <module>kernel-d-seata</module>
 
+        <!-- Socket模块 -->
+        <module>kernel-d-socket</module>
+
     </modules>
 
     <properties>
@@ -133,6 +136,7 @@
         <groovy.version>3.0.7</groovy.version>
         <oshi.version>5.7.1</oshi.version>
         <beetl.version>3.3.2.RELEASE</beetl.version>
+        <getty.version>1.4.9</getty.version>
     </properties>
 
     <dependencyManagement>
@@ -290,6 +294,20 @@
                 <groupId>com.github.oshi</groupId>
                 <artifactId>oshi-core</artifactId>
                 <version>${oshi.version}</version>
+            </dependency>
+
+            <!--getty核心包-->
+            <dependency>
+                <groupId>com.gettyio</groupId>
+                <artifactId>getty-core</artifactId>
+                <version>${getty.version}</version>
+            </dependency>
+
+            <!-- 拓展包 -->
+            <dependency>
+                <groupId>com.gettyio</groupId>
+                <artifactId>getty-expansion</artifactId>
+                <version>${getty.version}</version>
             </dependency>
 
         </dependencies>

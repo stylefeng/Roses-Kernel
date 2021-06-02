@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>cn.stylefeng.roses</groupId>
+        <artifactId>kernel-d-socket</artifactId>
+        <version>7.0.4</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>socket-api</artifactId>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!--config模块的api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>config-api</artifactId>
+            <version>7.0.4</version>
+        </dependency>
+
+        <!-- Getty核心包 -->
+        <dependency>
+            <groupId>com.gettyio</groupId>
+            <artifactId>getty-core</artifactId>
+        </dependency>
+
+        <!-- 拓展包 -->
+        <dependency>
+            <groupId>com.gettyio</groupId>
+            <artifactId>getty-expansion</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
