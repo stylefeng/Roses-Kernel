@@ -4,9 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.socket.api.session.pojo.SocketSession;
 import cn.stylefeng.roses.kernel.socket.websocket.operator.channel.GettySocketOperator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -26,9 +24,9 @@ public class SessionCenter {
     private static ConcurrentMap<String, SocketSession<GettySocketOperator>> socketSessionMap = new ConcurrentHashMap<>();
 
     /**
-     * 消息类型和会话ID关系维护
+     * 消息类型和用户ID关系维护
      */
-    private static ConcurrentMap<String, List<String>> messageTypeSessionMap = new ConcurrentHashMap<>();
+    private static ConcurrentMap<String, Set<String>> messageTypeSessionMap = new ConcurrentHashMap<>();
 
     /**
      * 获取维护的所有会话
@@ -42,26 +40,26 @@ public class SessionCenter {
     }
 
     /**
-     * 获取消息和会话ID的完整映射关系
+     * 获取消息和用户ID的完整映射关系
      *
-     * @return {@link ConcurrentMap< String, List< String>>}
+     * @return {@link ConcurrentMap< String, Set<String>>}
      * @author majianguo
      * @date 2021/6/1 下午2:14
      **/
-    public static ConcurrentMap<String, List<String>> getMessageTypeSessionMap() {
+    public static ConcurrentMap<String, Set<String>> getMessageTypeSessionMap() {
         return messageTypeSessionMap;
     }
 
     /**
-     * 根据会话ID获取会话详情
+     * 根据用户ID获取会话详情
      *
-     * @param sessionId 会话ID
+     * @param userId 用户ID
      * @return {@link SocketSession <GettySocketOperator>}
      * @author majianguo
      * @date 2021/6/1 下午1:48
      **/
-    public static SocketSession<GettySocketOperator> getSessionById(String sessionId) {
-        return socketSessionMap.get(sessionId);
+    public static SocketSession<GettySocketOperator> getSessionByUserId(String userId) {
+        return socketSessionMap.get(userId);
     }
 
     /**
@@ -72,18 +70,19 @@ public class SessionCenter {
      * @date 2021/6/1 下午1:49
      **/
     public static void addSocketSession(SocketSession<GettySocketOperator> socketSession) {
+
         // 维护会话
-        socketSessionMap.put(socketSession.getSessionId(), socketSession);
+        socketSessionMap.put(socketSession.getUserId(), socketSession);
 
         // 维护会话所有的消息类型和会话的关系
         if (ObjectUtil.isNotEmpty(socketSession.getMessageTypes())) {
             for (String messageType : socketSession.getMessageTypes()) {
-                List<String> sessionIds = messageTypeSessionMap.get(messageType);
-                if (ObjectUtil.isEmpty(sessionIds)) {
-                    sessionIds = new ArrayList<>();
-                    messageTypeSessionMap.put(messageType, sessionIds);
+                Set<String> userIds = messageTypeSessionMap.get(messageType);
+                if (ObjectUtil.isEmpty(userIds)) {
+                    userIds = new HashSet<>();
+                    messageTypeSessionMap.put(messageType, userIds);
                 }
-                sessionIds.add(socketSession.getSessionId());
+                userIds.add(socketSession.getUserId());
             }
         }
     }
@@ -99,10 +98,10 @@ public class SessionCenter {
         List<SocketSession<GettySocketOperator>> res = new ArrayList<>();
 
         // 获取监听该消息所有的会话
-        List<String> stringList = messageTypeSessionMap.get(msgType);
-        if (ObjectUtil.isNotEmpty(stringList)) {
-            for (String sessionId : stringList) {
-                SocketSession<GettySocketOperator> socketSession = socketSessionMap.get(sessionId);
+        Set<String> userIds = messageTypeSessionMap.get(msgType);
+        if (ObjectUtil.isNotEmpty(userIds)) {
+            for (String userId : userIds) {
+                SocketSession<GettySocketOperator> socketSession = socketSessionMap.get(userId);
                 res.add(socketSession);
             }
         }
@@ -113,29 +112,37 @@ public class SessionCenter {
     /**
      * 给会话添加监听的消息类型
      *
-     * @param msgType   消息类型
-     * @param sessionId 会话ID
+     * @param msgType 消息类型
+     * @param userId  用户ID
      * @author majianguo
      * @date 2021/6/1 下午2:11
      **/
-    public static void addSocketSessionMsgType(String msgType, String sessionId) {
-        SocketSession<GettySocketOperator> socketSession = socketSessionMap.get(sessionId);
+    public static void addSocketSessionMsgType(String msgType, String userId) {
+        // 维护Session信息
+        SocketSession<GettySocketOperator> socketSession = socketSessionMap.get(userId);
         if (ObjectUtil.isNotEmpty(socketSession)) {
             socketSession.getMessageTypes().add(msgType);
         }
+        // 维护消息列表
+        Set<String> userIds = messageTypeSessionMap.get(msgType);
+        if (ObjectUtil.isEmpty(userIds)) {
+            userIds = new HashSet<>();
+            messageTypeSessionMap.put(msgType, userIds);
+        }
+        userIds.add(userId);
     }
 
     /**
      * 连接关闭
      *
-     * @param sessionId 会话唯一标识
+     * @param userId 用户ID
      * @author majianguo
      * @date 2021/6/1 下午3:25
      **/
-    public static void closed(String sessionId) {
-        socketSessionMap.remove(sessionId);
-        for (Map.Entry<String, List<String>> stringListEntry : messageTypeSessionMap.entrySet()) {
-            stringListEntry.getValue().removeIf(item -> item.equals(sessionId));
+    public static void closed(String userId) {
+        socketSessionMap.remove(userId);
+        for (Map.Entry<String, Set<String>> stringListEntry : messageTypeSessionMap.entrySet()) {
+            stringListEntry.getValue().removeIf(item -> item.equals(userId));
         }
     }
 }

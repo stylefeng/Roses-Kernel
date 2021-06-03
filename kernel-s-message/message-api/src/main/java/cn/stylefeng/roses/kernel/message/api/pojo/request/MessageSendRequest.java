@@ -82,6 +82,11 @@ public class MessageSendRequest extends BaseRequest {
     private String businessType;
 
     /**
+     * 业务类型值
+     */
+    private String businessTypeValue;
+
+    /**
      * 消息发送时间
      */
     private Date messageSendTime;

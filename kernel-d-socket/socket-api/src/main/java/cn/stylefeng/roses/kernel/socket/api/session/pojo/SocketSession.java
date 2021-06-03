@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.socket.api.session.pojo;
 import cn.stylefeng.roses.kernel.socket.api.session.SocketSessionOperatorApi;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,12 +18,12 @@ public class SocketSession<T extends SocketSessionOperatorApi> {
     /**
      * 会话唯一标识
      */
-    private String sessionId;
+    private String userId;
 
     /**
      * 该会话所有的监听消息类型
      */
-    private Set<String> messageTypes;
+    private Set<String> messageTypes = new HashSet<>();
 
     /**
      * 连接时间

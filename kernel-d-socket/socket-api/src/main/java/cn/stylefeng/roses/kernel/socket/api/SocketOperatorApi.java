@@ -1,5 +1,8 @@
 package cn.stylefeng.roses.kernel.socket.api;
 
+import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
+import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
+
 /**
  * Socket通用操作类
  * <p>
@@ -13,12 +16,12 @@ public interface SocketOperatorApi {
     /**
      * 发送消息到指定会话
      *
-     * @param sessionId 会话ID(会话ID具体看业务的实现，WebSocket中使用的是用户传入的formId)
-     * @param msg       消息体
+     * @param userId 用户ID
+     * @param msg    消息体
      * @author majianguo
      * @date 2021/6/2 上午9:35
      **/
-    void sendMsgOfSession(String sessionId, Object msg);
+    void sendMsgOfUserSession(ServerMessageTypeEnum msgType, String userId, Object msg);
 
     /**
      * 发送消息到所有会话
@@ -27,7 +30,7 @@ public interface SocketOperatorApi {
      * @author majianguo
      * @date 2021/6/2 上午9:35
      **/
-    void sendMsgOfAllSession(Object msg);
+    void sendMsgOfAllUserSession(ServerMessageTypeEnum msgType, Object msg);
 
     /**
      * 监听指定类型消息

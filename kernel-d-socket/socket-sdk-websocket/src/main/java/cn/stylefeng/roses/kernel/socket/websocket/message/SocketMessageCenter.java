@@ -1,6 +1,6 @@
 package cn.stylefeng.roses.kernel.socket.websocket.message;
 
-import cn.stylefeng.roses.kernel.socket.api.SocketMsgCallbackInterface;
+import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 
 import java.util.HashMap;
 import java.util.Map;

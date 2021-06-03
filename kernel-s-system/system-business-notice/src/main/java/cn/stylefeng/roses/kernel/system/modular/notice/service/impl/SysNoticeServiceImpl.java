@@ -194,6 +194,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
 
         // 消息业务类型
         message.setBusinessType(MessageBusinessTypeEnum.SYS_NOTICE.getCode());
+        message.setBusinessTypeValue(MessageBusinessTypeEnum.SYS_NOTICE.getName());
 
         message.setBusinessId(sysNotice.getNoticeId());
         message.setMessageSendTime(new Date());

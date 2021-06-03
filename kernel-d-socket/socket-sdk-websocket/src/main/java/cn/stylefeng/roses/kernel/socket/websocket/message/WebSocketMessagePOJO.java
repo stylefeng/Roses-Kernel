@@ -19,15 +19,15 @@ public class WebSocketMessagePOJO {
     /**
      * 目标Id
      */
-    private String toId;
+    private String toUserId;
 
     /**
      * 发送者ID
      */
-    private String formId;
+    private String formUserId;
 
     /**
      * 数据
      */
-    private String data;
+    private Object data;
 }

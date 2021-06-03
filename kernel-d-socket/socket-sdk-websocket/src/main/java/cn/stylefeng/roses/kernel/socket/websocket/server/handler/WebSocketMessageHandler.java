@@ -1,7 +1,10 @@
 package cn.stylefeng.roses.kernel.socket.websocket.server.handler;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.stylefeng.roses.kernel.socket.api.SocketMsgCallbackInterface;
+import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
+import cn.stylefeng.roses.kernel.rule.constants.SymbolConstant;
+import cn.stylefeng.roses.kernel.socket.api.enums.ClientMessageTypeEnum;
+import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 import cn.stylefeng.roses.kernel.socket.websocket.message.SocketMessageCenter;
 import cn.stylefeng.roses.kernel.socket.api.session.pojo.SocketSession;
 import cn.stylefeng.roses.kernel.socket.websocket.session.SessionCenter;
@@ -55,13 +58,30 @@ public class WebSocketMessageHandler extends SimpleChannelInboundHandler<WebSock
             // 转换为Java对象
             WebSocketMessagePOJO webSocketMessagePOJO = JSON.toJavaObject(JSON.parseObject(data), WebSocketMessagePOJO.class);
 
+            // 心跳包
+            if (ClientMessageTypeEnum.USER_HEART.getCode().equals(webSocketMessagePOJO.getType())) {
+                // 更新用户最后活跃时间
+                String userId = ChannelIdAndUserBindCenter.getUserId(socketChannel.getChannelId());
+                if (ObjectUtil.isNotEmpty(userId)) {
+                    SocketSession<GettySocketOperator> session = SessionCenter.getSessionByUserId(userId);
+                    session.setLastActiveTime(System.currentTimeMillis());
+                }
+            }
+
+            // 用户ID为空不处理直接跳过
+            if (ObjectUtil.isEmpty(webSocketMessagePOJO.getFormUserId())) {
+                ChannelIdAndUserBindCenter.closed(socketChannel.getChannelId());
+                socketChannel.close();
+                return;
+            }
+
             // 维护通道和用户ID的绑定关系
-            if (!ChannelIdAndUserBindCenter.isBind(webSocketMessagePOJO.getFormId())) {
-                ChannelIdAndUserBindCenter.bind(socketChannel.getChannelId(), webSocketMessagePOJO.getFormId());
+            if (!ChannelIdAndUserBindCenter.isBind(webSocketMessagePOJO.getFormUserId())) {
+                ChannelIdAndUserBindCenter.bind(socketChannel.getChannelId(), webSocketMessagePOJO.getFormUserId());
 
                 // 创建api的会话对象
                 SocketSession<GettySocketOperator> socketSession = new SocketSession<>();
-                socketSession.setSessionId(webSocketMessagePOJO.getFormId());
+                socketSession.setUserId(webSocketMessagePOJO.getFormUserId());
                 socketSession.setSocketOperatorApi(new GettySocketOperator(socketChannel));
                 socketSession.setConnectionTime(System.currentTimeMillis());
                 socketSession.setLastActiveTime(System.currentTimeMillis());
@@ -70,11 +90,15 @@ public class WebSocketMessageHandler extends SimpleChannelInboundHandler<WebSock
                 SessionCenter.addSocketSession(socketSession);
             }
 
+            // 更新最后会话时间
+            SocketSession<GettySocketOperator> userSession = SessionCenter.getSessionByUserId(webSocketMessagePOJO.getFormUserId());
+            userSession.setLastActiveTime(System.currentTimeMillis());
+
             // 找到该消息的处理器
             SocketMsgCallbackInterface socketMsgCallbackInterface = SocketMessageCenter.getSocketMsgCallbackInterface(webSocketMessagePOJO.getType());
             if (ObjectUtil.isNotEmpty(socketMsgCallbackInterface)) {
                 // 获取会话
-                SocketSession<GettySocketOperator> session = SessionCenter.getSessionById(webSocketMessagePOJO.getFormId());
+                SocketSession<GettySocketOperator> session = SessionCenter.getSessionByUserId(webSocketMessagePOJO.getFormUserId());
 
                 // 触发回调
                 socketMsgCallbackInterface.callback(webSocketMessagePOJO.getType(), webSocketMessagePOJO, session);

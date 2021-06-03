@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.socket.api;
+package cn.stylefeng.roses.kernel.socket.api.message;
 
 import cn.stylefeng.roses.kernel.socket.api.session.pojo.SocketSession;
 

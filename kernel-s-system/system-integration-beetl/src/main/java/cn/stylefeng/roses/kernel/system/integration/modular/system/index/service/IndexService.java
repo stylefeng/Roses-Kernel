@@ -68,6 +68,9 @@ public class IndexService {
         // 获取登录用户ws-url
         renderMap.put("wsUrl", loginUser.getWsUrl());
 
+        // 获取登录用户ID
+        renderMap.put("userId", loginUser.getUserId());
+
         // 未读消息数量
         MessageRequest messageRequest = new MessageRequest();
         messageRequest.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());

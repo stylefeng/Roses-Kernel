@@ -1,17 +1,28 @@
 package cn.stylefeng.roses.kernel.socket.business.websocket.spring;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.config.api.constants.ConfigConstants;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
+import cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi;
+import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
+import cn.stylefeng.roses.kernel.socket.api.session.pojo.SocketSession;
+import cn.stylefeng.roses.kernel.socket.websocket.message.WebSocketMessagePOJO;
+import cn.stylefeng.roses.kernel.socket.websocket.operator.channel.GettySocketOperator;
 import cn.stylefeng.roses.kernel.socket.websocket.server.WebSocketServer;
+import cn.stylefeng.roses.kernel.socket.websocket.session.SessionCenter;
 import com.gettyio.core.channel.config.ServerConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.net.StandardSocketOptions;
+import java.util.HashSet;
+import java.util.List;
 
 import static cn.stylefeng.roses.kernel.socket.api.constants.SocketConstants.*;
+import static cn.stylefeng.roses.kernel.socket.api.enums.ClientMessageTypeEnum.*;
 
 /**
  * Spring Boot启动完成拉起WebSocket
@@ -22,6 +33,9 @@ import static cn.stylefeng.roses.kernel.socket.api.constants.SocketConstants.*;
 @Component
 @Slf4j
 public class WebSocketApplicationRunnerImpl implements ApplicationRunner {
+
+    @Autowired
+    private SocketOperatorApi socketOperatorApi;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -48,5 +62,14 @@ public class WebSocketApplicationRunnerImpl implements ApplicationRunner {
         WebSocketServer.run(aioServerConfig);
 
         log.info("WebSocket Server Start Success!");
+
+        // 添加用户新增消息类型的回调
+        socketOperatorApi.msgTypeCallback(USER_ADD_MSG_TYPE.getCode(), (msgType, msg, socketSession) -> {
+            // 转换对象
+            WebSocketMessagePOJO webSocketMessage = (WebSocketMessagePOJO)msg;
+
+            // 维护会话中心的消息类型
+            SessionCenter.addSocketSessionMsgType(webSocketMessage.getData().toString(), webSocketMessage.getFormUserId());
+        });
     }
 }

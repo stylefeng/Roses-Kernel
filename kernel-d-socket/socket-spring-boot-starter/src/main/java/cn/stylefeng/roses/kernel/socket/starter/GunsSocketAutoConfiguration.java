@@ -33,8 +33,8 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Socket的自动配置类
  *
- * @author fengshuonan
- * @date 2020/12/1 21:18
+ * @author majianguo
+ * @date 2021/6/2 下午5:48
  */
 @Configuration
 public class GunsSocketAutoConfiguration {
@@ -42,9 +42,9 @@ public class GunsSocketAutoConfiguration {
     /**
      * Socket操作实现类
      *
-     * @return {@link SocketOperatorApi}
+     * @return {@link cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi}
      * @author majianguo
-     * @date 2021/6/2 上午11:02
+     * @date 2021/6/2 下午5:48
      **/
     @Bean
     @ConditionalOnMissingBean(SocketOperatorApi.class)

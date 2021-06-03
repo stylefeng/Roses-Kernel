@@ -28,7 +28,7 @@ package cn.stylefeng.roses.kernel.socket.api.session;
  * socket会话操作接口
  * <p>
  * 该接口面向会话，须基于会话的通道调用。
- * 该接口支持扩展，可参考WebSocket模块中{@link cn.stylefeng.roses.kernel.socket.websocket.channel}包下的类
+ * 该接口支持扩展，可参考WebSocket模块中{@link cn.stylefeng.roses.kernel.socket.websocket.operator.channel}包下的类
  *
  * @author majianguo
  * @date 2021/6/1 上午11:46

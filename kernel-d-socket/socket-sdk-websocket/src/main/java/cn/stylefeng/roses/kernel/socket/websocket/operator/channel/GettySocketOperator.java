@@ -1,5 +1,7 @@
 package cn.stylefeng.roses.kernel.socket.websocket.operator.channel;
 
+import cn.stylefeng.roses.kernel.socket.websocket.message.WebSocketMessagePOJO;
+import com.alibaba.fastjson.JSON;
 import com.gettyio.core.channel.SocketChannel;
 import com.gettyio.expansion.handler.codec.websocket.frame.TextWebSocketFrame;
 
@@ -24,23 +26,12 @@ public class GettySocketOperator implements GettyChannelExpandInterFace {
 
     @Override
     public void writeAndFlush(Object obj) {
-        if (obj instanceof String) {
-            // 处理WebSocket的数据
-            TextWebSocketFrame textWebSocketFrame = new TextWebSocketFrame(obj.toString());
-            socketChannel.writeAndFlush(textWebSocketFrame);
-            return;
-        }
-        socketChannel.writeAndFlush(obj);
+        TextWebSocketFrame textWebSocketFrame = new TextWebSocketFrame(JSON.toJSONString(obj));
+        socketChannel.writeAndFlush(textWebSocketFrame);
     }
 
     @Override
     public void writeToChannel(Object obj) {
-        if (obj instanceof String) {
-            // 处理WebSocket的数据
-            TextWebSocketFrame textWebSocketFrame = new TextWebSocketFrame(obj.toString());
-            socketChannel.writeToChannel(textWebSocketFrame);
-            return;
-        }
         socketChannel.writeToChannel(obj);
     }
 

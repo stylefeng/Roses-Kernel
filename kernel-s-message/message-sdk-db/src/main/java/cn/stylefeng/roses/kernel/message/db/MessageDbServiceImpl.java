@@ -32,7 +32,6 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.message.api.MessageApi;
-import cn.stylefeng.roses.kernel.message.api.WebsocketApi;
 import cn.stylefeng.roses.kernel.message.api.constants.MessageConstants;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import cn.stylefeng.roses.kernel.message.api.exception.MessageException;
@@ -43,8 +42,11 @@ import cn.stylefeng.roses.kernel.message.api.pojo.response.MessageResponse;
 import cn.stylefeng.roses.kernel.message.db.entity.SysMessage;
 import cn.stylefeng.roses.kernel.message.db.service.SysMessageService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi;
+import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -65,7 +67,7 @@ import java.util.stream.Collectors;
 public class MessageDbServiceImpl implements MessageApi {
 
     @Resource
-    private WebsocketApi websocketApi;
+    private SocketOperatorApi socketOperatorApi;
 
     @Resource
     private UserServiceApi userServiceApi;
@@ -111,7 +113,10 @@ public class MessageDbServiceImpl implements MessageApi {
             }
         });
 
-        websocketApi.sendWebSocketMessage(ListUtil.toList(userIdSet), messageSendRequest);
+        // 给用户发送通知
+        for (Long userId : userIdSet) {
+            socketOperatorApi.sendMsgOfUserSession(ServerMessageTypeEnum.SYS_NOTICE_MSG_TYPE, userId.toString(), messageSendRequest);
+        }
         sysMessageService.saveBatch(sendMsgList);
 
     }
@@ -134,10 +139,7 @@ public class MessageDbServiceImpl implements MessageApi {
         LoginUser loginUser = LoginContext.me().getLoginUser();
         Long userId = loginUser.getUserId();
         LambdaUpdateWrapper<SysMessage> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.set(SysMessage::getReadFlag, MessageReadFlagEnum.READ.getCode())
-                .eq(SysMessage::getReadFlag, MessageReadFlagEnum.UNREAD.getCode())
-                .eq(SysMessage::getReceiveUserId, userId)
-                .set(SysMessage::getDelFlag, YesOrNotEnum.N.getCode());
+        updateWrapper.set(SysMessage::getReadFlag, MessageReadFlagEnum.READ.getCode()).eq(SysMessage::getReadFlag, MessageReadFlagEnum.UNREAD.getCode()).eq(SysMessage::getReceiveUserId, userId).set(SysMessage::getDelFlag, YesOrNotEnum.N.getCode());
         sysMessageService.update(updateWrapper);
 
     }
@@ -156,8 +158,7 @@ public class MessageDbServiceImpl implements MessageApi {
     public void deleteByMessageId(Long messageId) {
         LambdaUpdateWrapper<SysMessage> updateWrapper = new LambdaUpdateWrapper<>();
         // 修改为逻辑删除
-        updateWrapper.eq(SysMessage::getMessageId, messageId)
-                .set(SysMessage::getDelFlag, YesOrNotEnum.Y.getCode());
+        updateWrapper.eq(SysMessage::getMessageId, messageId).set(SysMessage::getDelFlag, YesOrNotEnum.Y.getCode());
         sysMessageService.update(updateWrapper);
     }
 
@@ -165,8 +166,7 @@ public class MessageDbServiceImpl implements MessageApi {
     @Transactional(rollbackFor = Exception.class)
     public void batchDeleteByMessageIds(String messageIds) {
         LambdaUpdateWrapper<SysMessage> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.inSql(SysMessage::getMessageId, messageIds)
-                .set(SysMessage::getDelFlag, YesOrNotEnum.Y.getCode());
+        updateWrapper.inSql(SysMessage::getMessageId, messageIds).set(SysMessage::getDelFlag, YesOrNotEnum.Y.getCode());
         sysMessageService.update(updateWrapper);
     }
 

@@ -37,6 +37,13 @@
             <version>7.0.4</version>
         </dependency>
 
+        <!--引入WebSocket模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>socket-sdk-websocket</artifactId>
+            <version>7.0.4</version>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -38,4 +38,10 @@ public interface SymbolConstant {
 
     String RIGHT_SQUARE_BRACKETS = "]";
 
+    String DOLLAR = "$";
+
+    String PERCENT = "%";
+
+    String AND = "&";
+
 }
