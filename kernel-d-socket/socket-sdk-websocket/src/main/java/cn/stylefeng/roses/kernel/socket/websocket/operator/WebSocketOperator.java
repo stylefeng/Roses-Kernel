@@ -27,7 +27,7 @@ import java.util.List;
 public class WebSocketOperator implements SocketOperatorApi {
 
     @Override
-    public void sendMsgOfUserSession(ServerMessageTypeEnum msgType, String userId, Object msg) {
+    public void sendMsgOfUserSession(String msgType, String userId, Object msg) {
         // 根据用户ID获取会话
         SocketSession<GettySocketOperator> socketSession = SessionCenter.getSessionByUserId(userId);
         if (ObjectUtil.isEmpty(socketSession)) {
@@ -35,26 +35,26 @@ public class WebSocketOperator implements SocketOperatorApi {
         }
 
         // 判断用户是否监听
-        if (socketSession.getMessageTypes().contains(msgType.getCode())) {
+        if (socketSession.getMessageTypes().contains(msgType)) {
             WebSocketMessagePOJO webSocketMessagePOJO = new WebSocketMessagePOJO();
             webSocketMessagePOJO.setData(msg);
-            webSocketMessagePOJO.setType(msgType.getCode());
+            webSocketMessagePOJO.setType(msgType);
             // 发送内容
             socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessagePOJO);
         }
     }
 
     @Override
-    public void sendMsgOfAllUserSession(ServerMessageTypeEnum msgType, Object msg) {
+    public void sendMsgOfAllUserSession(String msgType, Object msg) {
         // 获取监听该消息类型的所有会话
-        List<SocketSession<GettySocketOperator>> socketSessionList = SessionCenter.getSocketSessionByMsgType(msgType.getCode());
+        List<SocketSession<GettySocketOperator>> socketSessionList = SessionCenter.getSocketSessionByMsgType(msgType);
 
         if (ObjectUtil.isNotEmpty(socketSessionList)) {
             // 给所有会话发送消息
             for (SocketSession<GettySocketOperator> socketSession : socketSessionList) {
                 WebSocketMessagePOJO webSocketMessagePOJO = new WebSocketMessagePOJO();
                 webSocketMessagePOJO.setData(msg);
-                webSocketMessagePOJO.setType(msgType.getCode());
+                webSocketMessagePOJO.setType(msgType);
                 // 发送内容
                 socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessagePOJO);
             }

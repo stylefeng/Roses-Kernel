@@ -115,7 +115,7 @@ public class MessageDbServiceImpl implements MessageApi {
 
         // 给用户发送通知
         for (Long userId : userIdSet) {
-            socketOperatorApi.sendMsgOfUserSession(ServerMessageTypeEnum.SYS_NOTICE_MSG_TYPE, userId.toString(), messageSendRequest);
+            socketOperatorApi.sendMsgOfUserSession(ServerMessageTypeEnum.SYS_NOTICE_MSG_TYPE.getCode(), userId.toString(), messageSendRequest);
         }
         sysMessageService.saveBatch(sendMsgList);
 
