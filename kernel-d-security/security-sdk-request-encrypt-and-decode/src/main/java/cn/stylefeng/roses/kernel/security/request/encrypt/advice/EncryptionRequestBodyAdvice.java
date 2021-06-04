@@ -18,6 +18,7 @@ import cn.stylefeng.roses.kernel.security.request.encrypt.constants.EncryptionCo
 import cn.stylefeng.roses.kernel.security.request.encrypt.exception.EncryptionException;
 import cn.stylefeng.roses.kernel.security.request.encrypt.exception.enums.EncryptionExceptionEnum;
 import cn.stylefeng.roses.kernel.security.request.encrypt.holder.EncryptionHolder;
+import cn.stylefeng.roses.kernel.security.request.encrypt.holder.EncryptionRsaHolder;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -110,7 +111,7 @@ public class EncryptionRequestBodyAdvice implements RequestBodyAdvice {
                             }
 
                             // 使用私钥解密出返回加密数据的key和请求的内容
-                            RSA rsa = new RSA(EncryptionConstants.PRIVATE_KEY, EncryptionConstants.PUBLIC_KEY);
+                            RSA rsa = EncryptionRsaHolder.getRsa();
 
                             // 先使用SM4解密出请求的json
                             String objectString = jsonObject.getString("data");
