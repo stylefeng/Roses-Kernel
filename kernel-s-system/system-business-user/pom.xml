@@ -21,21 +21,21 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--config模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>config-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--office模块api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>office-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--文件操作的api-->
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>file-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--资源api模块-->
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--参数校验模块-->
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--安全模块api-->
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>security-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--包装器模块-->
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>wrapper-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--缓存api-->
@@ -83,18 +83,18 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-memory</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-redis</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
             <optional>true</optional>
         </dependency>
 
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>db-sdk-mp</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--web模块-->

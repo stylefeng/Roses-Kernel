@@ -18,7 +18,7 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>socket-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
     </dependencies>
 </project>

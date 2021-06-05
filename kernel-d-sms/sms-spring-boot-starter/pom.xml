@@ -21,14 +21,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>sms-sdk-aliyun</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!-- 验证码发送 -->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>sms-business-validation</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
     </dependencies>

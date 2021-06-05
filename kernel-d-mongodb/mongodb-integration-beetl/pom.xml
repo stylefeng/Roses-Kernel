@@ -22,14 +22,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--Mongodb file自动配置-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>mongodb-spring-boot-starter</artifactId>
-            <version>7.0.4</version>
+            <version>${roses.version}</version>
         </dependency>
     </dependencies>
 
