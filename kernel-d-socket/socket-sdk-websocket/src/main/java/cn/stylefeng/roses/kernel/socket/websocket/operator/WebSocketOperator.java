@@ -33,15 +33,11 @@ public class WebSocketOperator implements SocketOperatorApi {
         if (ObjectUtil.isEmpty(socketSession)) {
             throw new SocketException(SocketExceptionEnum.SESSION_NOT_EXIST);
         }
-
-        // 判断用户是否监听
-        if (socketSession.getMessageTypes().contains(msgType)) {
-            WebSocketMessagePOJO webSocketMessagePOJO = new WebSocketMessagePOJO();
-            webSocketMessagePOJO.setData(msg);
-            webSocketMessagePOJO.setType(msgType);
-            // 发送内容
-            socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessagePOJO);
-        }
+        WebSocketMessagePOJO webSocketMessagePOJO = new WebSocketMessagePOJO();
+        webSocketMessagePOJO.setData(msg);
+        webSocketMessagePOJO.setServerMsgType(msgType);
+        // 发送内容
+        socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessagePOJO);
     }
 
     @Override
@@ -54,7 +50,7 @@ public class WebSocketOperator implements SocketOperatorApi {
             for (SocketSession<GettySocketOperator> socketSession : socketSessionList) {
                 WebSocketMessagePOJO webSocketMessagePOJO = new WebSocketMessagePOJO();
                 webSocketMessagePOJO.setData(msg);
-                webSocketMessagePOJO.setType(msgType);
+                webSocketMessagePOJO.setServerMsgType(msgType);
                 // 发送内容
                 socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessagePOJO);
             }

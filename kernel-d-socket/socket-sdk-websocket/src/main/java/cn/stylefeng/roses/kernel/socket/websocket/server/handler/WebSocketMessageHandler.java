@@ -59,7 +59,7 @@ public class WebSocketMessageHandler extends SimpleChannelInboundHandler<WebSock
             WebSocketMessagePOJO webSocketMessagePOJO = JSON.toJavaObject(JSON.parseObject(data), WebSocketMessagePOJO.class);
 
             // 心跳包
-            if (ClientMessageTypeEnum.USER_HEART.getCode().equals(webSocketMessagePOJO.getType())) {
+            if (ClientMessageTypeEnum.USER_HEART.getCode().equals(webSocketMessagePOJO.getClientMsgType())) {
                 // 更新用户最后活跃时间
                 String userId = ChannelIdAndUserBindCenter.getUserId(socketChannel.getChannelId());
                 if (ObjectUtil.isNotEmpty(userId)) {
@@ -70,8 +70,6 @@ public class WebSocketMessageHandler extends SimpleChannelInboundHandler<WebSock
 
             // 用户ID为空不处理直接跳过
             if (ObjectUtil.isEmpty(webSocketMessagePOJO.getFormUserId())) {
-                ChannelIdAndUserBindCenter.closed(socketChannel.getChannelId());
-                socketChannel.close();
                 return;
             }
 
@@ -95,13 +93,13 @@ public class WebSocketMessageHandler extends SimpleChannelInboundHandler<WebSock
             userSession.setLastActiveTime(System.currentTimeMillis());
 
             // 找到该消息的处理器
-            SocketMsgCallbackInterface socketMsgCallbackInterface = SocketMessageCenter.getSocketMsgCallbackInterface(webSocketMessagePOJO.getType());
+            SocketMsgCallbackInterface socketMsgCallbackInterface = SocketMessageCenter.getSocketMsgCallbackInterface(webSocketMessagePOJO.getClientMsgType());
             if (ObjectUtil.isNotEmpty(socketMsgCallbackInterface)) {
                 // 获取会话
                 SocketSession<GettySocketOperator> session = SessionCenter.getSessionByUserId(webSocketMessagePOJO.getFormUserId());
 
                 // 触发回调
-                socketMsgCallbackInterface.callback(webSocketMessagePOJO.getType(), webSocketMessagePOJO, session);
+                socketMsgCallbackInterface.callback(webSocketMessagePOJO.getClientMsgType(), webSocketMessagePOJO, session);
             } else {
                 socketChannel.writeAndFlush(new TextWebSocketFrame("{\"code\":\"404\"}"));
             }
