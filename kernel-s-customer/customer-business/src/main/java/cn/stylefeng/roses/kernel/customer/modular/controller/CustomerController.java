@@ -71,7 +71,7 @@ public class CustomerController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "找回密码-发送邮件", path = "/customer/sendResetPwdEmail", requiredPermission = false, requiredLogin = false)
-    public ResponseData sendResetPwdEmail(@Validated(CustomerRequest.sendResetPwdEmail.class) CustomerRequest customerRequest) {
+    public ResponseData sendResetPwdEmail(@RequestBody @Validated(CustomerRequest.sendResetPwdEmail.class) CustomerRequest customerRequest) {
         customerService.sendResetPwdEmail(customerRequest);
         return new SuccessResponseData();
     }
@@ -83,7 +83,7 @@ public class CustomerController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "重置密码", path = "/customer/resetPassword", requiredPermission = false, requiredLogin = false)
-    public ResponseData resetPassword(@Validated(CustomerRequest.resetPassword.class) CustomerRequest customerRequest) {
+    public ResponseData resetPassword(@RequestBody @Validated(CustomerRequest.resetPassword.class) CustomerRequest customerRequest) {
         customerService.resetPassword(customerRequest);
         return new SuccessResponseData();
     }
