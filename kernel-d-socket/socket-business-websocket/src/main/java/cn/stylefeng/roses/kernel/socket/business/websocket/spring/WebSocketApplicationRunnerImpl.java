@@ -1,20 +1,13 @@
 package cn.stylefeng.roses.kernel.socket.business.websocket.spring;
 
-import cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi;
 import cn.stylefeng.roses.kernel.socket.api.expander.SocketConfigExpander;
-import cn.stylefeng.roses.kernel.socket.websocket.message.WebSocketMessagePOJO;
 import cn.stylefeng.roses.kernel.socket.websocket.server.WebSocketServer;
-import cn.stylefeng.roses.kernel.socket.websocket.session.SessionCenter;
 import com.gettyio.core.channel.config.ServerConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
 import java.net.StandardSocketOptions;
-
-import static cn.stylefeng.roses.kernel.socket.api.enums.ClientMessageTypeEnum.*;
 
 /**
  * Spring Boot启动完成拉起WebSocket
@@ -25,9 +18,6 @@ import static cn.stylefeng.roses.kernel.socket.api.enums.ClientMessageTypeEnum.*
 @Component
 @Slf4j
 public class WebSocketApplicationRunnerImpl implements ApplicationRunner {
-
-    @Autowired
-    private SocketOperatorApi socketOperatorApi;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -51,14 +41,5 @@ public class WebSocketApplicationRunnerImpl implements ApplicationRunner {
         WebSocketServer.run(aioServerConfig);
 
         log.info("WebSocket Server Start Success!");
-
-        // 添加用户新增消息类型的回调
-        socketOperatorApi.msgTypeCallback(USER_ADD_MSG_TYPE.getCode(), (msgType, msg, socketSession) -> {
-            // 转换对象
-            WebSocketMessagePOJO webSocketMessage = (WebSocketMessagePOJO)msg;
-
-            // 维护会话中心的消息类型
-            SessionCenter.addSocketSessionMsgType(webSocketMessage.getData().toString(), webSocketMessage.getFormUserId());
-        });
     }
 }

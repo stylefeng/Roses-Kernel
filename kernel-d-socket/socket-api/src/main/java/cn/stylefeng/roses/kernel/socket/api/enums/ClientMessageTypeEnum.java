@@ -14,11 +14,6 @@ import lombok.Getter;
 public enum ClientMessageTypeEnum {
 
     /**
-     * 添加用户监听的消息类型
-     */
-    USER_ADD_MSG_TYPE("200001", "用户添加一个监听的消息类型"),
-
-    /**
      * 用户心跳消息类型
      */
     USER_HEART("299999", "用户心跳消息类型");

@@ -42,18 +42,12 @@ public class WebSocketOperator implements SocketOperatorApi {
 
     @Override
     public void sendMsgOfAllUserSession(String msgType, Object msg) {
-        // 获取监听该消息类型的所有会话
-        List<SocketSession<GettySocketOperator>> socketSessionList = SessionCenter.getSocketSessionByMsgType(msgType);
-
-        if (ObjectUtil.isNotEmpty(socketSessionList)) {
-            // 给所有会话发送消息
-            for (SocketSession<GettySocketOperator> socketSession : socketSessionList) {
-                WebSocketMessagePOJO webSocketMessagePOJO = new WebSocketMessagePOJO();
-                webSocketMessagePOJO.setData(msg);
-                webSocketMessagePOJO.setServerMsgType(msgType);
-                // 发送内容
-                socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessagePOJO);
-            }
+        for (SocketSession<GettySocketOperator> socketSession : SessionCenter.getSocketSessionMap().values()) {
+            WebSocketMessagePOJO webSocketMessagePOJO = new WebSocketMessagePOJO();
+            webSocketMessagePOJO.setData(msg);
+            webSocketMessagePOJO.setServerMsgType(msgType);
+            // 发送内容
+            socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessagePOJO);
         }
     }
 
