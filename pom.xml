@@ -82,6 +82,9 @@
         <!--系统监控模块-->
         <module>kernel-o-monitor</module>
 
+        <!--C端用户-->
+        <module>kernel-s-customer</module>
+
         <!--演示环境-->
         <module>kernel-s-demo</module>
 
