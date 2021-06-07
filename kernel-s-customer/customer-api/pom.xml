@@ -16,6 +16,14 @@
     <packaging>jar</packaging>
 
     <dependencies>
+
+        <!--config模块的api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>config-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

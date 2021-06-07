@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Date;
+
 /**
  * C端用户表实例类
  *
@@ -35,7 +37,7 @@ public class Customer extends BaseEntity {
     private String account;
 
     /**
-     * 密码
+     * 密码，BCrypt
      */
     @TableField("password")
     @ChineseDescription("密码")
@@ -45,7 +47,7 @@ public class Customer extends BaseEntity {
      * 昵称（显示名称）
      */
     @TableField("nick_name")
-    @ChineseDescription("昵称（显示名称）")
+    @ChineseDescription("昵称")
     private String nickName;
 
     /**
@@ -63,10 +65,24 @@ public class Customer extends BaseEntity {
     private String telephone;
 
     /**
+     * 邮箱或手机验证码
+     */
+    @TableField("verify_code")
+    @ChineseDescription("邮箱或手机验证码")
+    private String verifyCode;
+
+    /**
+     * 是否已经邮箱或手机验证通过：Y-通过，N-未通过
+     */
+    @TableField("verified_flag")
+    @ChineseDescription("是否已经邮箱或手机验证通过")
+    private String verifiedFlag;
+
+    /**
      * 用户头像（文件表id）
      */
     @TableField("avatar")
-    @ChineseDescription("用户头像（文件表id）")
+    @ChineseDescription("用户头像")
     private Long avatar;
 
     /**
@@ -82,5 +98,26 @@ public class Customer extends BaseEntity {
     @TableField("score")
     @ChineseDescription("用户积分")
     private Integer score;
+
+    /**
+     * 用户状态：1-启用，2-禁用
+     */
+    @TableField("status_flag")
+    @ChineseDescription("用户状态：1-启用，2-禁用")
+    private Integer statusFlag;
+
+    /**
+     * 上次登录ip
+     */
+    @TableField("last_login_ip")
+    @ChineseDescription("上次登录ip")
+    private String lastLoginIp;
+
+    /**
+     * 上次登录时间
+     */
+    @TableField("last_login_time")
+    @ChineseDescription("上次登录时间")
+    private Date lastLoginTime;
 
 }

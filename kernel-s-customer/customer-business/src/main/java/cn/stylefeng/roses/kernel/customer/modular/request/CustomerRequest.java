@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.customer.modular.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,28 +29,43 @@ public class CustomerRequest extends BaseRequest {
     /**
      * 账号
      */
-    @NotBlank(message = "账号不能为空", groups = {add.class, edit.class})
     @ChineseDescription("账号")
+    @NotBlank(message = "账号不能为空", groups = {add.class, edit.class, reg.class})
+    @TableUniqueValue(
+            message = "账号存在重复，请从新输入账号",
+            groups = reg.class,
+            tableName = "toc_customer",
+            columnName = "account",
+            idFieldName = "customer_id")
     private String account;
 
     /**
-     * 密码
+     * 密码，BCrypt
      */
-    @NotBlank(message = "密码不能为空", groups = {add.class, edit.class})
     @ChineseDescription("密码")
+    @NotBlank(message = "密码，BCrypt不能为空", groups = {add.class, edit.class, reg.class})
     private String password;
 
     /**
      * 昵称（显示名称）
      */
-    @NotBlank(message = "昵称（显示名称）不能为空", groups = {add.class, edit.class})
-    @ChineseDescription("昵称（显示名称）")
+    @ChineseDescription("昵称")
+    @NotBlank(message = "昵称（显示名称）不能为空", groups = {add.class, edit.class, reg.class})
     private String nickName;
 
     /**
      * 邮箱
+     * <p>
+     * 注册时，必填邮箱
      */
     @ChineseDescription("邮箱")
+    @NotBlank(message = "邮箱不能为空", groups = {reg.class})
+    @TableUniqueValue(
+            message = "邮箱存在重复，请从新输入邮箱",
+            groups = reg.class,
+            tableName = "toc_customer",
+            columnName = "email",
+            idFieldName = "customer_id")
     private String email;
 
     /**
@@ -59,9 +75,22 @@ public class CustomerRequest extends BaseRequest {
     private String telephone;
 
     /**
+     * 邮箱或手机验证码
+     */
+    @ChineseDescription("邮箱或手机验证码")
+    @NotBlank(message = "激活码不能为空", groups = active.class)
+    private String verifyCode;
+
+    /**
+     * 是否已经邮箱或手机验证通过：Y-通过，N-未通过
+     */
+    @ChineseDescription("是否已经邮箱或手机验证通过")
+    private String verifiedFlag;
+
+    /**
      * 用户头像（文件表id）
      */
-    @ChineseDescription("用户头像（文件表id）")
+    @ChineseDescription("用户头像")
     private Long avatar;
 
     /**
@@ -75,5 +104,23 @@ public class CustomerRequest extends BaseRequest {
      */
     @ChineseDescription("用户积分")
     private Integer score;
+
+    /**
+     * 用户状态：1-启用，2-禁用
+     */
+    @ChineseDescription("用户状态：1-启用，2-禁用")
+    private Integer statusFlag;
+
+    /**
+     * 注册账号
+     */
+    public @interface reg {
+    }
+
+    /**
+     * 激活账号
+     */
+    public @interface active {
+    }
 
 }

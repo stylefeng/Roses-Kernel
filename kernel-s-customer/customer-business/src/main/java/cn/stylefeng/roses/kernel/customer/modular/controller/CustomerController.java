@@ -1,5 +1,7 @@
 package cn.stylefeng.roses.kernel.customer.modular.controller;
 
+import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
+import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
 import cn.stylefeng.roses.kernel.customer.modular.request.CustomerRequest;
 import cn.stylefeng.roses.kernel.customer.modular.service.CustomerService;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
@@ -25,6 +27,42 @@ public class CustomerController {
 
     @Resource
     private CustomerService customerService;
+
+    /**
+     * 注册C端用户
+     *
+     * @author fengshuonan
+     * @date 2021/06/07 11:40
+     */
+    @PostResource(name = "注册C端用户", path = "/customer/reg", requiredPermission = false, requiredLogin = false)
+    public ResponseData reg(@RequestBody @Validated(CustomerRequest.reg.class) CustomerRequest customerRequest) {
+        customerService.reg(customerRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 激活C端用户
+     *
+     * @author fengshuonan
+     * @date 2021/6/7 16:03
+     */
+    @GetResource(name = "激活C端用户", path = "/customer/active", requiredPermission = false, requiredLogin = false)
+    public ResponseData active(@Validated(CustomerRequest.active.class) CustomerRequest customerRequest) {
+        customerService.active(customerRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * C端用户登录
+     *
+     * @author fengshuonan
+     * @date 2021/06/07 11:40
+     */
+    @PostResource(name = "C端用户登录", path = "/customer/login", requiredPermission = false, requiredLogin = false)
+    public ResponseData login(@RequestBody @Validated LoginRequest loginRequest) {
+        LoginResponse loginResponse = customerService.login(loginRequest);
+        return new SuccessResponseData(loginResponse);
+    }
 
     /**
      * 添加

@@ -24,6 +24,22 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--jwt api-->
+        <!--生成jwt秘钥-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>jwt-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--log api-->
+        <!--记录登录日志-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>log-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--资源api模块-->
         <!--用在资源控制器，资源扫描上-->
         <dependency>
@@ -37,6 +53,14 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--邮件发送模块-->
+        <!--用在控制器，参数校验-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>email-spring-boot-starter</artifactId>
             <version>${roses.version}</version>
         </dependency>
 

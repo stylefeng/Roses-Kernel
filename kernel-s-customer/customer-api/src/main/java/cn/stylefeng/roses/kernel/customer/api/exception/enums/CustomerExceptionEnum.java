@@ -41,7 +41,12 @@ public enum CustomerExceptionEnum implements AbstractExceptionEnum {
     /**
      * 查询不到对应用户
      */
-    CANT_FIND_CUSTOMER(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "01", "查询不到对应用户，用户id是：{}");
+    CANT_FIND_CUSTOMER(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "01", "查询不到对应用户，用户信息：{}"),
+
+    /**
+     * 用户状态异常
+     */
+    CUSTOMER_STATUS_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "02", "用户被禁用，请联系管理员！{}");
 
     /**
      * 错误编码
