@@ -104,4 +104,21 @@ public class CustomerFactory {
         return loginUser;
     }
 
+    /**
+     * 创建发送注册激活邮件的参数
+     *
+     * @author fengshuonan
+     * @date 2021/6/7 15:27
+     */
+    public static SendMailParam createResetPwdEmail(String mail, String randomCode) {
+        String title = CustomerConfigExpander.getResetPwdMailTitle();
+        String template = CustomerConfigExpander.getResetPwdMailContent();
+
+        SendMailParam sendMailParam = new SendMailParam();
+        sendMailParam.setTo(mail);
+        sendMailParam.setTitle(title);
+        sendMailParam.setContent(StrUtil.format(template, randomCode));
+        return sendMailParam;
+    }
+
 }

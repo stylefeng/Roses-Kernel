@@ -42,6 +42,22 @@ public interface CustomerService extends IService<Customer> {
     LoginResponse login(LoginRequest loginRequest);
 
     /**
+     * 发送找回密码的邮件
+     *
+     * @author fengshuonan
+     * @date 2021/6/7 22:11
+     */
+    void sendResetPwdEmail(CustomerRequest customerRequest);
+
+    /**
+     * 重置密码
+     *
+     * @author fengshuonan
+     * @date 2021/6/7 22:13
+     */
+    void resetPassword(CustomerRequest customerRequest);
+
+    /**
      * 新增
      *
      * @author fengshuonan

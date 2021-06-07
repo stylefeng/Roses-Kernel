@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.customer.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
@@ -164,6 +165,51 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
         // 组装返回结果
         return new LoginResponse(loginUser, jwtToken, defaultJwtPayload.getExpirationDate());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void sendResetPwdEmail(CustomerRequest customerRequest) {
+
+        // 验证邮箱是否存在
+        LambdaQueryWrapper<Customer> customerLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        customerLambdaQueryWrapper.eq(Customer::getEmail, customerRequest.getEmail());
+        Customer customer = this.getOne(customerLambdaQueryWrapper, false);
+        if (customer == null) {
+            return;
+        }
+
+        // 邮箱验证码
+        String randomCode = RandomUtil.randomNumbers(6);
+
+        // 存储到数据库验证码
+        customer.setVerifyCode(randomCode);
+        this.updateById(customer);
+
+        // 发送邮箱验证码
+        SendMailParam resetPwdEmail = CustomerFactory.createResetPwdEmail(customerRequest.getEmail(), randomCode);
+        mailSenderApi.sendMailHtml(resetPwdEmail);
+    }
+
+    @Override
+    public void resetPassword(CustomerRequest customerRequest) {
+
+        // 检查校验码是否正确
+        LambdaQueryWrapper<Customer> customerLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        customerLambdaQueryWrapper.eq(Customer::getEmail, customerRequest.getEmail())
+                .and(i -> i.eq(Customer::getVerifyCode, customerRequest.getVerifyCode()));
+        Customer customer = this.getOne(customerLambdaQueryWrapper, false);
+
+        // 如果不存在则为验证码错误
+        if (customer == null) {
+            throw new CustomerException(CustomerExceptionEnum.EMAIL_VERIFY_COD_ERROR);
+        }
+
+        // 根据请求密码，重置账号的密码
+        String password = customerRequest.getPassword();
+        String encrypt = passwordStoredEncryptApi.encrypt(password);
+        customer.setPassword(encrypt);
+        this.updateById(customer);
     }
 
     @Override

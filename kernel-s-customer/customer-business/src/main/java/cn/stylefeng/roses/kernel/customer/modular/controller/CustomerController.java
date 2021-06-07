@@ -34,7 +34,7 @@ public class CustomerController {
      * @author fengshuonan
      * @date 2021/06/07 11:40
      */
-    @PostResource(name = "注册C端用户", path = "/customer/reg", requiredPermission = false, requiredLogin = false)
+    @PostResource(name = "注册", path = "/customer/reg", requiredPermission = false, requiredLogin = false)
     public ResponseData reg(@RequestBody @Validated(CustomerRequest.reg.class) CustomerRequest customerRequest) {
         customerService.reg(customerRequest);
         return new SuccessResponseData();
@@ -46,7 +46,7 @@ public class CustomerController {
      * @author fengshuonan
      * @date 2021/6/7 16:03
      */
-    @GetResource(name = "激活C端用户", path = "/customer/active", requiredPermission = false, requiredLogin = false)
+    @GetResource(name = "激活用户", path = "/customer/active", requiredPermission = false, requiredLogin = false)
     public ResponseData active(@Validated(CustomerRequest.active.class) CustomerRequest customerRequest) {
         customerService.active(customerRequest);
         return new SuccessResponseData();
@@ -58,79 +58,34 @@ public class CustomerController {
      * @author fengshuonan
      * @date 2021/06/07 11:40
      */
-    @PostResource(name = "C端用户登录", path = "/customer/login", requiredPermission = false, requiredLogin = false)
+    @PostResource(name = "登录", path = "/customer/login", requiredPermission = false, requiredLogin = false)
     public ResponseData login(@RequestBody @Validated LoginRequest loginRequest) {
         LoginResponse loginResponse = customerService.login(loginRequest);
         return new SuccessResponseData(loginResponse);
     }
 
     /**
-     * 添加
+     * 找回密码-发送邮件
      *
      * @author fengshuonan
      * @date 2021/06/07 11:40
      */
-    @PostResource(name = "添加", path = "/customer/add")
-    public ResponseData add(@RequestBody @Validated(CustomerRequest.add.class) CustomerRequest customerRequest) {
-        customerService.add(customerRequest);
+    @PostResource(name = "找回密码-发送邮件", path = "/customer/sendResetPwdEmail", requiredPermission = false, requiredLogin = false)
+    public ResponseData sendResetPwdEmail(@Validated(CustomerRequest.sendResetPwdEmail.class) CustomerRequest customerRequest) {
+        customerService.sendResetPwdEmail(customerRequest);
         return new SuccessResponseData();
     }
 
     /**
-     * 删除
+     * 重置密码
      *
      * @author fengshuonan
      * @date 2021/06/07 11:40
      */
-    @PostResource(name = "删除", path = "/customer/delete")
-    public ResponseData delete(@RequestBody @Validated(CustomerRequest.delete.class) CustomerRequest customerRequest) {
-        customerService.del(customerRequest);
+    @PostResource(name = "重置密码", path = "/customer/resetPassword", requiredPermission = false, requiredLogin = false)
+    public ResponseData resetPassword(@Validated(CustomerRequest.resetPassword.class) CustomerRequest customerRequest) {
+        customerService.resetPassword(customerRequest);
         return new SuccessResponseData();
-    }
-
-    /**
-     * 编辑
-     *
-     * @author fengshuonan
-     * @date 2021/06/07 11:40
-     */
-    @PostResource(name = "编辑", path = "/customer/edit")
-    public ResponseData edit(@RequestBody @Validated(CustomerRequest.edit.class) CustomerRequest customerRequest) {
-        customerService.edit(customerRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
-     * 查看详情
-     *
-     * @author fengshuonan
-     * @date 2021/06/07 11:40
-     */
-    @GetResource(name = "查看详情", path = "/customer/detail")
-    public ResponseData detail(@Validated(CustomerRequest.detail.class) CustomerRequest customerRequest) {
-        return new SuccessResponseData(customerService.detail(customerRequest));
-    }
-
-    /**
-     * 获取列表
-     *
-     * @author fengshuonan
-     * @date 2021/06/07 11:40
-     */
-    @GetResource(name = "获取列表", path = "/customer/list")
-    public ResponseData list(CustomerRequest customerRequest) {
-        return new SuccessResponseData(customerService.findList(customerRequest));
-    }
-
-    /**
-     * 获取列表（带分页）
-     *
-     * @author fengshuonan
-     * @date 2021/06/07 11:40
-     */
-    @GetResource(name = "分页查询", path = "/customer/page")
-    public ResponseData page(CustomerRequest customerRequest) {
-        return new SuccessResponseData(customerService.findPage(customerRequest));
     }
 
 }

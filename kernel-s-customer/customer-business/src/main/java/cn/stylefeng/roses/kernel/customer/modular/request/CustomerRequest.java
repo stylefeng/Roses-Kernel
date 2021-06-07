@@ -36,7 +36,7 @@ public class CustomerRequest extends BaseRequest {
      * 密码，BCrypt
      */
     @ChineseDescription("密码")
-    @NotBlank(message = "密码，BCrypt不能为空", groups = {add.class, edit.class, reg.class})
+    @NotBlank(message = "密码，BCrypt不能为空", groups = {add.class, edit.class, reg.class, resetPassword.class})
     private String password;
 
     /**
@@ -52,7 +52,7 @@ public class CustomerRequest extends BaseRequest {
      * 注册时，必填邮箱
      */
     @ChineseDescription("邮箱")
-    @NotBlank(message = "邮箱不能为空", groups = {reg.class})
+    @NotBlank(message = "邮箱不能为空", groups = {reg.class, sendResetPwdEmail.class, resetPassword.class})
     private String email;
 
     /**
@@ -65,7 +65,7 @@ public class CustomerRequest extends BaseRequest {
      * 邮箱或手机验证码
      */
     @ChineseDescription("邮箱或手机验证码")
-    @NotBlank(message = "激活码不能为空", groups = active.class)
+    @NotBlank(message = "激活码不能为空", groups = {active.class, resetPassword.class})
     private String verifyCode;
 
     /**
@@ -108,6 +108,18 @@ public class CustomerRequest extends BaseRequest {
      * 激活账号
      */
     public @interface active {
+    }
+
+    /**
+     * 发送找回密码邮件
+     */
+    public @interface sendResetPwdEmail {
+    }
+
+    /**
+     * 重置密码
+     */
+    public @interface resetPassword {
     }
 
 }
