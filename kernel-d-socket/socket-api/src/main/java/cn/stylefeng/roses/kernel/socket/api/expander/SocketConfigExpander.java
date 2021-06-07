@@ -22,24 +22,49 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.socket.api.constants;
+package cn.stylefeng.roses.kernel.socket.api.expander;
+
+import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 
 /**
- * socket 模块常量
+ * socket权限相关配置快速获取
  *
  * @author majianguo
- * @date 2021/6/1 上午11:21
+ * @date 2021/6/7 上午11:36
  */
-public interface SocketConstants {
+public class SocketConfigExpander {
 
     /**
-     * socket模块的名称
-     */
-    String SOCKET_MODULE_NAME = "kernel-d-socket";
+     * 获取主机地址
+     *
+     * @return {@link java.lang.String}
+     * @author majianguo
+     * @date 2021/6/7 上午11:39
+     **/
+    public static String getSocketHost() {
+        return ConfigContext.me().getSysConfigValueWithDefault("socket_host", String.class, "0.0.0.0");
+    }
 
     /**
-     * 异常枚举的步进值
-     */
-    String SOCKET_EXCEPTION_STEP_CODE = "30";
+     * 获取主机端口
+     *
+     * @return {@link java.lang.Integer}
+     * @author majianguo
+     * @date 2021/6/7 上午11:41
+     **/
+    public static Integer getSocketPort() {
+        return ConfigContext.me().getSysConfigValueWithDefault("socket_port", Integer.class, 11130);
+    }
+
+    /**
+     * 获取服务器内存池最大可分配空间大小
+     *
+     * @return {@link java.lang.Integer}
+     * @author majianguo
+     * @date 2021/6/7 上午11:41
+     **/
+    public static Integer getSocketServerChunkSize() {
+        return ConfigContext.me().getSysConfigValueWithDefault("socket_server_chunk_size", Integer.class, 512 * 1024 * 1024);
+    }
 
 }

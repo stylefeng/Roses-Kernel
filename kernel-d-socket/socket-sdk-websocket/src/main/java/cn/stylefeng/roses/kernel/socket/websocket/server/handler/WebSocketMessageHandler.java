@@ -1,8 +1,6 @@
 package cn.stylefeng.roses.kernel.socket.websocket.server.handler;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
-import cn.stylefeng.roses.kernel.rule.constants.SymbolConstant;
 import cn.stylefeng.roses.kernel.socket.api.enums.ClientMessageTypeEnum;
 import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 import cn.stylefeng.roses.kernel.socket.websocket.message.SocketMessageCenter;
@@ -16,8 +14,7 @@ import com.gettyio.core.channel.SocketChannel;
 import com.gettyio.core.pipeline.in.SimpleChannelInboundHandler;
 import com.gettyio.expansion.handler.codec.websocket.frame.TextWebSocketFrame;
 import com.gettyio.expansion.handler.codec.websocket.frame.WebSocketFrame;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 
@@ -27,18 +24,17 @@ import java.nio.charset.StandardCharsets;
  * @author majianguo
  * @date 2021/6/1 下午2:35
  */
+@Slf4j
 public class WebSocketMessageHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
 
-    private final Logger log = LoggerFactory.getLogger(WebSocketMessageHandler.class);
-
     @Override
-    public void channelAdded(SocketChannel aioChannel) throws Exception {
+    public void channelAdded(SocketChannel aioChannel) {
         log.info(aioChannel.getChannelId() + " connection successful.");
         ChannelIdAndUserBindCenter.addSocketChannel(aioChannel);
     }
 
     @Override
-    public void channelClosed(SocketChannel aioChannel) throws Exception {
+    public void channelClosed(SocketChannel aioChannel) {
         log.info(aioChannel.getChannelId() + " disconnected");
         // 获取用户ID
         String userId = ChannelIdAndUserBindCenter.getUserId(aioChannel.getChannelId());
@@ -50,7 +46,7 @@ public class WebSocketMessageHandler extends SimpleChannelInboundHandler<WebSock
     }
 
     @Override
-    public void channelRead0(SocketChannel socketChannel, WebSocketFrame webSocketFrame) throws Exception {
+    public void channelRead0(SocketChannel socketChannel, WebSocketFrame webSocketFrame) {
 
         if (webSocketFrame instanceof TextWebSocketFrame) {
             String data = new String(webSocketFrame.getPayloadData(), StandardCharsets.UTF_8);
@@ -82,7 +78,6 @@ public class WebSocketMessageHandler extends SimpleChannelInboundHandler<WebSock
                 socketSession.setUserId(webSocketMessagePOJO.getFormUserId());
                 socketSession.setSocketOperatorApi(new GettySocketOperator(socketChannel));
                 socketSession.setConnectionTime(System.currentTimeMillis());
-                socketSession.setLastActiveTime(System.currentTimeMillis());
 
                 // 维护会话
                 SessionCenter.addSocketSession(socketSession);

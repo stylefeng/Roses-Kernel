@@ -46,9 +46,7 @@ public enum SocketExceptionEnum implements AbstractExceptionEnum {
     /**
      * 会话不存在
      */
-    SESSION_NOT_EXIST(RuleConstants.THIRD_ERROR_TYPE_CODE + SocketConstants.SOCKET_EXCEPTION_STEP_CODE + "02", "会话不存在"),
-
-    ;
+    SESSION_NOT_EXIST(RuleConstants.THIRD_ERROR_TYPE_CODE + SocketConstants.SOCKET_EXCEPTION_STEP_CODE + "02", "会话不存在");
 
     /**
      * 错误编码

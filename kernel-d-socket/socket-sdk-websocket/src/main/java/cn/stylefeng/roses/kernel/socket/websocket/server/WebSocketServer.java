@@ -14,7 +14,7 @@ import java.net.StandardSocketOptions;
 public class WebSocketServer {
 
     /**
-     * 无参数启动
+     * 无参数启动(开发测试使用)
      *
      * @author majianguo
      * @date 2021/6/2 上午11:10
