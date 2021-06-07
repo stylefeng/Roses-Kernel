@@ -55,6 +55,11 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
      */
     private static final Object SESSION_OPERATE_LOCK = new Object();
 
+    /**
+     * 用于注册用户时候的加锁
+     */
+    private static final Object REG_LOCK = new Object();
+
     @Resource
     private MailSenderApi mailSenderApi;
 
@@ -70,16 +75,20 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void reg(CustomerRequest customerRequest) {
+        synchronized (REG_LOCK) {
+            // 校验邮箱和账号是否重复
+            validateRepeat(customerRequest);
 
-        // 创建C端用户
-        Customer regCustomer = CustomerFactory.createRegCustomer(customerRequest);
+            // 创建C端用户
+            Customer regCustomer = CustomerFactory.createRegCustomer(customerRequest);
 
-        // 保存用户
-        this.save(regCustomer);
+            // 保存用户
+            this.save(regCustomer);
 
-        // 发送邮箱验证码
-        SendMailParam regEmailParam = CustomerFactory.createRegEmailParam(regCustomer.getEmail(), regCustomer.getVerifyCode());
-        mailSenderApi.sendMail(regEmailParam);
+            // 发送邮箱验证码
+            SendMailParam regEmailParam = CustomerFactory.createRegEmailParam(regCustomer.getEmail(), regCustomer.getVerifyCode());
+            mailSenderApi.sendMailHtml(regEmailParam);
+        }
     }
 
     @Override
@@ -118,6 +127,11 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         // 校验用户状态
         if (!StatusEnum.ENABLE.getCode().equals(customer.getStatusFlag())) {
             throw new CustomerException(CustomerExceptionEnum.CUSTOMER_STATUS_ERROR, customer.getStatusFlag());
+        }
+
+        // 校验用户是否激活
+        if (!YesOrNotEnum.Y.getCode().equals(customer.getVerifiedFlag())) {
+            throw new CustomerException(CustomerExceptionEnum.CUSTOMER_NOT_VERIFIED);
         }
 
         // 获取LoginUser，用于用户的缓存
@@ -234,6 +248,29 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         queryWrapper.eq(ObjectUtil.isNotNull(score), Customer::getScore, score);
 
         return queryWrapper;
+    }
+
+    /**
+     * 校验是否存在重复的账号和邮箱
+     *
+     * @author fengshuonan
+     * @date 2021/6/7 21:43
+     */
+    private void validateRepeat(CustomerRequest customerRequest) {
+
+        LambdaQueryWrapper<Customer> accountWrapper = new LambdaQueryWrapper<>();
+        accountWrapper.eq(Customer::getAccount, customerRequest.getAccount());
+        int count = this.count(accountWrapper);
+        if (count > 0) {
+            throw new CustomerException(CustomerExceptionEnum.ACCOUNT_REPEAT);
+        }
+
+        LambdaQueryWrapper<Customer> emailWrapper = new LambdaQueryWrapper<>();
+        emailWrapper.eq(Customer::getEmail, customerRequest.getEmail());
+        int emailCount = this.count(emailWrapper);
+        if (emailCount > 0) {
+            throw new CustomerException(CustomerExceptionEnum.EMAIL_REPEAT);
+        }
     }
 
 }

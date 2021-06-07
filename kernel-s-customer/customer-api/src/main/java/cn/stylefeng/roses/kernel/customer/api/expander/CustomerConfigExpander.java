@@ -28,7 +28,7 @@ public class CustomerConfigExpander {
      * @date 2021/6/7 15:42
      */
     public static String getRegMailContent() {
-        return ConfigContext.me().getSysConfigValueWithDefault("CUSTOMER_REG_EMAIL_CONTENT", String.class, "感谢您注册Guns官方论坛，请点击此激活链接激活您的账户：<a href=\"http://localhost:8080/customer/active?verifyCode={}\">https://localhost:8080/customer/active?verifyCode={}</a>");
+        return ConfigContext.me().getSysConfigValueWithDefault("CUSTOMER_REG_EMAIL_CONTENT", String.class, "感谢您注册Guns官方论坛，请点击此激活链接激活您的账户：<a href=\"http://localhost:8080/customer/active?verifyCode={}\">http://localhost:8080/customer/active?verifyCode={} </a>");
     }
 
 }

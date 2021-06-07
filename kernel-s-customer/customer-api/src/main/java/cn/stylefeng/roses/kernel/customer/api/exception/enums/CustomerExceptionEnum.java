@@ -46,7 +46,22 @@ public enum CustomerExceptionEnum implements AbstractExceptionEnum {
     /**
      * 用户状态异常
      */
-    CUSTOMER_STATUS_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "02", "用户被禁用，请联系管理员！{}");
+    CUSTOMER_STATUS_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "02", "用户被禁用，请联系管理员！{}"),
+
+    /**
+     * 用户未激活
+     */
+    CUSTOMER_NOT_VERIFIED(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "03", "用户未激活，请查阅注册邮箱中的激活邮件并点击链接！"),
+
+    /**
+     * 账号重复，请更换账号
+     */
+    ACCOUNT_REPEAT(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "04", "账号重复，请更换账号"),
+
+    /**
+     * 邮箱重复，请更换邮箱
+     */
+    EMAIL_REPEAT(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "05", "邮箱重复，请更换邮箱");
 
     /**
      * 错误编码

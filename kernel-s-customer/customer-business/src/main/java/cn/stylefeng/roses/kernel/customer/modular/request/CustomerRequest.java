@@ -2,7 +2,6 @@ package cn.stylefeng.roses.kernel.customer.modular.request;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
-import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,12 +30,6 @@ public class CustomerRequest extends BaseRequest {
      */
     @ChineseDescription("账号")
     @NotBlank(message = "账号不能为空", groups = {add.class, edit.class, reg.class})
-    @TableUniqueValue(
-            message = "账号存在重复，请从新输入账号",
-            groups = reg.class,
-            tableName = "toc_customer",
-            columnName = "account",
-            idFieldName = "customer_id")
     private String account;
 
     /**
@@ -60,12 +53,6 @@ public class CustomerRequest extends BaseRequest {
      */
     @ChineseDescription("邮箱")
     @NotBlank(message = "邮箱不能为空", groups = {reg.class})
-    @TableUniqueValue(
-            message = "邮箱存在重复，请从新输入邮箱",
-            groups = reg.class,
-            tableName = "toc_customer",
-            columnName = "email",
-            idFieldName = "customer_id")
     private String email;
 
     /**
