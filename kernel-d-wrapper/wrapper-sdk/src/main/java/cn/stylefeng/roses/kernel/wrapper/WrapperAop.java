@@ -213,7 +213,7 @@ public class WrapperAop {
             }
         } catch (Exception e) {
             log.error("原始对象包装过程，字段转化异常：{}", e.getMessage());
-            throw new WrapperException(WrapperExceptionEnum.TRANSFER_ERROR);
+            throw new WrapperException(WrapperExceptionEnum.TRANSFER_ERROR, e.getMessage());
         }
 
         return originMap;

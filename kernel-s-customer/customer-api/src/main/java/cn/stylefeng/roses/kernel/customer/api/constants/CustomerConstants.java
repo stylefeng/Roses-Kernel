@@ -42,4 +42,9 @@ public interface CustomerConstants {
      */
     String CUSTOMER_EXCEPTION_STEP_CODE = "31";
 
+    /**
+     * C端用户的缓存
+     */
+    String CUSTOMER_CACHE_PREFIX = "customer:";
+
 }

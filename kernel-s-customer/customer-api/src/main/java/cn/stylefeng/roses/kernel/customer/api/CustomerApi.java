@@ -24,6 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.customer.api;
 
+import cn.stylefeng.roses.kernel.customer.api.pojo.CustomerInfo;
+
 /**
  * C端用户api
  *
@@ -32,5 +34,12 @@ package cn.stylefeng.roses.kernel.customer.api;
  */
 public interface CustomerApi {
 
+    /**
+     * 获取C端用户的详细信息
+     *
+     * @author fengshuonan
+     * @date 2021/6/8 21:25
+     */
+    CustomerInfo getCustomerInfoById(Long customerId);
 
 }

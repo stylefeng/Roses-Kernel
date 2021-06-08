@@ -51,4 +51,34 @@ public class CustomerConfigExpander {
         return ConfigContext.me().getSysConfigValueWithDefault("CUSTOMER_RESET_PWD_EMAIL_CONTENT", String.class, "您的验证码是【{}】，此验证码用于修改登录密码，请不要泄露给他人，如果不是您本人操作，请忽略此邮件。");
     }
 
+    /**
+     * 存放用户头像的bucket的名称
+     *
+     * @author fengshuonan
+     * @date 2021/6/7 15:42
+     */
+    public static String getCustomerBucket() {
+        return ConfigContext.me().getSysConfigValueWithDefault("CUSTOMER_FILE_BUCKET", String.class, "customer-bucket");
+    }
+
+    /**
+     * 存放用户头像的bucket的名称的过期时间
+     *
+     * @author fengshuonan
+     * @date 2021/6/7 15:42
+     */
+    public static Long getCustomerBucketExpiredSeconds() {
+        return ConfigContext.me().getSysConfigValueWithDefault("CUSTOMER_FILE_BUCKET_EXPIRED_SECONDS", Long.class, 600L);
+    }
+
+    /**
+     * 获取用户缓存的过期时间
+     *
+     * @author fengshuonan
+     * @date 2021/6/7 15:42
+     */
+    public static Long getCustomerCacheExpiredSeconds() {
+        return ConfigContext.me().getSysConfigValueWithDefault("CUSTOMER_CACHE_EXPIRED_SECONDS", Long.class, 3600L);
+    }
+
 }

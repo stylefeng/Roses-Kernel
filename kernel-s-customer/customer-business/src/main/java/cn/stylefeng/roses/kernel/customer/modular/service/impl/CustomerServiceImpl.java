@@ -11,8 +11,11 @@ import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.customer.api.exception.CustomerException;
 import cn.stylefeng.roses.kernel.customer.api.exception.enums.CustomerExceptionEnum;
+import cn.stylefeng.roses.kernel.customer.api.expander.CustomerConfigExpander;
+import cn.stylefeng.roses.kernel.customer.api.pojo.CustomerInfo;
 import cn.stylefeng.roses.kernel.customer.modular.entity.Customer;
 import cn.stylefeng.roses.kernel.customer.modular.factory.CustomerFactory;
 import cn.stylefeng.roses.kernel.customer.modular.mapper.CustomerMapper;
@@ -23,6 +26,7 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.email.api.MailSenderApi;
 import cn.stylefeng.roses.kernel.email.api.pojo.SendMailParam;
+import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.log.api.LoginLogServiceApi;
@@ -72,6 +76,12 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Resource
     private LoginLogServiceApi loginLogServiceApi;
+
+    @Resource
+    private CacheOperatorApi<CustomerInfo> customerInfoCacheOperatorApi;
+
+    @Resource
+    private FileOperatorApi fileOperatorApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -250,6 +260,38 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         return this.list(wrapper);
     }
 
+    @Override
+    public CustomerInfo getCustomerInfoById(Long customerId) {
+
+        // 查询缓存中有没有用户信息
+        String customerIdKey = String.valueOf(customerId);
+        CustomerInfo customerInfo = customerInfoCacheOperatorApi.get(customerIdKey);
+        if (customerInfo != null) {
+            return customerInfo;
+        }
+
+        // 获取C端用户详情
+        Customer customer = this.getById(customerId);
+        if (customer == null) {
+            throw new CustomerException(CustomerExceptionEnum.CANT_FIND_CUSTOMER, customerId);
+        }
+
+        CustomerInfo result = new CustomerInfo();
+        BeanUtil.copyProperties(customer, result);
+
+        // 获取头像的url
+        String fileAuthUrl = fileOperatorApi.getFileAuthUrl(
+                CustomerConfigExpander.getCustomerBucket(),
+                customer.getAvatarObjectName(),
+                CustomerConfigExpander.getCustomerBucketExpiredSeconds());
+        result.setAvatarObjectUrl(fileAuthUrl);
+
+        // 放入缓存用户信息
+        customerInfoCacheOperatorApi.put(customerIdKey, result, CustomerConfigExpander.getCustomerCacheExpiredSeconds());
+
+        return result;
+    }
+
     /**
      * 获取信息
      *
@@ -318,5 +360,6 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             throw new CustomerException(CustomerExceptionEnum.EMAIL_REPEAT);
         }
     }
+
 
 }

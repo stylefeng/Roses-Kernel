@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.customer.modular.service;
 
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
+import cn.stylefeng.roses.kernel.customer.api.CustomerApi;
 import cn.stylefeng.roses.kernel.customer.modular.entity.Customer;
 import cn.stylefeng.roses.kernel.customer.modular.request.CustomerRequest;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -15,7 +16,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2021/06/07 11:40
  */
-public interface CustomerService extends IService<Customer> {
+public interface CustomerService extends IService<Customer>, CustomerApi {
 
     /**
      * 注册用户
