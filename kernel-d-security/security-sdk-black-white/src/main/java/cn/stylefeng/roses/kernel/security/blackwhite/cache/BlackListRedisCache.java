@@ -22,47 +22,28 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kemel.security.blackwhite;
+package cn.stylefeng.roses.kernel.security.blackwhite.cache;
 
-import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
-import cn.stylefeng.roses.kernel.security.api.BlackListApi;
+import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
+import cn.stylefeng.roses.kernel.security.api.constants.CounterConstants;
+import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.Collection;
 
 /**
- * 黑名单的实现
- * <p>
- * 黑名单的数据会在访问资源时被限制
+ * 黑名单用户的缓存
  *
  * @author fengshuonan
- * @date 2020/11/20 15:52
+ * @date 2020/11/20 15:50
  */
-public class BlackListService implements BlackListApi {
+public class BlackListRedisCache extends AbstractRedisCacheOperator<String> {
 
-    private final CacheOperatorApi<String> cacheOperatorApi;
-
-    public BlackListService(CacheOperatorApi<String> cacheOperatorApi) {
-        this.cacheOperatorApi = cacheOperatorApi;
+    public BlackListRedisCache(RedisTemplate<String, String> redisTemplate) {
+        super(redisTemplate);
     }
 
     @Override
-    public void addBlackItem(String content) {
-        cacheOperatorApi.put(content, content);
-    }
-
-    @Override
-    public void removeBlackItem(String content) {
-        cacheOperatorApi.remove(content);
-    }
-
-    @Override
-    public Collection<String> getBlackList() {
-        return cacheOperatorApi.getAllKeys();
-    }
-
-    @Override
-    public boolean contains(String content) {
-        return cacheOperatorApi.contains(content);
+    public String getCommonKeyPrefix() {
+        return CounterConstants.BLACK_LIST_CACHE_KEY_PREFIX;
     }
 
 }

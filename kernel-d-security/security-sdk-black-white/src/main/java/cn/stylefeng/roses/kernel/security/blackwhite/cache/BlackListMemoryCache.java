@@ -22,12 +22,11 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kemel.security.blackwhite.cache;
+package cn.stylefeng.roses.kernel.security.blackwhite.cache;
 
-import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
+import cn.hutool.cache.impl.TimedCache;
+import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
 import cn.stylefeng.roses.kernel.security.api.constants.CounterConstants;
-import org.springframework.data.redis.core.RedisTemplate;
-
 
 /**
  * 黑名单用户的缓存
@@ -35,10 +34,10 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @author fengshuonan
  * @date 2020/11/20 15:50
  */
-public class BlackListRedisCache extends AbstractRedisCacheOperator<String> {
+public class BlackListMemoryCache extends AbstractMemoryCacheOperator<String> {
 
-    public BlackListRedisCache(RedisTemplate<String, String> redisTemplate) {
-        super(redisTemplate);
+    public BlackListMemoryCache(TimedCache<String, String> timedCache) {
+        super(timedCache);
     }
 
     @Override

@@ -19,6 +19,7 @@
         <module>security-api</module>
         <module>security-sdk-black-white</module>
         <module>security-sdk-captcha</module>
+        <module>security-sdk-cors</module>
         <module>security-sdk-count</module>
         <module>security-sdk-xss</module>
         <module>security-sdk-request-encrypt-and-decode</module>

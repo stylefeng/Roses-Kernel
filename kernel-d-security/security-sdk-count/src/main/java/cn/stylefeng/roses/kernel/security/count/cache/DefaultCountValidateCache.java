@@ -22,27 +22,28 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kemel.security.blackwhite.cache;
+package cn.stylefeng.roses.kernel.security.count.cache;
 
 import cn.hutool.cache.impl.TimedCache;
 import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
 import cn.stylefeng.roses.kernel.security.api.constants.CounterConstants;
 
+
 /**
- * 白名单的缓存
+ * 计数用的缓存
  *
  * @author fengshuonan
  * @date 2020/11/15 15:26
  */
-public class WhiteListMemoryCache extends AbstractMemoryCacheOperator<String> {
+public class DefaultCountValidateCache extends AbstractMemoryCacheOperator<Long> {
 
-    public WhiteListMemoryCache(TimedCache<String, String> timedCache) {
+    public DefaultCountValidateCache(TimedCache<String, Long> timedCache) {
         super(timedCache);
     }
 
     @Override
     public String getCommonKeyPrefix() {
-        return CounterConstants.WHITE_LIST_CACHE_KEY_PREFIX;
+        return CounterConstants.COUNT_VALIDATE_CACHE_KEY_PREFIX;
     }
 
 }

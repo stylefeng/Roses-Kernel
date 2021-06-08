@@ -22,27 +22,47 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kemel.security.blackwhite.cache;
+package cn.stylefeng.roses.kernel.security.blackwhite;
 
-import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
-import cn.stylefeng.roses.kernel.security.api.constants.CounterConstants;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
+import cn.stylefeng.roses.kernel.security.api.WhiteListApi;
+
+import java.util.Collection;
 
 /**
- * 黑名单用户的缓存
+ * 白名单的实现
+ * <p>
+ * 白名单的数据在访问资源时不受限
  *
  * @author fengshuonan
- * @date 2020/11/20 15:50
+ * @date 2020/11/20 15:53
  */
-public class BlackListMemoryCache extends AbstractMemoryCacheOperator<String> {
+public class WhiteListService implements WhiteListApi {
 
-    public BlackListMemoryCache(TimedCache<String, String> timedCache) {
-        super(timedCache);
+    private final CacheOperatorApi<String> cacheOperatorApi;
+
+    public WhiteListService(CacheOperatorApi<String> cacheOperatorApi) {
+        this.cacheOperatorApi = cacheOperatorApi;
     }
 
     @Override
-    public String getCommonKeyPrefix() {
-        return CounterConstants.BLACK_LIST_CACHE_KEY_PREFIX;
+    public void addWhiteItem(String content) {
+        cacheOperatorApi.put(content, content);
+    }
+
+    @Override
+    public void removeWhiteItem(String content) {
+        cacheOperatorApi.remove(content);
+    }
+
+    @Override
+    public Collection<String> getWhiteList() {
+        return cacheOperatorApi.getAllKeys();
+    }
+
+    @Override
+    public boolean contains(String content) {
+        return cacheOperatorApi.contains(content);
     }
 
 }

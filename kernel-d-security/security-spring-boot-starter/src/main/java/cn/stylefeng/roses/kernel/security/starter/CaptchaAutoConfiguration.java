@@ -26,10 +26,10 @@ package cn.stylefeng.roses.kernel.security.starter;
 
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kemel.security.captcha.CaptchaService;
-import cn.stylefeng.roses.kemel.security.captcha.cache.CaptchaMemoryCache;
 import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
 import cn.stylefeng.roses.kernel.security.api.CaptchaApi;
+import cn.stylefeng.roses.kernel.security.captcha.CaptchaService;
+import cn.stylefeng.roses.kernel.security.captcha.cache.CaptchaMemoryCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

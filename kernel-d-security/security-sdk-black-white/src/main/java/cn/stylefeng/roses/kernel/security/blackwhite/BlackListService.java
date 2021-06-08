@@ -22,57 +22,47 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kemel.security.captcha;
+package cn.stylefeng.roses.kernel.security.blackwhite;
 
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
-import cn.stylefeng.roses.kernel.security.api.CaptchaApi;
-import cn.stylefeng.roses.kernel.security.api.pojo.EasyCaptcha;
-import com.wf.captcha.SpecCaptcha;
+import cn.stylefeng.roses.kernel.security.api.BlackListApi;
+
+import java.util.Collection;
 
 /**
- * 图形验证码实现
+ * 黑名单的实现
+ * <p>
+ * 黑名单的数据会在访问资源时被限制
  *
- * @author chenjinlong
- * @date 2021/1/15 13:44
+ * @author fengshuonan
+ * @date 2020/11/20 15:52
  */
-public class CaptchaService implements CaptchaApi {
+public class BlackListService implements BlackListApi {
 
     private final CacheOperatorApi<String> cacheOperatorApi;
 
-    public CaptchaService(CacheOperatorApi<String> cacheOperatorApi) {
+    public BlackListService(CacheOperatorApi<String> cacheOperatorApi) {
         this.cacheOperatorApi = cacheOperatorApi;
     }
 
     @Override
-    public EasyCaptcha captcha() {
-        SpecCaptcha specCaptcha = new SpecCaptcha(130, 48, 5);
-        String verCode = specCaptcha.text().toLowerCase();
-        String verKey = IdUtil.simpleUUID();
-        cacheOperatorApi.put(verKey, verCode);
-        return EasyCaptcha.builder().verImage(specCaptcha.toBase64()).verKey(verKey).build();
+    public void addBlackItem(String content) {
+        cacheOperatorApi.put(content, content);
     }
 
     @Override
-    public boolean validateCaptcha(String verKey, String verCode) {
-        if (StrUtil.isAllEmpty(verKey, verCode)) {
-            return false;
-        }
-
-        if (!verCode.trim().toLowerCase().equals(cacheOperatorApi.get(verKey))) {
-            return false;
-        }
-
-        //删除缓存中验证码
-        cacheOperatorApi.remove(verKey);
-
-        return true;
+    public void removeBlackItem(String content) {
+        cacheOperatorApi.remove(content);
     }
 
     @Override
-    public String getVerCode(String verKey) {
-        return cacheOperatorApi.get(verKey);
+    public Collection<String> getBlackList() {
+        return cacheOperatorApi.getAllKeys();
+    }
+
+    @Override
+    public boolean contains(String content) {
+        return cacheOperatorApi.contains(content);
     }
 
 }

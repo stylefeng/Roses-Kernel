@@ -22,28 +22,27 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kemel.security.blackwhite.cache;
+package cn.stylefeng.roses.kernel.security.captcha.cache;
 
 import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
-import cn.stylefeng.roses.kernel.security.api.constants.CounterConstants;
+import cn.stylefeng.roses.kernel.security.api.constants.CaptchaConstants;
 import org.springframework.data.redis.core.RedisTemplate;
 
-
 /**
- * 白名单的缓存
+ * 图形验证码缓存
  *
- * @author fengshuonan
- * @date 2020/11/15 15:26
+ * @author chenjinlong
+ * @date 2021/1/15 13:44
  */
-public class WhiteListRedisCache extends AbstractRedisCacheOperator<Long> {
+public class CaptchaRedisCache extends AbstractRedisCacheOperator<Long> {
 
-    public WhiteListRedisCache(RedisTemplate<String, Long> redisTemplate) {
+    public CaptchaRedisCache(RedisTemplate<String, Long> redisTemplate) {
         super(redisTemplate);
     }
 
     @Override
     public String getCommonKeyPrefix() {
-        return CounterConstants.WHITE_LIST_CACHE_KEY_PREFIX;
+        return CaptchaConstants.CAPTCHA_CACHE_KEY_PREFIX;
     }
 
 }
