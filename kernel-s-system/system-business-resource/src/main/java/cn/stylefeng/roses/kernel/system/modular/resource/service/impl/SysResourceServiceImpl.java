@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.resource.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
@@ -42,6 +43,7 @@ import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceUrlParam;
 import cn.stylefeng.roses.kernel.system.api.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.ExternalResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.LayuiApiResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleResourceDTO;
@@ -234,6 +236,36 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         LambdaQueryWrapper<SysResource> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysResource::getProjectCode, projectCode);
         this.remove(wrapper);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addExternalResource(ExternalResourceRequest externalResourceRequest) {
+        if (ObjectUtil.isNotEmpty(externalResourceRequest.getResourceRequestList())) {
+            String appCode = externalResourceRequest.getResourceRequestList().get(0).getAppCode();
+
+            // 删除本app下的所有资源
+            LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            sysResourceLambdaQueryWrapper.eq(SysResource::getAppCode, appCode);
+            this.remove(sysResourceLambdaQueryWrapper);
+
+            // 添加新的资源
+            List<SysResource> sysResources = externalResourceRequest.getResourceRequestList().stream().map(item -> {
+                SysResource sysResource = BeanUtil.toBean(item, SysResource.class);
+                if (ObjectUtil.isEmpty(sysResource.getViewFlag())) {
+                    sysResource.setViewFlag(YesOrNotEnum.N.getCode());
+                }
+                // 处理JSON序列号类型
+                if (ObjectUtil.isNotEmpty(sysResource.getParamFieldDescriptions())) {
+                    sysResource.setParamFieldDescriptions(sysResource.getParamFieldDescriptions().replaceAll("com.sedinbj.kernel.resource.api.pojo.resource.FieldMetadata", "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata"));
+                }
+                if (ObjectUtil.isNotEmpty(sysResource.getResponseFieldDescriptions())) {
+                    sysResource.setResponseFieldDescriptions(sysResource.getResponseFieldDescriptions().replaceAll("com.sedinbj.kernel.resource.api.pojo.resource.FieldMetadata", "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata"));
+                }
+                return sysResource;
+            }).collect(Collectors.toList());
+            this.saveBatch(sysResources);
+        }
     }
 
     @Override

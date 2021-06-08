@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.system.modular.resource.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.ExternalResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.LayuiApiResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
@@ -102,4 +103,11 @@ public interface SysResourceService extends IService<SysResource> {
      */
     void deleteResourceByProjectCode(String projectCode);
 
+    /**
+     * 添加外部资源
+     *
+     * @author majianguo
+     * @date 2021/6/8 下午2:40
+     **/
+    void addExternalResource(ExternalResourceRequest externalResourceRequest);
 }
