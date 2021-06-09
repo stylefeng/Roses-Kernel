@@ -193,7 +193,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         customerLambdaQueryWrapper.eq(Customer::getEmail, customerRequest.getEmail());
         Customer customer = this.getOne(customerLambdaQueryWrapper, false);
         if (customer == null) {
-            return;
+            throw new CustomerException(CustomerExceptionEnum.CANT_FIND_CUSTOMER,customerRequest.getEmail());
         }
 
         // 邮箱验证码
