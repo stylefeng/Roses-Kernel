@@ -45,15 +45,6 @@ import java.util.List;
 public interface SysUserService extends IService<SysUser>, UserServiceApi {
 
     /**
-     * 新用户注册
-     *
-     * @param sysUserRequest 请求参数
-     * @author chenjinlong
-     * @date 2021/1/15 15:17
-     */
-    void register(SysUserRequest sysUserRequest);
-
-    /**
      * 增加用户
      *
      * @param sysUserRequest 请求参数封装

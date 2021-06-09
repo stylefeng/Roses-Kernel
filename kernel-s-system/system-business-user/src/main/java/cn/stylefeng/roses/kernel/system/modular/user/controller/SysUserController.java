@@ -62,18 +62,6 @@ public class SysUserController {
     private SysUserRoleService sysUserRoleService;
 
     /**
-     * 注册用户
-     *
-     * @author chenjinlong
-     * @date 2021/01/16 13:50
-     */
-    @PostResource(name = "系统用户_注册", path = "/sysUser/register", requiredLogin = false, requiredPermission = false)
-    public ResponseData register(@RequestBody @Validated(SysUserRequest.reg.class) SysUserRequest sysUserRequest) {
-        sysUserService.register(sysUserRequest);
-        return new SuccessResponseData();
-    }
-
-    /**
      * 增加用户
      *
      * @author luojie

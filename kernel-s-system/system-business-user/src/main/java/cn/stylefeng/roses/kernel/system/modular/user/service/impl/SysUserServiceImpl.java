@@ -26,7 +26,6 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
@@ -136,16 +135,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private CacheOperatorApi<SysUserDTO> sysUserCacheOperatorApi;
-
-    @Override
-    public void register(SysUserRequest sysUserRequest) {
-        SysUser sysUser = new SysUser();
-        BeanUtil.copyProperties(sysUserRequest, sysUser);
-        sysUser.setRealName(IdUtil.simpleUUID());
-        SysUserCreateFactory.fillAddSysUser(sysUser);
-        // 保存用户
-        this.save(sysUser);
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
