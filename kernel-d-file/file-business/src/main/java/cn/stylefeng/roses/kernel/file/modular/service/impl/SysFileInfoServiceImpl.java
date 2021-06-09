@@ -107,7 +107,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             fileBytes = fileOperatorApi.getFileBytes(DEFAULT_BUCKET_NAME, sysFileInfo.getFileObjectName());
         } catch (Exception e) {
             log.error("获取文件流异常，具体信息为：{}", e.getMessage());
-            throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR);
+            throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR, e.getMessage());
         }
 
         // 设置文件字节码
@@ -249,7 +249,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             DownloadUtil.download(DateUtil.now() + "-打包下载" + FILE_POSTFIX_SEPARATOR + "zip", bos.toByteArray(), response);
         } catch (Exception e) {
             log.error("获取文件流异常，具体信息为：{}", e.getMessage());
-            throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR);
+            throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR, e.getMessage());
         } finally {
             try {
                 zip.closeEntry();
@@ -330,13 +330,19 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     @Override
     public void previewByBucketAndObjName(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
 
+        // 如果是默认头像
+        if (FileConstants.DEFAULT_AVATAR_FILE_OBJ_NAME.equals(sysFileInfoRequest.getFileObjectName())) {
+            DownloadUtil.renderPreviewFile(response, Base64.decode(FileConfigExpander.getDefaultAvatarBase64()));
+            return;
+        }
+
         // 获取文件字节码
         byte[] fileBytes;
         try {
             fileBytes = fileOperatorApi.getFileBytes(sysFileInfoRequest.getFileBucket(), sysFileInfoRequest.getFileObjectName());
         } catch (Exception e) {
             log.error("获取文件流异常，具体信息为：{}", e.getMessage());
-            throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR);
+            throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR, e.getMessage());
         }
 
         // 获取文件后缀

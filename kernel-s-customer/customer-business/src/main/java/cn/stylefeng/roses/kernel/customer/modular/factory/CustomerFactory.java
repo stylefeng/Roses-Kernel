@@ -10,6 +10,7 @@ import cn.stylefeng.roses.kernel.customer.api.expander.CustomerConfigExpander;
 import cn.stylefeng.roses.kernel.customer.modular.entity.Customer;
 import cn.stylefeng.roses.kernel.customer.modular.request.CustomerRequest;
 import cn.stylefeng.roses.kernel.email.api.pojo.SendMailParam;
+import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 
@@ -53,8 +54,8 @@ public class CustomerFactory {
         customer.setVerifiedFlag(YesOrNotEnum.N.getCode());
 
         // 设置默认头像
-        customer.setAvatar(10000L);
-        customer.setAvatarObjectName("10000.png");
+        customer.setAvatar(FileConstants.DEFAULT_AVATAR_FILE_ID);
+        customer.setAvatarObjectName(FileConstants.DEFAULT_AVATAR_FILE_OBJ_NAME);
 
         // 设置默认积分0
         customer.setScore(0);

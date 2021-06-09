@@ -81,7 +81,7 @@ public enum FileExceptionEnum implements AbstractExceptionEnum {
     /**
      * 获取文件流错误
      */
-    FILE_STREAM_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + FileConstants.FILE_EXCEPTION_STEP_CODE + "09", "获取文件流错误"),
+    FILE_STREAM_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + FileConstants.FILE_EXCEPTION_STEP_CODE + "09", "获取文件流异常，具体信息为：{}"),
 
     /**
      * 下载文件错误
