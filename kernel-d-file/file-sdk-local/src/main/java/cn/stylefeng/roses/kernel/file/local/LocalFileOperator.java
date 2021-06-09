@@ -175,7 +175,7 @@ public class LocalFileOperator implements FileOperatorApi {
         // 获取context-path
         String contextPath = HttpServletUtil.getRequest().getContextPath();
 
-        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileBucket=" + bucketName + "&fileObjectName=" + key + "&token=" + token;
+        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PREVIEW_BY_OBJECT_NAME + "?fileBucket=" + bucketName + "&fileObjectName=" + key + "&token=" + token;
     }
 
     @Override
