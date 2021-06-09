@@ -68,7 +68,7 @@ public class FileConfigExpander {
      * @date 2020/11/29 16:13
      */
     public static String getFileAuthJwtSecret() {
-        String defaultFileTimeoutSeconds = ConfigContext.me().getConfigValueNullable("SYS_DEFAULT_FILE_TIMEOUT_SECONDS", String.class);
+        String defaultFileTimeoutSeconds = ConfigContext.me().getConfigValueNullable("SYS_DEFAULT_FILE_AUTH_JWT_SECRET", String.class);
         if (defaultFileTimeoutSeconds == null) {
             return RandomUtil.randomString(20);
         } else {
