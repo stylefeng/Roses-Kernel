@@ -39,6 +39,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +54,7 @@ import java.util.List;
  * @date 2021/06/07 11:40
  */
 @Service
+@Slf4j
 public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> implements CustomerService {
 
     /**
@@ -97,8 +99,13 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             this.save(regCustomer);
 
             // 发送邮箱验证码
-            SendMailParam regEmailParam = CustomerFactory.createRegEmailParam(regCustomer.getEmail(), regCustomer.getVerifyCode());
-            mailSenderApi.sendMailHtml(regEmailParam);
+            try {
+                SendMailParam regEmailParam = CustomerFactory.createRegEmailParam(regCustomer.getEmail(), regCustomer.getVerifyCode());
+                mailSenderApi.sendMailHtml(regEmailParam);
+            } catch (Exception exception) {
+                log.error("注册时，发送邮件失败！", exception);
+                throw new CustomerException(CustomerExceptionEnum.EMAIL_SEND_ERROR);
+            }
         }
     }
 

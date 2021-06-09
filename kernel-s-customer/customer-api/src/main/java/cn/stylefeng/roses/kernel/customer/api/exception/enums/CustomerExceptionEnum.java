@@ -66,7 +66,12 @@ public enum CustomerExceptionEnum implements AbstractExceptionEnum {
     /**
      * 邮箱验证码错误，请重新输入邮箱验证码
      */
-    EMAIL_VERIFY_COD_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "06", "邮箱验证码错误，请重新输入邮箱验证码");
+    EMAIL_VERIFY_COD_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "06", "邮箱验证码错误，请重新输入邮箱验证码"),
+
+    /**
+     * 注册时，发送邮件失败，请联系管理员
+     */
+    EMAIL_SEND_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "07", "注册失败，网络异常！请联系管理员！");
 
     /**
      * 错误编码
