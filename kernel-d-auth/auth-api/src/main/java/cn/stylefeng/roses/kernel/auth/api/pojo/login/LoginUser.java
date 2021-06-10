@@ -144,6 +144,12 @@ public class LoginUser implements Serializable {
      */
     @ChineseDescription("用户的ws-url")
     private String wsUrl;
+    
+    /**
+     * 头像url
+     */
+    @ChineseDescription("用户头像url")
+    private String avatarUrl;
 
     /**
      * 当前用户语种的标识，例如：chinese，english

@@ -10,6 +10,7 @@ import cn.stylefeng.roses.kernel.customer.api.expander.CustomerConfigExpander;
 import cn.stylefeng.roses.kernel.customer.modular.entity.Customer;
 import cn.stylefeng.roses.kernel.customer.modular.request.CustomerRequest;
 import cn.stylefeng.roses.kernel.email.api.pojo.SendMailParam;
+import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
@@ -89,7 +90,7 @@ public class CustomerFactory {
      * @author fengshuonan
      * @date 2021/6/7 17:06
      */
-    public static LoginUser createLoginUser(Customer customer) {
+    public static LoginUser createLoginUser(Customer customer, FileOperatorApi fileOperatorApi) {
         LoginUser loginUser = new LoginUser();
         loginUser.setUserId(customer.getCustomerId());
         loginUser.setAccount(customer.getAccount());
@@ -101,6 +102,10 @@ public class CustomerFactory {
         simpleUserInfo.setEmail(customer.getEmail());
         simpleUserInfo.setPhone(customer.getTelephone());
         loginUser.setSimpleUserInfo(simpleUserInfo);
+
+        // 设置用户头像url
+        String fileAuthUrl = fileOperatorApi.getFileAuthUrl(CustomerConfigExpander.getCustomerBucket(), customer.getAvatarObjectName(), CustomerConfigExpander.getCustomerBucketExpiredSeconds());
+        loginUser.setAvatarUrl(fileAuthUrl);
 
         return loginUser;
     }

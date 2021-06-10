@@ -116,7 +116,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         wrapper.set(Customer::getVerifiedFlag, YesOrNotEnum.Y.getCode());
         wrapper.eq(Customer::getVerifyCode, customerRequest.getVerifyCode());
         boolean result = this.update(wrapper);
-        if(!result){
+        if (!result) {
             throw new CustomerException(CustomerExceptionEnum.ACTIVE_ERROR);
         }
     }
@@ -155,7 +155,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         }
 
         // 获取LoginUser，用于用户的缓存
-        LoginUser loginUser = CustomerFactory.createLoginUser(customer);
+        LoginUser loginUser = CustomerFactory.createLoginUser(customer, fileOperatorApi);
 
         // 生成用户的token
         DefaultJwtPayload defaultJwtPayload = new DefaultJwtPayload(loginUser.getUserId(), loginUser.getAccount(), loginRequest.getRememberMe(), null);
@@ -195,7 +195,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         customerLambdaQueryWrapper.eq(Customer::getEmail, customerRequest.getEmail());
         Customer customer = this.getOne(customerLambdaQueryWrapper, false);
         if (customer == null) {
-            throw new CustomerException(CustomerExceptionEnum.CANT_FIND_CUSTOMER,customerRequest.getEmail());
+            throw new CustomerException(CustomerExceptionEnum.CANT_FIND_CUSTOMER, customerRequest.getEmail());
         }
 
         // 邮箱验证码
