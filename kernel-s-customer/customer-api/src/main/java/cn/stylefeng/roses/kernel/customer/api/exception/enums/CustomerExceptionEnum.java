@@ -71,7 +71,12 @@ public enum CustomerExceptionEnum implements AbstractExceptionEnum {
     /**
      * 注册时，发送邮件失败，请联系管理员
      */
-    EMAIL_SEND_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "07", "注册失败，网络异常！请联系管理员！");
+    EMAIL_SEND_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "07", "注册失败，网络异常！请联系管理员！"),
+
+    /**
+     * 激活用户失败
+     */
+    ACTIVE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "07", "激活用户失败！用户激活码无效！");
 
     /**
      * 错误编码

@@ -111,12 +111,14 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Override
     public void active(CustomerRequest customerRequest) {
-
         // 更新验证码的账号为激活状态
         LambdaUpdateWrapper<Customer> wrapper = new LambdaUpdateWrapper<>();
         wrapper.set(Customer::getVerifiedFlag, YesOrNotEnum.Y.getCode());
         wrapper.eq(Customer::getVerifyCode, customerRequest.getVerifyCode());
-        this.update(wrapper);
+        boolean result = this.update(wrapper);
+        if(!result){
+            throw new CustomerException(CustomerExceptionEnum.ACTIVE_ERROR);
+        }
     }
 
     @Override
