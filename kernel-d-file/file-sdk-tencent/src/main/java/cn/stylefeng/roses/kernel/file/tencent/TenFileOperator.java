@@ -30,6 +30,7 @@ import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.enums.BucketAuthEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.api.expander.FileConfigExpander;
 import cn.stylefeng.roses.kernel.file.api.pojo.props.TenCosProperties;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
@@ -248,6 +249,11 @@ public class TenFileOperator implements FileOperatorApi {
             throw new FileException(FileExceptionEnum.TENCENT_FILE_ERROR, e.getMessage());
         }
         return url.toString();
+    }
+
+    @Override
+    public String getFileUnAuthUrl(String bucketName, String key) {
+        return this.getFileAuthUrl(bucketName, key, FileConfigExpander.getDefaultFileTimeoutSeconds() * 1000);
     }
 
     @Override

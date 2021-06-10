@@ -104,7 +104,7 @@ public class CustomerFactory {
         loginUser.setSimpleUserInfo(simpleUserInfo);
 
         // 设置用户头像url
-        String fileAuthUrl = fileOperatorApi.getFileAuthUrl(CustomerConfigExpander.getCustomerBucket(), customer.getAvatarObjectName(), CustomerConfigExpander.getCustomerBucketExpiredSeconds());
+        String fileAuthUrl = fileOperatorApi.getFileUnAuthUrl(CustomerConfigExpander.getCustomerBucket(), customer.getAvatarObjectName());
         loginUser.setAvatarUrl(fileAuthUrl);
 
         return loginUser;

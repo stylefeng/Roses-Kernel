@@ -289,10 +289,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         BeanUtil.copyProperties(customer, result);
 
         // 获取头像的url
-        String fileAuthUrl = fileOperatorApi.getFileAuthUrl(
+        String fileAuthUrl = fileOperatorApi.getFileUnAuthUrl(
                 CustomerConfigExpander.getCustomerBucket(),
-                customer.getAvatarObjectName(),
-                CustomerConfigExpander.getCustomerBucketExpiredSeconds());
+                customer.getAvatarObjectName());
         result.setAvatarObjectUrl(fileAuthUrl);
 
         // 放入缓存用户信息

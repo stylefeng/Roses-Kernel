@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.enums.BucketAuthEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.api.expander.FileConfigExpander;
 import cn.stylefeng.roses.kernel.file.api.pojo.props.AliyunOssProperties;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
@@ -195,6 +196,11 @@ public class AliyunFileOperator implements FileOperatorApi {
             // 组装提示信息
             throw new FileException(FileExceptionEnum.ALIYUN_FILE_ERROR, e.getMessage());
         }
+    }
+
+    @Override
+    public String getFileUnAuthUrl(String bucketName, String key) {
+        return this.getFileAuthUrl(bucketName, key, FileConfigExpander.getDefaultFileTimeoutSeconds() * 1000);
     }
 
     @Override

@@ -116,7 +116,12 @@ public enum FileExceptionEnum implements AbstractExceptionEnum {
     /**
      * 文件不允许被访问
      */
-    FILE_DENIED_ACCESS(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + FileConstants.FILE_EXCEPTION_STEP_CODE + "16", "文件不允许被访问，文件加密等级不符合");
+    FILE_DENIED_ACCESS(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + FileConstants.FILE_EXCEPTION_STEP_CODE + "16", "文件不允许被访问，文件加密等级不符合"),
+
+    /**
+     * 文件不允许被访问
+     */
+    FILE_PERMISSION_DENIED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + FileConstants.FILE_EXCEPTION_STEP_CODE + "17", "文件不允许被访问，请登录后访问");
 
     /**
      * 错误编码

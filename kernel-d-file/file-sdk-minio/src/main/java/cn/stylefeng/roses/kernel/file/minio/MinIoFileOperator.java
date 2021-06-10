@@ -215,6 +215,14 @@ public class MinIoFileOperator implements FileOperatorApi {
     }
 
     @Override
+    public String getFileUnAuthUrl(String bucketName, String key) {
+        // 获取context-path
+        String contextPath = HttpServletUtil.getRequest().getContextPath();
+
+        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PREVIEW_BY_OBJECT_NAME + "?fileBucket=" + bucketName + "&fileObjectName=" + key;
+    }
+
+    @Override
     public void deleteFile(String bucketName, String key) {
         try {
             minioClient.removeObject(bucketName, key);

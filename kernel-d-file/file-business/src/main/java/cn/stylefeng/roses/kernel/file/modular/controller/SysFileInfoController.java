@@ -132,7 +132,7 @@ public class SysFileInfoController {
      * @author fengshuonan
      * @date 2020/11/29 11:29
      */
-    @GetResource(name = "文件预览，通过bucketName和objectName", path = FileConstants.FILE_PREVIEW_BY_OBJECT_NAME, requiredPermission = false)
+    @GetResource(name = "文件预览，通过bucketName和objectName", path = FileConstants.FILE_PREVIEW_BY_OBJECT_NAME, requiredPermission = false, requiredLogin = false)
     public void previewByBucketNameObjectName(@Validated(SysFileInfoRequest.previewByObjectName.class) SysFileInfoRequest sysFileInfoRequest) {
         HttpServletResponse response = HttpServletUtil.getResponse();
         sysFileInfoService.previewByBucketAndObjName(sysFileInfoRequest, response);

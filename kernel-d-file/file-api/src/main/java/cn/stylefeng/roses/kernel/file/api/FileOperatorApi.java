@@ -168,6 +168,17 @@ public interface FileOperatorApi {
     String getFileAuthUrl(String bucketName, String key, Long timeoutMillis);
 
     /**
+     * 获取文件的下载地址（不带鉴权的），生成外网地址
+     *
+     * @param bucketName 文件桶
+     * @param key        文件唯一标识
+     * @return 外部系统可以直接访问的url
+     * @author fengshuonan
+     * @date 2021/6/10 12:03
+     */
+    String getFileUnAuthUrl(String bucketName, String key);
+
+    /**
      * 删除文件
      *
      * @param bucketName 文件桶
