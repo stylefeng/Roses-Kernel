@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.message.api.MessageApi;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageRequest;
 import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageSendRequest;
+import cn.stylefeng.roses.kernel.message.api.pojo.response.MessageResponse;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -40,9 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统消息控制器
@@ -144,18 +143,16 @@ public class SysMessageController {
     }
 
     /**
-     * 系统消息未读数量
+     * 查询所有未读系统消息列表
      *
-     * @author liuhanqing
-     * @date 2021/1/11 19:50
+     * @author fengshuonan
+     * @date 2021/6/12 17:42
      */
-    @GetResource(name = "系统消息列表", path = "/sysMessage/unReadCount")
-    public ResponseData msgUnRead(MessageRequest messageRequest) {
+    @GetResource(name = "查询所有未读系统消息列表", path = "/sysMessage/unReadMessageList")
+    public ResponseData unReadMessageList(MessageRequest messageRequest) {
         messageRequest.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());
-        Integer messageCount = messageApi.queryCountCurrentUser(messageRequest);
-        Map<String, Object> msgMap = new HashMap<>(1);
-        msgMap.put("msgUnReadCount", messageCount);
-        return new SuccessResponseData(messageApi.queryListCurrentUser(messageRequest));
+        List<MessageResponse> messageResponses = messageApi.queryListCurrentUser(messageRequest);
+        return new SuccessResponseData(messageResponses);
     }
 
 }

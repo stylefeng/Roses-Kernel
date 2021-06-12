@@ -25,7 +25,6 @@
 package cn.stylefeng.roses.kernel.message.db;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
@@ -46,7 +45,6 @@ import cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi;
 import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -203,12 +201,11 @@ public class MessageDbServiceImpl implements MessageApi {
     @Override
     public List<MessageResponse> queryList(MessageRequest messageRequest) {
         List<SysMessage> messageList = sysMessageService.findList(messageRequest);
-        List<MessageResponse> resultList = messageList.stream().map(msg -> {
+        return messageList.stream().map(msg -> {
             MessageResponse response = new MessageResponse();
             BeanUtil.copyProperties(msg, response);
             return response;
         }).collect(Collectors.toList());
-        return resultList;
     }
 
     @Override
