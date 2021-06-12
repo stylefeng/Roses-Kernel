@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.socket.websocket.operator.channel;
 
-import cn.stylefeng.roses.kernel.socket.websocket.message.WebSocketMessagePOJO;
 import com.alibaba.fastjson.JSON;
 import com.gettyio.core.channel.SocketChannel;
 import com.gettyio.expansion.handler.codec.websocket.frame.TextWebSocketFrame;

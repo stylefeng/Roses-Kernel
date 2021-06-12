@@ -42,7 +42,7 @@ public class SocketConfigExpander {
      * @date 2021/6/7 上午11:39
      **/
     public static String getSocketHost() {
-        return ConfigContext.me().getSysConfigValueWithDefault("socket_host", String.class, "0.0.0.0");
+        return ConfigContext.me().getSysConfigValueWithDefault("SOCKET_HOST", String.class, "0.0.0.0");
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocketConfigExpander {
      * @date 2021/6/7 上午11:41
      **/
     public static Integer getSocketPort() {
-        return ConfigContext.me().getSysConfigValueWithDefault("socket_port", Integer.class, 11130);
+        return ConfigContext.me().getSysConfigValueWithDefault("SOCKET_PORT", Integer.class, 11130);
     }
 
     /**
@@ -64,7 +64,7 @@ public class SocketConfigExpander {
      * @date 2021/6/7 上午11:41
      **/
     public static Integer getSocketServerChunkSize() {
-        return ConfigContext.me().getSysConfigValueWithDefault("socket_server_chunk_size", Integer.class, 512 * 1024 * 1024);
+        return ConfigContext.me().getSysConfigValueWithDefault("SOCKET_SERVER_CHUNK_SIZE", Integer.class, 512 * 1024 * 1024);
     }
 
 }

@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.socket.api;
 
-import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
 import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 
 /**
@@ -45,4 +44,5 @@ public interface SocketOperatorApi {
      * @date 2021/6/2 上午9:54
      **/
     void msgTypeCallback(String msgType, SocketMsgCallbackInterface callbackInterface);
+
 }

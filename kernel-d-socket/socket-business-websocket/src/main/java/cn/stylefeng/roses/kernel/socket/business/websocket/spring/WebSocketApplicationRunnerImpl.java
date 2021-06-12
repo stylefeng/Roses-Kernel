@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+
 import java.net.StandardSocketOptions;
 
 /**
@@ -35,6 +36,7 @@ public class WebSocketApplicationRunnerImpl implements ApplicationRunner {
         aioServerConfig.setServerChunkSize(SocketConfigExpander.getSocketServerChunkSize());
 
         // 设置SocketOptions
+        // 每个套接口都有一个发送缓冲区和一个接收缓冲区，使用SO_RCVBUF可以改变缺省缓冲区大小。
         aioServerConfig.setOption(StandardSocketOptions.SO_RCVBUF, 8192);
 
         // 启动

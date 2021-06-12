@@ -1,20 +1,15 @@
 package cn.stylefeng.roses.kernel.socket.websocket.operator;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 import cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi;
-import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
 import cn.stylefeng.roses.kernel.socket.api.exception.SocketException;
 import cn.stylefeng.roses.kernel.socket.api.exception.enums.SocketExceptionEnum;
-import cn.stylefeng.roses.kernel.socket.websocket.message.WebSocketMessagePOJO;
-import cn.stylefeng.roses.kernel.socket.websocket.operator.channel.GettySocketOperator;
-import cn.stylefeng.roses.kernel.socket.websocket.message.SocketMessageCenter;
+import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 import cn.stylefeng.roses.kernel.socket.api.session.pojo.SocketSession;
+import cn.stylefeng.roses.kernel.socket.websocket.message.SocketMessageCenter;
+import cn.stylefeng.roses.kernel.socket.websocket.operator.channel.GettySocketOperator;
+import cn.stylefeng.roses.kernel.socket.websocket.pojo.WebSocketMessageDTO;
 import cn.stylefeng.roses.kernel.socket.websocket.session.SessionCenter;
-import com.alibaba.fastjson.JSON;
-import com.gettyio.expansion.handler.codec.websocket.frame.TextWebSocketFrame;
-
-import java.util.List;
 
 /**
  * WebSocket操作实现类
@@ -33,21 +28,21 @@ public class WebSocketOperator implements SocketOperatorApi {
         if (ObjectUtil.isEmpty(socketSession)) {
             throw new SocketException(SocketExceptionEnum.SESSION_NOT_EXIST);
         }
-        WebSocketMessagePOJO webSocketMessagePOJO = new WebSocketMessagePOJO();
-        webSocketMessagePOJO.setData(msg);
-        webSocketMessagePOJO.setServerMsgType(msgType);
+        WebSocketMessageDTO webSocketMessageDTO = new WebSocketMessageDTO();
+        webSocketMessageDTO.setData(msg);
+        webSocketMessageDTO.setServerMsgType(msgType);
         // 发送内容
-        socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessagePOJO);
+        socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessageDTO);
     }
 
     @Override
     public void sendMsgOfAllUserSession(String msgType, Object msg) {
         for (SocketSession<GettySocketOperator> socketSession : SessionCenter.getSocketSessionMap().values()) {
-            WebSocketMessagePOJO webSocketMessagePOJO = new WebSocketMessagePOJO();
-            webSocketMessagePOJO.setData(msg);
-            webSocketMessagePOJO.setServerMsgType(msgType);
+            WebSocketMessageDTO webSocketMessageDTO = new WebSocketMessageDTO();
+            webSocketMessageDTO.setData(msg);
+            webSocketMessageDTO.setServerMsgType(msgType);
             // 发送内容
-            socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessagePOJO);
+            socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessageDTO);
         }
     }
 

@@ -42,7 +42,6 @@ public class GunsSocketAutoConfiguration {
     /**
      * Socket操作实现类
      *
-     * @return {@link cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi}
      * @author majianguo
      * @date 2021/6/2 下午5:48
      **/

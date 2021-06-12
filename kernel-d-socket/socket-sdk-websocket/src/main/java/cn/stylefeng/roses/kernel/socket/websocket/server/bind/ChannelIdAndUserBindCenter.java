@@ -19,13 +19,15 @@ public class ChannelIdAndUserBindCenter {
 
     /**
      * 通道和用户绑定关系映射
+     * <p>
+     * key是channelId通道id，value是userId
      */
-    private static ConcurrentMap<String, String> channelIdAndUserBind = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, String> channelIdAndUserBind = new ConcurrentHashMap<>();
 
     /**
      * 等待绑定的通道
      */
-    private static List<SocketChannel> waitingBindList = Collections.synchronizedList(new ArrayList<>());
+    private static final List<SocketChannel> waitingBindList = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * 获取通道ID
@@ -95,4 +97,5 @@ public class ChannelIdAndUserBindCenter {
         waitingBindList.removeIf(item -> item.getChannelId().equals(channelId));
         channelIdAndUserBind.remove(channelId);
     }
+
 }

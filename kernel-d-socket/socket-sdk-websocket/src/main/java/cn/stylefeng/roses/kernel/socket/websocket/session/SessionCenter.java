@@ -19,12 +19,11 @@ public class SessionCenter {
     /**
      * 所有会话维护
      */
-    private static ConcurrentMap<String, SocketSession<GettySocketOperator>> socketSessionMap = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, SocketSession<GettySocketOperator>> socketSessionMap = new ConcurrentHashMap<>();
 
     /**
      * 获取维护的所有会话
      *
-     * @return {@link ConcurrentMap< String, SocketSession<GettySocketOperator>>}
      * @author majianguo
      * @date 2021/6/1 下午2:13
      **/
@@ -36,7 +35,6 @@ public class SessionCenter {
      * 根据用户ID获取会话详情
      *
      * @param userId 用户ID
-     * @return {@link SocketSession <GettySocketOperator>}
      * @author majianguo
      * @date 2021/6/1 下午1:48
      **/
@@ -65,4 +63,5 @@ public class SessionCenter {
     public static void closed(String userId) {
         socketSessionMap.remove(userId);
     }
+
 }
