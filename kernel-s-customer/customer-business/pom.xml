@@ -114,14 +114,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!--文件操作的api-->
-        <!--用在用户头像等文件的操作-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>file-api</artifactId>
-            <version>${roses.version}</version>
-        </dependency>
-
     </dependencies>
 
 </project>
