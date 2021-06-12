@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.auth.api.pojo.login;
 
 import cn.hutool.core.lang.Dict;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
@@ -36,7 +37,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 登录用户信息
@@ -144,7 +144,7 @@ public class LoginUser implements Serializable {
      */
     @ChineseDescription("用户的ws-url")
     private String wsUrl;
-    
+
     /**
      * 头像url
      */
@@ -168,14 +168,14 @@ public class LoginUser implements Serializable {
     private String tenantCode;
 
     public String getWsUrl() {
-        AtomicReference<String> returnUrl = new AtomicReference<>(StrUtil.EMPTY);
-        Optional.ofNullable(this.wsUrl).ifPresent(url -> {
-            Map<String, Long> user = new HashMap<>(1);
-            user.put("userId", this.userId);
-            user.put("port", Long.valueOf(SocketConfigExpander.getSocketPort()));
-            returnUrl.set(StrUtil.format(url, user));
-        });
-        return returnUrl.get();
+        if (ObjectUtil.isEmpty(this.wsUrl)) {
+            return "";
+        }
+
+        Map<String, Long> params = new HashMap<>(1);
+        params.put("userId", this.userId);
+        params.put("port", Long.valueOf(SocketConfigExpander.getSocketPort()));
+        return StrUtil.format(this.wsUrl, params);
     }
 
 }
