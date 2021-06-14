@@ -20,7 +20,22 @@
         <!--消息api模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-api</artifactId>
+            <artifactId>message-sdk-db</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--包装器模块-->
+        <!--包装结果-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>wrapper-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--系统管理api模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-api</artifactId>
             <version>${roses.version}</version>
         </dependency>
 

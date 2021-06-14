@@ -22,7 +22,7 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.message.modular;
+package cn.stylefeng.roses.kernel.message.modular.controller;
 
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.message.api.MessageApi;
@@ -30,11 +30,13 @@ import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageRequest;
 import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageSendRequest;
 import cn.stylefeng.roses.kernel.message.api.pojo.response.MessageResponse;
+import cn.stylefeng.roses.kernel.message.modular.wrapper.MessageWrapper;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -127,6 +129,7 @@ public class SysMessageController {
      * @date 2021/1/8 13:50
      */
     @GetResource(name = "分页查询系统消息列表", path = "/sysMessage/page")
+    @Wrapper(MessageWrapper.class)
     public ResponseData page(MessageRequest messageRequest) {
         return new SuccessResponseData(messageApi.queryPageCurrentUser(messageRequest));
     }
