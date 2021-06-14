@@ -67,7 +67,6 @@ public class SysNoticeRequest extends BaseRequest {
     /**
      * 通知优先级
      */
-    @NotBlank(message = "通知优先级不能为空", groups = {add.class, edit.class})
     @ChineseDescription("通知优先级")
     private String priorityLevel;
 
@@ -75,8 +74,7 @@ public class SysNoticeRequest extends BaseRequest {
     /**
      * 通知开始时间
      */
-    @NotNull(message = "通知开始时间不能为空", groups = {add.class, edit.class})
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ChineseDescription("通知开始时间")
     private Date noticeBeginTime;
 
@@ -84,8 +82,7 @@ public class SysNoticeRequest extends BaseRequest {
     /**
      * 通知结束时间
      */
-    @NotNull(message = "通知开始时间不能为空", groups = {add.class, edit.class})
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ChineseDescription("通知结束时间")
     private Date noticeEndTime;
 
@@ -93,6 +90,7 @@ public class SysNoticeRequest extends BaseRequest {
      * 通知内容
      */
     @ChineseDescription("通知内容")
+    @NotBlank(message = "通知内容不能为空", groups = {add.class, edit.class})
     private String noticeContent;
 
     /**

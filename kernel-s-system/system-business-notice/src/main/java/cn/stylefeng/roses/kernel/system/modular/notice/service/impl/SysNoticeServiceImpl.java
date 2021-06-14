@@ -29,6 +29,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.message.api.MessageApi;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageBusinessTypeEnum;
@@ -66,7 +67,11 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     @Override
     public void add(SysNoticeRequest sysNoticeRequest) {
         SysNotice sysNotice = new SysNotice();
+
+        // 拷贝属性
         BeanUtil.copyProperties(sysNoticeRequest, sysNotice);
+
+        // 没传递通知范围，则默认发给所有人
         if (StrUtil.isBlank(sysNotice.getNoticeScope())) {
             sysNotice.setNoticeScope(NOTICE_SCOPE_ALL);
         }
@@ -150,6 +155,9 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
      */
     private LambdaQueryWrapper<SysNotice> createWrapper(SysNoticeRequest sysNoticeRequest) {
         LambdaQueryWrapper<SysNotice> queryWrapper = new LambdaQueryWrapper<>();
+
+        // 按时间倒序排列
+        queryWrapper.orderByDesc(BaseEntity::getCreateTime);
 
         // 查询未删除状态的
         queryWrapper.eq(SysNotice::getDelFlag, YesOrNotEnum.N.getCode());

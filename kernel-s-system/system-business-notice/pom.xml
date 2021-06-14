@@ -32,6 +32,14 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--包装器模块-->
+        <!--包装结果-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>wrapper-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--参数校验模块-->
         <!--用在控制器，参数校验-->
         <dependency>
