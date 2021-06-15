@@ -14,6 +14,11 @@ import lombok.Getter;
 public enum ClientMessageTypeEnum {
 
     /**
+     * 用户连接鉴权
+     */
+    USER_CONNECTION_AUTHENTICATION("200000", "用户连接鉴权"),
+
+    /**
      * 用户心跳消息类型
      */
     USER_HEART("299999", "用户心跳消息类型");

@@ -15,6 +15,19 @@ public interface SocketOperatorApi {
     /**
      * 发送消息到指定会话
      *
+     * @param msgType   消息类型可参考{@link cn.stylefeng.roses.kernel.socket.api.enums}枚举类
+     * @param sessionId 会话ID
+     * @param msg       消息体
+     * @author majianguo
+     * @date 2021/6/11 下午2:19
+     **/
+    void sendMsgOfUserSessionBySessionId(String msgType, String sessionId, Object msg);
+
+    /**
+     * 发送消息到指定用户的所有会话
+     * <p>
+     * 如果用户同一个消息类型建立了多个会话，则统一全部发送
+     *
      * @param msgType 消息类型可参考{@link cn.stylefeng.roses.kernel.socket.api.enums}枚举类
      * @param userId  用户ID
      * @param msg     消息体
@@ -44,5 +57,4 @@ public interface SocketOperatorApi {
      * @date 2021/6/2 上午9:54
      **/
     void msgTypeCallback(String msgType, SocketMsgCallbackInterface callbackInterface);
-
 }

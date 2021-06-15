@@ -11,6 +11,9 @@ import cn.stylefeng.roses.kernel.socket.websocket.operator.channel.GettySocketOp
 import cn.stylefeng.roses.kernel.socket.websocket.pojo.WebSocketMessageDTO;
 import cn.stylefeng.roses.kernel.socket.websocket.session.SessionCenter;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * WebSocket操作实现类
  * <p>
@@ -22,27 +25,46 @@ import cn.stylefeng.roses.kernel.socket.websocket.session.SessionCenter;
 public class WebSocketOperator implements SocketOperatorApi {
 
     @Override
-    public void sendMsgOfUserSession(String msgType, String userId, Object msg) {
-        // 根据用户ID获取会话
-        SocketSession<GettySocketOperator> socketSession = SessionCenter.getSessionByUserId(userId);
-        if (ObjectUtil.isEmpty(socketSession)) {
+    public void sendMsgOfUserSessionBySessionId(String msgType, String sessionId, Object msg) {
+        SocketSession<GettySocketOperator> session = SessionCenter.getSessionBySessionId(sessionId);
+        if (ObjectUtil.isEmpty(session)) {
             throw new SocketException(SocketExceptionEnum.SESSION_NOT_EXIST);
         }
         WebSocketMessageDTO webSocketMessageDTO = new WebSocketMessageDTO();
         webSocketMessageDTO.setData(msg);
         webSocketMessageDTO.setServerMsgType(msgType);
-        // 发送内容
-        socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessageDTO);
+        session.getSocketOperatorApi().writeAndFlush(webSocketMessageDTO);
+    }
+
+    @Override
+    public void sendMsgOfUserSession(String msgType, String userId, Object msg) {
+        // 根据用户ID获取会话
+        List<SocketSession<GettySocketOperator>> socketSessionList = SessionCenter.getSessionByUserIdAndMsgType(userId);
+        if (ObjectUtil.isEmpty(socketSessionList)) {
+            throw new SocketException(SocketExceptionEnum.SESSION_NOT_EXIST);
+        }
+        WebSocketMessageDTO webSocketMessageDTO = new WebSocketMessageDTO();
+        webSocketMessageDTO.setData(msg);
+        webSocketMessageDTO.setServerMsgType(msgType);
+        for (SocketSession<GettySocketOperator> session : socketSessionList) {
+            // 发送内容
+            session.getSocketOperatorApi().writeAndFlush(webSocketMessageDTO);
+        }
     }
 
     @Override
     public void sendMsgOfAllUserSession(String msgType, Object msg) {
-        for (SocketSession<GettySocketOperator> socketSession : SessionCenter.getSocketSessionMap().values()) {
-            WebSocketMessageDTO webSocketMessageDTO = new WebSocketMessageDTO();
-            webSocketMessageDTO.setData(msg);
-            webSocketMessageDTO.setServerMsgType(msgType);
-            // 发送内容
-            socketSession.getSocketOperatorApi().writeAndFlush(webSocketMessageDTO);
+        Collection<List<SocketSession<GettySocketOperator>>> values = SessionCenter.getSocketSessionMap().values();
+        WebSocketMessageDTO webSocketMessageDTO = new WebSocketMessageDTO();
+        webSocketMessageDTO.setData(msg);
+        webSocketMessageDTO.setServerMsgType(msgType);
+        for (List<SocketSession<GettySocketOperator>> sessions : values) {
+            for (SocketSession<GettySocketOperator> session : sessions) {
+                // 找到该类型的通道
+                if (session.getMessageType().equals(msgType)) {
+                    session.getSocketOperatorApi().writeAndFlush(webSocketMessageDTO);
+                }
+            }
         }
     }
 

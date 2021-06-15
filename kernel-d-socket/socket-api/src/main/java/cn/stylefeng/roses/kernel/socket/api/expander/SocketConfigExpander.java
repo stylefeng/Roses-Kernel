@@ -66,5 +66,4 @@ public class SocketConfigExpander {
     public static Integer getSocketServerChunkSize() {
         return ConfigContext.me().getSysConfigValueWithDefault("SOCKET_SERVER_CHUNK_SIZE", Integer.class, 512 * 1024 * 1024);
     }
-
 }

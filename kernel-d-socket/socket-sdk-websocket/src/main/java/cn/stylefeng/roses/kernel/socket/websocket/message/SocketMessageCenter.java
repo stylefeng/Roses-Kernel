@@ -1,7 +1,6 @@
 package cn.stylefeng.roses.kernel.socket.websocket.message;
 
 import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,10 +16,8 @@ public class SocketMessageCenter {
 
     /**
      * 所有消息监听器维护
-     * <p>
-     * key是msgType，value是消息回调监听器
      */
-    private static final Map<String, SocketMsgCallbackInterface> messageListenerMap = new HashMap<>();
+    private static Map<String, SocketMsgCallbackInterface> messageListenerMap = new HashMap<>();
 
     /**
      * 设置消息类型的监听器
@@ -45,5 +42,4 @@ public class SocketMessageCenter {
     public static SocketMsgCallbackInterface getSocketMsgCallbackInterface(String msgType) {
         return messageListenerMap.get(msgType);
     }
-
 }

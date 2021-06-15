@@ -28,5 +28,4 @@ public class WebSocketInitializer extends ChannelInitializer {
         // 添加自定义的消息处理器
         pipeline.addLast(new WebSocketMessageHandler());
     }
-
 }

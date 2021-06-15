@@ -67,5 +67,4 @@ public interface SocketSessionOperatorApi {
      * @date 2021/6/1 上午11:50
      **/
     boolean isInvalid();
-
 }

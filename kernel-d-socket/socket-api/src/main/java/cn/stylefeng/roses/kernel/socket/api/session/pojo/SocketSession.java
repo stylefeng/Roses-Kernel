@@ -16,14 +16,19 @@ import java.util.Set;
 public class SocketSession<T extends SocketSessionOperatorApi> {
 
     /**
+     * 会话ID，每一个新建的会话都有(目前使用通道ID)
+     */
+    private String sessionId;
+
+    /**
      * 会话唯一标识
      */
     private String userId;
 
     /**
-     * 该会话所有的监听消息类型
+     * 该会话监听的消息类型
      */
-    private Set<String> messageTypes = new HashSet<>();
+    private String messageType;
 
     /**
      * 连接时间
