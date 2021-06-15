@@ -119,7 +119,7 @@ public interface UserServiceApi {
     SysUserDTO getUserInfoByUserId(Long userId);
 
     /**
-     * 查询全部用户ID(剔除管理员，和不允许登录)
+     * 查询全部用户ID(剔除被删除的)
      *
      * @param sysUserRequest 查询参数
      * @return List<Long> 用户id 集合

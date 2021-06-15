@@ -646,9 +646,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         LambdaQueryWrapper<SysUser> wrapper = createWrapper(sysUserRequest);
 
-        // 排除超级管理员
-        wrapper.ne(SysUser::getSuperAdminFlag, YesOrNotEnum.Y.getCode());
-
         // 只查询id
         wrapper.select(SysUser::getUserId);
 
