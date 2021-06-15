@@ -35,6 +35,7 @@ import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
+import cn.stylefeng.roses.kernel.file.api.expander.FileConfigExpander;
 import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -43,7 +44,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import static cn.stylefeng.roses.kernel.file.api.constants.FileConstants.DEFAULT_BUCKET_NAME;
 import static cn.stylefeng.roses.kernel.file.api.constants.FileConstants.FILE_POSTFIX_SEPARATOR;
 
 /**
@@ -80,7 +80,7 @@ public class FileInfoFactory {
         String finalFileName = fileId + FILE_POSTFIX_SEPARATOR + fileSuffix;
 
         // 桶名
-        String fileBucket = DEFAULT_BUCKET_NAME;
+        String fileBucket = FileConfigExpander.getDefaultBucket();
 
         // 存储文件
         byte[] bytes;

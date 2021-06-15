@@ -76,7 +76,6 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static cn.stylefeng.roses.kernel.file.api.constants.FileConstants.DEFAULT_BUCKET_NAME;
 import static cn.stylefeng.roses.kernel.file.api.constants.FileConstants.FILE_POSTFIX_SEPARATOR;
 import static cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum.FILE_NOT_FOUND;
 
@@ -104,7 +103,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         // 获取文件字节码
         byte[] fileBytes;
         try {
-            fileBytes = fileOperatorApi.getFileBytes(DEFAULT_BUCKET_NAME, sysFileInfo.getFileObjectName());
+            fileBytes = fileOperatorApi.getFileBytes(FileConfigExpander.getDefaultBucket(), sysFileInfo.getFileObjectName());
         } catch (Exception e) {
             log.error("获取文件流异常，具体信息为：{}", e.getMessage());
             throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR, e.getMessage());
@@ -137,6 +136,16 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         // 返回文件信息体
         SysFileInfoResponse fileUploadInfoResult = new SysFileInfoResponse();
         BeanUtil.copyProperties(sysFileInfo, fileUploadInfoResult);
+
+        // 拼接文件可直接访问的url
+        String fileAuthUrl;
+        if (YesOrNotEnum.Y.getCode().equals(sysFileInfoRequest.getSecretFlag())) {
+            fileAuthUrl = fileOperatorApi.getFileAuthUrl(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName(), FileConfigExpander.getDefaultFileTimeoutSeconds() * 1000);
+        } else {
+            fileAuthUrl = fileOperatorApi.getFileUnAuthUrl(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName());
+        }
+        fileUploadInfoResult.setFileUrl(fileAuthUrl);
+
         return fileUploadInfoResult;
     }
 
@@ -222,6 +231,12 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         List<Long> fileIdList = Arrays.stream(fileIds.split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
         List<SysFileInfoResponse> fileInfoResponseList = this.getFileInfoListByFileIds(fileIdList);
 
+        // 获取bucket名称
+        String bucketName = FileConfigExpander.getDefaultBucket();
+        if (ObjectUtil.isNotEmpty(fileInfoResponseList)) {
+            bucketName = fileInfoResponseList.get(0).getFileBucket();
+        }
+
         // 输出流等信息
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(bos);
@@ -236,7 +251,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
                         throw new FileException(FileExceptionEnum.SECRET_FLAG_INFO_ERROR, fileOriginName);
                     }
 
-                    byte[] fileBytes = fileOperatorApi.getFileBytes(DEFAULT_BUCKET_NAME, sysFileInfoResponse.getFileObjectName());
+                    byte[] fileBytes = fileOperatorApi.getFileBytes(bucketName, sysFileInfoResponse.getFileObjectName());
                     ZipEntry entry = new ZipEntry(i + 1 + "." + fileOriginName);
                     entry.setSize(fileBytes.length);
                     zip.putNextEntry(entry);

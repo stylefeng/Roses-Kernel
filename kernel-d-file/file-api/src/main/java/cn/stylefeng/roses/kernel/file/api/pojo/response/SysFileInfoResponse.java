@@ -109,4 +109,9 @@ public class SysFileInfoResponse {
      */
     private String filePath;
 
+    /**
+     * 文件访问的路径，如果是私密文件，则返回带鉴权的url，如果不是私密文件，则返回公网能直接访问的url
+     */
+    private String fileUrl;
+
 }

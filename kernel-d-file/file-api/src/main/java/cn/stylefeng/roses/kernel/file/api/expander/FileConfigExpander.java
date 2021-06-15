@@ -38,6 +38,16 @@ import cn.stylefeng.roses.kernel.file.api.pojo.props.LocalFileProperties;
 public class FileConfigExpander {
 
     /**
+     * 默认存储的bucket名称
+     *
+     * @author fengshuonan
+     * @date 2021/6/15 21:54
+     */
+    public static String getDefaultBucket() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_FILE_DEFAULT_BUCKET", String.class, FileConstants.DEFAULT_BUCKET_NAME);
+    }
+
+    /**
      * 获取服务部署的机器host，例如http://localhost
      * <p>
      * 这个配置为了用在文件url的拼接上
