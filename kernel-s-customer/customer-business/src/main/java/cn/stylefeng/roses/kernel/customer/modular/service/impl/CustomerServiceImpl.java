@@ -282,7 +282,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         // 获取C端用户详情
         Customer customer = this.getById(customerId);
         if (customer == null) {
-            throw new CustomerException(CustomerExceptionEnum.CANT_FIND_CUSTOMER, customerId);
+            return null;
         }
 
         CustomerInfo result = new CustomerInfo();
