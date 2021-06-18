@@ -203,14 +203,10 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         sysResourceLambdaQueryWrapper.eq(SysResource::getViewFlag, YesOrNotEnum.N.getCode());
         sysResourceLambdaQueryWrapper.select(SysResource::getAppCode, SysResource::getModularCode, SysResource::getModularName, SysResource::getResourceCode, SysResource::getUrl, SysResource::getResourceName);
 
-        // 查询资源名称
+        // 查询条件
         if (ObjectUtil.isNotEmpty(resourceRequest.getResourceName())) {
-            sysResourceLambdaQueryWrapper.like(SysResource::getResourceName, resourceRequest.getResourceName());
-        }
-
-        // 查询资源URL
-        if (ObjectUtil.isNotEmpty(resourceRequest.getUrl())) {
             sysResourceLambdaQueryWrapper.like(SysResource::getUrl, resourceRequest.getUrl());
+            sysResourceLambdaQueryWrapper.like(SysResource::getResourceName, resourceRequest.getResourceName());
         }
 
         List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
