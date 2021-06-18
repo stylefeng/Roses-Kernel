@@ -220,8 +220,8 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
                 SysResource sysResource = stringSysResourceMap.get(apiResource.getResourceCode());
                 if (ObjectUtil.isNotEmpty(sysResource)) {
                     item.setUrl(sysResource.getUrl());
-                    allApiGroupTreeWrapperList.add(item);
                 }
+                allApiGroupTreeWrapperList.add(item);
             }
         }
         return allApiGroupTreeWrapperList;
