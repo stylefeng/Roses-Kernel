@@ -13,6 +13,7 @@ import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.resource.ApiResourceExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiResourceFieldRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiResourceRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiGroup;
@@ -318,13 +319,17 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         // 删除原有的
         this.del(apiResourceRequest);
 
-
         // 新增一个新的
         apiResourceRequest.setResourceSort(oldApiResource.getResourceSort());
         this.add(apiResourceRequest);
 
         // 查询并返回结果
         return this.getById(apiResourceRequest.getApiResourceId());
+    }
+
+    @Override
+    public List<ApiResource> dataList(ApiGroupRequest apiGroupRequest) {
+        return this.baseMapper.dataList(apiGroupRequest);
     }
 
     @Override

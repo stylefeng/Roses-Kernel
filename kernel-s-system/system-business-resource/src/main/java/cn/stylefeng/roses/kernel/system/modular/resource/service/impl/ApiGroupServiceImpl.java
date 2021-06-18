@@ -176,6 +176,7 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
         Map<String, SysResource> stringSysResourceMap = new HashMap<>();
         LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysResourceLambdaQueryWrapper.eq(SysResource::getViewFlag, YesOrNotEnum.N.getCode());
+
         List<SysResource> sysResources = this.sysResourceService.list(sysResourceLambdaQueryWrapper);
         for (SysResource sysResource : sysResources) {
             stringSysResourceMap.put(sysResource.getResourceCode(), sysResource);
@@ -204,8 +205,8 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
             }
         }
 
-        // 查询所有资源
-        List<ApiResource> apiResourceList = this.apiResourceService.list();
+        // 查询资源
+        List<ApiResource> apiResourceList = this.apiResourceService.dataList(apiGroupRequest);
         if (ObjectUtil.isNotEmpty(apiResourceList)) {
             for (ApiResource apiResource : apiResourceList) {
                 ApiGroupTreeWrapper item = new ApiGroupTreeWrapper();
@@ -219,8 +220,8 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
                 SysResource sysResource = stringSysResourceMap.get(apiResource.getResourceCode());
                 if (ObjectUtil.isNotEmpty(sysResource)) {
                     item.setUrl(sysResource.getUrl());
+                    allApiGroupTreeWrapperList.add(item);
                 }
-                allApiGroupTreeWrapperList.add(item);
             }
         }
         return allApiGroupTreeWrapperList;

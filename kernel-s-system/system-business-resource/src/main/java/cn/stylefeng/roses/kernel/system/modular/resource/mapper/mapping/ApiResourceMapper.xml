@@ -2,4 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.resource.mapper.ApiResourceMapper">
 
+    <select id="dataList" resultType="cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource">
+        SELECT
+        ar.api_resource_id,
+        ar.group_id,
+        ar.request_method,
+        ar.api_alias,
+        ar.resource_code,
+        ar.last_request_header,
+        ar.last_request_content,
+        ar.last_response_content,
+        ar.resource_sort,
+        ar.create_time,
+        ar.create_user,
+        ar.update_time,
+        ar.update_user
+        FROM
+        api_resource ar
+        LEFT JOIN sys_resource sr ON ar.resource_code = sr.resource_code
+        WHERE 1=1
+        <if test="paramCondition.groupName != null and paramCondition.groupName != ''">
+            AND sr.resource_name LIKE CONCAT('%', #{paramCondition.groupName}, '%')
+            OR sr.url LIKE CONCAT('%', #{paramCondition.groupName}, '%')
+        </if>
+    </select>
 </mapper>
