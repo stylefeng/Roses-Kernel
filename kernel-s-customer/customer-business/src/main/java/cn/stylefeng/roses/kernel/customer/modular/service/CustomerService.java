@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.customer.modular.service;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
 import cn.stylefeng.roses.kernel.customer.api.CustomerApi;
+import cn.stylefeng.roses.kernel.customer.api.pojo.CustomerInfoRequest;
 import cn.stylefeng.roses.kernel.customer.modular.entity.Customer;
 import cn.stylefeng.roses.kernel.customer.modular.request.CustomerRequest;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -105,5 +106,21 @@ public interface CustomerService extends IService<Customer>, CustomerApi {
      * @date 2021/06/07 11:40
      */
     PageResult<Customer> findPage(CustomerRequest customerRequest);
+
+    /**
+     * 更新密码
+     *
+     * @author fengshuonan
+     * @date 2021/6/18 17:16
+     */
+    void updatePassword(CustomerInfoRequest customerInfoRequest);
+
+    /**
+     * 更新头像
+     *
+     * @author fengshuonan
+     * @date 2021/6/18 17:16
+     */
+    void updateAvatar(CustomerInfoRequest customerInfoRequest);
 
 }

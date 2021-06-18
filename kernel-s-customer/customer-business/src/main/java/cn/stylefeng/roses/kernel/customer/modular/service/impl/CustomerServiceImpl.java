@@ -16,6 +16,7 @@ import cn.stylefeng.roses.kernel.customer.api.exception.CustomerException;
 import cn.stylefeng.roses.kernel.customer.api.exception.enums.CustomerExceptionEnum;
 import cn.stylefeng.roses.kernel.customer.api.expander.CustomerConfigExpander;
 import cn.stylefeng.roses.kernel.customer.api.pojo.CustomerInfo;
+import cn.stylefeng.roses.kernel.customer.api.pojo.CustomerInfoRequest;
 import cn.stylefeng.roses.kernel.customer.modular.entity.Customer;
 import cn.stylefeng.roses.kernel.customer.modular.factory.CustomerFactory;
 import cn.stylefeng.roses.kernel.customer.modular.mapper.CustomerMapper;
@@ -26,7 +27,9 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.email.api.MailSenderApi;
 import cn.stylefeng.roses.kernel.email.api.pojo.SendMailParam;
+import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
+import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.log.api.LoginLogServiceApi;
@@ -84,6 +87,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Resource
     private FileOperatorApi fileOperatorApi;
+
+    @Resource
+    private FileInfoApi fileInfoApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -267,6 +273,41 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public List<Customer> findList(CustomerRequest customerRequest) {
         LambdaQueryWrapper<Customer> wrapper = this.createWrapper(customerRequest);
         return this.list(wrapper);
+    }
+
+    @Override
+    public void updatePassword(CustomerInfoRequest customerInfoRequest) {
+
+        CustomerRequest customerRequest = new CustomerRequest();
+        customerRequest.setCustomerId(customerInfoRequest.getCustomerId());
+        Customer customer = this.detail(customerRequest);
+
+        // 校验旧密码是否正确
+        Boolean passwordRightFlag = passwordStoredEncryptApi.checkPassword(customerInfoRequest.getOldPassword(), customer.getPassword());
+        if (!passwordRightFlag) {
+            throw new CustomerException(CustomerExceptionEnum.PWD_ERROR);
+        }
+
+        // 更新密码
+        String encryptPwd = passwordStoredEncryptApi.encrypt(customerInfoRequest.getNewPassword());
+        customer.setPassword(encryptPwd);
+        this.updateById(customer);
+    }
+
+    @Override
+    public void updateAvatar(CustomerInfoRequest customerInfoRequest) {
+
+        CustomerRequest customerRequest = new CustomerRequest();
+        customerRequest.setCustomerId(customerInfoRequest.getCustomerId());
+        Customer customer = this.detail(customerRequest);
+
+        // 根据id查询文件obj名称
+        SysFileInfoResponse fileInfo = fileInfoApi.getFileInfoWithoutContent(customerInfoRequest.getAvatar());
+
+        // 更新头像
+        customer.setAvatar(customerInfoRequest.getAvatar());
+        customer.setAvatarObjectName(fileInfo.getFileObjectName());
+        this.updateById(customer);
     }
 
     @Override

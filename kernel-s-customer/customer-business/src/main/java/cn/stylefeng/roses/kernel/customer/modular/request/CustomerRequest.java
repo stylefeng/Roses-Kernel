@@ -21,7 +21,7 @@ public class CustomerRequest extends BaseRequest {
     /**
      * 主键id
      */
-    @NotNull(message = "主键id不能为空", groups = {edit.class, delete.class})
+    @NotNull(message = "主键id不能为空", groups = {edit.class, delete.class, detail.class})
     @ChineseDescription("主键id")
     private Long customerId;
 

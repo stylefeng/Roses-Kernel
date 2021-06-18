@@ -76,7 +76,12 @@ public enum CustomerExceptionEnum implements AbstractExceptionEnum {
     /**
      * 激活用户失败
      */
-    ACTIVE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "07", "激活用户失败！用户激活码无效！");
+    ACTIVE_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "07", "激活用户失败！用户激活码无效！"),
+
+    /**
+     * 用户原密码错误
+     */
+    PWD_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "08", "更改密码失败，原密码错误!");
 
     /**
      * 错误编码
