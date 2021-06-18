@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.controller;
 
 import cn.stylefeng.roses.kernel.auth.api.AuthServiceApi;
+import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
@@ -36,6 +37,7 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.login.CurrentUserInfoResponse;
+import cn.stylefeng.roses.kernel.system.api.pojo.login.ValidateTokenRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.factory.UserLoginInfoFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -44,6 +46,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 /**
  * 登录登出控制器
@@ -58,6 +61,9 @@ public class LoginController {
 
     @Resource
     private AuthServiceApi authServiceApi;
+
+    @Resource
+    private SessionManagerApi sessionManagerApi;
 
     /**
      * 用户登陆
@@ -123,6 +129,18 @@ public class LoginController {
         CurrentUserInfoResponse currentUserInfoResponse = UserLoginInfoFactory.parseUserInfo(loginUser);
 
         return new SuccessResponseData(currentUserInfoResponse);
+    }
+
+    /**
+     * 校验token是否正确
+     *
+     * @author fengshuonan
+     * @date 2021/6/18 15:26
+     */
+    @PostResource(name = "校验token是否正确", path = "/validateToken", requiredPermission = false, requiredLogin = false)
+    public ResponseData validateToken(@RequestBody @Valid ValidateTokenRequest validateTokenRequest) {
+        boolean haveSessionFlag = sessionManagerApi.haveSession(validateTokenRequest.getToken());
+        return new SuccessResponseData(haveSessionFlag);
     }
 
 }
