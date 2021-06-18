@@ -187,6 +187,7 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
             wrapper.notLike(ApiGroup::getGroupPids, SymbolConstant.LEFT_SQUARE_BRACKETS + apiGroupRequest.getGroupId() + SymbolConstant.RIGHT_SQUARE_BRACKETS);
             wrapper.ne(ApiGroup::getGroupId, apiGroupRequest.getGroupId());
         }
+
         List<ApiGroup> apiGroups = this.list(wrapper);
 
         if (ObjectUtil.isNotEmpty(apiGroups)) {

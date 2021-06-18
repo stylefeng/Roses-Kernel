@@ -82,7 +82,7 @@ public interface SysResourceService extends IService<SysResource> {
      * @author fengshuonan
      * @date 2020/12/18 15:06
      */
-    List<LayuiApiResourceTreeNode> getApiResourceTree();
+    List<LayuiApiResourceTreeNode> getApiResourceTree(ResourceRequest resourceRequest);
 
     /**
      * 获取资源的详情

@@ -32,6 +32,7 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.LayuiApiResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
+import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,8 +60,8 @@ public class ApiController {
      * @date 2020/12/18 15:50
      */
     @GetResource(name = "获取接口树列表（用于接口文档页面）", path = "/resource/getTree", requiredLogin = false, responseClass = LayuiApiResourceTreeNode.class)
-    public ResponseData getTree() {
-        List<LayuiApiResourceTreeNode> resourceTree = sysResourceService.getApiResourceTree();
+    public ResponseData getTree(ResourceRequest resourceRequest) {
+        List<LayuiApiResourceTreeNode> resourceTree = sysResourceService.getApiResourceTree(resourceRequest);
         return new SuccessResponseData(resourceTree);
     }
 

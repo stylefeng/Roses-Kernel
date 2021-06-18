@@ -196,12 +196,23 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public List<LayuiApiResourceTreeNode> getApiResourceTree() {
+    public List<LayuiApiResourceTreeNode> getApiResourceTree(ResourceRequest resourceRequest) {
 
         // 1. 获取所有的资源
         LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysResourceLambdaQueryWrapper.eq(SysResource::getViewFlag, YesOrNotEnum.N.getCode());
         sysResourceLambdaQueryWrapper.select(SysResource::getAppCode, SysResource::getModularCode, SysResource::getModularName, SysResource::getResourceCode, SysResource::getUrl, SysResource::getResourceName);
+
+        // 查询资源名称
+        if (ObjectUtil.isNotEmpty(resourceRequest.getResourceName())) {
+            sysResourceLambdaQueryWrapper.like(SysResource::getResourceName, resourceRequest.getResourceName());
+        }
+
+        // 查询资源URL
+        if (ObjectUtil.isNotEmpty(resourceRequest.getUrl())) {
+            sysResourceLambdaQueryWrapper.like(SysResource::getUrl, resourceRequest.getUrl());
+        }
+
         List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
 
         // 2. 按应用和模块编码设置map
