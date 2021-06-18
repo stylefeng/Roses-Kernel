@@ -50,7 +50,7 @@ public class SessionCenter {
     /**
      * 根据用户ID和消息类型获取会话信息列表
      *
-     * @param userId  用户ID
+     * @param userId 用户ID
      * @return {@link SocketSession <GettySocketOperator>}
      * @author majianguo
      * @date 2021/6/1 下午1:48
@@ -103,7 +103,9 @@ public class SessionCenter {
      **/
     public static void closed(String sessionId) {
         for (List<SocketSession<GettySocketOperator>> values : socketSessionMap.values()) {
-            values.removeIf(item -> item.getSessionId().equals(sessionId));
+            if (ObjectUtil.isNotEmpty(values)) {
+                values.removeIf(item -> item.getSessionId().equals(sessionId));
+            }
         }
     }
 }
