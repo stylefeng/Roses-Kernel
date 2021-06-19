@@ -42,7 +42,7 @@ import javax.validation.ConstraintValidatorContext;
  * @author fengshuonan
  * @date 2020/11/4 14:39
  */
-public class TableUniqueValueValidator implements ConstraintValidator<TableUniqueValue, String> {
+public class TableUniqueValueValidator implements ConstraintValidator<TableUniqueValue, Object> {
 
     /**
      * 表名称，例如 sys_user
@@ -89,7 +89,7 @@ public class TableUniqueValueValidator implements ConstraintValidator<TableUniqu
     }
 
     @Override
-    public boolean isValid(String fieldValue, ConstraintValidatorContext context) {
+    public boolean isValid(Object fieldValue, ConstraintValidatorContext context) {
 
         if (ObjectUtil.isNull(fieldValue)) {
             return true;
@@ -120,7 +120,7 @@ public class TableUniqueValueValidator implements ConstraintValidator<TableUniqu
      * @author fengshuonan
      * @date 2020/8/17 21:55
      */
-    private UniqueValidateParam createAddParam(String fieldValue) {
+    private UniqueValidateParam createAddParam(Object fieldValue) {
         return UniqueValidateParam.builder()
                 .tableName(tableName)
                 .columnName(columnName)
@@ -137,7 +137,7 @@ public class TableUniqueValueValidator implements ConstraintValidator<TableUniqu
      * @author fengshuonan
      * @date 2020/8/17 21:56
      */
-    private UniqueValidateParam createEditParam(String fieldValue) {
+    private UniqueValidateParam createEditParam(Object fieldValue) {
 
         // 获取请求字段中id的值
         Dict requestParam = RequestParamContext.get();

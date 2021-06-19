@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.validator.api.validators.unique.service;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
 import cn.stylefeng.roses.kernel.db.api.context.DbOperatorContext;
@@ -130,7 +131,7 @@ public class TableUniqueValueService {
         if (StrUtil.isBlank(uniqueValidateParam.getColumnName())) {
             throw new ParamValidateException(ValidatorExceptionEnum.TABLE_UNIQUE_VALIDATE_ERROR, "@TableUniqueValue注解上columnName属性为空");
         }
-        if (StrUtil.isBlank(uniqueValidateParam.getValue())) {
+        if (ObjectUtil.isEmpty(uniqueValidateParam.getValue())) {
             throw new ParamValidateException(ValidatorExceptionEnum.TABLE_UNIQUE_VALIDATE_ERROR, "@TableUniqueValue被校验属性的值为空");
         }
     }

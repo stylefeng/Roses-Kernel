@@ -50,7 +50,7 @@ public class UniqueValidateParam {
     /**
      * 被参数校验时候的字段的值
      */
-    String value;
+    Object value;
 
     /**
      * 校验时，是否排除当前的记录
