@@ -10,4 +10,27 @@
             update_user = #{paramCondition.updateUser}
         WHERE group_pids LIKE CONCAT('%', #{paramCondition.oldParentIds}, '%')
     </update>
+
+    <select id="dataList" resultType="cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiGroup">
+        SELECT
+        ag.group_id,
+        ag.group_name,
+        ag.group_pid,
+        ag.group_pids,
+        ag.group_sort,
+        ag.create_time,
+        ag.create_user,
+        ag.update_time,
+        ag.update_user
+        FROM
+        api_group ag
+        LEFT JOIN api_resource ar ON ag.group_id = ar.group_id
+        LEFT JOIN sys_resource sr ON ar.resource_code = sr.resource_code
+        WHERE
+        1 = 1
+        <if test="paramCondition.groupName != null and paramCondition.groupName != ''">
+            AND ar.api_alias LIKE CONCAT('%', #{paramCondition.groupName}, '%')
+            OR sr.url LIKE CONCAT('%', #{paramCondition.groupName}, '%')
+        </if>
+    </select>
 </mapper>

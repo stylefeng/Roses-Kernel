@@ -189,8 +189,7 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
             wrapper.ne(ApiGroup::getGroupId, apiGroupRequest.getGroupId());
         }
 
-        List<ApiGroup> apiGroups = this.list(wrapper);
-
+        List<ApiGroup> apiGroups = this.dataList(apiGroupRequest);
         if (ObjectUtil.isNotEmpty(apiGroups)) {
             for (ApiGroup apiGroup : apiGroups) {
                 ApiGroupTreeWrapper item = new ApiGroupTreeWrapper();
@@ -225,6 +224,10 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
             }
         }
         return allApiGroupTreeWrapperList;
+    }
+
+    private List<ApiGroup> dataList(ApiGroupRequest apiGroupRequest) {
+        return this.baseMapper.dataList(apiGroupRequest);
     }
 
     @Override
