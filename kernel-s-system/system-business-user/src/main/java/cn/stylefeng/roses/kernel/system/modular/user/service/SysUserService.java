@@ -155,6 +155,16 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
     PageResult<SysUserDTO> findPage(SysUserRequest sysUserRequest);
 
     /**
+     * 查询系统用户
+     *
+     * @param sysUserRequest 查询参数
+     * @return 查询分页结果
+     * @author fengshuonan
+     * @date 2020/11/21 15:24
+     */
+    List<SysUserDTO> getUserList(SysUserRequest sysUserRequest);
+
+    /**
      * 导出用户
      *
      * @param response httpResponse
@@ -227,5 +237,13 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @date 2021/4/7 16:13
      */
     void batchDelete(SysUserRequest sysUserRequest);
+
+    /**
+     * 获取所有用户的id
+     *
+     * @author fengshuonan
+     * @date 2021/6/20 12:10
+     */
+    List<Long> getAllUserIds();
 
 }

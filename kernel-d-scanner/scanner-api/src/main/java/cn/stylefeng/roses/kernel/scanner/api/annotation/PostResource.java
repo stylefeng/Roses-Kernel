@@ -98,10 +98,19 @@ public @interface PostResource {
     /**
      * 请求路径(同RequestMapping)
      */
-    @AliasFor(annotation = RequestMapping.class) String[] path() default {};
+    @AliasFor(annotation = RequestMapping.class)
+    String[] path() default {};
 
     /**
      * 请求的http方法(同RequestMapping)
      */
-    @AliasFor(annotation = RequestMapping.class) RequestMethod[] method() default RequestMethod.POST;
+    @AliasFor(annotation = RequestMapping.class)
+    RequestMethod[] method() default RequestMethod.POST;
+
+    /**
+     * 同RequestMapping
+     */
+    @AliasFor(annotation = RequestMapping.class)
+    String[] produces() default {};
+
 }

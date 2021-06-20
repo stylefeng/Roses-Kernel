@@ -101,4 +101,11 @@ public @interface GetResource {
      */
     @AliasFor(annotation = RequestMapping.class)
     RequestMethod[] method() default RequestMethod.GET;
+
+    /**
+     * 同RequestMapping
+     */
+    @AliasFor(annotation = RequestMapping.class)
+    String[] produces() default {};
+
 }

@@ -98,11 +98,19 @@ public @interface ApiResource {
     /**
      * 请求路径(同RequestMapping)
      */
-    @AliasFor(annotation = RequestMapping.class) String[] path() default {};
+    @AliasFor(annotation = RequestMapping.class)
+    String[] path() default {};
 
     /**
      * 请求的http方法(同RequestMapping)
      */
-    @AliasFor(annotation = RequestMapping.class) RequestMethod[] method() default {};
+    @AliasFor(annotation = RequestMapping.class)
+    RequestMethod[] method() default {};
+
+    /**
+     * 同RequestMapping
+     */
+    @AliasFor(annotation = RequestMapping.class)
+    String[] produces() default {};
 
 }

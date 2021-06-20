@@ -42,6 +42,7 @@ import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.office.api.OfficeExcelApi;
 import cn.stylefeng.roses.kernel.office.api.pojo.report.ExcelExportParam;
+import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.TreeNodeEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
@@ -398,6 +399,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
+    public List<SysUserDTO> getUserList(SysUserRequest sysUserRequest) {
+        return this.baseMapper.findUserList(sysUserRequest);
+    }
+
+    @Override
     public void export(HttpServletResponse response) {
         ExcelExportParam excelExportParam = new ExcelExportParam();
         List<SysUser> sysUserList = this.list();
@@ -521,6 +527,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             tempRequest.setUserId(userId);
             this.del(tempRequest);
         }
+    }
+
+    @Override
+    public List<Long> getAllUserIds() {
+        LambdaQueryWrapper<SysUser> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.select(SysUser::getUserId);
+        userLambdaQueryWrapper.eq(SysUser::getStatusFlag, StatusEnum.ENABLE);
+        userLambdaQueryWrapper.ne(SysUser::getDelFlag, YesOrNotEnum.Y.getCode());
+
+        List<SysUser> list = this.list(userLambdaQueryWrapper);
+        return list.stream().map(SysUser::getUserId).collect(Collectors.toList());
     }
 
     @Override
