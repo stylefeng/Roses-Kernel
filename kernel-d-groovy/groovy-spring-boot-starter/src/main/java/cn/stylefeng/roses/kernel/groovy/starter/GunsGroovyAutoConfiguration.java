@@ -47,7 +47,7 @@ public class GunsGroovyAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(GroovyApi.class)
-    public GroovyApi fileOperatorApi() {
+    public GroovyApi groovyApi() {
         return new GroovyOperator();
     }
 
