@@ -151,7 +151,7 @@ public class SysAppController {
      * @author fengshuonan
      * @date 2021/4/21 15:31
      */
-    @GetResource(name = "获取应用列表，用于顶部应用列表", path = "/sysMenu/getTopAppList")
+    @GetResource(name = "获取应用列表，用于顶部应用列表", path = "/sysMenu/getTopAppList", requiredPermission = false)
     public ResponseData getTopAppList() {
         List<SysApp> userTopAppList = sysAppService.getUserTopAppList();
         return new SuccessResponseData(userTopAppList);

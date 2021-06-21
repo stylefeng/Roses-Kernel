@@ -151,7 +151,7 @@ public class SysMessageController {
      * @author fengshuonan
      * @date 2021/6/12 17:42
      */
-    @GetResource(name = "查询所有未读系统消息列表", path = "/sysMessage/unReadMessageList")
+    @GetResource(name = "查询所有未读系统消息列表", path = "/sysMessage/unReadMessageList", requiredPermission = false)
     public ResponseData unReadMessageList(MessageRequest messageRequest) {
         messageRequest.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());
         List<MessageResponse> messageResponses = messageApi.queryListCurrentUser(messageRequest);
