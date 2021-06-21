@@ -182,6 +182,9 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
             stringSysResourceMap.put(sysResource.getResourceCode(), sysResource);
         }
 
+        // 所有非空分组
+        Map<Long, Integer> notNullGroup = new HashMap<>();
+
         // 查询所有分组
         List<ApiGroup> apiGroups = this.dataList(apiGroupRequest);
         if (ObjectUtil.isNotEmpty(apiGroups)) {
@@ -202,6 +205,15 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
         List<ApiResource> apiResourceList = this.apiResourceService.dataList(apiGroupRequest);
         if (ObjectUtil.isNotEmpty(apiResourceList)) {
             for (ApiResource apiResource : apiResourceList) {
+                // 处理分组信息
+                Integer count = notNullGroup.get(apiResource.getGroupId());
+                if (ObjectUtil.isEmpty(count)) {
+                    count = 0;
+                }
+                count = count + 1;
+                notNullGroup.put(apiResource.getGroupId(), count);
+
+                // 处理节点信息
                 ApiGroupTreeWrapper item = new ApiGroupTreeWrapper();
                 item.setId(apiResource.getApiResourceId());
                 item.setPid(apiResource.getGroupId());
@@ -215,6 +227,20 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
                     item.setUrl(sysResource.getUrl());
                 }
                 allApiGroupTreeWrapperList.add(item);
+            }
+        }
+
+        // 删除空分组
+        Iterator<ApiGroupTreeWrapper> iterator = allApiGroupTreeWrapperList.iterator();
+        while (iterator.hasNext()) {
+            ApiGroupTreeWrapper item = iterator.next();
+            if (RuleConstants.TREE_ROOT_ID.toString().equals(item.getNodeParentId()) || NodeTypeEnums.DATA_NODE.getType().equals(item.getType())) {
+                continue;
+            } else {
+                Integer integer = notNullGroup.get(item.getId());
+                if (ObjectUtil.isEmpty(integer) || integer == 0) {
+                    iterator.remove();
+                }
             }
         }
         return allApiGroupTreeWrapperList;

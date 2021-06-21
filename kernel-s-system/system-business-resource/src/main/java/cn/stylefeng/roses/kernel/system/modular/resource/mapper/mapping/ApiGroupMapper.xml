@@ -27,16 +27,20 @@
         LEFT JOIN api_resource ar ON ag.group_id = ar.group_id
         LEFT JOIN sys_resource sr ON ar.resource_code = sr.resource_code
         WHERE
-        1 = 1
-        OR ag.group_pid  = -1
+        1=1
         <if test="paramCondition.groupName != null and paramCondition.groupName != ''">
-            AND ar.api_alias LIKE CONCAT('%', #{paramCondition.groupName}, '%')
+            AND (
+            ar.api_alias LIKE CONCAT('%', #{paramCondition.groupName}, '%')
             OR sr.url LIKE CONCAT('%', #{paramCondition.groupName}, '%')
+            )
         </if>
         <if test="paramCondition.groupId != null">
-            AND ag.group_pids NOT LIKE CONCAT('%[', #{paramCondition.groupId}, ']%')
-            AND ag.group_id !=  #{paramCondition.groupId}
+            AND (
+            ag.group_pids NOT LIKE CONCAT('%[', #{paramCondition.groupId}, ']%')
+            AND ag.group_id != #{paramCondition.groupId}
+            )
         </if>
+        OR ag.group_pid = -1
         GROUP BY ag.group_id
     </select>
 </mapper>
