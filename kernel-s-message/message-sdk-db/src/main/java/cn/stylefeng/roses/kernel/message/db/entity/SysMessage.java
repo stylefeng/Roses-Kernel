@@ -25,6 +25,8 @@
 package cn.stylefeng.roses.kernel.message.db.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,18 +48,21 @@ public class SysMessage extends BaseEntity {
      * 主键
      */
     @TableId(value = "message_id", type = IdType.ASSIGN_ID)
+    @JSONField(serializeUsing= ToStringSerializer.class)
     private Long messageId;
 
     /**
      * 接收用户id
      */
     @TableField(value = "receive_user_id")
+    @JSONField(serializeUsing= ToStringSerializer.class)
     private Long receiveUserId;
 
     /**
      * 发送用户id
      */
     @TableField(value = "send_user_id")
+    @JSONField(serializeUsing= ToStringSerializer.class)
     private Long sendUserId;
 
     /**
@@ -94,6 +99,7 @@ public class SysMessage extends BaseEntity {
      * 业务id
      */
     @TableField(value = "business_id")
+    @JSONField(serializeUsing= ToStringSerializer.class)
     private Long businessId;
 
     /**

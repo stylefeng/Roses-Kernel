@@ -110,13 +110,12 @@ public class MessageDbServiceImpl implements MessageApi {
                 sendMsgList.add(sysMessage);
             }
         });
-
-        // 给用户发送通知
-        for (Long userId : userIdSet) {
-            socketOperatorApi.sendMsgOfUserSession(ServerMessageTypeEnum.SYS_NOTICE_MSG_TYPE.getCode(), userId.toString(), messageSendRequest);
-        }
         sysMessageService.saveBatch(sendMsgList);
 
+        // 给用户发送通知
+        for (SysMessage item : sendMsgList) {
+            socketOperatorApi.sendMsgOfUserSession(ServerMessageTypeEnum.SYS_NOTICE_MSG_TYPE.getCode(), item.getReceiveUserId().toString(), item);
+        }
     }
 
     @Override
