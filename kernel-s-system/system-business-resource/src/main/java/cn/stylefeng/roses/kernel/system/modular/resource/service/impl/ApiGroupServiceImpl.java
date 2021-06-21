@@ -183,12 +183,6 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
         }
 
         // 查询所有分组
-        LambdaQueryWrapper<ApiGroup> wrapper = new LambdaQueryWrapper<>();
-        if (ObjectUtil.isNotEmpty(apiGroupRequest.getGroupId())) {
-            wrapper.notLike(ApiGroup::getGroupPids, SymbolConstant.LEFT_SQUARE_BRACKETS + apiGroupRequest.getGroupId() + SymbolConstant.RIGHT_SQUARE_BRACKETS);
-            wrapper.ne(ApiGroup::getGroupId, apiGroupRequest.getGroupId());
-        }
-
         List<ApiGroup> apiGroups = this.dataList(apiGroupRequest);
         if (ObjectUtil.isNotEmpty(apiGroups)) {
             for (ApiGroup apiGroup : apiGroups) {
