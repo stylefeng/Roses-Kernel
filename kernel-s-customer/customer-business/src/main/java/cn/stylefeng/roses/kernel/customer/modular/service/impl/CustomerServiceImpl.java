@@ -235,6 +235,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         String encrypt = passwordStoredEncryptApi.encrypt(password);
         customer.setPassword(encrypt);
         this.updateById(customer);
+
+        // 清除缓存中的用户信息
+        customerInfoCacheOperatorApi.remove(String.valueOf(customer.getCustomerId()));
     }
 
     @Override
@@ -248,6 +251,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public void del(CustomerRequest customerRequest) {
         Customer customer = this.queryCustomer(customerRequest);
         this.removeById(customer.getCustomerId());
+
+        // 清除缓存中的用户信息
+        customerInfoCacheOperatorApi.remove(String.valueOf(customer.getCustomerId()));
     }
 
     @Override
@@ -255,6 +261,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         Customer customer = this.queryCustomer(customerRequest);
         BeanUtil.copyProperties(customerRequest, customer);
         this.updateById(customer);
+
+        // 清除缓存中的用户信息
+        customerInfoCacheOperatorApi.remove(String.valueOf(customer.getCustomerId()));
     }
 
     @Override
@@ -292,6 +301,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         String encryptPwd = passwordStoredEncryptApi.encrypt(customerInfoRequest.getNewPassword());
         customer.setPassword(encryptPwd);
         this.updateById(customer);
+
+        // 清除缓存中的用户信息
+        customerInfoCacheOperatorApi.remove(String.valueOf(customer.getCustomerId()));
     }
 
     @Override
@@ -308,6 +320,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         customer.setAvatar(customerInfoRequest.getAvatar());
         customer.setAvatarObjectName(fileInfo.getFileObjectName());
         this.updateById(customer);
+
+        // 清除缓存中的用户信息
+        customerInfoCacheOperatorApi.remove(String.valueOf(customer.getCustomerId()));
     }
 
     @Override
