@@ -38,13 +38,6 @@
             <artifactId>scanner-api</artifactId>
             <version>${roses.version}</version>
         </dependency>
-
-        <!--WebSocket模块的Api-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>socket-api</artifactId>
-            <version>${roses.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

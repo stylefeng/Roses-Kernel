@@ -25,7 +25,7 @@
 package cn.stylefeng.roses.kernel.socket.starter;
 
 import cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi;
-import cn.stylefeng.roses.kernel.socket.websocket.operator.WebSocketOperator;
+import cn.stylefeng.roses.kernel.socket.business.websocket.operator.WebSocketOperator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

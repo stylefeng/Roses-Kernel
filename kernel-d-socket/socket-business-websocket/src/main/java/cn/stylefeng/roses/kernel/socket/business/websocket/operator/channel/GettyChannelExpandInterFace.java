@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.socket.websocket.operator.channel;
+package cn.stylefeng.roses.kernel.socket.business.websocket.operator.channel;
 
 import cn.stylefeng.roses.kernel.socket.api.session.SocketSessionOperatorApi;
 

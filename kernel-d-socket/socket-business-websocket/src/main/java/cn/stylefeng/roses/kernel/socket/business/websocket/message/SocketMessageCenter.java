@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.socket.websocket.message;
+package cn.stylefeng.roses.kernel.socket.business.websocket.message;
 
 import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 import java.util.HashMap;

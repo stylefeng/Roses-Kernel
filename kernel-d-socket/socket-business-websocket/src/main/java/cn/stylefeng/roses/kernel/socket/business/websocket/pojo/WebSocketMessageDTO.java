@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.socket.websocket.pojo;
+package cn.stylefeng.roses.kernel.socket.business.websocket.pojo;
 
 import cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi;
 import lombok.Data;

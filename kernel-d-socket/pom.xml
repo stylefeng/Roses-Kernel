@@ -17,7 +17,6 @@
 
     <modules>
         <module>socket-api</module>
-        <module>socket-sdk-websocket</module>
         <module>socket-business-websocket</module>
         <module>socket-spring-boot-starter</module>
     </modules>

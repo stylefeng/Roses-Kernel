@@ -32,7 +32,6 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
-import cn.stylefeng.roses.kernel.socket.api.expander.SocketConfigExpander;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -174,7 +173,6 @@ public class LoginUser implements Serializable {
 
         Map<String, Long> params = new HashMap<>(1);
         params.put("userId", this.userId);
-        params.put("port", Long.valueOf(SocketConfigExpander.getSocketPort()));
         return StrUtil.format(this.wsUrl, params);
     }
 

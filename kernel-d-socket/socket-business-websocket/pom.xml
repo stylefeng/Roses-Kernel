@@ -14,17 +14,31 @@
     <artifactId>socket-business-websocket</artifactId>
 
     <dependencies>
-        <!--Socket模块的Websocket实现-->
+
+        <!--Spring boot WebSocket实现-->
         <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>socket-sdk-websocket</artifactId>
-            <version>${roses.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
         <!--web模块-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--socket模块api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>socket-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--jwt模块的sdk-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>jwt-sdk</artifactId>
+            <version>${roses.version}</version>
         </dependency>
     </dependencies>
 
