@@ -102,6 +102,7 @@ public class FileInfoFactory {
 
         // 封装存储文件信息（上传替换公共信息）
         SysFileInfo sysFileInfo = new SysFileInfo();
+        sysFileInfo.setFileId(fileId);
         sysFileInfo.setFileLocation(FileLocationEnum.LOCAL.getCode());
         sysFileInfo.setFileBucket(fileBucket);
         sysFileInfo.setFileObjectName(finalFileName);
