@@ -171,8 +171,8 @@ public class LoginUser implements Serializable {
             return "";
         }
 
-        Map<String, Long> params = new HashMap<>(1);
-        params.put("userId", this.userId);
+        Map<String, String> params = new HashMap<>(1);
+        params.put("token", this.token);
         return StrUtil.format(this.wsUrl, params);
     }
 

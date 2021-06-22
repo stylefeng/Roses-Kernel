@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.socket.business.websocket.server;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
+import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.socket.api.enums.ClientMessageTypeEnum;
 import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
 import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 
 /**
  * 消息监听处理器
@@ -25,7 +27,7 @@ import javax.websocket.server.ServerEndpoint;
  * @date 2021/6/1 下午2:35
  */
 @Slf4j
-@ServerEndpoint(value = "/webSocket/{userId}")
+@ServerEndpoint(value = "/webSocket/{token}")
 @Component
 public class WebSocketServer {
 
@@ -39,7 +41,20 @@ public class WebSocketServer {
      * @date 2021/6/21 下午5:14
      **/
     @OnOpen
-    public void onOpen(Session session, @PathParam("userId") String userId) {
+    public void onOpen(Session session, @PathParam("token") String token) {
+        String userId = null;
+        try {
+            // 解析用户信息
+            DefaultJwtPayload defaultPayload = JwtContext.me().getDefaultPayload(token);
+            userId = defaultPayload.getUserId().toString();
+        } catch (io.jsonwebtoken.JwtException e) {
+            try {
+                session.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+
         // 操作api包装
         GunsSocketOperator GunsSocketOperator = new GunsSocketOperator(session);
 
@@ -65,6 +80,7 @@ public class WebSocketServer {
             // 回复消息
             GunsSocketOperator.writeAndFlush(replyMsg);
         }
+
     }
 
     /**
