@@ -7,7 +7,7 @@ import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
 import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 import cn.stylefeng.roses.kernel.socket.api.session.pojo.SocketSession;
 import cn.stylefeng.roses.kernel.socket.business.websocket.message.SocketMessageCenter;
-import cn.stylefeng.roses.kernel.socket.business.websocket.operator.channel.GettySocketOperator;
+import cn.stylefeng.roses.kernel.socket.business.websocket.operator.channel.GunsSocketOperator;
 import cn.stylefeng.roses.kernel.socket.business.websocket.pojo.WebSocketMessageDTO;
 import cn.stylefeng.roses.kernel.socket.business.websocket.session.SessionCenter;
 import com.alibaba.fastjson.JSON;
@@ -41,7 +41,7 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") String userId) {
         // 操作api包装
-        GettySocketOperator gettySocketOperator = new GettySocketOperator(session);
+        GunsSocketOperator GunsSocketOperator = new GunsSocketOperator(session);
 
         // 回复消息
         WebSocketMessageDTO replyMsg = new WebSocketMessageDTO();
@@ -53,17 +53,17 @@ public class WebSocketServer {
             replyMsg.setData(session.getId());
 
             // 创建会话对象
-            SocketSession<GettySocketOperator> socketSession = new SocketSession<>();
+            SocketSession<GunsSocketOperator> socketSession = new SocketSession<>();
             socketSession.setSessionId(session.getId());
             socketSession.setUserId(userId);
-            socketSession.setSocketOperatorApi(gettySocketOperator);
+            socketSession.setSocketOperatorApi(GunsSocketOperator);
             socketSession.setConnectionTime(System.currentTimeMillis());
 
             // 维护会话
             SessionCenter.addSocketSession(socketSession);
         } finally {
             // 回复消息
-            gettySocketOperator.writeAndFlush(replyMsg);
+            GunsSocketOperator.writeAndFlush(replyMsg);
         }
     }
 
@@ -94,7 +94,7 @@ public class WebSocketServer {
         WebSocketMessageDTO WebSocketMessageDTO = JSON.parseObject(message, WebSocketMessageDTO.class);
 
         // 维护通道是否已初始化
-        SocketSession<GettySocketOperator> socketSession = SessionCenter.getSessionBySessionId(socketChannel.getId());
+        SocketSession<GunsSocketOperator> socketSession = SessionCenter.getSessionBySessionId(socketChannel.getId());
 
         // 心跳包
         if (ObjectUtil.isNotEmpty(socketSession) && ClientMessageTypeEnum.USER_HEART.getCode().equals(WebSocketMessageDTO.getClientMsgType())) {

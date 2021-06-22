@@ -12,14 +12,14 @@ import java.io.IOException;
  * @author majianguo
  * @date 2021/6/1 下午3:41
  */
-public class GettySocketOperator implements GettyChannelExpandInterFace {
+public class GunsSocketOperator implements SocketChannelExpandInterFace {
 
     /**
      * 实际操作的通道
      */
     private Session socketChannel;
 
-    public GettySocketOperator(Session socketChannel) {
+    public GunsSocketOperator(Session socketChannel) {
         this.socketChannel = socketChannel;
     }
 

@@ -10,6 +10,6 @@ import cn.stylefeng.roses.kernel.socket.api.session.SocketSessionOperatorApi;
  * @author majianguo
  * @date 2021/6/1 下午3:44
  */
-public interface GettyChannelExpandInterFace extends SocketSessionOperatorApi {
+public interface SocketChannelExpandInterFace extends SocketSessionOperatorApi {
 
 }
