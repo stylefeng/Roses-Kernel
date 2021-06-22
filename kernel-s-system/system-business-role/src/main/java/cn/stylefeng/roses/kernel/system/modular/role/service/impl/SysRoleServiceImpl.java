@@ -40,6 +40,7 @@ import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
+import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
@@ -62,6 +63,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -90,6 +92,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private SysRoleMenuButtonService sysRoleMenuButtonService;
+
+    @Resource
+    private MenuServiceApi menuServiceApi;
 
     @Override
     public void add(SysRoleRequest sysRoleRequest) {
@@ -219,9 +224,25 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         List<Long> menuIdList = sysRoleMenuButtonRequest.getGrantMenuIdList();
         if (ObjectUtil.isNotEmpty(menuIdList)) {
             List<SysRoleMenu> sysRoleMenus = new ArrayList<>();
+
+            // 角色ID
+            Long roleId = sysRoleMenuButtonRequest.getRoleId();
+
+            // 查询菜单的所有父菜单
+            Set<Long> allParentMenuId = menuServiceApi.getMenuAllParentMenuId(new HashSet<>(menuIdList));
+
+            // 处理所有父菜单
+            for (Long menuId : allParentMenuId) {
+                SysRoleMenu item = new SysRoleMenu();
+                item.setRoleId(roleId);
+                item.setMenuId(menuId);
+                sysRoleMenus.add(item);
+            }
+
+            // 处理菜单本身
             for (Long menuId : menuIdList) {
                 SysRoleMenu item = new SysRoleMenu();
-                item.setRoleId(sysRoleMenuButtonRequest.getRoleId());
+                item.setRoleId(roleId);
                 item.setMenuId(menuId);
                 sysRoleMenus.add(item);
             }

@@ -25,7 +25,7 @@ import java.util.List;
 public class WebSocketOperator implements SocketOperatorApi {
 
     @Override
-    public void sendMsgOfUserSessionBySessionId(String msgType, String sessionId, Object msg) {
+    public void sendMsgOfUserSessionBySessionId(String msgType, String sessionId, Object msg) throws SocketException {
         SocketSession<GettySocketOperator> session = SessionCenter.getSessionBySessionId(sessionId);
         if (ObjectUtil.isEmpty(session)) {
             throw new SocketException(SocketExceptionEnum.SESSION_NOT_EXIST);
@@ -37,7 +37,7 @@ public class WebSocketOperator implements SocketOperatorApi {
     }
 
     @Override
-    public void sendMsgOfUserSession(String msgType, String userId, Object msg) {
+    public void sendMsgOfUserSession(String msgType, String userId, Object msg) throws SocketException {
         // 根据用户ID获取会话
         List<SocketSession<GettySocketOperator>> socketSessionList = SessionCenter.getSessionByUserIdAndMsgType(userId);
         if (ObjectUtil.isEmpty(socketSessionList)) {

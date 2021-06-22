@@ -32,6 +32,7 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
+import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.constants.SymbolConstant;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
@@ -407,9 +408,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 菜单查询条件
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode())
-                .eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode())
-                .orderByAsc(SysMenu::getMenuSort);
+        queryWrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode()).eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode()).orderByAsc(SysMenu::getMenuSort);
 
         // 如果应用编码不为空，则拼接应用编码
         if (StrUtil.isNotBlank(appCode)) {
@@ -461,6 +460,28 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         List<SysMenu> list = this.list(queryWrapper);
         return list.stream().map(SysMenu::getAppCode).collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<Long> getMenuAllParentMenuId(Set<Long> menuIds) {
+        Set<Long> parentMenuIds = new HashSet<>();
+
+        // 查询所有菜单信息
+        List<SysMenu> sysMenus = this.listByIds(menuIds);
+        if (ObjectUtil.isEmpty(sysMenus)) {
+            return parentMenuIds;
+        }
+
+        // 获取所有父菜单ID
+        for (SysMenu sysMenu : sysMenus) {
+            String menuPids = sysMenu.getMenuPids().replaceAll("\\[", "").replaceAll("\\]", "");
+            String[] ids = menuPids.split(SymbolConstant.COMMA);
+            for (String id : ids) {
+                parentMenuIds.add(Long.parseLong(id));
+            }
+        }
+
+        return parentMenuIds;
     }
 
     /**

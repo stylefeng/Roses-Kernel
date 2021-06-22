@@ -43,6 +43,7 @@ import cn.stylefeng.roses.kernel.message.db.service.SysMessageService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.socket.api.SocketOperatorApi;
 import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
+import cn.stylefeng.roses.kernel.socket.api.exception.SocketException;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -98,23 +99,28 @@ public class MessageDbServiceImpl implements MessageApi {
         }
 
         Set<Long> userIdSet = new HashSet<>(userIds);
-        SysMessage sysMessage = new SysMessage();
-        BeanUtil.copyProperties(messageSendRequest, sysMessage);
-        // 初始化默认值
-        sysMessage.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());
-        sysMessage.setSendUserId(loginUser.getUserId());
-        userIdSet.forEach(userId -> {
+        for (Long userId : userIdSet) {
             // 判断用户是否存在
             if (userServiceApi.userExist(userId)) {
+                SysMessage sysMessage = new SysMessage();
+                BeanUtil.copyProperties(messageSendRequest, sysMessage);
+                // 初始化默认值
+                sysMessage.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());
+                sysMessage.setSendUserId(loginUser.getUserId());
                 sysMessage.setReceiveUserId(userId);
                 sendMsgList.add(sysMessage);
             }
-        });
+        }
         sysMessageService.saveBatch(sendMsgList);
 
         // 给用户发送通知
         for (SysMessage item : sendMsgList) {
-            socketOperatorApi.sendMsgOfUserSession(ServerMessageTypeEnum.SYS_NOTICE_MSG_TYPE.getCode(), item.getReceiveUserId().toString(), item);
+            try {
+                socketOperatorApi.sendMsgOfUserSession(ServerMessageTypeEnum.SYS_NOTICE_MSG_TYPE.getCode(), item.getReceiveUserId().toString(), item);
+            } catch (SocketException socketException) {
+                // 该用户不在线
+
+            }
         }
     }
 

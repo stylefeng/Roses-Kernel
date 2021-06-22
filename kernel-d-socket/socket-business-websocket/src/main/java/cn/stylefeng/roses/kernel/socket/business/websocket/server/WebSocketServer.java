@@ -40,6 +40,31 @@ public class WebSocketServer {
      **/
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") String userId) {
+        // 操作api包装
+        GettySocketOperator gettySocketOperator = new GettySocketOperator(session);
+
+        // 回复消息
+        WebSocketMessageDTO replyMsg = new WebSocketMessageDTO();
+        replyMsg.setServerMsgType(ServerMessageTypeEnum.SYS_REPLY_MSG_TYPE.getCode());
+        replyMsg.setToUserId(userId);
+
+        try {
+            // 设置回复内容
+            replyMsg.setData(session.getId());
+
+            // 创建会话对象
+            SocketSession<GettySocketOperator> socketSession = new SocketSession<>();
+            socketSession.setSessionId(session.getId());
+            socketSession.setUserId(userId);
+            socketSession.setSocketOperatorApi(gettySocketOperator);
+            socketSession.setConnectionTime(System.currentTimeMillis());
+
+            // 维护会话
+            SessionCenter.addSocketSession(socketSession);
+        } finally {
+            // 回复消息
+            gettySocketOperator.writeAndFlush(replyMsg);
+        }
     }
 
     /**
@@ -68,51 +93,20 @@ public class WebSocketServer {
         // 转换为Java对象
         WebSocketMessageDTO WebSocketMessageDTO = JSON.parseObject(message, WebSocketMessageDTO.class);
 
+        // 维护通道是否已初始化
+        SocketSession<GettySocketOperator> socketSession = SessionCenter.getSessionBySessionId(socketChannel.getId());
+
         // 心跳包
-        if (ClientMessageTypeEnum.USER_HEART.getCode().equals(WebSocketMessageDTO.getClientMsgType())) {
+        if (ObjectUtil.isNotEmpty(socketSession) && ClientMessageTypeEnum.USER_HEART.getCode().equals(WebSocketMessageDTO.getClientMsgType())) {
             // 更新会话最后活跃时间
-            SocketSession<GettySocketOperator> session = SessionCenter.getSessionBySessionId(socketChannel.getId());
-            if (ObjectUtil.isNotEmpty(session)) {
-                session.setLastActiveTime(System.currentTimeMillis());
+            if (ObjectUtil.isNotEmpty(socketSession)) {
+                socketSession.setLastActiveTime(System.currentTimeMillis());
             }
+            return;
         }
 
         // 用户ID为空不处理直接跳过
         if (ObjectUtil.isEmpty(WebSocketMessageDTO.getFormUserId())) {
-            return;
-        }
-
-        // 维护通道是否已初始化
-        SocketSession<GettySocketOperator> socketSession = SessionCenter.getSessionBySessionId(socketChannel.getId());
-        if (ObjectUtil.isEmpty(socketSession) && ClientMessageTypeEnum.USER_CONNECTION_AUTHENTICATION.getCode().equals(WebSocketMessageDTO.getClientMsgType())) {
-            // 操作api包装
-            GettySocketOperator gettySocketOperator = new GettySocketOperator(socketChannel);
-
-            // 回复消息
-            WebSocketMessageDTO replyMsg = new WebSocketMessageDTO();
-            replyMsg.setServerMsgType(ServerMessageTypeEnum.SYS_REPLY_MSG_TYPE.getCode());
-            replyMsg.setToUserId(WebSocketMessageDTO.getFormUserId());
-
-            try {
-                // 校验token是否合法
-                JwtContext.me().validateTokenWithException(WebSocketMessageDTO.getData().toString());
-
-                // 设置回复内容
-                replyMsg.setData(socketChannel.getId());
-
-                // 创建会话对象
-                socketSession = new SocketSession<>();
-                socketSession.setSessionId(socketChannel.getId());
-                socketSession.setUserId(WebSocketMessageDTO.getFormUserId());
-                socketSession.setSocketOperatorApi(gettySocketOperator);
-                socketSession.setConnectionTime(System.currentTimeMillis());
-
-                // 维护会话
-                SessionCenter.addSocketSession(socketSession);
-            } finally {
-                // 回复消息
-                gettySocketOperator.writeAndFlush(replyMsg);
-            }
             return;
         }
 
@@ -143,7 +137,6 @@ public class WebSocketServer {
      **/
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("发生错误");
-        error.printStackTrace();
+        log.error("session 发生错误:" + session.getId());
     }
 }

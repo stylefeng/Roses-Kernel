@@ -26,7 +26,9 @@ public class GettySocketOperator implements GettyChannelExpandInterFace {
     @Override
     public void writeAndFlush(Object obj) {
         try {
-            socketChannel.getBasicRemote().sendText(JSON.toJSONString(obj));
+            if (socketChannel.isOpen()) {
+                socketChannel.getBasicRemote().sendText(JSON.toJSONString(obj));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -34,13 +36,17 @@ public class GettySocketOperator implements GettyChannelExpandInterFace {
 
     @Override
     public void writeToChannel(Object obj) {
-        socketChannel.getAsyncRemote().sendText(JSON.toJSONString(obj));
+        if (socketChannel.isOpen()) {
+            socketChannel.getAsyncRemote().sendText(JSON.toJSONString(obj));
+        }
     }
 
     @Override
     public void close() {
         try {
-            socketChannel.close();
+            if (socketChannel.isOpen()) {
+                socketChannel.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

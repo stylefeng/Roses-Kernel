@@ -4,8 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.socket.api.session.pojo.SocketSession;
 import cn.stylefeng.roses.kernel.socket.business.websocket.operator.channel.GettySocketOperator;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -102,9 +101,13 @@ public class SessionCenter {
      * @date 2021/6/1 下午3:25
      **/
     public static void closed(String sessionId) {
-        for (List<SocketSession<GettySocketOperator>> values : socketSessionMap.values()) {
-            if (ObjectUtil.isNotEmpty(values)) {
-                values.removeIf(item -> item.getSessionId().equals(sessionId));
+        Set<Map.Entry<String, List<SocketSession<GettySocketOperator>>>> entrySet = socketSessionMap.entrySet();
+        Iterator<Map.Entry<String, List<SocketSession<GettySocketOperator>>>> iterator = entrySet.iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, List<SocketSession<GettySocketOperator>>> next = iterator.next();
+            List<SocketSession<GettySocketOperator>> value = next.getValue();
+            if (ObjectUtil.isNotEmpty(value)) {
+                value.removeIf(gettySocketOperatorSocketSession -> gettySocketOperatorSocketSession.getSessionId().equals(sessionId));
             }
         }
     }

@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.api;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单api
@@ -51,5 +52,15 @@ public interface MenuServiceApi {
      * @date 2021/4/21 15:40
      */
     List<String> getUserAppCodeList();
+
+    /**
+     * 获取菜单所有的父级菜单ID
+     *
+     * @param menuIds 菜单列表
+     * @return {@link java.util.Set<java.lang.Long>}
+     * @author majianguo
+     * @date 2021/6/22 上午10:11
+     **/
+    Set<Long> getMenuAllParentMenuId(Set<Long> menuIds);
 
 }

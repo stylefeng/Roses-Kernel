@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.socket.api;
 
+import cn.stylefeng.roses.kernel.socket.api.exception.SocketException;
 import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 
 /**
@@ -21,7 +22,7 @@ public interface SocketOperatorApi {
      * @author majianguo
      * @date 2021/6/11 下午2:19
      **/
-    void sendMsgOfUserSessionBySessionId(String msgType, String sessionId, Object msg);
+    void sendMsgOfUserSessionBySessionId(String msgType, String sessionId, Object msg) throws SocketException;
 
     /**
      * 发送消息到指定用户的所有会话
@@ -34,7 +35,7 @@ public interface SocketOperatorApi {
      * @author majianguo
      * @date 2021/6/2 上午9:35
      **/
-    void sendMsgOfUserSession(String msgType, String userId, Object msg);
+    void sendMsgOfUserSession(String msgType, String userId, Object msg) throws SocketException;
 
     /**
      * 发送消息到所有会话

@@ -40,7 +40,7 @@
         <!--引入WebSocket模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>socket-sdk-websocket</artifactId>
+            <artifactId>socket-api</artifactId>
             <version>${roses.version}</version>
         </dependency>
 
