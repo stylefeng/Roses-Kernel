@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentMap;
 public class SessionCenter {
 
     /**
-     * 所有会话维护
+     * 所有用户会话维护
      */
     private static ConcurrentMap<String, List<SocketSession<GunsSocketOperator>>> socketSessionMap = new ConcurrentHashMap<>();
 
@@ -87,7 +87,7 @@ public class SessionCenter {
     public static void addSocketSession(SocketSession<GunsSocketOperator> socketSession) {
         List<SocketSession<GunsSocketOperator>> socketSessions = socketSessionMap.get(socketSession.getUserId());
         if (ObjectUtil.isEmpty(socketSessions)) {
-            socketSessions = new ArrayList<>();
+            socketSessions = Collections.synchronizedList(new ArrayList<>());
             socketSessionMap.put(socketSession.getUserId(), socketSessions);
         }
         socketSessions.add(socketSession);
