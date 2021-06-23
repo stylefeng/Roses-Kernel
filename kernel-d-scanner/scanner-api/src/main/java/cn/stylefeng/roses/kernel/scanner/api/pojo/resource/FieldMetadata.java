@@ -60,6 +60,12 @@ public class FieldMetadata {
     private String fieldClassType;
 
     /**
+     * 字段类型路径，例如：java.long.String
+     */
+    @ChineseDescription("字段类型路径")
+    private String fieldClassPath;
+
+    /**
      * 字段名称，例如：createUser
      */
     @ChineseDescription("字段名称")

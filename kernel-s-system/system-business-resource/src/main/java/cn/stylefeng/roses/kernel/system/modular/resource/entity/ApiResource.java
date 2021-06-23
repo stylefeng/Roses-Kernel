@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.resource.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiResourceFieldRequest;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -115,6 +116,6 @@ public class ApiResource extends BaseEntity {
      */
     @TableField(exist = false)
     @ChineseDescription("该资源所有字段")
-    private List<ApiResourceField> apiResourceFieldList;
+    private List<ApiResourceFieldRequest> apiResourceFieldList;
 
 }

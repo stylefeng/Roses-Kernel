@@ -58,7 +58,7 @@ public class ApiResourceField extends BaseEntity {
     private String fieldCode;
 
     /**
-     * 字段类型：string或file
+     * 字段类型：string或file、List、Object
      */
     @TableField("field_type")
     @ChineseDescription("字段类型")
@@ -77,6 +77,13 @@ public class ApiResourceField extends BaseEntity {
     @TableField("field_validation_msg")
     @ChineseDescription("字段其他校验信息，后端校验注解内容")
     private String fieldValidationMsg;
+
+    /**
+     * 字段子字段信息(Object和List会用到)
+     */
+    @TableField("field_sub_info")
+    @ChineseDescription("字段子字段信息(Object和List会用到)")
+    private String fieldSubInfo;
 
     /**
      * 创建时间

@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * 接口字段信息封装类
@@ -63,6 +64,11 @@ public class ApiResourceFieldRequest extends BaseRequest {
      * 字段其他校验信息，后端校验注解内容
      */
     private String fieldValidationMsg;
+
+    /**
+     * 字段子字段信息(Object和List会用到)
+     */
+    private Set<ApiResourceFieldRequest> children;
 
     /**
      * 创建时间

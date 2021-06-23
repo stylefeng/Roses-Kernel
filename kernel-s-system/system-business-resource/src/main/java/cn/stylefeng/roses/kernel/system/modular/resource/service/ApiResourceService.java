@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.system.modular.resource.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiResourceFieldRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiResourceRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResourceField;
@@ -87,7 +88,7 @@ public interface ApiResourceService extends IService<ApiResource> {
      * @author majianguo
      * @date 2021/5/24 下午6:45
      **/
-    List<ApiResourceField> allField(ApiResourceRequest apiResourceRequest);
+    List<ApiResourceFieldRequest> allField(ApiResourceRequest apiResourceRequest);
 
     /**
      * 重置

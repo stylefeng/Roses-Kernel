@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceServ
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -38,10 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -221,7 +219,16 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         List<ApiResourceField> apiResourceFields = this.apiResourceFieldService.list(apiResourceFieldLambdaQueryWrapper);
         // 过滤创建时间和创建人
         apiResourceFields.removeIf(resourceField -> "createTime".equalsIgnoreCase(resourceField.getFieldCode()) || "createUser".equalsIgnoreCase(resourceField.getFieldCode()) || "updateTime".equalsIgnoreCase(resourceField.getFieldCode()) || "updateUser".equalsIgnoreCase(resourceField.getFieldCode()));
-        apiResource.setApiResourceFieldList(apiResourceFields);
+
+        List<ApiResourceFieldRequest> apiResourceFieldList = new ArrayList<>();
+        for (ApiResourceField apiResourceField : apiResourceFields) {
+            // 转换为前端对象
+            ApiResourceFieldRequest apiResourceFieldRequest = BeanUtil.toBean(apiResourceField, ApiResourceFieldRequest.class);
+            apiResourceFieldRequest.setChildren(JSON.parseObject(apiResourceField.getFieldSubInfo(), Set.class, Feature.SupportAutoType));
+            apiResourceFieldList.add(apiResourceFieldRequest);
+        }
+
+        apiResource.setApiResourceFieldList(apiResourceFieldList);
 
         return apiResource;
     }
@@ -282,7 +289,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
     }
 
     @Override
-    public List<ApiResourceField> allField(ApiResourceRequest apiResourceRequest) {
+    public List<ApiResourceFieldRequest> allField(ApiResourceRequest apiResourceRequest) {
         LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysResourceLambdaQueryWrapper.eq(SysResource::getResourceCode, apiResourceRequest.getResourceCode());
         SysResource sysResources = sysResourceService.getOne(sysResourceLambdaQueryWrapper);
@@ -291,20 +298,28 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         ResourceDefinition fillResourceDetail = ResourceFactory.fillResourceDetail(ResourceFactory.createResourceDefinition(sysResources));
 
         // 把所有字段加进去
-        List<ApiResourceField> apiResourceFieldList = new ArrayList<>();
+        List<ApiResourceFieldRequest> apiResourceFieldList = new ArrayList<>();
         if (ObjectUtil.isNotEmpty(fillResourceDetail.getParamFieldDescriptions())) {
             // 处理所有请求字段
             for (FieldMetadata fieldMetadata : fillResourceDetail.getParamFieldDescriptions()) {
                 ApiResourceField conversion = this.conversion(sysResources, null, fieldMetadata);
                 conversion.setFieldLocation("request");
-                apiResourceFieldList.add(conversion);
+
+                // 转换为前端对象
+                ApiResourceFieldRequest apiResourceFieldRequest = BeanUtil.toBean(conversion, ApiResourceFieldRequest.class);
+                apiResourceFieldRequest.setChildren(JSON.parseObject(conversion.getFieldSubInfo(), Set.class, Feature.SupportAutoType));
+                apiResourceFieldList.add(apiResourceFieldRequest);
             }
 
             // 处理所有响应字段
             for (FieldMetadata fieldDescription : fillResourceDetail.getResponseFieldDescriptions()) {
                 ApiResourceField conversion = this.conversion(sysResources, null, fieldDescription);
                 conversion.setFieldLocation("response");
-                apiResourceFieldList.add(conversion);
+
+                // 转换为前端对象
+                ApiResourceFieldRequest apiResourceFieldRequest = BeanUtil.toBean(conversion, ApiResourceFieldRequest.class);
+                apiResourceFieldRequest.setChildren(JSON.parseObject(conversion.getFieldSubInfo(), Set.class, Feature.SupportAutoType));
+                apiResourceFieldList.add(apiResourceFieldRequest);
             }
         }
         return apiResourceFieldList;
@@ -400,7 +415,11 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         item.setApiResourceId(apiResourceId);
         item.setFieldCode(fieldMetadata.getFieldName());
         item.setFieldName(fieldMetadata.getChineseName());
-        if ("file".equalsIgnoreCase(fieldMetadata.getFieldClassType())) {
+        if ("cn.stylefeng.".contains(fieldMetadata.getFieldClassPath())) {
+            item.setFieldType("object");
+        } else if ("java.util".contains(fieldMetadata.getFieldClassPath())) {
+            item.setFieldType("list");
+        } else if ("java.io".contains(fieldMetadata.getFieldClassPath())) {
             item.setFieldType("file");
         } else {
             item.setFieldType("string");
@@ -411,6 +430,17 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
 
         // 字段校验消息
         item.setFieldValidationMsg(fieldMetadata.getValidationMessages());
+
+        // 如果还有子字段，则处理字段
+        Set<FieldMetadata> genericFieldMetadata = fieldMetadata.getGenericFieldMetadata();
+        if (ObjectUtil.isNotEmpty(genericFieldMetadata)) {
+            Set<ApiResourceField> apiResourceFieldSet = new HashSet<>();
+            for (FieldMetadata genericFieldMetadatum : genericFieldMetadata) {
+                ApiResourceField conversion = this.conversion(sysResource, apiResourceId, genericFieldMetadatum);
+                apiResourceFieldSet.add(conversion);
+            }
+            item.setFieldSubInfo(JSON.toJSONString(apiResourceFieldSet, SerializerFeature.WriteClassName));
+        }
 
         return item;
     }

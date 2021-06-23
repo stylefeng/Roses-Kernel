@@ -26,15 +26,14 @@ package cn.stylefeng.roses.kernel.scanner.api.util;
 
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.TypeUtil;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -45,6 +44,8 @@ import java.util.*;
  */
 public class ClassReflectUtil {
 
+    private static Map<String, String> runingMap = new HashMap<>(2);
+
     /**
      * 获取一个类的所有字段描述
      *
@@ -54,81 +55,121 @@ public class ClassReflectUtil {
      * @date 2020/12/8 18:27
      */
     public static Set<FieldMetadata> getClassFieldDescription(Class<?> clazz) {
-
         HashSet<FieldMetadata> fieldDescriptions = new HashSet<>();
 
         if (clazz == null) {
             return fieldDescriptions;
         }
 
+        // 查询本类是否正在进行解析(防止死循环)
+        String runing = runingMap.get(clazz.getName());
+
+        // 返回null则标识这个类正在运行，则不对该类再进行解析
+        if (ObjectUtil.isNotEmpty(runing)) {
+            return null;
+        }
+
         // 获取该类和该类所有父类的属性
-        while (clazz != null){
+        while (clazz != null) {
+            runingMap.put(clazz.getName(), clazz.getName());
             // 获取类中的所有字段
             Field[] declaredFields = ClassUtil.getDeclaredFields(clazz);
-
             for (Field declaredField : declaredFields) {
-
-                FieldMetadata fieldDescription = new FieldMetadata();
-
-                // 生成uuid，给前端用
-                fieldDescription.setMetadataId(IdUtil.fastSimpleUUID());
-
-                // 获取字段的名称
-                String name = declaredField.getName();
-                fieldDescription.setFieldName(name);
-
-                // 获取字段的类型
-                Class<?> declaredFieldType = declaredField.getType();
-                fieldDescription.setFieldClassType(declaredFieldType.getSimpleName());
-
-                // 如果字段类型是Object类型，则遍历Object类型里的字段
-                if (BaseRequest.class.isAssignableFrom(declaredFieldType)) {
-                    fieldDescription.setGenericFieldMetadata(getClassFieldDescription(declaredFieldType));
-                }
-
-                // 如果是泛型类型，遍历泛泛型的class类型里的字段
-                if (Collection.class.isAssignableFrom(declaredFieldType)) {
-                    Class<?> genericClass = TypeUtil.getClass(TypeUtil.getTypeArgument(TypeUtil.getType(declaredField)));
-                    if (BaseRequest.class.isAssignableFrom(genericClass)) {
-                        fieldDescription.setGenericFieldMetadata(getClassFieldDescription(genericClass));
-                    }
-                }
-
-                // 获取字段的所有注解
-                Annotation[] annotations = declaredField.getAnnotations();
-                if (annotations != null && annotations.length > 0) {
-
-                    // 设置字段的所有注解
-                    fieldDescription.setAnnotations(annotationsToStrings(annotations));
-
-                    // 遍历字段上的所有注解，找到带groups属性的，按group分类组装注解
-                    Map<String, Set<String>> groupAnnotations = new HashMap<>();
-                    for (Annotation annotation : annotations) {
-                        Class<?>[] validateGroupsClasses = invokeAnnotationMethodIgnoreError(annotation, "groups", Class[].class);
-                        if (validateGroupsClasses != null) {
-                            for (Class<?> validateGroupsClass : validateGroupsClasses) {
-                                addGroupValidateAnnotation(annotation, validateGroupsClass, groupAnnotations);
-                            }
-                        }
-                    }
-                    // 设置分组注解
-                    fieldDescription.setGroupValidationMessage(groupAnnotations);
-
-                    // 填充字段的中文名称
-                    ChineseDescription chineseDescription = declaredField.getAnnotation(ChineseDescription.class);
-                    if (chineseDescription != null) {
-                        fieldDescription.setChineseName(chineseDescription.value());
-                    }
-                }
-
+                // 获取字段元数据
+                FieldMetadata fieldDescription = getFieldMetadata(declaredField);
                 fieldDescriptions.add(fieldDescription);
             }
 
+            runingMap.remove(clazz.getName());
             // 获取本类的父类
             clazz = clazz.getSuperclass();
         }
-
         return fieldDescriptions;
+    }
+
+    /**
+     * 获取字段详情
+     *
+     * @param declaredField 字段
+     * @return {@link cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata}
+     * @author majianguo
+     * @date 2021/6/23 上午10:03
+     **/
+    private static FieldMetadata getFieldMetadata(Field declaredField) {
+        FieldMetadata fieldDescription = new FieldMetadata();
+
+        // 生成uuid，给前端用
+        fieldDescription.setMetadataId(IdUtil.fastSimpleUUID());
+
+        // 获取字段的名称
+        String name = declaredField.getName();
+        fieldDescription.setFieldName(name);
+
+        // 获取字段的类型
+        Class<?> declaredFieldType = declaredField.getType();
+        fieldDescription.setFieldClassType(declaredFieldType.getSimpleName());
+        fieldDescription.setFieldClassPath(declaredFieldType.getName());
+
+        // 如果字段类型是Object类型，则遍历Object类型里的字段
+        if (BaseRequest.class.isAssignableFrom(declaredFieldType)) {
+            fieldDescription.setGenericFieldMetadata(getClassFieldDescription(declaredFieldType));
+        } else if (List.class.isAssignableFrom(declaredFieldType)) {
+            // 如果是集合类型，则处理集合里面的字段
+            Type genericType = declaredField.getGenericType();
+            ParameterizedType pt = (ParameterizedType)genericType;
+            // 得到泛型里的class类型对象
+            Class<?> actualTypeArgument = (Class<?>)pt.getActualTypeArguments()[0];
+            // 基本类型处理
+            if (actualTypeArgument.isPrimitive() || "java.lang".equals(actualTypeArgument.getPackage().getName()) || "java.util".equals(actualTypeArgument.getPackage().getName())) {
+                FieldMetadata item = new FieldMetadata();
+                item.setMetadataId(IdUtil.fastSimpleUUID());
+                item.setFieldName(actualTypeArgument.getName());
+                item.setFieldClassType(actualTypeArgument.getTypeName());
+                // 填充字段的中文名称
+                ChineseDescription chineseDescription = declaredField.getAnnotation(ChineseDescription.class);
+                if (chineseDescription != null) {
+                    item.setChineseName(chineseDescription.value());
+                }
+                fieldDescription.setGenericFieldMetadata(Collections.singleton(item));
+            } else {
+                fieldDescription.setGenericFieldMetadata(getClassFieldDescription(actualTypeArgument));
+            }
+
+        } else if (Collection.class.isAssignableFrom(declaredFieldType)) {
+            // 如果是泛型类型，遍历泛泛型的class类型里的字段
+            Class<?> genericClass = TypeUtil.getClass(TypeUtil.getTypeArgument(TypeUtil.getType(declaredField)));
+            if (BaseRequest.class.isAssignableFrom(genericClass)) {
+                fieldDescription.setGenericFieldMetadata(getClassFieldDescription(genericClass));
+            }
+        }
+
+        // 获取字段的所有注解
+        Annotation[] annotations = declaredField.getAnnotations();
+        if (annotations != null && annotations.length > 0) {
+
+            // 设置字段的所有注解
+            fieldDescription.setAnnotations(annotationsToStrings(annotations));
+
+            // 遍历字段上的所有注解，找到带groups属性的，按group分类组装注解
+            Map<String, Set<String>> groupAnnotations = new HashMap<>();
+            for (Annotation annotation : annotations) {
+                Class<?>[] validateGroupsClasses = invokeAnnotationMethodIgnoreError(annotation, "groups", Class[].class);
+                if (validateGroupsClasses != null) {
+                    for (Class<?> validateGroupsClass : validateGroupsClasses) {
+                        addGroupValidateAnnotation(annotation, validateGroupsClass, groupAnnotations);
+                    }
+                }
+            }
+            // 设置分组注解
+            fieldDescription.setGroupValidationMessage(groupAnnotations);
+
+            // 填充字段的中文名称
+            ChineseDescription chineseDescription = declaredField.getAnnotation(ChineseDescription.class);
+            if (chineseDescription != null) {
+                fieldDescription.setChineseName(chineseDescription.value());
+            }
+        }
+        return fieldDescription;
     }
 
     /**
