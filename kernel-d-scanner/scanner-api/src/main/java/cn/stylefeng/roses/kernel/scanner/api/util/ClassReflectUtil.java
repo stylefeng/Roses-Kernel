@@ -44,7 +44,7 @@ import java.util.*;
  */
 public class ClassReflectUtil {
 
-    private static Map<String, String> runingMap = new HashMap<>(2);
+    private static Map<String, String> runMap = new HashMap<>(2);
 
     /**
      * 获取一个类的所有字段描述
@@ -62,7 +62,7 @@ public class ClassReflectUtil {
         }
 
         // 查询本类是否正在进行解析(防止死循环)
-        String runing = runingMap.get(clazz.getName());
+        String runing = runMap.get(clazz.getName());
 
         // 返回null则标识这个类正在运行，则不对该类再进行解析
         if (ObjectUtil.isNotEmpty(runing)) {
@@ -71,7 +71,7 @@ public class ClassReflectUtil {
 
         // 获取该类和该类所有父类的属性
         while (clazz != null) {
-            runingMap.put(clazz.getName(), clazz.getName());
+            runMap.put(clazz.getName(), clazz.getName());
             // 获取类中的所有字段
             Field[] declaredFields = ClassUtil.getDeclaredFields(clazz);
             for (Field declaredField : declaredFields) {
@@ -80,7 +80,7 @@ public class ClassReflectUtil {
                 fieldDescriptions.add(fieldDescription);
             }
 
-            runingMap.remove(clazz.getName());
+            runMap.remove(clazz.getName());
             // 获取本类的父类
             clazz = clazz.getSuperclass();
         }

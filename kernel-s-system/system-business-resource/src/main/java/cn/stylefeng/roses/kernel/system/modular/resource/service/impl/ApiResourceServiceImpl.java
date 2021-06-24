@@ -415,14 +415,14 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         item.setApiResourceId(apiResourceId);
         item.setFieldCode(fieldMetadata.getFieldName());
         item.setFieldName(fieldMetadata.getChineseName());
-        if ("cn.stylefeng.".contains(fieldMetadata.getFieldClassPath())) {
-            item.setFieldType("object");
-        } else if ("java.util".contains(fieldMetadata.getFieldClassPath())) {
+        if (fieldMetadata.getFieldClassPath().contains("java.util")) {
             item.setFieldType("list");
-        } else if ("java.io".contains(fieldMetadata.getFieldClassPath())) {
+        } else if (fieldMetadata.getFieldClassPath().contains("java.io")) {
             item.setFieldType("file");
-        } else {
+        } else if (fieldMetadata.getFieldClassPath().contains("java.")) {
             item.setFieldType("string");
+        } else {
+            item.setFieldType("object");
         }
 
         // 是否必填
@@ -437,6 +437,10 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
             Set<ApiResourceField> apiResourceFieldSet = new HashSet<>();
             for (FieldMetadata genericFieldMetadatum : genericFieldMetadata) {
                 ApiResourceField conversion = this.conversion(sysResource, apiResourceId, genericFieldMetadatum);
+                // 如果是list设置嵌套类型里面的全是非必填
+                if ("list".equals(item.getFieldType())) {
+                    conversion.setFieldRequired(YesOrNotEnum.N.getCode());
+                }
                 apiResourceFieldSet.add(conversion);
             }
             item.setFieldSubInfo(JSON.toJSONString(apiResourceFieldSet, SerializerFeature.WriteClassName));
