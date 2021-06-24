@@ -230,16 +230,18 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
             }
         }
 
-        // 删除空分组
-        Iterator<ApiGroupTreeWrapper> iterator = allApiGroupTreeWrapperList.iterator();
-        while (iterator.hasNext()) {
-            ApiGroupTreeWrapper item = iterator.next();
-            if (RuleConstants.TREE_ROOT_ID.toString().equals(item.getNodeParentId()) || NodeTypeEnums.DATA_NODE.getType().equals(item.getType())) {
-                continue;
-            } else {
-                Integer integer = notNullGroup.get(item.getId());
-                if (ObjectUtil.isEmpty(integer) || integer == 0) {
-                    iterator.remove();
+        // 如果是搜索，则删除空分组
+        if (ObjectUtil.isNotEmpty(apiGroupRequest.getGroupName())) {
+            Iterator<ApiGroupTreeWrapper> iterator = allApiGroupTreeWrapperList.iterator();
+            while (iterator.hasNext()) {
+                ApiGroupTreeWrapper item = iterator.next();
+                if (RuleConstants.TREE_ROOT_ID.toString().equals(item.getNodeParentId()) || NodeTypeEnums.DATA_NODE.getType().equals(item.getType())) {
+                    continue;
+                } else {
+                    Integer integer = notNullGroup.get(item.getId());
+                    if (ObjectUtil.isEmpty(integer) || integer == 0) {
+                        iterator.remove();
+                    }
                 }
             }
         }
