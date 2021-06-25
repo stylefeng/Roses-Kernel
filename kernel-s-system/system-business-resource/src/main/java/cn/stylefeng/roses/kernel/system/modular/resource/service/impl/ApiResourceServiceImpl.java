@@ -415,7 +415,9 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         item.setApiResourceId(apiResourceId);
         item.setFieldCode(fieldMetadata.getFieldName());
         item.setFieldName(fieldMetadata.getChineseName());
-        if (fieldMetadata.getFieldClassPath().contains("java.util")) {
+        if (ObjectUtil.isEmpty(fieldMetadata.getFieldClassPath())) {
+            item.setFieldType("object");
+        } else if (fieldMetadata.getFieldClassPath().contains("java.util")) {
             item.setFieldType("list");
         } else if (fieldMetadata.getFieldClassPath().contains("java.io")) {
             item.setFieldType("file");

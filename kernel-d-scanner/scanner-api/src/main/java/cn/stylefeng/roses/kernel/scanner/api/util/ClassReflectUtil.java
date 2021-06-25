@@ -31,6 +31,7 @@ import cn.hutool.core.util.TypeUtil;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
+import sun.reflect.generics.reflectiveObjects.WildcardTypeImpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -116,9 +117,24 @@ public class ClassReflectUtil {
         } else if (List.class.isAssignableFrom(declaredFieldType)) {
             // 如果是集合类型，则处理集合里面的字段
             Type genericType = declaredField.getGenericType();
-            ParameterizedType pt = (ParameterizedType)genericType;
+
             // 得到泛型里的class类型对象
-            Class<?> actualTypeArgument = (Class<?>)pt.getActualTypeArguments()[0];
+            Class<?> actualTypeArgument;
+            // 处理List没写泛型的情况
+            if (genericType instanceof ParameterizedType) {
+                ParameterizedType pt = (ParameterizedType)genericType;
+                Type typeArgument = pt.getActualTypeArguments()[0];
+
+                // 处理List<?>这种情况
+                if (!(typeArgument instanceof WildcardTypeImpl)) {
+                    actualTypeArgument = (Class<?>)pt.getActualTypeArguments()[0];
+                } else {
+                    actualTypeArgument = Object.class;
+                }
+            } else {
+                actualTypeArgument = Object.class;
+            }
+
             // 基本类型处理
             if (actualTypeArgument.isPrimitive() || "java.lang".equals(actualTypeArgument.getPackage().getName()) || "java.util".equals(actualTypeArgument.getPackage().getName())) {
                 FieldMetadata item = new FieldMetadata();
@@ -142,7 +158,6 @@ public class ClassReflectUtil {
                 fieldDescription.setGenericFieldMetadata(getClassFieldDescription(genericClass));
             }
         }
-
         // 获取字段的所有注解
         Annotation[] annotations = declaredField.getAnnotations();
         if (annotations != null && annotations.length > 0) {
@@ -182,7 +197,7 @@ public class ClassReflectUtil {
         try {
             Class<? extends Annotation> annotationType = apiResource.annotationType();
             Method method = annotationType.getMethod(methodName);
-            return (T) method.invoke(apiResource);
+            return (T)method.invoke(apiResource);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             // 忽略异常
         }
