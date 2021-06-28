@@ -161,6 +161,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 不能修改状态，用修改状态接口修改状态
         oldMenu.setStatusFlag(null);
 
+        // 更新 AntdvVisible LayuiVisible 字段
+        String visible = sysMenuRequest.getVisible();
+        oldMenu.setAntdvVisible(visible);
+        oldMenu.setLayuiVisible(visible);
+
         this.updateById(oldMenu);
     }
 
