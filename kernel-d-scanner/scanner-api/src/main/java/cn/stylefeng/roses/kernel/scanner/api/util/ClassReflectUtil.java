@@ -31,7 +31,6 @@ import cn.hutool.core.util.TypeUtil;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
-import sun.reflect.generics.reflectiveObjects.WildcardTypeImpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -126,7 +125,7 @@ public class ClassReflectUtil {
                 Type typeArgument = pt.getActualTypeArguments()[0];
 
                 // 处理List<?>这种情况
-                if (!(typeArgument instanceof WildcardTypeImpl)) {
+                if (!(typeArgument instanceof WildcardType)) {
                     actualTypeArgument = (Class<?>)pt.getActualTypeArguments()[0];
                 } else {
                     actualTypeArgument = Object.class;
