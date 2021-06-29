@@ -72,6 +72,7 @@ public class WebSocketServer {
             socketSession.setSessionId(session.getId());
             socketSession.setUserId(userId);
             socketSession.setSocketOperatorApi(GunsSocketOperator);
+            socketSession.setToken(token);
             socketSession.setConnectionTime(System.currentTimeMillis());
 
             // 维护会话
