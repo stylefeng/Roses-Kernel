@@ -25,6 +25,9 @@
 package cn.stylefeng.roses.kernel.rule.util;
 
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.ContentType;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ErrorResponseData;
 import com.alibaba.fastjson.JSON;
@@ -77,6 +80,18 @@ public class ResponseRenderUtil {
         } catch (IOException e) {
             log.error("渲染http json信息错误！", e);
         }
+    }
+
+    /**
+     * 设置渲染文件的头
+     *
+     * @author fengshuonan
+     * @date 2021/7/1 15:01
+     */
+    public static void setRenderFileHeader(HttpServletResponse response, String fileName) {
+        final String charset = ObjectUtil.defaultIfNull(response.getCharacterEncoding(), CharsetUtil.UTF_8);
+        response.setHeader("Content-Disposition", StrUtil.format("attachment;filename={}", URLUtil.encode(fileName, charset)));
+        response.setContentType("application/octet-stream; charset=utf-8");
     }
 
 }
