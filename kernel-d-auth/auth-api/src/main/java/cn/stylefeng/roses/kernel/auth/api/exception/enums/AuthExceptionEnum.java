@@ -116,7 +116,12 @@ public enum AuthExceptionEnum implements AbstractExceptionEnum {
     /**
      * SSO使用token登录时，解密token出错
      */
-    SSO_TOKEN_DECRYPT_USER_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "16", "解密token出错:{}");
+    SSO_TOKEN_DECRYPT_USER_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "16", "解密token出错:{}"),
+
+    /**
+     * 无法访问未经授权的接口
+     */
+    CANT_REQUEST_UN_OPEN_API(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "17", "无法访问未经授权的接口");
 
     /**
      * 错误编码
