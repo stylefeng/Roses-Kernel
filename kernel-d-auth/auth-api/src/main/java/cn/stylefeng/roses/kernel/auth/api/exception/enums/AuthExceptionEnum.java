@@ -121,7 +121,7 @@ public enum AuthExceptionEnum implements AbstractExceptionEnum {
     /**
      * 无法访问未经授权的接口
      */
-    CANT_REQUEST_UN_OPEN_API(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "17", "无法访问未经授权的接口");
+    CANT_REQUEST_UN_OPEN_API(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "17", "无法访问未经授权的接口，未授权url为：{}");
 
     /**
      * 错误编码
