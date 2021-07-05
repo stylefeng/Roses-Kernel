@@ -52,6 +52,13 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--数据库加密解密模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>security-sdk-database-field</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--CORS过滤器，默认不开启-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>

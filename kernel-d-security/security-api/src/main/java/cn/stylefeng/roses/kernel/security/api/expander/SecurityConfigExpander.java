@@ -67,4 +67,15 @@ public class SecurityConfigExpander {
         }
     }
 
+    /**
+     * 获取AES秘钥
+     *
+     * @return {@link String}
+     * @author majianguo
+     * @date 2021/7/5 10:15
+     **/
+    public static String getEncryptSecretKey() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_ENCRYPT_SECRET_KEY", String.class, "Ux1dqQ22KxVjSYootgzMe776em8vWEGE");
+    }
+
 }
