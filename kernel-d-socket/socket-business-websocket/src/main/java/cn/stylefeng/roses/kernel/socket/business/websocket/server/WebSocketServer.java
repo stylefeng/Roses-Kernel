@@ -5,6 +5,7 @@ import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.socket.api.enums.ClientMessageTypeEnum;
 import cn.stylefeng.roses.kernel.socket.api.enums.ServerMessageTypeEnum;
+import cn.stylefeng.roses.kernel.socket.api.enums.SystemMessageTypeEnum;
 import cn.stylefeng.roses.kernel.socket.api.message.SocketMsgCallbackInterface;
 import cn.stylefeng.roses.kernel.socket.api.session.pojo.SocketSession;
 import cn.stylefeng.roses.kernel.socket.business.websocket.message.SocketMessageCenter;
@@ -63,12 +64,11 @@ public class WebSocketServer {
         replyMsg.setServerMsgType(ServerMessageTypeEnum.SYS_REPLY_MSG_TYPE.getCode());
         replyMsg.setToUserId(userId);
 
+        // 创建会话对象
+        SocketSession<GunsSocketOperator> socketSession = new SocketSession<>();
         try {
             // 设置回复内容
             replyMsg.setData(session.getId());
-
-            // 创建会话对象
-            SocketSession<GunsSocketOperator> socketSession = new SocketSession<>();
             socketSession.setSessionId(session.getId());
             socketSession.setUserId(userId);
             socketSession.setSocketOperatorApi(GunsSocketOperator);
@@ -80,6 +80,13 @@ public class WebSocketServer {
         } finally {
             // 回复消息
             GunsSocketOperator.writeAndFlush(replyMsg);
+
+            // 触发首次连接回调
+            SocketMsgCallbackInterface socketMsgCallbackInterface = SocketMessageCenter.getSocketMsgCallbackInterface(SystemMessageTypeEnum.SYS_LISTENER_ONOPEN.getCode());
+            if (ObjectUtil.isNotEmpty(socketMsgCallbackInterface)) {
+                // 触发回调
+                socketMsgCallbackInterface.callback(SystemMessageTypeEnum.SYS_LISTENER_ONOPEN.getCode(), null, socketSession);
+            }
         }
 
     }
@@ -93,7 +100,17 @@ public class WebSocketServer {
      **/
     @OnClose
     public void onClose(Session session) {
-        SessionCenter.closed(session.getId());
+        try {
+            SocketSession<GunsSocketOperator> socketSession = SessionCenter.getSessionBySessionId(session.getId());
+            // 触发首次连接回调
+            SocketMsgCallbackInterface socketMsgCallbackInterface = SocketMessageCenter.getSocketMsgCallbackInterface(SystemMessageTypeEnum.SYS_LISTENER_ONCLOSE.getCode());
+            if (ObjectUtil.isNotEmpty(socketMsgCallbackInterface)) {
+                // 触发回调
+                socketMsgCallbackInterface.callback(SystemMessageTypeEnum.SYS_LISTENER_ONCLOSE.getCode(), null, socketSession);
+            }
+        } finally {
+            SessionCenter.closed(session.getId());
+        }
     }
 
     /**
@@ -154,6 +171,13 @@ public class WebSocketServer {
      **/
     @OnError
     public void onError(Session session, Throwable error) {
+        SocketSession<GunsSocketOperator> socketSession = SessionCenter.getSessionBySessionId(session.getId());
+        // 触发首次连接回调
+        SocketMsgCallbackInterface socketMsgCallbackInterface = SocketMessageCenter.getSocketMsgCallbackInterface(SystemMessageTypeEnum.SYS_LISTENER_ONERROR.getCode());
+        if (ObjectUtil.isNotEmpty(socketMsgCallbackInterface)) {
+            // 触发回调
+            socketMsgCallbackInterface.callback(SystemMessageTypeEnum.SYS_LISTENER_ONERROR.getCode(), error, socketSession);
+        }
         log.error("session 发生错误:" + session.getId());
     }
 }
