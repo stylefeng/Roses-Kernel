@@ -55,7 +55,7 @@ import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.log.api.LoginLogServiceApi;
 import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
-import cn.stylefeng.roses.kernel.security.api.CaptchaApi;
+import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.expander.SystemConfigExpander;
@@ -102,7 +102,7 @@ public class AuthServiceImpl implements AuthServiceApi {
     private LoginLogServiceApi loginLogServiceApi;
 
     @Resource
-    private CaptchaApi captchaApi;
+    private ImageCaptchaApi captchaApi;
 
     @Resource
     private SsoProperties ssoProperties;

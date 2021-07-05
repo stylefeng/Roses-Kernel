@@ -27,8 +27,8 @@ package cn.stylefeng.roses.kernel.security.captcha;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
-import cn.stylefeng.roses.kernel.security.api.CaptchaApi;
-import cn.stylefeng.roses.kernel.security.api.pojo.EasyCaptcha;
+import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
+import cn.stylefeng.roses.kernel.security.api.pojo.ImageCaptcha;
 import com.wf.captcha.SpecCaptcha;
 
 /**
@@ -37,21 +37,21 @@ import com.wf.captcha.SpecCaptcha;
  * @author chenjinlong
  * @date 2021/1/15 13:44
  */
-public class CaptchaService implements CaptchaApi {
+public class ImageCaptchaService implements ImageCaptchaApi {
 
     private final CacheOperatorApi<String> cacheOperatorApi;
 
-    public CaptchaService(CacheOperatorApi<String> cacheOperatorApi) {
+    public ImageCaptchaService(CacheOperatorApi<String> cacheOperatorApi) {
         this.cacheOperatorApi = cacheOperatorApi;
     }
 
     @Override
-    public EasyCaptcha captcha() {
+    public ImageCaptcha captcha() {
         SpecCaptcha specCaptcha = new SpecCaptcha(130, 48, 5);
         String verCode = specCaptcha.text().toLowerCase();
         String verKey = IdUtil.simpleUUID();
         cacheOperatorApi.put(verKey, verCode);
-        return EasyCaptcha.builder().verImage(specCaptcha.toBase64()).verKey(verKey).build();
+        return ImageCaptcha.builder().verImage(specCaptcha.toBase64()).verKey(verKey).build();
     }
 
     @Override

@@ -28,11 +28,15 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.security.api.CaptchaApi;
-import cn.stylefeng.roses.kernel.security.api.pojo.EasyCaptcha;
+import cn.stylefeng.roses.kernel.security.api.DragCaptchaApi;
+import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
+import cn.stylefeng.roses.kernel.security.api.pojo.DragCaptchaImageDTO;
+import cn.stylefeng.roses.kernel.security.api.pojo.ImageCaptcha;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+
+import static cn.stylefeng.roses.kernel.rule.constants.RuleConstants.BASE64_IMG_PREFIX;
 
 /**
  * 图形验证码
@@ -45,11 +49,34 @@ import javax.annotation.Resource;
 public class KaptchaController {
 
     @Resource
-    private CaptchaApi captchaApi;
+    private ImageCaptchaApi captchaApi;
 
-    @GetResource(name = "获取图形验证码", path = "/captcha", requiredPermission = false, requiredLogin = false, responseClass = EasyCaptcha.class)
+    @Resource
+    private DragCaptchaApi dragCaptchaApi;
+
+    /**
+     * 获取图形验证码
+     *
+     * @author fengshuonan
+     * @date 2021/7/5 12:00
+     */
+    @GetResource(name = "获取图形验证码", path = "/captcha", requiredPermission = false, requiredLogin = false, responseClass = ImageCaptcha.class)
     public ResponseData captcha() {
         return new SuccessResponseData(captchaApi.captcha());
+    }
+
+    /**
+     * 获取拖拽验证码
+     *
+     * @author fengshuonan
+     * @date 2021/7/5 12:00
+     */
+    @GetResource(name = "获取图形验证码", path = "/dragCaptcha", requiredPermission = false, requiredLogin = false, responseClass = DragCaptchaImageDTO.class)
+    public ResponseData dragCaptcha() {
+        DragCaptchaImageDTO captcha = dragCaptchaApi.createCaptcha();
+        captcha.setSrcImage(BASE64_IMG_PREFIX + captcha.getSrcImage());
+        captcha.setCutImage(BASE64_IMG_PREFIX + captcha.getCutImage());
+        return new SuccessResponseData(captcha);
     }
 
 }

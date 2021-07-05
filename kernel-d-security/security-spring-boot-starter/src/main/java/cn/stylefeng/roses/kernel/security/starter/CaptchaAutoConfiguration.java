@@ -26,8 +26,10 @@ package cn.stylefeng.roses.kernel.security.starter;
 
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kernel.security.api.CaptchaApi;
-import cn.stylefeng.roses.kernel.security.captcha.CaptchaService;
+import cn.stylefeng.roses.kernel.security.api.DragCaptchaApi;
+import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
+import cn.stylefeng.roses.kernel.security.captcha.DragCaptchaService;
+import cn.stylefeng.roses.kernel.security.captcha.ImageCaptchaService;
 import cn.stylefeng.roses.kernel.security.captcha.cache.CaptchaMemoryCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -49,12 +51,27 @@ public class CaptchaAutoConfiguration {
      * @date 2021/1/15 11:25
      */
     @Bean
-    @ConditionalOnMissingBean(CaptchaApi.class)
-    public CaptchaApi captchaApi() {
+    @ConditionalOnMissingBean(ImageCaptchaApi.class)
+    public ImageCaptchaApi captchaApi() {
         // 验证码过期时间 120秒
         TimedCache<String, String> timedCache = CacheUtil.newTimedCache(1000 * 120);
         CaptchaMemoryCache captchaMemoryCache = new CaptchaMemoryCache(timedCache);
-        return new CaptchaService(captchaMemoryCache);
+        return new ImageCaptchaService(captchaMemoryCache);
+    }
+
+    /**
+     * 拖拽验证码工具
+     *
+     * @author fengshuonan
+     * @date 2021/7/5 11:57
+     */
+    @Bean
+    @ConditionalOnMissingBean(DragCaptchaApi.class)
+    public DragCaptchaApi dragCaptchaService() {
+        // 验证码过期时间 120秒
+        TimedCache<String, String> timedCache = CacheUtil.newTimedCache(1000 * 120);
+        CaptchaMemoryCache captchaMemoryCache = new CaptchaMemoryCache(timedCache);
+        return new DragCaptchaService(captchaMemoryCache);
     }
 
 }

@@ -87,4 +87,9 @@ public interface RuleConstants {
      */
     String TENANT_DB_PREFIX = "sys_tenant_db_";
 
+    /**
+     * base64图片前缀，用在给<img src=""/>使用
+     */
+    String BASE64_IMG_PREFIX = "data:image/png;base64,";
+
 }

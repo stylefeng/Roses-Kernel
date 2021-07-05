@@ -36,7 +36,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class EasyCaptcha {
+public class ImageCaptcha {
 
     /**
      * 缓存Key

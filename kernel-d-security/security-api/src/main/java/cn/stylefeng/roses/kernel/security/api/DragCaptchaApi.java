@@ -24,44 +24,30 @@
  */
 package cn.stylefeng.roses.kernel.security.api;
 
-import cn.stylefeng.roses.kernel.security.api.pojo.EasyCaptcha;
+import cn.stylefeng.roses.kernel.security.api.pojo.DragCaptchaImageDTO;
 
 /**
- * 图形验证码Api
- * <p>
- * 开启用户登录图形验证码后获取图形验证码
+ * 拖拽验证码
  *
- * @author chenjinlong
- * @date 2021/1/15 13:46
+ * @author fengshuonan
+ * @date 2021/7/5 12:05
  */
-public interface CaptchaApi {
+public interface DragCaptchaApi {
 
     /**
-     * 生成图形验证码
+     * 生成拖拽验证码的返回值
      *
-     * @author chenjinlong
-     * @date 2021/1/15 12:38
+     * @author fengshuonan
+     * @date 2021/7/5 11:55
      */
-    EasyCaptcha captcha();
+    DragCaptchaImageDTO createCaptcha();
 
     /**
-     * 校验图形验证码
+     * 验证拖拽验证码
      *
-     * @param verKey  缓存key值
-     * @param verCode 验证码
-     * @return true-验证码正确，false-验证码错误
-     * @author chenjinlong
-     * @date 2021/1/15 12:38
+     * @author fengshuonan
+     * @date 2021/7/5 11:55
      */
-    boolean validateCaptcha(String verKey, String verCode);
-
-    /**
-     * 根据key值获取验证码
-     *
-     * @param verKey 缓存key值
-     * @author chenjinlong
-     * @date 2021/1/15 12:40
-     */
-    String getVerCode(String verKey);
+    boolean validateCaptcha(String verKey, Integer verCode);
 
 }

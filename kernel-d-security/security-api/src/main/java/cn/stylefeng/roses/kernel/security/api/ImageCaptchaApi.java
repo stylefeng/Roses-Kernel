@@ -22,40 +22,46 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.security.api.exception.enums;
+package cn.stylefeng.roses.kernel.security.api;
 
-import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
-import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
-import cn.stylefeng.roses.kernel.security.api.constants.SecurityConstants;
-import lombok.Getter;
+import cn.stylefeng.roses.kernel.security.api.pojo.ImageCaptcha;
 
 /**
- * 安全模块异常枚举
+ * 图形验证码Api
+ * <p>
+ * 开启用户登录图形验证码后获取图形验证码
  *
- * @author fengshuonan
- * @date 2021/2/19 8:46
+ * @author chenjinlong
+ * @date 2021/1/15 13:46
  */
-@Getter
-public enum SecurityExceptionEnum implements AbstractExceptionEnum {
+public interface ImageCaptchaApi {
 
     /**
-     * 生成验证码错误
+     * 生成图形验证码
+     *
+     * @author chenjinlong
+     * @date 2021/1/15 12:38
      */
-    CAPTCHA_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SecurityConstants.SECURITY_EXCEPTION_STEP_CODE + "01", "生成验证码错误");
+    ImageCaptcha captcha();
 
     /**
-     * 错误编码
+     * 校验图形验证码
+     *
+     * @param verKey  缓存key值
+     * @param verCode 验证码
+     * @return true-验证码正确，false-验证码错误
+     * @author chenjinlong
+     * @date 2021/1/15 12:38
      */
-    private final String errorCode;
+    boolean validateCaptcha(String verKey, String verCode);
 
     /**
-     * 提示用户信息
+     * 根据key值获取验证码
+     *
+     * @param verKey 缓存key值
+     * @author chenjinlong
+     * @date 2021/1/15 12:40
      */
-    private final String userTip;
-
-    SecurityExceptionEnum(String errorCode, String userTip) {
-        this.errorCode = errorCode;
-        this.userTip = userTip;
-    }
+    String getVerCode(String verKey);
 
 }

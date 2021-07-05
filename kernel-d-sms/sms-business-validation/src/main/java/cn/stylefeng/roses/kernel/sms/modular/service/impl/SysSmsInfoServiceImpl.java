@@ -31,7 +31,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.security.api.CaptchaApi;
+import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
 import cn.stylefeng.roses.kernel.sms.api.SmsSenderApi;
 import cn.stylefeng.roses.kernel.sms.api.exception.SmsException;
 import cn.stylefeng.roses.kernel.sms.api.expander.SmsConfigExpander;
@@ -75,7 +75,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
     private SmsSenderApi smsSenderApi;
 
     @Resource
-    private CaptchaApi captchaApi;
+    private ImageCaptchaApi captchaApi;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
