@@ -41,7 +41,12 @@ public enum SecurityExceptionEnum implements AbstractExceptionEnum {
     /**
      * 生成验证码错误
      */
-    CAPTCHA_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SecurityConstants.SECURITY_EXCEPTION_STEP_CODE + "01", "生成验证码错误");
+    CAPTCHA_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SecurityConstants.SECURITY_EXCEPTION_STEP_CODE + "01", "生成验证码错误"),
+
+    /**
+     * 验证码过期，请从新生成验证码
+     */
+    CAPTCHA_INVALID_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SecurityConstants.SECURITY_EXCEPTION_STEP_CODE + "02", "验证码过期，请从新生成验证码");
 
     /**
      * 错误编码

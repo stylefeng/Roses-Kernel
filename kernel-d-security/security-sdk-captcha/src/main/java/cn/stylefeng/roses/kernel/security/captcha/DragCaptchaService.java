@@ -35,6 +35,7 @@ import cn.stylefeng.roses.kernel.security.api.exception.SecurityException;
 import cn.stylefeng.roses.kernel.security.api.exception.enums.SecurityExceptionEnum;
 import cn.stylefeng.roses.kernel.security.api.pojo.DragCaptchaImageDTO;
 import cn.stylefeng.roses.kernel.security.captcha.util.DragCaptchaImageUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -45,6 +46,7 @@ import java.io.IOException;
  * @author fengshuonan
  * @date 2021/7/5 11:34
  */
+@Slf4j
 public class DragCaptchaService implements DragCaptchaApi {
 
     private final CacheOperatorApi<String> cacheOperatorApi;
@@ -57,6 +59,7 @@ public class DragCaptchaService implements DragCaptchaApi {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Base64.decode(DragCaptchaImageUtil.IMAGE_BASE64));
         try {
             DragCaptchaImageDTO dragCaptchaImageDTO = DragCaptchaImageUtil.getVerifyImage(byteArrayInputStream);
+
             // 缓存x轴坐标
             String verKey = IdUtil.simpleUUID();
             Integer verValue = dragCaptchaImageDTO.getLocationX();
@@ -82,8 +85,14 @@ public class DragCaptchaService implements DragCaptchaApi {
             return false;
         }
 
+        // 获取缓存中正确的locationX的值
+        String locationXString = cacheOperatorApi.get(verKey);
+        if (StrUtil.isEmpty(locationXString)) {
+            throw new SecurityException(SecurityExceptionEnum.CAPTCHA_INVALID_ERROR);
+        }
+
         // 获取缓存中存储的范围
-        Integer locationX = Convert.toInt(cacheOperatorApi.get(verKey));
+        Integer locationX = Convert.toInt(locationXString);
         int beginScope = locationX - 5;
         int endScope = locationX + 5;
 
