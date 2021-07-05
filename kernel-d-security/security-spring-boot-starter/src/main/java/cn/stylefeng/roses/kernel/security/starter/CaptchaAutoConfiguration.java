@@ -26,7 +26,6 @@ package cn.stylefeng.roses.kernel.security.starter;
 
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
 import cn.stylefeng.roses.kernel.security.api.CaptchaApi;
 import cn.stylefeng.roses.kernel.security.captcha.CaptchaService;
 import cn.stylefeng.roses.kernel.security.captcha.cache.CaptchaMemoryCache;
@@ -52,7 +51,8 @@ public class CaptchaAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CaptchaApi.class)
     public CaptchaApi captchaApi() {
-        TimedCache<String, String> timedCache = CacheUtil.newTimedCache(CacheConstants.NONE_EXPIRED_TIME);
+        // 验证码过期时间 120秒
+        TimedCache<String, String> timedCache = CacheUtil.newTimedCache(1000 * 120);
         CaptchaMemoryCache captchaMemoryCache = new CaptchaMemoryCache(timedCache);
         return new CaptchaService(captchaMemoryCache);
     }

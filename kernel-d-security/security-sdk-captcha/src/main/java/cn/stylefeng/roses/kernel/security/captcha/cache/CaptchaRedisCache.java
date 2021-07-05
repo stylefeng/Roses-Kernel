@@ -34,9 +34,9 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @author chenjinlong
  * @date 2021/1/15 13:44
  */
-public class CaptchaRedisCache extends AbstractRedisCacheOperator<Long> {
+public class CaptchaRedisCache extends AbstractRedisCacheOperator<String> {
 
-    public CaptchaRedisCache(RedisTemplate<String, Long> redisTemplate) {
+    public CaptchaRedisCache(RedisTemplate<String, String> redisTemplate) {
         super(redisTemplate);
     }
 
