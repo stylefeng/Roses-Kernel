@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.auth.auth;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -55,6 +56,7 @@ import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.log.api.LoginLogServiceApi;
 import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
+import cn.stylefeng.roses.kernel.security.api.DragCaptchaApi;
 import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
@@ -103,6 +105,9 @@ public class AuthServiceImpl implements AuthServiceApi {
 
     @Resource
     private ImageCaptchaApi captchaApi;
+
+    @Resource
+    private DragCaptchaApi dragCaptchaApi;
 
     @Resource
     private SsoProperties ssoProperties;
@@ -260,6 +265,19 @@ public class AuthServiceImpl implements AuthServiceApi {
             }
             if (!captchaApi.validateCaptcha(verKey, verCode)) {
                 throw new AuthException(ValidatorExceptionEnum.CAPTCHA_ERROR);
+            }
+        }
+
+        // 2.1 验证拖拽验证码
+        if (SystemConfigExpander.getDragCaptchaOpen()) {
+            String verKey = loginRequest.getVerKey();
+            String verXLocationValue = loginRequest.getVerCode();
+
+            if (StrUtil.isEmpty(verKey) || StrUtil.isEmpty(verXLocationValue)) {
+                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
+            }
+            if (!dragCaptchaApi.validateCaptcha(verKey, Convert.toInt(verXLocationValue))) {
+                throw new AuthException(ValidatorExceptionEnum.DRAG_CAPTCHA_ERROR);
             }
         }
 

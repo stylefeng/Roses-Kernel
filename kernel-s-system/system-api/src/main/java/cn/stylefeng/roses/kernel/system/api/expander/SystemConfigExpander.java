@@ -68,6 +68,16 @@ public class SystemConfigExpander {
     }
 
     /**
+     * 获取拖拽验证码的开关
+     *
+     * @author fengshuonan
+     * @date 2020/12/27 17:22
+     */
+    public static Boolean getDragCaptchaOpen() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_DRAG_CAPTCHA_OPEN", Boolean.class, SystemConstants.DEFAULT_CAPTCHA_OPEN);
+    }
+
+    /**
      * 获取系统名称
      *
      * @author fengshuonan
