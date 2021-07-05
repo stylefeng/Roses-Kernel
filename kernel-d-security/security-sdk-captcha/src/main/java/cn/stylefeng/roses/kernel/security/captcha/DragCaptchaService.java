@@ -67,7 +67,7 @@ public class DragCaptchaService implements DragCaptchaApi {
 
             // 清空x轴坐标
             dragCaptchaImageDTO.setKey(verKey);
-            dragCaptchaImageDTO.setLocationX(null);
+//            dragCaptchaImageDTO.setLocationX(null);
 
             return dragCaptchaImageDTO;
         } catch (IOException e) {
