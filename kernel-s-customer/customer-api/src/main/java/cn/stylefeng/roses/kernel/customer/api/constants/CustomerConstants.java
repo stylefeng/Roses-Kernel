@@ -47,4 +47,9 @@ public interface CustomerConstants {
      */
     String CUSTOMER_CACHE_PREFIX = "customer:";
 
+    /**
+     * 默认的空bcrypt加密的密码
+     */
+    String DEFAULT_EMPTY_PASSWORD = "-1";
+
 }

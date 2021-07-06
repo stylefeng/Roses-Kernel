@@ -15,6 +15,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.customer.api.OldPasswordValidateApi;
+import cn.stylefeng.roses.kernel.customer.api.constants.CustomerConstants;
 import cn.stylefeng.roses.kernel.customer.api.exception.CustomerException;
 import cn.stylefeng.roses.kernel.customer.api.exception.enums.CustomerExceptionEnum;
 import cn.stylefeng.roses.kernel.customer.api.expander.CustomerConfigExpander;
@@ -163,15 +164,16 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             throw new CustomerException(CustomerExceptionEnum.CANT_FIND_CUSTOMER, loginRequest.getAccount());
         }
 
-        // 校验用户密码
-        Boolean passwordFlag = passwordStoredEncryptApi.checkPassword(loginRequest.getPassword(), customer.getPassword());
-        if (!passwordFlag) {
-            // 如果开启了旧版密码校验，则再校验一次
-            if (CustomerConfigExpander.getOldPasswordValidate()) {
-                if (!oldPasswordValidateApi.validatePassword(loginRequest.getPassword(), customer.getOldPassword(), customer.getOldPasswordSalt())) {
-                    throw new AuthException(AuthExceptionEnum.USERNAME_PASSWORD_ERROR);
-                }
-            } else {
+        // 如果开启了旧版密码，并且bcrypt密码是空
+        if (CustomerConfigExpander.getOldPasswordValidate()
+                && customer.getPassword().equals(CustomerConstants.DEFAULT_EMPTY_PASSWORD)) {
+            if (!oldPasswordValidateApi.validatePassword(loginRequest.getPassword(), customer.getOldPassword(), customer.getOldPasswordSalt())) {
+                throw new AuthException(AuthExceptionEnum.USERNAME_PASSWORD_ERROR);
+            }
+        } else {
+            // 校验用户密码
+            Boolean passwordFlag = passwordStoredEncryptApi.checkPassword(loginRequest.getPassword(), customer.getPassword());
+            if (!passwordFlag) {
                 throw new AuthException(AuthExceptionEnum.USERNAME_PASSWORD_ERROR);
             }
         }
