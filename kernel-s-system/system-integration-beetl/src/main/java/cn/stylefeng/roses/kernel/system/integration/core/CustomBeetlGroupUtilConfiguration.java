@@ -3,6 +3,7 @@ package cn.stylefeng.roses.kernel.system.integration.core;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
 import cn.stylefeng.roses.kernel.i18n.util.QuickTranslateUtil;
+import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
 import cn.stylefeng.roses.kernel.system.api.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.integration.core.tag.SysDictCheckBoxTag;
 import cn.stylefeng.roses.kernel.system.integration.core.tag.SysDictRadioTag;
@@ -34,6 +35,9 @@ public class CustomBeetlGroupUtilConfiguration extends BeetlGroupUtilConfigurati
 
         // 获取基本信息的工具
         groupTemplate.registerFunctionPackage("constants", SystemConfigExpander.class);
+
+        // 获取验证码开关的工具
+        groupTemplate.registerFunctionPackage("security", SecurityConfigExpander.class);
 
         // 多语言
         groupTemplate.registerFunctionPackage("translate", QuickTranslateUtil.class);
