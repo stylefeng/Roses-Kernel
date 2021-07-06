@@ -81,4 +81,14 @@ public class CustomerConfigExpander {
         return ConfigContext.me().getSysConfigValueWithDefault("CUSTOMER_CACHE_EXPIRED_SECONDS", Long.class, 3600L);
     }
 
+    /**
+     * 是否开启旧版密码校验
+     *
+     * @author fengshuonan
+     * @date 2021/7/6 22:00
+     */
+    public static Boolean getOldPasswordValidate() {
+        return ConfigContext.me().getSysConfigValueWithDefault("CUSTOMER_OPEN_OLD_PASSWORD_VALIDATE", Boolean.class, Boolean.FALSE);
+    }
+
 }

@@ -44,6 +44,20 @@ public class Customer extends BaseEntity {
     private String password;
 
     /**
+     * 旧网站密码（可选）
+     */
+    @TableField("old_password")
+    @ChineseDescription("旧网站密码")
+    private String oldPassword;
+
+    /**
+     * 旧网站密码盐（可选）
+     */
+    @TableField("old_password_salt")
+    @ChineseDescription("旧网站密码盐")
+    private String oldPasswordSalt;
+
+    /**
      * 昵称（显示名称）
      */
     @TableField("nick_name")
