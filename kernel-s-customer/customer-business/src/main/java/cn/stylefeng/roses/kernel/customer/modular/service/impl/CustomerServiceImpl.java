@@ -102,6 +102,10 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void reg(CustomerRequest customerRequest) {
+
+        // 验证拖拽验证码
+        this.validateDragCaptcha(customerRequest.getVerKey(), customerRequest.getVerCode());
+
         synchronized (REG_LOCK) {
             // 校验邮箱和账号是否重复
             validateRepeat(customerRequest);
@@ -143,17 +147,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         loginRequest.setRememberMe(true);
 
         // 验证拖拽验证码
-        if (SecurityConfigExpander.getDragCaptchaOpen()) {
-            String verKey = loginRequest.getVerKey();
-            String verXLocationValue = loginRequest.getVerCode();
-
-            if (StrUtil.isEmpty(verKey) || StrUtil.isEmpty(verXLocationValue)) {
-                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
-            }
-            if (!dragCaptchaApi.validateCaptcha(verKey, Convert.toInt(verXLocationValue))) {
-                throw new AuthException(ValidatorExceptionEnum.DRAG_CAPTCHA_ERROR);
-            }
-        }
+        this.validateDragCaptcha(loginRequest.getVerKey(), loginRequest.getVerCode());
 
         // 查询用户信息
         LambdaQueryWrapper<Customer> wrapper = new LambdaQueryWrapper<>();
@@ -216,6 +210,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void sendResetPwdEmail(CustomerRequest customerRequest) {
+
+        // 验证拖拽验证码
+        this.validateDragCaptcha(customerRequest.getVerKey(), customerRequest.getVerCode());
 
         // 验证邮箱是否存在
         LambdaQueryWrapper<Customer> customerLambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -443,6 +440,23 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         int emailCount = this.count(emailWrapper);
         if (emailCount > 0) {
             throw new CustomerException(CustomerExceptionEnum.EMAIL_REPEAT);
+        }
+    }
+
+    /**
+     * 验证拖拽验证码是否正确
+     *
+     * @author fengshuonan
+     * @date 2021/7/6 15:07
+     */
+    private void validateDragCaptcha(String verKey, String verCode) {
+        if (SecurityConfigExpander.getDragCaptchaOpen()) {
+            if (StrUtil.isEmpty(verKey) || StrUtil.isEmpty(verCode)) {
+                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
+            }
+            if (!dragCaptchaApi.validateCaptcha(verKey, Convert.toInt(verCode))) {
+                throw new AuthException(ValidatorExceptionEnum.DRAG_CAPTCHA_ERROR);
+            }
         }
     }
 

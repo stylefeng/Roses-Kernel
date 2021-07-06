@@ -99,6 +99,16 @@ public class CustomerRequest extends BaseRequest {
     private Integer statusFlag;
 
     /**
+     * 用在图形验证码或者拖拽验证码
+     */
+    private String verKey;
+
+    /**
+     * 用在图形验证码或者拖拽验证码
+     */
+    private String verCode;
+
+    /**
      * 注册账号
      */
     public @interface reg {
