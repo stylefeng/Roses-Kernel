@@ -47,4 +47,9 @@ public interface SecurityConstants {
      */
     String DEFAULT_XSS_PATTERN = "/*";
 
+    /**
+     * 默认验证码的开关：关闭
+     */
+    Boolean DEFAULT_CAPTCHA_OPEN = false;
+
 }

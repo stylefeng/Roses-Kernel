@@ -58,9 +58,9 @@ import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.security.api.DragCaptchaApi;
 import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
+import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
-import cn.stylefeng.roses.kernel.system.api.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
 import cn.stylefeng.roses.kernel.validator.api.exception.enums.ValidatorExceptionEnum;
 import com.alibaba.fastjson.JSON;
@@ -256,7 +256,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         }
 
         // 2. 如果开启了验证码校验，则验证当前请求的验证码是否正确
-        if (SystemConfigExpander.getCaptchaOpen()) {
+        if (SecurityConfigExpander.getCaptchaOpen()) {
             String verKey = loginRequest.getVerKey();
             String verCode = loginRequest.getVerCode();
 
@@ -269,7 +269,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         }
 
         // 2.1 验证拖拽验证码
-        if (SystemConfigExpander.getDragCaptchaOpen()) {
+        if (SecurityConfigExpander.getDragCaptchaOpen()) {
             String verKey = loginRequest.getVerKey();
             String verXLocationValue = loginRequest.getVerCode();
 

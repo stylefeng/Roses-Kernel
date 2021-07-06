@@ -17,6 +17,14 @@
 
     <dependencies>
 
+        <!--安全模块api-->
+        <!--用在图形验证码-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>security-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--c端用户api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>

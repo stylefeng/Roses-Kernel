@@ -1,8 +1,10 @@
 package cn.stylefeng.roses.kernel.customer.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
@@ -38,6 +40,9 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.exception.enums.defaults.DefaultBusinessExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
+import cn.stylefeng.roses.kernel.security.api.DragCaptchaApi;
+import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
+import cn.stylefeng.roses.kernel.validator.api.exception.enums.ValidatorExceptionEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -91,6 +96,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     @Resource
     private FileInfoApi fileInfoApi;
 
+    @Resource
+    private DragCaptchaApi dragCaptchaApi;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void reg(CustomerRequest customerRequest) {
@@ -133,6 +141,19 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         // 不创建cookie，默认开启记住我（7天会话）
         loginRequest.setCreateCookie(false);
         loginRequest.setRememberMe(true);
+
+        // 验证拖拽验证码
+        if (SecurityConfigExpander.getDragCaptchaOpen()) {
+            String verKey = loginRequest.getVerKey();
+            String verXLocationValue = loginRequest.getVerCode();
+
+            if (StrUtil.isEmpty(verKey) || StrUtil.isEmpty(verXLocationValue)) {
+                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
+            }
+            if (!dragCaptchaApi.validateCaptcha(verKey, Convert.toInt(verXLocationValue))) {
+                throw new AuthException(ValidatorExceptionEnum.DRAG_CAPTCHA_ERROR);
+            }
+        }
 
         // 查询用户信息
         LambdaQueryWrapper<Customer> wrapper = new LambdaQueryWrapper<>();
