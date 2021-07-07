@@ -109,6 +109,9 @@
         <!-- Socket模块 -->
         <module>kernel-d-socket</module>
 
+        <!-- 数据迁移模块 -->
+        <module>kernel-s-migration</module>
+
     </modules>
 
     <properties>
