@@ -33,6 +33,8 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+
 /**
  * druid监控的自动配置类
  *
@@ -82,6 +84,17 @@ public class GunsDruidMonitorAutoConfiguration {
         }
         registrationBean.addInitParameter("profileEnable", DruidConfigExpander.getDruidAdminWebStatFilterProfileEnable());
         return registrationBean;
+    }
+
+    /**
+     * 解决druid discard long time none received connection问题
+     *
+     * @author fengshuonan
+     * @date 2021/7/7 14:15
+     */
+    @PostConstruct
+    public void setProperties() {
+        System.setProperty("druid.mysql.usePingMethod", "false");
     }
 
 }
