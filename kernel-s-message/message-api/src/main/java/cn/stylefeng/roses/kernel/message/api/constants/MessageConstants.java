@@ -50,6 +50,6 @@ public interface MessageConstants {
     /**
      * 默认websocket-url
      */
-    String DEFAULT_WS_URL = "ws://localhost:8080/message/websocket/{userId}";
+    String DEFAULT_WS_URL = "ws://localhost:8080/webSocket/{token}";
 
 }
