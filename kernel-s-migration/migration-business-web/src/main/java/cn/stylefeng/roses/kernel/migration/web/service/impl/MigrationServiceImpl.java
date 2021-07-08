@@ -1,19 +1,15 @@
 package cn.stylefeng.roses.kernel.migration.web.service.impl;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.URLUtil;
 import cn.stylefeng.roses.kernel.migration.aggregation.scheduling.SchedulingCenter;
 import cn.stylefeng.roses.kernel.migration.api.constants.MigrationConstants;
 import cn.stylefeng.roses.kernel.migration.api.pojo.MigrationAggregationPOJO;
 import cn.stylefeng.roses.kernel.migration.web.pojo.MigrationRequest;
 import cn.stylefeng.roses.kernel.migration.web.service.MigrationService;
-import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -80,7 +76,7 @@ public class MigrationServiceImpl implements MigrationService {
     }
 
     @Override
-    public void restoreData(MultipartFile file,String type) {
+    public void restoreData(MultipartFile file, String type) {
         String jsonStr = null;
         try {
             // 转换文件为String类型
@@ -90,7 +86,7 @@ public class MigrationServiceImpl implements MigrationService {
             MigrationAggregationPOJO migrationAggregationPOJO = JSON.parseObject(jsonStr, MigrationAggregationPOJO.class);
 
             // 交给调度中心去调度
-            SchedulingCenter.importData(migrationAggregationPOJO,type);
+            SchedulingCenter.importData(migrationAggregationPOJO, type);
         } catch (IOException e) {
             e.printStackTrace();
         }
