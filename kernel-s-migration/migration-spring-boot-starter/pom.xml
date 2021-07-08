@@ -16,14 +16,7 @@
 
     <dependencies>
 
-        <!--migration模块的SDK-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>migration-sdk-data-aggregation</artifactId>
-            <version>${roses.version}</version>
-        </dependency>
-
-        <!--migration模块的业务-->
+        <!--migration的业务模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>migration-business-web</artifactId>

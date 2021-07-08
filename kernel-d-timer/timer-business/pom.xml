@@ -64,6 +64,13 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--迁移模块的sdk-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>migration-sdk-data-aggregation</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--web模块-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.migration.web.controller;
 
-import cn.stylefeng.roses.kernel.migration.aggregation.scheduling.SchedulingCenter;
 import cn.stylefeng.roses.kernel.migration.api.pojo.MigrationAggregationPOJO;
 import cn.stylefeng.roses.kernel.migration.web.pojo.MigrationRequest;
 import cn.stylefeng.roses.kernel.migration.web.service.MigrationService;

@@ -16,15 +16,15 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!--auth模块的api-->
-        <!--记录日志时候，有可能需要记录当前登录用户id-->
-        <!--如果不要记录当前登录用户id时就不用本模块，所以optional=true-->
+
+        <!--参数校验模块-->
+        <!--用在控制器，参数校验-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>auth-api</artifactId>
+            <artifactId>validator-api</artifactId>
             <version>${roses.version}</version>
-            <optional>true</optional>
         </dependency>
+
     </dependencies>
 
 </project>
