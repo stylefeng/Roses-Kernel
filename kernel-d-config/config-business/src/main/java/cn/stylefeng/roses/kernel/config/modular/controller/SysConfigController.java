@@ -145,6 +145,17 @@ public class SysConfigController {
         return new SuccessResponseData();
     }
 
+    /**
+     * 获取需要初始化的配置列表
+     *
+     * @author fengshuonan
+     * @date 2021/7/8 16:36
+     */
+    @GetResource(name = "获取需要初始化的配置列表", path = "/sysConfig/getInitConfigList")
+    public ResponseData getInitConfigList() {
+        return new SuccessResponseData(sysConfigService.getInitConfigs());
+    }
+
 }
 
 

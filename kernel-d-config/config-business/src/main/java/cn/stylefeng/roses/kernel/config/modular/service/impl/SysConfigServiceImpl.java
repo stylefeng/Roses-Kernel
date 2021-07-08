@@ -28,9 +28,11 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.config.api.ConfigInitStrategyApi;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
 import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
+import cn.stylefeng.roses.kernel.config.api.pojo.ConfigInitItem;
 import cn.stylefeng.roses.kernel.config.api.pojo.ConfigInitRequest;
 import cn.stylefeng.roses.kernel.config.modular.entity.SysConfig;
 import cn.stylefeng.roses.kernel.config.modular.mapper.SysConfigMapper;
@@ -48,6 +50,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +62,9 @@ import java.util.Map;
  */
 @Service
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig> implements SysConfigService {
+
+    @Resource
+    private ConfigInitStrategyApi configInitStrategyApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -187,6 +193,11 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
                 return Convert.toBool(sysConfig.getConfigValue());
             }
         }
+    }
+
+    @Override
+    public List<ConfigInitItem> getInitConfigs() {
+        return configInitStrategyApi.getInitConfigs();
     }
 
     /**

@@ -22,33 +22,27 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.config.starter;
+package cn.stylefeng.roses.kernel.config.api;
 
-import cn.stylefeng.roses.kernel.config.api.ConfigInitStrategyApi;
-import cn.stylefeng.roses.kernel.config.modular.strategy.DefaultStrategyImpl;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import cn.stylefeng.roses.kernel.config.api.pojo.ConfigInitItem;
+
+import java.util.List;
 
 /**
- * 系统配置模块的自动配置类
+ * 配置初始化的策略
  *
  * @author fengshuonan
- * @date 2020/11/30 22:24
+ * @date 2021/7/8 17:33
  */
-@Configuration
-public class GunsSysConfigAutoConfiguration {
+public interface ConfigInitStrategyApi {
 
     /**
-     * 默认的配置初始化api
+     * 获取需要被初始化的配置集合
      *
+     * @return 需要被初始化的配置集合
      * @author fengshuonan
-     * @date 2021/7/8 17:48
+     * @date 2021/7/8 17:40
      */
-    @Bean
-    @ConditionalOnMissingBean(ConfigInitStrategyApi.class)
-    public ConfigInitStrategyApi configInitStrategyApi() {
-        return new DefaultStrategyImpl();
-    }
+    List<ConfigInitItem> getInitConfigs();
 
 }

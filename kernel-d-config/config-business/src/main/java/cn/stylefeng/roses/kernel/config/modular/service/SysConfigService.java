@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.config.modular.service;
 
+import cn.stylefeng.roses.kernel.config.api.pojo.ConfigInitItem;
 import cn.stylefeng.roses.kernel.config.api.pojo.ConfigInitRequest;
 import cn.stylefeng.roses.kernel.config.modular.entity.SysConfig;
 import cn.stylefeng.roses.kernel.config.modular.param.SysConfigParam;
@@ -113,5 +114,13 @@ public interface SysConfigService extends IService<SysConfig> {
      * @date 2021/7/8 17:20
      */
     Boolean getInitConfigFlag();
+
+    /**
+     * 获取初始化的配置列表
+     *
+     * @author fengshuonan
+     * @date 2021/7/8 17:49
+     */
+    List<ConfigInitItem> getInitConfigs();
 
 }
