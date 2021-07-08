@@ -92,4 +92,9 @@ public interface RuleConstants {
      */
     String BASE64_IMG_PREFIX = "data:image/png;base64,";
 
+    /**
+     * 系统配置初始化的标识的常量名称，用在sys_config表作为config_code
+     */
+    String SYSTEM_CONFIG_INIT_FLAG_NAME = "SYS_CONFIG_INIT_FLAG";
+
 }

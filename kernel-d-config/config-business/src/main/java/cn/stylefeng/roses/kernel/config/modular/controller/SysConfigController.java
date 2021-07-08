@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.config.modular.controller;
 
+import cn.stylefeng.roses.kernel.config.api.pojo.ConfigInitRequest;
 import cn.stylefeng.roses.kernel.config.modular.param.SysConfigParam;
 import cn.stylefeng.roses.kernel.config.modular.service.SysConfigService;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
@@ -119,6 +120,29 @@ public class SysConfigController {
     @GetResource(name = "系统参数配置列表", path = "/sysConfig/list")
     public ResponseData list(SysConfigParam sysConfigParam) {
         return new SuccessResponseData(sysConfigService.findList(sysConfigParam));
+    }
+
+    /**
+     * 获取系统配置是否初始化的标志
+     *
+     * @author fengshuonan
+     * @date 2021/7/8 17:20
+     */
+    @GetResource(name = "获取系统配置是否初始化的标志", path = "/sysConfig/getInitConfigFlag")
+    public ResponseData getInitConfigFlag() {
+        return new SuccessResponseData(sysConfigService.getInitConfigFlag());
+    }
+
+    /**
+     * 初始化系统配置参数，用在系统第一次登录时
+     *
+     * @author fengshuonan
+     * @date 2021/7/8 16:36
+     */
+    @PostResource(name = "初始化系统配置参数，用在系统第一次登录时", path = "/sysConfig/initConfig")
+    public ResponseData initConfig(@RequestBody ConfigInitRequest configInitRequest) {
+        sysConfigService.initConfig(configInitRequest);
+        return new SuccessResponseData();
     }
 
 }

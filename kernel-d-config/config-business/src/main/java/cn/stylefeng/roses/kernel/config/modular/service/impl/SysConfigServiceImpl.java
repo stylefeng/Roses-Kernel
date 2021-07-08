@@ -25,11 +25,13 @@
 package cn.stylefeng.roses.kernel.config.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
 import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
+import cn.stylefeng.roses.kernel.config.api.pojo.ConfigInitRequest;
 import cn.stylefeng.roses.kernel.config.modular.entity.SysConfig;
 import cn.stylefeng.roses.kernel.config.modular.mapper.SysConfigMapper;
 import cn.stylefeng.roses.kernel.config.modular.param.SysConfigParam;
@@ -37,6 +39,7 @@ import cn.stylefeng.roses.kernel.config.modular.service.SysConfigService;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -46,6 +49,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统参数配置service接口实现类
@@ -132,6 +136,57 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public List<SysConfig> findList(SysConfigParam sysConfigParam) {
         LambdaQueryWrapper<SysConfig> wrapper = createWrapper(sysConfigParam);
         return this.list(wrapper);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void initConfig(ConfigInitRequest configInitRequest) {
+
+        if (configInitRequest == null || configInitRequest.getSysConfigs() == null) {
+            throw new ConfigException(ConfigExceptionEnum.CONFIG_INIT_ERROR);
+        }
+
+        // 添加系统已经初始化的配置
+        Map<String, String> sysConfigs = configInitRequest.getSysConfigs();
+        sysConfigs.put(RuleConstants.SYSTEM_CONFIG_INIT_FLAG_NAME, "true");
+
+        // 针对每个配置执行更新库和刷新缓存的操作
+        for (Map.Entry<String, String> entry : sysConfigs.entrySet()) {
+            String configCode = entry.getKey();
+            String configValue = entry.getValue();
+
+            // 获取库数据库这条记录
+            LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(SysConfig::getConfigCode, configCode);
+            SysConfig sysConfig = this.getOne(wrapper, false);
+            if (sysConfig == null) {
+                continue;
+            }
+            sysConfig.setConfigValue(configValue);
+            this.updateById(sysConfig);
+
+            // 更新缓存
+            ConfigContext.me().putConfig(configCode, configValue);
+        }
+    }
+
+    @Override
+    public Boolean getInitConfigFlag() {
+        LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysConfig::getConfigCode, RuleConstants.SYSTEM_CONFIG_INIT_FLAG_NAME);
+        SysConfig sysConfig = this.getOne(wrapper, false);
+
+        // 配置为空，还没初始化
+        if (sysConfig == null) {
+            return true;
+        } else {
+            String configValue = sysConfig.getConfigValue();
+            if (StrUtil.isEmpty(configValue)) {
+                return true;
+            } else {
+                return Convert.toBool(sysConfig.getConfigValue());
+            }
+        }
     }
 
     /**

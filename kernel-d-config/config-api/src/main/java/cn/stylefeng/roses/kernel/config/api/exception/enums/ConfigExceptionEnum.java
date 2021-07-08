@@ -85,7 +85,12 @@ public enum ConfigExceptionEnum implements AbstractExceptionEnum {
     /**
      * 配置容器是空，请先初始化配置容器
      */
-    CONFIG_CONTAINER_IS_NULL(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ConfigConstants.CONFIG_EXCEPTION_STEP_CODE + "10", "配置容器为空，请先初始化配置容器，请调用ConfigContext.setConfigApi()初始化");
+    CONFIG_CONTAINER_IS_NULL(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ConfigConstants.CONFIG_EXCEPTION_STEP_CODE + "10", "配置容器为空，请先初始化配置容器，请调用ConfigContext.setConfigApi()初始化"),
+
+    /**
+     * 初始化配置失败，参数为空
+     */
+    CONFIG_INIT_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ConfigConstants.CONFIG_EXCEPTION_STEP_CODE + "11", "初始化配置失败，参数为空");
 
     /**
      * 错误编码

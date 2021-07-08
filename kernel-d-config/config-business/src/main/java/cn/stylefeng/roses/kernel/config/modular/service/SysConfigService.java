@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.config.modular.service;
 
+import cn.stylefeng.roses.kernel.config.api.pojo.ConfigInitRequest;
 import cn.stylefeng.roses.kernel.config.modular.entity.SysConfig;
 import cn.stylefeng.roses.kernel.config.modular.param.SysConfigParam;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -95,5 +96,22 @@ public interface SysConfigService extends IService<SysConfig> {
      * @date 2020/4/14 11:14
      */
     List<SysConfig> findList(SysConfigParam sysConfigParam);
+
+    /**
+     * 初始化配置参数
+     *
+     * @author fengshuonan
+     * @date 2021/7/8 16:48
+     */
+    void initConfig(ConfigInitRequest configInitRequest);
+
+    /**
+     * 获取配置是否初始化的标志
+     *
+     * @return true-系统已经初始化，false-系统没有初始化
+     * @author fengshuonan
+     * @date 2021/7/8 17:20
+     */
+    Boolean getInitConfigFlag();
 
 }
