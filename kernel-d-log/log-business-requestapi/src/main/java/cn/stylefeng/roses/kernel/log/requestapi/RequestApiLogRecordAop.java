@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.log.requestapi;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.log.api.LogRecordApi;
 import cn.stylefeng.roses.kernel.log.api.constants.LogConstants;
 import cn.stylefeng.roses.kernel.log.api.constants.LogFileConstants;
@@ -84,15 +85,16 @@ public class RequestApiLogRecordAop implements Ordered {
         Object result = point.proceed();
 
         try {
+            if (ObjectUtil.isNotEmpty(result)) {
+                // 获取接口上@PostResource或者@GetResource的name属性和requiredLogin属性
+                Map<String, Object> annotationProp = getAnnotationProp(point);
 
-            // 获取接口上@PostResource或者@GetResource的name属性和requiredLogin属性
-            Map<String, Object> annotationProp = getAnnotationProp(point);
+                // 获取字段的名
+                Map<String, Object> args = getFieldsName(point);
 
-            // 获取字段的名
-            Map<String, Object> args = getFieldsName(point);
-
-            // 记录日志
-            recordLog(args, result, annotationProp);
+                // 记录日志
+                recordLog(args, result, annotationProp);
+            }
         } catch (Exception e) {
             log.error("日志记录没有记录成功！", e);
         }
@@ -109,7 +111,7 @@ public class RequestApiLogRecordAop implements Ordered {
      * @date 2020/12/22 21:18
      */
     private Map<String, Object> getAnnotationProp(ProceedingJoinPoint joinPoint) {
-        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
         Method method = methodSignature.getMethod();
 
         // 通过map封装参数和参数值，key参数名，value是参数值
@@ -224,7 +226,7 @@ public class RequestApiLogRecordAop implements Ordered {
                 // 解决上传文件接口aop记录日志报错
                 if (args[i] instanceof MultipartFile && args[i] != null) {
                     // 根据参数名只记录文件名
-                    paramMap.put(parameterNames[i], ((MultipartFile) args[i]).getOriginalFilename());
+                    paramMap.put(parameterNames[i], ((MultipartFile)args[i]).getOriginalFilename());
                 } else {
                     paramMap.put(parameterNames[i], args[i]);
                 }
@@ -243,7 +245,7 @@ public class RequestApiLogRecordAop implements Ordered {
             for (int i = 0; i < args.length; i++) {
                 if (args[i] instanceof MultipartFile && args[i] != null) {
                     // 根据参数名只记录文件名
-                    paramMap.put("args" + i, ((MultipartFile) args[i]).getOriginalFilename());
+                    paramMap.put("args" + i, ((MultipartFile)args[i]).getOriginalFilename());
                 } else {
                     paramMap.put("args" + i, args[i]);
                 }
