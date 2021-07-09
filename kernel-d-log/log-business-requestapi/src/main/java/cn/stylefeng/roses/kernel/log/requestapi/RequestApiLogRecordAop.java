@@ -48,6 +48,8 @@ import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,6 +93,9 @@ public class RequestApiLogRecordAop implements Ordered {
 
                 // 获取字段的名
                 Map<String, Object> args = getFieldsName(point);
+
+                // 删除Request和Response
+                args.entrySet().removeIf(objectEntry -> objectEntry.getValue() instanceof HttpServletRequest || objectEntry.getValue() instanceof HttpServletResponse);
 
                 // 记录日志
                 recordLog(args, result, annotationProp);
