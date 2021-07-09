@@ -152,6 +152,15 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             throw new ConfigException(ConfigExceptionEnum.CONFIG_INIT_ERROR);
         }
 
+        // 如果当前已经初始化过配置，则不能初始化
+        LambdaQueryWrapper<SysConfig> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(SysConfig::getConfigCode, RuleConstants.SYSTEM_CONFIG_INIT_FLAG_NAME);
+        SysConfig tempSysConfig = this.getOne(lambdaQueryWrapper, false);
+        String alreadyInit = tempSysConfig.getConfigValue();
+        if (Convert.toBool(alreadyInit)) {
+            throw new ConfigException(ConfigExceptionEnum.CONFIG_INIT_ALREADY);
+        }
+
         // 添加系统已经初始化的配置
         Map<String, String> sysConfigs = configInitRequest.getSysConfigs();
         sysConfigs.put(RuleConstants.SYSTEM_CONFIG_INIT_FLAG_NAME, "true");

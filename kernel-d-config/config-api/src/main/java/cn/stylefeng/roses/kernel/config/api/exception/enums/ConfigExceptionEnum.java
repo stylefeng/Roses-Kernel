@@ -90,7 +90,12 @@ public enum ConfigExceptionEnum implements AbstractExceptionEnum {
     /**
      * 初始化配置失败，参数为空
      */
-    CONFIG_INIT_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ConfigConstants.CONFIG_EXCEPTION_STEP_CODE + "11", "初始化配置失败，参数为空");
+    CONFIG_INIT_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ConfigConstants.CONFIG_EXCEPTION_STEP_CODE + "11", "初始化配置失败，参数为空"),
+
+    /**
+     * 初始化配置失败，系统已经初始化
+     */
+    CONFIG_INIT_ALREADY(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ConfigConstants.CONFIG_EXCEPTION_STEP_CODE + "12", "初始化配置失败，系统配置已经初始化");
 
     /**
      * 错误编码
