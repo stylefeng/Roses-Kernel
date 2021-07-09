@@ -244,7 +244,6 @@ public class RequestApiLogRecordAop implements Ordered {
             if (log.isDebugEnabled()) {
                 e.printStackTrace();
             }
-            log.error(e.getMessage());
 
             // 有异常则不显示参数名称直接返回参数
             for (int i = 0; i < args.length; i++) {
