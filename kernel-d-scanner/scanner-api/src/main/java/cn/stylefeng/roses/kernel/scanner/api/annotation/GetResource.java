@@ -41,7 +41,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@RequestMapping(method = RequestMethod.POST)
+@RequestMapping(method = RequestMethod.GET)
 public @interface GetResource {
 
     /**
