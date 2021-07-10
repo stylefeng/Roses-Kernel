@@ -109,8 +109,8 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/3/17 17:24
      */
-    @ApiResource(name = "登出", path = "/logout", requiredPermission = false, method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseData logoutPage() {
+    @ApiResource(name = "登出", path = "/logoutAction", requiredPermission = false, method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseData logoutAction() {
         authServiceApi.logout();
         return new SuccessResponseData();
     }
