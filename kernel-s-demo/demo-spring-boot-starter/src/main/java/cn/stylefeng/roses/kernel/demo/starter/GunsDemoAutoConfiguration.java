@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.demo.starter;
 
 import cn.stylefeng.roses.kernel.demo.interceptor.DemoProfileSqlInterceptor;
 import cn.stylefeng.roses.kernel.demo.util.StartCalcUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,6 +41,9 @@ import java.util.Date;
 @Configuration
 public class GunsDemoAutoConfiguration {
 
+    @Value("${project.start.interval:20}")
+    private Integer projectStartInterval;
+
     /**
      * 演示环境的sql拦截器
      *
@@ -49,7 +53,7 @@ public class GunsDemoAutoConfiguration {
     @Bean
     public DemoProfileSqlInterceptor demoProfileSqlInterceptor() {
         StartCalcUtil.init(new Date());
-        return new DemoProfileSqlInterceptor();
+        return new DemoProfileSqlInterceptor(projectStartInterval);
     }
 
 }

@@ -19,11 +19,6 @@ public class StartCalcUtil {
     public static Date startDate = null;
 
     /**
-     * 项目启动时间预估
-     */
-    public static final long startInterValSeconds = 20;
-
-    /**
      * 初始化项目开始时间
      *
      * @author fengshuonan
@@ -39,7 +34,7 @@ public class StartCalcUtil {
      * @author fengshuonan
      * @date 2021/7/13 17:43
      */
-    public static boolean calcEnable(Date date) {
+    public static boolean calcEnable(Date date, long startInterValSeconds) {
         return DateUtil.between(startDate, date, DateUnit.SECOND) > startInterValSeconds;
     }
 

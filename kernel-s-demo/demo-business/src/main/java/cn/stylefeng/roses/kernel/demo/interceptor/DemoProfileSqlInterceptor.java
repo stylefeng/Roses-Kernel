@@ -54,6 +54,15 @@ import java.util.Date;
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class DemoProfileSqlInterceptor implements Interceptor {
 
+    /**
+     * 系统启动预估时间
+     */
+    private final int projectStartInterval;
+
+    public DemoProfileSqlInterceptor(int projectStartInterval) {
+        this.projectStartInterval = projectStartInterval;
+    }
+
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
 
@@ -63,7 +72,7 @@ public class DemoProfileSqlInterceptor implements Interceptor {
         }
 
         // 如果是演示环境，并且项目还没起来，则直接放过sql
-        if (DemoConfigExpander.getDemoEnvFlag() && !StartCalcUtil.calcEnable(new Date())) {
+        if (DemoConfigExpander.getDemoEnvFlag() && !StartCalcUtil.calcEnable(new Date(), projectStartInterval)) {
             return invocation.proceed();
         }
 
