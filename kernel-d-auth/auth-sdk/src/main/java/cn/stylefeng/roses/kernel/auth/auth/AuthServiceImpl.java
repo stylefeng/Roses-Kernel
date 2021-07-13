@@ -181,10 +181,14 @@ public class AuthServiceImpl implements AuthServiceApi {
     @Override
     public void logout() {
         String token = LoginContext.me().getToken();
-        //退出日志
-        if (StrUtil.isNotEmpty(token)) {
-            loginLogServiceApi.loginOutSuccess(LoginContext.me().getLoginUser().getUserId());
+
+        // 演示环境，不记录退出日志
+        if(!DemoConfigExpander.getDemoEnvFlag()){
+            if (StrUtil.isNotEmpty(token)) {
+                loginLogServiceApi.loginOutSuccess(LoginContext.me().getLoginUser().getUserId());
+            }
         }
+
         logoutWithToken(token);
         sessionManagerApi.destroySessionCookie();
 
