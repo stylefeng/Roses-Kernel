@@ -25,10 +25,11 @@
 package cn.stylefeng.roses.kernel.demo.starter;
 
 import cn.stylefeng.roses.kernel.demo.interceptor.DemoProfileSqlInterceptor;
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import cn.stylefeng.roses.kernel.demo.util.StartCalcUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Date;
 
 /**
  * 演示环境的自动配置
@@ -37,7 +38,6 @@ import org.springframework.context.annotation.Configuration;
  * @date 2020/12/1 21:51
  */
 @Configuration
-@AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
 public class GunsDemoAutoConfiguration {
 
     /**
@@ -48,6 +48,7 @@ public class GunsDemoAutoConfiguration {
      */
     @Bean
     public DemoProfileSqlInterceptor demoProfileSqlInterceptor() {
+        StartCalcUtil.init(new Date());
         return new DemoProfileSqlInterceptor();
     }
 

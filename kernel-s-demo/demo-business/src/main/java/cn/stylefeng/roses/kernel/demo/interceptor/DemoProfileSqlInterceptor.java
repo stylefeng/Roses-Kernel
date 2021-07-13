@@ -28,6 +28,7 @@ import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.demo.exception.DemoException;
 import cn.stylefeng.roses.kernel.demo.exception.enums.DemoExceptionEnum;
 import cn.stylefeng.roses.kernel.demo.expander.DemoConfigExpander;
+import cn.stylefeng.roses.kernel.demo.util.StartCalcUtil;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import org.apache.ibatis.executor.statement.StatementHandler;
@@ -42,6 +43,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.util.AntPathMatcher;
 
 import java.sql.Connection;
+import java.util.Date;
 
 /**
  * 演示环境的sql过滤器，只放开select语句，其他语句都不放过
@@ -57,6 +59,11 @@ public class DemoProfileSqlInterceptor implements Interceptor {
 
         // 演示环境没开，直接跳过此过滤器
         if (!DemoConfigExpander.getDemoEnvFlag()) {
+            return invocation.proceed();
+        }
+
+        // 如果是演示环境，并且项目还没起来，则直接放过sql
+        if (DemoConfigExpander.getDemoEnvFlag() && !StartCalcUtil.calcEnable(new Date())) {
             return invocation.proceed();
         }
 
