@@ -25,6 +25,9 @@
 package cn.stylefeng.roses.kernel.system.modular.user.controller;
 
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
+import cn.stylefeng.roses.kernel.demo.exception.DemoException;
+import cn.stylefeng.roses.kernel.demo.exception.enums.DemoExceptionEnum;
+import cn.stylefeng.roses.kernel.demo.expander.DemoConfigExpander;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -61,7 +64,7 @@ public class OnlineUserController {
      * @author fengshuonan
      * @date 2021/1/11 22:53
      */
-    @GetResource(name = "当前在线用户列表", path = "/sysUser/onlineUserList",responseClass = OnlineUserDTO.class)
+    @GetResource(name = "当前在线用户列表", path = "/sysUser/onlineUserList", responseClass = OnlineUserDTO.class)
     public ResponseData onlineUserList(OnlineUserRequest onlineUserRequest) {
         return new SuccessResponseData(sysUserService.onlineUserList(onlineUserRequest));
     }
@@ -74,6 +77,9 @@ public class OnlineUserController {
      */
     @PostResource(name = "踢掉在线用户", path = "/sysUser/removeSession")
     public ResponseData removeSession(@Valid @RequestBody OnlineUserRequest onlineUserRequest) {
+        if (DemoConfigExpander.getDemoEnvFlag()) {
+            throw new DemoException(DemoExceptionEnum.DEMO_OPERATE);
+        }
         sessionManagerApi.removeSession(onlineUserRequest.getToken());
         return new SuccessResponseData();
     }
