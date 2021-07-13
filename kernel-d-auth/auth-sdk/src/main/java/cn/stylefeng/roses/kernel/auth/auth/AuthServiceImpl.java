@@ -47,6 +47,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginWithTokenRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import cn.stylefeng.roses.kernel.demo.expander.DemoConfigExpander;
 import cn.stylefeng.roses.kernel.jwt.JwtTokenOperator;
 import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
 import cn.stylefeng.roses.kernel.jwt.api.exception.JwtException;
@@ -332,12 +333,15 @@ public class AuthServiceImpl implements AuthServiceApi {
             }
         }
 
-        // 12. 更新用户登录时间和ip
-        String ip = HttpServletUtil.getRequestClientIp(HttpServletUtil.getRequest());
-        userServiceApi.updateUserLoginInfo(loginUser.getUserId(), new Date(), ip);
+        // 演示环境，跳过记录日志
+        if (!DemoConfigExpander.getDemoEnvFlag()) {
+            // 12. 更新用户登录时间和ip
+            String ip = HttpServletUtil.getRequestClientIp(HttpServletUtil.getRequest());
+            userServiceApi.updateUserLoginInfo(loginUser.getUserId(), new Date(), ip);
 
-        // 13.登录成功日志
-        loginLogServiceApi.loginSuccess(loginUser.getUserId());
+            // 13.登录成功日志
+            loginLogServiceApi.loginSuccess(loginUser.getUserId());
+        }
 
         // 14. 组装返回结果
         return new LoginResponse(loginUser, jwtToken, defaultJwtPayload.getExpirationDate());

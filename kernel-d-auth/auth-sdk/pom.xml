@@ -17,6 +17,13 @@
 
     <dependencies>
 
+        <!--demo api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>demo-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--auth本模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
