@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.auth.api.pojo.auth;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
@@ -74,7 +75,7 @@ public class LoginResponse {
      * @date 2021/5/25 22:31
      */
     public LoginResponse(LoginUser loginUser, String token, Long expireAt) {
-        this.loginUser = loginUser;
+        this.loginUser = uselessFilter(loginUser);
         this.token = token;
         this.expireAt = expireAt;
     }
@@ -88,6 +89,23 @@ public class LoginResponse {
     public LoginResponse(String loginCode) {
         this.ssoLogin = true;
         this.ssoLoginCode = loginCode;
+    }
+
+    /**
+     * 过滤无用的用户信息返回给登录用户
+     *
+     * @author fengshuonan
+     * @date 2021/7/13 11:23
+     */
+    private LoginUser uselessFilter(LoginUser loginUser) {
+        LoginUser tempUser = new LoginUser();
+        BeanUtil.copyProperties(loginUser, tempUser);
+
+        // 过滤一些内容
+        tempUser.setDataScopeTypeEnums(null);
+        tempUser.setResourceUrls(null);
+        tempUser.setToken(null);
+        return tempUser;
     }
 
 }
