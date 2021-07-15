@@ -44,4 +44,10 @@ public interface SymbolConstant {
 
     String AND = "&";
 
+    String POINT = ".";
+
+    String SLASH = "/";
+    
+    String BACK_SLASH = "\\";
+
 }
