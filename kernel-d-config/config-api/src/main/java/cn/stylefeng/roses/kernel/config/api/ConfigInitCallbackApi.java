@@ -22,17 +22,33 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.config.starter;
-
-import org.springframework.context.annotation.Configuration;
+package cn.stylefeng.roses.kernel.config.api;
 
 /**
- * 系统配置模块的自动配置类
+ * 配置初始化回调
  *
- * @author fengshuonan
- * @date 2020/11/30 22:24
+ * @author majianguo
+ * @date 2021/7/17 11:52
  */
-@Configuration
-public class GunsSysConfigAutoConfiguration {
+public interface ConfigInitCallbackApi {
 
+    /**
+     * 初始化之前回调
+     * <p>
+     * 其他组件可以在配置初始化之前干一些事情，如生成配置文件等操作
+     *
+     * @author majianguo
+     * @date 2021/7/17 11:54
+     **/
+    void initBefore();
+
+    /**
+     * 初始化之后回调
+     * <p>
+     * 其他组件可以在配置初始化之前干一些事情,如重新配置等操作
+     *
+     * @author majianguo
+     * @date 2021/7/17 11:55
+     **/
+    void initAfter();
 }

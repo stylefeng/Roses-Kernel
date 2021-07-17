@@ -28,6 +28,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import cn.stylefeng.roses.kernel.config.api.ConfigInitCallbackApi;
 import cn.stylefeng.roses.kernel.config.api.ConfigInitStrategyApi;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
@@ -50,7 +52,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -62,9 +64,6 @@ import java.util.Map;
  */
 @Service
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig> implements SysConfigService {
-
-    @Resource
-    private ConfigInitStrategyApi configInitStrategyApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -161,6 +160,16 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             throw new ConfigException(ConfigExceptionEnum.CONFIG_INIT_ALREADY);
         }
 
+        // 获取初始化回调接口的所有实现类
+        Map<String, ConfigInitCallbackApi> beans = SpringUtil.getBeansOfType(ConfigInitCallbackApi.class);
+
+        // 调用初始化之前回调
+        if (ObjectUtil.isNotNull(beans)) {
+            for (ConfigInitCallbackApi initCallbackApi : beans.values()) {
+                initCallbackApi.initBefore();
+            }
+        }
+
         // 添加系统已经初始化的配置
         Map<String, String> sysConfigs = configInitRequest.getSysConfigs();
         sysConfigs.put(RuleConstants.SYSTEM_CONFIG_INIT_FLAG_NAME, "true");
@@ -182,6 +191,13 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
             // 更新缓存
             ConfigContext.me().putConfig(configCode, configValue);
+        }
+
+        // 调用初始化之后回调
+        if (ObjectUtil.isNotNull(beans)) {
+            for (ConfigInitCallbackApi initCallbackApi : beans.values()) {
+                initCallbackApi.initAfter();
+            }
         }
     }
 
@@ -206,7 +222,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     @Override
     public List<ConfigInitItem> getInitConfigs() {
-        return configInitStrategyApi.getInitConfigs();
+        List<ConfigInitItem> configInitItemList = new ArrayList<>();
+        Map<String, ConfigInitStrategyApi> beans = SpringUtil.getBeansOfType(ConfigInitStrategyApi.class);
+        for (ConfigInitStrategyApi value : beans.values()) {
+            configInitItemList.addAll(value.getInitConfigs());
+        }
+        return configInitItemList;
     }
 
     /**
