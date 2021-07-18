@@ -54,6 +54,11 @@ public class CustomerInfo {
     private Integer score;
 
     /**
+     * 是否是会员
+     */
+    private Boolean memberFlag;
+
+    /**
      * 会员截止日期，到期时间
      */
     private Date memberExpireTime;

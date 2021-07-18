@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.customer.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -380,6 +381,17 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
                 CustomerConfigExpander.getCustomerBucket(),
                 customer.getAvatarObjectName());
         result.setAvatarObjectUrl(fileAuthUrl);
+
+        // 更新用户会员信息
+        if (result.getMemberExpireTime() == null) {
+            result.setMemberFlag(false);
+        } else {
+            if (DateUtil.compare(result.getMemberExpireTime(), new Date()) < 0) {
+                result.setMemberFlag(false);
+            } else {
+                result.setMemberFlag(true);
+            }
+        }
 
         // 放入缓存用户信息
         customerInfoCacheOperatorApi.put(customerIdKey, result, CustomerConfigExpander.getCustomerCacheExpiredSeconds());
