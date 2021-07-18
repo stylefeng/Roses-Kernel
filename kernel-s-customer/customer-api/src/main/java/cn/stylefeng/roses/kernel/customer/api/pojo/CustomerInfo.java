@@ -2,6 +2,8 @@ package cn.stylefeng.roses.kernel.customer.api.pojo;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * 用户信息封装
  *
@@ -50,5 +52,10 @@ public class CustomerInfo {
      * 用户积分
      */
     private Integer score;
+
+    /**
+     * 会员截止日期，到期时间
+     */
+    private Date memberExpireTime;
 
 }
