@@ -387,6 +387,14 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         return result;
     }
 
+    @Override
+    public void updateMemberExpiryDate(Long customerId, Date expiryDate) {
+        LambdaUpdateWrapper<Customer> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.set(Customer::getMemberExpireTime, expiryDate);
+        wrapper.eq(Customer::getCustomerId, customerId);
+        this.update(wrapper);
+    }
+
     /**
      * 获取信息
      *

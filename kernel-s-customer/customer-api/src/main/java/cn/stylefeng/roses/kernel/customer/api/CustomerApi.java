@@ -26,6 +26,8 @@ package cn.stylefeng.roses.kernel.customer.api;
 
 import cn.stylefeng.roses.kernel.customer.api.pojo.CustomerInfo;
 
+import java.util.Date;
+
 /**
  * C端用户api
  *
@@ -41,5 +43,13 @@ public interface CustomerApi {
      * @date 2021/6/8 21:25
      */
     CustomerInfo getCustomerInfoById(Long customerId);
+
+    /**
+     * 更新用户会员时间
+     *
+     * @author fengshuonan
+     * @date 2021/7/18 22:16
+     */
+    void updateMemberExpiryDate(Long customerId, Date expiryDate);
 
 }
