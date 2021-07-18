@@ -405,6 +405,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         wrapper.set(Customer::getMemberExpireTime, expiryDate);
         wrapper.eq(Customer::getCustomerId, customerId);
         this.update(wrapper);
+
+        // 清除缓存中的用户信息
+        customerInfoCacheOperatorApi.remove(String.valueOf(customerId));
     }
 
     /**
