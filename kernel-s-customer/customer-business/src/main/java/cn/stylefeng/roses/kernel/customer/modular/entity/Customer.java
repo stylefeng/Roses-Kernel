@@ -121,6 +121,13 @@ public class Customer extends BaseEntity {
     private Integer statusFlag;
 
     /**
+     * 会员截止日期，到期时间
+     */
+    @TableField("member_expire_time")
+    @ChineseDescription("会员截止日期，到期时间")
+    private Date memberExpireTime;
+
+    /**
      * 上次登录ip
      */
     @TableField("last_login_ip")
