@@ -15,10 +15,15 @@ public class AesEncryptAlgorithmApiImpl implements EncryptAlgorithmApi {
     /**
      * AES加密实体类
      */
-    public final SymmetricCrypto symmetricCrypto;
+    public SymmetricCrypto symmetricCrypto;
 
     public AesEncryptAlgorithmApiImpl(byte[] key) {
         symmetricCrypto = new SymmetricCrypto(SymmetricAlgorithm.AES, key);
+    }
+
+    @Override
+    public void setInstance(SymmetricCrypto instance) {
+        this.symmetricCrypto = instance;
     }
 
     @Override
@@ -30,5 +35,4 @@ public class AesEncryptAlgorithmApiImpl implements EncryptAlgorithmApi {
     public String decrypt(String cipher) {
         return symmetricCrypto.decryptStr(cipher);
     }
-
 }

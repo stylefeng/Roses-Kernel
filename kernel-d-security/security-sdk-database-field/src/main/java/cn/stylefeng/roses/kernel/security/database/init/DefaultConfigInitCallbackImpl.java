@@ -1,15 +1,13 @@
 package cn.stylefeng.roses.kernel.security.database.init;
 
-import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
-import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.config.api.ConfigInitCallbackApi;
 import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
 import cn.stylefeng.roses.kernel.security.database.algorithm.EncryptAlgorithmApi;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.security.auth.login.LoginContext;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -21,6 +19,9 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class DefaultConfigInitCallbackImpl implements ConfigInitCallbackApi {
 
+    @Autowired
+    private EncryptAlgorithmApi encryptAlgorithmApi;
+
     @Override
     public void initBefore() {
 
@@ -29,8 +30,7 @@ public class DefaultConfigInitCallbackImpl implements ConfigInitCallbackApi {
     @Override
     public void initAfter() {
         // 修改数据库秘钥AES实例
-        EncryptAlgorithmApi encryptAlgorithmApi = SpringUtil.getBean(EncryptAlgorithmApi.class);
         SymmetricCrypto symmetricCrypto = new SymmetricCrypto(SymmetricAlgorithm.AES, SecurityConfigExpander.getEncryptSecretKey().getBytes(StandardCharsets.UTF_8));
-        ReflectUtil.setFieldValue(encryptAlgorithmApi, "symmetricCrypto", symmetricCrypto);
+        encryptAlgorithmApi.setInstance(symmetricCrypto);
     }
 }
