@@ -45,6 +45,14 @@ public interface CustomerApi {
     CustomerInfo getCustomerInfoById(Long customerId);
 
     /**
+     * 获取用户信息，通过用户的secretKey字段
+     *
+     * @author fengshuonan
+     * @date 2021/7/20 10:51
+     */
+    CustomerInfo getCustomerInfoBySecretKey(String secretKey);
+
+    /**
      * 更新用户会员时间
      *
      * @author fengshuonan

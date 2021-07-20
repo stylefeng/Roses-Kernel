@@ -373,6 +373,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         wrapper.eq(Customer::getCustomerId, userId);
         this.update(wrapper);
 
+        // 清除缓存中的用户信息
+        customerInfoCacheOperatorApi.remove(String.valueOf(userId));
+
         return uuid;
     }
 
@@ -416,6 +419,26 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         customerInfoCacheOperatorApi.put(customerIdKey, result, CustomerConfigExpander.getCustomerCacheExpiredSeconds());
 
         return result;
+    }
+
+    @Override
+    public CustomerInfo getCustomerInfoBySecretKey(String secretKey) {
+
+        if (StrUtil.isEmpty(secretKey)) {
+            return null;
+        }
+
+        // 先通过secretKey获取用户id
+        LambdaQueryWrapper<Customer> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Customer::getSecretKey, secretKey);
+        wrapper.select(Customer::getCustomerId);
+        Customer customer = this.getOne(wrapper, false);
+        if (customer == null) {
+            return null;
+        }
+
+        // 再通过用户id，获取用户的信息
+        return this.getCustomerInfoById(customer.getCustomerId());
     }
 
     @Override
