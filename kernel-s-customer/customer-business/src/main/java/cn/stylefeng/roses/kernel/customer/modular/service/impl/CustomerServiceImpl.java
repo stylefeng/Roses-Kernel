@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
@@ -48,6 +49,7 @@ import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
 import cn.stylefeng.roses.kernel.validator.api.exception.enums.ValidatorExceptionEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -355,6 +357,23 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
         // 清除缓存中的用户信息
         customerInfoCacheOperatorApi.remove(String.valueOf(customer.getCustomerId()));
+    }
+
+    @Override
+    public String updateSecret() {
+        // 获取当前登录用户
+        Long userId = LoginContext.me().getLoginUser().getUserId();
+
+        // 重新生成秘钥
+        String uuid = IdWorker.get32UUID();
+
+        // 更新用户秘钥
+        LambdaUpdateWrapper<Customer> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.set(Customer::getSecretKey, uuid);
+        wrapper.eq(Customer::getCustomerId, userId);
+        this.update(wrapper);
+
+        return uuid;
     }
 
     @Override

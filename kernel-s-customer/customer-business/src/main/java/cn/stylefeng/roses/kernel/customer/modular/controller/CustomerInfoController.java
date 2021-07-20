@@ -64,4 +64,16 @@ public class CustomerInfoController {
         return new SuccessResponseData();
     }
 
+    /**
+     * 重置个人秘钥
+     *
+     * @author fengshuonan
+     * @date 2021/7/20 10:44
+     */
+    @PostResource(name = "重置个人秘钥", path = "/customerInfo/resetPersonalSecret", requiredPermission = false)
+    public ResponseData resetPersonalSecret() {
+        String secret = customerService.updateSecret();
+        return new SuccessResponseData(secret);
+    }
+
 }

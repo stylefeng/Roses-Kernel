@@ -123,4 +123,12 @@ public interface CustomerService extends IService<Customer>, CustomerApi {
      */
     void updateAvatar(CustomerInfoRequest customerInfoRequest);
 
+    /**
+     * 重置个人秘钥
+     *
+     * @author fengshuonan
+     * @date 2021/7/20 10:44
+     */
+    String updateSecret();
+
 }

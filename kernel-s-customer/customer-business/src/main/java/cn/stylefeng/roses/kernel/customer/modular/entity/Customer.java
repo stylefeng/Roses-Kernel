@@ -121,6 +121,13 @@ public class Customer extends BaseEntity {
     private Integer statusFlag;
 
     /**
+     * 用户秘钥，用在调用会员校验等
+     */
+    @TableField("secret_key")
+    @ChineseDescription("用户秘钥")
+    private String secretKey;
+
+    /**
      * 会员截止日期，到期时间
      */
     @TableField("member_expire_time")
