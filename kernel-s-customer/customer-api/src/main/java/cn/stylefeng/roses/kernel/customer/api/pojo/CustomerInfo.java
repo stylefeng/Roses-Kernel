@@ -63,4 +63,9 @@ public class CustomerInfo {
      */
     private Date memberExpireTime;
 
+    /**
+     * 用户状态（1：启用，2：禁用，3：冻结）
+     */
+    private Integer statusFlag;
+
 }
