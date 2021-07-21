@@ -45,33 +45,35 @@ public class MenuTypeFactory {
      */
     public static void processMenuType(SysMenu sysMenu, String visible) {
 
-        if (ObjectUtil.isAllEmpty(
-                sysMenu.getAntdvIcon(),
-                sysMenu.getAntdvComponent(),
-                sysMenu.getAntdvRouter(),
-                sysMenu.getAntdvUidUrl(),
-                sysMenu.getAntdvLinkOpenType(),
-                sysMenu.getAntdvLinkUrl())) {
+        if (sysMenu.getAntdvVisible() == null) {
+            sysMenu.setAntdvVisible(YesOrNotEnum.N.getCode());
+        }
 
+        if (sysMenu.getLayuiVisible() == null) {
+            sysMenu.setLayuiVisible(YesOrNotEnum.N.getCode());
+        }
+
+        if (ObjectUtil.isNotEmpty(sysMenu.getAntdvIcon())
+                || ObjectUtil.isNotEmpty(sysMenu.getAntdvComponent())
+                || ObjectUtil.isNotEmpty(sysMenu.getAntdvComponent())
+                || ObjectUtil.isNotEmpty(sysMenu.getAntdvComponent())
+                || ObjectUtil.isNotEmpty(sysMenu.getAntdvComponent())
+                || ObjectUtil.isNotEmpty(sysMenu.getAntdvComponent())
+                || ObjectUtil.isNotEmpty(sysMenu.getAntdvComponent())) {
             if (StrUtil.isEmpty(visible)) {
-                sysMenu.setLayuiVisible(YesOrNotEnum.Y.getCode());
-                sysMenu.setAntdvVisible(YesOrNotEnum.N.getCode());
+                sysMenu.setAntdvVisible(YesOrNotEnum.Y.getCode());
             } else {
-                sysMenu.setLayuiVisible(visible);
-                sysMenu.setAntdvVisible(YesOrNotEnum.N.getCode());
+                sysMenu.setAntdvVisible(visible);
             }
         }
 
-        if (ObjectUtil.isAllEmpty(
-                sysMenu.getLayuiIcon(),
-                sysMenu.getLayuiPath())) {
-
+        if (ObjectUtil.isNotEmpty(sysMenu.getAntdvIcon())
+                || ObjectUtil.isNotEmpty(sysMenu.getLayuiIcon())
+                || ObjectUtil.isNotEmpty(sysMenu.getLayuiPath())) {
             if (StrUtil.isEmpty(visible)) {
-                sysMenu.setLayuiVisible(YesOrNotEnum.N.getCode());
-                sysMenu.setAntdvVisible(YesOrNotEnum.Y.getCode());
+                sysMenu.setLayuiVisible(YesOrNotEnum.Y.getCode());
             } else {
-                sysMenu.setLayuiVisible(YesOrNotEnum.N.getCode());
-                sysMenu.setAntdvVisible(visible);
+                sysMenu.setLayuiVisible(visible);
             }
         }
     }
