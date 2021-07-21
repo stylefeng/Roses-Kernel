@@ -122,7 +122,7 @@ public class AuthServiceImpl implements AuthServiceApi {
     public LoginResponse loginWithUserName(String username) {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setAccount(username);
-        return loginAction(new LoginRequest(), false, null);
+        return loginAction(loginRequest, false, null);
     }
 
     @Override
