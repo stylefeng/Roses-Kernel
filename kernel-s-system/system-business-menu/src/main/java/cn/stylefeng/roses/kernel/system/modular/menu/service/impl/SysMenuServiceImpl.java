@@ -32,7 +32,6 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
-import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.constants.SymbolConstant;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
@@ -58,6 +57,7 @@ import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
 import cn.stylefeng.roses.kernel.system.modular.menu.factory.AntdMenusFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.factory.LayuiMenusFactory;
+import cn.stylefeng.roses.kernel.system.modular.menu.factory.MenuTypeFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuMapper;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuButtonService;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
@@ -119,6 +119,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 设置启用状态
         sysMenu.setStatusFlag(StatusEnum.ENABLE.getCode());
         sysMenu.setDelFlag(YesOrNotEnum.N.getCode());
+
+        // 设置添加的菜单的类型
+        MenuTypeFactory.processMenuType(sysMenu);
 
         this.save(sysMenu);
     }
