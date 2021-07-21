@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.factory;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 
@@ -42,7 +43,8 @@ public class MenuTypeFactory {
      * @author fengshuonan
      * @date 2021/7/21 14:44
      */
-    public static void processMenuType(SysMenu sysMenu) {
+    public static void processMenuType(SysMenu sysMenu, String visible) {
+
         if (ObjectUtil.isAllEmpty(
                 sysMenu.getAntdvIcon(),
                 sysMenu.getAntdvComponent(),
@@ -50,15 +52,27 @@ public class MenuTypeFactory {
                 sysMenu.getAntdvUidUrl(),
                 sysMenu.getAntdvLinkOpenType(),
                 sysMenu.getAntdvLinkUrl())) {
-            sysMenu.setLayuiVisible(YesOrNotEnum.Y.getCode());
-            sysMenu.setAntdvVisible(YesOrNotEnum.N.getCode());
+
+            if (StrUtil.isEmpty(visible)) {
+                sysMenu.setLayuiVisible(YesOrNotEnum.Y.getCode());
+                sysMenu.setAntdvVisible(YesOrNotEnum.N.getCode());
+            } else {
+                sysMenu.setLayuiVisible(visible);
+                sysMenu.setAntdvVisible(YesOrNotEnum.N.getCode());
+            }
         }
 
         if (ObjectUtil.isAllEmpty(
                 sysMenu.getLayuiIcon(),
                 sysMenu.getLayuiPath())) {
-            sysMenu.setLayuiVisible(YesOrNotEnum.N.getCode());
-            sysMenu.setAntdvVisible(YesOrNotEnum.Y.getCode());
+
+            if (StrUtil.isEmpty(visible)) {
+                sysMenu.setLayuiVisible(YesOrNotEnum.N.getCode());
+                sysMenu.setAntdvVisible(YesOrNotEnum.Y.getCode());
+            } else {
+                sysMenu.setLayuiVisible(YesOrNotEnum.N.getCode());
+                sysMenu.setAntdvVisible(visible);
+            }
         }
     }
 

@@ -121,7 +121,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         sysMenu.setDelFlag(YesOrNotEnum.N.getCode());
 
         // 设置添加的菜单的类型
-        MenuTypeFactory.processMenuType(sysMenu);
+        MenuTypeFactory.processMenuType(sysMenu, sysMenuRequest.getVisible());
 
         this.save(sysMenu);
     }
@@ -164,10 +164,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 不能修改状态，用修改状态接口修改状态
         oldMenu.setStatusFlag(null);
 
-        // 更新 AntdvVisible LayuiVisible 字段
-        String visible = sysMenuRequest.getVisible();
-        oldMenu.setAntdvVisible(visible);
-        oldMenu.setLayuiVisible(visible);
+        // 设置添加的菜单的类型fengshuonan_sedinbj
+        MenuTypeFactory.processMenuType(oldMenu, sysMenuRequest.getVisible());
 
         this.updateById(oldMenu);
     }
