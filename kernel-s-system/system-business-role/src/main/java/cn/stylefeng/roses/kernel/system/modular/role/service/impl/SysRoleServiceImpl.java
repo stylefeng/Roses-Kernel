@@ -32,6 +32,7 @@ import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
@@ -45,9 +46,6 @@ import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.role.SysRoleExceptionEnum;
-import cn.stylefeng.roses.kernel.system.modular.role.entity.*;
-import cn.stylefeng.roses.kernel.system.modular.role.mapper.SysRoleMapper;
-import cn.stylefeng.roses.kernel.system.modular.role.service.*;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleMenuButtonDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleMenuDTO;
@@ -55,6 +53,9 @@ import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleResourceDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleMenuButtonRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.api.util.DataScopeUtil;
+import cn.stylefeng.roses.kernel.system.modular.role.entity.*;
+import cn.stylefeng.roses.kernel.system.modular.role.mapper.SysRoleMapper;
+import cn.stylefeng.roses.kernel.system.modular.role.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -95,6 +96,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private MenuServiceApi menuServiceApi;
+
+    @Resource
+    private CacheOperatorApi<SysRole> roleInfoCacheApi;
 
     @Override
     public void add(SysRoleRequest sysRoleRequest) {
@@ -139,9 +143,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // 级联删除该角色对应的角色-菜单表关联信息
         sysRoleResourceService.deleteRoleResourceListByRoleId(roleId);
+
+        // 删除角色缓存信息
+        roleInfoCacheApi.remove(String.valueOf(roleId));
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void edit(SysRoleRequest sysRoleRequest) {
         SysRole sysRole = this.querySysRole(sysRoleRequest);
 
@@ -159,6 +167,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         sysRole.setStatusFlag(null);
 
         this.updateById(sysRole);
+
+        // 删除角色缓存信息
+        roleInfoCacheApi.remove(String.valueOf(sysRoleRequest.getRoleId()));
     }
 
     @Override
@@ -342,24 +353,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public List<SysRoleDTO> getRolesByIds(List<Long> roleIds) {
-
         ArrayList<SysRoleDTO> sysRoleResponses = new ArrayList<>();
-
-        LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysRole::getRoleId, roleIds);
-        List<SysRole> sysRoles = this.list(queryWrapper);
-
-        // 角色列表不为空，角色信息转化为SysRoleResponse
-        if (!sysRoles.isEmpty()) {
-            for (SysRole sysRole : sysRoles) {
-                SysRoleDTO sysRoleResponse = new SysRoleDTO();
-                BeanUtil.copyProperties(sysRole, sysRoleResponse);
-                // 填充数据范围类型枚举
-                sysRoleResponse.setDataScopeTypeEnum(DataScopeTypeEnum.codeToEnum(sysRole.getDataScopeType()));
-                sysRoleResponses.add(sysRoleResponse);
-            }
+        for (Long roleId : roleIds) {
+            SysRoleRequest sysRoleRequest = new SysRoleRequest();
+            sysRoleRequest.setRoleId(roleId);
+            SysRoleDTO detail = this.detail(sysRoleRequest);
+            sysRoleResponses.add(detail);
         }
-
         return sysRoleResponses;
     }
 
@@ -446,10 +446,22 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @date 2020/11/5 下午4:12
      */
     private SysRole querySysRole(SysRoleRequest sysRoleRequest) {
+
+        // 从缓存中获取角色信息
+        String key = String.valueOf(sysRoleRequest.getRoleId());
+        SysRole sysRoleCache = roleInfoCacheApi.get(key);
+        if (sysRoleCache != null) {
+            return sysRoleCache;
+        }
+
         SysRole sysRole = this.getById(sysRoleRequest.getRoleId());
         if (ObjectUtil.isNull(sysRole)) {
             throw new SystemModularException(SysRoleExceptionEnum.ROLE_NOT_EXIST);
         }
+
+        // 加入缓存
+        roleInfoCacheApi.put(key, sysRole);
+
         return sysRole;
     }
 

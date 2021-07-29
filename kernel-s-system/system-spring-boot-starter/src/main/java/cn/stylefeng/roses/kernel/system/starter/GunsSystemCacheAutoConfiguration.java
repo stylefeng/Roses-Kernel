@@ -29,6 +29,8 @@ import cn.hutool.cache.impl.TimedCache;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
+import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleMemoryCache;
+import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
 import cn.stylefeng.roses.kernel.system.modular.user.cache.SysUserMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.user.cache.UserRoleMemoryCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -38,13 +40,13 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 /**
- * 用户缓存的自动配置
+ * 系统管理缓存的自动配置（默认内存缓存）
  *
  * @author fengshuonan
  * @date 2021/2/28 10:29
  */
 @Configuration
-public class GunsUserCacheAutoConfiguration {
+public class GunsSystemCacheAutoConfiguration {
 
     /**
      * 用户的缓存，非在线用户缓存，此缓存为了加快查看用户相关操作
@@ -68,8 +70,21 @@ public class GunsUserCacheAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "userRoleCacheApi")
     public CacheOperatorApi<List<Long>> userRoleCacheApi() {
-        TimedCache<String, List<Long>> sysUserTimedCache = CacheUtil.newTimedCache(SystemCachesConstants.USER_CACHE_TIMEOUT_SECONDS * 1000);
-        return new UserRoleMemoryCache(sysUserTimedCache);
+        TimedCache<String, List<Long>> userRoleCache = CacheUtil.newTimedCache(SystemCachesConstants.USER_CACHE_TIMEOUT_SECONDS * 1000);
+        return new UserRoleMemoryCache(userRoleCache);
+    }
+
+    /**
+     * 角色信息对应的缓存
+     *
+     * @author fengshuonan
+     * @date 2021/7/29 23:00
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "roleInfoCacheApi")
+    public CacheOperatorApi<SysRole> roleInfoCacheApi() {
+        TimedCache<String, SysRole> roleCache = CacheUtil.newTimedCache(SystemCachesConstants.USER_CACHE_TIMEOUT_SECONDS * 1000);
+        return new RoleMemoryCache(roleCache);
     }
 
 }

@@ -22,23 +22,23 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.system.modular.user.cache;
+package cn.stylefeng.roses.kernel.system.modular.role.cache;
 
-import cn.hutool.cache.impl.TimedCache;
-import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
 import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
-import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
+import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 角色信息的缓存
  *
  * @author fengshuonan
- * @date 2021/7/29 23:28
+ * @date 2021/7/29 23:29
  */
-public class RoleMemoryCache extends AbstractMemoryCacheOperator<SysRoleDTO> {
+public class RoleRedisCache extends AbstractRedisCacheOperator<SysRole> {
 
-    public RoleMemoryCache(TimedCache<String, SysRoleDTO> timedCache) {
-        super(timedCache);
+    public RoleRedisCache(RedisTemplate<String, SysRole> redisTemplate) {
+        super(redisTemplate);
     }
 
     @Override
