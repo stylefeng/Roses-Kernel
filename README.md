@@ -33,7 +33,7 @@
 
 ### 配套手册
 
-[https://doc.stylefeng.cn/contents/roses_kernel/](https://doc.stylefeng.cn/contents/roses_kernel/)
+[https://www.stylefeng.cn/contents/roses_kernel/](https://www.stylefeng.cn/contents/roses_kernel/)
 
 ### 使用方式
 
