@@ -157,6 +157,9 @@ public class UserLoginInfoFactory {
         // 设置用户昵称
         currentUserInfoResponse.setNickname(loginUser.getSimpleUserInfo().getNickName());
 
+        // 姓名
+        currentUserInfoResponse.setRealName(loginUser.getSimpleUserInfo().getRealName());
+
         // 设置头像，并获取头像的url
         Long avatarFileId = loginUser.getSimpleUserInfo().getAvatar();
         String userAvatarUrl = sysUserService.getUserAvatarUrl(avatarFileId, loginUser.getToken());

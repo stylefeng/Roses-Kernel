@@ -67,6 +67,12 @@ public class CurrentUserInfoResponse {
     private String nickname;
 
     /**
+     * 用户姓名
+     */
+    @ChineseDescription("用户姓名")
+    private String realName;
+
+    /**
      * 用户头像（url）
      */
     @ChineseDescription("用户头像（url）")
