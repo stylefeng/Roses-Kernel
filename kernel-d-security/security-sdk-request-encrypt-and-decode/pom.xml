@@ -17,11 +17,10 @@
 
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15to18 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15to18</artifactId>
-            <version>1.68</version>
+            <version>${bcprov.version}</version>
         </dependency>
 
         <!--安全模块的api-->
