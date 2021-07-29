@@ -33,6 +33,8 @@ import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
+import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -50,6 +52,9 @@ public class LoginUserImpl implements LoginUserApi {
 
     @Resource
     private SessionManagerApi sessionManagerApi;
+
+    @Resource
+    private UserServiceApi userServiceApi;
 
     @Override
     public String getToken() {
@@ -109,7 +114,9 @@ public class LoginUserImpl implements LoginUserApi {
             throw new AuthException(AuthExceptionEnum.AUTH_EXPIRED_ERROR);
         }
 
-        return session;
+        // 从新组装一次loginUser，保证loginUser中数据的时效性
+        UserLoginInfoDTO userLoginInfo = userServiceApi.getUserLoginInfo(session.getAccount());
+        return userLoginInfo.getLoginUser();
     }
 
     @Override
