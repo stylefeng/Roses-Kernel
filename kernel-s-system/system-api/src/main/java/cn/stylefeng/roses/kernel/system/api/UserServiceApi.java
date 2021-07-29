@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.api;
 
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.OnlineUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
@@ -43,7 +44,7 @@ import java.util.Set;
 public interface UserServiceApi {
 
     /**
-     * 获取用户登录需要的详细信息
+     * 获取用户登录需要的详细信息（用在第一次获取登录用户）
      *
      * @param account 账号
      * @return 用户登录需要的详细信息
@@ -51,6 +52,18 @@ public interface UserServiceApi {
      * @date 2020/10/20 16:59
      */
     UserLoginInfoDTO getUserLoginInfo(String account);
+
+    /**
+     * 获取刷新后的登录用户（用在用户登录之后调用）
+     * <p>
+     * 以往用户登录后直接从session缓存中获取用户信息，不能及时更新，需要退出才可以获取最新信息
+     * <p>
+     * 本方法解决了实时获取当前登录用户不准确的问题
+     *
+     * @author fengshuonan
+     * @date 2021/7/29 22:03
+     */
+    LoginUser getEffectiveLoginUser(LoginUser loginUser);
 
     /**
      * 更新用户的登录信息，一般为更新用户的登录时间和ip

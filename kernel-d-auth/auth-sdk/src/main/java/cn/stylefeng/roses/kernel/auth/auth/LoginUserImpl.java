@@ -34,7 +34,6 @@ import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -115,8 +114,7 @@ public class LoginUserImpl implements LoginUserApi {
         }
 
         // 从新组装一次loginUser，保证loginUser中数据的时效性
-        UserLoginInfoDTO userLoginInfo = userServiceApi.getUserLoginInfo(session.getAccount());
-        return userLoginInfo.getLoginUser();
+        return userServiceApi.getEffectiveLoginUser(session);
     }
 
     @Override

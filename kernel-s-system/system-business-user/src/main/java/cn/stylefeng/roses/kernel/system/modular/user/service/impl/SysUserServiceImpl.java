@@ -571,6 +571,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return UserLoginInfoFactory.userLoginInfoDTO(sysUser, roleResponseList, dataScopeResponse, userOrgInfo, resourceUrlsListByCodes, roleButtonCodes);
     }
 
+    @Override
+    public LoginUser getEffectiveLoginUser(LoginUser loginUser) {
+
+        UserLoginInfoDTO userLoginInfoDTO = this.getUserLoginInfo(loginUser.getAccount());
+        LoginUser newLoginUser = userLoginInfoDTO.getLoginUser();
+
+        // 设置登录用户原有的一些信息
+        newLoginUser.setToken(loginUser.getToken());
+        newLoginUser.setTenantCode(loginUser.getTenantCode());
+        newLoginUser.setWsUrl(loginUser.getWsUrl());
+
+        return newLoginUser;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateUserLoginInfo(Long userId, Date date, String ip) {
