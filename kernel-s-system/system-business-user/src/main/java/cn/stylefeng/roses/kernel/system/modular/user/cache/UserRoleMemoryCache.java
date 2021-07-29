@@ -22,49 +22,31 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.system.api.constants;
+package cn.stylefeng.roses.kernel.system.modular.user.cache;
+
+import cn.hutool.cache.impl.TimedCache;
+import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
+import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
+
+import java.util.List;
 
 /**
- * 系统管理模块的常量
+ * 用户角色的内存缓存
+ * <p>
+ * key为userId，value是Long类型集合，为角色的集合
  *
  * @author fengshuonan
- * @date 2020/11/4 15:48
+ * @date 2021/7/29 22:54
  */
-public interface SystemConstants {
+public class UserRoleMemoryCache extends AbstractMemoryCacheOperator<List<Long>> {
 
-    /**
-     * 系统管理模块的名称
-     */
-    String SYSTEM_MODULE_NAME = "kernel-s-system";
+    public UserRoleMemoryCache(TimedCache<String, List<Long>> timedCache) {
+        super(timedCache);
+    }
 
-    /**
-     * 异常枚举的步进值
-     */
-    String SYSTEM_EXCEPTION_STEP_CODE = "18";
-
-    /**
-     * 默认的系统版本号
-     */
-    String DEFAULT_SYSTEM_VERSION = "20210101";
-
-    /**
-     * 默认多租户的开关：关闭
-     */
-    Boolean DEFAULT_TENANT_OPEN = false;
-
-    /**
-     * 默认的系统的名称
-     */
-    String DEFAULT_SYSTEM_NAME = "Guns快速开发平台";
-
-    /**
-     * 超级管理员的角色编码
-     */
-    String SUPER_ADMIN_ROLE_CODE = "superAdmin";
-
-    /**
-     * 初始化超级管理员的监听器顺序
-     */
-    Integer SUPER_ADMIN_INIT_LISTENER_SORT = 400;
+    @Override
+    public String getCommonKeyPrefix() {
+        return SystemCachesConstants.USER_ROLES_CACHE_PREFIX;
+    }
 
 }

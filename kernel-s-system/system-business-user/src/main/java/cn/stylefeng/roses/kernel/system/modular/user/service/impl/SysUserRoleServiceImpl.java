@@ -27,16 +27,18 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.request.UserRoleRequest;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
 import cn.stylefeng.roses.kernel.system.modular.user.mapper.SysUserRoleMapper;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.request.UserRoleRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,6 +51,8 @@ import java.util.stream.Collectors;
 @Service
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements SysUserRoleService {
 
+    @Resource(name = "userRoleCacheApi")
+    private CacheOperatorApi<List<Long>> userRoleCacheApi;
 
     @Override
     public void add(UserRoleRequest userRoleRequest) {
@@ -99,12 +103,22 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     @Override
 
     public List<Long> findRoleIdsByUserId(Long userId) {
+
+        // 先从缓存获取用户绑定的角色
+        String key = String.valueOf(userId);
+        List<Long> userRolesCache = userRoleCacheApi.get(key);
+        if (userRolesCache != null) {
+            return userRolesCache;
+        }
+
+        // 从数据库查询角色
         UserRoleRequest userRoleRequest = new UserRoleRequest();
         userRoleRequest.setUserId(userId);
         List<SysUserRole> sysUserRoleList = this.findList(userRoleRequest);
-        return sysUserRoleList.stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
+        List<Long> userRoles = sysUserRoleList.stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
+        userRoleCacheApi.put(key, userRoles);
+        return userRoles;
     }
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -128,6 +142,9 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
         });
 
         this.saveBatch(sysUserRoleList);
+
+        // 清除用户角色的缓存
+        userRoleCacheApi.remove(String.valueOf(userId));
     }
 
     /**

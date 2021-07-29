@@ -26,7 +26,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.cache;
 
 import cn.hutool.cache.impl.TimedCache;
 import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;
-import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
+import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 
 /**
@@ -43,7 +43,7 @@ public class SysUserMemoryCache extends AbstractMemoryCacheOperator<SysUserDTO> 
 
     @Override
     public String getCommonKeyPrefix() {
-        return SystemConstants.USER_CACHE_PREFIX;
+        return SystemCachesConstants.USER_CACHE_PREFIX;
     }
 
 }

@@ -25,7 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.cache;
 
 import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
-import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
+import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -43,7 +43,7 @@ public class SysUserRedisCache extends AbstractRedisCacheOperator<SysUserDTO> {
 
     @Override
     public String getCommonKeyPrefix() {
-        return SystemConstants.USER_CACHE_PREFIX;
+        return SystemCachesConstants.USER_CACHE_PREFIX;
     }
 
 }
