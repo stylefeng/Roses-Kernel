@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserOrgExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
@@ -38,6 +39,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
@@ -50,8 +52,18 @@ import java.util.List;
 @Service
 public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, SysUserOrg> implements SysUserOrgService {
 
+    @Resource(name = "userOrgCacheApi")
+    private CacheOperatorApi<SysUserOrgDTO> userOrgCacheApi;
+
     @Override
     public SysUserOrgDTO getUserOrgByUserId(Long userId) {
+
+        // 从缓存获取数据
+        String key = String.valueOf(userId);
+        SysUserOrgDTO sysUserDTOCache = userOrgCacheApi.get(key);
+        if (sysUserDTOCache != null) {
+            return sysUserDTOCache;
+        }
 
         UserOrgRequest userOrgRequest = new UserOrgRequest();
         userOrgRequest.setUserId(userId);
@@ -61,6 +73,10 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
         }
         SysUserOrgDTO sysUserOrgDTO = new SysUserOrgDTO();
         BeanUtil.copyProperties(sysUserOrg, sysUserOrgDTO);
+
+        // 加入缓存
+        userOrgCacheApi.put(key, sysUserOrgDTO);
+
         return sysUserOrgDTO;
     }
 
@@ -93,6 +109,9 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
     public void del(UserOrgRequest userOrgResponse) {
         SysUserOrg sysUserOrg = this.querySysUserOrgById(userOrgResponse);
         this.removeById(sysUserOrg.getUserOrgId());
+
+        // 清除缓存
+        userOrgCacheApi.remove(String.valueOf(sysUserOrg.getUserId()));
     }
 
     @Override
@@ -100,6 +119,9 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
         LambdaQueryWrapper<SysUserOrg> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysUserOrg::getUserId, userId);
         this.remove(queryWrapper);
+
+        // 清除缓存
+        userOrgCacheApi.remove(String.valueOf(userId));
     }
 
     @Override
@@ -107,6 +129,9 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
         SysUserOrg sysUserOrg = this.querySysUserOrgById(userOrgResponse);
         BeanUtil.copyProperties(userOrgResponse, sysUserOrg);
         this.updateById(sysUserOrg);
+
+        // 清除缓存
+        userOrgCacheApi.remove(String.valueOf(sysUserOrg.getUserId()));
     }
 
     @Override
@@ -118,6 +143,9 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
 
         // 新增组织机构绑定
         this.add(userId, orgId);
+
+        // 清除缓存
+        userOrgCacheApi.remove(String.valueOf(userId));
     }
 
     @Override
@@ -129,6 +157,9 @@ public class SysUserOrgServiceServiceImpl extends ServiceImpl<SysUserOrgMapper, 
 
         // 新增组织机构绑定
         this.add(userId, orgId, positionId);
+
+        // 清除缓存
+        userOrgCacheApi.remove(String.valueOf(userId));
     }
 
 
