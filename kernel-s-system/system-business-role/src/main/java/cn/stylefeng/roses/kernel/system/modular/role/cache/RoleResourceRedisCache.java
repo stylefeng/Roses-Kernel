@@ -22,44 +22,29 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.system.api.constants;
+package cn.stylefeng.roses.kernel.system.modular.role.cache;
+
+import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
+import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.List;
 
 /**
- * 缓存前缀相关的常量
+ * 角色绑定资源的缓存
  *
  * @author fengshuonan
- * @date 2021/7/29 22:55
+ * @date 2021/7/29 23:29
  */
-public interface SystemCachesConstants {
+public class RoleResourceRedisCache extends AbstractRedisCacheOperator<List<String>> {
 
-    /**
-     * 用户缓存的前缀
-     */
-    String USER_CACHE_PREFIX = "user:";
+    public RoleResourceRedisCache(RedisTemplate<String, List<String>> redisTemplate) {
+        super(redisTemplate);
+    }
 
-    /**
-     * 用户缓存过期时间(1小时)
-     */
-    Long USER_CACHE_TIMEOUT_SECONDS = 3600L;
-
-    /**
-     * 用户绑定的角色的缓存前缀
-     */
-    String USER_ROLES_CACHE_PREFIX = "user_roles:";
-
-    /**
-     * 角色信息的缓存
-     */
-    String ROLE_INFO_CACHE_PREFIX = "role:";
-
-    /**
-     * 用户组织机构缓存的前缀
-     */
-    String USER_ORG_CACHE_PREFIX = "user_org:";
-
-    /**
-     * 角色绑定资源的缓存
-     */
-    String ROLE_RESOURCE_CACHE_PREFIX = "role_resource:";
+    @Override
+    public String getCommonKeyPrefix() {
+        return SystemCachesConstants.ROLE_RESOURCE_CACHE_PREFIX;
+    }
 
 }

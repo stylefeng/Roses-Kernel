@@ -24,17 +24,20 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.role.service.impl;
 
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRoleResource;
 import cn.stylefeng.roses.kernel.system.modular.role.mapper.SysRoleResourceMapper;
 import cn.stylefeng.roses.kernel.system.modular.role.service.SysRoleResourceService;
-import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 系统角色菜单service接口实现类
@@ -45,6 +48,8 @@ import java.util.List;
 @Service
 public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMapper, SysRoleResource> implements SysRoleResourceService {
 
+    @Resource(name = "roleResourceCacheApi")
+    private CacheOperatorApi<List<String>> roleResourceCacheApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -56,6 +61,9 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
         LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysRoleResource::getRoleId, roleId);
         this.remove(queryWrapper);
+
+        // 清除角色缓存资源
+        roleResourceCacheApi.remove(String.valueOf(roleId));
 
         // 授权资源
         List<String> grantResourceList = sysRoleRequest.getGrantResourceList();
@@ -74,6 +82,20 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteRoleResourceListByResourceIds(List<Long> resourceIds) {
+
+        // 查询资源包含的角色
+        LambdaQueryWrapper<SysRoleResource> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.select(SysRoleResource::getRoleId);
+        wrapper1.in(SysRoleResource::getResourceCode, resourceIds);
+        wrapper1.groupBy(SysRoleResource::getRoleId);
+        List<SysRoleResource> toGetRoles = this.list(wrapper1);
+        List<Long> roleIds = toGetRoles.stream().map(SysRoleResource::getRoleId).collect(Collectors.toList());
+        for (Long roleId : roleIds) {
+            // 清除角色绑定的资源缓存
+            roleResourceCacheApi.remove(String.valueOf(roleId));
+        }
+
+        // 清除资源
         LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(SysRoleResource::getResourceCode, resourceIds);
         this.remove(queryWrapper);
@@ -85,6 +107,10 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
         LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysRoleResource::getRoleId, roleId);
         this.remove(queryWrapper);
+
+        // 清除角色绑定的资源缓存
+        roleResourceCacheApi.remove(String.valueOf(roleId));
+
     }
 
 }

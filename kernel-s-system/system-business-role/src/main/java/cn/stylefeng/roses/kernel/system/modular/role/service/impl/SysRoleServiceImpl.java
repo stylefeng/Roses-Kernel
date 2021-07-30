@@ -100,6 +100,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Resource
     private CacheOperatorApi<SysRole> roleInfoCacheApi;
 
+    @Resource(name = "roleResourceCacheApi")
+    private CacheOperatorApi<List<String>> roleResourceCacheApi;
+
     @Override
     public void add(SysRoleRequest sysRoleRequest) {
 
@@ -398,11 +401,32 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public List<String> getRoleResourceCodeList(List<Long> roleIdList) {
-        LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.select(SysRoleResource::getResourceCode);
-        queryWrapper.in(SysRoleResource::getRoleId, roleIdList);
-        List<SysRoleResource> sysRoleResources = sysRoleResourceService.list(queryWrapper);
-        return sysRoleResources.parallelStream().map(SysRoleResource::getResourceCode).collect(Collectors.toList());
+
+        ArrayList<String> result = new ArrayList<>();
+
+        for (Long roleId : roleIdList) {
+
+            // 从缓存获取所有角色绑定的资源
+            String key = String.valueOf(roleId);
+            List<String> resourceCodesCache = roleResourceCacheApi.get(key);
+            if (ObjectUtil.isNotEmpty(resourceCodesCache)) {
+                result.addAll(resourceCodesCache);
+                continue;
+            }
+
+            // 从数据库查询角色绑定的资源
+            LambdaQueryWrapper<SysRoleResource> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.select(SysRoleResource::getResourceCode);
+            queryWrapper.eq(SysRoleResource::getRoleId, roleId);
+            List<SysRoleResource> sysRoleResources = sysRoleResourceService.list(queryWrapper);
+            List<String> sysResourceCodes = sysRoleResources.parallelStream().map(SysRoleResource::getResourceCode).collect(Collectors.toList());
+            if (ObjectUtil.isNotEmpty(sysResourceCodes)) {
+                result.addAll(sysResourceCodes);
+                roleResourceCacheApi.put(key, sysResourceCodes);
+            }
+        }
+
+        return result;
     }
 
     @Override
