@@ -50,34 +50,34 @@ public abstract class AbstractRedisCacheOperator<T> implements CacheOperatorApi<
 
     @Override
     public void put(String key, T value) {
-        redisTemplate.boundValueOps(getCommonKeyPrefix() + key).set(value);
+        redisTemplate.boundValueOps(calcKey(key)).set(value);
     }
 
     @Override
     public void put(String key, T value, Long timeoutSeconds) {
-        redisTemplate.boundValueOps(getCommonKeyPrefix() + key).set(value, timeoutSeconds, TimeUnit.SECONDS);
+        redisTemplate.boundValueOps(calcKey(key)).set(value, timeoutSeconds, TimeUnit.SECONDS);
     }
 
     @Override
     public T get(String key) {
-        return redisTemplate.boundValueOps(getCommonKeyPrefix() + key).get();
+        return redisTemplate.boundValueOps(calcKey(key)).get();
     }
 
     @Override
     public void remove(String... key) {
         ArrayList<String> keys = CollectionUtil.toList(key);
-        List<String> withPrefixKeys = keys.stream().map(i -> getCommonKeyPrefix() + i).collect(Collectors.toList());
+        List<String> withPrefixKeys = keys.stream().map(this::calcKey).collect(Collectors.toList());
         redisTemplate.delete(withPrefixKeys);
     }
 
     @Override
     public void expire(String key, Long expiredSeconds) {
-        redisTemplate.boundValueOps(getCommonKeyPrefix() + key).expire(expiredSeconds, TimeUnit.SECONDS);
+        redisTemplate.boundValueOps(calcKey(key)).expire(expiredSeconds, TimeUnit.SECONDS);
     }
 
     @Override
     public boolean contains(String key) {
-        T value = redisTemplate.boundValueOps(getCommonKeyPrefix() + key).get();
+        T value = redisTemplate.boundValueOps(calcKey(key)).get();
         return value != null;
     }
 

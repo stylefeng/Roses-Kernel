@@ -24,6 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.cache.api;
 
+import cn.hutool.core.util.StrUtil;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -133,5 +135,23 @@ public interface CacheOperatorApi<T> {
      * @date 2020/7/9 11:06
      */
     String getCommonKeyPrefix();
+
+    /**
+     * 计算最终插入缓存的key值
+     * <p>
+     * key的组成： 缓存前缀 + keyParam.toUpperCase
+     *
+     * @param keyParam 用户传递的key参数
+     * @return 最终插入缓存的key值
+     * @author fengshuonan
+     * @date 2021/7/30 21:18
+     */
+    default String calcKey(String keyParam) {
+        if (StrUtil.isBlank(keyParam)) {
+            return getCommonKeyPrefix();
+        } else {
+            return getCommonKeyPrefix() + keyParam.toUpperCase();
+        }
+    }
 
 }

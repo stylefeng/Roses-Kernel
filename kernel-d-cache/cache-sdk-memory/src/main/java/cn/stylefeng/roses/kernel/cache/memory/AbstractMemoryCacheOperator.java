@@ -48,38 +48,38 @@ public abstract class AbstractMemoryCacheOperator<T> implements CacheOperatorApi
 
     @Override
     public void put(String key, T value) {
-        timedCache.put(getCommonKeyPrefix() + key, value);
+        timedCache.put(calcKey(key), value);
     }
 
     @Override
     public void put(String key, T value, Long timeoutSeconds) {
-        timedCache.put(getCommonKeyPrefix() + key, value, timeoutSeconds * 1000);
+        timedCache.put(calcKey(key), value, timeoutSeconds * 1000);
     }
 
     @Override
     public T get(String key) {
         // 如果用户在超时前调用了get(key)方法，会重头计算起始时间，false的作用就是不从头算
-        return timedCache.get(getCommonKeyPrefix() + key, true);
+        return timedCache.get(calcKey(key), true);
     }
 
     @Override
     public void remove(String... key) {
         if (key.length > 0) {
             for (String itemKey : key) {
-                timedCache.remove(getCommonKeyPrefix() + itemKey);
+                timedCache.remove(calcKey(itemKey));
             }
         }
     }
 
     @Override
     public void expire(String key, Long expiredSeconds) {
-        T value = timedCache.get(getCommonKeyPrefix() + key, true);
-        timedCache.put(getCommonKeyPrefix() + key, value, expiredSeconds * 1000);
+        T value = timedCache.get(calcKey(key), true);
+        timedCache.put(calcKey(key), value, expiredSeconds * 1000);
     }
 
     @Override
     public boolean contains(String key) {
-        return timedCache.containsKey(getCommonKeyPrefix() + key);
+        return timedCache.containsKey(calcKey(key));
     }
 
     @Override
