@@ -103,6 +103,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Resource(name = "roleResourceCacheApi")
     private CacheOperatorApi<List<String>> roleResourceCacheApi;
 
+    @Resource(name = "roleDataScopeCacheApi")
+    private CacheOperatorApi<List<Long>> roleDataScopeCacheApi;
+
     @Override
     public void add(SysRoleRequest sysRoleRequest) {
 
@@ -149,6 +152,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // 删除角色缓存信息
         roleInfoCacheApi.remove(String.valueOf(roleId));
+
+        // 删除角色的数据范围缓存
+        roleDataScopeCacheApi.remove(String.valueOf(sysRoleRequest.getRoleId()));
     }
 
     @Override
@@ -314,6 +320,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // 绑定角色数据范围关联
         sysRoleDataScopeService.grantDataScope(sysRoleRequest);
+
+        // 删除角色的数据范围缓存
+        roleDataScopeCacheApi.remove(String.valueOf(sysRoleRequest.getRoleId()));
     }
 
     @Override
@@ -368,15 +377,35 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public List<Long> getRoleDataScopes(List<Long> roleIds) {
-        LambdaQueryWrapper<SysRoleDataScope> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysRoleDataScope::getRoleId, roleIds);
 
-        List<SysRoleDataScope> list = this.sysRoleDataScopeService.list(queryWrapper);
-        if (!list.isEmpty()) {
-            return list.stream().map(SysRoleDataScope::getOrganizationId).collect(Collectors.toList());
-        } else {
-            return new ArrayList<>();
+        ArrayList<Long> result = new ArrayList<>();
+
+        if (ObjectUtil.isEmpty(roleIds)) {
+            return result;
         }
+
+        for (Long roleId : roleIds) {
+            // 从缓存获取数据范围
+            String key = String.valueOf(roleId);
+            List<Long> scopes = roleDataScopeCacheApi.get(key);
+            if (scopes != null) {
+                result.addAll(scopes);
+            }
+
+            // 从数据库查询数据范围
+            LambdaQueryWrapper<SysRoleDataScope> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(SysRoleDataScope::getRoleId, roleId);
+            List<SysRoleDataScope> list = this.sysRoleDataScopeService.list(queryWrapper);
+            if (!list.isEmpty()) {
+                List<Long> realScopes = list.stream().map(SysRoleDataScope::getOrganizationId).collect(Collectors.toList());
+                result.addAll(realScopes);
+
+                // 添加结果到缓存中
+                roleDataScopeCacheApi.put(key, realScopes);
+            }
+        }
+
+        return result;
     }
 
     @Override

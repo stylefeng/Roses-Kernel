@@ -24,9 +24,9 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.role.service;
 
-import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRoleDataScope;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleDataScopeRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRoleDataScope;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -57,7 +57,6 @@ public interface SysRoleDataScopeService extends IService<SysRoleDataScope> {
      * @date 2020/11/5 上午11:21
      */
     List<Long> getRoleDataScopeIdList(List<Long> roleIdList);
-
 
     /**
      * 新增

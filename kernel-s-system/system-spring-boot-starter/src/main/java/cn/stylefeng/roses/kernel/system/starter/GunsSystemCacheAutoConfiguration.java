@@ -30,6 +30,7 @@ import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
+import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleDataScopeMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleResourceMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
@@ -114,6 +115,19 @@ public class GunsSystemCacheAutoConfiguration {
     public CacheOperatorApi<List<String>> roleResourceCacheApi() {
         TimedCache<String, List<String>> roleCache = CacheUtil.newTimedCache(SystemCachesConstants.USER_CACHE_TIMEOUT_SECONDS * 1000);
         return new RoleResourceMemoryCache(roleCache);
+    }
+
+    /**
+     * 角色绑定的数据范围的缓存
+     *
+     * @author fengshuonan
+     * @date 2021/7/31 17:59
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "roleDataScopeCacheApi")
+    public CacheOperatorApi<List<Long>> roleDataScopeCacheApi() {
+        TimedCache<String, List<Long>> roleCache = CacheUtil.newTimedCache(SystemCachesConstants.USER_CACHE_TIMEOUT_SECONDS * 1000);
+        return new RoleDataScopeMemoryCache(roleCache);
     }
 
 }
