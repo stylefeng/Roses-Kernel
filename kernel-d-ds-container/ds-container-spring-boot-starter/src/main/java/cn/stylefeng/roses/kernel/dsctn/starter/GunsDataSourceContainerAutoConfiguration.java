@@ -26,8 +26,13 @@ package cn.stylefeng.roses.kernel.dsctn.starter;
 
 import cn.stylefeng.roses.kernel.dsctn.DynamicDataSource;
 import cn.stylefeng.roses.kernel.dsctn.aop.MultiSourceExchangeAop;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 /**
  * 数据库连接和DAO框架的配置
@@ -38,6 +43,8 @@ import org.springframework.context.annotation.Configuration;
  * @date 2020/11/30 22:24
  */
 @Configuration
+@AutoConfigureBefore(DataSourceAutoConfiguration.class)
+@ConditionalOnMissingBean(DataSource.class)
 public class GunsDataSourceContainerAutoConfiguration {
 
     /**
