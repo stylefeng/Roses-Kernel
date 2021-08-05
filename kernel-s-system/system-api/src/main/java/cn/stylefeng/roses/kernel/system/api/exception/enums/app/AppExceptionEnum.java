@@ -56,7 +56,12 @@ public enum AppExceptionEnum implements AbstractExceptionEnum {
     /**
      * 激活的应用不能被禁用
      */
-    CANT_DISABLE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "14", "激活的应用不能被禁用");
+    CANT_DISABLE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "14", "激活的应用不能被禁用"),
+
+    /**
+     * 激活应用失败，该应用没有菜单
+     */
+    ACTIVE_ERROR(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "15", "激活应用失败，该应用没有菜单");
 
     /**
      * 错误编码

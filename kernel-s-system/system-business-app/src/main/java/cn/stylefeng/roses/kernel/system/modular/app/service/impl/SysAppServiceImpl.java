@@ -155,6 +155,12 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     public void updateActiveFlag(SysAppRequest sysAppRequest) {
         SysApp currentApp = this.querySysApp(sysAppRequest);
 
+        // 如果应用下没有菜单，不能激活
+        boolean hasMenu = menuApi.hasMenu(currentApp.getAppCode());
+        if (hasMenu) {
+            throw new ServiceException(AppExceptionEnum.ACTIVE_ERROR);
+        }
+
         // 所有已激活的改为未激活
         LambdaUpdateWrapper<SysApp> sysAppLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         sysAppLambdaUpdateWrapper.set(SysApp::getActiveFlag, YesOrNotEnum.N.getCode());
