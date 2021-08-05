@@ -15,6 +15,7 @@ import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -78,7 +79,7 @@ public class CustomerFactory {
         String template = CustomerConfigExpander.getRegMailContent();
 
         SendMailParam sendMailParam = new SendMailParam();
-        sendMailParam.setTo(mail);
+        sendMailParam.setTos(Collections.singletonList(mail));
         sendMailParam.setTitle(title);
         sendMailParam.setContent(StrUtil.format(template, verifyCode, verifyCode));
         return sendMailParam;
@@ -121,7 +122,7 @@ public class CustomerFactory {
         String template = CustomerConfigExpander.getResetPwdMailContent();
 
         SendMailParam sendMailParam = new SendMailParam();
-        sendMailParam.setTo(mail);
+        sendMailParam.setTos(Collections.singletonList(mail));
         sendMailParam.setTitle(title);
         sendMailParam.setContent(StrUtil.format(template, randomCode));
         return sendMailParam;

@@ -58,7 +58,7 @@ public class JavaMailSender implements MailSenderApi {
         assertSendMailParams(sendMailParam);
 
         //spring发送邮件
-        MailUtil.send(mailAccount, CollUtil.newArrayList(sendMailParam.getTo()), sendMailParam.getTitle(), sendMailParam.getContent(), false);
+        MailUtil.send(mailAccount, sendMailParam.getTos(), sendMailParam.getCcsTos(), sendMailParam.getBccsTos(), sendMailParam.getTitle(), sendMailParam.getContent(), sendMailParam.getImageMap(), false, sendMailParam.getFiles());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class JavaMailSender implements MailSenderApi {
         assertSendMailParams(sendMailParam);
 
         //spring发送邮件
-        MailUtil.send(mailAccount, CollUtil.newArrayList(sendMailParam.getTo()), sendMailParam.getTitle(), sendMailParam.getContent(), true);
+        MailUtil.send(mailAccount, sendMailParam.getTos(), sendMailParam.getCcsTos(), sendMailParam.getBccsTos(), sendMailParam.getTitle(), sendMailParam.getContent(), sendMailParam.getImageMap(), true, sendMailParam.getFiles());
     }
 
     /**
@@ -83,7 +83,7 @@ public class JavaMailSender implements MailSenderApi {
             throw new MailException(EmailExceptionEnum.EMAIL_PARAM_EMPTY_ERROR.getErrorCode(), format);
         }
 
-        if (ObjectUtil.isEmpty(sendMailParam.getTo())) {
+        if (ObjectUtil.isEmpty(sendMailParam.getTos())) {
             String format = StrUtil.format(EmailExceptionEnum.EMAIL_PARAM_EMPTY_ERROR.getUserTip(), "收件人邮箱");
             throw new MailException(EmailExceptionEnum.EMAIL_PARAM_EMPTY_ERROR.getErrorCode(), format);
         }
@@ -98,5 +98,4 @@ public class JavaMailSender implements MailSenderApi {
             throw new MailException(EmailExceptionEnum.EMAIL_PARAM_EMPTY_ERROR.getErrorCode(), format);
         }
     }
-
 }
