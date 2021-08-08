@@ -170,7 +170,10 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             item.setCode(id);
             item.setParentCode(RuleConstants.TREE_ROOT_ID.toString());
             item.setNodeName(entry.getKey());
-            item.setChecked(false);
+
+            // 设置临时变量，统计半开状态
+            int checkedNumber = 0;
+
             //创建二级节点
             for (SysResource resource : entry.getValue()) {
                 ResourceTreeNode subItem = new ResourceTreeNode();
@@ -178,6 +181,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 if (!resourceCodes.contains(resource.getResourceCode())) {
                     subItem.setChecked(false);
                 } else {
+                    checkedNumber++;
+
                     // 让父类也选择
                     item.setChecked(true);
                     subItem.setChecked(true);
@@ -188,6 +193,19 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 subItem.setParentCode(id);
                 res.add(subItem);
             }
+
+            // 统计选中的数量
+            if (checkedNumber == entry.getValue().size()) {
+                item.setChecked(true);
+                item.setIndeterminate(false);
+            } else if (checkedNumber == 0) {
+                item.setChecked(false);
+                item.setIndeterminate(false);
+            } else {
+                item.setChecked(false);
+                item.setIndeterminate(true);
+            }
+
             res.add(item);
         }
 

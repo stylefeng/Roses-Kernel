@@ -73,6 +73,12 @@ public class ResourceTreeNode implements AbstractTreeNode<ResourceTreeNode> {
     private Boolean checked;
 
     /**
+     * 是否是半开状态（一部分选中）
+     */
+    @ChineseDescription("是否是半开状态（一部分选中）")
+    private Boolean indeterminate;
+
+    /**
      * 子节点集合
      */
     @ChineseDescription("子节点集合")
