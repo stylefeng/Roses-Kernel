@@ -24,13 +24,6 @@
             <version>${roses.version}</version>
         </dependency>
 
-        <!--prometheus监控-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>monitor-sdk-prometheus</artifactId>
-            <version>${roses.version}</version>
-        </dependency>
-
     </dependencies>
 
 </project>
