@@ -92,6 +92,25 @@ public class AntdMenusFactory {
     }
 
     /**
+     * 填充叶子节点的标识
+     *
+     * @author fengshuonan
+     * @date 2021/8/8 15:22
+     */
+    public static void fillLeafFlag(List<SysMenu> sysMenuList) {
+        for (SysMenu sysMenu : sysMenuList) {
+            sysMenu.setLeafFlag(true);
+
+            // 判断这个节点下面有没有节点
+            for (SysMenu tempMenu : sysMenuList) {
+                if (tempMenu.getMenuPids().contains("[" + sysMenu.getMenuId() + "]")) {
+                    sysMenu.setLeafFlag(false);
+                }
+            }
+        }
+    }
+
+    /**
      * 模型转化
      *
      * @author fengshuonan

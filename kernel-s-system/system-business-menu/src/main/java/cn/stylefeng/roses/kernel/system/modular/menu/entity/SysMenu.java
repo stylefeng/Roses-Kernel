@@ -209,6 +209,13 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode<SysMenu> {
     @ChineseDescription("父级菜单的名称")
     private String menuParentName;
 
+    /**
+     * 是否是叶子节点菜单
+     */
+    @TableField(exist = false)
+    @ChineseDescription("是否是叶子节点菜单")
+    private Boolean leafFlag;
+
     @Override
     public String getNodeId() {
         return menuId.toString();

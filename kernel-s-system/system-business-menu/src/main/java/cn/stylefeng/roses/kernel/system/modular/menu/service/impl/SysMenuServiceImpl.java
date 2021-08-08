@@ -221,6 +221,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         List<SysMenu> sysMenuList = this.findList(sysMenuRequest);
 
+        // 遍历菜单，设置是否是叶子节点属性
+        AntdMenusFactory.fillLeafFlag(sysMenuList);
+
         // 将结果集处理成树
         return new DefaultTreeBuildFactory<SysMenu>().doTreeBuild(sysMenuList);
     }
