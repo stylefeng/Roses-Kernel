@@ -56,6 +56,13 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--资源模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-resource</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--web模块-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

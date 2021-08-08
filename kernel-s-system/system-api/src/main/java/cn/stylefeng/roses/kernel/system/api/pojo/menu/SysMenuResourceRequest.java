@@ -22,30 +22,30 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.system.modular.menu.service;
+package cn.stylefeng.roses.kernel.system.api.pojo.menu;
 
-import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuResource;
-import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
-import com.baomidou.mybatisplus.extension.service.IService;
+import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 /**
- * 菜单资源信息
+ * 菜单资源的请求
  *
  * @author fengshuonan
- * @date 2021/8/8 21:38
+ * @date 2021/8/8 22:40
  */
-public interface SysMenuResourceService extends IService<SysMenuResource> {
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class SysMenuResourceRequest extends BaseRequest {
 
     /**
-     * 获取菜单或菜单按钮绑定资源的树
-     *
-     * @param businessId 业务id，菜单或按钮id
-     * @return 资源树列表
-     * @author fengshuonan
-     * @date 2021/8/8 21:56
+     * 业务id不能为空
      */
-    List<ResourceTreeNode> getMenuResourceTree(Long businessId);
+    @NotNull(message = "业务id不能为空")
+    @ChineseDescription("业务id")
+    private Long businessId;
 
 }

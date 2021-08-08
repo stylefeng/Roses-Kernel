@@ -22,30 +22,44 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.system.modular.menu.service;
+package cn.stylefeng.roses.kernel.system.modular.menu.controller;
 
-import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuResource;
+import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
+import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuResourceRequest;
+import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuResourceService;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
-import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 菜单资源信息
+ * 菜单资源控制器
  *
  * @author fengshuonan
- * @date 2021/8/8 21:38
+ * @date 2021/8/8 22:38
  */
-public interface SysMenuResourceService extends IService<SysMenuResource> {
+@RestController
+@ApiResource(name = "菜单资源控制器")
+public class SysMenuResourceController {
+
+    @Resource
+    private SysMenuResourceService sysMenuResourceService;
 
     /**
-     * 获取菜单或菜单按钮绑定资源的树
+     * 获取菜单的资源分配列表
      *
-     * @param businessId 业务id，菜单或按钮id
-     * @return 资源树列表
      * @author fengshuonan
-     * @date 2021/8/8 21:56
+     * @date 2021/8/8 22:38
      */
-    List<ResourceTreeNode> getMenuResourceTree(Long businessId);
+    @GetResource(name = "获取菜单的资源分配列表", path = "/sysMenuResource/getMenuResourceList")
+    public ResponseData getMenuResourceList(@Validated SysMenuResourceRequest sysMenuResourceRequest) {
+        List<ResourceTreeNode> menuResourceTree = sysMenuResourceService.getMenuResourceTree(sysMenuResourceRequest.getBusinessId());
+        return new SuccessResponseData(menuResourceTree);
+    }
 
 }

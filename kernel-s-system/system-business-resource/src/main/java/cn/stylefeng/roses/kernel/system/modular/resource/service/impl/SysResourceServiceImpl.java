@@ -111,8 +111,22 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public List<ResourceTreeNode> getResourceTree(Long roleId, Boolean treeBuildFlag) {
+    public List<ResourceTreeNode> getRoleResourceTree(Long roleId, Boolean treeBuildFlag) {
 
+        // 查询当前角色已有的接口
+        List<SysRoleResourceDTO> resourceList = roleServiceApi.getRoleResourceList(Collections.singletonList(roleId));
+
+        // 该角色已拥有权限
+        List<String> alreadyList = new ArrayList<>();
+        for (SysRoleResourceDTO sysRoleResponse : resourceList) {
+            alreadyList.add(sysRoleResponse.getResourceCode());
+        }
+
+        return this.getResourceList(alreadyList, treeBuildFlag);
+    }
+
+    @Override
+    public List<ResourceTreeNode> getResourceList(List<String> resourceCodes, Boolean treeBuildFlag) {
         List<ResourceTreeNode> res = new ArrayList<>();
 
         // 获取所有的资源
@@ -133,15 +147,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         }
 
         List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);
-
-        // 查询当前角色已有的接口
-        List<SysRoleResourceDTO> resourceList = roleServiceApi.getRoleResourceList(Collections.singletonList(roleId));
-
-        // 该角色已拥有权限
-        Map<String, SysRoleResourceDTO> alreadyHave = new HashMap<>(resourceList.size());
-        for (SysRoleResourceDTO sysRoleResponse : resourceList) {
-            alreadyHave.put(sysRoleResponse.getResourceCode(), sysRoleResponse);
-        }
 
         // 根据模块名称把资源分类
         Map<String, List<SysResource>> modularMap = new HashMap<>();
@@ -170,8 +175,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             for (SysResource resource : entry.getValue()) {
                 ResourceTreeNode subItem = new ResourceTreeNode();
                 // 判断是否已经拥有
-                SysRoleResourceDTO resourceResponse = alreadyHave.get(resource.getResourceCode());
-                if (ObjectUtil.isEmpty(resourceResponse)) {
+                if (!resourceCodes.contains(resource.getResourceCode())) {
                     subItem.setChecked(false);
                 } else {
                     // 让父类也选择
@@ -206,9 +210,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         // 查询条件
         if (ObjectUtil.isNotEmpty(resourceRequest.getResourceName())) {
             sysResourceLambdaQueryWrapper
-                .like(SysResource::getUrl, resourceRequest.getResourceName())
-                .or()
-                .like(SysResource::getResourceName, resourceRequest.getResourceName());
+                    .like(SysResource::getUrl, resourceRequest.getResourceName())
+                    .or()
+                    .like(SysResource::getResourceName, resourceRequest.getResourceName());
         }
 
         List<SysResource> allResource = this.list(sysResourceLambdaQueryWrapper);

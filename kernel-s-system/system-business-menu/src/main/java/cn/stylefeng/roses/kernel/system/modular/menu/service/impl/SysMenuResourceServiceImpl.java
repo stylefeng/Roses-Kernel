@@ -27,8 +27,15 @@ package cn.stylefeng.roses.kernel.system.modular.menu.service.impl;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuResource;
 import cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuResourceMapper;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuResourceService;
+import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
+import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 系统资源信息关联
@@ -38,5 +45,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysMenuResourceServiceImpl extends ServiceImpl<SysMenuResourceMapper, SysMenuResource> implements SysMenuResourceService {
+
+    @Resource
+    private SysResourceService sysResourceService;
+
+    @Override
+    public List<ResourceTreeNode> getMenuResourceTree(Long businessId) {
+        LambdaQueryWrapper<SysMenuResource> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysMenuResource::getBusinessId, businessId);
+        List<SysMenuResource> list = this.list(wrapper);
+
+        List<String> resourceCodes = list.stream().map(SysMenuResource::getResourceCode).collect(Collectors.toList());
+        return sysResourceService.getResourceList(resourceCodes, true);
+    }
 
 }

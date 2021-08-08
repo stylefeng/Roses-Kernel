@@ -31,7 +31,6 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
-import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ExternalResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
@@ -39,7 +38,6 @@ import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
 import com.alibaba.fastjson.JSON;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -92,7 +90,7 @@ public class ResourceController {
      */
     @GetResource(name = "Layui版本--获取资源树列表，用于角色分配接口权限", path = "/resource/getRoleResourceTree", responseClass = ResourceTreeNode.class)
     public List<ResourceTreeNode> getLateralTree(SysRoleRequest sysRoleRequest) {
-        return sysResourceService.getResourceTree(sysRoleRequest.getRoleId(), false);
+        return sysResourceService.getRoleResourceTree(sysRoleRequest.getRoleId(), false);
     }
 
     /**
@@ -103,7 +101,7 @@ public class ResourceController {
      */
     @GetResource(name = "AntdVue版本--获取资源树列表，用于角色分配接口权限", path = "/resource/getRoleResourceTreeAntdv", responseClass = ResourceTreeNode.class)
     public ResponseData getLateralTreeChildren(SysRoleRequest sysRoleRequest) {
-        List<ResourceTreeNode> resourceLateralTree = sysResourceService.getResourceTree(sysRoleRequest.getRoleId(), true);
+        List<ResourceTreeNode> resourceLateralTree = sysResourceService.getRoleResourceTree(sysRoleRequest.getRoleId(), true);
         return new SuccessResponseData(resourceLateralTree);
     }
 
