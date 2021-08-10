@@ -24,8 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.role.service;
 
-import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRoleResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRoleResource;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -46,6 +46,14 @@ public interface SysRoleResourceService extends IService<SysRoleResource> {
      * @date 2020/11/5 上午11:17
      */
     void grantResource(SysRoleRequest sysRoleRequest);
+
+    /**
+     * 角色授权接口资源
+     *
+     * @author fengshuonan
+     * @date 2021/8/10 18:28
+     */
+    void grantResourceV2(SysRoleRequest sysRoleRequest);
 
     /**
      * 根据资源id集合删除角色关联的资源

@@ -24,12 +24,14 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.role.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRoleResource;
 import cn.stylefeng.roses.kernel.system.modular.role.mapper.SysRoleResourceMapper;
 import cn.stylefeng.roses.kernel.system.modular.role.service.SysRoleResourceService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +79,31 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
             sysRoleResources.add(sysRoleMenu);
         }
         this.saveBatch(sysRoleResources);
+    }
+
+    @Override
+    public void grantResourceV2(SysRoleRequest sysRoleRequest) {
+        // 先将该业务下，模块下的所有资源删除掉
+        List<String> modularTotalResource = sysRoleRequest.getModularTotalResource();
+        if (ObjectUtil.isNotEmpty(modularTotalResource)) {
+            LambdaUpdateWrapper<SysRoleResource> wrapper = new LambdaUpdateWrapper<>();
+            wrapper.in(SysRoleResource::getResourceCode, modularTotalResource);
+            wrapper.eq(SysRoleResource::getRoleId, sysRoleRequest.getRoleId());
+            this.remove(wrapper);
+        }
+
+        // 再将该业务下，需要绑定的资源添加上
+        List<String> selectedResource = sysRoleRequest.getSelectedResource();
+        if (ObjectUtil.isNotEmpty(selectedResource)) {
+            ArrayList<SysRoleResource> menuResources = new ArrayList<>();
+            for (String resourceCode : selectedResource) {
+                SysRoleResource sysRoleResource = new SysRoleResource();
+                sysRoleResource.setRoleId(sysRoleRequest.getRoleId());
+                sysRoleResource.setResourceCode(resourceCode);
+                menuResources.add(sysRoleResource);
+            }
+            this.saveBatch(menuResources, menuResources.size());
+        }
     }
 
     @Override

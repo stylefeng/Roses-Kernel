@@ -49,7 +49,7 @@ public class SysRoleRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "roleId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class, grantDataScope.class, grantMenuButton.class})
+    @NotNull(message = "roleId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class, grantResourceV2.class, grantDataScope.class, grantMenuButton.class})
     @ChineseDescription("主键")
     private Long roleId;
 
@@ -121,6 +121,18 @@ public class SysRoleRequest extends BaseRequest {
     private List<String> grantResourceList;
 
     /**
+     * 授权资源，模块组包含的所有资源
+     */
+    @ChineseDescription("授权资源，模块组包含的所有资源")
+    private List<String> modularTotalResource;
+
+    /**
+     * 授权资源，模块组选中的资源
+     */
+    @ChineseDescription("授权资源，模块组选中的资源")
+    private List<String> selectedResource;
+
+    /**
      * 授权数据
      */
     @ChineseDescription("授权数据")
@@ -151,6 +163,13 @@ public class SysRoleRequest extends BaseRequest {
      * 参数校验分组：授权资源
      */
     public @interface grantResource {
+
+    }
+
+    /**
+     * 参数校验分组：授权资源
+     */
+    public @interface grantResourceV2 {
 
     }
 

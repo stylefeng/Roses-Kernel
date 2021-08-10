@@ -129,6 +129,18 @@ public class SysRoleController {
     }
 
     /**
+     * 角色绑定接口数据
+     *
+     * @author fengshuonan
+     * @date 2021/8/10 18:23
+     */
+    @PostResource(name = "角色绑定接口数据V2", path = "/sysRole/grantResourceV2")
+    public ResponseData grantResourceV2(@RequestBody @Validated(SysRoleRequest.grantResourceV2.class) SysRoleRequest sysRoleRequest) {
+        sysRoleResourceService.grantResourceV2(sysRoleRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
      * 角色授权菜单和按钮
      *
      * @author majianguo
