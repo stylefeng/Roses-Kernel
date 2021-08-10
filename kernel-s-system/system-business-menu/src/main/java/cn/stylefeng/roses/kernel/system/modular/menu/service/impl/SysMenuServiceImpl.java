@@ -45,6 +45,7 @@ import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.menu.SysMenuExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
@@ -311,22 +312,24 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest, Boolean lateralFlag) {
         List<LayuiMenuAndButtonTreeResponse> menuTreeNodeList = CollectionUtil.newArrayList();
 
-        LambdaQueryWrapper<SysMenu> munuWrapper = new LambdaQueryWrapper<>();
-        munuWrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode());
-        munuWrapper.eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode());
-        // 非超级管理员则获取自己拥有的菜单，分配给人员，防止越级授权
+        // 查询未删除的启用的菜单列表
+        LambdaQueryWrapper<SysMenu> menuWrapper = new LambdaQueryWrapper<>();
+        menuWrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode());
+        menuWrapper.eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode());
+
+        // 非超级管理员则获取自己拥有的菜单
         if (!LoginContext.me().getSuperAdminFlag()) {
             List<Long> menuIdList = getCurrentUserMenuIds();
             if (!menuIdList.isEmpty()) {
-                munuWrapper.in(SysMenu::getMenuId, menuIdList);
+                menuWrapper.in(SysMenu::getMenuId, menuIdList);
             }
         }
+        List<SysMenu> sysMenuList = this.list(menuWrapper);
 
-        List<SysMenu> sysMenuList = this.list(munuWrapper);
-
+        // 获取菜单的id集合
         List<Long> menuList = sysMenuList.parallelStream().map(SysMenu::getMenuId).collect(Collectors.toList());
 
-        // 查询所有的按钮
+        // 查询这些菜单对应的所有按钮
         LambdaQueryWrapper<SysMenuButton> buttonWrapper = new LambdaQueryWrapper<>();
         buttonWrapper.eq(SysMenuButton::getDelFlag, YesOrNotEnum.N.getCode());
         buttonWrapper.in(SysMenuButton::getMenuId, menuList);
@@ -346,6 +349,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 查询所有已有的权限
         // 所有已有的菜单权限
         List<SysRoleMenuDTO> roleMenuList = roleServiceApi.getRoleMenuList(Collections.singletonList(sysRoleRequest.getRoleId()));
+
         // 转换成map方便后续处理
         Map<Long, SysRoleMenuDTO> roleMenuMap = new HashMap<>();
         for (SysRoleMenuDTO sysRoleMenuResponse : roleMenuList) {
@@ -370,11 +374,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             menuTree.setPid(sysMenu.getMenuParentId());
             // 判断是否已经有了
             SysRoleMenuDTO roleMenuResponse = roleMenuMap.get(sysMenu.getMenuId());
-            if (ObjectUtil.isEmpty(roleMenuResponse)) {
-                menuTree.setChecked(false);
-            } else {
-                menuTree.setChecked(true);
-            }
+            menuTree.setChecked(!ObjectUtil.isEmpty(roleMenuResponse));
 
             // 处理该菜单的按钮
             List<SysMenuButton> menuButtons = buttons.get(sysMenu.getMenuId());
@@ -410,6 +410,51 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         } else {
             return new DefaultTreeBuildFactory<LayuiMenuAndButtonTreeResponse>().doTreeBuild(menuTreeNodeList);
         }
+    }
+
+    @Override
+    public List<MenuAndButtonTreeResponse> getRoleMenuAndButtons(SysRoleRequest sysRoleRequest) {
+        List<MenuAndButtonTreeResponse> menuTreeNodeList = CollectionUtil.newArrayList();
+
+        // 查询未删除的启用的菜单列表
+        LambdaQueryWrapper<SysMenu> menuWrapper = new LambdaQueryWrapper<>();
+        menuWrapper.eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode());
+        menuWrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode());
+
+        // 非超级管理员则获取自己拥有的菜单
+        if (!LoginContext.me().getSuperAdminFlag()) {
+            List<Long> menuIdList = getCurrentUserMenuIds();
+            if (!menuIdList.isEmpty()) {
+                menuWrapper.in(SysMenu::getMenuId, menuIdList);
+            }
+        }
+
+        // 查询所有菜单列表
+        List<SysMenu> sysMenuList = this.list(menuWrapper);
+
+        // 获取菜单的id集合
+        List<Long> menuIdList = sysMenuList.stream().map(SysMenu::getMenuId).collect(Collectors.toList());
+
+        // 获取角色绑定的菜单的id
+        List<SysRoleMenuDTO> roleMenuList = roleServiceApi.getRoleMenuList(Collections.singletonList(sysRoleRequest.getRoleId()));
+
+        // 转化 --->>> 菜单列表自转化为响应的节点类型
+        List<MenuAndButtonTreeResponse> menuAndButtonTreeResponses = AntdMenusFactory.parseMenuAndButtonTreeResponse(sysMenuList, roleMenuList);
+
+        // 查询这些菜单对应的所有按钮
+        LambdaQueryWrapper<SysMenuButton> buttonWrapper = new LambdaQueryWrapper<>();
+        buttonWrapper.eq(SysMenuButton::getDelFlag, YesOrNotEnum.N.getCode());
+        buttonWrapper.in(SysMenuButton::getMenuId, menuIdList);
+        List<SysMenuButton> buttonList = sysMenuButtonService.list(buttonWrapper);
+
+        // 获取角色绑定的按钮的id
+        List<SysRoleMenuButtonDTO> roleMenuButtonList = roleServiceApi.getRoleMenuButtonList(Collections.singletonList(sysRoleRequest.getRoleId()));
+
+        // 转化 --->>> 将这些按钮，分别绑定在各自的菜单上
+        AntdMenusFactory.fillButtons(menuAndButtonTreeResponses, buttonList, roleMenuButtonList);
+
+        // 菜单列表转化为一棵树
+        return new DefaultTreeBuildFactory<MenuAndButtonTreeResponse>().doTreeBuild(menuAndButtonTreeResponses);
     }
 
     @Override

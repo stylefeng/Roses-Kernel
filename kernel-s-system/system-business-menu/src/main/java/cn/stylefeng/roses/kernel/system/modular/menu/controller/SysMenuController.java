@@ -30,6 +30,7 @@ import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
@@ -180,6 +181,18 @@ public class SysMenuController {
     @GetResource(name = "获取系统菜单和按钮的树，用于角色分配菜单按钮（antd vue版本使用）", path = "/sysMenu/menuAndButtonTreeChildren", responseClass = LayuiMenuAndButtonTreeResponse.class)
     public ResponseData menuAndButtonTreeChildren(SysRoleRequest sysRoleRequest) {
         List<LayuiMenuAndButtonTreeResponse> treeResponseList = sysMenuService.getMenuAndButtonTree(sysRoleRequest, false);
+        return new SuccessResponseData(treeResponseList);
+    }
+
+    /**
+     * 新版角色分配菜单和按钮界面使用的接口
+     *
+     * @author fengshuonan
+     * @date 2021/8/10 22:21
+     */
+    @GetResource(name = "新版角色分配菜单和按钮界面使用的接口（v2）", path = "/sysMenu/menuAndButtonTreeChildrenV2", responseClass = LayuiMenuAndButtonTreeResponse.class)
+    public ResponseData menuAndButtonTreeChildrenV2(SysRoleRequest sysRoleRequest) {
+        List<MenuAndButtonTreeResponse> treeResponseList = sysMenuService.getRoleMenuAndButtons(sysRoleRequest);
         return new SuccessResponseData(treeResponseList);
     }
 

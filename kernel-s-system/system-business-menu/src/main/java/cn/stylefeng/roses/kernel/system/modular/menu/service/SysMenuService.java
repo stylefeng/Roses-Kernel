@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.service;
 
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
@@ -144,6 +145,14 @@ public interface SysMenuService extends IService<SysMenu> {
      * @date 2021/1/9 17:11
      */
     List<LayuiMenuAndButtonTreeResponse> getMenuAndButtonTree(SysRoleRequest sysRoleRequest, Boolean lateralFlag);
+
+    /**
+     * 获取角色绑定菜单和按钮权限的树
+     *
+     * @author fengshuonan
+     * @date 2021/8/10 22:23
+     */
+    List<MenuAndButtonTreeResponse> getRoleMenuAndButtons(SysRoleRequest sysRoleRequest);
 
     /**
      * 获取当前用户的某个应用下的菜单

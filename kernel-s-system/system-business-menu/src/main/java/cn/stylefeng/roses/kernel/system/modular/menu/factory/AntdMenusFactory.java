@@ -28,9 +28,13 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleMenuButtonDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleMenuDTO;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -107,6 +111,79 @@ public class AntdMenusFactory {
                     sysMenu.setLeafFlag(false);
                 }
             }
+        }
+    }
+
+    /**
+     * 菜单集合转化成角色分配菜单的集合
+     *
+     * @author fengshuonan
+     * @date 2021/8/10 22:56
+     */
+    public static List<MenuAndButtonTreeResponse> parseMenuAndButtonTreeResponse(List<SysMenu> sysMenuList, List<SysRoleMenuDTO> roleBindMenus) {
+        ArrayList<MenuAndButtonTreeResponse> result = new ArrayList<>();
+
+        if (ObjectUtil.isEmpty(sysMenuList)) {
+            return result;
+        }
+
+        for (SysMenu sysMenu : sysMenuList) {
+            MenuAndButtonTreeResponse menuAndButtonTreeResponse = new MenuAndButtonTreeResponse();
+            menuAndButtonTreeResponse.setId(sysMenu.getMenuId());
+            menuAndButtonTreeResponse.setName(sysMenu.getMenuName());
+            menuAndButtonTreeResponse.setCode(sysMenu.getMenuCode());
+            menuAndButtonTreeResponse.setPid(sysMenu.getMenuParentId());
+            menuAndButtonTreeResponse.setChecked(false);
+
+            if (ObjectUtil.isNotEmpty(roleBindMenus)) {
+                for (SysRoleMenuDTO roleBindMenu : roleBindMenus) {
+                    if (roleBindMenu.getMenuId().equals(sysMenu.getMenuId())) {
+                        menuAndButtonTreeResponse.setChecked(true);
+                    }
+                }
+            }
+
+            result.add(menuAndButtonTreeResponse);
+        }
+
+        return result;
+    }
+
+    /**
+     * 菜单集合转化成角色分配菜单的集合
+     *
+     * @author fengshuonan
+     * @date 2021/8/10 22:56
+     */
+    public static void fillButtons(List<MenuAndButtonTreeResponse> sysMenuList, List<SysMenuButton> buttonList, List<SysRoleMenuButtonDTO> roleMenuButtonList) {
+        for (MenuAndButtonTreeResponse menuAndButtonTreeResponse : sysMenuList) {
+            if (ObjectUtil.isEmpty(buttonList)) {
+                continue;
+            }
+
+            ArrayList<MenuAndButtonTreeResponse> menuButtonList = new ArrayList<>();
+
+            for (SysMenuButton sysMenuButton : buttonList) {
+                if (menuAndButtonTreeResponse.getId().equals(sysMenuButton.getMenuId())) {
+                    MenuAndButtonTreeResponse buttonInfo = new MenuAndButtonTreeResponse();
+                    buttonInfo.setId(sysMenuButton.getButtonId());
+                    buttonInfo.setName(sysMenuButton.getButtonName());
+                    buttonInfo.setCode(sysMenuButton.getButtonCode());
+                    buttonInfo.setChecked(false);
+
+                    if (ObjectUtil.isNotEmpty(roleMenuButtonList)) {
+                        for (SysRoleMenuButtonDTO sysRoleMenuButtonDTO : roleMenuButtonList) {
+                            if (sysRoleMenuButtonDTO.getButtonId().equals(sysMenuButton.getButtonId())) {
+                                buttonInfo.setChecked(true);
+                            }
+                        }
+                    }
+
+                    menuButtonList.add(buttonInfo);
+                }
+            }
+
+            menuAndButtonTreeResponse.setButtons(menuButtonList);
         }
     }
 
