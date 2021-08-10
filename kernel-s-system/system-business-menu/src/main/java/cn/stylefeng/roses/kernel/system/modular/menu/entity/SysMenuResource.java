@@ -64,7 +64,7 @@ public class SysMenuResource extends BaseEntity implements Serializable {
      */
     @TableField(value = "business_id")
     @ChineseDescription("菜单或按钮id")
-    private String businessId;
+    private Long businessId;
 
     /**
      * 资源的编码

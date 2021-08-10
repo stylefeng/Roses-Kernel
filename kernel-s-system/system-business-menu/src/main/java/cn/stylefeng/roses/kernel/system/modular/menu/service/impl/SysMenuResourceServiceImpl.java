@@ -24,16 +24,21 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.menu.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuResourceRequest;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuResource;
 import cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuResourceMapper;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuResourceService;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +62,33 @@ public class SysMenuResourceServiceImpl extends ServiceImpl<SysMenuResourceMappe
 
         List<String> resourceCodes = list.stream().map(SysMenuResource::getResourceCode).collect(Collectors.toList());
         return sysResourceService.getResourceList(resourceCodes, true);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addMenuResourceBind(SysMenuResourceRequest sysMenuResourceRequest) {
+        // 先将该业务下，模块下的所有资源删除掉
+        List<String> modularTotalResource = sysMenuResourceRequest.getModularTotalResource();
+        if (ObjectUtil.isNotEmpty(modularTotalResource)) {
+            LambdaUpdateWrapper<SysMenuResource> wrapper = new LambdaUpdateWrapper<>();
+            wrapper.in(SysMenuResource::getResourceCode, modularTotalResource);
+            wrapper.eq(SysMenuResource::getBusinessId, sysMenuResourceRequest.getBusinessId());
+            this.remove(wrapper);
+        }
+
+        // 再将该业务下，需要绑定的资源添加上
+        List<String> selectedResource = sysMenuResourceRequest.getSelectedResource();
+        if (ObjectUtil.isNotEmpty(selectedResource)) {
+            ArrayList<SysMenuResource> menuResources = new ArrayList<>();
+            for (String resourceCode : selectedResource) {
+                SysMenuResource sysMenuResource = new SysMenuResource();
+                sysMenuResource.setBusinessType(sysMenuResourceRequest.getBusinessType());
+                sysMenuResource.setBusinessId(sysMenuResourceRequest.getBusinessId());
+                sysMenuResource.setResourceCode(resourceCode);
+                menuResources.add(sysMenuResource);
+            }
+            this.saveBatch(menuResources, menuResources.size());
+        }
     }
 
 }

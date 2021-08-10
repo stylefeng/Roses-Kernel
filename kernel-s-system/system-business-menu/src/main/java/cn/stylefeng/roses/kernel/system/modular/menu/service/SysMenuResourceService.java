@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.menu.service;
 
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuResourceRequest;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -47,5 +48,13 @@ public interface SysMenuResourceService extends IService<SysMenuResource> {
      * @date 2021/8/8 21:56
      */
     List<ResourceTreeNode> getMenuResourceTree(Long businessId);
+
+    /**
+     * 添加菜单和资源的绑定
+     *
+     * @author fengshuonan
+     * @date 2021/8/10 13:58
+     */
+    void addMenuResourceBind(SysMenuResourceRequest sysMenuResourceRequest);
 
 }
