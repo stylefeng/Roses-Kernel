@@ -212,6 +212,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         // 更新用户ip和登录时间
         String ip = HttpServletUtil.getRequestClientIp(HttpServletUtil.getRequest());
         LambdaUpdateWrapper<Customer> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Customer::getCustomerId, loginUser.getUserId());
         updateWrapper.set(Customer::getLastLoginIp, ip);
         updateWrapper.set(Customer::getLastLoginTime, new Date());
         this.update(updateWrapper);
