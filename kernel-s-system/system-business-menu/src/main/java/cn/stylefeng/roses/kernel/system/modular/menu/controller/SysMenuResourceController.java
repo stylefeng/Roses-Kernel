@@ -33,6 +33,7 @@ import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuResourceRequest;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuResourceService;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -70,7 +71,7 @@ public class SysMenuResourceController {
      * @date 2021/8/10 11:55
      */
     @PostResource(name = "设置菜单资源绑定", path = "/sysMenuResource/addMenuResourceBind")
-    public ResponseData addMenuResourceBind(@Validated(value = SysMenuResourceRequest.add.class) SysMenuResourceRequest sysMenuResourceRequest) {
+    public ResponseData addMenuResourceBind(@RequestBody @Validated(value = SysMenuResourceRequest.add.class) SysMenuResourceRequest sysMenuResourceRequest) {
         sysMenuResourceService.addMenuResourceBind(sysMenuResourceRequest);
         return new SuccessResponseData();
     }
