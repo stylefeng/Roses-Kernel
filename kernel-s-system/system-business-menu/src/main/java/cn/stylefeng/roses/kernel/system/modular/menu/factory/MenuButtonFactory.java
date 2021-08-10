@@ -25,11 +25,13 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.factory;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.modular.menu.constants.MenuButtonConstant;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 组装菜单按钮
@@ -47,40 +49,49 @@ public class MenuButtonFactory {
      * @author chenjinlong
      * @date 2021/1/27 15:36
      */
-    public static List<SysMenuButton> createSystemDefaultButton(Long menuId) {
+    public static List<SysMenuButton> createSystemDefaultButton(Long menuId, String menuName, String menuCode) {
 
         List<SysMenuButton> sysMenuButtonList = CollUtil.newArrayList();
+
+        // 菜单编码加下划线
+        if (StrUtil.isNotBlank(menuCode)) {
+            menuCode = menuCode.toUpperCase(Locale.ROOT) + "_";
+        }
+
+        // 菜单名称添加下划线
+        if (StrUtil.isNotBlank(menuName)) {
+            menuName = menuName + "_";
+        }
 
         // 新增按钮
         SysMenuButton addButton = new SysMenuButton();
         addButton.setMenuId(menuId);
-        addButton.setButtonCode(MenuButtonConstant.DEFAULT_ADD_BUTTON_CODE);
-        addButton.setButtonName(MenuButtonConstant.DEFAULT_ADD_BUTTON_NAME);
+        addButton.setButtonCode(menuCode + MenuButtonConstant.DEFAULT_ADD_BUTTON_CODE);
+        addButton.setButtonName(menuName + MenuButtonConstant.DEFAULT_ADD_BUTTON_NAME);
         addButton.setDelFlag(YesOrNotEnum.N.getCode());
         sysMenuButtonList.add(addButton);
 
         // 删除按钮
         SysMenuButton delButton = new SysMenuButton();
         delButton.setMenuId(menuId);
-        delButton.setButtonCode(MenuButtonConstant.DEFAULT_DEL_BUTTON_CODE);
-        delButton.setButtonName(MenuButtonConstant.DEFAULT_DEL_BUTTON_NAME);
+        delButton.setButtonCode(menuCode + MenuButtonConstant.DEFAULT_DEL_BUTTON_CODE);
+        delButton.setButtonName(menuName + MenuButtonConstant.DEFAULT_DEL_BUTTON_NAME);
         delButton.setDelFlag(YesOrNotEnum.N.getCode());
         sysMenuButtonList.add(delButton);
 
         // 修改按钮
         SysMenuButton updateButton = new SysMenuButton();
         updateButton.setMenuId(menuId);
-        updateButton.setButtonCode(MenuButtonConstant.DEFAULT_UPDATE_BUTTON_CODE);
-        updateButton.setButtonName(MenuButtonConstant.DEFAULT_UPDATE_BUTTON_NAME);
+        updateButton.setButtonCode(menuCode + MenuButtonConstant.DEFAULT_UPDATE_BUTTON_CODE);
+        updateButton.setButtonName(menuName + MenuButtonConstant.DEFAULT_UPDATE_BUTTON_NAME);
         updateButton.setDelFlag(YesOrNotEnum.N.getCode());
         sysMenuButtonList.add(updateButton);
-
 
         // 查询按钮
         SysMenuButton searchButton = new SysMenuButton();
         searchButton.setMenuId(menuId);
-        searchButton.setButtonCode(MenuButtonConstant.DEFAULT_SEARCH_BUTTON_CODE);
-        searchButton.setButtonName(MenuButtonConstant.DEFAULT_SEARCH_BUTTON_NAME);
+        searchButton.setButtonCode(menuCode + MenuButtonConstant.DEFAULT_SEARCH_BUTTON_CODE);
+        searchButton.setButtonName(menuName + MenuButtonConstant.DEFAULT_SEARCH_BUTTON_NAME);
         searchButton.setDelFlag(YesOrNotEnum.N.getCode());
         sysMenuButtonList.add(searchButton);
 

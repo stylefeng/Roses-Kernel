@@ -33,16 +33,19 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.menu.SysMenuButtonExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuButtonRequest;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
 import cn.stylefeng.roses.kernel.system.modular.menu.factory.MenuButtonFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuButtonMapper;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuButtonService;
-import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuButtonRequest;
+import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
 
@@ -55,6 +58,9 @@ import java.util.Set;
 @Service
 public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, SysMenuButton> implements SysMenuButtonService {
 
+    @Resource
+    private SysMenuService sysMenuService;
+
     @Override
     public void add(SysMenuButtonRequest sysMenuButtonRequest) {
         SysMenuButton sysMenuButton = new SysMenuButton();
@@ -65,8 +71,12 @@ public class SysMenuButtonServiceImpl extends ServiceImpl<SysMenuButtonMapper, S
     @Override
     public void addDefaultButtons(SysMenuButtonRequest sysMenuButtonRequest) {
         Long menuId = sysMenuButtonRequest.getMenuId();
+
+        // 获取菜单的编码
+        SysMenu sysMenu = this.sysMenuService.getById(menuId);
+
         // 构建菜单的系统默认按钮
-        List<SysMenuButton> sysMenuButtonList = MenuButtonFactory.createSystemDefaultButton(menuId);
+        List<SysMenuButton> sysMenuButtonList = MenuButtonFactory.createSystemDefaultButton(menuId, sysMenu.getMenuName(), sysMenu.getMenuCode());
         this.saveBatch(sysMenuButtonList);
     }
 
