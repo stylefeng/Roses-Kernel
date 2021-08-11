@@ -146,9 +146,33 @@ public class SysRoleController {
      * @author majianguo
      * @date 2021/1/9 18:04
      */
-    @PostResource(name = "授权资源", path = "/sysRole/grantMenuAndButton")
+    @PostResource(name = "角色授权菜单和按钮", path = "/sysRole/grantMenuAndButton")
     public ResponseData grantMenuAndButton(@RequestBody @Validated(SysRoleRequest.grantMenuButton.class) SysRoleRequest sysRoleRequest) {
         sysRoleService.grantMenuAndButton(sysRoleRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 角色授权菜单，新版界面用
+     *
+     * @author fengshuonan
+     * @date 2021/8/11 9:58
+     */
+    @PostResource(name = "角色授权菜单", path = "/sysRole/grantMenu")
+    public ResponseData grantMenu(@RequestBody @Validated(SysRoleRequest.grantMenu.class) SysRoleRequest sysRoleRequest) {
+        sysRoleService.grantMenu(sysRoleRequest);
+        return new SuccessResponseData();
+    }
+
+    /**
+     * 角色授权按钮，新版界面用
+     *
+     * @author fengshuonan
+     * @date 2021/8/11 9:58
+     */
+    @PostResource(name = "角色授权按钮", path = "/sysRole/grantButton")
+    public ResponseData grantButton(@RequestBody @Validated(SysRoleRequest.grantButton.class) SysRoleRequest sysRoleRequest) {
+        sysRoleService.grantButton(sysRoleRequest);
         return new SuccessResponseData();
     }
 

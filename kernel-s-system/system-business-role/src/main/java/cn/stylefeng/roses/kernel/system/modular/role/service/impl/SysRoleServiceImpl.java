@@ -57,6 +57,7 @@ import cn.stylefeng.roses.kernel.system.modular.role.entity.*;
 import cn.stylefeng.roses.kernel.system.modular.role.mapper.SysRoleMapper;
 import cn.stylefeng.roses.kernel.system.modular.role.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -281,6 +282,57 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 sysRoleMenuButtons.add(item);
             }
             sysRoleMenuButtonService.saveBatch(sysRoleMenuButtons);
+        }
+    }
+
+    @Override
+    public void grantMenu(SysRoleRequest sysRoleMenuButtonRequest) {
+
+        // 获取新增还是取消绑定
+        Boolean grantAddMenuFlag = sysRoleMenuButtonRequest.getGrantAddMenuFlag();
+
+        // 如果是新增绑定菜单
+        if (grantAddMenuFlag) {
+            SysRoleMenu item = new SysRoleMenu();
+            item.setRoleId(sysRoleMenuButtonRequest.getRoleId());
+            item.setMenuId(sysRoleMenuButtonRequest.getGrantMenuId());
+            this.roleMenuService.save(item);
+        } else {
+            //如果是解除绑定菜单
+            LambdaUpdateWrapper<SysRoleMenu> wrapper = new LambdaUpdateWrapper<>();
+            wrapper.eq(SysRoleMenu::getRoleId, sysRoleMenuButtonRequest.getRoleId());
+            wrapper.eq(SysRoleMenu::getMenuId, sysRoleMenuButtonRequest.getGrantMenuId());
+            this.roleMenuService.remove(wrapper);
+        }
+    }
+
+    @Override
+    public void grantButton(SysRoleRequest sysRoleMenuButtonRequest) {
+        // 该模块下角色绑定的按钮全部删除
+        List<Long> modularButtonIds = sysRoleMenuButtonRequest.getModularButtonIds();
+        if (ObjectUtil.isNotEmpty(modularButtonIds)) {
+            LambdaUpdateWrapper<SysRoleMenuButton> wrapper = new LambdaUpdateWrapper<>();
+            wrapper.in(SysRoleMenuButton::getButtonId, modularButtonIds);
+            wrapper.eq(SysRoleMenuButton::getRoleId, sysRoleMenuButtonRequest.getRoleId());
+            this.sysRoleMenuButtonService.remove(wrapper);
+        }
+
+        // 该模块下，勾选的按钮，添加到角色绑定
+        List<Long> selectedButtonIds = sysRoleMenuButtonRequest.getSelectedButtonIds();
+        if (ObjectUtil.isNotEmpty(selectedButtonIds)) {
+            ArrayList<SysRoleMenuButton> sysRoleMenuButtons = new ArrayList<>();
+            for (Long selectButtonId : selectedButtonIds) {
+                SysRoleMenuButton sysRoleMenuButton = new SysRoleMenuButton();
+                sysRoleMenuButton.setRoleId(sysRoleMenuButtonRequest.getRoleId());
+                sysRoleMenuButton.setButtonId(selectButtonId);
+
+                // 通过buttonId获取buttonCode
+                String buttonCode = this.menuServiceApi.getMenuButtonCodeByButtonId(selectButtonId);
+                sysRoleMenuButton.setButtonCode(buttonCode);
+
+                sysRoleMenuButtons.add(sysRoleMenuButton);
+            }
+            this.sysRoleMenuButtonService.saveBatch(sysRoleMenuButtons, sysRoleMenuButtons.size());
         }
     }
 

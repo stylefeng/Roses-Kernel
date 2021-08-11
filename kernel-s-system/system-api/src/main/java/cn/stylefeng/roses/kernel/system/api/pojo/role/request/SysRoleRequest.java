@@ -49,7 +49,8 @@ public class SysRoleRequest extends BaseRequest {
     /**
      * 主键
      */
-    @NotNull(message = "roleId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class, grantResourceV2.class, grantDataScope.class, grantMenuButton.class})
+    @NotNull(message = "roleId不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class, grantResource.class,
+            grantResourceV2.class, grantDataScope.class, grantMenuButton.class, grantMenu.class, grantButton.class})
     @ChineseDescription("主键")
     private Long roleId;
 
@@ -153,9 +154,45 @@ public class SysRoleRequest extends BaseRequest {
     private List<SysRoleMenuButtonRequest> grantMenuButtonIdList;
 
     /**
+     * 是否是新增绑定菜单，true-新增绑定菜单，false-取消绑定菜单
+     */
+    @NotNull(message = "是否是新增绑定菜单", groups = {grantMenu.class})
+    private Boolean grantAddMenuFlag;
+
+    /**
+     * 绑定菜单的id
+     */
+    @NotNull(message = "绑定菜单的id", groups = {grantMenu.class})
+    private Long grantMenuId;
+
+    /**
+     * 模块下所有的按钮id
+     */
+    private List<Long> modularButtonIds;
+
+    /**
+     * 模块下选中的按钮id
+     */
+    private List<Long> selectedButtonIds;
+
+    /**
      * 参数校验分组：授权菜单和按钮
      */
     public @interface grantMenuButton {
+
+    }
+
+    /**
+     * 参数校验分组：角色授权菜单
+     */
+    public @interface grantMenu {
+
+    }
+
+    /**
+     * 参数校验分组：角色授权按钮
+     */
+    public @interface grantButton {
 
     }
 
@@ -177,6 +214,7 @@ public class SysRoleRequest extends BaseRequest {
      * 参数校验分组：授权数据
      */
     public @interface grantDataScope {
+
     }
 
 }

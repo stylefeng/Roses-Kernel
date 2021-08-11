@@ -538,6 +538,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return parentMenuIds;
     }
 
+    @Override
+    public String getMenuButtonCodeByButtonId(Long buttonId) {
+        SysMenuButton sysMenuButton = this.sysMenuButtonService.getById(buttonId);
+        if (sysMenuButton != null) {
+            return sysMenuButton.getButtonCode();
+        } else {
+            return "";
+        }
+    }
+
     /**
      * 获取系统菜单
      *

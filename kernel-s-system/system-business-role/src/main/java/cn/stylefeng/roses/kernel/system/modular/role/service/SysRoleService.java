@@ -27,9 +27,9 @@ package cn.stylefeng.roses.kernel.system.modular.role.service;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
-import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -106,6 +106,22 @@ public interface SysRoleService extends IService<SysRole>, RoleServiceApi {
      * @date 2021/1/9 18:13
      */
     void grantMenuAndButton(SysRoleRequest sysRoleMenuButtonRequest);
+
+    /**
+     * 角色绑定菜单，新界面用
+     *
+     * @author fengshuonan
+     * @date 2021/8/11 10:02
+     */
+    void grantMenu(SysRoleRequest sysRoleMenuButtonRequest);
+
+    /**
+     * 角色绑定按钮，新界面用
+     *
+     * @author fengshuonan
+     * @date 2021/8/11 10:02
+     */
+    void grantButton(SysRoleRequest sysRoleMenuButtonRequest);
 
     /**
      * 授权数据范围（组织机构）

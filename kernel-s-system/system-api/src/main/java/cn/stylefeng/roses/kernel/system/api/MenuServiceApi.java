@@ -63,4 +63,12 @@ public interface MenuServiceApi {
      **/
     Set<Long> getMenuAllParentMenuId(Set<Long> menuIds);
 
+    /**
+     * 通过按钮id获取按钮code
+     *
+     * @author fengshuonan
+     * @date 2021/8/11 10:40
+     */
+    String getMenuButtonCodeByButtonId(Long buttonId);
+
 }
