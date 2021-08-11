@@ -26,23 +26,23 @@ public class PositionViewController {
     }
 
     /**
-     * 职位管理-首页-视图
+     * 职位管理-添加-视图
      *
      * @author chenjinlong
      * @date 2020/11/04 11:07
      */
-    @GetResource(name = "职位管理-首页-视图", path = "/view/position/addView")
+    @GetResource(name = "职位管理-添加-视图", path = "/view/position/addView")
     public String addView() {
         return "/modular/system/position/position_add.html";
     }
 
     /**
-     * 职位管理-首页-视图
+     * 职位管理-修改-视图
      *
      * @author chenjinlong
      * @date 2020/11/04 11:07
      */
-    @GetResource(name = "职位管理-首页-视图", path = "/view/position/editView")
+    @GetResource(name = "职位管理-修改-视图", path = "/view/position/editView")
     public String editView() {
         return "/modular/system/position/position_edit.html";
     }

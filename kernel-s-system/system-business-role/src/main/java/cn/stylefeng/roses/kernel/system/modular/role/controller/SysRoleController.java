@@ -64,7 +64,7 @@ public class SysRoleController {
      * @author majianguo
      * @date 2020/11/5 上午10:38
      */
-    @PostResource(name = "添加系统", path = "/sysRole/add")
+    @PostResource(name = "添加角色", path = "/sysRole/add")
     public ResponseData add(@RequestBody @Validated(SysRoleRequest.add.class) SysRoleRequest sysRoleRequest) {
         sysRoleService.add(sysRoleRequest);
         return new SuccessResponseData();
