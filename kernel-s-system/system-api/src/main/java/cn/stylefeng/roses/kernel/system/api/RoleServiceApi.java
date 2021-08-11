@@ -78,7 +78,7 @@ public interface RoleServiceApi {
      * @author majianguo
      * @date 2020/11/5 上午11:17
      */
-    List<String> getRoleResourceCodeList(List<Long> roleIdList);
+    Set<String> getRoleResourceCodeList(List<Long> roleIdList);
 
     /**
      * 获取角色的资源code集合

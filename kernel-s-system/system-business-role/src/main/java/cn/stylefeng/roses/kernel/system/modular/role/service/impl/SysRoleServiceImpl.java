@@ -481,9 +481,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public List<String> getRoleResourceCodeList(List<Long> roleIdList) {
+    public Set<String> getRoleResourceCodeList(List<Long> roleIdList) {
 
-        ArrayList<String> result = new ArrayList<>();
+        HashSet<String> result = new HashSet<>();
 
         for (Long roleId : roleIdList) {
 

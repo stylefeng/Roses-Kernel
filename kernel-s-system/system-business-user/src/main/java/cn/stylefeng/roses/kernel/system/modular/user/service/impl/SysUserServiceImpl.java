@@ -561,7 +561,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgByUserId(userId);
 
         // 5. 获取用户的所有资源url
-        List<String> resourceCodeList = roleServiceApi.getRoleResourceCodeList(roleIds);
+        Set<String> resourceCodeList = roleServiceApi.getRoleResourceCodeList(roleIds);
         Set<String> resourceUrlsListByCodes = resourceServiceApi.getResourceUrlsListByCodes(resourceCodeList);
 
         // 6. 获取用户的所有按钮code集合

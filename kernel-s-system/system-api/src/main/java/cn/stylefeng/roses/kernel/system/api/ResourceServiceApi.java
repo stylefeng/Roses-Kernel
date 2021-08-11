@@ -27,7 +27,6 @@ package cn.stylefeng.roses.kernel.system.api;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceUrlParam;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -56,6 +55,6 @@ public interface ResourceServiceApi {
      * @author fengshuonan
      * @date 2020/11/29 19:49
      */
-    Set<String> getResourceUrlsListByCodes(List<String> resourceCodes);
+    Set<String> getResourceUrlsListByCodes(Set<String> resourceCodes);
 
 }

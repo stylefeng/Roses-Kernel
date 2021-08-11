@@ -140,7 +140,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         if (!loginUserApi.getSuperAdminFlag()) {
             // 获取权限列表
             List<Long> roleIds = loginUserApi.getLoginUser().getSimpleRoleInfoList().parallelStream().map(SimpleRoleInfo::getRoleId).collect(Collectors.toList());
-            List<String> resourceCodeList = roleServiceApi.getRoleResourceCodeList(roleIds);
+            Set<String> resourceCodeList = roleServiceApi.getRoleResourceCodeList(roleIds);
             if (!resourceCodeList.isEmpty()) {
                 sysResourceLambdaQueryWrapper.in(SysResource::getResourceCode, resourceCodeList);
             }
@@ -366,7 +366,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public Set<String> getResourceUrlsListByCodes(List<String> resourceCodes) {
+    public Set<String> getResourceUrlsListByCodes(Set<String> resourceCodes) {
 
         if (resourceCodes == null || resourceCodes.isEmpty()) {
             return new HashSet<>();
