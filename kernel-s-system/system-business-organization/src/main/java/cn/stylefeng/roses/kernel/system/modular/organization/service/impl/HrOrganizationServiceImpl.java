@@ -439,6 +439,12 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         if (needToDataScope) {
             // 获取用户数据范围信息
             Set<Long> dataScope = LoginContext.me().getLoginUser().getDataScopeOrganizationIds();
+
+            // 如果数据范围为空，则返回空数组
+            if (ObjectUtil.isEmpty(dataScope)) {
+                return new ArrayList<>();
+            }
+
             // 根据组织机构数据范围的上级组织，用于展示完整的树形结构
             Set<Long> allLevelParentIdsByOrganizations = this.findAllLevelParentIdsByOrganizations(dataScope);
             // 拼接查询条件

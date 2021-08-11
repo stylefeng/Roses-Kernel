@@ -20,7 +20,7 @@ public class TranslationViewController {
      * @author fengshuonan
      * @date 2021/1/24 19:15
      */
-    @GetResource(name = "文件管理首页", path = "/view/i18n")
+    @GetResource(name = "多语言主界面", path = "/view/i18n")
     public String index() {
         return "/modular/system/i18n/translation.html";
     }
@@ -42,7 +42,7 @@ public class TranslationViewController {
      * @author fengshuonan
      * @date 2021/1/24 19:16
      */
-    @GetResource(name = "文件管理首页", path = "/view/i18n/edit")
+    @GetResource(name = "多语言编辑界面", path = "/view/i18n/edit")
     public String edit() {
         return "/modular/system/i18n/translation_edit.html";
     }

@@ -56,11 +56,13 @@ import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleMenuDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuResource;
 import cn.stylefeng.roses.kernel.system.modular.menu.factory.AntdMenusFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.factory.LayuiMenusFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.factory.MenuTypeFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuMapper;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuButtonService;
+import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuResourceService;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -92,6 +94,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Resource
     private SysMenuButtonService sysMenuButtonService;
+
+    @Resource
+    private SysMenuResourceService sysMenuResourceService;
 
     @Override
     public void add(SysMenuRequest sysMenuRequest) {
@@ -546,6 +551,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         } else {
             return "";
         }
+    }
+
+    @Override
+    public List<String> getResourceCodesByBusinessId(List<Long> businessIds) {
+        LambdaQueryWrapper<SysMenuResource> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(SysMenuResource::getBusinessId, businessIds);
+        wrapper.select(SysMenuResource::getResourceCode);
+        List<SysMenuResource> list = sysMenuResourceService.list(wrapper);
+
+        return list.stream().map(SysMenuResource::getResourceCode).collect(Collectors.toList());
     }
 
     /**

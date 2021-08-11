@@ -71,4 +71,12 @@ public interface MenuServiceApi {
      */
     String getMenuButtonCodeByButtonId(Long buttonId);
 
+    /**
+     * 通过菜单或按钮id的集合，获取拥有资源编码的集合
+     *
+     * @author fengshuonan
+     * @date 2021/8/11 14:25
+     */
+    List<String> getResourceCodesByBusinessId(List<Long> businessIds);
+
 }

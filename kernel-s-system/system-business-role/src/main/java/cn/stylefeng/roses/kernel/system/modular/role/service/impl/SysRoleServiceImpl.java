@@ -507,6 +507,28 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             }
         }
 
+        // 获取角色的所有菜单
+        LambdaQueryWrapper<SysRoleMenu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(SysRoleMenu::getRoleId, roleIdList);
+        wrapper.select(SysRoleMenu::getMenuId);
+        List<SysRoleMenu> list = this.roleMenuService.list(wrapper);
+        List<Long> menuIds = list.stream().map(SysRoleMenu::getMenuId).collect(Collectors.toList());
+
+        // 获取角色绑定的所有按钮
+        LambdaQueryWrapper<SysRoleMenuButton> wrapper2 = new LambdaQueryWrapper<>();
+        wrapper2.in(SysRoleMenuButton::getRoleId, roleIdList);
+        wrapper2.select(SysRoleMenuButton::getButtonId);
+        List<SysRoleMenuButton> roleMenuButtons = this.sysRoleMenuButtonService.list(wrapper2);
+        List<Long> buttonIds = roleMenuButtons.stream().map(SysRoleMenuButton::getButtonId).collect(Collectors.toList());
+
+        // 获取菜单和按钮所有绑定的资源
+        ArrayList<Long> businessIds = new ArrayList<>();
+        businessIds.addAll(menuIds);
+        businessIds.addAll(buttonIds);
+
+        // 获取菜单和按钮
+        List<String> menuButtonResources = menuServiceApi.getResourceCodesByBusinessId(businessIds);
+        result.addAll(menuButtonResources);
         return result;
     }
 
