@@ -69,6 +69,11 @@ public class WebSocketOperator implements SocketOperatorApi {
     }
 
     @Override
+    public void closeSocketBySocketId(String socketId) {
+        SessionCenter.closed(socketId);
+    }
+
+    @Override
     public void msgTypeCallback(String msgType, SocketMsgCallbackInterface callbackInterface) {
         SocketMessageCenter.setMessageListener(msgType, callbackInterface);
     }

@@ -48,6 +48,15 @@ public interface SocketOperatorApi {
     void sendMsgOfAllUserSession(String msgType, Object msg);
 
     /**
+     * 根据会话id关闭会话
+     *
+     * @param socketId 会话id
+     * @author majianguo
+     * @date 2021/8/13 16:00
+     **/
+    void closeSocketBySocketId(String socketId);
+
+    /**
      * 监听指定类型消息
      * <p>
      * 1.该方法每调用一次即注册一个监听,同一个消息类型多次调用只有最后一次生效
