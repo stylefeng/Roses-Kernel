@@ -57,7 +57,7 @@ public class WebSocketServer {
         }
 
         // 操作api包装
-        GunsSocketOperator GunsSocketOperator = new GunsSocketOperator(session);
+        GunsSocketOperator gunsSocketOperator = new GunsSocketOperator(session);
 
         // 回复消息
         WebSocketMessageDTO replyMsg = new WebSocketMessageDTO();
@@ -71,7 +71,7 @@ public class WebSocketServer {
             replyMsg.setData(session.getId());
             socketSession.setSessionId(session.getId());
             socketSession.setUserId(userId);
-            socketSession.setSocketOperatorApi(GunsSocketOperator);
+            socketSession.setSocketOperatorApi(gunsSocketOperator);
             socketSession.setToken(token);
             socketSession.setConnectionTime(System.currentTimeMillis());
 
@@ -79,7 +79,7 @@ public class WebSocketServer {
             SessionCenter.addSocketSession(socketSession);
         } finally {
             // 回复消息
-            GunsSocketOperator.writeAndFlush(replyMsg);
+            gunsSocketOperator.writeAndFlush(replyMsg);
 
             // 触发首次连接回调
             SocketMsgCallbackInterface socketMsgCallbackInterface = SocketMessageCenter.getSocketMsgCallbackInterface(SystemMessageTypeEnum.SYS_LISTENER_ONOPEN.getCode());
