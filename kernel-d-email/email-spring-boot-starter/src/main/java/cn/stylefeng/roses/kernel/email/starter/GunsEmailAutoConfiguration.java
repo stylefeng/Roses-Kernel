@@ -24,6 +24,10 @@
  */
 package cn.stylefeng.roses.kernel.email.starter;
 
+import cn.stylefeng.roses.kernel.email.api.MailSenderApi;
+import cn.stylefeng.roses.kernel.email.jdk.JavaMailSender;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -35,4 +39,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GunsEmailAutoConfiguration {
 
+    /**
+     * java mail方式发送邮件的接口
+     *
+     * @author fengshuonan
+     * @date 2020/12/1 11:32
+     */
+    @Bean
+    @ConditionalOnMissingBean(MailSenderApi.class)
+    public MailSenderApi mailSenderApi() {
+        return new JavaMailSender();
+    }
 }
