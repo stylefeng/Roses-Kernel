@@ -24,7 +24,6 @@
  */
 package cn.stylefeng.roses.kernel.email.jdk;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.mail.MailAccount;
@@ -32,6 +31,7 @@ import cn.hutool.extra.mail.MailUtil;
 import cn.stylefeng.roses.kernel.email.api.MailSenderApi;
 import cn.stylefeng.roses.kernel.email.api.exception.MailException;
 import cn.stylefeng.roses.kernel.email.api.exception.enums.EmailExceptionEnum;
+import cn.stylefeng.roses.kernel.email.api.expander.EmailConfigExpander;
 import cn.stylefeng.roses.kernel.email.api.pojo.SendMailParam;
 
 /**
@@ -42,15 +42,6 @@ import cn.stylefeng.roses.kernel.email.api.pojo.SendMailParam;
  */
 public class JavaMailSender implements MailSenderApi {
 
-    /**
-     * 邮件配置
-     */
-    private final MailAccount mailAccount;
-
-    public JavaMailSender(MailAccount mailAccount) {
-        this.mailAccount = mailAccount;
-    }
-
     @Override
     public void sendMail(SendMailParam sendMailParam) {
 
@@ -58,7 +49,7 @@ public class JavaMailSender implements MailSenderApi {
         assertSendMailParams(sendMailParam);
 
         //spring发送邮件
-        MailUtil.send(mailAccount, sendMailParam.getTos(), sendMailParam.getCcsTos(), sendMailParam.getBccsTos(), sendMailParam.getTitle(), sendMailParam.getContent(), sendMailParam.getImageMap(), false, sendMailParam.getFiles());
+        MailUtil.send(this.getConfigAccountInfo(), sendMailParam.getTos(), sendMailParam.getCcsTos(), sendMailParam.getBccsTos(), sendMailParam.getTitle(), sendMailParam.getContent(), sendMailParam.getImageMap(), false, sendMailParam.getFiles());
     }
 
     @Override
@@ -68,7 +59,31 @@ public class JavaMailSender implements MailSenderApi {
         assertSendMailParams(sendMailParam);
 
         //spring发送邮件
-        MailUtil.send(mailAccount, sendMailParam.getTos(), sendMailParam.getCcsTos(), sendMailParam.getBccsTos(), sendMailParam.getTitle(), sendMailParam.getContent(), sendMailParam.getImageMap(), true, sendMailParam.getFiles());
+        MailUtil.send(this.getConfigAccountInfo(), sendMailParam.getTos(), sendMailParam.getCcsTos(), sendMailParam.getBccsTos(), sendMailParam.getTitle(), sendMailParam.getContent(), sendMailParam.getImageMap(), true, sendMailParam.getFiles());
+    }
+
+    /**
+     * 获取配置账号信息
+     *
+     * @return {@link MailAccount}
+     * @author majianguo
+     * @date 2021/8/16 13:57
+     **/
+    private MailAccount getConfigAccountInfo() {
+        MailAccount mailAccount = new MailAccount();
+        // 配置默认都从系统配置表获取
+        mailAccount.setHost(EmailConfigExpander.getSmtpHost());
+        mailAccount.setPort(EmailConfigExpander.getSmtpPort());
+        mailAccount.setAuth(EmailConfigExpander.getSmtpAuthEnable());
+        mailAccount.setUser(EmailConfigExpander.getSmtpUser());
+        mailAccount.setPass(EmailConfigExpander.getSmtpPass());
+        mailAccount.setFrom(EmailConfigExpander.getSmtpFrom());
+        mailAccount.setStarttlsEnable(EmailConfigExpander.getStartTlsEnable());
+        mailAccount.setSslEnable(EmailConfigExpander.getSSLEnable());
+        mailAccount.setSocketFactoryPort(EmailConfigExpander.getSocketFactoryPort());
+        mailAccount.setTimeout(EmailConfigExpander.getTimeout());
+        mailAccount.setConnectionTimeout(EmailConfigExpander.getConnectionTimeout());
+        return mailAccount;
     }
 
     /**
