@@ -24,14 +24,11 @@
  */
 package cn.stylefeng.roses.kernel.security.starter;
 
-import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
 import cn.stylefeng.roses.kernel.security.database.algorithm.EncryptAlgorithmApi;
 import cn.stylefeng.roses.kernel.security.database.algorithm.impl.AesEncryptAlgorithmApiImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * 加密算法自动配置
@@ -52,8 +49,7 @@ public class EncryptAlgorithmAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(EncryptAlgorithmApi.class)
     public EncryptAlgorithmApi encryptAlgorithmApi() {
-        String encryptSecretKey = SecurityConfigExpander.getEncryptSecretKey();
-        return new AesEncryptAlgorithmApiImpl(encryptSecretKey.getBytes(StandardCharsets.UTF_8));
+        return new AesEncryptAlgorithmApiImpl();
     }
 
 }

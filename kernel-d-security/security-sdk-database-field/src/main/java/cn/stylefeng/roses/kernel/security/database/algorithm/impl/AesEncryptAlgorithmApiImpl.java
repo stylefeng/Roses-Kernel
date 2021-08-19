@@ -2,7 +2,10 @@ package cn.stylefeng.roses.kernel.security.database.algorithm.impl;
 
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
+import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
 import cn.stylefeng.roses.kernel.security.database.algorithm.EncryptAlgorithmApi;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * AES 加密解密实现
@@ -12,27 +15,15 @@ import cn.stylefeng.roses.kernel.security.database.algorithm.EncryptAlgorithmApi
  */
 public class AesEncryptAlgorithmApiImpl implements EncryptAlgorithmApi {
 
-    /**
-     * AES加密实体类
-     */
-    public SymmetricCrypto symmetricCrypto;
-
-    public AesEncryptAlgorithmApiImpl(byte[] key) {
-        symmetricCrypto = new SymmetricCrypto(SymmetricAlgorithm.AES, key);
-    }
-
-    @Override
-    public void setInstance(SymmetricCrypto instance) {
-        this.symmetricCrypto = instance;
-    }
-
     @Override
     public String encrypt(String encryptedData) {
+        SymmetricCrypto symmetricCrypto = new SymmetricCrypto(SymmetricAlgorithm.AES, SecurityConfigExpander.getEncryptSecretKey().getBytes(StandardCharsets.UTF_8));
         return symmetricCrypto.encryptHex(encryptedData);
     }
 
     @Override
     public String decrypt(String cipher) {
+        SymmetricCrypto symmetricCrypto = new SymmetricCrypto(SymmetricAlgorithm.AES, SecurityConfigExpander.getEncryptSecretKey().getBytes(StandardCharsets.UTF_8));
         return symmetricCrypto.decryptStr(cipher);
     }
 }
