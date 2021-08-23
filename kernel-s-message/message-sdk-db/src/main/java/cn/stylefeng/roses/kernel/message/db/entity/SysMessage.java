@@ -48,21 +48,21 @@ public class SysMessage extends BaseEntity {
      * 主键
      */
     @TableId(value = "message_id", type = IdType.ASSIGN_ID)
-    @JSONField(serializeUsing= ToStringSerializer.class)
+    @JSONField(serializeUsing = ToStringSerializer.class)
     private Long messageId;
 
     /**
      * 接收用户id
      */
     @TableField(value = "receive_user_id")
-    @JSONField(serializeUsing= ToStringSerializer.class)
+    @JSONField(serializeUsing = ToStringSerializer.class)
     private Long receiveUserId;
 
     /**
      * 发送用户id
      */
     @TableField(value = "send_user_id")
-    @JSONField(serializeUsing= ToStringSerializer.class)
+    @JSONField(serializeUsing = ToStringSerializer.class)
     private Long sendUserId;
 
     /**
@@ -99,7 +99,7 @@ public class SysMessage extends BaseEntity {
      * 业务id
      */
     @TableField(value = "business_id")
-    @JSONField(serializeUsing= ToStringSerializer.class)
+    @JSONField(serializeUsing = ToStringSerializer.class)
     private Long businessId;
 
     /**
@@ -119,5 +119,11 @@ public class SysMessage extends BaseEntity {
      */
     @TableField(value = "del_flag", fill = FieldFill.INSERT)
     private String delFlag;
+
+    /**
+     * 业务类型值
+     */
+    @TableField(exist = false)
+    private String businessTypeValue;
 
 }
