@@ -218,7 +218,7 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @author liuhanqing
      * @date 2021/1/15 11:16
      */
-    List<UserSelectTreeNode> getUserTreeNodeList(Long orgId);
+    List<UserSelectTreeNode> getUserTreeNodeList(Long orgId, List<UserSelectTreeNode> treeNodeList);
 
     /**
      * 用户下拉列表选择

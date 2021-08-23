@@ -432,7 +432,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             orgTreeNode.setValue(String.valueOf(hrOrganization.getOrgId()));
             orgTreeNode.setSort(hrOrganization.getOrgSort());
             treeNodeList.add(orgTreeNode);
-            List<UserSelectTreeNode> userNodeList = this.getUserTreeNodeList(hrOrganization.getOrgId());
+            List<UserSelectTreeNode> userNodeList = this.getUserTreeNodeList(hrOrganization.getOrgId(), treeNodeList);
             if (userNodeList.size() > 0) {
                 treeNodeList.addAll(userNodeList);
             }
@@ -477,9 +477,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public List<UserSelectTreeNode> getUserTreeNodeList(Long orgId) {
+    public List<UserSelectTreeNode> getUserTreeNodeList(Long orgId, List<UserSelectTreeNode> treeNodeList) {
         // 定义返回结果
-        List<UserSelectTreeNode> treeNodeList = CollectionUtil.newArrayList();
+        List<UserSelectTreeNode> newTreeNodeList = CollectionUtil.newArrayList();
         SysUserRequest userRequest = new SysUserRequest();
         userRequest.setOrgId(orgId);
         List<SysUserDTO> userList = this.baseMapper.findUserList(userRequest);
@@ -491,9 +491,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             userTreeNode.setName(user.getRealName());
             userTreeNode.setNodeType(TreeNodeEnum.USER.getCode());
             userTreeNode.setValue(String.valueOf(user.getUserId()));
-            treeNodeList.add(userTreeNode);
+
+            // 判断参数treeNodeList是否包含这个用户，如果包含了就不用返回了
+            boolean fillThisUser = true;
+            for (UserSelectTreeNode userSelectTreeNode : treeNodeList) {
+                if (userSelectTreeNode.getNodeId().equals(userTreeNode.getId())) {
+                    fillThisUser = false;
+                    break;
+                }
+            }
+            if (fillThisUser) {
+                newTreeNodeList.add(userTreeNode);
+            }
         }
-        return treeNodeList;
+        return newTreeNodeList;
     }
 
     @Override
