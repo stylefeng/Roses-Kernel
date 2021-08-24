@@ -24,10 +24,15 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.menu.factory;
 
+
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.system.api.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
@@ -37,8 +42,7 @@ import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 针对于antd vue版本的前端菜单的组装
@@ -51,16 +55,42 @@ public class AntdMenusFactory {
     /**
      * 组装antdv用的获取所有菜单列表详情
      *
+     * @param appSortedMenus 按应用排序过的菜单集合
      * @author fengshuonan
      * @date 2021/1/7 18:17
      */
-    public static List<AntdSysMenuDTO> createTotalMenus(List<SysMenu> sysMenuList) {
+    public static List<AntdSysMenuDTO> createTotalMenus(Map<String, List<SysMenu>> appSortedMenus, String activeAppCode) {
 
-        // 构造菜单树
-        List<SysMenu> treeStructMenu = new DefaultTreeBuildFactory<SysMenu>(TreeConstants.DEFAULT_PARENT_ID.toString()).doTreeBuild(sysMenuList);
+        // 创建应用级别的菜单集合
+        ArrayList<AntdSysMenuDTO> appSortedAntdMenus = new ArrayList<>();
 
-        // 模型转化
-        return doModelTransfer(treeStructMenu);
+        // 如果用户菜单中包含了激活的应用，先放激活的应用的
+        if (appSortedMenus.containsKey(activeAppCode)) {
+            // 创建顶层应用菜单
+            AntdSysMenuDTO firstSortApp = createRootAppMenu(activeAppCode);
+            List<SysMenu> treeStructMenu = new DefaultTreeBuildFactory<SysMenu>(TreeConstants.DEFAULT_PARENT_ID.toString()).doTreeBuild(appSortedMenus.get(activeAppCode));
+            List<AntdSysMenuDTO> antdSysMenuDTOS = doModelTransfer(treeStructMenu);
+
+            // 更新顶层应用级别的菜单
+            firstSortApp.setChildren(antdSysMenuDTOS);
+            appSortedAntdMenus.add(firstSortApp);
+        }
+
+        // 创建其他应用的菜单
+        for (Map.Entry<String, List<SysMenu>> entry : appSortedMenus.entrySet()) {
+            if (!entry.getKey().equals(activeAppCode)) {
+                // 创建顶层应用菜单
+                AntdSysMenuDTO rootAppMenu = createRootAppMenu(entry.getKey());
+                List<SysMenu> treeStructMenu = new DefaultTreeBuildFactory<SysMenu>(TreeConstants.DEFAULT_PARENT_ID.toString()).doTreeBuild(entry.getValue());
+                List<AntdSysMenuDTO> antdSysMenuDTOS = doModelTransfer(treeStructMenu);
+
+                // 更新顶层应用级别的菜单
+                rootAppMenu.setChildren(antdSysMenuDTOS);
+                appSortedAntdMenus.add(rootAppMenu);
+            }
+        }
+
+        return appSortedAntdMenus;
     }
 
     /**
@@ -188,6 +218,36 @@ public class AntdMenusFactory {
     }
 
     /**
+     * 获取分类过的用户菜单，返回一个menus数组，并且第一个是激活的应用
+     *
+     * @author fengshuonan
+     * @date 2021/8/24 16:50
+     */
+    public static Map<String, List<SysMenu>> sortUserMenusByAppCode(List<SysMenu> currentUserMenus) {
+
+        // 根据应用编码分类的菜单，key是应用编码，value是菜单
+        HashMap<String, List<SysMenu>> appMenus = new HashMap<>();
+
+        // 将菜单分类
+        for (SysMenu currentUserMenu : currentUserMenus) {
+
+            // 获取这个菜单的应用编码
+            String appCode = currentUserMenu.getAppCode();
+
+            // 获取该应用已有的菜单集合
+            List<SysMenu> sysMenus = appMenus.get(appCode);
+            if (sysMenus == null) {
+                sysMenus = new ArrayList<>();
+            }
+
+            sysMenus.add(currentUserMenu);
+            appMenus.put(appCode, sysMenus);
+        }
+
+        return appMenus;
+    }
+
+    /**
      * 模型转化
      *
      * @author fengshuonan
@@ -215,6 +275,33 @@ public class AntdMenusFactory {
 
             return resultMenus;
         }
+    }
+
+    /**
+     * 创建顶层应用层级的菜单
+     *
+     * @author fengshuonan
+     * @date 2021/8/24 17:23
+     */
+    private static AntdSysMenuDTO createRootAppMenu(String appCode) {
+
+        AntdSysMenuDTO antdSysMenuDTO = new AntdSysMenuDTO();
+
+        // 获取应用的详细信息
+        AppServiceApi appServiceApi = SpringUtil.getBean(AppServiceApi.class);
+        Set<SimpleDict> appsByAppCodes = appServiceApi.getAppsByAppCodes(CollectionUtil.set(false, appCode));
+
+        if (appsByAppCodes.size() > 0) {
+            SimpleDict appInfo = appsByAppCodes.iterator().next();
+            antdSysMenuDTO.setTitle(appInfo.getName());
+            antdSysMenuDTO.setIcon("PieChartTwoTone");
+            antdSysMenuDTO.setPath("/" + appCode);
+            antdSysMenuDTO.setComponent(null);
+            antdSysMenuDTO.setHide(false);
+            antdSysMenuDTO.setUid(null);
+        }
+
+        return antdSysMenuDTO;
     }
 
 }

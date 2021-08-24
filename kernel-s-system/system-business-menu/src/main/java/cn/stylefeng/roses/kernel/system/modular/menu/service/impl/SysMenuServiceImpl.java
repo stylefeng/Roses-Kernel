@@ -297,20 +297,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<AntdSysMenuDTO> getLeftMenusAntdv(SysMenuRequest sysMenuRequest) {
 
         // 不分应用查询菜单
-        List<SysMenu> currentUserMenus = null;
-        if (sysMenuRequest.getTotalMenus() != null && sysMenuRequest.getTotalMenus()) {
-            currentUserMenus = this.getCurrentUserMenus(null, false);
-        }
-        // 根据应用查询菜单
-        else {
-            String appCode = sysMenuRequest.getAppCode();
-            if (ObjectUtil.isEmpty(appCode)) {
-                appCode = appServiceApi.getActiveAppCode();
-            }
-            currentUserMenus = this.getCurrentUserMenus(appCode, false);
-        }
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, false);
 
-        return AntdMenusFactory.createTotalMenus(currentUserMenus);
+        // 获取当前激活的应用
+        String activeAppCode = appServiceApi.getActiveAppCode();
+
+        // 将菜单按应用编码分类，激活的应用放在最前边
+        Map<String, List<SysMenu>> sortedUserMenus = AntdMenusFactory.sortUserMenusByAppCode(currentUserMenus);
+
+        return AntdMenusFactory.createTotalMenus(sortedUserMenus, activeAppCode);
     }
 
     @Override

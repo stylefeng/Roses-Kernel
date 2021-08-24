@@ -157,12 +157,6 @@ public class SysMenuRequest extends BaseRequest {
     private String antdvLinkUrl;
 
     /**
-     * 查询时传递：是否查询所有的菜单，true-所有的
-     */
-    @ChineseDescription("查询时传递：是否查询所有的菜单，true-所有的")
-    private Boolean totalMenus = false;
-
-    /**
      * 获取主页左侧菜单列表（适配Antd Vue的版本）
      */
     public @interface getAppMenusAntdVue {
