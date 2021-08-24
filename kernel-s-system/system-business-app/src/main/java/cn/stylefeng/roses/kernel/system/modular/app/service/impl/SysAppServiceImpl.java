@@ -157,7 +157,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
 
         // 如果应用下没有菜单，不能激活
         boolean hasMenu = menuApi.hasMenu(currentApp.getAppCode());
-        if (hasMenu) {
+        if (!hasMenu) {
             throw new ServiceException(AppExceptionEnum.ACTIVE_ERROR);
         }
 
