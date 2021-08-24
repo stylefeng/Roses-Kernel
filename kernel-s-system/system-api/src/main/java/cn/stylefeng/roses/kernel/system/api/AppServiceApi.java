@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.api;
 
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
+import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppResult;
 
 import java.util.Set;
 
@@ -64,5 +65,13 @@ public interface AppServiceApi {
      * @date 2021/1/8 19:01
      */
     String getActiveAppCode();
+
+    /**
+     * 获取应用信息详情
+     *
+     * @author fengshuonan
+     * @date 2021/8/24 20:12
+     */
+    SysAppResult getAppInfoByAppCode(String appCode);
 
 }

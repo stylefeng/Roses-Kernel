@@ -25,14 +25,13 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.factory;
 
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
-import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.system.api.AppServiceApi;
+import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppResult;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
@@ -42,7 +41,10 @@ import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 针对于antd vue版本的前端菜单的组装
@@ -289,17 +291,13 @@ public class AntdMenusFactory {
 
         // 获取应用的详细信息
         AppServiceApi appServiceApi = SpringUtil.getBean(AppServiceApi.class);
-        Set<SimpleDict> appsByAppCodes = appServiceApi.getAppsByAppCodes(CollectionUtil.set(false, appCode));
-
-        if (appsByAppCodes.size() > 0) {
-            SimpleDict appInfo = appsByAppCodes.iterator().next();
-            antdSysMenuDTO.setTitle(appInfo.getName());
-            antdSysMenuDTO.setIcon("PieChartTwoTone");
-            antdSysMenuDTO.setPath("/" + appCode);
-            antdSysMenuDTO.setComponent(null);
-            antdSysMenuDTO.setHide(false);
-            antdSysMenuDTO.setUid(null);
-        }
+        SysAppResult appInfoByAppCode = appServiceApi.getAppInfoByAppCode(appCode);
+        antdSysMenuDTO.setTitle(appInfoByAppCode.getAppName());
+        antdSysMenuDTO.setIcon(appInfoByAppCode.getAppIcon());
+        antdSysMenuDTO.setPath("/" + appCode);
+        antdSysMenuDTO.setComponent(null);
+        antdSysMenuDTO.setHide(false);
+        antdSysMenuDTO.setUid(null);
 
         return antdSysMenuDTO;
     }

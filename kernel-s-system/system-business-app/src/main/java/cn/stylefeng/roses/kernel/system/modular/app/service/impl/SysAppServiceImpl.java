@@ -38,6 +38,7 @@ import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.app.AppExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppResult;
 import cn.stylefeng.roses.kernel.system.modular.app.entity.SysApp;
 import cn.stylefeng.roses.kernel.system.modular.app.mapper.SysAppMapper;
 import cn.stylefeng.roses.kernel.system.modular.app.service.SysAppService;
@@ -73,6 +74,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         // 设置名称和编码
         sysApp.setAppName(sysAppRequest.getAppName());
         sysApp.setAppCode(sysAppRequest.getAppCode());
+        sysApp.setAppIcon(sysAppRequest.getAppIcon());
 
         // 默认不激活
         sysApp.setActiveFlag(YesOrNotEnum.N.getCode());
@@ -243,6 +245,21 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
             return null;
         } else {
             return list.get(0).getAppCode();
+        }
+    }
+
+    @Override
+    public SysAppResult getAppInfoByAppCode(String appCode) {
+        LambdaQueryWrapper<SysApp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(SysApp::getAppCode, appCode);
+        SysApp sysApp = this.getOne(lambdaQueryWrapper, false);
+
+        if (sysApp != null) {
+            SysAppResult sysAppResult = new SysAppResult();
+            BeanUtil.copyProperties(sysApp, sysAppResult);
+            return sysAppResult;
+        } else {
+            return new SysAppResult();
         }
     }
 

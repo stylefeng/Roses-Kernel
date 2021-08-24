@@ -76,8 +76,15 @@ public class SysAppRequest extends BaseRequest {
             columnName = "app_code",
             idFieldName = "app_id",
             excludeLogicDeleteItems = true)
-    @ChineseDescription("编码不能为空")
+    @ChineseDescription("应用编码")
     private String appCode;
+
+    /**
+     * 应用图标
+     */
+    @NotBlank(message = "应用图标不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("应用图标")
+    private String appIcon;
 
     /**
      * 是否默认激活：Y-是，N-否，激活的应用下的菜单会在首页默认展开
