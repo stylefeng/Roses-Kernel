@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.auth.session;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.cookie.SessionCookieCreator;
@@ -207,8 +208,10 @@ public class DefaultSessionManager implements SessionManagerApi {
         for (Map.Entry<String, LoginUser> userEntry : allKeyValues.entrySet()) {
             String token = userEntry.getKey();
             LoginUser loginUser = userEntry.getValue();
-            loginUser.setToken(token);
-            loginUsers.add(loginUser);
+            LoginUser tempUser = new LoginUser();
+            BeanUtil.copyProperties(loginUser, tempUser);
+            tempUser.setToken(token);
+            loginUsers.add(tempUser);
         }
 
         return loginUsers;
