@@ -34,9 +34,10 @@ import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.system.api.AppServiceApi;
-import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
+import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppResult;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiAppIndexMenusVO;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiIndexMenuTreeNode;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -104,7 +105,9 @@ public class LayuiMenusFactory {
             // 将appCode和对应的树包装为实体
             LayuiAppIndexMenusVO layuiAppIndexMenusVO = new LayuiAppIndexMenusVO();
             layuiAppIndexMenusVO.setAppCode(appCode);
-            layuiAppIndexMenusVO.setAppName(getAppNameByAppCode(appCode));
+            SysAppResult appInfo = getAppNameByAppCode(appCode);
+            layuiAppIndexMenusVO.setAppName(appInfo.getAppName());
+            layuiAppIndexMenusVO.setAppIcon(appInfo.getAppIcon());
             layuiAppIndexMenusVO.setLayuiIndexMenuTreeNodes(layuiIndexMenuTreeNodeList);
             resultList.add(layuiAppIndexMenusVO);
         }
@@ -118,9 +121,9 @@ public class LayuiMenusFactory {
      * @author fengshuonan
      * @date 2021/1/1 18:09
      */
-    private static String getAppNameByAppCode(String appCode) {
+    private static SysAppResult getAppNameByAppCode(String appCode) {
         AppServiceApi appServiceApi = SpringUtil.getBean(AppServiceApi.class);
-        return appServiceApi.getAppNameByAppCode(appCode);
+        return appServiceApi.getAppInfoByAppCode(appCode);
     }
 
 }

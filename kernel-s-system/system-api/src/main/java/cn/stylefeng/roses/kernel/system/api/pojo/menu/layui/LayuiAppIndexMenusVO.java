@@ -48,6 +48,11 @@ public class LayuiAppIndexMenusVO {
     private String appName;
 
     /**
+     * 应用图标
+     */
+    private String appIcon;
+
+    /**
      * 该应用对应的菜单树
      */
     private List<LayuiIndexMenuTreeNode> layuiIndexMenuTreeNodes;
