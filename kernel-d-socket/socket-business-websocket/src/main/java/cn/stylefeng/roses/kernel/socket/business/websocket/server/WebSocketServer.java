@@ -178,6 +178,5 @@ public class WebSocketServer {
             // 触发回调
             socketMsgCallbackInterface.callback(SystemMessageTypeEnum.SYS_LISTENER_ONERROR.getCode(), error, socketSession);
         }
-        log.error("session 发生错误:" + session.getId());
     }
 }
