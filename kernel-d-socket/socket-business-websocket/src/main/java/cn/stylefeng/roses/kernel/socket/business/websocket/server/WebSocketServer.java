@@ -104,12 +104,12 @@ public class WebSocketServer {
             SocketSession<GunsSocketOperator> socketSession = SessionCenter.getSessionBySessionId(session.getId());
             // 触发首次连接回调
             SocketMsgCallbackInterface socketMsgCallbackInterface = SocketMessageCenter.getSocketMsgCallbackInterface(SystemMessageTypeEnum.SYS_LISTENER_ONCLOSE.getCode());
-            if (ObjectUtil.isNotEmpty(socketMsgCallbackInterface)) {
+            if (ObjectUtil.isNotEmpty(socketSession) && ObjectUtil.isNotEmpty(socketMsgCallbackInterface)) {
                 // 触发回调
                 socketMsgCallbackInterface.callback(SystemMessageTypeEnum.SYS_LISTENER_ONCLOSE.getCode(), null, socketSession);
             }
         } finally {
-            SessionCenter.closed(session.getId());
+            SessionCenter.deleteById(session.getId());
         }
     }
 

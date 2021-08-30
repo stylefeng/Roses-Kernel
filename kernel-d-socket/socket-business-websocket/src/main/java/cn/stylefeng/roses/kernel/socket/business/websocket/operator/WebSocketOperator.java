@@ -70,7 +70,7 @@ public class WebSocketOperator implements SocketOperatorApi {
 
     @Override
     public void closeSocketBySocketId(String socketId) {
-        SessionCenter.closed(socketId);
+         SessionCenter.closed(socketId);
     }
 
     @Override
