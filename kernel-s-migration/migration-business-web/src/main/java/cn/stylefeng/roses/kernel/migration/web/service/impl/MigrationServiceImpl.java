@@ -7,6 +7,10 @@ import cn.stylefeng.roses.kernel.migration.api.pojo.MigrationAggregationPOJO;
 import cn.stylefeng.roses.kernel.migration.web.pojo.MigrationRequest;
 import cn.stylefeng.roses.kernel.migration.web.service.MigrationService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,7 +76,10 @@ public class MigrationServiceImpl implements MigrationService {
         SchedulingCenter.exportData(migrationAggregationPOJO);
 
         // 转换为Json字符串
-        return JSON.toJSONString(migrationAggregationPOJO);
+        SerializeConfig serializeConfig = new SerializeConfig();
+        serializeConfig.put(Long.class, ToStringSerializer.instance);
+        serializeConfig.put(Long.TYPE, ToStringSerializer.instance);
+        return JSONObject.toJSONString(migrationAggregationPOJO, serializeConfig, SerializerFeature.PrettyFormat);
     }
 
     @Override
