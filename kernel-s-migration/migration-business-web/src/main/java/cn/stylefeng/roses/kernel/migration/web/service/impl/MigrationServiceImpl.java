@@ -76,10 +76,7 @@ public class MigrationServiceImpl implements MigrationService {
         SchedulingCenter.exportData(migrationAggregationPOJO);
 
         // 转换为Json字符串
-        SerializeConfig serializeConfig = new SerializeConfig();
-        serializeConfig.put(Long.class, ToStringSerializer.instance);
-        serializeConfig.put(Long.TYPE, ToStringSerializer.instance);
-        return JSONObject.toJSONString(migrationAggregationPOJO, serializeConfig, SerializerFeature.PrettyFormat);
+        return JSONObject.toJSONString(migrationAggregationPOJO);
     }
 
     @Override
