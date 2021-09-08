@@ -95,15 +95,18 @@ public class SysRoleResourceServiceImpl extends ServiceImpl<SysRoleResourceMappe
         // 再将该业务下，需要绑定的资源添加上
         List<String> selectedResource = sysRoleRequest.getSelectedResource();
         if (ObjectUtil.isNotEmpty(selectedResource)) {
-            ArrayList<SysRoleResource> menuResources = new ArrayList<>();
+            ArrayList<SysRoleResource> sysRoleResources = new ArrayList<>();
             for (String resourceCode : selectedResource) {
                 SysRoleResource sysRoleResource = new SysRoleResource();
                 sysRoleResource.setRoleId(sysRoleRequest.getRoleId());
                 sysRoleResource.setResourceCode(resourceCode);
-                menuResources.add(sysRoleResource);
+                sysRoleResources.add(sysRoleResource);
             }
-            this.saveBatch(menuResources, menuResources.size());
+            this.saveBatch(sysRoleResources, sysRoleResources.size());
         }
+
+        // 清除角色绑定的资源缓存
+        roleResourceCacheApi.remove(String.valueOf(sysRoleRequest.getRoleId()));
     }
 
     @Override
