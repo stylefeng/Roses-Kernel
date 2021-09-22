@@ -17,6 +17,14 @@
 
     <dependencies>
 
+        <!-- 多数据源操作的api -->
+        <!-- 获取当前登录用户之前需要切数据源 -->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>ds-container-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--demo api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
