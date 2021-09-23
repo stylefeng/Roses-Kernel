@@ -33,6 +33,7 @@ import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import cn.stylefeng.roses.kernel.dsctn.api.constants.DatasourceContainerConstants;
 import cn.stylefeng.roses.kernel.dsctn.api.context.CurrentDataSourceContext;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
@@ -120,7 +121,7 @@ public class LoginUserImpl implements LoginUserApi {
         String dataSourceName = CurrentDataSourceContext.getDataSourceName();
 
         // 如果当前用户有租户编码，则需要切下数据源
-        if (ObjectUtil.isNotEmpty(session.getTenantCode())) {
+        if (ObjectUtil.isNotEmpty(session.getTenantCode()) && !session.getTenantCode().equals(DatasourceContainerConstants.MASTER_DATASOURCE_NAME)) {
             CurrentDataSourceContext.setDataSourceName(RuleConstants.TENANT_DB_PREFIX + session.getTenantCode());
         }
         try {
