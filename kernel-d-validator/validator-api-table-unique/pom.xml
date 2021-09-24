@@ -11,30 +11,25 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>validator-spring-boot-starter</artifactId>
+    <artifactId>validator-api-table-unique</artifactId>
 
     <packaging>jar</packaging>
 
     <dependencies>
 
-        <!--参数校验api-->
+        <!-- 参数校验主api -->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>validator-api</artifactId>
             <version>${roses.version}</version>
         </dependency>
 
-        <!--参数校验-校验table内编码唯一的-->
+        <!-- auth-api -->
+        <!-- 校验过程中需要拿到当前用户的租户编码 -->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>validator-api-table-unique</artifactId>
+            <artifactId>auth-api</artifactId>
             <version>${roses.version}</version>
-        </dependency>
-
-        <!--web模块-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
     </dependencies>

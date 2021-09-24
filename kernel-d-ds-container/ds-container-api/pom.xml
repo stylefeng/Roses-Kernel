@@ -24,6 +24,13 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--参数校验模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>validator-api-table-unique</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

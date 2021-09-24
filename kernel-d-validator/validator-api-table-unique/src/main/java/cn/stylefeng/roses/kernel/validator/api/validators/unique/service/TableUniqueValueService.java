@@ -26,11 +26,14 @@ package cn.stylefeng.roses.kernel.validator.api.validators.unique.service;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.db.api.DbOperatorApi;
 import cn.stylefeng.roses.kernel.db.api.context.DbOperatorContext;
 import cn.stylefeng.roses.kernel.validator.api.exception.ParamValidateException;
 import cn.stylefeng.roses.kernel.validator.api.exception.enums.ValidatorExceptionEnum;
 import cn.stylefeng.roses.kernel.validator.api.pojo.UniqueValidateParam;
+import cn.stylefeng.roses.kernel.validator.api.validators.unique.constants.TenantConstants;
 
 /**
  * 判断表中字段是否是唯一值的业务封装
@@ -66,7 +69,7 @@ public class TableUniqueValueService {
         if (!uniqueValidateParam.getExcludeCurrentRecord()
                 && !uniqueValidateParam.getExcludeLogicDeleteItems()) {
             String sqlTemplate = "select count(*) from {} where {} = {0}";
-            String finalSql = StrUtil.format(sqlTemplate, uniqueValidateParam.getTableName(), uniqueValidateParam.getColumnName());
+            String finalSql = StrUtil.format(sqlTemplate, calcTenantTableName(uniqueValidateParam.getTableName()), uniqueValidateParam.getColumnName());
             resultCount = dbOperatorApi.selectCount(finalSql, uniqueValidateParam.getValue());
         }
 
@@ -75,7 +78,7 @@ public class TableUniqueValueService {
                 && uniqueValidateParam.getExcludeLogicDeleteItems()) {
             String sqlTemplate = "select count(*) from {} where {} = {0}  and ({} is null or {} <> '{}')";
             String finalSql = StrUtil.format(sqlTemplate,
-                    uniqueValidateParam.getTableName(),
+                    calcTenantTableName(uniqueValidateParam.getTableName()),
                     uniqueValidateParam.getColumnName(),
                     uniqueValidateParam.getLogicDeleteFieldName(),
                     uniqueValidateParam.getLogicDeleteFieldName(),
@@ -91,7 +94,7 @@ public class TableUniqueValueService {
             paramIdValidate(uniqueValidateParam);
 
             String sqlTemplate = "select count(*) from {} where {} = {0} and {} <> {1}";
-            String finalSql = StrUtil.format(sqlTemplate, uniqueValidateParam.getTableName(), uniqueValidateParam.getColumnName(), uniqueValidateParam.getIdFieldName());
+            String finalSql = StrUtil.format(sqlTemplate, calcTenantTableName(uniqueValidateParam.getTableName()), uniqueValidateParam.getColumnName(), uniqueValidateParam.getIdFieldName());
             resultCount = dbOperatorApi.selectCount(finalSql, uniqueValidateParam.getValue(), uniqueValidateParam.getId());
         }
 
@@ -104,7 +107,7 @@ public class TableUniqueValueService {
 
             String sqlTemplate = "select count(*) from {} where {} = {0} and {} <> {1} and ({} is null or {} <> '{}')";
             String finalSql = StrUtil.format(sqlTemplate,
-                    uniqueValidateParam.getTableName(),
+                    calcTenantTableName(uniqueValidateParam.getTableName()),
                     uniqueValidateParam.getColumnName(),
                     uniqueValidateParam.getIdFieldName(),
                     uniqueValidateParam.getLogicDeleteFieldName(),
@@ -146,6 +149,26 @@ public class TableUniqueValueService {
         if (uniqueValidateParam.getId() == null) {
             throw new ParamValidateException(ValidatorExceptionEnum.TABLE_UNIQUE_VALIDATE_ERROR, StrUtil.toCamelCase(uniqueValidateParam.getIdFieldName()) + "参数值为空");
         }
+    }
+
+    /**
+     * 计算携带租户code情况下的表名称
+     *
+     * @author fengshuonan
+     * @date 2021/9/24 17:01
+     */
+    private static String calcTenantTableName(String originTableName) {
+
+        // 获取租户编码
+        LoginUser loginUser = LoginContext.me().getLoginUser();
+        String tenantCode = loginUser.getTenantCode();
+
+        // 如果是主数据源可以忽略
+        if (tenantCode == null || TenantConstants.MASTER_DATASOURCE_NAME.equals(tenantCode)) {
+            return originTableName;
+        }
+
+        return TenantConstants.TENANT_DB_PREFIX + tenantCode + "." + originTableName;
     }
 
 }

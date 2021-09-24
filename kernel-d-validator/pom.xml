@@ -17,6 +17,7 @@
 
     <modules>
         <module>validator-api</module>
+        <module>validator-api-table-unique</module>
         <module>validator-spring-boot-starter</module>
     </modules>
 

@@ -23,6 +23,11 @@
             <artifactId>validator-api</artifactId>
             <version>${roses.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>validator-api-table-unique</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
 
         <!--config模块的api-->
         <dependency>

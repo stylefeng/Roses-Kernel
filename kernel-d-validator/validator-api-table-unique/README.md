@@ -1,0 +1,1 @@
+将@TableUniqueValue注解的校验单独提出来
