@@ -414,12 +414,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         else if (dataScopeTypeEnums.contains(DataScopeTypeEnum.DEPT)
                 || dataScopeTypeEnums.contains(DataScopeTypeEnum.DEPT_WITH_CHILD)
                 || dataScopeTypeEnums.contains(DataScopeTypeEnum.DEFINE)) {
-            sysUserRequest.setScopeOrgIds(null);
-            sysUserRequest.setUserScopeIds(dataScopeUserIds);
+            sysUserRequest.setScopeOrgIds(dataScopeOrganizationIds);
+            sysUserRequest.setUserScopeIds(null);
         }
         // 如果包含了仅有自己的数据
         else if (dataScopeTypeEnums.contains(DataScopeTypeEnum.SELF)) {
-            sysUserRequest.setScopeOrgIds(dataScopeOrganizationIds);
+            sysUserRequest.setScopeOrgIds(null);
             sysUserRequest.setUserScopeIds(dataScopeUserIds);
         }
         // 其他情况，没有设置数据范围，则查所有
