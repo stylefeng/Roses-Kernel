@@ -35,6 +35,19 @@
             <if test="sysUserRequest.orgId != null and sysUserRequest.orgId != ''">
                 and suorg.org_id in (select org_id from hr_organization where org_pids like CONCAT('%$[',#{sysUserRequest.orgId},'$]%') escape '$' or org_id=#{sysUserRequest.orgId} )
             </if>
+            <if test="sysUserRequest.scopeOrgIds != null and sysUserRequest.scopeOrgIds.size() > 0">
+                and suorg.org_id in
+                <foreach  item="item" collection="sysUserRequest.scopeOrgIds" index="index"  open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="sysUserRequest.userScopeIds != null and sysUserRequest.userScopeIds.size() > 0">
+                and suser.user_id in
+                <foreach  item="item" collection="sysUserRequest.userScopeIds" index="index"  open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
             and suser.del_flag = 'N'
             order by suser.create_time desc
         </where>

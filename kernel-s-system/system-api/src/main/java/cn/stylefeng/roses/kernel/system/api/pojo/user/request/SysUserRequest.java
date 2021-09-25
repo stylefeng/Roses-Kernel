@@ -38,6 +38,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 系统用户参数
@@ -178,6 +179,16 @@ public class SysUserRequest extends BaseRequest {
     @NotEmpty(message = "用户id集合不能为空", groups = batchDelete.class)
     @ChineseDescription("用户id集合(用在批量删除)")
     private List<Long> userIds;
+
+    /**
+     * 部门的数据范围集合
+     */
+    private Set<Long> scopeOrgIds;
+
+    /**
+     * 用户id的数据范围集合
+     */
+    private Set<Long> userScopeIds;
 
     /**
      * 参数校验分组：修改密码

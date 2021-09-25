@@ -30,6 +30,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
+import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
@@ -392,6 +393,40 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public PageResult<SysUserDTO> findPage(SysUserRequest sysUserRequest) {
+
+        LoginUser loginUser = LoginContext.me().getLoginUser();
+
+        // 获取当前用户数据范围的枚举
+        Set<DataScopeTypeEnum> dataScopeTypeEnums = loginUser.getDataScopeTypeEnums();
+
+        // 获取当前用户数绑定的组织机构范围
+        Set<Long> dataScopeOrganizationIds = loginUser.getDataScopeOrganizationIds();
+
+        // 获取当前用户绑定的用户数据范围
+        Set<Long> dataScopeUserIds = loginUser.getDataScopeUserIds();
+
+        // 如果包含了全部数据
+        if (dataScopeTypeEnums.contains(DataScopeTypeEnum.ALL)) {
+            sysUserRequest.setScopeOrgIds(null);
+            sysUserRequest.setUserScopeIds(null);
+        }
+        // 如果是按部门数据划分
+        else if (dataScopeTypeEnums.contains(DataScopeTypeEnum.DEPT)
+                || dataScopeTypeEnums.contains(DataScopeTypeEnum.DEPT_WITH_CHILD)
+                || dataScopeTypeEnums.contains(DataScopeTypeEnum.DEFINE)) {
+            sysUserRequest.setScopeOrgIds(null);
+            sysUserRequest.setUserScopeIds(dataScopeUserIds);
+        }
+        // 如果包含了仅有自己的数据
+        else if (dataScopeTypeEnums.contains(DataScopeTypeEnum.SELF)) {
+            sysUserRequest.setScopeOrgIds(dataScopeOrganizationIds);
+            sysUserRequest.setUserScopeIds(dataScopeUserIds);
+        }
+        // 其他情况，没有设置数据范围，则查所有
+        else {
+            sysUserRequest.setScopeOrgIds(null);
+            sysUserRequest.setUserScopeIds(null);
+        }
 
         Page<SysUserDTO> userPage = this.baseMapper.findUserPage(PageFactory.defaultPage(), sysUserRequest);
 
