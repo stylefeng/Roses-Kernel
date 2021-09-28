@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.scanner.api.pojo.resource;
 
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -153,6 +154,7 @@ public class ResourceDefinition implements Serializable {
      * 资源添加日期
      */
     @ChineseDescription("资源添加日期")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     /**

@@ -17,6 +17,13 @@
 
     <dependencies>
 
+        <!--ResourceDefinition解析需要转化时间-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!--web-->
         <!--ResourcePersistenceApi会用到web，用在提供feign接口时-->
         <dependency>
