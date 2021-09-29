@@ -35,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * http响应信息的直接渲染工具
@@ -90,7 +91,7 @@ public class ResponseRenderUtil {
      */
     public static void setRenderFileHeader(HttpServletResponse response, String fileName) {
         final String charset = ObjectUtil.defaultIfNull(response.getCharacterEncoding(), CharsetUtil.UTF_8);
-        response.setHeader("Content-Disposition", StrUtil.format("attachment;filename={}", URLUtil.encode(fileName, charset)));
+        response.setHeader("Content-Disposition", StrUtil.format("attachment;filename={}", URLUtil.encode(fileName, Charset.forName(charset))));
         response.setContentType("application/octet-stream; charset=utf-8");
     }
 

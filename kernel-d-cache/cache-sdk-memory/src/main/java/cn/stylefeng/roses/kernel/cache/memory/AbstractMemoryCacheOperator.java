@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.cache.memory;
 import cn.hutool.cache.impl.CacheObj;
 import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 
@@ -107,7 +108,7 @@ public abstract class AbstractMemoryCacheOperator<T> implements CacheOperatorApi
     @Override
     public Map<String, T> getAllKeyValues() {
         Collection<String> allKeys = this.getAllKeys();
-        HashMap<String, T> results = CollectionUtil.newHashMap();
+        HashMap<String, T> results = MapUtil.newHashMap();
         for (String key : allKeys) {
             results.put(key, this.get(key));
         }

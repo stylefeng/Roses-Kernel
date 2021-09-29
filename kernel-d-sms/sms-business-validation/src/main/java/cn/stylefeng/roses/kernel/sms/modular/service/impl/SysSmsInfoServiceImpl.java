@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.sms.modular.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -106,7 +107,7 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         else {
             validateCode = RandomUtil.randomNumbers(6);
             if (params == null) {
-                params = CollectionUtil.newHashMap();
+                params = MapUtil.newHashMap();
             }
             params.put(SMS_CODE_PARAM_NAME, validateCode);
         }

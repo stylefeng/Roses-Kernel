@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.cache.redis;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -104,7 +105,7 @@ public abstract class AbstractRedisHashCacheOperator<T> implements CacheOperator
     @Override
     public Map<String, T> getAllKeyValues() {
         Collection<String> allKeys = this.getAllKeys();
-        HashMap<String, T> results = CollectionUtil.newHashMap();
+        HashMap<String, T> results = MapUtil.newHashMap();
         for (String key : allKeys) {
             results.put(key, this.get(key));
         }

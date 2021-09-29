@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.sms.modular.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
@@ -79,7 +80,7 @@ public class SmsSenderController {
         sysSmsSendParam.setParams(null);
 
         // 设置模板中的参数
-        HashMap<String, Object> paramMap = CollectionUtil.newHashMap();
+        HashMap<String, Object> paramMap = MapUtil.newHashMap();
         paramMap.put("code", RandomUtil.randomNumbers(6));
         sysSmsSendParam.setParams(paramMap);
 
