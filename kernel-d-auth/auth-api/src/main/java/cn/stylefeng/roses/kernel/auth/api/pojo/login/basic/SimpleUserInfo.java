@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.auth.api.pojo.login.basic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -55,6 +56,7 @@ public class SimpleUserInfo {
     /**
      * 生日
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date birthday;
 
     /**

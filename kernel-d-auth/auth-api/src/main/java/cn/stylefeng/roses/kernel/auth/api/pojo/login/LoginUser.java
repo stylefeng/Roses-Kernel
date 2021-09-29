@@ -32,6 +32,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -124,6 +125,7 @@ public class LoginUser implements Serializable {
      * 登录的时间
      */
     @ChineseDescription("登录的时间")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date loginTime;
 
     /**

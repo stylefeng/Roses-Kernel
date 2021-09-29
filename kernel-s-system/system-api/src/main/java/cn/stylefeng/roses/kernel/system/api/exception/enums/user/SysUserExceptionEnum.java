@@ -96,7 +96,12 @@ public enum SysUserExceptionEnum implements AbstractExceptionEnum {
     /**
      * 系统错误，账号存在多个
      */
-    ACCOUNT_HAVE_MANY(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "712", "系统错误，账号存在多个，账号为：{}");
+    ACCOUNT_HAVE_MANY(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "712", "系统错误，账号存在多个，账号为：{}"),
+
+    /**
+     * 请求参数token为空
+     */
+    TOKEN_EMPTY(RuleConstants.BUSINESS_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "713", "请求参数token为空");
 
     /**
      * 错误编码
