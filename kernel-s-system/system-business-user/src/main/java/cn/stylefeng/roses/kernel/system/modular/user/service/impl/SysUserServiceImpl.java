@@ -620,6 +620,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public LoginUser getEffectiveLoginUser(LoginUser loginUser) {
 
+        // 如果是C端用户，直接返回缓存中的登录用户
+        if (loginUser.getCustomerFlag()) {
+            return loginUser;
+        }
+
         UserLoginInfoDTO userLoginInfoDTO = this.getUserLoginInfo(loginUser.getAccount());
         LoginUser newLoginUser = userLoginInfoDTO.getLoginUser();
 

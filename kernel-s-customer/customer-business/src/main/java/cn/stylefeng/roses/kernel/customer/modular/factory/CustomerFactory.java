@@ -108,6 +108,9 @@ public class CustomerFactory {
         String fileAuthUrl = fileOperatorApi.getFileUnAuthUrl(CustomerConfigExpander.getCustomerBucket(), customer.getAvatarObjectName());
         loginUser.setAvatarUrl(fileAuthUrl);
 
+        // 设置用户是C端用户
+        loginUser.setCustomerFlag(true);
+
         return loginUser;
     }
 

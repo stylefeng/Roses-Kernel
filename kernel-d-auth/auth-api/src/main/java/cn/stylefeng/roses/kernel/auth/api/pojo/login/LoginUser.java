@@ -168,6 +168,12 @@ public class LoginUser implements Serializable {
     @ChineseDescription("租户的编码")
     private String tenantCode;
 
+    /**
+     * 当前登录用户是否是C端用户（默认不是C端用户）
+     */
+    @ChineseDescription("是否是C端用户")
+    private Boolean customerFlag = false;
+
     public String getWsUrl() {
         if (ObjectUtil.isEmpty(this.wsUrl)) {
             return "";
