@@ -127,7 +127,7 @@ public class GunsAuthAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(name = "loginUserCache")
-    public MemoryLoginUserCache loginUserCache() {
+    public CacheOperatorApi<LoginUser> loginUserCache() {
         Long sessionExpiredSeconds = AuthConfigExpander.getSessionExpiredSeconds();
         TimedCache<String, LoginUser> loginUsers = CacheUtil.newTimedCache(1000L * sessionExpiredSeconds);
         return new MemoryLoginUserCache(loginUsers);
@@ -143,7 +143,7 @@ public class GunsAuthAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(name = "allPlaceLoginTokenCache")
-    public MemoryLoginTokenCache allPlaceLoginTokenCache() {
+    public CacheOperatorApi<Set<String>> allPlaceLoginTokenCache() {
         TimedCache<String, Set<String>> loginTokens = CacheUtil.newTimedCache(CacheConstants.NONE_EXPIRED_TIME);
         return new MemoryLoginTokenCache(loginTokens);
     }
