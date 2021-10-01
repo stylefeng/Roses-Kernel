@@ -26,7 +26,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.cache;
 
 import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
 import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
@@ -35,9 +35,9 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @author fengshuonan
  * @date 2021/2/28 10:23
  */
-public class UserOrgRedisCache extends AbstractRedisCacheOperator<SysUserDTO> {
+public class UserOrgRedisCache extends AbstractRedisCacheOperator<SysUserOrgDTO> {
 
-    public UserOrgRedisCache(RedisTemplate<String, SysUserDTO> redisTemplate) {
+    public UserOrgRedisCache(RedisTemplate<String, SysUserOrgDTO> redisTemplate) {
         super(redisTemplate);
     }
 
