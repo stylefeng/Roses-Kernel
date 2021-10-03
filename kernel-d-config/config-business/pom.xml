@@ -17,7 +17,14 @@
 
     <dependencies>
 
-        <!--系统配置表的sdk-->
+        <!--系统配置表的redis的sdk-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>config-sdk-redis</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--默认系统配置表的sdk-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>config-sdk-map</artifactId>

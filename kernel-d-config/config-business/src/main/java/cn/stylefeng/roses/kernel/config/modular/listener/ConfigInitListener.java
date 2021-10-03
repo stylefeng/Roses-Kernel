@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.config.modular.listener;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.db.DbUtil;
 import cn.hutool.db.Entity;
@@ -32,6 +33,7 @@ import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
 import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
 import cn.stylefeng.roses.kernel.config.modular.factory.SysConfigDataFactory;
+import cn.stylefeng.roses.kernel.config.redis.RedisConfigContainer;
 import cn.stylefeng.roses.kernel.rule.context.ApplicationPropertiesContext;
 import cn.stylefeng.roses.kernel.rule.listener.ContextInitializedListener;
 import lombok.extern.slf4j.Slf4j;
@@ -66,11 +68,26 @@ public class ConfigInitListener extends ContextInitializedListener implements Or
     @Override
     public void eventCallback(ApplicationContextInitializedEvent event) {
 
-        // 初始化Config Api
-        ConfigContext.setConfigApi(new ConfigContainer());
-
         // 获取environment参数
         ConfigurableEnvironment environment = event.getApplicationContext().getEnvironment();
+
+        // 是否采用redis进行sys_config缓存的装载和读取（true/false）
+        String redisConfigCacheEnable = environment.getProperty("redis.config.cache.enable");
+        Boolean redisConfigCacheEnableFlag = Convert.toBool(redisConfigCacheEnable, false);
+
+        if (redisConfigCacheEnableFlag) {
+            // 获取Redis的相关配置
+            String redisHost = environment.getProperty("spring.redis.host");
+            String redisPort = environment.getProperty("spring.redis.port");
+            String redisPassword = environment.getProperty("spring.redis.password");
+            String dbNumber = environment.getProperty("spring.redis.database");
+
+            // 初始化Config Api
+            ConfigContext.setConfigApi(new RedisConfigContainer(redisHost, Convert.toInt(redisPort, 6379), redisPassword, Convert.toInt(dbNumber, 0)));
+        } else {
+            // 初始化Config Api，内存方式
+            ConfigContext.setConfigApi(new ConfigContainer());
+        }
 
         // 初始化ApplicationPropertiesContext
         ApplicationPropertiesContext.getInstance().initConfigs(environment);

@@ -18,6 +18,7 @@
     <modules>
         <module>config-api</module>
         <module>config-sdk-map</module>
+        <module>config-sdk-redis</module>
         <module>config-business</module>
         <module>config-spring-boot-starter</module>
     </modules>
