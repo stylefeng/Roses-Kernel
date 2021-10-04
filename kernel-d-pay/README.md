@@ -126,7 +126,7 @@ public class AlipayTest {
 <dependency>
   <groupId>cn.stylefeng.roses</groupId>
   <artifactId>pay-spring-boot-starter</artifactId>
-  <version>7.1.3</version>
+  <version>${roses.version}</version>
 </dependency>
 ```
 
