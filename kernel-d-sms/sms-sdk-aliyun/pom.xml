@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-sms</artifactId>
-        <version>7.1.4</version>
+        <version>7.1.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
