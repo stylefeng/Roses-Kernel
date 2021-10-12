@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -150,7 +151,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 请求bean转为实体，填充一些基本属性
         SysUser sysUser = new SysUser();
-        BeanUtil.copyProperties(sysUserRequest, sysUser);
+        BeanUtil.copyProperties(sysUserRequest, sysUser, CopyOptions.create().ignoreError());
         SysUserCreateFactory.fillAddSysUser(sysUser);
 
         // 设置用户默认头像
@@ -215,7 +216,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 转化为实体
         SysUser sysUser = this.querySysUser(sysUserRequest);
-        BeanUtil.copyProperties(sysUserRequest, sysUser);
+        BeanUtil.copyProperties(sysUserRequest, sysUser, CopyOptions.create().ignoreError());
 
         // 填充基础参数
         SysUserCreateFactory.fillEditSysUser(sysUser);
@@ -378,7 +379,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 获取用户基本信息
         SysUser sysUser = this.querySysUser(sysUserRequest);
-        BeanUtil.copyProperties(sysUser, sysUserResponse);
+        BeanUtil.copyProperties(sysUser, sysUserResponse, CopyOptions.create().ignoreError());
 
         // 获取用户组织绑定信息
         SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgByUserId(sysUser.getUserId());
@@ -768,7 +769,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUserDTO sysUserDTO = sysUserCacheOperatorApi.get(userIdKey);
         if (sysUserDTO != null) {
             SysUser tempUser = new SysUser();
-            BeanUtil.copyProperties(sysUserDTO, tempUser);
+            BeanUtil.copyProperties(sysUserDTO, tempUser, CopyOptions.create().ignoreError());
             return tempUser;
         }
 
@@ -779,7 +780,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 放入缓存
         SysUserDTO sysUserDTOCache = new SysUserDTO();
-        BeanUtil.copyProperties(sysUser, sysUserDTOCache);
+        BeanUtil.copyProperties(sysUser, sysUserDTOCache, CopyOptions.create().ignoreError());
         sysUserCacheOperatorApi.put(userIdKey, sysUserDTOCache);
 
         return sysUser;
