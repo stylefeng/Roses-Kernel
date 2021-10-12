@@ -101,8 +101,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         LambdaQueryWrapper<ApiResource> apiResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
         apiResourceLambdaQueryWrapper.eq(ApiResource::getGroupId, apiResourceRequest.getGroupId());
         apiResourceLambdaQueryWrapper.orderByDesc(ApiResource::getResourceSort);
-        apiResourceLambdaQueryWrapper.last("LIMIT 1");
-        ApiResource resource = this.getOne(apiResourceLambdaQueryWrapper);
+        ApiResource resource = this.getOne(apiResourceLambdaQueryWrapper, false);
         if (ObjectUtil.isNotEmpty(resource)) {
             index = resource.getResourceSort();
         }
