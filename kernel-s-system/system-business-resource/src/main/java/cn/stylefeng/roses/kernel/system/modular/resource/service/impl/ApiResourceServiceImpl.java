@@ -424,7 +424,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
             item.setFieldType("list");
         } else if (fieldMetadata.getFieldClassPath().contains("java.io")) {
             item.setFieldType("file");
-        } else if (fieldMetadata.getFieldClassPath().contains("java.")) {
+        } else if (fieldMetadata.getFieldClassPath().contains("java.") || this.getBasicTypeName().stream().anyMatch(typeName -> fieldMetadata.getFieldClassPath().equalsIgnoreCase(typeName))) {
             item.setFieldType("string");
         } else {
             item.setFieldType("object");
@@ -484,5 +484,16 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         }
 
         return false;
+    }
+
+    /**
+     * 获取基本类型名称
+     *
+     * @return {@link List< String>}
+     * @author majianguo
+     * @date 2021/10/13 18:21
+     **/
+    private List<String> getBasicTypeName() {
+        return Arrays.asList("int", "short", "double", "float", "long", "boolean", "char", "byte");
     }
 }
