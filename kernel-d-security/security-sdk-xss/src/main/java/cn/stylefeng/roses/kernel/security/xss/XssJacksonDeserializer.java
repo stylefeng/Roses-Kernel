@@ -59,7 +59,7 @@ public class XssJacksonDeserializer extends JsonDeserializer<String> {
         if (xssProperties != null &&
                 ObjectUtil.isNotEmpty(xssProperties.getUrlExclusion())) {
             for (String exclusion : xssProperties.getUrlExclusion()) {
-                if (antPathMatcher.match(contextPath + exclusion, servletPath)) {
+                if (antPathMatcher.match(contextPath + exclusion, contextPath + servletPath)) {
                     return jsonParser.getText();
                 }
             }

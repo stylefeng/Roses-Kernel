@@ -62,7 +62,7 @@ public class XssFilter implements Filter {
         if (xssProperties != null &&
                 ObjectUtil.isNotEmpty(xssProperties.getUrlExclusion())) {
             for (String exclusion : xssProperties.getUrlExclusion()) {
-                if (antPathMatcher.match(contextPath + exclusion, servletPath)) {
+                if (antPathMatcher.match(contextPath + exclusion, contextPath + servletPath)) {
                     chain.doFilter(request, response);
                     return;
                 }
