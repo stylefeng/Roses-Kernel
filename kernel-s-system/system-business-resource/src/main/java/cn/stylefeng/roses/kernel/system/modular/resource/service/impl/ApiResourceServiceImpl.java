@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,13 +52,13 @@ import java.util.stream.Collectors;
 @Service
 public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiResource> implements ApiResourceService {
 
-    @Autowired
+    @Resource
     private ApiGroupService apiGroupService;
 
-    @Autowired
+    @Resource
     private SysResourceService sysResourceService;
 
-    @Autowired
+    @Resource
     private ApiResourceFieldService apiResourceFieldService;
 
     @Override
@@ -216,14 +217,17 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         LambdaQueryWrapper<ApiResourceField> apiResourceFieldLambdaQueryWrapper = new LambdaQueryWrapper<>();
         apiResourceFieldLambdaQueryWrapper.eq(ApiResourceField::getApiResourceId, apiResource.getApiResourceId());
         List<ApiResourceField> apiResourceFields = this.apiResourceFieldService.list(apiResourceFieldLambdaQueryWrapper);
+
         // 过滤创建时间和创建人
-        apiResourceFields.removeIf(resourceField -> "createTime".equalsIgnoreCase(resourceField.getFieldCode()) || "createUser".equalsIgnoreCase(resourceField.getFieldCode()) || "updateTime".equalsIgnoreCase(resourceField.getFieldCode()) || "updateUser".equalsIgnoreCase(resourceField.getFieldCode()));
+        apiResourceFields.removeIf(resourceField -> "createTime".equalsIgnoreCase(resourceField.getFieldCode())
+                || "createUser".equalsIgnoreCase(resourceField.getFieldCode())
+                || "updateTime".equalsIgnoreCase(resourceField.getFieldCode())
+                || "updateUser".equalsIgnoreCase(resourceField.getFieldCode()));
 
         List<ApiResourceFieldRequest> apiResourceFieldList = new ArrayList<>();
         for (ApiResourceField apiResourceField : apiResourceFields) {
             // 转换为前端对象
             ApiResourceFieldRequest apiResourceFieldRequest = BeanUtil.toBean(apiResourceField, ApiResourceFieldRequest.class);
-            apiResourceFieldRequest.setChildren(JSON.parseObject(apiResourceField.getFieldSubInfo(), Set.class, Feature.SupportAutoType));
             apiResourceFieldList.add(apiResourceFieldRequest);
         }
 
