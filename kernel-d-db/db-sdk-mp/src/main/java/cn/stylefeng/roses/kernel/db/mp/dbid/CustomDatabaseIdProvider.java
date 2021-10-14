@@ -48,22 +48,26 @@ public class CustomDatabaseIdProvider implements DatabaseIdProvider {
 
         String url = "";
 
+        // 常规获取url的方式
         try {
-            Class<?> XAClass = Class.forName("io.seata.rm.datasource.xa.DataSourceProxyXA");
-
-            // xa的dataSource
-            if (XAClass.isInstance(dataSource)) {
-                Method xaMethod = XAClass.getMethod("getResourceId");
-                Object xaResult = xaMethod.invoke(dataSource);
-                url = xaResult.toString();
-            } else {
-                // 其他的dataSource类型还走原有的逻辑
-                url = dataSource.getConnection().getMetaData().getURL();
-            }
-
+            url = dataSource.getConnection().getMetaData().getURL();
         } catch (Exception e) {
-            log.error("CustomDatabaseIdProvider无法判断当前数据源类型", e);
-            return DbTypeEnum.MYSQL.getCode();
+
+            // 兼容对seata数据源的判断
+            try {
+                Class<?> XAClass = Class.forName("io.seata.rm.datasource.xa.DataSourceProxyXA");
+
+                // xa的dataSource
+                if (XAClass.isInstance(dataSource)) {
+                    Method xaMethod = XAClass.getMethod("getResourceId");
+                    Object xaResult = xaMethod.invoke(dataSource);
+                    url = xaResult.toString();
+                }
+
+            } catch (Exception e2) {
+                log.warn("CustomDatabaseIdProvider无法判断当前数据源类型，默认选择Mysql类型");
+                return DbTypeEnum.MYSQL.getCode();
+            }
         }
 
         if (url.contains(DbTypeEnum.ORACLE.getCode())) {
