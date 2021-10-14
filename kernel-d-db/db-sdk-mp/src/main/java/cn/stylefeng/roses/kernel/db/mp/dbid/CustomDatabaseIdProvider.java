@@ -25,9 +25,11 @@
 package cn.stylefeng.roses.kernel.db.mp.dbid;
 
 import cn.stylefeng.roses.kernel.db.api.enums.DbTypeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 
 /**
@@ -38,12 +40,31 @@ import java.sql.SQLException;
  * @author fengshuonan
  * @date 2020/10/16 17:02
  */
+@Slf4j
 public class CustomDatabaseIdProvider implements DatabaseIdProvider {
 
     @Override
     public String getDatabaseId(DataSource dataSource) throws SQLException {
 
-        String url = dataSource.getConnection().getMetaData().getURL();
+        String url = "";
+
+        try {
+            Class<?> XAClass = Class.forName("io.seata.rm.datasource.xa.DataSourceProxyXA");
+
+            // xa的dataSource
+            if (XAClass.isInstance(dataSource)) {
+                Method xaMethod = XAClass.getMethod("getResourceId");
+                Object xaResult = xaMethod.invoke(dataSource);
+                url = xaResult.toString();
+            } else {
+                // 其他的dataSource类型还走原有的逻辑
+                url = dataSource.getConnection().getMetaData().getURL();
+            }
+
+        } catch (Exception e) {
+            log.error("CustomDatabaseIdProvider无法判断当前数据源类型", e);
+            return DbTypeEnum.MYSQL.getCode();
+        }
 
         if (url.contains(DbTypeEnum.ORACLE.getCode())) {
             return DbTypeEnum.ORACLE.getCode();
