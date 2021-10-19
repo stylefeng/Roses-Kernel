@@ -25,8 +25,9 @@
 package cn.stylefeng.roses.kernel.db.api.factory;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -73,6 +74,23 @@ public class PageFactory {
             pageNo = Integer.parseInt(pageNoString);
         }
 
+        return new Page<>(pageNo, pageSize);
+    }
+
+    /**
+     * 从baseRequest中获取分页参数
+     *
+     * @author fengshuonan
+     * @date 2021/10/19 16:05
+     */
+    public static <T> Page<T> defaultPage(BaseRequest baseRequest) {
+        int pageSize = 20;
+        int pageNo = 1;
+
+        if (ObjectUtil.isNotEmpty(baseRequest)) {
+            pageNo = baseRequest.getPageNo() == null ? pageNo : baseRequest.getPageNo();
+            pageSize = baseRequest.getPageSize() == null ? pageNo : baseRequest.getPageSize();
+        }
         return new Page<>(pageNo, pageSize);
     }
 
