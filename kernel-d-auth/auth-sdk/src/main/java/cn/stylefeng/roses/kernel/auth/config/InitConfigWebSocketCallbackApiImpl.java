@@ -1,8 +1,11 @@
 package cn.stylefeng.roses.kernel.auth.config;
 
+import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
+import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.config.api.ConfigInitCallbackApi;
 import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,6 +17,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class InitConfigWebSocketCallbackApiImpl implements ConfigInitCallbackApi {
 
+    @Autowired
+    private SessionManagerApi sessionManagerApi;
+
     @Override
     public void initBefore() {
 
@@ -21,6 +27,8 @@ public class InitConfigWebSocketCallbackApiImpl implements ConfigInitCallbackApi
 
     @Override
     public void initAfter() {
-        LoginContext.me().getLoginUser().setWsUrl(WebSocketConfigExpander.getWebSocketWsUrl());
+        LoginUser loginUser = LoginContext.me().getLoginUser();
+        loginUser.setWsUrl(WebSocketConfigExpander.getWebSocketWsUrl());
+        sessionManagerApi.updateSession(loginUser.getToken(), loginUser);
     }
 }
