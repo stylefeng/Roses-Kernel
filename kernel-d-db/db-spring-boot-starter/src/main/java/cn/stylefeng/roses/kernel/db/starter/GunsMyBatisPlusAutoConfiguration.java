@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.db.mp.fieldfill.CustomMetaObjectHandler;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
@@ -57,6 +58,9 @@ public class GunsMyBatisPlusAutoConfiguration {
         // 使用分页插插件
         interceptor.addInnerInterceptor(paginationInterceptor());
 
+        // 使用乐观锁插件
+        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
+
         return interceptor;
     }
 
@@ -69,6 +73,17 @@ public class GunsMyBatisPlusAutoConfiguration {
     @Bean
     public PaginationInnerInterceptor paginationInterceptor() {
         return new PaginationInnerInterceptor();
+    }
+
+    /**
+     * 乐观锁插件
+     *
+     * @author fengshuonan
+     * @date 2021/10/28 17:52
+     */
+    @Bean
+    public OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
+        return new OptimisticLockerInnerInterceptor();
     }
 
     /**
