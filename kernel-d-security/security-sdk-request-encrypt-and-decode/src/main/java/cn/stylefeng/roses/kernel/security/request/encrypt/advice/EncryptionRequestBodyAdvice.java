@@ -14,7 +14,6 @@ import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.crypto.symmetric.SM4;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
-import cn.stylefeng.roses.kernel.security.request.encrypt.constants.EncryptionConstants;
 import cn.stylefeng.roses.kernel.security.request.encrypt.exception.EncryptionException;
 import cn.stylefeng.roses.kernel.security.request.encrypt.exception.enums.EncryptionExceptionEnum;
 import cn.stylefeng.roses.kernel.security.request.encrypt.holder.EncryptionHolder;
@@ -60,10 +59,8 @@ public class EncryptionRequestBodyAdvice implements RequestBodyAdvice {
     /**
      * 设置条件,这个条件为true才会执行下面的beforeBodyRead方法
      *
-     * @param methodParameter
-     * @param targetType
-     * @param converterType
-     * @return
+     * @author luojie
+     * @date 2021/10/29 9:32
      */
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -111,7 +108,7 @@ public class EncryptionRequestBodyAdvice implements RequestBodyAdvice {
                             }
 
                             // 使用私钥解密出返回加密数据的key和请求的内容
-                            RSA rsa = EncryptionRsaHolder.getRsa();
+                            RSA rsa = EncryptionRsaHolder.STATIC_RSA;
 
                             // 先使用SM4解密出请求的json
                             String objectString = jsonObject.getString("data");
@@ -193,16 +190,6 @@ public class EncryptionRequestBodyAdvice implements RequestBodyAdvice {
         return body;
     }
 
-    /**
-     * 传入的json是空值的时候,进入这个方法
-     *
-     * @param body
-     * @param inputMessage
-     * @param parameter
-     * @param targetType
-     * @param converterType
-     * @return
-     */
     @Override
     public Object handleEmptyBody(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         return body;
