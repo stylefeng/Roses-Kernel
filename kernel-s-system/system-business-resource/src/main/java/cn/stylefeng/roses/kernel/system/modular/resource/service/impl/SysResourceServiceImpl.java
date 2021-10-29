@@ -341,6 +341,13 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             return null;
         } else {
 
+            // 先从缓存中查询
+            ResourceDefinition tempCachedResourceDefinition = resourceCache.get(resourceUrlReq.getUrl());
+            if (tempCachedResourceDefinition != null) {
+                return tempCachedResourceDefinition;
+            }
+
+            // 缓存中没有去数据库查询
             List<SysResource> resources = resourceMapper.selectList(new QueryWrapper<SysResource>().eq("url", resourceUrlReq.getUrl()));
 
             if (resources == null || resources.isEmpty()) {
@@ -359,6 +366,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 // 获取请求权限的标记，判断是否有权限，如果有则设置为true,否则为false
                 String requiredPermissionFlag = resource.getRequiredPermissionFlag();
                 resourceDefinition.setRequiredPermissionFlag(YesOrNotEnum.Y.name().equals(requiredPermissionFlag));
+
+                // 查询结果添加到缓存
+                resourceCache.put(resourceDefinition.getUrl(), resourceDefinition);
 
                 return resourceDefinition;
             }
