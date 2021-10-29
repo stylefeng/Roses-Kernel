@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.db.mp.fieldfill;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
@@ -49,19 +50,17 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
 
         try {
-
             // 设置createUser（BaseEntity)
-            setFieldValByName(CREATE_USER, this.getUserUniqueId(), metaObject);
+            setValue(metaObject, CREATE_USER, this.getUserUniqueId());
 
             // 设置createTime（BaseEntity)
-            setFieldValByName(CREATE_TIME, new Date(), metaObject);
+            setValue(metaObject, CREATE_TIME, new Date());
 
             // 设置删除标记 默认N-删除
-            setFieldValByName(DEL_FLAG, YesOrNotEnum.N.getCode(), metaObject);
+            setValue(metaObject, DEL_FLAG, YesOrNotEnum.N.getCode());
 
             // 设置状态字段 默认1-启用
-            setFieldValByName(STATUS_FLAG, StatusEnum.ENABLE.getCode(), metaObject);
-
+            setValue(metaObject, STATUS_FLAG, StatusEnum.ENABLE.getCode());
         } catch (ReflectionException e) {
             log.warn("CustomMetaObjectHandler处理过程中无相关字段，不做处理");
         }
@@ -72,13 +71,11 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
 
         try {
-
             // 设置updateUser（BaseEntity)
-            setFieldValByName(UPDATE_USER, this.getUserUniqueId(), metaObject);
+            setValue(metaObject, UPDATE_USER, this.getUserUniqueId());
 
             // 设置updateTime（BaseEntity)
-            setFieldValByName(UPDATE_TIME, new Date(), metaObject);
-
+            setValue(metaObject, UPDATE_TIME, new Date());
         } catch (ReflectionException e) {
             log.warn("CustomMetaObjectHandler处理过程中无相关字段，不做处理");
         }
@@ -87,6 +84,9 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
 
     /**
      * 获取用户唯一id
+     *
+     * @author fengshuonan
+     * @date 2021/10/29 10:01
      */
     private Long getUserUniqueId() {
 
@@ -97,6 +97,19 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
             return -1L;
         }
 
+    }
+
+    /**
+     * 设置属性
+     *
+     * @author fengshuonan
+     * @date 2021/10/29 10:01
+     */
+    private void setValue(MetaObject metaObject, String fieldName, Object value) {
+        Object originalAttr = getFieldValByName(fieldName, metaObject);
+        if (ObjectUtil.isEmpty(originalAttr)) {
+            setFieldValByName(fieldName, value, metaObject);
+        }
     }
 
 }
