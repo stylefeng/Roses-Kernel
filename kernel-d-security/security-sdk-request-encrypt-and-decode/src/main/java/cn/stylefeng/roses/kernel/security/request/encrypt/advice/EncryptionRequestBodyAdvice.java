@@ -46,6 +46,7 @@ import java.util.Date;
  */
 @Slf4j
 @ControllerAdvice
+@SuppressWarnings("all")
 public class EncryptionRequestBodyAdvice implements RequestBodyAdvice {
 
     static {

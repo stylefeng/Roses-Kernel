@@ -24,7 +24,13 @@
  */
 package cn.stylefeng.roses.kernel.security.starter;
 
+import cn.stylefeng.roses.kernel.security.api.constants.SecurityConstants;
+import cn.stylefeng.roses.kernel.security.clear.ClearThreadLocalFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 /**
  * 安全模块自动配置
@@ -34,5 +40,21 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class GunsSecurityAutoConfiguration {
+
+    /**
+     * ThreadLocal清除器
+     *
+     * @author fengshuonan
+     * @date 2021/10/29 11:29
+     */
+    @Bean
+    public FilterRegistrationBean<ClearThreadLocalFilter> clearThreadLocalFilterFilterRegistrationBean() {
+        FilterRegistrationBean<ClearThreadLocalFilter> bean = new FilterRegistrationBean<>();
+        bean.setFilter(new ClearThreadLocalFilter());
+        bean.addUrlPatterns(SecurityConstants.DEFAULT_XSS_PATTERN);
+        bean.setName(ClearThreadLocalFilter.NAME);
+        bean.setOrder(HIGHEST_PRECEDENCE + 1);
+        return bean;
+    }
 
 }

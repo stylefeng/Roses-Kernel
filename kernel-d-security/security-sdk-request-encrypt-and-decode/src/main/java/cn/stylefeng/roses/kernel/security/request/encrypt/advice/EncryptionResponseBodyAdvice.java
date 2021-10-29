@@ -31,6 +31,7 @@ import java.util.Date;
  */
 @Slf4j
 @ControllerAdvice
+@SuppressWarnings("all")
 public class EncryptionResponseBodyAdvice implements ResponseBodyAdvice {
 
     static {
@@ -57,7 +58,7 @@ public class EncryptionResponseBodyAdvice implements ResponseBodyAdvice {
                     // 判断响应实体是否是 ResponseData
                     if (body instanceof ResponseData) {
                         // 转换类型
-                        ResponseData responseData = (ResponseData)body;
+                        ResponseData responseData = (ResponseData) body;
 
                         Object data = responseData.getData();
 
@@ -66,6 +67,7 @@ public class EncryptionResponseBodyAdvice implements ResponseBodyAdvice {
 
                         // 从 ThreadLocal 中获取 aes key
                         String aesKey = EncryptionHolder.getAesKey();
+
                         // 偏移
                         byte[] iv = HexUtil.decodeHex(SecureUtil.md5(StrUtil.format("{}{}", aesKey, DateUtil.format(new Date(), "yyyyMMdd"))));
 

@@ -24,6 +24,13 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--threadLocal清除器-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>security-sdk-clear-threadlocal</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--图形验证码模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
