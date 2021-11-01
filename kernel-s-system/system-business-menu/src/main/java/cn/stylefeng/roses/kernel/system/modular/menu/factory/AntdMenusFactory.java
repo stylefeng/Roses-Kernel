@@ -268,7 +268,7 @@ public class AntdMenusFactory {
                 antdvMenuItem.setPath(sysMenu.getAntdvRouter());
                 antdvMenuItem.setComponent(sysMenu.getAntdvComponent());
                 antdvMenuItem.setHide(YesOrNotEnum.N.getCode().equals(sysMenu.getAntdvVisible()));
-                antdvMenuItem.setUid(sysMenu.getAntdvUidUrl());
+                antdvMenuItem.setActive(sysMenu.getAntdvActiveUrl());
                 if (ObjectUtil.isNotEmpty(sysMenu.getChildren())) {
                     antdvMenuItem.setChildren(doModelTransfer(sysMenu.getChildren()));
                 }
@@ -297,7 +297,7 @@ public class AntdMenusFactory {
         antdSysMenuDTO.setPath("/" + appCode);
         antdSysMenuDTO.setComponent(null);
         antdSysMenuDTO.setHide(false);
-        antdSysMenuDTO.setUid(null);
+        antdSysMenuDTO.setActive(null);
 
         return antdSysMenuDTO;
     }

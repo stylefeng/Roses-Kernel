@@ -69,10 +69,10 @@ public class AntdSysMenuDTO {
     private Boolean hide;
 
     /**
-     * 比如修改页面不在侧边栏，打开后侧边栏就没有选中了，这个可以配置选中地址
+     * 配置选中的path地址，比如修改页面不在侧栏，打开后侧栏就没有选中，这个配置选中地址，非必须
      */
-    @ChineseDescription("比如修改页面不在侧边栏，打开后侧边栏就没有选中了，这个可以配置选中地址")
-    private String uid;
+    @ChineseDescription("配置选中的path地址")
+    private String active;
 
     /**
      * 子级

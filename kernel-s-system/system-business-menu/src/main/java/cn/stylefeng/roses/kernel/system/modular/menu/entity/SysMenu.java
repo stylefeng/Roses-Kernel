@@ -170,9 +170,9 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode<SysMenu> {
     /**
      * 用于非菜单显示页面的重定向url设置
      */
-    @TableField("antdv_uid_url")
+    @TableField("antdv_active_url")
     @ChineseDescription("用于非菜单显示页面的重定向url设置")
-    private String antdvUidUrl;
+    private String antdvActiveUrl;
 
     /**
      * 是否可见(分离版用)：Y-是，N-否
