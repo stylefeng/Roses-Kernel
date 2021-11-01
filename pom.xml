@@ -120,7 +120,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <roses.version>7.1.5</roses.version>
         <hutool.version>5.7.6</hutool.version>
-        <fastjson.version>1.2.74</fastjson.version>
+        <fastjson.version>1.2.78</fastjson.version>
         <lombok.versin>1.18.14</lombok.versin>
         <mp.version>3.4.0</mp.version>
         <mysql-connector-java.version>8.0.21</mysql-connector-java.version>
