@@ -46,7 +46,12 @@ public enum ScannerExceptionEnum implements AbstractExceptionEnum {
     /**
      * 扫描资源过程中，存在不合法控制器名称，请将控制名称以Controller结尾
      */
-    ERROR_CONTROLLER_NAME(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ScannerConstants.RESOURCE_MODULE_NAME + "02", "扫描资源过程中，存在不合法控制器名称，请将控制名称以Controller结尾，控制器名称：{}");
+    ERROR_CONTROLLER_NAME(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ScannerConstants.RESOURCE_MODULE_NAME + "02", "扫描资源过程中，存在不合法控制器名称，请将控制名称以Controller结尾，控制器名称：{}"),
+
+    /**
+     * 系统资源尚未初始化完毕，无法使用系统
+     */
+    SYSTEM_RESOURCE_URL_NOT_INIT(RuleConstants.BUSINESS_ERROR_TYPE_CODE + ScannerConstants.RESOURCE_MODULE_NAME + "03", "系统资源尚未初始化完毕，请稍后使用系统");
 
     /**
      * 错误编码

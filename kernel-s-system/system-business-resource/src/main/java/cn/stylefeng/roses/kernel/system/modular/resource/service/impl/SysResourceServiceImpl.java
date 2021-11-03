@@ -392,6 +392,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         return list.stream().map(SysResource::getUrl).collect(Collectors.toSet());
     }
 
+    @Override
+    public Integer getResourceCount() {
+        return this.count();
+    }
+
     /**
      * 创建wrapper
      *

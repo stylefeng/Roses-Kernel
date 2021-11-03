@@ -57,4 +57,12 @@ public interface ResourceServiceApi {
      */
     Set<String> getResourceUrlsListByCodes(Set<String> resourceCodes);
 
+    /**
+     * 获取当前资源url的数量
+     *
+     * @author fengshuonan
+     * @date 2021/11/3 15:11
+     */
+    Integer getResourceCount();
+
 }

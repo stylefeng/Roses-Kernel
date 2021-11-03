@@ -57,9 +57,12 @@ import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
 import cn.stylefeng.roses.kernel.log.api.LoginLogServiceApi;
 import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
+import cn.stylefeng.roses.kernel.scanner.api.exception.ScannerException;
+import cn.stylefeng.roses.kernel.scanner.api.exception.enums.ScannerExceptionEnum;
 import cn.stylefeng.roses.kernel.security.api.DragCaptchaApi;
 import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
 import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
+import cn.stylefeng.roses.kernel.system.api.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
@@ -112,6 +115,9 @@ public class AuthServiceImpl implements AuthServiceApi {
 
     @Resource
     private SsoProperties ssoProperties;
+
+    @Resource
+    private ResourceServiceApi resourceServiceApi;
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
@@ -183,7 +189,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         String token = LoginContext.me().getToken();
 
         // 演示环境，不记录退出日志
-        if(!DemoConfigExpander.getDemoEnvFlag()){
+        if (!DemoConfigExpander.getDemoEnvFlag()) {
             if (StrUtil.isNotEmpty(token)) {
                 loginLogServiceApi.loginOutSuccess(LoginContext.me().getLoginUser().getUserId());
             }
@@ -284,6 +290,12 @@ public class AuthServiceImpl implements AuthServiceApi {
             if (!dragCaptchaApi.validateCaptcha(verKey, Convert.toInt(verXLocationValue))) {
                 throw new AuthException(ValidatorExceptionEnum.DRAG_CAPTCHA_ERROR);
             }
+        }
+
+        // 2.2 校验当前系统是否初始化资源完成，如果资源还没有初始化，提示用户请等一下再登录
+        Integer resourceCount = resourceServiceApi.getResourceCount();
+        if (resourceCount == null || resourceCount.equals(0)) {
+            throw new ScannerException(ScannerExceptionEnum.SYSTEM_RESOURCE_URL_NOT_INIT);
         }
 
         // 3. 解密密码的密文
