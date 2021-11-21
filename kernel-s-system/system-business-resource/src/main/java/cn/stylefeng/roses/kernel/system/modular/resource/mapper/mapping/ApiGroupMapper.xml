@@ -13,15 +13,7 @@
 
     <select id="dataList" resultType="cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiGroup">
         SELECT
-        ag.group_id,
-        ag.group_name,
-        ag.group_pid,
-        ag.group_pids,
-        ag.group_sort,
-        ag.create_time,
-        ag.create_user,
-        ag.update_time,
-        ag.update_user
+        ag.group_id
         FROM
         api_group ag
         LEFT JOIN api_resource ar ON ag.group_id = ar.group_id
@@ -43,4 +35,30 @@
         OR ag.group_pid = -1
         GROUP BY ag.group_id
     </select>
+
+    <select id="dataList" resultType="cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiGroup" databaseId="oracle">
+        SELECT
+        ag.group_id
+        FROM
+        api_group ag
+        LEFT JOIN api_resource ar ON ag.group_id = ar.group_id
+        LEFT JOIN sys_resource sr ON ar.resource_code = sr.resource_code
+        WHERE
+        1=1
+        <if test="paramCondition.groupName != null and paramCondition.groupName != ''">
+            AND (
+            ar.api_alias LIKE '%' || #{paramCondition.groupName} || '%'
+            OR sr.url LIKE '%' || #{paramCondition.groupName} '%'
+            )
+        </if>
+        <if test="paramCondition.groupId != null">
+            AND (
+            ag.group_pids NOT LIKE '%[' || #{paramCondition.groupId} || ']%'
+            AND ag.group_id != #{paramCondition.groupId}
+            )
+        </if>
+        OR ag.group_pid = -1
+        GROUP BY ag.group_id
+    </select>
+
 </mapper>

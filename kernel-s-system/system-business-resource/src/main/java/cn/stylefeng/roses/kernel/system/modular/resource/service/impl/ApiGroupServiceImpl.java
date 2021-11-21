@@ -249,7 +249,16 @@ public class ApiGroupServiceImpl extends ServiceImpl<ApiGroupMapper, ApiGroup> i
     }
 
     private List<ApiGroup> dataList(ApiGroupRequest apiGroupRequest) {
-        return this.baseMapper.dataList(apiGroupRequest);
+        List<ApiGroup> apiGroups = this.baseMapper.dataList(apiGroupRequest);
+
+        // 根据每个记录的groupId填充其他信息
+        ArrayList<ApiGroup> arrayList = new ArrayList<>();
+        for (ApiGroup apiGroup : apiGroups) {
+            apiGroup = this.getById(apiGroup.getGroupId());
+            arrayList.add(apiGroup);
+        }
+
+        return arrayList;
     }
 
     @Override
