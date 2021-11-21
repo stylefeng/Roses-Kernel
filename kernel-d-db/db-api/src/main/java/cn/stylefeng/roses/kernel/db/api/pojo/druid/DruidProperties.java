@@ -149,6 +149,6 @@ public class DruidProperties {
      * 日志用的filter:log4j
      * 防御sql注入的filter:wall
      */
-    private String filters = "stat,wall";
+    private String filters = "stat";
 
 }
