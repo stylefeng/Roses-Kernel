@@ -32,6 +32,8 @@ public class SysConfigDataFactory {
             return new MssqlSysConfigData();
         } else if (DbTypeEnum.ORACLE.equals(dbType)) {
             return new OracleSysConfigData();
+        } else if (DbTypeEnum.DM.equals(dbType)) {
+            return new OracleSysConfigData();
         }
         return new MysqlSysConfigData();
     }

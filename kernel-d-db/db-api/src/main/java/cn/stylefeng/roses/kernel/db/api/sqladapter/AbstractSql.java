@@ -24,7 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.db.api.sqladapter;
 
-import cn.stylefeng.roses.kernel.db.api.enums.DbTypeEnum;
+
+import cn.stylefeng.roses.kernel.rule.enums.DbTypeEnum;
 
 /**
  * 异构sql获取基类，通过继承此类，编写使用不同数据库的sql
@@ -43,13 +44,16 @@ public abstract class AbstractSql {
      * @date 2020/10/31 23:44
      */
     public String getSql(String jdbcUrl) {
-        if (jdbcUrl.contains(DbTypeEnum.ORACLE.getCode())) {
+        if (jdbcUrl.contains(DbTypeEnum.ORACLE.getUrlWords())) {
             return oracle();
         }
-        if (jdbcUrl.contains(DbTypeEnum.MS_SQL.getCode())) {
+        if (jdbcUrl.contains(DbTypeEnum.DM.getUrlWords())) {
+            return oracle();
+        }
+        if (jdbcUrl.contains(DbTypeEnum.MS_SQL.getUrlWords())) {
             return sqlServer();
         }
-        if (jdbcUrl.contains(DbTypeEnum.PG_SQL.getCode())) {
+        if (jdbcUrl.contains(DbTypeEnum.PG_SQL.getUrlWords())) {
             return pgSql();
         }
         return mysql();

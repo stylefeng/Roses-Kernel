@@ -46,15 +46,14 @@ public class DatabaseTypeUtil {
             return DbTypeEnum.MYSQL;
         }
 
-        if (jdbcUrl.contains(DbTypeEnum.ORACLE.getName())) {
-            return DbTypeEnum.ORACLE;
-        } else if (jdbcUrl.contains(DbTypeEnum.PG_SQL.getName())) {
-            return DbTypeEnum.PG_SQL;
-        } else if (jdbcUrl.contains(DbTypeEnum.MS_SQL.getName())) {
-            return DbTypeEnum.MS_SQL;
-        } else {
-            return DbTypeEnum.MYSQL;
+        // url字符串中包含了dbTypeEnum的name，则判定为该类型
+        for (DbTypeEnum dbTypeEnum : DbTypeEnum.values()) {
+            if (jdbcUrl.contains(dbTypeEnum.getUrlWords())) {
+                return dbTypeEnum;
+            }
         }
+
+        return DbTypeEnum.MYSQL;
     }
 
 }

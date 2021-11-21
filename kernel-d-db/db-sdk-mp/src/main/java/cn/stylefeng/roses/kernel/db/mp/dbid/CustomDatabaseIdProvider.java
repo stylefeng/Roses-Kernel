@@ -24,7 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.db.mp.dbid;
 
-import cn.stylefeng.roses.kernel.db.api.enums.DbTypeEnum;
+import cn.stylefeng.roses.kernel.rule.enums.DbTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 
@@ -66,21 +66,26 @@ public class CustomDatabaseIdProvider implements DatabaseIdProvider {
 
             } catch (Exception e2) {
                 log.warn("CustomDatabaseIdProvider无法判断当前数据源类型，默认选择Mysql类型");
-                return DbTypeEnum.MYSQL.getCode();
+                return DbTypeEnum.MYSQL.getUrlWords();
             }
         }
 
-        if (url.contains(DbTypeEnum.ORACLE.getCode())) {
-            return DbTypeEnum.ORACLE.getCode();
+        // 达梦和oracle使用同一种
+        if (url.contains(DbTypeEnum.ORACLE.getUrlWords())) {
+            return DbTypeEnum.ORACLE.getUrlWords();
         }
-        if (url.contains(DbTypeEnum.MS_SQL.getCode())) {
-            return DbTypeEnum.MS_SQL.getCode();
-        }
-        if (url.contains(DbTypeEnum.PG_SQL.getCode())) {
-            return DbTypeEnum.PG_SQL.getCode();
+        if (url.contains(DbTypeEnum.DM.getUrlWords())) {
+            return DbTypeEnum.ORACLE.getUrlWords();
         }
 
-        return DbTypeEnum.MYSQL.getCode();
+        if (url.contains(DbTypeEnum.MS_SQL.getUrlWords())) {
+            return DbTypeEnum.MS_SQL.getUrlWords();
+        }
+        if (url.contains(DbTypeEnum.PG_SQL.getUrlWords())) {
+            return DbTypeEnum.PG_SQL.getUrlWords();
+        }
+
+        return DbTypeEnum.MYSQL.getUrlWords();
     }
 
 }

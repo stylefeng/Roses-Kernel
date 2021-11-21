@@ -25,8 +25,8 @@
 package cn.stylefeng.roses.kernel.db.api.factory;
 
 import cn.hutool.core.util.StrUtil;
-import cn.stylefeng.roses.kernel.db.api.enums.DbTypeEnum;
 import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
+import cn.stylefeng.roses.kernel.rule.enums.DbTypeEnum;
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.extern.slf4j.Slf4j;
 
@@ -117,14 +117,10 @@ public class DruidDatasourceFactory {
      * @date 2020/10/16 16:12
      */
     private static String getValidateQueryByUrl(String url) {
-        if (url.contains(DbTypeEnum.ORACLE.getCode())) {
-            return DbTypeEnum.ORACLE.getValidateQuery();
-        }
-        if (url.contains(DbTypeEnum.MS_SQL.getCode())) {
-            return DbTypeEnum.MS_SQL.getValidateQuery();
-        }
-        if (url.contains(DbTypeEnum.PG_SQL.getCode())) {
-            return DbTypeEnum.PG_SQL.getValidateQuery();
+        for (DbTypeEnum value : DbTypeEnum.values()) {
+            if (url.contains(value.getUrlWords())) {
+                return value.getValidateQuery();
+            }
         }
 
         return DbTypeEnum.MYSQL.getValidateQuery();

@@ -17,30 +17,47 @@ public enum DbTypeEnum {
     /**
      * mysql
      */
-    MYSQL("mysql", "mysql"),
+    MYSQL("mysql", "mysql", "select 1"),
 
     /**
      * pgsql
      */
-    PG_SQL("pgsql", "postgresql"),
+    PG_SQL("postgresql", "pgsql", "select version()"),
 
     /**
      * oracle
      */
-    ORACLE("oracle", "oracle"),
+    ORACLE("oracle", "oracle", "select 1 from dual"),
+
+    /**
+     * 达梦（使用oracle的mapping.xml）
+     */
+    DM("dm", "oracle", "select 1 from dual"),
 
     /**
      * mssql
      */
-    MS_SQL("mssql", "sqlserver");
+    MS_SQL("sqlserver", "mssql", "select 1");
 
-    private final String code;
+    /**
+     * spring.datasource.url中包含的关键字
+     */
+    private final String urlWords;
 
-    private final String name;
+    /**
+     * mapping.xml使用databaseId="xxx"来标识的关键字
+     */
+    private final String xmlDatabaseId;
 
-    DbTypeEnum(String code, String name) {
-        this.code = code;
-        this.name = name;
+    /**
+     * validateQuery所使用的语句
+     */
+    private final String validateQuery;
+
+    DbTypeEnum(String urlWords, String xmlDatabaseId, String validateQuery) {
+        this.urlWords = urlWords;
+        this.xmlDatabaseId = xmlDatabaseId;
+        this.validateQuery = validateQuery;
     }
 
 }
