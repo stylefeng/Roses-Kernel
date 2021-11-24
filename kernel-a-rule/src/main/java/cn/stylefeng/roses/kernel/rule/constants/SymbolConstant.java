@@ -44,7 +44,7 @@ public interface SymbolConstant {
 
     String AND = "&";
 
-    String POINT = ".";
+    String DOT = ".";
 
     String SLASH = "/";
     
