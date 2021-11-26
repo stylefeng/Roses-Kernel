@@ -126,6 +126,7 @@ public interface CustomerService extends IService<Customer>, CustomerApi {
     /**
      * 重置个人秘钥
      *
+     * @return 用户秘钥
      * @author fengshuonan
      * @date 2021/7/20 10:44
      */
