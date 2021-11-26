@@ -70,4 +70,13 @@ public interface CustomerApi {
      */
     String createOrUpdateCustomerSecret(Long customerId);
 
+    /**
+     * 获取用户信息
+     *
+     * @param keyWords 用户账号，邮箱，或用户id
+     * @author fengshuonan
+     * @date 2021/7/20 10:44
+     */
+    CustomerInfo getCustomerInfoByKeyWords(String keyWords);
+
 }

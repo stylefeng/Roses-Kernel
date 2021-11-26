@@ -369,7 +369,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Override
     public String createOrUpdateCustomerSecret(Long customerId) {
-        if(customerId == null){
+        if (customerId == null) {
             return null;
         }
 
@@ -386,6 +386,21 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         customerInfoCacheOperatorApi.remove(String.valueOf(customerId));
 
         return randomString;
+    }
+
+    @Override
+    public CustomerInfo getCustomerInfoByKeyWords(String keyWords) {
+        LambdaQueryWrapper<Customer> customerLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        customerLambdaQueryWrapper.eq(Customer::getAccount, keyWords)
+                .or().eq(Customer::getEmail, keyWords)
+                .or().eq(Customer::getCustomerId, keyWords)
+                .select(Customer::getCustomerId);
+        Customer one = this.getOne(customerLambdaQueryWrapper, false);
+        if (one == null) {
+            return null;
+        } else {
+            return this.getCustomerInfoById(one.getCustomerId());
+        }
     }
 
     @Override
