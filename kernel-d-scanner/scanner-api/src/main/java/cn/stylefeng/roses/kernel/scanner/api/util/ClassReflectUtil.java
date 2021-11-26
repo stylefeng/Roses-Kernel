@@ -36,6 +36,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
 
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toCollection;
+
 /**
  * 类的反射工具
  *
@@ -81,10 +84,11 @@ public class ClassReflectUtil {
             }
 
             runMap.remove(clazz.getName());
+
             // 获取本类的父类
             clazz = clazz.getSuperclass();
         }
-        return fieldDescriptions;
+        return fieldDescriptions.stream().collect(toCollection(() -> new TreeSet<>(comparing(FieldMetadata::getFieldName))));
     }
 
     /**
@@ -244,5 +248,4 @@ public class ClassReflectUtil {
 
         return strings;
     }
-
 }
