@@ -54,6 +54,11 @@ public class CustomerInfo {
     private Integer score;
 
     /**
+     * 用户秘钥
+     */
+    private String secretKey;
+
+    /**
      * 是否是会员
      */
     private Boolean memberFlag;

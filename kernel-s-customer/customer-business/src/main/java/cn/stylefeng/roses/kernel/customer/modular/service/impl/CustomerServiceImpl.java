@@ -373,6 +373,17 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             return null;
         }
 
+        // 查看当前用户是否有秘钥
+        Customer customer = this.getById(customerId);
+        if (StrUtil.isEmpty(customer.getSecretKey())) {
+            throw new CustomerException(CustomerExceptionEnum.NO_SECRET);
+        }
+
+        // 判断秘钥是否过期
+        if (customer.getMemberExpireTime().before(new Date())) {
+            throw new CustomerException(CustomerExceptionEnum.SECRET_EXPIRED);
+        }
+
         // 重新生成秘钥
         String randomString = RandomUtil.randomString(32);
 
