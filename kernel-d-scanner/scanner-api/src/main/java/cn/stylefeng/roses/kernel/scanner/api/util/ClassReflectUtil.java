@@ -130,7 +130,7 @@ public class ClassReflectUtil {
 
                 // 处理List<?>这种情况
                 if (!(typeArgument instanceof WildcardType)) {
-                    actualTypeArgument = (Class<?>)pt.getActualTypeArguments()[0];
+                    actualTypeArgument = typeArgument.getClass();
                 } else {
                     actualTypeArgument = Object.class;
                 }
