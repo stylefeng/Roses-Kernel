@@ -57,6 +57,11 @@ public class HttpServletUtil {
     private static final String LOCAL_IP = "127.0.0.1";
 
     /**
+     * Nginx代理自定义的IP名称
+     */
+    private static final String AGENT_SOURCE_IP = "Agent-Source-Ip";
+
+    /**
      * 本机ip地址的ipv6地址
      */
     private static final String LOCAL_REMOTE_HOST = "0:0:0:0:0:0:0:1";
@@ -73,7 +78,7 @@ public class HttpServletUtil {
      * @date 2020/10/15 17:48
      */
     public static HttpServletRequest getRequest() {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             throw new ServiceException(ServletExceptionEnum.HTTP_CONTEXT_ERROR);
         } else {
@@ -88,7 +93,7 @@ public class HttpServletUtil {
      * @date 2020/10/15 17:48
      */
     public static HttpServletResponse getResponse() {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             throw new ServiceException(ServletExceptionEnum.HTTP_CONTEXT_ERROR);
         } else {
@@ -108,7 +113,7 @@ public class HttpServletUtil {
         if (ObjectUtil.isEmpty(request)) {
             return LOCAL_IP;
         } else {
-            String remoteHost = ServletUtil.getClientIP(request);
+            String remoteHost = ServletUtil.getClientIP(request, AGENT_SOURCE_IP);
             return LOCAL_REMOTE_HOST.equals(remoteHost) ? LOCAL_IP : remoteHost;
         }
     }
@@ -151,7 +156,7 @@ public class HttpServletUtil {
                 HttpRequest http = HttpUtil.createGet(String.format(ipGeoApi, ip));
                 http.header(requestApiHeader, appCodeSymbol + " " + ipGeoAppCode);
                 resultJson = http.timeout(3000).execute().body();
-                resultJson = String.join("", (List<String>) JSONPath.read(resultJson, jsonPath));
+                resultJson = String.join("", (List<String>)JSONPath.read(resultJson, jsonPath));
             }
         } catch (Exception e) {
             log.error("根据ip定位异常，具体信息为：{}", e.getMessage());
@@ -192,8 +197,7 @@ public class HttpServletUtil {
      * @date 2021/2/22 22:37
      */
     public static Boolean getNormalRequestFlag(HttpServletRequest request) {
-        return request.getHeader("Accept") == null
-                || request.getHeader("Accept").toLowerCase().contains("text/html");
+        return request.getHeader("Accept") == null || request.getHeader("Accept").toLowerCase().contains("text/html");
     }
 
     /**
@@ -206,8 +210,7 @@ public class HttpServletUtil {
      * @date 2021/2/22 22:37
      */
     public static Boolean getJsonRequestFlag(HttpServletRequest request) {
-        return request.getHeader("Accept") == null
-                || request.getHeader("Accept").toLowerCase().contains("application/json");
+        return request.getHeader("Accept") == null || request.getHeader("Accept").toLowerCase().contains("application/json");
     }
 
 }
