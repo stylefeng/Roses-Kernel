@@ -45,7 +45,6 @@ public interface SessionManagerApi {
      *
      * @param token     用户登录的token
      * @param loginUser 登录的用户
-     * @param loginUser 登录的用户
      * @author fengshuonan
      * @date 2020/10/19 16:47
      */
