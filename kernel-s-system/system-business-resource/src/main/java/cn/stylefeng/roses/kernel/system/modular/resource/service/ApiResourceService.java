@@ -5,7 +5,6 @@ import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiGroupRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiResourceFieldRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ApiResourceRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResource;
-import cn.stylefeng.roses.kernel.system.modular.resource.entity.ApiResourceField;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -107,4 +106,25 @@ public interface ApiResourceService extends IService<ApiResource> {
      * @date 2021/6/18 下午6:28
      **/
     List<ApiResource> dataList(ApiGroupRequest apiGroupRequest);
+
+    /**
+     * 刷新表中的数据
+     * <p>
+     * 把表中的resource_code中的app code和当前启动的app code对应
+     *
+     * @author majianguo
+     * @date 2021/12/2 13:49
+     **/
+    void refreshTableData();
+
+    /**
+     * 根据应用编码更新接口资源
+     *
+     * @param oldAppCode        等待替换的应用编码
+     * @param newAppCode        新应用编码
+     * @param currentSystemFlag 是否是当前系统
+     * @author majianguo
+     * @date 2021/12/2 14:30
+     **/
+    void updateApiResourceByAppCode(String oldAppCode, String newAppCode, String currentSystemFlag);
 }

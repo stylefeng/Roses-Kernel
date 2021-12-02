@@ -53,6 +53,13 @@ public class ApiResource extends BaseEntity {
     private String apiAlias;
 
     /**
+     * 是否是当前系统资源：Y-是，N-否
+     */
+    @TableField("current_system_flag")
+    @ChineseDescription("是否是当前系统资源：Y-是，N-否")
+    private String currentSystemFlag;
+
+    /**
      * 资源唯一编码,关联sys_resource表的code
      */
     @TableField("resource_code")

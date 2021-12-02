@@ -8,6 +8,7 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.constants.SymbolConstant;
+import cn.stylefeng.roses.kernel.rule.context.ApplicationPropertiesContext;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
@@ -31,9 +32,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -76,7 +77,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
 
         // 如果是控制器名称，则查询模块下的所有资源
-        if (!apiResourceRequest.getResourceCode().contains("$")) {
+        if (!apiResourceRequest.getResourceCode().contains(SymbolConstant.DOLLAR)) {
             sysResourceLambdaQueryWrapper.eq(SysResource::getModularCode, apiResourceRequest.getResourceCode());
             sysResourceLambdaQueryWrapper.eq(SysResource::getViewFlag, YesOrNotEnum.N.getCode());
             List<SysResource> sysResourceList = sysResourceService.list(sysResourceLambdaQueryWrapper);
@@ -120,6 +121,14 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
 
             // 设置资源code
             apiResource.setResourceCode(sysResource.getResourceCode());
+
+            // 是否是当前系统资源
+            String applicationName = ApplicationPropertiesContext.getInstance().getApplicationName();
+            String currentSystemFlag = YesOrNotEnum.N.getCode();
+            if (applicationName.equals(sysResource.getAppCode())) {
+                currentSystemFlag = YesOrNotEnum.Y.getCode();
+            }
+            apiResource.setCurrentSystemFlag(currentSystemFlag);
 
             // 设置排序
             if (ObjectUtil.isEmpty(apiResourceRequest.getResourceSort())) {
@@ -219,10 +228,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         List<ApiResourceField> apiResourceFields = this.apiResourceFieldService.list(apiResourceFieldLambdaQueryWrapper);
 
         // 过滤创建时间和创建人
-        apiResourceFields.removeIf(resourceField -> "createTime".equalsIgnoreCase(resourceField.getFieldCode())
-                || "createUser".equalsIgnoreCase(resourceField.getFieldCode())
-                || "updateTime".equalsIgnoreCase(resourceField.getFieldCode())
-                || "updateUser".equalsIgnoreCase(resourceField.getFieldCode()));
+        apiResourceFields.removeIf(resourceField -> "createTime".equalsIgnoreCase(resourceField.getFieldCode()) || "createUser".equalsIgnoreCase(resourceField.getFieldCode()) || "updateTime".equalsIgnoreCase(resourceField.getFieldCode()) || "updateUser".equalsIgnoreCase(resourceField.getFieldCode()));
 
         List<ApiResourceFieldRequest> apiResourceFieldList = new ArrayList<>();
         for (ApiResourceField apiResourceField : apiResourceFields) {
@@ -351,6 +357,29 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
     }
 
     @Override
+    public void refreshTableData() {
+        LambdaQueryWrapper<ApiResource> apiResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        apiResourceLambdaQueryWrapper.eq(ApiResource::getCurrentSystemFlag, YesOrNotEnum.Y.getCode());
+        apiResourceLambdaQueryWrapper.last("limit 1");
+        ApiResource apiResource = this.getOne(apiResourceLambdaQueryWrapper);
+        if (ObjectUtil.isNotEmpty(apiResource)) {
+            String resourceCode = apiResource.getResourceCode();
+            String oldAppCode = resourceCode.substring(0, resourceCode.indexOf(SymbolConstant.DOLLAR));
+            String newAppCode = ApplicationPropertiesContext.getInstance().getApplicationName();
+            this.updateApiResourceByAppCode(oldAppCode, newAppCode, YesOrNotEnum.Y.getCode());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateApiResourceByAppCode(String oldAppCode, String newAppCode, String currentSystemFlag) {
+        LambdaUpdateWrapper<ApiResource> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(ApiResource::getCurrentSystemFlag, currentSystemFlag);
+        lambdaUpdateWrapper.setSql("resource_code=replace(resource_code, '" + oldAppCode + SymbolConstant.DOLLAR + "', '" + newAppCode + SymbolConstant.DOLLAR + "')");
+        this.update(lambdaUpdateWrapper);
+    }
+
+    @Override
     public List<ApiResource> findList(ApiResourceRequest apiResourceRequest) {
         LambdaQueryWrapper<ApiResource> wrapper = this.createWrapper(apiResourceRequest);
         return this.list(wrapper);
@@ -382,6 +411,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         Long apiResourceId = apiResourceRequest.getApiResourceId();
         Long groupId = apiResourceRequest.getGroupId();
         String apiAlias = apiResourceRequest.getApiAlias();
+        String currentSystemFlag = apiResourceRequest.getCurrentSystemFlag();
         String resourceCode = apiResourceRequest.getResourceCode();
         String lastRequestContent = apiResourceRequest.getLastRequestContent();
         String lastResponseContent = apiResourceRequest.getLastResponseContent();
@@ -395,6 +425,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
         queryWrapper.eq(ObjectUtil.isNotNull(groupId), ApiResource::getGroupId, groupId);
         queryWrapper.like(ObjectUtil.isNotEmpty(apiAlias), ApiResource::getApiAlias, apiAlias);
         queryWrapper.like(ObjectUtil.isNotEmpty(resourceCode), ApiResource::getResourceCode, resourceCode);
+        queryWrapper.like(ObjectUtil.isNotEmpty(currentSystemFlag), ApiResource::getCurrentSystemFlag, currentSystemFlag);
         queryWrapper.like(ObjectUtil.isNotEmpty(lastRequestContent), ApiResource::getLastRequestContent, lastRequestContent);
         queryWrapper.like(ObjectUtil.isNotEmpty(lastResponseContent), ApiResource::getLastResponseContent, lastResponseContent);
         queryWrapper.eq(ObjectUtil.isNotNull(resourceSort), ApiResource::getResourceSort, resourceSort);
