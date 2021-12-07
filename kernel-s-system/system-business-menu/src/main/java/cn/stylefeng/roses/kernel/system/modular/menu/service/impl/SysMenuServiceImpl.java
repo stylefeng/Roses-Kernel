@@ -550,6 +550,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<String> getResourceCodesByBusinessId(List<Long> businessIds) {
+        if (ObjectUtil.isEmpty(businessIds)) {
+            return new ArrayList<>();
+        }
+        
         LambdaQueryWrapper<SysMenuResource> wrapper = new LambdaQueryWrapper<>();
         wrapper.in(SysMenuResource::getBusinessId, businessIds);
         wrapper.select(SysMenuResource::getResourceCode);
