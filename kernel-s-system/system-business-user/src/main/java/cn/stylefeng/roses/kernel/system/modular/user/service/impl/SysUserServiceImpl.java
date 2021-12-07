@@ -633,6 +633,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         newLoginUser.setToken(loginUser.getToken());
         newLoginUser.setTenantCode(loginUser.getTenantCode());
         newLoginUser.setWsUrl(loginUser.getWsUrl());
+        newLoginUser.setOtherInfos(loginUser.getOtherInfos());
 
         return newLoginUser;
     }
