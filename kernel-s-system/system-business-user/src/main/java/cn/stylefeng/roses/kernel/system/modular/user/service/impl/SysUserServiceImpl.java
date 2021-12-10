@@ -552,7 +552,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         wrapper.ne(SysUser::getSuperAdminFlag, YesOrNotEnum.Y.getCode());
 
         // 只查询id和name
-        wrapper.select(SysUser::getRealName, SysUser::getUserId);
+        wrapper.select(SysUser::getRealName, SysUser::getUserId, SysUser::getAccount);
         List<SysUser> list = this.list(wrapper);
 
         ArrayList<SimpleDict> results = new ArrayList<>();
@@ -560,6 +560,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             SimpleDict simpleDict = new SimpleDict();
             simpleDict.setId(sysUser.getUserId());
             simpleDict.setName(sysUser.getRealName());
+            simpleDict.setCode(sysUser.getAccount());
             results.add(simpleDict);
         }
 
@@ -580,7 +581,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<Long> getAllUserIds() {
         LambdaQueryWrapper<SysUser> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userLambdaQueryWrapper.select(SysUser::getUserId);
-        userLambdaQueryWrapper.eq(SysUser::getStatusFlag, StatusEnum.ENABLE);
+        userLambdaQueryWrapper.eq(SysUser::getStatusFlag, StatusEnum.ENABLE.getCode());
         userLambdaQueryWrapper.ne(SysUser::getDelFlag, YesOrNotEnum.Y.getCode());
 
         List<SysUser> list = this.list(userLambdaQueryWrapper);
