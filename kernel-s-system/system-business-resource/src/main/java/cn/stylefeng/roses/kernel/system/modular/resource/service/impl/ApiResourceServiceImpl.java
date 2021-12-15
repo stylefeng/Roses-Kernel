@@ -360,8 +360,7 @@ public class ApiResourceServiceImpl extends ServiceImpl<ApiResourceMapper, ApiRe
     public void refreshTableData() {
         LambdaQueryWrapper<ApiResource> apiResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
         apiResourceLambdaQueryWrapper.eq(ApiResource::getCurrentSystemFlag, YesOrNotEnum.Y.getCode());
-        apiResourceLambdaQueryWrapper.last("limit 1");
-        ApiResource apiResource = this.getOne(apiResourceLambdaQueryWrapper);
+        ApiResource apiResource = this.getOne(apiResourceLambdaQueryWrapper,false);
         if (ObjectUtil.isNotEmpty(apiResource)) {
             String resourceCode = apiResource.getResourceCode();
             String oldAppCode = resourceCode.substring(0, resourceCode.indexOf(SymbolConstant.DOLLAR));

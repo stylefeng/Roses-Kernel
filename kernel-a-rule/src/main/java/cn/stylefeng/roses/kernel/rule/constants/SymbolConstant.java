@@ -50,4 +50,5 @@ public interface SymbolConstant {
     
     String BACK_SLASH = "\\";
 
+    String SPACE = " ";
 }
