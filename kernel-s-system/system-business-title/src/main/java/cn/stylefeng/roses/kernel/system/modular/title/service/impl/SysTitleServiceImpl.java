@@ -53,10 +53,13 @@ public class SysTitleServiceImpl extends ServiceImpl<SysTitleMapper, SysTitle> i
         // 保存图片信息
         SysFileInfoResponse backgroundImageResponse = this.uploadFile(sysTitleRequest.getBackgroundImage(), DEFAULT_FILE_UPLOAD);
         sysTitle.setBackgroundImage(backgroundImageResponse.getFileId().toString());
+
         SysFileInfoResponse browserIconResponse = this.uploadFile(sysTitleRequest.getBrowserIcon(), DEFAULT_FILE_UPLOAD);
         sysTitle.setBrowserIcon(browserIconResponse.getFileId().toString());
+
         SysFileInfoResponse companyLogoResponse = this.uploadFile(sysTitleRequest.getCompanyLogo(), DEFAULT_FILE_UPLOAD);
         sysTitle.setCompanyLogo(companyLogoResponse.getFileId().toString());
+
         SysFileInfoResponse pageImageResponse = this.uploadFile(sysTitleRequest.getPageImage(), DEFAULT_FILE_UPLOAD);
         sysTitle.setPageImage(pageImageResponse.getFileId().toString());
 
@@ -81,6 +84,7 @@ public class SysTitleServiceImpl extends ServiceImpl<SysTitleMapper, SysTitle> i
         sysFileInfoRequest.setFileLocation(4);
         sysFileInfoRequest.setFilePath("D:\\test");
         sysFileInfoRequest.setFileOriginName(multipartFile.getOriginalFilename());
+
         return sysFileInfoService.uploadFile(multipartFile, sysFileInfoRequest);
     }
 
@@ -105,9 +109,11 @@ public class SysTitleServiceImpl extends ServiceImpl<SysTitleMapper, SysTitle> i
      */
     private SysTitle querySysTitleById(SysTitleRequest sysTitleRequest) {
         SysTitle sysTitle = this.getById(sysTitleRequest.getTitleId());
+
         if (ObjectUtil.isEmpty(sysTitle)) {
             throw new SystemModularException(SysTitleExceptionEnum.TITLE_NOT_EXIST, sysTitleRequest.getTitleId());
         }
+
         return sysTitle;
     }
 
