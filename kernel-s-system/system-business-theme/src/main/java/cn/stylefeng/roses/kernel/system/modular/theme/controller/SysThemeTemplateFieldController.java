@@ -72,15 +72,4 @@ public class SysThemeTemplateFieldController {
     public ResponseData detail(SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
         return new SuccessResponseData(sysThemeTemplateFieldService.detail(sysThemeTemplateFieldParam));
     }
-
-    /**
-     * 查询系统主题模板属性列表
-     *
-     * @author xixiaowei
-     * @date 2021/12/22 11:34
-     */
-    /*@GetResource(name = "查询系统主题模板属性列表", path = "/sysThemeTemplateField/findList")
-    public ResponseData findList(SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
-        return new SuccessResponseData(sysThemeTemplateFieldService.findList(sysThemeTemplateFieldParam));
-    }*/
 }

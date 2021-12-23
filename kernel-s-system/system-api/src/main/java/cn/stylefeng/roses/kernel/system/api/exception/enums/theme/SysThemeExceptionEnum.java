@@ -5,6 +5,12 @@ import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
 import lombok.Getter;
 
+/**
+ * 系统主题异常类
+ *
+ * @author xixiaowei
+ * @date 2021/12/23 17:00
+ */
 @Getter
 public enum SysThemeExceptionEnum implements AbstractExceptionEnum {
 
