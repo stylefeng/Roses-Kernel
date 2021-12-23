@@ -90,7 +90,7 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         // 获取图片文件的编码
         LambdaQueryWrapper<SysThemeTemplateField> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(SysThemeTemplateField::getFieldName, themeKeys).eq(SysThemeTemplateField::getFieldType, "file")
-                    .select(SysThemeTemplateField::getFieldName);
+                .select(SysThemeTemplateField::getFieldName);
         List<SysThemeTemplateField> sysThemeTemplateFields = sysThemeTemplateFieldService.list(queryWrapper);
         List<String> fileNames = sysThemeTemplateFields.stream().map(SysThemeTemplateField::getFieldName).collect(Collectors.toList());
 
@@ -125,7 +125,7 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
     public PageResult<SysTheme> findPage(SysThemeRequest sysThemeRequest) {
         LambdaQueryWrapper<SysTheme> queryWrapper = new LambdaQueryWrapper<>();
         // 通过主题名称模糊查询
-        queryWrapper.like(StrUtil.isNotBlank(sysThemeRequest.getThemeName()),SysTheme::getThemeName, sysThemeRequest.getThemeName());
+        queryWrapper.like(StrUtil.isNotBlank(sysThemeRequest.getThemeName()), SysTheme::getThemeName, sysThemeRequest.getThemeName());
 
         Page<SysTheme> page = page(PageFactory.defaultPage(), queryWrapper);
 

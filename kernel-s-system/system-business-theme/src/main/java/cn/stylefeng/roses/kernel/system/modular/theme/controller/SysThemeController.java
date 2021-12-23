@@ -69,7 +69,7 @@ public class SysThemeController {
      * @date 2021/12/17 16:58
      */
     @GetResource(name = "查询系统主题", path = "/sysTheme/findPage")
-    public ResponseData findPage(SysThemeRequest sysThemeParam)  {
+    public ResponseData findPage(SysThemeRequest sysThemeParam) {
         return new SuccessResponseData(sysThemeService.findPage(sysThemeParam));
     }
 

@@ -116,7 +116,7 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
     public PageResult<SysThemeTemplate> findPage(SysThemeTemplateRequest sysThemeTemplateRequest) {
         LambdaQueryWrapper<SysThemeTemplate> queryWrapper = new LambdaQueryWrapper<>();
         // 根据系统主题模板名称模糊查询
-        queryWrapper.like(StrUtil.isNotBlank(sysThemeTemplateRequest.getTemplateName()) ,SysThemeTemplate::getTemplateName, sysThemeTemplateRequest.getTemplateName());
+        queryWrapper.like(StrUtil.isNotBlank(sysThemeTemplateRequest.getTemplateName()), SysThemeTemplate::getTemplateName, sysThemeTemplateRequest.getTemplateName());
 
         Page<SysThemeTemplate> page = page(PageFactory.defaultPage(), queryWrapper);
 
@@ -145,6 +145,12 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
         this.updateById(sysThemeTemplate);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<SysThemeTemplateDataDTO> detail(SysThemeTemplateRequest sysThemeTemplateRequest) {
+        return sysThemeTemplateMapper.sysThemeTemplateDetail(sysThemeTemplateRequest.getTemplateId());
+    }
+
     /**
      * 查询单个系统主题模板
      *
@@ -157,11 +163,5 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
             throw new SystemModularException(SysThemeTemplateExceptionEnum.TEMPLATE_NOT_EXIT);
         }
         return sysThemeTemplate;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public List<SysThemeTemplateDataDTO> detail(SysThemeTemplateRequest sysThemeTemplateRequest) {
-       return sysThemeTemplateMapper.sysThemeTemplateDetail(sysThemeTemplateRequest.getTemplateId());
     }
 }
