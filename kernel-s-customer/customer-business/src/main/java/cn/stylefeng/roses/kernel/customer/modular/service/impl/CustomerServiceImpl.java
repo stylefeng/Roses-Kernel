@@ -364,17 +364,8 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         // 获取当前登录用户
         Long userId = LoginContext.me().getLoginUser().getUserId();
 
-        return this.createOrUpdateCustomerSecret(userId);
-    }
-
-    @Override
-    public String createOrUpdateCustomerSecret(Long customerId) {
-        if (customerId == null) {
-            return null;
-        }
-
         // 查看当前用户是否有秘钥
-        Customer customer = this.getById(customerId);
+        Customer customer = this.getById(userId);
         if (StrUtil.isEmpty(customer.getSecretKey())) {
             throw new CustomerException(CustomerExceptionEnum.NO_SECRET);
         }
@@ -382,6 +373,15 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         // 判断秘钥是否过期
         if (customer.getMemberExpireTime().before(new Date())) {
             throw new CustomerException(CustomerExceptionEnum.SECRET_EXPIRED);
+        }
+
+        return this.createOrUpdateCustomerSecret(userId);
+    }
+
+    @Override
+    public String createOrUpdateCustomerSecret(Long customerId) {
+        if (customerId == null) {
+            return null;
         }
 
         // 重新生成秘钥
