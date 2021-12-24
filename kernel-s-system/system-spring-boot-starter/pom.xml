@@ -52,6 +52,13 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--主题管理业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-theme</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--用户管理的业务-->
         <!--默认使用内存缓存-->
         <dependency>
