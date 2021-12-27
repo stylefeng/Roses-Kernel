@@ -33,6 +33,13 @@ public class SysThemeTemplateRequest extends BaseRequest {
     private String templateName;
 
     /**
+     * 主题模板编码
+     */
+    @NotNull(message = "主题模板编码不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("主题模板编码")
+    private String templateCode;
+
+    /**
      * 主题模板类型：1-系统类型，2-业务类型
      */
     @NotNull(message = "主题模板类型不能为空", groups = {add.class, edit.class})

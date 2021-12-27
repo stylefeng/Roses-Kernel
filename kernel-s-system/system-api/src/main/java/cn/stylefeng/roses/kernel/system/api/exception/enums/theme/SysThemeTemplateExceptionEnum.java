@@ -27,7 +27,12 @@ public enum SysThemeTemplateExceptionEnum implements AbstractExceptionEnum {
     /**
      * 系统主题模板正在被使用，不允许操作
      */
-    TEMPLATE_IS_USED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "113", "系统主题模板正在被使用，不允许操作");
+    TEMPLATE_IS_USED(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "113", "系统主题模板正在被使用，不允许操作"),
+
+    /**
+     * 系统主题模板没有属性，不允许启用
+     */
+    TEMPLATE_NOT_ATTRIBUTE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "114", "系统主题模板没有属性，不允许启用");
 
     /**
      * 错误编码

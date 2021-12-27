@@ -5,7 +5,6 @@ import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-
 /**
  * 系统主题service接口
  *

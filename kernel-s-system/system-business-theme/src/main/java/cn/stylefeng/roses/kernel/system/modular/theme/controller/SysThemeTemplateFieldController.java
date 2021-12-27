@@ -63,13 +63,46 @@ public class SysThemeTemplateFieldController {
     }
 
     /**
-     * 查询系统主题模板属性
+     * 查询系统主题模板属性详情
      *
      * @author xixiaowei
      * @date 2021/12/17 11:49
      */
-    @GetResource(name = "查询系统主题模板属性", path = "/sysThemeTemplateField/detail")
-    public ResponseData detail(SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
+    @GetResource(name = "查询系统主题模板属性详情", path = "/sysThemeTemplateField/detail")
+    public ResponseData detail(@Validated(SysThemeTemplateFieldRequest.detail.class) SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
         return new SuccessResponseData(sysThemeTemplateFieldService.detail(sysThemeTemplateFieldParam));
+    }
+
+    /**
+     * 查询系统主题模板属性列表
+     *
+     * @author xixiaowei
+     * @date 2021/12/24 9:47
+     */
+    @GetResource(name = "查询系统主题模板属性列表", path = "/sysThemeTemplateField/findPage")
+    public ResponseData findPage(SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
+        return new SuccessResponseData(sysThemeTemplateFieldService.findPage(sysThemeTemplateFieldParam));
+    }
+
+    /**
+     * 查询系统主题模板属性已有关系列表
+     *
+     * @author xixiaowei
+     * @date 2021/12/24 14:42
+     */
+    @GetResource(name = "查询系统主题模板属性已有关系列表", path = "/sysThemeTemplateField/findRelList")
+    public ResponseData findRelPage(SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
+        return new SuccessResponseData(sysThemeTemplateFieldService.findRelList(sysThemeTemplateFieldParam));
+    }
+
+    /**
+     * 查询系统主题模板属性未有关系列表
+     *
+     * @author xixiaowei
+     * @date 2021/12/24 14:44
+     */
+    @GetResource(name = "查询系统主题模板属性未有关系列表", path = "/sysThemeTemplateField/findNotRelList")
+    public ResponseData findNotRelPage(SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
+        return new SuccessResponseData(sysThemeTemplateFieldService.findNotRelList(sysThemeTemplateFieldParam));
     }
 }

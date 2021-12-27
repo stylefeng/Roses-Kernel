@@ -28,7 +28,6 @@ public class SysThemeTemplateFieldRequest extends BaseRequest {
     /**
      * 模板ID
      */
-    @NotNull(message = "模板ID不能为空", groups = {add.class, delete.class})
     @ChineseDescription("模板ID")
     private Long templateId;
 
@@ -38,6 +37,10 @@ public class SysThemeTemplateFieldRequest extends BaseRequest {
     @NotBlank(message = "属性名称不能为空", groups = {add.class, edit.class})
     @ChineseDescription("属性名称")
     private String fieldName;
+
+    @NotNull(message = "属性编码不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("属性编码")
+    private String fieldCode;
 
     /**
      * 属性展示类型(字典维护)

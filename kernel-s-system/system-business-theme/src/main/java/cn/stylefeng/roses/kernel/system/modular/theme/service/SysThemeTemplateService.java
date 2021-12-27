@@ -41,7 +41,7 @@ public interface SysThemeTemplateService extends IService<SysThemeTemplate> {
     void del(SysThemeTemplateRequest sysThemeTemplateRequest);
 
     /**
-     * 查找系统主题模板
+     * 查询系统主题模板列表
      *
      * @return 分页结果
      * @author xixiaowei

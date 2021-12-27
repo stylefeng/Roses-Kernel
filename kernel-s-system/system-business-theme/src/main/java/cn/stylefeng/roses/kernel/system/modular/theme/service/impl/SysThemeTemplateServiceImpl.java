@@ -13,15 +13,12 @@ import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeTemplateDataDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeTemplateRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplate;
-import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateField;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateRel;
 import cn.stylefeng.roses.kernel.system.modular.theme.mapper.SysThemeTemplateMapper;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeService;
-import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateFieldService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateRelService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -29,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 系统主题模板service接口实现类
@@ -49,9 +45,6 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
     @Resource
     private SysThemeTemplateRelService sysThemeTemplateRelService;
 
-    @Resource
-    private SysThemeTemplateFieldService sysThemeTemplateFieldService;
-
     @Override
     public void add(SysThemeTemplateRequest sysThemeTemplateRequest) {
         SysThemeTemplate sysThemeTemplate = new SysThemeTemplate();
@@ -59,8 +52,6 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
         // 拷贝属性
         BeanUtil.copyProperties(sysThemeTemplateRequest, sysThemeTemplate);
 
-        // 设置主题模板编码
-        sysThemeTemplate.setTemplateCode(IdWorker.getIdStr());
         // 默认启用状态：禁用N
         sysThemeTemplate.setStatusFlag(YesOrNotEnum.N.getCode().charAt(0));
 
@@ -90,21 +81,10 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
             throw new SystemModularException(SysThemeTemplateExceptionEnum.TEMPLATE_IS_ENABLE);
         }
 
-        // 删除关联关系
+        // 删除关联关系条件
         LambdaQueryWrapper<SysThemeTemplateRel> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysThemeTemplateRel::getTemplateId, sysThemeTemplate.getTemplateId());
 
-        // 查询所有关联属性的编码
-        List<SysThemeTemplateRel> SysThemeTemplateRels = sysThemeTemplateRelService.list(queryWrapper.select(SysThemeTemplateRel::getFieldCode));
-        List<String> sysThemeTemplateFieldCodes = SysThemeTemplateRels.stream().map(SysThemeTemplateRel::getFieldCode).collect(Collectors.toList());
-
-        LambdaQueryWrapper<SysThemeTemplateField> delFieldWrapper = new LambdaQueryWrapper<>();
-        delFieldWrapper.in(SysThemeTemplateField::getFieldCode, sysThemeTemplateFieldCodes);
-
-        // 删除关联属性
-        if (sysThemeTemplateFieldCodes.size() > 0) {
-            sysThemeTemplateFieldService.remove(delFieldWrapper);
-        }
         // 删除关联关系
         sysThemeTemplateRelService.remove(queryWrapper);
 
@@ -139,9 +119,19 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
         if (YesOrNotEnum.Y.getCode().equals(sysThemeTemplate.getStatusFlag().toString())) {
             sysThemeTemplate.setStatusFlag(YesOrNotEnum.N.getCode().charAt(0));
         } else {
+            // 如果该模板没有属性不允许启用
+            LambdaQueryWrapper<SysThemeTemplateRel> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(SysThemeTemplateRel::getTemplateId, sysThemeTemplate.getTemplateId());
+
+            List<SysThemeTemplateRel> sysThemeTemplateRels = sysThemeTemplateRelService.list(wrapper);
+
+            if (sysThemeTemplateRels.size() <= 0) {
+                throw new SystemModularException(SysThemeTemplateExceptionEnum.TEMPLATE_NOT_ATTRIBUTE);
+            }
+
             sysThemeTemplate.setStatusFlag(YesOrNotEnum.Y.getCode().charAt(0));
         }
-
+        
         this.updateById(sysThemeTemplate);
     }
 
