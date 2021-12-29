@@ -758,6 +758,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Boolean.TRUE;
     }
 
+    @Override
+    public String getUserAvatarUrlByUserId(Long userId) {
+
+        // 获取用户头像文件id
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserId, userId).select(SysUser::getAvatar);
+        SysUser sysUser = this.getOne(wrapper, false);
+
+        if (sysUser == null) {
+            return "";
+        }
+
+        return this.getUserAvatarUrl(sysUser.getAvatar());
+    }
+
     /**
      * 获取系统用户
      *
