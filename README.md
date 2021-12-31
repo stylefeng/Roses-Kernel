@@ -33,7 +33,7 @@
 
 ### 配套手册
 
-[https://www.stylefeng.cn/contents/roses_kernel/](https://www.stylefeng.cn/contents/roses_kernel/)
+[https://javaguns.com/contents/guns/roses_kernel/summary/1_module.html](https://javaguns.com/contents/guns/roses_kernel/summary/1_module.html)
 
 ### 使用方式
 
