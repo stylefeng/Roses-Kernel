@@ -12,6 +12,7 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.ThemeServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.theme.SysThemeExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplate;
@@ -86,12 +87,12 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         // 获取map的key
         List<String> themeKeys = new ArrayList<>(themeMap.keySet());
 
-        // 获取图片文件的编码
+        // 获取图片文件的名称
         LambdaQueryWrapper<SysThemeTemplateField> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysThemeTemplateField::getFieldName, themeKeys).eq(SysThemeTemplateField::getFieldType, "file")
-                .select(SysThemeTemplateField::getFieldName);
+        queryWrapper.in(SysThemeTemplateField::getFieldCode, themeKeys).eq(SysThemeTemplateField::getFieldType, "file")
+                .select(SysThemeTemplateField::getFieldCode);
         List<SysThemeTemplateField> sysThemeTemplateFields = sysThemeTemplateFieldService.list(queryWrapper);
-        List<String> fileNames = sysThemeTemplateFields.stream().map(SysThemeTemplateField::getFieldName).collect(Collectors.toList());
+        List<String> fileNames = sysThemeTemplateFields.stream().map(SysThemeTemplateField::getFieldCode).collect(Collectors.toList());
 
         // 删除图片
         if (fileNames.size() > 0) {
@@ -112,7 +113,7 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
 
     @Override
     public void edit(SysThemeRequest sysThemeRequest) {
-        SysTheme sysTheme = this.querySysThemeById(sysThemeRequest);
+        SysTheme sysTheme = new SysTheme();
 
         // 拷贝属性
         BeanUtil.copyProperties(sysThemeRequest, sysTheme);
@@ -121,14 +122,23 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
     }
 
     @Override
-    public PageResult<SysTheme> findPage(SysThemeRequest sysThemeRequest) {
+    public PageResult<SysThemeDTO> findPage(SysThemeRequest sysThemeRequest) {
         LambdaQueryWrapper<SysTheme> queryWrapper = new LambdaQueryWrapper<>();
         // 通过主题名称模糊查询
         queryWrapper.like(StrUtil.isNotBlank(sysThemeRequest.getThemeName()), SysTheme::getThemeName, sysThemeRequest.getThemeName());
 
         Page<SysTheme> page = page(PageFactory.defaultPage(), queryWrapper);
 
-        return PageResultFactory.createPageResult(page);
+        List<SysThemeDTO> sysThemeDTOList = new ArrayList<>();
+        for (SysTheme record : page.getRecords()) {
+            SysThemeDTO sysThemeDTO = new SysThemeDTO();
+            BeanUtil.copyProperties(record, sysThemeDTO);
+            SysThemeTemplate sysThemeTemplate = sysThemeTemplateService.getById(record.getTemplateId());
+            sysThemeDTO.setTemplateName(sysThemeTemplate.getTemplateName());
+            sysThemeDTOList.add(sysThemeDTO);
+        }
+
+        return PageResultFactory.createPageResult(sysThemeDTOList, page.getTotal(), Integer.valueOf(String.valueOf(page.getSize())), Integer.valueOf(String.valueOf(page.getCurrent())));
     }
 
     @Override

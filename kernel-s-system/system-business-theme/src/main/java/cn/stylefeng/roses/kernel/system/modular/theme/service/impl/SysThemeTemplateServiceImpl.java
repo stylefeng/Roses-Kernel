@@ -104,6 +104,11 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
     }
 
     @Override
+    public List<SysThemeTemplate> findList(SysThemeTemplateRequest sysThemeTemplateRequest) {
+        return this.list();
+    }
+
+    @Override
     public void updateTemplateStatus(SysThemeTemplateRequest sysThemeTemplateRequest) {
         SysThemeTemplate sysThemeTemplate = this.querySysThemeTemplateById(sysThemeTemplateRequest);
 

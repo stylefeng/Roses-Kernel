@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.theme.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -44,7 +45,7 @@ public interface SysThemeService extends IService<SysTheme> {
      * @author xixiaowei
      * @date 2021/12/17 16:52
      */
-    PageResult<SysTheme> findPage(SysThemeRequest sysThemeRequest);
+    PageResult<SysThemeDTO> findPage(SysThemeRequest sysThemeRequest);
 
     /**
      * 查询系统主题详情

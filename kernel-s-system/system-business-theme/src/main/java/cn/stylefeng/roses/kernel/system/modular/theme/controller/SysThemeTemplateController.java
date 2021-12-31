@@ -68,9 +68,20 @@ public class SysThemeTemplateController {
      * @author xixiaowei
      * @date 2021/12/17 15:00
      */
-    @GetResource(name = "查询系统模板主题", path = "/sysThemeTemplate/findPage")
+    @GetResource(name = "查询系统主题模板", path = "/sysThemeTemplate/findPage")
     public ResponseData findPage(SysThemeTemplateRequest sysThemeTemplateParam) {
         return new SuccessResponseData(sysThemeTemplateService.findPage(sysThemeTemplateParam));
+    }
+
+    /**
+     * 查询系统主题模板列表
+     *
+     * @author xixiaowei
+     * @date 2021/12/29 9:12
+     */
+    @GetResource(name = "查询系统主题模板列表", path = "/sysThemeTemplate/findList")
+    public ResponseData findList(SysThemeTemplateRequest sysThemeTemplateParam) {
+        return new SuccessResponseData(sysThemeTemplateService.findList(sysThemeTemplateParam));
     }
 
     /**

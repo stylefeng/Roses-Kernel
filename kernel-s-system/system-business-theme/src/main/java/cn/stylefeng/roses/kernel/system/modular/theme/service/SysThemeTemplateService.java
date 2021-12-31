@@ -50,6 +50,14 @@ public interface SysThemeTemplateService extends IService<SysThemeTemplate> {
     PageResult<SysThemeTemplate> findPage(SysThemeTemplateRequest sysThemeTemplateRequest);
 
     /**
+     * 查询系统诸如提模板列表
+     *
+     * @author xixiaowei
+     * @date 2021/12/29 9:10
+     */
+    List<SysThemeTemplate> findList(SysThemeTemplateRequest sysThemeTemplateRequest);
+
+    /**
      * 修改系统主题模板状态
      *
      * @author xixiaowei
