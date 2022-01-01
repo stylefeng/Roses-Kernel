@@ -188,8 +188,10 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         SysFileInfoResponse sysFileInfoResponse = this.getFileInfoResult(sysFileInfoRequest.getFileId());
 
         // 如果文件加密等级不符合，文件不允许被访问
-        if (!sysFileInfoRequest.getSecretFlag().equals(sysFileInfoResponse.getSecretFlag())) {
-            throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+        if(YesOrNotEnum.Y.getCode().equals(sysFileInfoResponse.getSecretFlag())){
+            if(YesOrNotEnum.N.getCode().equals(sysFileInfoRequest.getSecretFlag())){
+                throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+            }
         }
 
         DownloadUtil.download(sysFileInfoResponse.getFileOriginName(), sysFileInfoResponse.getFileBytes(), response);
@@ -295,8 +297,10 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         SysFileInfoResponse sysFileInfoResponse = this.getFileInfoResult(sysFileInfoRequest.getFileId());
 
         // 如果文件加密等级不符合，文件不允许被访问
-        if (!sysFileInfoRequest.getSecretFlag().equals(sysFileInfoResponse.getSecretFlag())) {
-            throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+        if(YesOrNotEnum.Y.getCode().equals(sysFileInfoResponse.getSecretFlag())){
+            if(YesOrNotEnum.N.getCode().equals(sysFileInfoRequest.getSecretFlag())){
+                throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+            }
         }
 
         // 获取文件后缀
