@@ -176,8 +176,13 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
                 // 设置唯一id
                 antdvFileInfo.setUid(IdWorker.getIdStr());
                 // 设置文件名称
-                SysFileInfoResponse fileInfoWithoutContent = fileInfoApi.getFileInfoWithoutContent(Long.valueOf(value));
-                antdvFileInfo.setName(fileInfoWithoutContent.getFileOriginName());
+                SysFileInfoResponse fileInfoWithoutContent = null;
+                try {
+                    fileInfoWithoutContent = fileInfoApi.getFileInfoWithoutContent(Long.valueOf(value));
+                    antdvFileInfo.setName(fileInfoWithoutContent.getFileOriginName());
+                } catch (Exception e) {
+                    // 未查询到文件继续查询下一个文件
+                }
                 // 设置文件访问url
                 String fileAuthUrl = fileInfoApi.getFileAuthUrl(Long.valueOf(value));
                 antdvFileInfo.setThumbUrl(fileAuthUrl);
