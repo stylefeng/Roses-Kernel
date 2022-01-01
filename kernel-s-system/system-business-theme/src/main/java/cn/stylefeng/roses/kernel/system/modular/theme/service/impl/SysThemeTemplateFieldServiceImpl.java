@@ -83,14 +83,11 @@ public class SysThemeTemplateFieldServiceImpl extends ServiceImpl<SysThemeTempla
     public void edit(SysThemeTemplateFieldRequest sysThemeTemplateFieldRequest) {
         SysThemeTemplateField sysThemeTemplateField = this.queryThemeTemplateFieldById(sysThemeTemplateFieldRequest);
 
-        // 校验系统主题模板属性使用
-        this.verificationAttributeUsage(sysThemeTemplateField);
+        // 编号不能修改
+        sysThemeTemplateFieldRequest.setFieldCode(null);
 
         // 更新属性
         BeanUtil.copyProperties(sysThemeTemplateFieldRequest, sysThemeTemplateField);
-
-        // 设置是否必填：如果请求参数为空，默认设置为非必填
-        sysThemeTemplateField.setFieldRequired(StringUtils.isBlank(sysThemeTemplateFieldRequest.getFieldType()) ? YesOrNotEnum.N.getCode().charAt(0) : sysThemeTemplateFieldRequest.getFieldRequired());
 
         this.updateById(sysThemeTemplateField);
     }
