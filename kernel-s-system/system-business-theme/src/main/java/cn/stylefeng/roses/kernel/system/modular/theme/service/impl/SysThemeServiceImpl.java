@@ -19,6 +19,7 @@ import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplate;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateField;
+import cn.stylefeng.roses.kernel.system.modular.theme.enums.FieldTypeEnum;
 import cn.stylefeng.roses.kernel.system.modular.theme.mapper.SysThemeMapper;
 import cn.stylefeng.roses.kernel.system.modular.theme.pojo.AntdvFileInfo;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeService;
@@ -100,7 +101,7 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         List<String> fileNames = new ArrayList<>();
         if (themeKeys.size() > 0) {
             LambdaQueryWrapper<SysThemeTemplateField> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.in(SysThemeTemplateField::getFieldCode, themeKeys).eq(SysThemeTemplateField::getFieldType, "file")
+            queryWrapper.in(SysThemeTemplateField::getFieldCode, themeKeys).eq(SysThemeTemplateField::getFieldType, FieldTypeEnum.FILE.getCode())
                     .select(SysThemeTemplateField::getFieldCode);
             List<SysThemeTemplateField> sysThemeTemplateFields = sysThemeTemplateFieldService.list(queryWrapper);
             fileNames = sysThemeTemplateFields.stream().map(SysThemeTemplateField::getFieldCode).collect(Collectors.toList());
@@ -114,7 +115,7 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
                 for (String fileName : fileNames) {
                     if (StrUtil.isNotBlank(themeKey) && StrUtil.isNotBlank(fileName) && themeKey.equals(fileName)) {
                         SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
-                        sysFileInfoRequest.setFileCode(Long.parseLong(themeValueStr));
+                        sysFileInfoRequest.setFileId(Long.parseLong(themeValueStr));
                         sysFileInfoService.deleteReally(sysFileInfoRequest);
                     }
                 }
