@@ -188,8 +188,8 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         SysFileInfoResponse sysFileInfoResponse = this.getFileInfoResult(sysFileInfoRequest.getFileId());
 
         // 如果文件加密等级不符合，文件不允许被访问
-        if(YesOrNotEnum.Y.getCode().equals(sysFileInfoResponse.getSecretFlag())){
-            if(YesOrNotEnum.N.getCode().equals(sysFileInfoRequest.getSecretFlag())){
+        if (YesOrNotEnum.Y.getCode().equals(sysFileInfoResponse.getSecretFlag())) {
+            if (YesOrNotEnum.N.getCode().equals(sysFileInfoRequest.getSecretFlag())) {
                 throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
             }
         }
@@ -203,7 +203,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
         // 查询该Code的所有历史版本
         LambdaQueryWrapper<SysFileInfo> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(SysFileInfo::getFileCode, sysFileInfoRequest.getFileCode());
+        lqw.eq(SysFileInfo::getFileCode, sysFileInfoRequest.getFileCode()).or().eq(SysFileInfo::getFileId, sysFileInfoRequest.getFileId());
         List<SysFileInfo> fileInfos = this.list(lqw);
 
         // 批量删除
@@ -297,8 +297,8 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         SysFileInfoResponse sysFileInfoResponse = this.getFileInfoResult(sysFileInfoRequest.getFileId());
 
         // 如果文件加密等级不符合，文件不允许被访问
-        if(YesOrNotEnum.Y.getCode().equals(sysFileInfoResponse.getSecretFlag())){
-            if(YesOrNotEnum.N.getCode().equals(sysFileInfoRequest.getSecretFlag())){
+        if (YesOrNotEnum.Y.getCode().equals(sysFileInfoResponse.getSecretFlag())) {
+            if (YesOrNotEnum.N.getCode().equals(sysFileInfoRequest.getSecretFlag())) {
                 throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
             }
         }
