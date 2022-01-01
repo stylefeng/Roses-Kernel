@@ -88,11 +88,15 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         List<String> themeKeys = new ArrayList<>(themeMap.keySet());
 
         // 获取图片文件的名称
-        LambdaQueryWrapper<SysThemeTemplateField> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(SysThemeTemplateField::getFieldCode, themeKeys).eq(SysThemeTemplateField::getFieldType, "file")
-                .select(SysThemeTemplateField::getFieldCode);
-        List<SysThemeTemplateField> sysThemeTemplateFields = sysThemeTemplateFieldService.list(queryWrapper);
-        List<String> fileNames = sysThemeTemplateFields.stream().map(SysThemeTemplateField::getFieldCode).collect(Collectors.toList());
+        List<String> fileNames = new ArrayList<>();
+        if (themeKeys.size() > 0) {
+            LambdaQueryWrapper<SysThemeTemplateField> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.in(SysThemeTemplateField::getFieldCode, themeKeys).eq(SysThemeTemplateField::getFieldType, "file")
+                    .select(SysThemeTemplateField::getFieldCode);
+            List<SysThemeTemplateField> sysThemeTemplateFields = sysThemeTemplateFieldService.list(queryWrapper);
+            fileNames = sysThemeTemplateFields.stream().map(SysThemeTemplateField::getFieldCode).collect(Collectors.toList());
+        }
+
 
         // 删除图片
         if (fileNames.size() > 0) {
