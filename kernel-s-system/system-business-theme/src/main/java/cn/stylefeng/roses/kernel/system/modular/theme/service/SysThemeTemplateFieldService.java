@@ -72,4 +72,13 @@ public interface SysThemeTemplateFieldService extends IService<SysThemeTemplateF
      * @date 2021/12/24 11:49
      */
     List<SysThemeTemplateField> findNotRelList(SysThemeTemplateFieldRequest sysThemeTemplateFieldRequest);
+
+    /**
+     * 根据字段名，获取该属性是否为文件类型
+     *
+     * @author fengshuonan
+     * @date 2022/1/1 22:24
+     */
+    boolean getKeyFileFlag(String code);
+
 }

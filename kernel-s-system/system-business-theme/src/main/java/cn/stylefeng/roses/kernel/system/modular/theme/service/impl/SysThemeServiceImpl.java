@@ -6,7 +6,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
+import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.ThemeServiceApi;
@@ -18,17 +20,21 @@ import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplate;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateField;
 import cn.stylefeng.roses.kernel.system.modular.theme.mapper.SysThemeMapper;
+import cn.stylefeng.roses.kernel.system.modular.theme.pojo.AntdvFileInfo;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateFieldService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,6 +56,9 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
 
     @Resource
     private SysFileInfoService sysFileInfoService;
+
+    @Resource
+    private FileInfoApi fileInfoApi;
 
     @Override
     public void add(SysThemeRequest sysThemeRequest) {
@@ -147,7 +156,37 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
 
     @Override
     public SysTheme detail(SysThemeRequest sysThemeRequest) {
-        return this.querySysThemeById(sysThemeRequest);
+        SysTheme sysTheme = this.querySysThemeById(sysThemeRequest);
+
+        // 设置动态属性表单
+        String themeValueJson = sysTheme.getThemeValue();
+        JSONObject jsonObject = JSON.parseObject(themeValueJson);
+        sysTheme.setDynamicForm(jsonObject.getInnerMap());
+
+        // 遍历表单属性，找到所有文件类型的，组装文件的图片和名称等信息
+        HashMap<String, AntdvFileInfo[]> tempFileList = new HashMap<>();
+        for (Map.Entry<String, Object> keyValues : jsonObject.entrySet()) {
+            String key = keyValues.getKey();
+            String value = jsonObject.getString(key);
+            // 判断是否是文件类型
+            boolean keyFileFlag = sysThemeTemplateFieldService.getKeyFileFlag(key);
+            if (keyFileFlag) {
+                AntdvFileInfo antdvFileInfo = new AntdvFileInfo();
+                // 设置唯一id
+                antdvFileInfo.setUid(IdWorker.getIdStr());
+                // 设置文件名称
+                SysFileInfoResponse fileInfoWithoutContent = fileInfoApi.getFileInfoWithoutContent(Long.valueOf(value));
+                antdvFileInfo.setName(fileInfoWithoutContent.getFileOriginName());
+                // 设置文件访问url
+                String fileAuthUrl = fileInfoApi.getFileAuthUrl(Long.valueOf(value));
+                antdvFileInfo.setThumbUrl(fileAuthUrl);
+                tempFileList.put(key, new AntdvFileInfo[]{antdvFileInfo});
+            }
+        }
+
+        // 设置临时文件的展示
+        sysTheme.setTempFileList(tempFileList);
+        return sysTheme;
     }
 
     @Override
