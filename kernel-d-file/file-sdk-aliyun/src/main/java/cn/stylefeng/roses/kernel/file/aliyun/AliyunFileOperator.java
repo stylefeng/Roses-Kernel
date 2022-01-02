@@ -28,6 +28,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.enums.BucketAuthEnum;
+import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.api.pojo.props.AliyunOssProperties;
@@ -207,6 +208,11 @@ public class AliyunFileOperator implements FileOperatorApi {
     @Override
     public void deleteFile(String bucketName, String key) {
         ossClient.deleteObject(bucketName, key);
+    }
+
+    @Override
+    public FileLocationEnum getFileLocationEnum() {
+        return FileLocationEnum.ALIYUN;
     }
 
 }

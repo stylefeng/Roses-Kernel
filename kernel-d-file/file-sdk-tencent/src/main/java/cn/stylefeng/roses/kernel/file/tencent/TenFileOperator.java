@@ -28,6 +28,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.thread.ExecutorBuilder;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.enums.BucketAuthEnum;
+import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.api.expander.FileConfigExpander;
@@ -259,6 +260,11 @@ public class TenFileOperator implements FileOperatorApi {
     @Override
     public void deleteFile(String bucketName, String key) {
         cosClient.deleteObject(bucketName, key);
+    }
+
+    @Override
+    public FileLocationEnum getFileLocationEnum() {
+        return FileLocationEnum.TENCENT;
     }
 
 }

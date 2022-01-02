@@ -31,7 +31,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
-import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
@@ -103,7 +102,7 @@ public class FileInfoFactory {
         // 封装存储文件信息（上传替换公共信息）
         SysFileInfo sysFileInfo = new SysFileInfo();
         sysFileInfo.setFileId(fileId);
-        sysFileInfo.setFileLocation(FileLocationEnum.LOCAL.getCode());
+        sysFileInfo.setFileLocation(fileOperatorApi.getFileLocationEnum().getCode());
         sysFileInfo.setFileBucket(fileBucket);
         sysFileInfo.setFileObjectName(finalFileName);
         sysFileInfo.setFileOriginName(originalFilename);
