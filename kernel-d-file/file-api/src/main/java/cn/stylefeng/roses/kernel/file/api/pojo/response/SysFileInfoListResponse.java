@@ -81,7 +81,6 @@ public class SysFileInfoListResponse implements Serializable {
      */
     private String fileOriginName;
 
-
     /**
      * 文件存储位置：1-阿里云，2-腾讯云，3-minio，4-本地
      */
@@ -126,5 +125,10 @@ public class SysFileInfoListResponse implements Serializable {
      * 创建人姓名
      */
     private String realName;
+
+    /**
+     * 文件访问的url
+     */
+    private String fileUrl;
 
 }

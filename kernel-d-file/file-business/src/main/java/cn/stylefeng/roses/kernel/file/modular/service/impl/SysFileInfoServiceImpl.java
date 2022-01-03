@@ -223,6 +223,14 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         // 排除defaultAvatar.png这个图片,这个是默认头像
         List<SysFileInfoListResponse> newList = list.stream().filter(i -> !i.getFileOriginName().equals("defaultAvatar.png")).collect(Collectors.toList());
 
+        // 拼接图片url地址
+        for (SysFileInfoListResponse sysFileInfoListResponse : newList) {
+            // 判断是否是可以预览的文件
+            if (PicFileTypeUtil.getFileImgTypeFlag(sysFileInfoListResponse.getFileSuffix())) {
+                sysFileInfoListResponse.setFileUrl(this.getFileAuthUrl(sysFileInfoListResponse.getFileId()));
+            }
+        }
+
         return PageResultFactory.createPageResult(page.setRecords(newList));
     }
 
