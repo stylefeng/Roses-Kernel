@@ -38,6 +38,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
+import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
@@ -53,6 +54,7 @@ import cn.stylefeng.roses.kernel.file.modular.factory.FileInfoFactory;
 import cn.stylefeng.roses.kernel.file.modular.mapper.SysFileInfoMapper;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -436,8 +438,15 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         sysFileInfoRequest.setFileId(fileId);
         SysFileInfo sysFileInfo = querySysFileInfo(sysFileInfoRequest);
 
-        // 返回第三方存储文件url
-        return fileOperatorApi.getFileAuthUrl(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName(), FileConfigExpander.getDefaultFileTimeoutSeconds());
+        // 如果是本地存储，则返回本地存储方式的文件预览
+        if (sysFileInfo.getFileLocation().equals(FileLocationEnum.LOCAL.getCode())) {
+            // 获取context-path
+            String contextPath = HttpServletUtil.getRequest().getContextPath();
+            return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
+        } else {
+            // 返回第三方存储文件url
+            return fileOperatorApi.getFileAuthUrl(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName(), FileConfigExpander.getDefaultFileTimeoutSeconds());
+        }
     }
 
     /**
