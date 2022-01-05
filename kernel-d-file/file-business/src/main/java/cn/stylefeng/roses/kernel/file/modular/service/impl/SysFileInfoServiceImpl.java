@@ -38,7 +38,6 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
-import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
@@ -54,7 +53,6 @@ import cn.stylefeng.roses.kernel.file.modular.factory.FileInfoFactory;
 import cn.stylefeng.roses.kernel.file.modular.mapper.SysFileInfoMapper;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
-import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -428,57 +426,18 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
     @Override
     public String getFileAuthUrl(Long fileId) {
-
-        // 获取登录用户的token
-        String token = LoginContext.me().getToken();
-
-        // 获取context-path
-        String contextPath = HttpServletUtil.getRequest().getContextPath();
-
-        SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
-        sysFileInfoRequest.setFileId(fileId);
-
-        // 获取文件的基本信息
-        SysFileInfo sysFileInfo = querySysFileInfo(sysFileInfoRequest);
-
-        // 获取文件存储位置
-        Integer fileLocation = sysFileInfo.getFileLocation();
-
-        if (!fileLocation.equals(FileLocationEnum.LOCAL.getCode())) {
-            // 获取文件存储到bucket中的名字
-            String fileObjectName = sysFileInfo.getFileObjectName();
-
-            // 返回第三方存储文件url
-            return fileOperatorApi.getFileUnAuthUrl(FileConfigExpander.getDefaultBucket(), fileObjectName);
-        }
-
-        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
+        return this.getFileAuthUrl(fileId, LoginContext.me().getToken());
     }
 
     @Override
     public String getFileAuthUrl(Long fileId, String token) {
-
-        // 获取context-path
-        String contextPath = HttpServletUtil.getRequest().getContextPath();
-
+        // 获取文件的基本信息
         SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
         sysFileInfoRequest.setFileId(fileId);
-
-        // 获取文件的基本信息
         SysFileInfo sysFileInfo = querySysFileInfo(sysFileInfoRequest);
 
-        // 获取文件存储位置
-        Integer fileLocation = sysFileInfo.getFileLocation();
-
-        if (!fileLocation.equals(FileLocationEnum.LOCAL.getCode())) {
-            // 获取文件存储到bucket中的名字
-            String fileObjectName = sysFileInfo.getFileObjectName();
-
-            // 返回第三方存储文件url
-            return fileOperatorApi.getFileAuthUrl(FileConfigExpander.getDefaultBucket(), fileObjectName, FileConfigExpander.getDefaultFileTimeoutSeconds() * 1000);
-        }
-
-        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
+        // 返回第三方存储文件url
+        return fileOperatorApi.getFileAuthUrl(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName(), FileConfigExpander.getDefaultFileTimeoutSeconds());
     }
 
     /**
