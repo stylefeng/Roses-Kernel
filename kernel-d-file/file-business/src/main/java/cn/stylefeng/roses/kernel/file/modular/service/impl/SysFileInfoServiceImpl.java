@@ -38,6 +38,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
+import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
@@ -434,6 +435,23 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         // 获取context-path
         String contextPath = HttpServletUtil.getRequest().getContextPath();
 
+        SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
+        sysFileInfoRequest.setFileId(fileId);
+
+        // 获取文件的基本信息
+        SysFileInfo sysFileInfo = querySysFileInfo(sysFileInfoRequest);
+
+        // 获取文件存储位置
+        Integer fileLocation = sysFileInfo.getFileLocation();
+
+        if (!fileLocation.equals(FileLocationEnum.LOCAL.getCode())) {
+            // 获取文件存储到bucket中的名字
+            String fileObjectName = sysFileInfo.getFileObjectName();
+
+            // 返回第三方存储文件url
+            return fileOperatorApi.getFileUnAuthUrl(FileConfigExpander.getDefaultBucket(), fileObjectName);
+        }
+
         return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
     }
 
@@ -442,6 +460,23 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
         // 获取context-path
         String contextPath = HttpServletUtil.getRequest().getContextPath();
+
+        SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
+        sysFileInfoRequest.setFileId(fileId);
+
+        // 获取文件的基本信息
+        SysFileInfo sysFileInfo = querySysFileInfo(sysFileInfoRequest);
+
+        // 获取文件存储位置
+        Integer fileLocation = sysFileInfo.getFileLocation();
+
+        if (!fileLocation.equals(FileLocationEnum.LOCAL.getCode())) {
+            // 获取文件存储到bucket中的名字
+            String fileObjectName = sysFileInfo.getFileObjectName();
+
+            // 返回第三方存储文件url
+            return fileOperatorApi.getFileAuthUrl(FileConfigExpander.getDefaultBucket(), fileObjectName, FileConfigExpander.getDefaultFileTimeoutSeconds() * 1000);
+        }
 
         return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
     }
