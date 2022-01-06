@@ -104,19 +104,4 @@ public class ResourceController {
         List<ResourceTreeNode> resourceLateralTree = sysResourceService.getRoleResourceTree(sysRoleRequest.getRoleId(), true);
         return new SuccessResponseData(resourceLateralTree);
     }
-
-    /**
-     * 添加外部资源
-     *
-     * @return {@link cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData}
-     * @author majianguo
-     * @date 2021/6/8 下午2:30
-     **/
-    @PostResource(name = "添加外部资源", path = "/resource/addExternalResource", requiredPermission = false, requiredLogin = false)
-    public ResponseData addExternalResource(@RequestBody String base64Data) {
-        String jsonStr = new String(Base64Decoder.decode(base64Data), StandardCharsets.UTF_8);
-        sysResourceService.addExternalResource(JSON.parseObject(jsonStr, ExternalResourceRequest.class));
-        return new SuccessResponseData();
-    }
-
 }

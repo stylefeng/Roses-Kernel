@@ -28,11 +28,20 @@ public class ExternalResourceRequest extends BaseRequest {
     private String appCode;
 
     /**
+     * FieldMetadata类全路径(如:cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata)
+     */
+    @NotNull(message = "FieldMetadata类全路径不能为空", groups = {add.class})
+    @ChineseDescription("FieldMetadata类全路径")
+    private String classAllPath;
+
+    /**
      * 资源列表
      */
     @Valid
     @NotNull(message = "资源列表不能为空", groups = {add.class})
     @ChineseDescription("资源列表")
     private List<ResourceRequest> resourceRequestList;
+
+
 
 }

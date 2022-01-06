@@ -112,12 +112,4 @@ public interface SysResourceService extends IService<SysResource> {
      * @date 2020/11/24 20:46
      */
     void deleteResourceByProjectCode(String projectCode);
-
-    /**
-     * 添加外部资源
-     *
-     * @author majianguo
-     * @date 2021/6/8 下午2:40
-     **/
-    void addExternalResource(ExternalResourceRequest externalResourceRequest);
 }

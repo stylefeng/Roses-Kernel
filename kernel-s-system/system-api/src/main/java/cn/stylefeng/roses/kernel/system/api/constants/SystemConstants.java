@@ -67,4 +67,9 @@ public interface SystemConstants {
      */
     Integer SUPER_ADMIN_INIT_LISTENER_SORT = 400;
 
+    /**
+     * FieldMetadata类全路径
+     */
+    String FIELD_METADATA_CLASS_ALL_PATH = "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata";
+
 }

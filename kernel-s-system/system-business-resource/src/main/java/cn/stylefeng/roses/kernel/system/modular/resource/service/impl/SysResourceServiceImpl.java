@@ -269,35 +269,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         this.remove(wrapper);
     }
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void addExternalResource(ExternalResourceRequest externalResourceRequest) {
-        if (ObjectUtil.isNotEmpty(externalResourceRequest.getResourceRequestList())) {
-            String appCode = externalResourceRequest.getResourceRequestList().get(0).getAppCode();
 
-            // 删除本app下的所有资源
-            LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            sysResourceLambdaQueryWrapper.eq(SysResource::getAppCode, appCode);
-            this.remove(sysResourceLambdaQueryWrapper);
-
-            // 添加新的资源
-            List<SysResource> sysResources = externalResourceRequest.getResourceRequestList().stream().map(item -> {
-                SysResource sysResource = BeanUtil.toBean(item, SysResource.class);
-                if (ObjectUtil.isEmpty(sysResource.getViewFlag())) {
-                    sysResource.setViewFlag(YesOrNotEnum.N.getCode());
-                }
-                // 处理JSON序列号类型
-                if (ObjectUtil.isNotEmpty(sysResource.getParamFieldDescriptions())) {
-                    sysResource.setParamFieldDescriptions(sysResource.getParamFieldDescriptions().replaceAll("com.sedinbj.kernel.resource.api.pojo.resource.FieldMetadata", "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata"));
-                }
-                if (ObjectUtil.isNotEmpty(sysResource.getResponseFieldDescriptions())) {
-                    sysResource.setResponseFieldDescriptions(sysResource.getResponseFieldDescriptions().replaceAll("com.sedinbj.kernel.resource.api.pojo.resource.FieldMetadata", "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata"));
-                }
-                return sysResource;
-            }).collect(Collectors.toList());
-            this.saveBatch(sysResources);
-        }
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
