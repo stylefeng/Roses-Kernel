@@ -359,7 +359,8 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     public void previewByBucketAndObjName(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
 
         // 如果是默认头像
-        if (FileConstants.DEFAULT_AVATAR_FILE_OBJ_NAME.equals(sysFileInfoRequest.getFileObjectName())) {
+        if (FileConstants.DEFAULT_AVATAR_FILE_OBJ_NAME.equals(sysFileInfoRequest.getFileObjectName())
+                || FileConstants.DEFAULT_AVATAR_FILE_FINAL_NAME.equals(sysFileInfoRequest.getFileObjectName())) {
             DownloadUtil.renderPreviewFile(response, Base64.decode(FileConfigExpander.getDefaultAvatarBase64()));
             return;
         }
