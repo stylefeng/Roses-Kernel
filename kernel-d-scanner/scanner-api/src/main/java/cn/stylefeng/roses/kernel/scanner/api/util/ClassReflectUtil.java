@@ -47,7 +47,7 @@ import static java.util.stream.Collectors.toCollection;
  */
 public class ClassReflectUtil {
 
-    private static Map<String, String> runMap = new HashMap<>(2);
+    private final static Map<String, String> RUN_MAP = new HashMap<>(2);
 
     /**
      * 获取一个类的所有字段描述
@@ -65,7 +65,7 @@ public class ClassReflectUtil {
         }
 
         // 查询本类是否正在进行解析(防止死循环)
-        String runing = runMap.get(clazz.getName());
+        String runing = RUN_MAP.get(clazz.getName());
 
         // 返回null则标识这个类正在运行，则不对该类再进行解析
         if (ObjectUtil.isNotEmpty(runing)) {
@@ -74,7 +74,7 @@ public class ClassReflectUtil {
 
         // 获取该类和该类所有父类的属性
         while (clazz != null) {
-            runMap.put(clazz.getName(), clazz.getName());
+            RUN_MAP.put(clazz.getName(), clazz.getName());
             // 获取类中的所有字段
             Field[] declaredFields = ClassUtil.getDeclaredFields(clazz);
             for (Field declaredField : declaredFields) {
@@ -83,7 +83,7 @@ public class ClassReflectUtil {
                 fieldDescriptions.add(fieldDescription);
             }
 
-            runMap.remove(clazz.getName());
+            RUN_MAP.remove(clazz.getName());
 
             // 获取本类的父类
             clazz = clazz.getSuperclass();
@@ -114,23 +114,41 @@ public class ClassReflectUtil {
         fieldDescription.setFieldClassType(declaredFieldType.getSimpleName());
         fieldDescription.setFieldClassPath(declaredFieldType.getName());
 
-        // 如果字段类型是Object类型，则遍历Object类型里的字段
-        if (BaseRequest.class.isAssignableFrom(declaredFieldType)) {
-            fieldDescription.setGenericFieldMetadata(getClassFieldDescription(declaredFieldType));
-        } else if (List.class.isAssignableFrom(declaredFieldType)) {
+        // 遍历Object类型里的字段
+        classParsing(declaredField, fieldDescription, declaredFieldType);
+
+        return fieldDescription;
+    }
+
+    /**
+     * class类解析
+     *
+     * @author majianguo
+     * @date 2022/1/6 16:09
+     **/
+    private static void classParsing(Field declaredField, FieldMetadata fieldDescription, Class<?> declaredFieldType) {
+        // 得到泛型里的class类型对象
+        Class<?> actualTypeArgument = declaredFieldType;
+
+        if (BaseRequest.class.isAssignableFrom(actualTypeArgument)) {
+            fieldDescription.setGenericFieldMetadata(getClassFieldDescription(actualTypeArgument));
+        } else if (List.class.isAssignableFrom(actualTypeArgument)) {
             // 如果是集合类型，则处理集合里面的字段
             Type genericType = declaredField.getGenericType();
 
-            // 得到泛型里的class类型对象
-            Class<?> actualTypeArgument;
             // 处理List没写泛型的情况
             if (genericType instanceof ParameterizedType) {
-                ParameterizedType pt = (ParameterizedType)genericType;
+                ParameterizedType pt = (ParameterizedType) genericType;
                 Type typeArgument = pt.getActualTypeArguments()[0];
 
                 // 处理List<?>这种情况
                 if (!(typeArgument instanceof WildcardType)) {
-                    actualTypeArgument = typeArgument.getClass();
+                    try {
+                        actualTypeArgument = Class.forName(typeArgument.getTypeName());
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        actualTypeArgument = Object.class;
+                    }
                 } else {
                     actualTypeArgument = Object.class;
                 }
@@ -138,29 +156,23 @@ public class ClassReflectUtil {
                 actualTypeArgument = Object.class;
             }
 
-            // 基本类型处理
-            if (actualTypeArgument.isPrimitive() || "java.lang".equals(actualTypeArgument.getPackage().getName()) || "java.util".equals(actualTypeArgument.getPackage().getName())) {
-                FieldMetadata item = new FieldMetadata();
-                item.setMetadataId(IdUtil.fastSimpleUUID());
-                item.setFieldName(actualTypeArgument.getName());
-                item.setFieldClassType(actualTypeArgument.getTypeName());
-                // 填充字段的中文名称
-                ChineseDescription chineseDescription = declaredField.getAnnotation(ChineseDescription.class);
-                if (chineseDescription != null) {
-                    item.setChineseName(chineseDescription.value());
-                }
-                fieldDescription.setGenericFieldMetadata(Collections.singleton(item));
-            } else {
-                fieldDescription.setGenericFieldMetadata(getClassFieldDescription(actualTypeArgument));
-            }
-
-        } else if (Collection.class.isAssignableFrom(declaredFieldType)) {
+        } else if (Collection.class.isAssignableFrom(actualTypeArgument)) {
             // 如果是泛型类型，遍历泛泛型的class类型里的字段
-            Class<?> genericClass = TypeUtil.getClass(TypeUtil.getTypeArgument(TypeUtil.getType(declaredField)));
-            if (BaseRequest.class.isAssignableFrom(genericClass)) {
-                fieldDescription.setGenericFieldMetadata(getClassFieldDescription(genericClass));
-            }
+            actualTypeArgument = TypeUtil.getClass(TypeUtil.getTypeArgument(TypeUtil.getType(declaredField)));
         }
+
+        // 基本类型处理
+        if (actualTypeArgument.isPrimitive() || "java.lang".equals(actualTypeArgument.getPackage().getName()) || "java.util".equals(actualTypeArgument.getPackage().getName())) {
+            FieldMetadata fieldMetadata = baseTypeParsing(declaredField, actualTypeArgument);
+
+            // 如果是集合，则把结果放到集合内
+            if (List.class.isAssignableFrom(declaredFieldType) || Collection.class.isAssignableFrom(declaredFieldType)) {
+                fieldDescription.setGenericFieldMetadata(Collections.singleton(fieldMetadata));
+            }
+        } else {
+            fieldDescription.setGenericFieldMetadata(getClassFieldDescription(actualTypeArgument));
+        }
+
         // 获取字段的所有注解
         Annotation[] annotations = declaredField.getAnnotations();
         if (annotations != null && annotations.length > 0) {
@@ -187,7 +199,25 @@ public class ClassReflectUtil {
                 fieldDescription.setChineseName(chineseDescription.value());
             }
         }
-        return fieldDescription;
+    }
+
+    /**
+     * 基础类型解析
+     *
+     * @author majianguo
+     * @date 2022/1/6 16:09
+     **/
+    private static FieldMetadata baseTypeParsing(Field declaredField, Class<?> actualTypeArgument) {
+        FieldMetadata item = new FieldMetadata();
+        item.setMetadataId(IdUtil.fastSimpleUUID());
+        item.setFieldName(actualTypeArgument.getName());
+        item.setFieldClassType(actualTypeArgument.getTypeName());
+        // 填充字段的中文名称
+        ChineseDescription chineseDescription = declaredField.getAnnotation(ChineseDescription.class);
+        if (null != chineseDescription) {
+            item.setChineseName(chineseDescription.value());
+        }
+        return item;
     }
 
     /**
@@ -200,7 +230,7 @@ public class ClassReflectUtil {
         try {
             Class<? extends Annotation> annotationType = apiResource.annotationType();
             Method method = annotationType.getMethod(methodName);
-            return (T)method.invoke(apiResource);
+            return (T) method.invoke(apiResource);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             // 忽略异常
         }
@@ -248,4 +278,5 @@ public class ClassReflectUtil {
 
         return strings;
     }
+
 }
