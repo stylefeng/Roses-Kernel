@@ -160,7 +160,7 @@ public class LoginUser implements Serializable {
      * 默认语种是中文
      */
     @ChineseDescription("当前用户语种的标识")
-    private String tranLanguageCode = RuleConstants.CHINES_TRAN_LANGUAGE_CODE;
+    private String tranLanguageCode = RuleConstants.CHINESE_TRAN_LANGUAGE_CODE;
 
     /**
      * 租户的编码

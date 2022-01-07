@@ -24,25 +24,19 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.resource.controller;
 
-import cn.hutool.core.codec.Base64Decoder;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
-import cn.stylefeng.roses.kernel.system.api.pojo.resource.ExternalResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
-import com.alibaba.fastjson.JSON;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
