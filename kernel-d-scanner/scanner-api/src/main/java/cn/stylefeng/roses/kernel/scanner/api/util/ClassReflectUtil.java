@@ -156,13 +156,14 @@ public class ClassReflectUtil {
                 actualTypeArgument = Object.class;
             }
 
+
         } else if (Collection.class.isAssignableFrom(actualTypeArgument)) {
             // 如果是泛型类型，遍历泛泛型的class类型里的字段
             actualTypeArgument = TypeUtil.getClass(TypeUtil.getTypeArgument(TypeUtil.getType(declaredField)));
         }
 
         // 基本类型处理
-        if (actualTypeArgument.isPrimitive() || "java.lang".equals(actualTypeArgument.getPackage().getName()) || "java.util".equals(actualTypeArgument.getPackage().getName())) {
+        if (isPrimitive(actualTypeArgument)) {
             FieldMetadata fieldMetadata = baseTypeParsing(declaredField, actualTypeArgument);
 
             // 如果是集合，则把结果放到集合内
@@ -279,4 +280,31 @@ public class ClassReflectUtil {
         return strings;
     }
 
+    /**
+     * 判断类是否是基本类型
+     *
+     * @return {@link boolean}
+     * @author majianguo
+     * @date 2022/1/7 10:42
+     **/
+    private static boolean isPrimitive(Class<?> clazz) {
+        boolean isPrimitive;
+        try {
+            if (clazz.isPrimitive()) {
+                isPrimitive = true;
+            } else {
+                isPrimitive = ((Class<?>) clazz.getField("TYPE").get(null)).isPrimitive();
+            }
+        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+            isPrimitive = false;
+        }
+
+        Package packageObj = clazz.getPackage();
+        if (!isPrimitive && ObjectUtil.isNotEmpty(packageObj)) {
+            isPrimitive = "java.lang".equals(packageObj.getName()) || "java.util".equals(packageObj.getName());
+        }
+
+        return isPrimitive;
+
+    }
 }
