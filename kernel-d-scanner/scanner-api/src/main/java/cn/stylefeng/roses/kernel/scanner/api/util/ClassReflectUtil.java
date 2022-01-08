@@ -50,6 +50,60 @@ public class ClassReflectUtil {
     private final static Map<String, String> RUN_MAP = new HashMap<>(2);
 
     /**
+     * 获取ResponseData类型的字段描述，参数clazz是ResponseData的data属性的类型
+     *
+     * @author fengshuonan
+     * @date 2022/1/7 15:37
+     */
+    public static Set<FieldMetadata> getResponseDataClassFieldDescription(Class<?> clazz) {
+
+        HashSet<FieldMetadata> responseDataFieldMetadata = new HashSet<>();
+
+        // 创建ResponseData几个固定的属性描述
+        FieldMetadata success = new FieldMetadata();
+        success.setMetadataId(IdUtil.fastSimpleUUID());
+        success.setChineseName("请求是否成功");
+        success.setFieldClassType("Boolean");
+        success.setFieldClassPath("java.lang.Boolean");
+        success.setFieldName("success");
+        responseDataFieldMetadata.add(success);
+
+        // 创建ResponseData几个固定的属性描述
+        FieldMetadata code = new FieldMetadata();
+        code.setMetadataId(IdUtil.fastSimpleUUID());
+        code.setChineseName("响应状态码");
+        code.setFieldClassType("String");
+        code.setFieldClassPath("java.lang.String");
+        code.setFieldName("code");
+        responseDataFieldMetadata.add(code);
+
+        // 创建ResponseData几个固定的属性描述
+        FieldMetadata message = new FieldMetadata();
+        message.setMetadataId(IdUtil.fastSimpleUUID());
+        message.setChineseName("响应信息");
+        message.setFieldClassType("String");
+        message.setFieldClassPath("java.lang.String");
+        message.setFieldName("message");
+        responseDataFieldMetadata.add(message);
+
+        // 创建ResponseData几个固定的属性描述
+        FieldMetadata data = new FieldMetadata();
+        data.setMetadataId(IdUtil.fastSimpleUUID());
+        data.setChineseName("响应对象");
+        data.setFieldClassType(clazz.getSimpleName());
+        data.setFieldClassPath(clazz.getName());
+        data.setFieldName("data");
+
+        // 设置data属性类型具体的元数据
+        Set<FieldMetadata> dataFieldMetadata = getClassFieldDescription(clazz);
+        data.setGenericFieldMetadata(dataFieldMetadata);
+
+        responseDataFieldMetadata.add(data);
+
+        return responseDataFieldMetadata;
+    }
+
+    /**
      * 获取一个类的所有字段描述
      *
      * @param clazz 类的class类型
@@ -305,6 +359,6 @@ public class ClassReflectUtil {
         }
 
         return isPrimitive;
-
     }
+
 }
