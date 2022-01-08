@@ -53,7 +53,12 @@ public enum FileLocationEnum {
     /**
      * 本地
      */
-    LOCAL(4);
+    LOCAL(4),
+
+    /**
+     * 数据库中
+     */
+    DB(5);
 
     private final Integer code;
 

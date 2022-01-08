@@ -31,12 +31,14 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
+import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.api.expander.FileConfigExpander;
 import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
+import cn.stylefeng.roses.kernel.file.modular.service.SysFileStorageService;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,6 +64,7 @@ public class FileInfoFactory {
     public static SysFileInfo createSysFileInfo(MultipartFile file, SysFileInfoRequest sysFileInfoRequest) {
 
         FileOperatorApi fileOperatorApi = SpringUtil.getBean(FileOperatorApi.class);
+        SysFileStorageService fileStorageService = SpringUtil.getBean(SysFileStorageService.class);
 
         // 生成文件的唯一id
         Long fileId = IdWorker.getId();
@@ -88,7 +91,12 @@ public class FileInfoFactory {
             if (StrUtil.isNotEmpty(sysFileInfoRequest.getFileBucket())) {
                 fileBucket = sysFileInfoRequest.getFileBucket();
             }
-            fileOperatorApi.storageFile(fileBucket, finalFileName, bytes);
+            // 如果是存在数据库库里，单独处理一下
+            if (FileLocationEnum.DB.getCode().equals(sysFileInfoRequest.getFileLocation())) {
+                fileStorageService.saveFile(fileId, bytes);
+            } else {
+                fileOperatorApi.storageFile(fileBucket, finalFileName, bytes);
+            }
         } catch (IOException e) {
             throw new FileException(FileExceptionEnum.ERROR_FILE, e.getMessage());
         }
@@ -102,7 +110,12 @@ public class FileInfoFactory {
         // 封装存储文件信息（上传替换公共信息）
         SysFileInfo sysFileInfo = new SysFileInfo();
         sysFileInfo.setFileId(fileId);
-        sysFileInfo.setFileLocation(fileOperatorApi.getFileLocationEnum().getCode());
+        // 如果是存在数据库库里，单独处理一下
+        if (FileLocationEnum.DB.getCode().equals(sysFileInfoRequest.getFileLocation())) {
+            sysFileInfo.setFileLocation(FileLocationEnum.DB.getCode());
+        } else {
+            sysFileInfo.setFileLocation(fileOperatorApi.getFileLocationEnum().getCode());
+        }
         sysFileInfo.setFileBucket(fileBucket);
         sysFileInfo.setFileObjectName(finalFileName);
         sysFileInfo.setFileOriginName(originalFilename);

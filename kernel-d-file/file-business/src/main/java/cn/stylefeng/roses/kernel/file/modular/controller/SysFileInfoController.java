@@ -72,6 +72,10 @@ public class SysFileInfoController {
 
     /**
      * 上传文件
+     * <p>
+     * 支持上传到数据库，参数fileLocation传递5即可
+     * <p>
+     * fileLocation传递其他值或不传值，不能决定文件上传到本地还是阿里云或其他地方
      *
      * @author majianguo
      * @date 2020/12/27 13:17
