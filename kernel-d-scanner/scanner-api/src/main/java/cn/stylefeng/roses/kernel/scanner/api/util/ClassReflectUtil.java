@@ -396,32 +396,5 @@ public class ClassReflectUtil {
         return isPrimitive;
 
     }
-
-    /**
-     * 是否是忽略的基础类
-     *
-     * @return {@link boolean}
-     * @author majianguo
-     * @date 2022/1/8 15:55
-     **/
-    private static boolean isIgnoreBaseCLassPath(String path) {
-        return getIgnoreBaseClassPaths().stream().anyMatch(item -> item.equals(path));
-    }
-
-    /**
-     * 获取忽略的基础类型路径
-     *
-     * @return {@link Set< String>}
-     * @author majianguo
-     * @date 2022/1/8 11:53
-     **/
-    private static Set<String> getIgnoreBaseClassPaths() {
-        Set<String> paths = new HashSet<>();
-        paths.add("java.util.ArrayList");
-        paths.add("java.util.HashSet");
-        paths.add("java.util.List");
-        paths.add("java.util.Set");
-
-        return paths;
-    }
+    
 }
