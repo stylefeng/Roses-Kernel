@@ -28,7 +28,6 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.TypeUtil;
-import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
 
@@ -47,6 +46,9 @@ import static java.util.stream.Collectors.toCollection;
  */
 public class ClassReflectUtil {
 
+    /**
+     * 正在进行解析的Class
+     */
     private final static Map<String, String> RUN_MAP = new HashMap<>(2);
 
     /**
@@ -168,67 +170,98 @@ public class ClassReflectUtil {
         fieldDescription.setFieldClassType(declaredFieldType.getSimpleName());
         fieldDescription.setFieldClassPath(declaredFieldType.getName());
 
-        // 遍历Object类型里的字段
-        classParsing(declaredField, fieldDescription, declaredFieldType);
+        // 解析字段类
+        fieldClassParsing(declaredField, fieldDescription, declaredFieldType);
 
         return fieldDescription;
     }
 
     /**
-     * class类解析
+     * 字段class类解析
      *
      * @author majianguo
      * @date 2022/1/6 16:09
      **/
-    private static void classParsing(Field declaredField, FieldMetadata fieldDescription, Class<?> declaredFieldType) {
-        // 得到泛型里的class类型对象
-        Class<?> actualTypeArgument = declaredFieldType;
+    private static void fieldClassParsing(Field declaredField, FieldMetadata fieldDescription, Class<?> declaredFieldType) {
 
-        if (BaseRequest.class.isAssignableFrom(actualTypeArgument)) {
-            fieldDescription.setGenericFieldMetadata(getClassFieldDescription(actualTypeArgument));
-        } else if (List.class.isAssignableFrom(actualTypeArgument)) {
-            // 如果是集合类型，则处理集合里面的字段
-            Type genericType = declaredField.getGenericType();
-
-            // 处理List没写泛型的情况
-            if (genericType instanceof ParameterizedType) {
-                ParameterizedType pt = (ParameterizedType) genericType;
-                Type typeArgument = pt.getActualTypeArguments()[0];
-
-                // 处理List<?>这种情况
-                if (!(typeArgument instanceof WildcardType)) {
-                    try {
-                        actualTypeArgument = Class.forName(typeArgument.getTypeName());
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                        actualTypeArgument = Object.class;
-                    }
-                } else {
-                    actualTypeArgument = Object.class;
-                }
-            } else {
-                actualTypeArgument = Object.class;
-            }
-
-
-        } else if (Collection.class.isAssignableFrom(actualTypeArgument)) {
-            // 如果是泛型类型，遍历泛泛型的class类型里的字段
-            actualTypeArgument = TypeUtil.getClass(TypeUtil.getTypeArgument(TypeUtil.getType(declaredField)));
-        }
+        // 获取泛型
+        Type genericType = declaredField.getGenericType();
 
         // 基本类型处理
-        if (isPrimitive(actualTypeArgument)) {
-            FieldMetadata fieldMetadata = baseTypeParsing(declaredField, actualTypeArgument);
+        if (isPrimitive(declaredFieldType)) {
 
-            // 如果是集合，则把结果放到集合内
-            if (List.class.isAssignableFrom(declaredFieldType) || Collection.class.isAssignableFrom(declaredFieldType)) {
-                fieldDescription.setGenericFieldMetadata(Collections.singleton(fieldMetadata));
+            // 如果是泛型，则把结果放到集合内
+            if (genericType instanceof ParameterizedType) {
+
+                // 读取所有泛型信息解析
+                ParameterizedType type = (ParameterizedType) genericType;
+                Set<FieldMetadata> metadataSet = null;
+                for (Type actualTypeArgument : type.getActualTypeArguments()) {
+                    Class<?> aClass = TypeUtil.getClass(actualTypeArgument);
+                    // 泛型如果是基本类型则解析基本类型信息，否则什么也不干，最后有泛型的判断解析，这里只处理基本类型
+                    if (isPrimitive(aClass)) {
+                        FieldMetadata fieldMetadata = baseTypeParsing(declaredField, aClass);
+                        if (metadataSet == null) {
+                            metadataSet = new LinkedHashSet<>();
+                        }
+                        metadataSet.add(fieldMetadata);
+                    }
+                }
+                fieldDescription.setGenericFieldMetadata(metadataSet);
             }
-        } else {
-            fieldDescription.setGenericFieldMetadata(getClassFieldDescription(actualTypeArgument));
+        }
+
+        // 处理数组类型
+        else if (declaredFieldType.getComponentType() != null) {
+            declaredFieldType = declaredFieldType.getComponentType();
+            if (!isPrimitive(declaredFieldType)) {
+                fieldDescription.setGenericFieldMetadata(getClassFieldDescription(declaredFieldType));
+            }
+        }
+
+        // 其他类型
+        else {
+            fieldDescription.setGenericFieldMetadata(getClassFieldDescription(declaredFieldType));
         }
 
         // 获取字段的所有注解
+        parsingAnnotation(declaredField, fieldDescription);
+
+        // 该类解析完以后，判断一下会不会是集合嵌套集合的情况，集合嵌套集合就继续下一层解析
+        if (genericType instanceof ParameterizedType && ((ParameterizedType) genericType).getActualTypeArguments()[0] instanceof ParameterizedType) {
+            ParameterizedType type = (ParameterizedType) ((ParameterizedType) genericType).getActualTypeArguments()[0];
+            Type typeArgument = type.getActualTypeArguments()[0];
+            Class<?> typeArgumentItem = TypeUtil.getClass(typeArgument);
+            fieldDescription.getGenericFieldMetadata().iterator().next().setGenericFieldMetadata(getClassFieldDescription(typeArgumentItem));
+        }
+
+        // 如果是泛型，则解析一下所有泛型
+        else if (genericType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericType;
+            Set<FieldMetadata> fieldMetadataSet = new LinkedHashSet<>();
+            for (Type actualTypeArgument : parameterizedType.getActualTypeArguments()) {
+                Class<?> typeClass = TypeUtil.getClass(actualTypeArgument);
+                if (!isPrimitive(typeClass)) {
+                    Set<FieldMetadata> classFieldDescription = getClassFieldDescription(typeClass);
+                    if (null != classFieldDescription) {
+                        fieldMetadataSet.addAll(classFieldDescription);
+                    }
+                } else {
+                    FieldMetadata fieldMetadata = baseTypeParsing(declaredField, typeClass);
+                    fieldMetadataSet.add(fieldMetadata);
+                }
+                fieldDescription.setGenericFieldMetadata(fieldMetadataSet);
+            }
+        }
+    }
+
+    /**
+     * 解析所有注解
+     *
+     * @author majianguo
+     * @date 2022/1/7 18:26
+     **/
+    private static void parsingAnnotation(Field declaredField, FieldMetadata fieldDescription) {
         Annotation[] annotations = declaredField.getAnnotations();
         if (annotations != null && annotations.length > 0) {
 
@@ -344,9 +377,11 @@ public class ClassReflectUtil {
     private static boolean isPrimitive(Class<?> clazz) {
         boolean isPrimitive;
         try {
+            // 基本类型
             if (clazz.isPrimitive()) {
                 isPrimitive = true;
             } else {
+                // 基本类型包装类
                 isPrimitive = ((Class<?>) clazz.getField("TYPE").get(null)).isPrimitive();
             }
         } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
@@ -355,10 +390,38 @@ public class ClassReflectUtil {
 
         Package packageObj = clazz.getPackage();
         if (!isPrimitive && ObjectUtil.isNotEmpty(packageObj)) {
-            isPrimitive = "java.lang".equals(packageObj.getName()) || "java.util".equals(packageObj.getName());
+            isPrimitive = "java.lang".equals(packageObj.getName()) || "java.util".equals(packageObj.getName()) || "java.math".equals(packageObj.getName());
         }
 
         return isPrimitive;
+
     }
 
+    /**
+     * 是否是忽略的基础类
+     *
+     * @return {@link boolean}
+     * @author majianguo
+     * @date 2022/1/8 15:55
+     **/
+    private static boolean isIgnoreBaseCLassPath(String path) {
+        return getIgnoreBaseClassPaths().stream().anyMatch(item -> item.equals(path));
+    }
+
+    /**
+     * 获取忽略的基础类型路径
+     *
+     * @return {@link Set< String>}
+     * @author majianguo
+     * @date 2022/1/8 11:53
+     **/
+    private static Set<String> getIgnoreBaseClassPaths() {
+        Set<String> paths = new HashSet<>();
+        paths.add("java.util.ArrayList");
+        paths.add("java.util.HashSet");
+        paths.add("java.util.List");
+        paths.add("java.util.Set");
+
+        return paths;
+    }
 }
