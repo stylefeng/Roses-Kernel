@@ -36,6 +36,7 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
+import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
@@ -235,7 +236,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         List<SysFileInfoListResponse> list = this.baseMapper.fileInfoList(page, sysFileInfoRequest);
 
         // 排除defaultAvatar.png这个图片,这个是默认头像
-        List<SysFileInfoListResponse> newList = list.stream().filter(i -> !i.getFileOriginName().equals("defaultAvatar.png")).collect(Collectors.toList());
+        List<SysFileInfoListResponse> newList = list.stream().filter(i -> !i.getFileOriginName().equals(FileConstants.DEFAULT_AVATAR_FILE_OBJ_NAME)).collect(Collectors.toList());
 
         // 拼接图片url地址
         for (SysFileInfoListResponse sysFileInfoListResponse : newList) {
