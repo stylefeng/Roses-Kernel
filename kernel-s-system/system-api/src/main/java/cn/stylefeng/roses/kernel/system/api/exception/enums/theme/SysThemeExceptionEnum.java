@@ -32,7 +32,12 @@ public enum SysThemeExceptionEnum implements AbstractExceptionEnum {
     /**
      * 唯一启用的系统主题不允许禁用
      */
-    UNIQUE_ENABLE_NOT_DISABLE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "124", "唯一启用的系统主题不允许禁用");
+    UNIQUE_ENABLE_NOT_DISABLE(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "124", "唯一启用的系统主题不允许禁用"),
+
+    /**
+     * 编码前缀为GUNS的是系统内置属性，不能删除
+     */
+    THEME_IS_SYSTEM(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "125", "编码前缀为GUNS的是系统内置属性，不能删除");
 
     /**
      * 错误编码

@@ -7,7 +7,9 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.api.exception.enums.theme.SysThemeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.theme.SysThemeTemplateExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeTemplateDataDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeTemplateRequest;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 系统主题模板service接口实现类
@@ -77,6 +80,12 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
     public void del(SysThemeTemplateRequest sysThemeTemplateRequest) {
         SysThemeTemplate sysThemeTemplate = this.querySysThemeTemplateById(sysThemeTemplateRequest);
 
+        // Guns开头的模板字段不能删除，系统内置
+        if (sysThemeTemplateRequest.getTemplateCode().toUpperCase(Locale.ROOT).startsWith(SystemConstants.THEME_CODE_SYSTEM_PREFIX)) {
+            throw new SystemModularException(SysThemeExceptionEnum.THEME_IS_SYSTEM);
+        }
+
+        // 启动的主题模板不能删除
         if (YesOrNotEnum.Y.getCode().equals(sysThemeTemplate.getStatusFlag().toString())) {
             throw new SystemModularException(SysThemeTemplateExceptionEnum.TEMPLATE_IS_ENABLE);
         }
@@ -136,7 +145,7 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
 
             sysThemeTemplate.setStatusFlag(YesOrNotEnum.Y.getCode().charAt(0));
         }
-        
+
         this.updateById(sysThemeTemplate);
     }
 

@@ -7,7 +7,9 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
+import cn.stylefeng.roses.kernel.system.api.exception.enums.theme.SysThemeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.theme.SysThemeTemplateFieldExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeTemplateFieldRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateField;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -54,6 +57,11 @@ public class SysThemeTemplateFieldServiceImpl extends ServiceImpl<SysThemeTempla
     @Override
     public void del(SysThemeTemplateFieldRequest sysThemeTemplateFieldRequest) {
         SysThemeTemplateField sysThemeTemplateField = this.queryThemeTemplateFieldById(sysThemeTemplateFieldRequest);
+
+        // Guns开头的模板字段不能删除，系统内置
+        if (sysThemeTemplateField.getFieldCode().toUpperCase(Locale.ROOT).startsWith(SystemConstants.THEME_CODE_SYSTEM_PREFIX)) {
+            throw new SystemModularException(SysThemeExceptionEnum.THEME_IS_SYSTEM);
+        }
 
         // 校验系统主题模板属性使用
         this.verificationAttributeUsage(sysThemeTemplateField);

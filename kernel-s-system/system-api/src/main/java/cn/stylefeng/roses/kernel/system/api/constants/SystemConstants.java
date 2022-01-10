@@ -68,6 +68,16 @@ public interface SystemConstants {
     Integer SUPER_ADMIN_INIT_LISTENER_SORT = 400;
 
     /**
+     * 主题编码相关的系统变量前缀
+     */
+    String THEME_CODE_SYSTEM_PREFIX = "GUNS";
+
+    /**
+     * 系统内置主题模板的编码
+     */
+    String THEME_GUNS_PLATFORM = "GUNS_PLATFORM";
+
+    /**
      * FieldMetadata类全路径
      */
     String FIELD_METADATA_CLASS_ALL_PATH = "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata";
