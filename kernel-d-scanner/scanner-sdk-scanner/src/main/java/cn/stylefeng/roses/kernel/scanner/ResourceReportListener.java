@@ -77,10 +77,10 @@ public class ResourceReportListener extends ApplicationReadyListener implements 
             DevOpsReportProperties devOpsReportProperties = applicationContext.getBean(DevOpsReportProperties.class);
             // 如果配置了相关属性则进行DevOps资源汇报
             if (ObjectUtil.isAllNotEmpty(devOpsReportProperties,
-                    devOpsReportProperties.getHost(),
-                    devOpsReportProperties.getPort(),
-                    devOpsReportProperties.getProjectInteractionKey(),
-                    devOpsReportProperties.getProjectUniqueCode())) {
+                    devOpsReportProperties.getServerHost(),
+                    devOpsReportProperties.getProjectInteractionSecretKey(),
+                    devOpsReportProperties.getProjectUniqueCode(),
+                    devOpsReportProperties.getServerHost())) {
                 DevOpsReportApi devOpsReportApi = applicationContext.getBean(DevOpsReportApi.class);
                 devOpsReportApi.reportResources(devOpsReportProperties, modularResources);
             }

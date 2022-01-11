@@ -62,4 +62,14 @@ public interface ScannerConstants {
      */
     String FIELD_METADATA_CLASS_ALL_PATH = "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata";
 
+    /**
+     * DevOps平台资源汇报接口token超时时间
+     */
+    Long DEVOPS_REPORT_TIMEOUT_SECONDS = 5L;
+
+    /**
+     * DevOps平台资源汇报接口连接超时时间
+     */
+    Integer DEVOPS_REPORT_CONNECTION_TIMEOUT_SECONDS = 3;
+
 }

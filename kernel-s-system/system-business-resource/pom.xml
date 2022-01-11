@@ -17,6 +17,13 @@
 
     <dependencies>
 
+        <!--jwt相关参数-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>jwt-sdk</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--系统管理api模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
