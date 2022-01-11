@@ -72,4 +72,9 @@ public interface ScannerConstants {
      */
     Integer DEVOPS_REPORT_CONNECTION_TIMEOUT_SECONDS = 3;
 
+    /**
+     * DevOps平台资源汇报路径
+     */
+    String DEVOPS_REQUEST_PATH = "/resource/addExternalResource";
+
 }

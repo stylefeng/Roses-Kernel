@@ -79,8 +79,7 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants.DEVOPS_REPORT_CONNECTION_TIMEOUT_SECONDS;
-import static cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants.DEVOPS_REPORT_TIMEOUT_SECONDS;
+import static cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants.*;
 
 /**
  * 资源表 服务实现类
@@ -394,8 +393,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             serverHost = StrUtil.removeSuffix(serverHost, "/");
         }
 
-        // 组装请求DevOps平台的地址 todo
-        String devopsReportUrl = serverHost + "/todo url";
+        // 组装请求DevOps平台的地址
+        String devopsReportUrl = serverHost + DEVOPS_REQUEST_PATH;
 
         // jwt token生成
         String projectInteractionSecretKey = devOpsReportProperties.getProjectInteractionSecretKey();
