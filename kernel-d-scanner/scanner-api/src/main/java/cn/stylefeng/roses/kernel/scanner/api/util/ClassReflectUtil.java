@@ -303,9 +303,11 @@ public class ClassReflectUtil {
                     FieldMetadata fieldMetadata = genericFieldAndNameMap.get(fieldActualTypeArgument.getTypeName());
                     if (ObjectUtil.isNotEmpty(fieldMetadata)) {
                         FieldMetadata metadata = fieldAndNameMap.get(field.getName());
-                        Set<FieldMetadata> metadataSet = new LinkedHashSet<>();
-                        metadataSet.add(fieldMetadata);
-                        metadata.setGenericFieldMetadata(metadataSet);
+                        if (ObjectUtil.isNotEmpty(metadata)) {
+                            Set<FieldMetadata> metadataSet = new LinkedHashSet<>();
+                            metadataSet.add(fieldMetadata);
+                            metadata.setGenericFieldMetadata(metadataSet);
+                        }
                     }
                 }
             }
