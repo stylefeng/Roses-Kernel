@@ -91,6 +91,11 @@ public @interface GetResource {
     Class<?> responseClass() default Void.class;
 
     /**
+     * 资源的响应类型的泛型类型，用于生成api文档
+     */
+    Class<?> responseGenericClass() default Void.class;
+
+    /**
      * 请求路径(同RequestMapping)
      */
     @AliasFor(annotation = RequestMapping.class)
