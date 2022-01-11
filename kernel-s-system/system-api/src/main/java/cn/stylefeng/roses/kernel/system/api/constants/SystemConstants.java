@@ -77,9 +77,4 @@ public interface SystemConstants {
      */
     String THEME_GUNS_PLATFORM = "GUNS_PLATFORM";
 
-    /**
-     * FieldMetadata类全路径
-     */
-    String FIELD_METADATA_CLASS_ALL_PATH = "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata";
-
 }

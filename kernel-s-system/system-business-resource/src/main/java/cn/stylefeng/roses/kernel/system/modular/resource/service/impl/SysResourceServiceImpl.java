@@ -24,7 +24,6 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.resource.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
@@ -37,13 +36,14 @@ import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.scanner.api.DevOpsReportApi;
 import cn.stylefeng.roses.kernel.scanner.api.ResourceReportApi;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.devops.DevOpsReportProperties;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ReportResourceParam;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceUrlParam;
 import cn.stylefeng.roses.kernel.system.api.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
-import cn.stylefeng.roses.kernel.system.api.pojo.resource.ExternalResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.LayuiApiResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleResourceDTO;
@@ -73,7 +73,7 @@ import java.util.stream.Collectors;
  * @date 2020/11/23 22:45
  */
 @Service
-public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysResourceService, ResourceReportApi, ResourceServiceApi {
+public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysResourceService, ResourceReportApi, ResourceServiceApi, DevOpsReportApi {
 
     @Resource
     private SysResourceMapper resourceMapper;
@@ -270,7 +270,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void reportResources(@RequestBody ReportResourceParam reportResourceReq) {
@@ -367,6 +366,19 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Override
     public Integer getResourceCount() {
         return this.count();
+    }
+
+    @Override
+    public void reportResources(DevOpsReportProperties devOpsReportProperties, Map<String, Map<String, ResourceDefinition>> resourceDefinitions) {
+
+        // 获取运维平台相关配置
+        
+
+        // jwt秘钥生成
+
+        // 进行post请求，汇报资源
+
+
     }
 
     /**

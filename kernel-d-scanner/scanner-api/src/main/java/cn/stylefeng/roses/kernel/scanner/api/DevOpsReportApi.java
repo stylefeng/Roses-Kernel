@@ -38,7 +38,7 @@ import java.util.Map;
 public interface DevOpsReportApi {
 
     /**
-     * 汇报资源接口
+     * 向DevOps一体化平台汇报资源
      *
      * @param devOpsReportProperties DevOps平台的系统配置
      * @param resourceDefinitions    资源汇报具体数据

@@ -57,4 +57,9 @@ public interface ScannerConstants {
      */
     String VIEW_CONTROLLER_PATH_START_WITH = "/view";
 
+    /**
+     * FieldMetadata类全路径
+     */
+    String FIELD_METADATA_CLASS_ALL_PATH = "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata";
+
 }

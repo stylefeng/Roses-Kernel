@@ -58,9 +58,15 @@ public class DevOpsReportResourceParam extends BaseRequest {
      */
     private Map<String, Map<String, ResourceDefinition>> resourceDefinitions;
 
-    public DevOpsReportResourceParam(String projectUniqueCode, String interactionToken, Map<String, Map<String, ResourceDefinition>> resourceDefinitions) {
+    /**
+     * FieldMetadata类的全路径
+     */
+    private String fieldMetadataClassPath;
+
+    public DevOpsReportResourceParam(String projectUniqueCode, String interactionToken, Map<String, Map<String, ResourceDefinition>> resourceDefinitions, String fieldMetadataClassPath) {
         this.projectUniqueCode = projectUniqueCode;
         this.interactionToken = interactionToken;
         this.resourceDefinitions = resourceDefinitions;
+        this.fieldMetadataClassPath = fieldMetadataClassPath;
     }
 }
