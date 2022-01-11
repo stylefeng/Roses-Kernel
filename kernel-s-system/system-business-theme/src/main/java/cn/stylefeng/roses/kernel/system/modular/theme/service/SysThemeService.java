@@ -4,6 +4,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
+import cn.stylefeng.roses.kernel.system.modular.theme.pojo.DefaultTheme;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -63,4 +64,13 @@ public interface SysThemeService extends IService<SysTheme> {
      * @date 2021/12/17 17:06
      */
     void updateThemeStatus(SysThemeRequest sysThemeRequest);
+
+    /**
+     * 当前系统主题数据
+     *
+     * @author fengshuonan
+     * @date 2022/1/10 18:30
+     */
+    DefaultTheme currentThemeInfo(SysThemeRequest sysThemeParam);
+
 }

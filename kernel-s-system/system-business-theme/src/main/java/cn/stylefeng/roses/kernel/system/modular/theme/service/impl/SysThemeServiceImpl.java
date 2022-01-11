@@ -3,8 +3,10 @@ package cn.stylefeng.roses.kernel.system.modular.theme.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
+import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
@@ -12,6 +14,7 @@ import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.ThemeServiceApi;
+import cn.stylefeng.roses.kernel.system.api.constants.SystemConstants;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.theme.SysThemeExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeDTO;
@@ -20,8 +23,10 @@ import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplate;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateField;
 import cn.stylefeng.roses.kernel.system.modular.theme.enums.FieldTypeEnum;
+import cn.stylefeng.roses.kernel.system.modular.theme.factory.DefaultThemeFactory;
 import cn.stylefeng.roses.kernel.system.modular.theme.mapper.SysThemeMapper;
 import cn.stylefeng.roses.kernel.system.modular.theme.pojo.AntdvFileInfo;
+import cn.stylefeng.roses.kernel.system.modular.theme.pojo.DefaultTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateFieldService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateService;
@@ -31,6 +36,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -47,6 +53,7 @@ import java.util.stream.Collectors;
  * @date 2021/12/17 16:17
  */
 @Service
+@Slf4j
 public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> implements SysThemeService, ThemeServiceApi {
 
     @Resource
@@ -61,10 +68,14 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
     @Resource
     private FileInfoApi fileInfoApi;
 
+    @Resource(name = "themeCacheApi")
+    private CacheOperatorApi<DefaultTheme> themeCacheApi;
+
     @Override
     public void add(SysThemeRequest sysThemeRequest) {
         // 查询模板状态
         SysThemeTemplate sysThemeTemplate = sysThemeTemplateService.getById(sysThemeRequest.getTemplateId());
+
         // 判断模板启用状态：如果为禁用状态不允许使用
         if (YesOrNotEnum.N.getCode().equals(sysThemeTemplate.getStatusFlag().toString())) {
             throw new SystemModularException(SysThemeExceptionEnum.THEME_TEMPLATE_IS_DISABLE);
@@ -218,6 +229,30 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         this.updateById(sysTheme);
     }
 
+    @Override
+    public DefaultTheme currentThemeInfo(SysThemeRequest sysThemeParam) {
+
+        // 获取缓存中是否有默认主题
+        DefaultTheme defaultTheme = themeCacheApi.get(SystemConstants.THEME_GUNS_PLATFORM);
+        if (defaultTheme != null) {
+            return defaultTheme;
+        }
+
+        // 查询系统中激活的主题
+        DefaultTheme result = null;
+        try {
+            result = this.querySystemTheme();
+        } catch (Exception e) {
+            log.error("获取当前系统主题出错", e);
+            return DefaultThemeFactory.getSystemDefaultTheme();
+        }
+
+        // 缓存系统中激活的主题
+        themeCacheApi.put(SystemConstants.THEME_GUNS_PLATFORM, result);
+
+        return result;
+    }
+
     /**
      * 查询单个系统主题
      *
@@ -231,4 +266,44 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         }
         return sysTheme;
     }
+
+    /**
+     * 查找系统中默认的主题
+     *
+     * @author fengshuonan
+     * @date 2022/1/11 9:44
+     */
+    private DefaultTheme querySystemTheme() {
+
+        // 查询编码为GUNS_PLATFORM的主题模板id
+        LambdaQueryWrapper<SysThemeTemplate> sysThemeTemplateLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysThemeTemplateLambdaQueryWrapper.eq(SysThemeTemplate::getTemplateCode, SystemConstants.THEME_GUNS_PLATFORM);
+        SysThemeTemplate sysThemeTemplate = this.sysThemeTemplateService.getOne(sysThemeTemplateLambdaQueryWrapper, false);
+        if (sysThemeTemplate == null) {
+            log.error("当前系统主题模板编码GUNS_PLATFORM不存在，请检查数据库数据是否正常！");
+            return DefaultThemeFactory.getSystemDefaultTheme();
+        }
+
+        // 查找改模板激活的主题，如果没有就返回默认主题
+        LambdaQueryWrapper<SysTheme> sysThemeLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysThemeLambdaQueryWrapper.eq(SysTheme::getTemplateId, sysThemeTemplate.getTemplateId());
+        sysThemeLambdaQueryWrapper.eq(SysTheme::getStatusFlag, YesOrNotEnum.Y.getCode());
+        sysThemeLambdaQueryWrapper.orderByDesc(BaseEntity::getCreateTime);
+        SysTheme sysTheme = this.getOne(sysThemeLambdaQueryWrapper, false);
+        if (sysTheme == null) {
+            log.error("当前系统主题模板编码为GUNS_PLATFORM的主题不存在，请检查数据库数据是否正常！");
+            return DefaultThemeFactory.getSystemDefaultTheme();
+        }
+
+        // 解析主题中的json字符串
+        String themeValue = sysTheme.getThemeValue();
+        if (StrUtil.isBlank(themeValue)) {
+            JSONObject jsonObject = JSONObject.parseObject(themeValue);
+            return DefaultThemeFactory.parseDefaultTheme(jsonObject);
+        } else {
+            return DefaultThemeFactory.getSystemDefaultTheme();
+        }
+
+    }
+
 }

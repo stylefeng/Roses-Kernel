@@ -34,6 +34,8 @@ import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleDataScopeMemoryCa
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleResourceMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
+import cn.stylefeng.roses.kernel.system.modular.theme.cache.ThemeMemoryCache;
+import cn.stylefeng.roses.kernel.system.modular.theme.pojo.DefaultTheme;
 import cn.stylefeng.roses.kernel.system.modular.user.cache.SysUserMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.user.cache.UserOrgMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.user.cache.UserRoleMemoryCache;
@@ -128,6 +130,19 @@ public class GunsSystemCacheAutoConfiguration {
     public CacheOperatorApi<List<Long>> roleDataScopeCacheApi() {
         TimedCache<String, List<Long>> roleCache = CacheUtil.newTimedCache(SystemCachesConstants.USER_CACHE_TIMEOUT_SECONDS * 1000);
         return new RoleDataScopeMemoryCache(roleCache);
+    }
+
+    /**
+     * 主题的缓存
+     *
+     * @author fengshuonan
+     * @date 2021/7/31 17:59
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "themeCacheApi")
+    public CacheOperatorApi<DefaultTheme> themeCacheApi() {
+        TimedCache<String, DefaultTheme> themeCache = CacheUtil.newTimedCache(Long.MAX_VALUE);
+        return new ThemeMemoryCache(themeCache);
     }
 
 }
