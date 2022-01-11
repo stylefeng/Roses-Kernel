@@ -24,19 +24,18 @@
  */
 package cn.stylefeng.roses.kernel.scanner.api.util;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.TypeUtil;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.scanner.api.enums.FieldMetadataTypeEnum;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
-
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toCollection;
 
 /**
  * 类的反射工具
@@ -114,17 +113,17 @@ public class ClassReflectUtil {
      * @date 2020/12/8 18:27
      */
     public static Set<FieldMetadata> getClassFieldDescription(Class<?> clazz) {
-        HashSet<FieldMetadata> fieldDescriptions = new HashSet<>();
+        HashSet<FieldMetadata> fieldDescriptions = new LinkedHashSet<>();
 
         if (clazz == null) {
             return fieldDescriptions;
         }
 
         // 查询本类是否正在进行解析(防止死循环)
-        String runing = RUN_MAP.get(clazz.getName());
+        String runClassName = RUN_MAP.get(clazz.getName());
 
         // 返回null则标识这个类正在运行，则不对该类再进行解析
-        if (ObjectUtil.isNotEmpty(runing)) {
+        if (ObjectUtil.isNotEmpty(runClassName)) {
             return null;
         }
 
@@ -144,7 +143,7 @@ public class ClassReflectUtil {
             // 获取本类的父类
             clazz = clazz.getSuperclass();
         }
-        return fieldDescriptions.stream().collect(toCollection(() -> new TreeSet<>(comparing(FieldMetadata::getFieldName))));
+        return fieldDescriptions;
     }
 
     /**
@@ -156,19 +155,13 @@ public class ClassReflectUtil {
      * @date 2021/6/23 上午10:03
      **/
     private static FieldMetadata getFieldMetadata(Field declaredField) {
-        FieldMetadata fieldDescription = new FieldMetadata();
-
-        // 生成uuid，给前端用
-        fieldDescription.setMetadataId(IdUtil.fastSimpleUUID());
+        // 获取字段的类型
+        Class<?> declaredFieldType = declaredField.getType();
+        FieldMetadata fieldDescription = createFieldMetadata(declaredFieldType);
 
         // 获取字段的名称
         String name = declaredField.getName();
         fieldDescription.setFieldName(name);
-
-        // 获取字段的类型
-        Class<?> declaredFieldType = declaredField.getType();
-        fieldDescription.setFieldClassType(declaredFieldType.getSimpleName());
-        fieldDescription.setFieldClassPath(declaredFieldType.getName());
 
         // 解析字段类
         fieldClassParsing(declaredField, fieldDescription, declaredFieldType);
@@ -207,6 +200,7 @@ public class ClassReflectUtil {
                         metadataSet.add(fieldMetadata);
                     }
                 }
+                fieldDescription.setGenericFieldMetadataType(FieldMetadataTypeEnum.GENERIC.getCode());
                 fieldDescription.setGenericFieldMetadata(metadataSet);
             }
         }
@@ -227,30 +221,102 @@ public class ClassReflectUtil {
         // 获取字段的所有注解
         parsingAnnotation(declaredField, fieldDescription);
 
-        // 该类解析完以后，判断一下会不会是集合嵌套集合的情况，集合嵌套集合就继续下一层解析
+        // 该类解析完以后，判断一下会不会是集合嵌套集合的情况，集合嵌套集合就继续下一层解析目前只能解析两层
         if (genericType instanceof ParameterizedType && ((ParameterizedType) genericType).getActualTypeArguments()[0] instanceof ParameterizedType) {
             ParameterizedType type = (ParameterizedType) ((ParameterizedType) genericType).getActualTypeArguments()[0];
             Type typeArgument = type.getActualTypeArguments()[0];
             Class<?> typeArgumentItem = TypeUtil.getClass(typeArgument);
-            fieldDescription.getGenericFieldMetadata().iterator().next().setGenericFieldMetadata(getClassFieldDescription(typeArgumentItem));
+            FieldMetadata fieldMetadataItem = createFieldMetadata(typeArgumentItem);
+            fieldMetadataItem.setGenericFieldMetadata(getClassFieldDescription(typeArgumentItem));
+            fieldDescription.setGenericFieldMetadataType(FieldMetadataTypeEnum.GENERIC.getCode());
+            fieldDescription.getGenericFieldMetadata().iterator().next().setGenericFieldMetadata(Collections.singleton(fieldMetadataItem));
         }
 
         // 如果是泛型，则解析一下所有泛型
         else if (genericType instanceof ParameterizedType) {
+
+            // 解析泛型字段
             ParameterizedType parameterizedType = (ParameterizedType) genericType;
             Set<FieldMetadata> fieldMetadataSet = new LinkedHashSet<>();
             for (Type actualTypeArgument : parameterizedType.getActualTypeArguments()) {
                 Class<?> typeClass = TypeUtil.getClass(actualTypeArgument);
+                FieldMetadata fieldMetadataItem = createFieldMetadata(typeClass);
                 if (!isPrimitive(typeClass)) {
-                    Set<FieldMetadata> classFieldDescription = getClassFieldDescription(typeClass);
-                    if (null != classFieldDescription) {
-                        fieldMetadataSet.addAll(classFieldDescription);
-                    }
+                    fieldMetadataItem.setGenericFieldMetadata(getClassFieldDescription(typeClass));
                 } else {
                     FieldMetadata fieldMetadata = baseTypeParsing(declaredField, typeClass);
-                    fieldMetadataSet.add(fieldMetadata);
+                    fieldMetadataItem.setGenericFieldMetadata(Collections.singleton(fieldMetadata));
                 }
+                fieldMetadataSet.add(fieldMetadataItem);
+            }
+
+            // 查看该类下面是否有字段（有字段找到那个泛型字段进行解析）
+            Set<FieldMetadata> genericFieldMetadataSet = fieldDescription.getGenericFieldMetadata();
+            if (ObjectUtil.isNotEmpty(genericFieldMetadataSet)) {
+                fieldMetadataGenericFill(genericFieldMetadataSet, declaredFieldType, fieldMetadataSet);
+            } else {
+                // 没有字段则把泛型字段添加进去
+                fieldDescription.setGenericFieldMetadataType(FieldMetadataTypeEnum.GENERIC.getCode());
                 fieldDescription.setGenericFieldMetadata(fieldMetadataSet);
+            }
+        }
+    }
+
+
+    /**
+     * 字段属性填充
+     *
+     * @param genericFieldMetadataSet 类本身的所有字段信息
+     * @param declaredFieldType       类本身
+     * @param fieldMetadataSet        类的泛型已解析的信息
+     * @author majianguo
+     * @date 2022/1/10 9:46
+     **/
+    private static void fieldMetadataGenericFill(Set<FieldMetadata> genericFieldMetadataSet, Class<?> declaredFieldType, Set<FieldMetadata> fieldMetadataSet) {
+
+        // 类声明的泛型信息
+        Map<String, FieldMetadata> genericFieldAndNameMap = new HashMap<>();
+        TypeVariable<? extends Class<?>>[] typeParameters = declaredFieldType.getTypeParameters();
+        if (ObjectUtil.isNotEmpty(typeParameters)) {
+            Iterator<FieldMetadata> iterator = fieldMetadataSet.iterator();
+            for (TypeVariable<? extends Class<?>> typeParameter : typeParameters) {
+                genericFieldAndNameMap.put(typeParameter.getName(), iterator.next());
+            }
+        }
+
+        // 字段名称和字段信息的映射
+        Map<String, FieldMetadata> fieldAndNameMap = new HashMap<>(genericFieldMetadataSet.size());
+        for (FieldMetadata fieldMetadata : genericFieldMetadataSet) {
+            fieldAndNameMap.put(fieldMetadata.getFieldName(), fieldMetadata);
+        }
+
+        // 有字段则找到哪些字段用到了泛型
+        Field[] declaredFields = ClassUtil.getDeclaredFields(declaredFieldType);
+        for (Field field : declaredFields) {
+            Type type = field.getGenericType();
+
+            // 字段带泛型
+            if (type instanceof ParameterizedType) {
+                ParameterizedType fieldGenericType = (ParameterizedType) type;
+                Type[] fieldActualTypeArguments = fieldGenericType.getActualTypeArguments();
+                for (Type fieldActualTypeArgument : fieldActualTypeArguments) {
+                    FieldMetadata fieldMetadata = genericFieldAndNameMap.get(fieldActualTypeArgument.getTypeName());
+                    if (ObjectUtil.isNotEmpty(fieldMetadata)) {
+                        FieldMetadata metadata = fieldAndNameMap.get(field.getName());
+                        Set<FieldMetadata> metadataSet = new LinkedHashSet<>();
+                        metadataSet.add(fieldMetadata);
+                        metadata.setGenericFieldMetadata(metadataSet);
+                    }
+                }
+            }
+
+            // 字段本身就是泛型
+            else if (type instanceof TypeVariable) {
+                FieldMetadata fieldMetadata = genericFieldAndNameMap.get(type.getTypeName());
+                if (ObjectUtil.isNotEmpty(fieldMetadata)) {
+                    FieldMetadata metadata = fieldAndNameMap.get(field.getName());
+                    BeanUtil.copyProperties(fieldMetadata, metadata);
+                }
             }
         }
     }
@@ -296,10 +362,9 @@ public class ClassReflectUtil {
      * @date 2022/1/6 16:09
      **/
     private static FieldMetadata baseTypeParsing(Field declaredField, Class<?> actualTypeArgument) {
-        FieldMetadata item = new FieldMetadata();
-        item.setMetadataId(IdUtil.fastSimpleUUID());
+        FieldMetadata item = createFieldMetadata(actualTypeArgument);
         item.setFieldName(actualTypeArgument.getName());
-        item.setFieldClassType(actualTypeArgument.getTypeName());
+
         // 填充字段的中文名称
         ChineseDescription chineseDescription = declaredField.getAnnotation(ChineseDescription.class);
         if (null != chineseDescription) {
@@ -396,5 +461,23 @@ public class ClassReflectUtil {
         return isPrimitive;
 
     }
-    
+
+
+    /**
+     * 根据Class创建字段元数据
+     *
+     * @return {@link FieldMetadata}
+     * @author majianguo
+     * @date 2022/1/10 16:11
+     **/
+    private static FieldMetadata createFieldMetadata(Class<?> typeArgumentItem) {
+        FieldMetadata fieldMetadataItem = new FieldMetadata();
+        fieldMetadataItem.setMetadataId(IdUtil.fastSimpleUUID());
+        fieldMetadataItem.setFieldName(typeArgumentItem.getSimpleName());
+        fieldMetadataItem.setFieldClassType(typeArgumentItem.getSimpleName());
+        fieldMetadataItem.setFieldClassPath(typeArgumentItem.getName());
+        fieldMetadataItem.setGenericFieldMetadataType(FieldMetadataTypeEnum.FIELD.getCode());
+        return fieldMetadataItem;
+    }
+
 }

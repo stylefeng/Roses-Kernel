@@ -93,6 +93,12 @@ public class FieldMetadata {
     private String validationMessages;
 
     /**
+     * 泛型或object类型的字段的描述类型(1-字段，2-泛型)
+     */
+    @ChineseDescription("泛型或object类型的字段的描述(1-字段，2-泛型)")
+    private Integer genericFieldMetadataType;
+
+    /**
      * 泛型或object类型的字段的描述
      */
     @ChineseDescription("泛型或object类型的字段的描述")
