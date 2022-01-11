@@ -22,45 +22,29 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.scanner.api.pojo.devops;
+package cn.stylefeng.roses.kernel.scanner.api;
 
-import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.devops.DevOpsReportProperties;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.Map;
 
 /**
- * 资源发送到DevOps一体化平台的参数
+ * 向DevOps一体化平台汇报资源的api
  *
  * @author fengshuonan
- * @date 2022/1/11 14:05
+ * @date 2022/1/11 14:57
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
-public class DevOpsReportResourceParam extends BaseRequest {
+public interface DevOpsReportApi {
 
     /**
-     * 项目唯一编码，在DevOps平台创建项目后会颁发
+     * 汇报资源接口
+     *
+     * @param devOpsReportProperties DevOps平台的系统配置
+     * @param resourceDefinitions    资源汇报具体数据
+     * @author fengshuonan
+     * @date 2022/1/11 15:02
      */
-    private String projectUniqueCode;
+    void reportResources(DevOpsReportProperties devOpsReportProperties, Map<String, Map<String, ResourceDefinition>> resourceDefinitions);
 
-    /**
-     * 向DevOps平台发送资源时候的令牌（通过jwt工具生成）
-     */
-    private String interactionToken;
-
-    /**
-     * 第一个key是模块名称，是下划线分割的控制器名称，不带Controller结尾
-     * <p>
-     * 第二个key是资源的编码
-     */
-    private Map<String, Map<String, ResourceDefinition>> resourceDefinitions;
-
-    public DevOpsReportResourceParam(String projectUniqueCode, String interactionToken, Map<String, Map<String, ResourceDefinition>> resourceDefinitions) {
-        this.projectUniqueCode = projectUniqueCode;
-        this.interactionToken = interactionToken;
-        this.resourceDefinitions = resourceDefinitions;
-    }
 }

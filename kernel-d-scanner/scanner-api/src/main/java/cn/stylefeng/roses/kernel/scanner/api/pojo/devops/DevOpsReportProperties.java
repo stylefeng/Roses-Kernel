@@ -12,6 +12,16 @@ import lombok.Data;
 public class DevOpsReportProperties {
 
     /**
+     * DevOps平台的IP
+     */
+    private String host;
+
+    /**
+     * DevOps平台的端口
+     */
+    private String port;
+
+    /**
      * 当前项目在DevOps平台的唯一标识，由DevOps平台颁发
      */
     private String projectUniqueCode;
@@ -20,15 +30,5 @@ public class DevOpsReportProperties {
      * 当前项目和DevOps平台的交互秘钥（jwt秘钥）
      */
     private String projectInteractionKey;
-
-    /**
-     * DevOps平台的IP
-     */
-    private String devOpsServerHost;
-
-    /**
-     * DevOps平台的端口
-     */
-    private String devOpsServerPort;
 
 }
