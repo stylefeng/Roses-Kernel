@@ -65,4 +65,14 @@ public interface FileInfoApi {
      */
     String getFileAuthUrl(Long fileId, String token);
 
+    /**
+     * 获取文件的下载地址（不带鉴权的），生成外网地址
+     *
+     * @param fileId 文件id
+     * @return 外部系统可以直接访问的url
+     * @author fengshuonan
+     * @date 2020/10/26 10:40
+     */
+    String getFileUnAuthUrl(Long fileId);
+
 }

@@ -22,6 +22,7 @@ import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplate;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateField;
+import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateRel;
 import cn.stylefeng.roses.kernel.system.modular.theme.enums.FieldTypeEnum;
 import cn.stylefeng.roses.kernel.system.modular.theme.factory.DefaultThemeFactory;
 import cn.stylefeng.roses.kernel.system.modular.theme.mapper.SysThemeMapper;
@@ -29,6 +30,7 @@ import cn.stylefeng.roses.kernel.system.modular.theme.pojo.AntdvFileInfo;
 import cn.stylefeng.roses.kernel.system.modular.theme.pojo.DefaultTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateFieldService;
+import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateRelService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -40,6 +42,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +74,9 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
 
     @Resource(name = "themeCacheApi")
     private CacheOperatorApi<DefaultTheme> themeCacheApi;
+
+    @Resource
+    private SysThemeTemplateRelService sysThemeTemplateRelService;
 
     @Override
     public void add(SysThemeRequest sysThemeRequest) {
@@ -239,13 +246,10 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         }
 
         // 查询系统中激活的主题
-        DefaultTheme result = null;
-        try {
-            result = this.querySystemTheme();
-        } catch (Exception e) {
-            log.error("获取当前系统主题出错", e);
-            return DefaultThemeFactory.getSystemDefaultTheme();
-        }
+        DefaultTheme result = this.querySystemTheme();
+
+        // 将主题信息中的文件id，拼接为文件url的形式
+        this.parseFileUrls(result);
 
         // 缓存系统中激活的主题
         themeCacheApi.put(SystemConstants.THEME_GUNS_PLATFORM, result);
@@ -274,19 +278,15 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
      * @date 2022/1/11 9:44
      */
     private DefaultTheme querySystemTheme() {
-
         // 查询编码为GUNS_PLATFORM的主题模板id
-        LambdaQueryWrapper<SysThemeTemplate> sysThemeTemplateLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysThemeTemplateLambdaQueryWrapper.eq(SysThemeTemplate::getTemplateCode, SystemConstants.THEME_GUNS_PLATFORM);
-        SysThemeTemplate sysThemeTemplate = this.sysThemeTemplateService.getOne(sysThemeTemplateLambdaQueryWrapper, false);
-        if (sysThemeTemplate == null) {
-            log.error("当前系统主题模板编码GUNS_PLATFORM不存在，请检查数据库数据是否正常！");
+        Long defaultTemplateId = getDefaultTemplateId();
+        if (defaultTemplateId == null) {
             return DefaultThemeFactory.getSystemDefaultTheme();
         }
 
         // 查找改模板激活的主题，如果没有就返回默认主题
         LambdaQueryWrapper<SysTheme> sysThemeLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysThemeLambdaQueryWrapper.eq(SysTheme::getTemplateId, sysThemeTemplate.getTemplateId());
+        sysThemeLambdaQueryWrapper.eq(SysTheme::getTemplateId, defaultTemplateId);
         sysThemeLambdaQueryWrapper.eq(SysTheme::getStatusFlag, YesOrNotEnum.Y.getCode());
         sysThemeLambdaQueryWrapper.orderByDesc(BaseEntity::getCreateTime);
         SysTheme sysTheme = this.getOne(sysThemeLambdaQueryWrapper, false);
@@ -297,13 +297,102 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
 
         // 解析主题中的json字符串
         String themeValue = sysTheme.getThemeValue();
-        if (StrUtil.isBlank(themeValue)) {
+        if (StrUtil.isNotBlank(themeValue)) {
             JSONObject jsonObject = JSONObject.parseObject(themeValue);
             return DefaultThemeFactory.parseDefaultTheme(jsonObject);
         } else {
             return DefaultThemeFactory.getSystemDefaultTheme();
         }
+    }
 
+    /**
+     * 将属性中所有是文件类型的文件id转化为文件url
+     *
+     * @author fengshuonan
+     * @date 2022/1/11 11:12
+     */
+    private DefaultTheme parseFileUrls(DefaultTheme theme) {
+        // 查询编码为GUNS_PLATFORM的主题模板id
+        Long defaultTemplateId = getDefaultTemplateId();
+        if (defaultTemplateId == null) {
+            return theme;
+        }
+
+        // 获取主题模板中所有是文件的字段
+        LambdaQueryWrapper<SysThemeTemplateRel> sysThemeTemplateRelLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysThemeTemplateRelLambdaQueryWrapper.eq(SysThemeTemplateRel::getTemplateId, defaultTemplateId);
+        List<SysThemeTemplateRel> relList = this.sysThemeTemplateRelService.list(sysThemeTemplateRelLambdaQueryWrapper);
+
+        if (ObjectUtil.isEmpty(relList)) {
+            return theme;
+        }
+
+        // 所有是文件类型的字段编码
+        List<String> fieldCodes = relList.stream().map(SysThemeTemplateRel::getFieldCode).collect(Collectors.toList());
+
+        // 查询字段中是文件的字段列表
+        LambdaQueryWrapper<SysThemeTemplateField> sysThemeTemplateFieldLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysThemeTemplateFieldLambdaQueryWrapper.in(SysThemeTemplateField::getFieldCode, fieldCodes);
+        sysThemeTemplateFieldLambdaQueryWrapper.eq(SysThemeTemplateField::getFieldType, FieldTypeEnum.FILE.getCode());
+        sysThemeTemplateFieldLambdaQueryWrapper.select(SysThemeTemplateField::getFieldCode);
+        List<SysThemeTemplateField> fieldInfoList = this.sysThemeTemplateFieldService.list(sysThemeTemplateFieldLambdaQueryWrapper);
+
+        if (ObjectUtil.isEmpty(fieldInfoList)) {
+            return theme;
+        }
+
+        // 所有文件类型的字段名
+        List<String> needToParse = fieldInfoList.stream().map(SysThemeTemplateField::getFieldCode).map(StrUtil::toCamelCase).collect(Collectors.toList());
+
+        // 其他属性
+        Map<String, String> otherConfigs = theme.getOtherConfigs();
+
+        for (String fieldName : needToParse) {
+            PropertyDescriptor propertyDescriptor = null;
+            try {
+                propertyDescriptor = new PropertyDescriptor(fieldName, DefaultTheme.class);
+                Method readMethod = propertyDescriptor.getReadMethod();
+                String fieldValue = (String) readMethod.invoke(theme);
+                if (!StrUtil.isEmpty(fieldValue)) {
+                    // 将文件id转化为文件url
+                    String fileUnAuthUrl = fileInfoApi.getFileUnAuthUrl(Long.valueOf(fieldValue));
+                    Method writeMethod = propertyDescriptor.getWriteMethod();
+                    writeMethod.invoke(theme, fileUnAuthUrl);
+                }
+            } catch (Exception e) {
+                log.error("解析主题的文件id为url时出错", e);
+            }
+
+            // 判断其他属性有没有需要转化的
+            for (Map.Entry<String, String> otherItem : otherConfigs.entrySet()) {
+                if (fieldName.equals(otherItem.getKey())) {
+                    String otherFileId = otherItem.getValue();
+                    // 将文件id转化为文件url
+                    String fileUnAuthUrl = fileInfoApi.getFileUnAuthUrl(Long.valueOf(otherFileId));
+                    otherConfigs.put(otherItem.getKey(), fileUnAuthUrl);
+                }
+            }
+        }
+
+        return theme;
+    }
+
+    /**
+     * 获取默认系统的模板id
+     *
+     * @author fengshuonan
+     * @date 2022/1/11 11:35
+     */
+    private Long getDefaultTemplateId() {
+        // 查询编码为GUNS_PLATFORM的主题模板id
+        LambdaQueryWrapper<SysThemeTemplate> sysThemeTemplateLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysThemeTemplateLambdaQueryWrapper.eq(SysThemeTemplate::getTemplateCode, SystemConstants.THEME_GUNS_PLATFORM);
+        SysThemeTemplate sysThemeTemplate = this.sysThemeTemplateService.getOne(sysThemeTemplateLambdaQueryWrapper, false);
+        if (sysThemeTemplate == null) {
+            log.error("当前系统主题模板编码GUNS_PLATFORM不存在，请检查数据库数据是否正常！");
+            return null;
+        }
+        return sysThemeTemplate.getTemplateId();
     }
 
 }

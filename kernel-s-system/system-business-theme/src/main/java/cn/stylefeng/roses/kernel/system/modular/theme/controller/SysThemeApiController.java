@@ -3,7 +3,7 @@ package cn.stylefeng.roses.kernel.system.modular.theme.controller;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.pojo.DefaultTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeService;
@@ -30,7 +30,7 @@ public class SysThemeApiController {
      * @author fengshuonan
      * @date 2022/1/10 18:29
      */
-    @PostResource(name = "获取当前Guns管理系统的主题数据", path = "/theme/currentThemeInfo", requiredPermission = false, requiredLogin = false)
+    @GetResource(name = "获取当前Guns管理系统的主题数据", path = "/theme/currentThemeInfo", requiredPermission = false, requiredLogin = false)
     public ResponseData currentThemeInfo(SysThemeRequest sysThemeParam) {
         DefaultTheme defaultTheme = sysThemeService.currentThemeInfo(sysThemeParam);
         return new SuccessResponseData(defaultTheme);

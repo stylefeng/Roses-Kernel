@@ -449,6 +449,22 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         }
     }
 
+    @Override
+    public String getFileUnAuthUrl(Long fileId) {
+        // 获取文件的基本信息
+        SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
+        sysFileInfoRequest.setFileId(fileId);
+        SysFileInfo sysFileInfo = querySysFileInfo(sysFileInfoRequest);
+
+        // 如果是数据库存储，则返回previewUrl
+        if (sysFileInfo.getFileLocation().equals(FileLocationEnum.DB.getCode())) {
+            return this.sysFileStorageService.getFileUnAuthUrl(String.valueOf(fileId));
+        } else {
+            // 返回第三方存储文件url
+            return fileOperatorApi.getFileUnAuthUrl(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName());
+        }
+    }
+
     /**
      * 渲染被预览的文件到servlet的response流中
      *
