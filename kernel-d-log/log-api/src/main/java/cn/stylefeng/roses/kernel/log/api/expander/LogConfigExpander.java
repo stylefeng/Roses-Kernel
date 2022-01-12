@@ -59,4 +59,14 @@ public class LogConfigExpander {
         return ConfigContext.me().getSysConfigValueWithDefault("SYS_LOG_FILE_SAVE_PATH_LINUX", String.class, LogFileConstants.DEFAULT_FILE_SAVE_PATH_LINUX);
     }
 
+    /**
+     * 全局日志记录，如果开启则所有请求都将记录日志
+     *
+     * @author fengshuonan
+     * @date 2022/1/12 20:32
+     */
+    public static Boolean getGlobalControllerOpenFlag() {
+        return ConfigContext.me().getSysConfigValueWithDefault("SYS_LOG_GLOBAL_FLAG", Boolean.class, LogFileConstants.DEFAULT_GLOBAL_LOG_FLAG);
+    }
+
 }

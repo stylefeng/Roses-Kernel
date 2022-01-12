@@ -22,51 +22,24 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.log.api.constants;
+package cn.stylefeng.roses.kernel.log.api.annotation;
+
+import java.lang.annotation.*;
 
 /**
- * 日志文件的常量
+ * 用来标记在控制器类或方法上，进行判断是否需要对接口进行日志记录
  *
  * @author fengshuonan
- * @date 2020/10/28 15:56
+ * @date 2022/1/12 20:48
  */
-public interface LogFileConstants {
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface BusinessLog {
 
     /**
-     * 记录日志文件名前缀，如果没有appName的话
-     * <p>
-     * 例如：app-logs-2020-10-28.log
+     * 是否进行日志记录，默认是开启
      */
-    String DEFAULT_LOG_FILE_NAME = "app-logs";
-
-    /**
-     * 文件拼接符号
-     */
-    String FILE_CONTRACT_SYMBOL = "-";
-
-    /**
-     * 日志文件的后缀名
-     */
-    String FILE_SUFFIX = ".log";
-
-    /**
-     * 默认文件存储路径（windows的）
-     */
-    String DEFAULT_FILE_SAVE_PATH_WINDOWS = "d:/logfiles";
-
-    /**
-     * 默认文件存储路径（linux和windows的的）
-     */
-    String DEFAULT_FILE_SAVE_PATH_LINUX = "/tmp/logfiles";
-
-    /**
-     * 默认api日志记录的aop的顺序
-     */
-    Integer DEFAULT_API_LOG_AOP_SORT = 500;
-
-    /**
-     * 默认全局记录日志的开关
-     */
-    Boolean DEFAULT_GLOBAL_LOG_FLAG = false;
+    boolean openLog() default true;
 
 }
