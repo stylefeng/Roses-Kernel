@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.resource.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -53,6 +54,7 @@ import cn.stylefeng.roses.kernel.scanner.api.pojo.devops.DevOpsReportResourcePar
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ReportResourceParam;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceUrlParam;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.SysResourcePersistencePojo;
 import cn.stylefeng.roses.kernel.system.api.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.LayuiApiResourceTreeNode;
@@ -64,7 +66,6 @@ import cn.stylefeng.roses.kernel.system.modular.resource.mapper.SysResourceMappe
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -290,12 +291,16 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void reportResources(@RequestBody ReportResourceParam reportResourceReq) {
+        this.reportResourcesAndGetResult(reportResourceReq);
+    }
 
+    @Override
+    public List<SysResourcePersistencePojo> reportResourcesAndGetResult(ReportResourceParam reportResourceReq) {
         String projectCode = reportResourceReq.getProjectCode();
         Map<String, Map<String, ResourceDefinition>> resourceDefinitions = reportResourceReq.getResourceDefinitions();
 
         if (ObjectUtil.isEmpty(projectCode) || resourceDefinitions == null) {
-            return;
+            return new ArrayList<>();
         }
 
         //根据project删除该项目下的所有资源
@@ -321,6 +326,16 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         for (Map.Entry<String, ResourceDefinition> entry : resourceDefinitionMap.entrySet()) {
             resourceCache.put(entry.getKey(), entry.getValue());
         }
+
+        // 组装返回结果
+        ArrayList<SysResourcePersistencePojo> finalResult = new ArrayList<>();
+        for (SysResource item : allResources) {
+            SysResourcePersistencePojo sysResourcePersistencePojo = new SysResourcePersistencePojo();
+            BeanUtil.copyProperties(item, sysResourcePersistencePojo);
+            finalResult.add(sysResourcePersistencePojo);
+        }
+
+        return finalResult;
     }
 
     @Override
@@ -386,7 +401,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public void reportResources(DevOpsReportProperties devOpsReportProperties, Map<String, Map<String, ResourceDefinition>> resourceDefinitions) {
+    public void reportResources(DevOpsReportProperties devOpsReportProperties, List<SysResourcePersistencePojo> sysResourcePersistencePojoList) {
 
         // 去掉请求地址结尾的左斜杠
         String serverHost = devOpsReportProperties.getServerHost();
@@ -407,11 +422,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
         // 组装请求参数
         DevOpsReportResourceParam devOpsReportResourceParam = new DevOpsReportResourceParam(
-                devOpsReportProperties.getProjectUniqueCode(), jwtToken, resourceDefinitions, devOpsReportProperties.getFieldMetadataClassPath());
+                devOpsReportProperties.getProjectUniqueCode(), jwtToken, sysResourcePersistencePojoList, devOpsReportProperties.getFieldMetadataClassPath());
 
         // 进行post请求，汇报资源
         HttpRequest httpRequest = HttpUtil.createPost(devopsReportUrl);
-        httpRequest.body(JSON.toJSONString(devOpsReportResourceParam, SerializerFeature.WriteClassName));
+        httpRequest.body(JSON.toJSONString(devOpsReportResourceParam));
         httpRequest.setConnectionTimeout(Convert.toInt(DEVOPS_REPORT_CONNECTION_TIMEOUT_SECONDS * 1000));
         try {
             HttpResponse execute = httpRequest.execute();

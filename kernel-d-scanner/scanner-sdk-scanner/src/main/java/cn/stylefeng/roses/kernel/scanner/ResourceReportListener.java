@@ -34,12 +34,14 @@ import cn.stylefeng.roses.kernel.scanner.api.holder.InitScanFlagHolder;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.devops.DevOpsReportProperties;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ReportResourceParam;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.SysResourcePersistencePojo;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.scanner.ScannerProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,7 +73,7 @@ public class ResourceReportListener extends ApplicationReadyListener implements 
 
             // 持久化资源，发送资源到资源服务或本项目
             ResourceReportApi resourceService = applicationContext.getBean(ResourceReportApi.class);
-            resourceService.reportResources(new ReportResourceParam(scannerProperties.getAppCode(), modularResources));
+            List<SysResourcePersistencePojo> persistencePojos = resourceService.reportResourcesAndGetResult(new ReportResourceParam(scannerProperties.getAppCode(), modularResources));
 
             // 向DevOps一体化平台汇报资源
             DevOpsReportProperties devOpsReportProperties = applicationContext.getBean(DevOpsReportProperties.class);
@@ -82,7 +84,7 @@ public class ResourceReportListener extends ApplicationReadyListener implements 
                     devOpsReportProperties.getProjectUniqueCode(),
                     devOpsReportProperties.getServerHost())) {
                 DevOpsReportApi devOpsReportApi = applicationContext.getBean(DevOpsReportApi.class);
-                devOpsReportApi.reportResources(devOpsReportProperties, modularResources);
+                devOpsReportApi.reportResources(devOpsReportProperties, persistencePojos);
             }
 
             // 设置标识已经扫描过

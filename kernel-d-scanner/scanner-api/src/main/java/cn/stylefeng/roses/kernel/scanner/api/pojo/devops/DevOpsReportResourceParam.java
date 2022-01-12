@@ -25,11 +25,11 @@
 package cn.stylefeng.roses.kernel.scanner.api.pojo.devops;
 
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
-import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.SysResourcePersistencePojo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * 资源发送到DevOps一体化平台的参数
@@ -56,17 +56,17 @@ public class DevOpsReportResourceParam extends BaseRequest {
      * <p>
      * 第二个key是资源的编码
      */
-    private Map<String, Map<String, ResourceDefinition>> resourceDefinitions;
+    private List<SysResourcePersistencePojo> sysResourcePersistencePojoList;
 
     /**
      * FieldMetadata类的全路径
      */
     private String fieldMetadataClassPath;
 
-    public DevOpsReportResourceParam(String projectUniqueCode, String interactionToken, Map<String, Map<String, ResourceDefinition>> resourceDefinitions, String fieldMetadataClassPath) {
+    public DevOpsReportResourceParam(String projectUniqueCode, String interactionToken, List<SysResourcePersistencePojo> sysResourcePersistencePojoList, String fieldMetadataClassPath) {
         this.projectUniqueCode = projectUniqueCode;
         this.interactionToken = interactionToken;
-        this.resourceDefinitions = resourceDefinitions;
+        this.sysResourcePersistencePojoList = sysResourcePersistencePojoList;
         this.fieldMetadataClassPath = fieldMetadataClassPath;
     }
 }

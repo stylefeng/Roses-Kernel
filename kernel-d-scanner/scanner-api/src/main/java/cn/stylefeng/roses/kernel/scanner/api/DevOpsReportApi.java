@@ -25,9 +25,9 @@
 package cn.stylefeng.roses.kernel.scanner.api;
 
 import cn.stylefeng.roses.kernel.scanner.api.pojo.devops.DevOpsReportProperties;
-import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.SysResourcePersistencePojo;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * 向DevOps一体化平台汇报资源的api
@@ -40,11 +40,11 @@ public interface DevOpsReportApi {
     /**
      * 向DevOps一体化平台汇报资源
      *
-     * @param devOpsReportProperties DevOps平台的系统配置
-     * @param resourceDefinitions    资源汇报具体数据
+     * @param devOpsReportProperties         DevOps平台的系统配置
+     * @param sysResourcePersistencePojoList 资源汇报具体数据
      * @author fengshuonan
      * @date 2022/1/11 15:02
      */
-    void reportResources(DevOpsReportProperties devOpsReportProperties, Map<String, Map<String, ResourceDefinition>> resourceDefinitions);
+    void reportResources(DevOpsReportProperties devOpsReportProperties, List<SysResourcePersistencePojo> sysResourcePersistencePojoList);
 
 }
