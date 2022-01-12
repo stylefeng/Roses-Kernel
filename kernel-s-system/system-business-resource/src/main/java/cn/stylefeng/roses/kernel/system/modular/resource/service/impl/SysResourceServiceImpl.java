@@ -64,6 +64,7 @@ import cn.stylefeng.roses.kernel.system.modular.resource.mapper.SysResourceMappe
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -410,7 +411,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
         // 进行post请求，汇报资源
         HttpRequest httpRequest = HttpUtil.createPost(devopsReportUrl);
-        httpRequest.body(JSON.toJSONString(devOpsReportResourceParam));
+        httpRequest.body(JSON.toJSONString(devOpsReportResourceParam, SerializerFeature.WriteClassName));
         httpRequest.setConnectionTimeout(Convert.toInt(DEVOPS_REPORT_CONNECTION_TIMEOUT_SECONDS * 1000));
         try {
             HttpResponse execute = httpRequest.execute();
