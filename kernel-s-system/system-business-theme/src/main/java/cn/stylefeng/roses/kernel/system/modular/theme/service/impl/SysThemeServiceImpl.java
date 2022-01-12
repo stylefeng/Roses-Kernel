@@ -141,6 +141,9 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         }
 
         this.removeById(sysTheme);
+
+        // 清除主题缓存
+        this.clearThemeCache();
     }
 
     @Override
@@ -151,6 +154,9 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         BeanUtil.copyProperties(sysThemeRequest, sysTheme);
 
         this.updateById(sysTheme);
+
+        // 清除主题缓存
+        this.clearThemeCache();
     }
 
     @Override
@@ -234,6 +240,9 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
             }
         }
         this.updateById(sysTheme);
+
+        // 清除主题缓存
+        this.clearThemeCache();
     }
 
     @Override
@@ -393,6 +402,16 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
             return null;
         }
         return sysThemeTemplate.getTemplateId();
+    }
+
+    /**
+     * 清除主题缓存
+     *
+     * @author fengshuonan
+     * @date 2022/1/12 12:49
+     */
+    private void clearThemeCache() {
+        themeCacheApi.remove(SystemConstants.THEME_GUNS_PLATFORM);
     }
 
 }
