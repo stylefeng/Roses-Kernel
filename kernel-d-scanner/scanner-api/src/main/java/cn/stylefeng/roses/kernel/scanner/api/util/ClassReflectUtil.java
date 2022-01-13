@@ -381,7 +381,7 @@ public class ClassReflectUtil {
      * @author fengshuonan
      * @date 2020/12/8 17:13
      */
-    private static <T> T invokeAnnotationMethodIgnoreError(Annotation apiResource, String methodName, Class<T> resultType) {
+    public static <T> T invokeAnnotationMethodIgnoreError(Annotation apiResource, String methodName, Class<T> resultType) {
         try {
             Class<? extends Annotation> annotationType = apiResource.annotationType();
             Method method = annotationType.getMethod(methodName);
@@ -401,7 +401,7 @@ public class ClassReflectUtil {
      * @author fengshuonan
      * @date 2020/12/8 19:12
      */
-    private static void addGroupValidateAnnotation(Annotation fieldAnnotation, Class<?> validateGroupsClass, Map<String, Set<String>> groupAnnotations) {
+    public static void addGroupValidateAnnotation(Annotation fieldAnnotation, Class<?> validateGroupsClass, Map<String, Set<String>> groupAnnotations) {
         Set<String> annotations = groupAnnotations.get(validateGroupsClass.getSimpleName());
         if (annotations == null) {
             annotations = new HashSet<>();
@@ -420,7 +420,7 @@ public class ClassReflectUtil {
      * @author fengshuonan
      * @date 2020/12/9 13:39
      */
-    private static Set<String> annotationsToStrings(Annotation[] annotations) {
+    public static Set<String> annotationsToStrings(Annotation[] annotations) {
         Set<String> strings = new HashSet<>();
 
         if (annotations == null || annotations.length == 0) {

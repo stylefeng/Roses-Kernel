@@ -48,7 +48,12 @@ public enum FieldTypeEnum {
     /**
      * 对象类型，描述java中的自定义实体实体类型等
      */
-    OBJECT(3);
+    OBJECT(3),
+
+    /**
+     * 其他类型，未知
+     */
+    OTHER(4);
 
     FieldTypeEnum(Integer code) {
         this.code = code;
