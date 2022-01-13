@@ -99,6 +99,12 @@ public class FieldMetadata {
     private Integer genericFieldMetadataType;
 
     /**
+     * 字段类型：1-基本类型，2-数组，3-实体对象
+     */
+    @ChineseDescription("字段类型：1-基本类型，2-数组，3-实体对象")
+    private Integer fieldType;
+
+    /**
      * 泛型或object类型的字段的描述
      */
     @ChineseDescription("泛型或object类型的字段的描述")
