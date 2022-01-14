@@ -27,7 +27,7 @@ package cn.stylefeng.roses.kernel.scanner.api.enums;
 import lombok.Getter;
 
 /**
- * 字段类型
+ * 解析字段元数据时，各种情况的枚举
  *
  * @author fengshuonan
  * @date 2022/1/13 16:37
@@ -41,19 +41,44 @@ public enum FieldTypeEnum {
     BASIC(1),
 
     /**
-     * 数组类型，描述java中的数组、Collection等
+     * 基础数组类型，描述java中的数组，例如long[]
      */
-    ARRAY(2),
+    BASE_ARRAY(2),
 
     /**
-     * 对象类型，描述java中的自定义实体实体类型等
+     * 实体类型的数组（需要解析其中具体字段），例如SysUser[]
      */
-    OBJECT(3),
+    ARRAY_WITH_OBJECT(3),
+
+    /**
+     * 基础集合类型，Collection等，单纯的集合，没带泛型，不需要再解析实体，例如List
+     */
+    BASE_COLLECTION(4),
+
+    /**
+     * 集合类型，Collection携带泛型的，需要具体解析泛型中实体的，例如List<SysUser>，List<String>
+     */
+    COLLECTION_WITH_OBJECT(5),
+
+    /**
+     * 单纯对象类型，不带泛型，例如SysUser
+     */
+    OBJECT(6),
+
+    /**
+     * 对象类型携带泛型的，需要再解析泛型中的实体，例如ResponseData<SysUser>
+     */
+    OBJECT_WITH_GENERIC(7),
+
+    /**
+     * 带T类型的泛型对象，需要从所属类上拿到具体泛型，例如字段SomeEntity<T>，List<T>，T
+     */
+    WITH_UNKNOWN_GENERIC(8),
 
     /**
      * 其他类型，未知
      */
-    OTHER(4);
+    OTHER(9);
 
     FieldTypeEnum(Integer code) {
         this.code = code;

@@ -29,7 +29,7 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.TypeUtil;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldMetadataTypeEnum;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
 

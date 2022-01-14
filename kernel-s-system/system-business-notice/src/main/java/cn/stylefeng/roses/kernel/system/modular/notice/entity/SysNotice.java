@@ -26,7 +26,7 @@ package cn.stylefeng.roses.kernel.system.modular.notice.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import cn.stylefeng.roses.kernel.dict.api.serializer.DictValueSerializer;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

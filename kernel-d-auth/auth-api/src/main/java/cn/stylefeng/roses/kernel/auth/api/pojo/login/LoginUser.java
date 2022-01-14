@@ -30,8 +30,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 

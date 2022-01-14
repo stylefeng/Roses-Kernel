@@ -32,17 +32,17 @@ import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
  * @author fengshuonan
  * @date 2020/10/16 16:23
  */
-public class SuccessResponseData extends ResponseData {
+public class SuccessResponseData<T> extends ResponseData<T> {
 
     public SuccessResponseData() {
         super(Boolean.TRUE, RuleConstants.SUCCESS_CODE, RuleConstants.SUCCESS_MESSAGE, null);
     }
 
-    public SuccessResponseData(Object object) {
+    public SuccessResponseData(T object) {
         super(Boolean.TRUE, RuleConstants.SUCCESS_CODE, RuleConstants.SUCCESS_MESSAGE, object);
     }
 
-    public SuccessResponseData(String code, String message, Object object) {
+    public SuccessResponseData(String code, String message, T object) {
         super(Boolean.TRUE, code, message, object);
     }
 }

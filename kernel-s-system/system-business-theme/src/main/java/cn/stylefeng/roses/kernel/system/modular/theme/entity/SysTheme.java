@@ -1,7 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.theme.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.system.modular.theme.pojo.AntdvFileInfo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

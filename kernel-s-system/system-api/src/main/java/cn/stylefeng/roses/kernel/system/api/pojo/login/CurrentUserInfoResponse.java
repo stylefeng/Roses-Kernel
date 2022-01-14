@@ -24,7 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.login;
 
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

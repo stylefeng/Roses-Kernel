@@ -26,7 +26,7 @@ package cn.stylefeng.roses.kernel.auth.api.pojo.auth;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import lombok.Data;
 
 /**

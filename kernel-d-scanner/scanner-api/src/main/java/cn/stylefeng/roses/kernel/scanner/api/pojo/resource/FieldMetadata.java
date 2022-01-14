@@ -24,11 +24,9 @@
  */
 package cn.stylefeng.roses.kernel.scanner.api.pojo.resource;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import lombok.Data;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -111,21 +109,5 @@ public class FieldMetadata {
      */
     @ChineseDescription("泛型或object类型的字段的描述")
     private Set<FieldMetadata> genericFieldMetadata;
-
-    /**
-     * 添加一个子数据
-     *
-     * @author fengshuonan
-     * @date 2022/1/14 0:02
-     */
-    public void addOneSubFieldMetadata(FieldMetadata fieldMetadata) {
-        if (ObjectUtil.isEmpty(this.genericFieldMetadata)) {
-            HashSet<FieldMetadata> subMetadataSet = new HashSet<>();
-            subMetadataSet.add(fieldMetadata);
-            this.genericFieldMetadata = subMetadataSet;
-        } else {
-            this.genericFieldMetadata.add(fieldMetadata);
-        }
-    }
 
 }
