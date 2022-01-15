@@ -130,7 +130,7 @@ public class ClassTypeUtil {
             }
         }
 
-        // 带T的参数，例如解析到ResponseData<T>中的data字段是带T的
+        // 带T的参数，例如解析到ResponseData<T>中的data字段就是这种情况
         else if (type instanceof TypeVariableImpl<?>) {
             return FieldTypeEnum.WITH_UNKNOWN_GENERIC;
         }
