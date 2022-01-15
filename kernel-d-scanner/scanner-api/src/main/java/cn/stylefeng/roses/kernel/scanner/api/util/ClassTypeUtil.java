@@ -5,6 +5,7 @@ import cn.hutool.core.util.ClassUtil;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import sun.reflect.generics.reflectiveObjects.TypeVariableImpl;
+import sun.reflect.generics.reflectiveObjects.WildcardTypeImpl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -87,7 +88,7 @@ public class ClassTypeUtil {
 
             // 其他类型，暂不处理
             else {
-                log.info("类型是Class，但有处理不到的情况，打印出类的信息如下：{}", clazz.toGenericString());
+                log.debug("类型是Class，但有处理不到的情况，打印出类的信息如下：{}", clazz.toGenericString());
                 return FieldTypeEnum.OTHER;
             }
         }
@@ -120,12 +121,12 @@ public class ClassTypeUtil {
 
                 // 泛型的主体情况不确定，不处理
                 else {
-                    log.info("泛型的主体情况不确定，不处理，打印出rawTypeClass：{}", rawTypeClass.getName());
+                    log.debug("泛型的主体情况不确定，不处理，打印出rawTypeClass：{}", rawTypeClass.getName());
                     return FieldTypeEnum.OTHER;
                 }
             } else {
                 // 泛型的主体是别的类型
-                log.info("rawType为非Class类型？打印出rawType：{}", rawType.getTypeName());
+                log.debug("rawType为非Class类型？打印出rawType：{}", rawType.getTypeName());
                 return FieldTypeEnum.OTHER;
             }
         }
@@ -135,9 +136,14 @@ public class ClassTypeUtil {
             return FieldTypeEnum.WITH_UNKNOWN_GENERIC;
         }
 
+        // 带?的参数，例如解析到ResponseData<?>中的data字段就是这种情况
+        else if (type instanceof WildcardTypeImpl) {
+            return FieldTypeEnum.OTHER;
+        }
+
         // 其他情况，既不是class也不是ParameterizedType
         else {
-            log.info("未知类型的处理，既不是class也不是ParameterizedType，打印出类的信息如下：{}", type.getTypeName());
+            log.debug("未知类型的处理，既不是class也不是ParameterizedType，打印出类的信息如下：{}", type.getTypeName());
             return FieldTypeEnum.OTHER;
         }
     }

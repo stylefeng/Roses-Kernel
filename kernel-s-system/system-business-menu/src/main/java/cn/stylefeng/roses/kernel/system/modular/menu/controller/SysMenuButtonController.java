@@ -123,7 +123,7 @@ public class SysMenuButtonController {
      * @author luojie
      * @date 2021/1/9 11:53
      */
-    @GetResource(name = "获取菜单按钮详情", path = "/sysMenuButton/detail", responseClass = SysMenuButton.class)
+    @GetResource(name = "获取菜单按钮详情", path = "/sysMenuButton/detail")
     public ResponseData detail(@Validated(SysMenuButtonRequest.detail.class) SysMenuButtonRequest sysMenuButtonRequest) {
         SysMenuButton detail = sysMenuButtonService.detail(sysMenuButtonRequest);
         return new SuccessResponseData(detail);
@@ -136,7 +136,7 @@ public class SysMenuButtonController {
      * @author luojie
      * @date 2021/1/9 12:33
      */
-    @GetResource(name = "获取菜单按钮列表", path = "/sysMenuButton/pageList", responseClass = SysMenuButton.class)
+    @GetResource(name = "获取菜单按钮列表", path = "/sysMenuButton/pageList")
     public ResponseData pageList(@Validated(SysMenuButtonRequest.list.class) SysMenuButtonRequest sysMenuButtonRequest) {
         PageResult<SysMenuButton> pageResult = sysMenuButtonService.findPage(sysMenuButtonRequest);
         return new SuccessResponseData(pageResult);

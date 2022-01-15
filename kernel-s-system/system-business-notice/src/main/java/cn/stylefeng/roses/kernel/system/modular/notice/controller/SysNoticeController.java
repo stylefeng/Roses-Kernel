@@ -30,7 +30,6 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.notice.SysNoticeRequest;
-import cn.stylefeng.roses.kernel.system.modular.notice.entity.SysNotice;
 import cn.stylefeng.roses.kernel.system.modular.notice.service.SysNoticeService;
 import cn.stylefeng.roses.kernel.system.modular.notice.wrapper.NoticeWrapper;
 import cn.stylefeng.roses.kernel.wrapper.api.annotation.Wrapper;
@@ -95,7 +94,7 @@ public class SysNoticeController {
      * @author liuhanqing
      * @date 2021/1/9 9:49
      */
-    @GetResource(name = "查看通知管理", path = "/sysNotice/detail", responseClass = SysNotice.class)
+    @GetResource(name = "查看通知管理", path = "/sysNotice/detail")
     public ResponseData detail(@Validated(SysNoticeRequest.detail.class) SysNoticeRequest sysNoticeParam) {
         return new SuccessResponseData(sysNoticeService.detail(sysNoticeParam));
     }
@@ -106,7 +105,7 @@ public class SysNoticeController {
      * @author liuhanqing
      * @date 2021/1/9 21:23
      */
-    @GetResource(name = "查询通知管理", path = "/sysNotice/page", responseClass = SysNotice.class)
+    @GetResource(name = "查询通知管理", path = "/sysNotice/page")
     @Wrapper(NoticeWrapper.class)
     public ResponseData page(SysNoticeRequest sysNoticeParam) {
         return new SuccessResponseData(sysNoticeService.findPage(sysNoticeParam));
@@ -118,7 +117,7 @@ public class SysNoticeController {
      * @author liuhanqing
      * @date 2021/1/9 14:55
      */
-    @GetResource(name = "通知管理列表", path = "/sysNotice/list", responseClass = SysNotice.class)
+    @GetResource(name = "通知管理列表", path = "/sysNotice/list")
     public ResponseData list(SysNoticeRequest sysNoticeParam) {
         return new SuccessResponseData(sysNoticeService.findList(sysNoticeParam));
     }

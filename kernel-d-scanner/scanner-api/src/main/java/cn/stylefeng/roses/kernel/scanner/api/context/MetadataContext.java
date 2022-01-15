@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.scanner.api.context;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldTypeEnum;
 import cn.stylefeng.roses.kernel.scanner.api.util.ClassTypeUtil;
 
@@ -95,6 +96,19 @@ public class MetadataContext {
      */
     public static void cleanContext() {
         META_DATA_CLASS_COUNT_CONTEXT.clear();
+    }
+
+    /**
+     * 清空指定过程的缓存
+     *
+     * @author fengshuonan
+     * @date 2022/1/15 10:49
+     */
+    public static void cleanContext(String uuid) {
+        if (StrUtil.isEmpty(uuid)) {
+            return;
+        }
+        META_DATA_CLASS_COUNT_CONTEXT.remove(uuid);
     }
 
 }

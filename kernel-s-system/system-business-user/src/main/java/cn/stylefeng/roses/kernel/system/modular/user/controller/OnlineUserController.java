@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 在线用户管理
@@ -64,9 +65,9 @@ public class OnlineUserController {
      * @author fengshuonan
      * @date 2021/1/11 22:53
      */
-    @GetResource(name = "当前在线用户列表", path = "/sysUser/onlineUserList", responseClass = OnlineUserDTO.class)
-    public ResponseData onlineUserList(OnlineUserRequest onlineUserRequest) {
-        return new SuccessResponseData(sysUserService.onlineUserList(onlineUserRequest));
+    @GetResource(name = "当前在线用户列表", path = "/sysUser/onlineUserList")
+    public ResponseData<List<OnlineUserDTO>> onlineUserList(OnlineUserRequest onlineUserRequest) {
+        return new SuccessResponseData<>(sysUserService.onlineUserList(onlineUserRequest));
     }
 
     /**
@@ -76,12 +77,12 @@ public class OnlineUserController {
      * @date 2021/1/11 22:53
      */
     @PostResource(name = "踢掉在线用户", path = "/sysUser/removeSession")
-    public ResponseData removeSession(@Valid @RequestBody OnlineUserRequest onlineUserRequest) {
+    public ResponseData<?> removeSession(@Valid @RequestBody OnlineUserRequest onlineUserRequest) {
         if (DemoConfigExpander.getDemoEnvFlag()) {
             throw new DemoException(DemoExceptionEnum.DEMO_OPERATE);
         }
         sessionManagerApi.removeSession(onlineUserRequest.getToken());
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
 }

@@ -152,7 +152,7 @@ public class ClassDetailMetadataFactory {
 
             return fieldDetailMetadataSet;
         } else {
-            log.info("带泛型的实体主题rawType非Class类型" + fieldType);
+            log.debug("带泛型的实体主题rawType非Class类型" + fieldType);
             return null;
         }
     }

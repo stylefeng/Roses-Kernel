@@ -31,6 +31,7 @@ import org.springframework.validation.annotation.Validated;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -105,7 +106,7 @@ public class MethodReflectUtil {
                     Method validateGroupMethod = annotation.annotationType().getMethod("value");
                     Object invoke = validateGroupMethod.invoke(annotation);
                     if (invoke != null) {
-                        Class<?>[] result = (Class<?>[])invoke;
+                        Class<?>[] result = (Class<?>[]) invoke;
                         if (result.length > 0) {
                             HashSet<String> groupClassNames = new HashSet<>();
                             for (Class<?> groupClass : result) {
@@ -123,43 +124,33 @@ public class MethodReflectUtil {
     }
 
     /**
-     * 获取方法第一个参数的类类型
+     * 返回方法的所有类型参数信息
      *
      * @param method 方法反射信息
      * @return 方法第一个参数的class类型
      * @author fengshuonan
      * @date 2020/12/8 18:16
      */
-    public static Class<?> getMethodFirstParamClass(Method method) {
+    public static Type[] getMethodGenericTypes(Method method) {
         if (method == null) {
             return null;
         }
-
-        if (method.getParameterCount() <= 0) {
-            return null;
-        }
-
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        if (parameterTypes.length > 0) {
-            return parameterTypes[0];
-        } else {
-            return null;
-        }
+        return method.getGenericParameterTypes();
     }
 
     /**
-     * 获取方法的返回值class类型
+     * 获取方法的返回值type类型，type可能是class也可能是带泛型的类型
      *
      * @param method 方法反射信息
      * @return 方法返回值的class类型
      * @author fengshuonan
      * @date 2020/12/8 18:20
      */
-    public static Class<?> getMethodReturnClass(Method method) {
+    public static Type getMethodReturnType(Method method) {
         if (method == null) {
             return null;
         }
-        return method.getReturnType();
+        return method.getGenericReturnType();
     }
 
 }

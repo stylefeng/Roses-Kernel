@@ -148,7 +148,7 @@ public class ResourceDefinition implements Serializable {
      * 接口返回结果的字段描述
      */
     @ChineseDescription("接口返回结果的字段描述")
-    private Set<FieldMetadata> responseFieldDescriptions;
+    private FieldMetadata responseFieldDescriptions;
 
     /**
      * 资源添加日期

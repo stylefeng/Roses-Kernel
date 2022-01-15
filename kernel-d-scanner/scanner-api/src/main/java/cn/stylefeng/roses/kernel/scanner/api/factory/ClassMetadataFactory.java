@@ -53,16 +53,16 @@ public class ClassMetadataFactory {
             ParameterizedType parameterizedType = (ParameterizedType) type;
 
             // 创建类型的基本信息
-            FieldMetadata baseMetadata = ClassDescriptionUtil.createParameterizedMetadata(parameterizedType, classFieldType);
+            fieldMetadata = ClassDescriptionUtil.createParameterizedMetadata(parameterizedType, classFieldType);
 
             // 补充类型的子信息
             Set<FieldMetadata> fieldDetailMetadataSet = ClassDetailMetadataFactory.createFieldDetailMetadataSet(type, uuid);
-            baseMetadata.setGenericFieldMetadata(fieldDetailMetadataSet);
+            fieldMetadata.setGenericFieldMetadata(fieldDetailMetadataSet);
         }
 
         // 其他情况
         else {
-            log.info("未知类型的处理，既不是class也不是ParameterizedType，打印出类的信息如下：{}", type.getTypeName());
+            log.debug("未知类型的处理，既不是class也不是ParameterizedType，打印出类的信息如下：{}", type.getTypeName());
         }
 
         return fieldMetadata;
