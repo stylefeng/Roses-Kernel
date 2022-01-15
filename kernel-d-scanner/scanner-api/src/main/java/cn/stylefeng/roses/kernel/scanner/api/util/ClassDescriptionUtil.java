@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.scanner.api.factory.description;
+package cn.stylefeng.roses.kernel.scanner.api.util;
 
 import cn.hutool.core.util.IdUtil;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldMetadataTypeEnum;
