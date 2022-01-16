@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.scanner.api.factory;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.scanner.api.context.MetadataContext;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldTypeEnum;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
@@ -125,7 +124,7 @@ public class ClassDetailMetadataFactory {
             Class<?> clazz = (Class<?>) fieldType;
             // 获取主类型的所有属性
             Set<FieldMetadata> fieldDetailMetadataSet = createFieldDetailMetadataSet(clazz, uuid);
-            if (ObjectUtil.isEmpty(fieldDetailMetadataSet)) {
+            if (fieldDetailMetadataSet == null) {
                 return null;
             }
             for (FieldMetadata fieldMetadata : fieldDetailMetadataSet) {
@@ -147,6 +146,12 @@ public class ClassDetailMetadataFactory {
                         continue;
                     }
                     fieldMetadata.setGenericFieldMetadata(current);
+                }
+
+                // 如果是T这种形式，应该将当前fieldMetadata的类型改为泛型的类型，例如参数genericType是List时候
+                if (FieldTypeEnum.WITH_UNKNOWN_GENERIC.getCode().equals(fieldMetadata.getFieldType())) {
+                    FieldTypeEnum classFieldType = ClassTypeUtil.getClassFieldType(genericType);
+                    fieldMetadata.setFieldType(classFieldType.getCode());
                 }
             }
 
