@@ -14,7 +14,7 @@ import cn.stylefeng.roses.kernel.system.api.exception.enums.theme.SysThemeTempla
 import cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeTemplateFieldRequest;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateField;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateRel;
-import cn.stylefeng.roses.kernel.system.modular.theme.enums.FieldTypeEnum;
+import cn.stylefeng.roses.kernel.system.modular.theme.enums.ThemeFieldTypeEnum;
 import cn.stylefeng.roses.kernel.system.modular.theme.mapper.SysThemeTemplateFieldMapper;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateFieldService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateRelService;
@@ -183,7 +183,7 @@ public class SysThemeTemplateFieldServiceImpl extends ServiceImpl<SysThemeTempla
             return false;
         }
 
-        return FieldTypeEnum.FILE.getCode().equals(sysThemeTemplateField.getFieldType());
+        return ThemeFieldTypeEnum.FILE.getCode().equals(sysThemeTemplateField.getFieldType());
     }
 
     /**

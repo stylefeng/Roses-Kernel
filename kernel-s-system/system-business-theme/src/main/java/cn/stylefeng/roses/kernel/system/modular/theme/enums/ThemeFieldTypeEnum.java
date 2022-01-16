@@ -33,7 +33,7 @@ import lombok.Getter;
  * @date 2022/1/1 22:29
  */
 @Getter
-public enum FieldTypeEnum {
+public enum ThemeFieldTypeEnum {
 
     /**
      * 字符串类型
@@ -49,7 +49,7 @@ public enum FieldTypeEnum {
 
     private final String message;
 
-    FieldTypeEnum(String code, String message) {
+    ThemeFieldTypeEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

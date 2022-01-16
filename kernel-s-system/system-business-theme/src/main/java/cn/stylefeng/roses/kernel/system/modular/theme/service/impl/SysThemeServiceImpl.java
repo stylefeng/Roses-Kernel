@@ -23,7 +23,7 @@ import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplate;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateField;
 import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateRel;
-import cn.stylefeng.roses.kernel.system.modular.theme.enums.FieldTypeEnum;
+import cn.stylefeng.roses.kernel.system.modular.theme.enums.ThemeFieldTypeEnum;
 import cn.stylefeng.roses.kernel.system.modular.theme.factory.DefaultThemeFactory;
 import cn.stylefeng.roses.kernel.system.modular.theme.mapper.SysThemeMapper;
 import cn.stylefeng.roses.kernel.system.modular.theme.pojo.AntdvFileInfo;
@@ -119,7 +119,7 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         List<String> fileNames = new ArrayList<>();
         if (themeKeys.size() > 0) {
             LambdaQueryWrapper<SysThemeTemplateField> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.in(SysThemeTemplateField::getFieldCode, themeKeys).eq(SysThemeTemplateField::getFieldType, FieldTypeEnum.FILE.getCode())
+            queryWrapper.in(SysThemeTemplateField::getFieldCode, themeKeys).eq(SysThemeTemplateField::getFieldType, ThemeFieldTypeEnum.FILE.getCode())
                     .select(SysThemeTemplateField::getFieldCode);
             List<SysThemeTemplateField> sysThemeTemplateFields = sysThemeTemplateFieldService.list(queryWrapper);
             fileNames = sysThemeTemplateFields.stream().map(SysThemeTemplateField::getFieldCode).collect(Collectors.toList());
@@ -342,7 +342,7 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
         // 查询字段中是文件的字段列表
         LambdaQueryWrapper<SysThemeTemplateField> sysThemeTemplateFieldLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysThemeTemplateFieldLambdaQueryWrapper.in(SysThemeTemplateField::getFieldCode, fieldCodes);
-        sysThemeTemplateFieldLambdaQueryWrapper.eq(SysThemeTemplateField::getFieldType, FieldTypeEnum.FILE.getCode());
+        sysThemeTemplateFieldLambdaQueryWrapper.eq(SysThemeTemplateField::getFieldType, ThemeFieldTypeEnum.FILE.getCode());
         sysThemeTemplateFieldLambdaQueryWrapper.select(SysThemeTemplateField::getFieldCode);
         List<SysThemeTemplateField> fieldInfoList = this.sysThemeTemplateFieldService.list(sysThemeTemplateFieldLambdaQueryWrapper);
 
