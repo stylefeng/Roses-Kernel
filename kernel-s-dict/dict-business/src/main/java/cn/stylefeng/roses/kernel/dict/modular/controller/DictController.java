@@ -63,9 +63,9 @@ public class DictController {
      * @date 2020/10/29 16:35
      */
     @PostResource(name = "添加字典", path = "/dict/add", requiredPermission = false)
-    public ResponseData add(@RequestBody @Validated(DictRequest.add.class) DictRequest dictRequest) {
+    public ResponseData<?> add(@RequestBody @Validated(DictRequest.add.class) DictRequest dictRequest) {
         this.dictService.add(dictRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -75,9 +75,9 @@ public class DictController {
      * @date 2020/10/29 16:35
      */
     @PostResource(name = "删除字典", path = "/dict/delete", requiredPermission = false)
-    public ResponseData delete(@RequestBody @Validated(DictRequest.delete.class) DictRequest dictRequest) {
+    public ResponseData<?> delete(@RequestBody @Validated(DictRequest.delete.class) DictRequest dictRequest) {
         this.dictService.del(dictRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -87,9 +87,9 @@ public class DictController {
      * @date 2020/10/29 16:35
      */
     @PostResource(name = "修改字典", path = "/dict/edit", requiredPermission = false)
-    public ResponseData edit(@RequestBody @Validated(DictRequest.edit.class) DictRequest dictRequest) {
+    public ResponseData<?> edit(@RequestBody @Validated(DictRequest.edit.class) DictRequest dictRequest) {
         this.dictService.edit(dictRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -99,9 +99,9 @@ public class DictController {
      * @date 2020/10/29 16:35
      */
     @GetResource(name = "获取字典详情", path = "/dict/detail", requiredPermission = false)
-    public ResponseData detail(@Validated(BaseRequest.detail.class) DictRequest dictRequest) {
+    public ResponseData<SysDict> detail(@Validated(BaseRequest.detail.class) DictRequest dictRequest) {
         SysDict detail = this.dictService.detail(dictRequest);
-        return new SuccessResponseData(detail);
+        return new SuccessResponseData<>(detail);
     }
 
     /**
@@ -111,8 +111,8 @@ public class DictController {
      * @date 2020/10/29 16:35
      */
     @GetResource(name = "获取字典列表", path = "/dict/list", requiredPermission = false)
-    public ResponseData list(DictRequest dictRequest) {
-        return new SuccessResponseData(this.dictService.findList(dictRequest));
+    public ResponseData<List<SysDict>> list(DictRequest dictRequest) {
+        return new SuccessResponseData<>(this.dictService.findList(dictRequest));
     }
 
     /**
@@ -122,8 +122,8 @@ public class DictController {
      * @date 2020/10/29 16:35
      */
     @GetResource(name = "获取字典列表", path = "/dict/page", requiredPermission = false)
-    public ResponseData page(DictRequest dictRequest) {
-        return new SuccessResponseData(this.dictService.findPage(dictRequest));
+    public ResponseData<PageResult<SysDict>> page(DictRequest dictRequest) {
+        return new SuccessResponseData<>(this.dictService.findPage(dictRequest));
     }
 
 
@@ -134,9 +134,9 @@ public class DictController {
      * @date 2020/10/29 16:36
      */
     @GetResource(name = "获取树形字典列表", path = "/dict/getDictTreeList", requiredPermission = false)
-    public ResponseData getDictTreeList(@Validated(DictRequest.treeList.class) DictRequest dictRequest) {
+    public ResponseData<List<TreeDictInfo>> getDictTreeList(@Validated(DictRequest.treeList.class) DictRequest dictRequest) {
         List<TreeDictInfo> treeDictList = this.dictService.getTreeDictList(dictRequest);
-        return new SuccessResponseData(treeDictList);
+        return new SuccessResponseData<>(treeDictList);
     }
 
     /**
@@ -146,10 +146,10 @@ public class DictController {
      * @date 2021/1/25 11:47
      */
     @GetResource(name = "获取系统配置分组字典列表", path = "/dict/getConfigGroupPage", requiredPermission = false)
-    public ResponseData getConfigGroupPage(DictRequest dictRequest) {
+    public ResponseData<PageResult<SysDict>> getConfigGroupPage(DictRequest dictRequest) {
         dictRequest.setDictTypeCode(DictConstants.CONFIG_GROUP_DICT_TYPE_CODE);
         PageResult<SysDict> page = this.dictService.findPage(dictRequest);
-        return new SuccessResponseData(page);
+        return new SuccessResponseData<>(page);
     }
 
     /**
@@ -159,10 +159,10 @@ public class DictController {
      * @date 2021/1/25 11:47
      */
     @GetResource(name = "获取多语言字典列表", path = "/dict/getLanguagesPage", requiredPermission = false)
-    public ResponseData getLanguagesPage(DictRequest dictRequest) {
+    public ResponseData<PageResult<SysDict>> getLanguagesPage(DictRequest dictRequest) {
         dictRequest.setDictTypeCode(DictConstants.LANGUAGES_DICT_TYPE_CODE);
         PageResult<SysDict> page = this.dictService.findPage(dictRequest);
-        return new SuccessResponseData(page);
+        return new SuccessResponseData<>(page);
     }
 
 }

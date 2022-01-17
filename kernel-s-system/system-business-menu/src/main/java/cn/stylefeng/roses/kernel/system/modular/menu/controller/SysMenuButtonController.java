@@ -60,9 +60,9 @@ public class SysMenuButtonController {
      * @date 2021/1/9 11:28
      */
     @PostResource(name = "添加系统菜单按钮", path = "/sysMenuButton/add")
-    public ResponseData add(@RequestBody @Validated(SysMenuButtonRequest.add.class) SysMenuButtonRequest sysMenuButtonRequest) {
+    public ResponseData<?> add(@RequestBody @Validated(SysMenuButtonRequest.add.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.add(sysMenuButtonRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -72,9 +72,9 @@ public class SysMenuButtonController {
      * @date 2021/1/9 11:28
      */
     @PostResource(name = "添加系统默认菜单按钮", path = "/sysMenuButton/addSystemDefaultButton")
-    public ResponseData addSystemDefaultButton(@RequestBody @Validated(SysMenuButtonRequest.def.class) SysMenuButtonRequest sysMenuButtonRequest) {
+    public ResponseData<?> addSystemDefaultButton(@RequestBody @Validated(SysMenuButtonRequest.def.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.addDefaultButtons(sysMenuButtonRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -85,9 +85,9 @@ public class SysMenuButtonController {
      * @date 2021/1/9 12:14
      */
     @PostResource(name = "删除单个系统菜单按钮", path = "/sysMenuButton/delete")
-    public ResponseData delete(@RequestBody @Validated(SysMenuButtonRequest.delete.class) SysMenuButtonRequest sysMenuButtonRequest) {
+    public ResponseData<?> delete(@RequestBody @Validated(SysMenuButtonRequest.delete.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.del(sysMenuButtonRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -98,9 +98,9 @@ public class SysMenuButtonController {
      * @date 2021/1/9 12:27
      */
     @PostResource(name = "批量删除多个系统菜单按钮", path = "/sysMenuButton/batchDelete")
-    public ResponseData batchDelete(@RequestBody @Validated(SysMenuButtonRequest.batchDelete.class) SysMenuButtonRequest sysMenuButtonRequest) {
+    public ResponseData<?> batchDelete(@RequestBody @Validated(SysMenuButtonRequest.batchDelete.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.delBatch(sysMenuButtonRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -111,9 +111,9 @@ public class SysMenuButtonController {
      * @date 2021/1/9 12:00
      */
     @PostResource(name = "编辑系统菜单按钮", path = "/sysMenuButton/edit")
-    public ResponseData edit(@RequestBody @Validated(SysMenuButtonRequest.edit.class) SysMenuButtonRequest sysMenuButtonRequest) {
+    public ResponseData<?> edit(@RequestBody @Validated(SysMenuButtonRequest.edit.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.edit(sysMenuButtonRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -124,9 +124,9 @@ public class SysMenuButtonController {
      * @date 2021/1/9 11:53
      */
     @GetResource(name = "获取菜单按钮详情", path = "/sysMenuButton/detail")
-    public ResponseData detail(@Validated(SysMenuButtonRequest.detail.class) SysMenuButtonRequest sysMenuButtonRequest) {
+    public ResponseData<SysMenuButton> detail(@Validated(SysMenuButtonRequest.detail.class) SysMenuButtonRequest sysMenuButtonRequest) {
         SysMenuButton detail = sysMenuButtonService.detail(sysMenuButtonRequest);
-        return new SuccessResponseData(detail);
+        return new SuccessResponseData<>(detail);
     }
 
     /**
@@ -137,9 +137,9 @@ public class SysMenuButtonController {
      * @date 2021/1/9 12:33
      */
     @GetResource(name = "获取菜单按钮列表", path = "/sysMenuButton/pageList")
-    public ResponseData pageList(@Validated(SysMenuButtonRequest.list.class) SysMenuButtonRequest sysMenuButtonRequest) {
+    public ResponseData<PageResult<SysMenuButton>> pageList(@Validated(SysMenuButtonRequest.list.class) SysMenuButtonRequest sysMenuButtonRequest) {
         PageResult<SysMenuButton> pageResult = sysMenuButtonService.findPage(sysMenuButtonRequest);
-        return new SuccessResponseData(pageResult);
+        return new SuccessResponseData<>(pageResult);
     }
 
 }

@@ -24,9 +24,12 @@
  */
 package cn.stylefeng.roses.kernel.file.modular.controller;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
+import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse;
 import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
+import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
@@ -81,9 +84,9 @@ public class SysFileInfoController {
      * @date 2020/12/27 13:17
      */
     @PostResource(name = "上传文件", path = "/sysFileInfo/upload", requiredPermission = false)
-    public ResponseData upload(@RequestPart("file") MultipartFile file, @Validated(SysFileInfoRequest.add.class) SysFileInfoRequest sysFileInfoRequest) {
+    public ResponseData<SysFileInfoResponse> upload(@RequestPart("file") MultipartFile file, @Validated(SysFileInfoRequest.add.class) SysFileInfoRequest sysFileInfoRequest) {
         SysFileInfoResponse fileUploadInfoResult = this.sysFileInfoService.uploadFile(file, sysFileInfoRequest);
-        return new SuccessResponseData(fileUploadInfoResult);
+        return new SuccessResponseData<>(fileUploadInfoResult);
     }
 
     /**
@@ -177,9 +180,9 @@ public class SysFileInfoController {
      * @date 2020/12/16 15:34
      */
     @PostResource(name = "替换文件", path = "/sysFileInfo/update", requiredPermission = false)
-    public ResponseData update(@RequestPart("file") MultipartFile file, @Validated(SysFileInfoRequest.edit.class) SysFileInfoRequest sysFileInfoRequest) {
+    public ResponseData<SysFileInfoResponse> update(@RequestPart("file") MultipartFile file, @Validated(SysFileInfoRequest.edit.class) SysFileInfoRequest sysFileInfoRequest) {
         SysFileInfoResponse fileUploadInfoResult = this.sysFileInfoService.updateFile(file, sysFileInfoRequest);
-        return new SuccessResponseData(fileUploadInfoResult);
+        return new SuccessResponseData<>(fileUploadInfoResult);
     }
 
     /**
@@ -189,9 +192,9 @@ public class SysFileInfoController {
      * @date 2020/12/16 15:34
      */
     @PostResource(name = "替换文件", path = "/sysFileInfo/versionBack", requiredPermission = false)
-    public ResponseData versionBack(@Validated(SysFileInfoRequest.versionBack.class) SysFileInfoRequest sysFileInfoRequest) {
+    public ResponseData<SysFileInfoResponse> versionBack(@Validated(SysFileInfoRequest.versionBack.class) SysFileInfoRequest sysFileInfoRequest) {
         SysFileInfoResponse fileUploadInfoResult = this.sysFileInfoService.versionBack(sysFileInfoRequest);
-        return new SuccessResponseData(fileUploadInfoResult);
+        return new SuccessResponseData<>(fileUploadInfoResult);
     }
 
     /**
@@ -203,9 +206,9 @@ public class SysFileInfoController {
      * @date 2020/12/27 13:17
      */
     @GetResource(name = "根据附件IDS查询附件信息", path = "/sysFileInfo/getFileInfoListByFileIds", requiredPermission = false)
-    public ResponseData getFileInfoListByFileIds(@RequestParam(value = "fileIds") String fileIds) {
+    public ResponseData<List<SysFileInfoResponse>> getFileInfoListByFileIds(@RequestParam(value = "fileIds") String fileIds) {
         List<SysFileInfoResponse> list = this.sysFileInfoService.getFileInfoListByFileIds(fileIds);
-        return new SuccessResponseData(list);
+        return new SuccessResponseData<>(list);
     }
 
     /**
@@ -239,9 +242,9 @@ public class SysFileInfoController {
      * @date 2020/11/29 11:19
      */
     @PostResource(name = "删除文件信息（真删除文件信息）", path = "/sysFileInfo/deleteReally", requiredPermission = false)
-    public ResponseData deleteReally(@RequestBody @Validated(SysFileInfoRequest.delete.class) SysFileInfoRequest sysFileInfoRequest) {
+    public ResponseData<?> deleteReally(@RequestBody @Validated(SysFileInfoRequest.delete.class) SysFileInfoRequest sysFileInfoRequest) {
         this.sysFileInfoService.deleteReally(sysFileInfoRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -251,8 +254,8 @@ public class SysFileInfoController {
      * @date 2020/11/29 11:29
      */
     @GetResource(name = "分页查询文件信息表", path = "/sysFileInfo/fileInfoListPage", requiredPermission = false)
-    public ResponseData fileInfoListPage(SysFileInfoRequest sysFileInfoRequest) {
-        return new SuccessResponseData(this.sysFileInfoService.fileInfoListPage(sysFileInfoRequest));
+    public ResponseData<PageResult<SysFileInfoListResponse>> fileInfoListPage(SysFileInfoRequest sysFileInfoRequest) {
+        return new SuccessResponseData<>(this.sysFileInfoService.fileInfoListPage(sysFileInfoRequest));
     }
 
     /**
@@ -262,8 +265,8 @@ public class SysFileInfoController {
      * @date 2020/11/29 11:29
      */
     @GetResource(name = "查看详情文件信息表", path = "/sysFileInfo/detail", requiredPermission = false)
-    public ResponseData detail(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
-        return new SuccessResponseData(sysFileInfoService.detail(sysFileInfoRequest));
+    public ResponseData<SysFileInfo> detail(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
+        return new SuccessResponseData<>(sysFileInfoService.detail(sysFileInfoRequest));
     }
 
 }

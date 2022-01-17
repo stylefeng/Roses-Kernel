@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.message.modular.controller;
 
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.message.api.MessageApi;
 import cn.stylefeng.roses.kernel.message.api.enums.MessageReadFlagEnum;
 import cn.stylefeng.roses.kernel.message.api.pojo.request.MessageRequest;
@@ -68,10 +69,10 @@ public class SysMessageController {
      * @date 2021/1/8 13:50
      */
     @PostResource(name = "发送系统消息", path = "/sysMessage/sendMessage")
-    public ResponseData sendMessage(@RequestBody @Validated(MessageSendRequest.add.class) MessageSendRequest messageSendRequest) {
+    public ResponseData<?> sendMessage(@RequestBody @Validated(MessageSendRequest.add.class) MessageSendRequest messageSendRequest) {
         messageSendRequest.setMessageSendTime(new Date());
         messageApi.sendMessage(messageSendRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -81,10 +82,10 @@ public class SysMessageController {
      * @date 2021/1/8 13:50
      */
     @PostResource(name = "批量更新系统消息状态", path = "/sysMessage/batchUpdateReadFlag")
-    public ResponseData batchUpdateReadFlag(@RequestBody @Validated(MessageRequest.updateReadFlag.class) MessageRequest messageRequest) {
+    public ResponseData<?> batchUpdateReadFlag(@RequestBody @Validated(MessageRequest.updateReadFlag.class) MessageRequest messageRequest) {
         List<Long> messageIdList = messageRequest.getMessageIdList();
         messageApi.batchReadFlagByMessageIds(StrUtil.join(",", messageIdList), MessageReadFlagEnum.READ);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -94,9 +95,9 @@ public class SysMessageController {
      * @date 2021/1/8 13:50
      */
     @GetResource(name = "系统消息全部修改已读", path = "/sysMessage/allMessageReadFlag")
-    public ResponseData allMessageReadFlag() {
+    public ResponseData<?> allMessageReadFlag() {
         messageApi.allMessageReadFlag();
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -106,9 +107,9 @@ public class SysMessageController {
      * @date 2021/1/8 13:50
      */
     @PostResource(name = "删除系统消息", path = "/sysMessage/delete")
-    public ResponseData delete(@RequestBody @Validated(MessageRequest.delete.class) MessageRequest messageRequest) {
+    public ResponseData<?> delete(@RequestBody @Validated(MessageRequest.delete.class) MessageRequest messageRequest) {
         messageApi.deleteByMessageId(messageRequest.getMessageId());
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -118,8 +119,8 @@ public class SysMessageController {
      * @date 2021/1/8 13:50
      */
     @GetResource(name = "查看系统消息", path = "/sysMessage/detail")
-    public ResponseData detail(@Validated(MessageRequest.detail.class) MessageRequest messageRequest) {
-        return new SuccessResponseData(messageApi.messageDetail(messageRequest));
+    public ResponseData<MessageResponse> detail(@Validated(MessageRequest.detail.class) MessageRequest messageRequest) {
+        return new SuccessResponseData<>(messageApi.messageDetail(messageRequest));
     }
 
     /**
@@ -130,8 +131,8 @@ public class SysMessageController {
      */
     @GetResource(name = "分页查询系统消息列表", path = "/sysMessage/page")
     @Wrapper(MessageWrapper.class)
-    public ResponseData page(MessageRequest messageRequest) {
-        return new SuccessResponseData(messageApi.queryPageCurrentUser(messageRequest));
+    public ResponseData<PageResult<MessageResponse>> page(MessageRequest messageRequest) {
+        return new SuccessResponseData<>(messageApi.queryPageCurrentUser(messageRequest));
     }
 
     /**
@@ -141,8 +142,8 @@ public class SysMessageController {
      * @date 2021/1/8 13:50
      */
     @GetResource(name = "系统消息列表", path = "/sysMessage/list")
-    public ResponseData list(MessageRequest messageRequest) {
-        return new SuccessResponseData(messageApi.queryListCurrentUser(messageRequest));
+    public ResponseData<List<MessageResponse>> list(MessageRequest messageRequest) {
+        return new SuccessResponseData<>(messageApi.queryListCurrentUser(messageRequest));
     }
 
     /**
@@ -152,10 +153,10 @@ public class SysMessageController {
      * @date 2021/6/12 17:42
      */
     @GetResource(name = "查询所有未读系统消息列表", path = "/sysMessage/unReadMessageList", requiredPermission = false)
-    public ResponseData unReadMessageList(MessageRequest messageRequest) {
+    public ResponseData<List<MessageResponse>> unReadMessageList(MessageRequest messageRequest) {
         messageRequest.setReadFlag(MessageReadFlagEnum.UNREAD.getCode());
         List<MessageResponse> messageResponses = messageApi.queryListCurrentUser(messageRequest);
-        return new SuccessResponseData(messageResponses);
+        return new SuccessResponseData<>(messageResponses);
     }
 
 }

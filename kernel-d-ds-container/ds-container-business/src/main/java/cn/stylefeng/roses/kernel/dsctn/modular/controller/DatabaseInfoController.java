@@ -62,9 +62,9 @@ public class DatabaseInfoController {
      * @date 2020/11/1 22:16
      */
     @PostResource(name = "新增数据源", path = "/databaseInfo/add")
-    public ResponseData add(@RequestBody @Validated(BaseRequest.add.class) DatabaseInfoRequest databaseInfoRequest) {
+    public ResponseData<?> add(@RequestBody @Validated(BaseRequest.add.class) DatabaseInfoRequest databaseInfoRequest) {
         databaseInfoService.add(databaseInfoRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -74,9 +74,9 @@ public class DatabaseInfoController {
      * @date 2020/11/1 22:18
      */
     @PostResource(name = "删除数据源", path = "/databaseInfo/delete")
-    public ResponseData del(@RequestBody @Validated(DatabaseInfoRequest.delete.class) DatabaseInfoRequest databaseInfoRequest) {
+    public ResponseData<?> del(@RequestBody @Validated(DatabaseInfoRequest.delete.class) DatabaseInfoRequest databaseInfoRequest) {
         databaseInfoService.del(databaseInfoRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -86,9 +86,9 @@ public class DatabaseInfoController {
      * @date 2020/11/1 22:16
      */
     @PostResource(name = "编辑数据源", path = "/databaseInfo/edit")
-    public ResponseData edit(@RequestBody @Validated(DatabaseInfoRequest.edit.class) DatabaseInfoRequest databaseInfoRequest) {
+    public ResponseData<?> edit(@RequestBody @Validated(DatabaseInfoRequest.edit.class) DatabaseInfoRequest databaseInfoRequest) {
         databaseInfoService.edit(databaseInfoRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -98,9 +98,9 @@ public class DatabaseInfoController {
      * @date 2020/11/1 22:18
      */
     @GetResource(name = "查询数据源列表（带分页）", path = "/databaseInfo/page")
-    public ResponseData findPage(DatabaseInfoRequest databaseInfoRequest) {
+    public ResponseData<PageResult<DatabaseInfo>> findPage(DatabaseInfoRequest databaseInfoRequest) {
         PageResult<DatabaseInfo> pageResult = databaseInfoService.findPage(databaseInfoRequest);
-        return new SuccessResponseData(pageResult);
+        return new SuccessResponseData<>(pageResult);
     }
 
     /**
@@ -110,9 +110,9 @@ public class DatabaseInfoController {
      * @date 2020/11/1 22:18
      */
     @GetResource(name = "查询所有数据源列表", path = "/databaseInfo/list")
-    public ResponseData findList(DatabaseInfoRequest databaseInfoRequest) {
+    public ResponseData<List<DatabaseInfo>> findList(DatabaseInfoRequest databaseInfoRequest) {
         List<DatabaseInfo> databaseInfos = databaseInfoService.findList(databaseInfoRequest);
-        return new SuccessResponseData(databaseInfos);
+        return new SuccessResponseData<>(databaseInfos);
     }
 
     /**
@@ -122,9 +122,9 @@ public class DatabaseInfoController {
      * @date 2021/1/23 20:29
      */
     @GetResource(name = "查询数据源详情", path = "/databaseInfo/detail")
-    public ResponseData detail(@Validated(BaseRequest.detail.class) DatabaseInfoRequest databaseInfoRequest) {
+    public ResponseData<DatabaseInfo> detail(@Validated(BaseRequest.detail.class) DatabaseInfoRequest databaseInfoRequest) {
         DatabaseInfo databaseInfo = databaseInfoService.detail(databaseInfoRequest);
-        return new SuccessResponseData(databaseInfo);
+        return new SuccessResponseData<>(databaseInfo);
     }
 
 }

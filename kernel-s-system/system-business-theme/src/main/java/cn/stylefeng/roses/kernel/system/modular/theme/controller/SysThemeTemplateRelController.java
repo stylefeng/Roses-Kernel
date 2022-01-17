@@ -32,9 +32,9 @@ public class SysThemeTemplateRelController {
      * @date 2021/12/24 11:17
      */
     @PostResource(name = "增加系统主题模板属性关系", path = "/sysThemeTemplateRel/add")
-    public ResponseData add(@RequestBody @Validated(SysThemeTemplateRelRequest.add.class) SysThemeTemplateRelRequest sysThemeTemplateParam) {
+    public ResponseData<?> add(@RequestBody @Validated(SysThemeTemplateRelRequest.add.class) SysThemeTemplateRelRequest sysThemeTemplateParam) {
         sysThemeTemplateRelService.add(sysThemeTemplateParam);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -44,8 +44,8 @@ public class SysThemeTemplateRelController {
      * @date 2021/12/24 11:23
      */
     @PostResource(name = "删除系统主题模板属性关系", path = "/sysThemeTemplateRel/del")
-    public ResponseData del(@RequestBody SysThemeTemplateRelRequest sysThemeTemplateRelParam) {
+    public ResponseData<?> del(@RequestBody SysThemeTemplateRelRequest sysThemeTemplateRelParam) {
         sysThemeTemplateRelService.del(sysThemeTemplateRelParam);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 }

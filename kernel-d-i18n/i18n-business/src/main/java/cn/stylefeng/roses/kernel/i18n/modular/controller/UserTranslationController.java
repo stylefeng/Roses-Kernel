@@ -68,9 +68,9 @@ public class UserTranslationController {
      * @date 2021/1/24 19:20
      */
     @GetResource(name = "获取所有的多语言类型编码", path = "/i18n/getAllLanguages", requiredPermission = false)
-    public ResponseData getAllLanguages() {
+    public ResponseData<List<SimpleDict>> getAllLanguages() {
         List<SimpleDict> dictDetailsByDictTypeCode = dictApi.getDictDetailsByDictTypeCode(DictConstants.LANGUAGES_DICT_TYPE_CODE);
-        return new SuccessResponseData(dictDetailsByDictTypeCode);
+        return new SuccessResponseData<>(dictDetailsByDictTypeCode);
     }
 
     /**
@@ -80,10 +80,10 @@ public class UserTranslationController {
      * @date 2021/1/27 22:00
      */
     @GetResource(name = "获取当前用户的多语言字典", path = "/i18n/getUserTranslation", requiredPermission = false)
-    public ResponseData getUserTranslation() {
+    public ResponseData<Map<String, String>> getUserTranslation() {
         String tranLanguageCode = LoginContext.me().getLoginUser().getTranLanguageCode();
         Map<String, String> translationDictByLanguage = TranslationContext.me().getTranslationDictByLanguage(tranLanguageCode);
-        return new SuccessResponseData(translationDictByLanguage);
+        return new SuccessResponseData<>(translationDictByLanguage);
     }
 
     /**
@@ -93,7 +93,7 @@ public class UserTranslationController {
      * @date 2021/1/27 22:04
      */
     @PostResource(name = "修改当前用户的多语言配置", path = "/i18n/changeUserTranslation", requiredPermission = false)
-    public ResponseData changeUserTranslation(@RequestBody @Validated(TranslationRequest.changeUserLanguage.class) TranslationRequest translationRequest) {
+    public ResponseData<?> changeUserTranslation(@RequestBody @Validated(TranslationRequest.changeUserLanguage.class) TranslationRequest translationRequest) {
 
         String token = LoginContext.me().getToken();
         LoginUser loginUser = LoginContext.me().getLoginUser();
@@ -102,7 +102,7 @@ public class UserTranslationController {
         loginUser.setTranLanguageCode(translationRequest.getTranLanguageCode());
         sessionManagerApi.updateSession(token, loginUser);
 
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
 }

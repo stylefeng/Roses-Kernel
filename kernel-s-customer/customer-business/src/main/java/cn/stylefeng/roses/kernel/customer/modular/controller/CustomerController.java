@@ -35,9 +35,9 @@ public class CustomerController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "注册", path = "/customer/reg", requiredPermission = false, requiredLogin = false)
-    public ResponseData reg(@RequestBody @Validated(CustomerRequest.reg.class) CustomerRequest customerRequest) {
+    public ResponseData<?> reg(@RequestBody @Validated(CustomerRequest.reg.class) CustomerRequest customerRequest) {
         customerService.reg(customerRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -47,9 +47,9 @@ public class CustomerController {
      * @date 2021/6/7 16:03
      */
     @GetResource(name = "激活用户", path = "/customer/active", requiredPermission = false, requiredLogin = false)
-    public ResponseData active(@Validated(CustomerRequest.active.class) CustomerRequest customerRequest) {
+    public ResponseData<?> active(@Validated(CustomerRequest.active.class) CustomerRequest customerRequest) {
         customerService.active(customerRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -59,9 +59,9 @@ public class CustomerController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "登录", path = "/customer/login", requiredPermission = false, requiredLogin = false)
-    public ResponseData login(@RequestBody @Validated LoginRequest loginRequest) {
+    public ResponseData<LoginResponse> login(@RequestBody @Validated LoginRequest loginRequest) {
         LoginResponse loginResponse = customerService.login(loginRequest);
-        return new SuccessResponseData(loginResponse);
+        return new SuccessResponseData<>(loginResponse);
     }
 
     /**
@@ -71,9 +71,9 @@ public class CustomerController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "找回密码-发送邮件", path = "/customer/sendResetPwdEmail", requiredPermission = false, requiredLogin = false)
-    public ResponseData sendResetPwdEmail(@RequestBody @Validated(CustomerRequest.sendResetPwdEmail.class) CustomerRequest customerRequest) {
+    public ResponseData<?> sendResetPwdEmail(@RequestBody @Validated(CustomerRequest.sendResetPwdEmail.class) CustomerRequest customerRequest) {
         customerService.sendResetPwdEmail(customerRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -83,9 +83,9 @@ public class CustomerController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "重置密码", path = "/customer/resetPassword", requiredPermission = false, requiredLogin = false)
-    public ResponseData resetPassword(@RequestBody @Validated(CustomerRequest.resetPassword.class) CustomerRequest customerRequest) {
+    public ResponseData<?> resetPassword(@RequestBody @Validated(CustomerRequest.resetPassword.class) CustomerRequest customerRequest) {
         customerService.resetPassword(customerRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
 }

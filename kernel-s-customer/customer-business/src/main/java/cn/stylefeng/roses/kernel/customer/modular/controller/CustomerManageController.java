@@ -1,7 +1,9 @@
 package cn.stylefeng.roses.kernel.customer.modular.controller;
 
+import cn.stylefeng.roses.kernel.customer.modular.entity.Customer;
 import cn.stylefeng.roses.kernel.customer.modular.request.CustomerRequest;
 import cn.stylefeng.roses.kernel.customer.modular.service.CustomerService;
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * C端用户表控制器
@@ -33,9 +36,9 @@ public class CustomerManageController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "添加", path = "/customer/add")
-    public ResponseData add(@RequestBody @Validated(CustomerRequest.add.class) CustomerRequest customerRequest) {
+    public ResponseData<?> add(@RequestBody @Validated(CustomerRequest.add.class) CustomerRequest customerRequest) {
         customerService.add(customerRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -45,9 +48,9 @@ public class CustomerManageController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "删除", path = "/customer/delete")
-    public ResponseData delete(@RequestBody @Validated(CustomerRequest.delete.class) CustomerRequest customerRequest) {
+    public ResponseData<?> delete(@RequestBody @Validated(CustomerRequest.delete.class) CustomerRequest customerRequest) {
         customerService.del(customerRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -57,9 +60,9 @@ public class CustomerManageController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "编辑", path = "/customer/edit")
-    public ResponseData edit(@RequestBody @Validated(CustomerRequest.edit.class) CustomerRequest customerRequest) {
+    public ResponseData<?> edit(@RequestBody @Validated(CustomerRequest.edit.class) CustomerRequest customerRequest) {
         customerService.edit(customerRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -69,8 +72,8 @@ public class CustomerManageController {
      * @date 2021/06/07 11:40
      */
     @GetResource(name = "查看详情", path = "/customer/detail")
-    public ResponseData detail(@Validated(CustomerRequest.detail.class) CustomerRequest customerRequest) {
-        return new SuccessResponseData(customerService.detail(customerRequest));
+    public ResponseData<Customer> detail(@Validated(CustomerRequest.detail.class) CustomerRequest customerRequest) {
+        return new SuccessResponseData<>(customerService.detail(customerRequest));
     }
 
     /**
@@ -80,8 +83,8 @@ public class CustomerManageController {
      * @date 2021/06/07 11:40
      */
     @GetResource(name = "获取列表", path = "/customer/list")
-    public ResponseData list(CustomerRequest customerRequest) {
-        return new SuccessResponseData(customerService.findList(customerRequest));
+    public ResponseData<List<Customer>> list(CustomerRequest customerRequest) {
+        return new SuccessResponseData<>(customerService.findList(customerRequest));
     }
 
     /**
@@ -91,8 +94,8 @@ public class CustomerManageController {
      * @date 2021/06/07 11:40
      */
     @GetResource(name = "分页查询", path = "/customer/page")
-    public ResponseData page(CustomerRequest customerRequest) {
-        return new SuccessResponseData(customerService.findPage(customerRequest));
+    public ResponseData<PageResult<Customer>> page(CustomerRequest customerRequest) {
+        return new SuccessResponseData<>(customerService.findPage(customerRequest));
     }
 
 }

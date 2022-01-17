@@ -59,9 +59,9 @@ public class SysMenuResourceController {
      * @date 2021/8/8 22:38
      */
     @GetResource(name = "获取菜单的资源分配列表", path = "/sysMenuResource/getMenuResourceList")
-    public ResponseData getMenuResourceList(@Validated(value = SysMenuResourceRequest.list.class) SysMenuResourceRequest sysMenuResourceRequest) {
+    public ResponseData<List<ResourceTreeNode>> getMenuResourceList(@Validated(value = SysMenuResourceRequest.list.class) SysMenuResourceRequest sysMenuResourceRequest) {
         List<ResourceTreeNode> menuResourceTree = sysMenuResourceService.getMenuResourceTree(sysMenuResourceRequest.getBusinessId());
-        return new SuccessResponseData(menuResourceTree);
+        return new SuccessResponseData<>(menuResourceTree);
     }
 
     /**
@@ -71,9 +71,9 @@ public class SysMenuResourceController {
      * @date 2021/8/10 11:55
      */
     @PostResource(name = "设置菜单资源绑定", path = "/sysMenuResource/addMenuResourceBind")
-    public ResponseData addMenuResourceBind(@RequestBody @Validated(value = SysMenuResourceRequest.add.class) SysMenuResourceRequest sysMenuResourceRequest) {
+    public ResponseData<?> addMenuResourceBind(@RequestBody @Validated(value = SysMenuResourceRequest.add.class) SysMenuResourceRequest sysMenuResourceRequest) {
         sysMenuResourceService.addMenuResourceBind(sysMenuResourceRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
 }

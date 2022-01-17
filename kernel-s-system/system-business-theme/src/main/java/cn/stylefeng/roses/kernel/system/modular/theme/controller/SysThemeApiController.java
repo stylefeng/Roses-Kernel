@@ -31,9 +31,9 @@ public class SysThemeApiController {
      * @date 2022/1/10 18:29
      */
     @GetResource(name = "获取当前Guns管理系统的主题数据", path = "/theme/currentThemeInfo", requiredPermission = false, requiredLogin = false)
-    public ResponseData currentThemeInfo(SysThemeRequest sysThemeParam) {
+    public ResponseData<DefaultTheme> currentThemeInfo(SysThemeRequest sysThemeParam) {
         DefaultTheme defaultTheme = sysThemeService.currentThemeInfo(sysThemeParam);
-        return new SuccessResponseData(defaultTheme);
+        return new SuccessResponseData<>(defaultTheme);
     }
 
 

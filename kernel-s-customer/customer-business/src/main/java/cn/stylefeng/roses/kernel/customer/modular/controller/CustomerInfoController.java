@@ -35,9 +35,9 @@ public class CustomerInfoController {
      * @date 2021/6/18 16:29
      */
     @GetResource(name = "获取个人信息", path = "/customerInfo/getPersonInfo", requiredPermission = false)
-    public ResponseData getPersonInfo(@Validated(CustomerInfoRequest.detail.class) CustomerRequest customerRequest) {
+    public ResponseData<CustomerInfo> getPersonInfo(@Validated(CustomerInfoRequest.detail.class) CustomerRequest customerRequest) {
         CustomerInfo customerInfo = customerService.getCustomerInfoById(customerRequest.getCustomerId());
-        return new SuccessResponseData(customerInfo);
+        return new SuccessResponseData<>(customerInfo);
     }
 
     /**
@@ -47,9 +47,9 @@ public class CustomerInfoController {
      * @date 2021/6/18 16:29
      */
     @PostResource(name = "修改个人密码", path = "/customerInfo/updatePassword", requiredPermission = false)
-    public ResponseData updatePassword(@RequestBody @Validated(CustomerInfoRequest.changePassword.class) CustomerInfoRequest customerInfoRequest) {
+    public ResponseData<?> updatePassword(@RequestBody @Validated(CustomerInfoRequest.changePassword.class) CustomerInfoRequest customerInfoRequest) {
         this.customerService.updatePassword(customerInfoRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -59,9 +59,9 @@ public class CustomerInfoController {
      * @date 2021/6/18 16:29
      */
     @PostResource(name = "修改个人头像", path = "/customerInfo/updateAvatar", requiredPermission = false)
-    public ResponseData updateAvatar(@RequestBody @Validated(CustomerInfoRequest.changeAvatar.class) CustomerInfoRequest customerInfoRequest) {
+    public ResponseData<?> updateAvatar(@RequestBody @Validated(CustomerInfoRequest.changeAvatar.class) CustomerInfoRequest customerInfoRequest) {
         this.customerService.updateAvatar(customerInfoRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -71,9 +71,9 @@ public class CustomerInfoController {
      * @date 2021/7/20 10:44
      */
     @PostResource(name = "重置个人秘钥", path = "/customerInfo/resetPersonalSecret", requiredPermission = false)
-    public ResponseData resetPersonalSecret() {
+    public ResponseData<String> resetPersonalSecret() {
         String secret = customerService.updateSecret();
-        return new SuccessResponseData(secret);
+        return new SuccessResponseData<>(secret);
     }
 
 }

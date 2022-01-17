@@ -32,9 +32,11 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.layui.LayuiMenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,9 +65,9 @@ public class SysMenuController {
      * @date 2020/3/27 8:57
      */
     @PostResource(name = "添加系统菜单", path = "/sysMenu/add")
-    public ResponseData add(@RequestBody @Validated(SysMenuRequest.add.class) SysMenuRequest sysMenuRequest) {
+    public ResponseData<?> add(@RequestBody @Validated(SysMenuRequest.add.class) SysMenuRequest sysMenuRequest) {
         sysMenuService.add(sysMenuRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -75,9 +77,9 @@ public class SysMenuController {
      * @date 2020/3/27 8:58
      */
     @PostResource(name = "删除系统菜单", path = "/sysMenu/delete")
-    public ResponseData delete(@RequestBody @Validated(SysMenuRequest.delete.class) SysMenuRequest sysMenuRequest) {
+    public ResponseData<?> delete(@RequestBody @Validated(SysMenuRequest.delete.class) SysMenuRequest sysMenuRequest) {
         sysMenuService.del(sysMenuRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -87,9 +89,9 @@ public class SysMenuController {
      * @date 2020/3/27 8:59
      */
     @PostResource(name = "编辑系统菜单", path = "/sysMenu/edit")
-    public ResponseData edit(@RequestBody @Validated(SysMenuRequest.edit.class) SysMenuRequest sysMenuRequest) {
+    public ResponseData<?> edit(@RequestBody @Validated(SysMenuRequest.edit.class) SysMenuRequest sysMenuRequest) {
         sysMenuService.edit(sysMenuRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -99,8 +101,8 @@ public class SysMenuController {
      * @date 2020/3/27 9:01
      */
     @GetResource(name = "查看系统菜单", path = "/sysMenu/detail")
-    public ResponseData detail(@Validated(SysMenuRequest.detail.class) SysMenuRequest sysMenuRequest) {
-        return new SuccessResponseData(sysMenuService.detail(sysMenuRequest));
+    public ResponseData<SysMenu> detail(@Validated(SysMenuRequest.detail.class) SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData<>(sysMenuService.detail(sysMenuRequest));
     }
 
     /**
@@ -110,8 +112,8 @@ public class SysMenuController {
      * @date 2021/1/6 17:09
      */
     @GetResource(name = "获取菜单列表（layui版本）", path = "/sysMenu/layuiList")
-    public ResponseData layuiList(SysMenuRequest sysMenuRequest) {
-        return new SuccessResponseData(sysMenuService.findList(sysMenuRequest));
+    public ResponseData<List<SysMenu>> layuiList(SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData<>(sysMenuService.findList(sysMenuRequest));
     }
 
     /**
@@ -143,9 +145,9 @@ public class SysMenuController {
      * @date 2021/1/7 15:17
      */
     @GetResource(name = "获取系统所有菜单（适用于登录后获取左侧菜单）（适配antd vue版本）", path = "/sysMenu/getLeftMenusAntdv", requiredPermission = false)
-    public ResponseData getLeftMenusAntdv(SysMenuRequest sysMenuRequest) {
+    public ResponseData<List<AntdSysMenuDTO>> getLeftMenusAntdv(SysMenuRequest sysMenuRequest) {
         List<AntdSysMenuDTO> sysMenuResponses = sysMenuService.getLeftMenusAntdv(sysMenuRequest);
-        return new SuccessResponseData(sysMenuResponses);
+        return new SuccessResponseData<>(sysMenuResponses);
     }
 
     /**
@@ -155,8 +157,8 @@ public class SysMenuController {
      * @date 2020/3/20 21:23
      */
     @GetResource(name = "系统菜单列表（树）", path = "/sysMenu/list")
-    public ResponseData list(SysMenuRequest sysMenuRequest) {
-        return new SuccessResponseData(sysMenuService.findListWithTreeStructure(sysMenuRequest));
+    public ResponseData<List<SysMenu>> list(SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData<>(sysMenuService.findListWithTreeStructure(sysMenuRequest));
     }
 
     /**
@@ -166,8 +168,8 @@ public class SysMenuController {
      * @date 2020/3/27 15:55
      */
     @GetResource(name = "获取系统菜单树，用于新增，编辑时选择上级节点", path = "/sysMenu/tree")
-    public ResponseData tree(SysMenuRequest sysMenuRequest) {
-        return new SuccessResponseData(sysMenuService.tree(sysMenuRequest));
+    public ResponseData<List<AntdMenuSelectTreeNode>> tree(SysMenuRequest sysMenuRequest) {
+        return new SuccessResponseData<>(sysMenuService.tree(sysMenuRequest));
     }
 
     /**
@@ -177,9 +179,9 @@ public class SysMenuController {
      * @date 2021/1/9 17:10
      */
     @GetResource(name = "获取系统菜单和按钮的树，用于角色分配菜单按钮（antd vue版本使用）", path = "/sysMenu/menuAndButtonTreeChildren")
-    public ResponseData menuAndButtonTreeChildren(SysRoleRequest sysRoleRequest) {
+    public ResponseData<List<LayuiMenuAndButtonTreeResponse>> menuAndButtonTreeChildren(SysRoleRequest sysRoleRequest) {
         List<LayuiMenuAndButtonTreeResponse> treeResponseList = sysMenuService.getMenuAndButtonTree(sysRoleRequest, false);
-        return new SuccessResponseData(treeResponseList);
+        return new SuccessResponseData<>(treeResponseList);
     }
 
     /**
@@ -189,9 +191,9 @@ public class SysMenuController {
      * @date 2021/8/10 22:21
      */
     @GetResource(name = "新版角色分配菜单和按钮界面使用的接口（v2）", path = "/sysMenu/menuAndButtonTreeChildrenV2")
-    public ResponseData menuAndButtonTreeChildrenV2(SysRoleRequest sysRoleRequest) {
+    public ResponseData<List<MenuAndButtonTreeResponse>> menuAndButtonTreeChildrenV2(SysRoleRequest sysRoleRequest) {
         List<MenuAndButtonTreeResponse> treeResponseList = sysMenuService.getRoleMenuAndButtons(sysRoleRequest);
-        return new SuccessResponseData(treeResponseList);
+        return new SuccessResponseData<>(treeResponseList);
     }
 
 }
