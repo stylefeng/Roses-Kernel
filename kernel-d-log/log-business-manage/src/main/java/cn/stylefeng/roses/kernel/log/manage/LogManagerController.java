@@ -24,8 +24,10 @@
  */
 package cn.stylefeng.roses.kernel.log.manage;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
+import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
 import cn.stylefeng.roses.kernel.log.manage.wrapper.LogInfoWrapper;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
@@ -39,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 日志管理控制器
@@ -69,8 +72,8 @@ public class LogManagerController {
      * @date 2020/11/3 12:58
      */
     @GetResource(name = "查询日志列表", path = "/logManager/list")
-    public ResponseData list(@RequestBody LogManagerRequest logManagerRequest) {
-        return new SuccessResponseData(logManagerApi.findList(logManagerRequest));
+    public ResponseData<List<LogRecordDTO>> list(@RequestBody LogManagerRequest logManagerRequest) {
+        return new SuccessResponseData<>(logManagerApi.findList(logManagerRequest));
     }
 
     /**
@@ -81,8 +84,8 @@ public class LogManagerController {
      */
     @GetResource(name = "查询日志列表", path = "/logManager/page")
     @Wrapper(LogInfoWrapper.class)
-    public ResponseData page(LogManagerRequest logManagerRequest) {
-        return new SuccessResponseData(logManagerApi.findPage(logManagerRequest));
+    public ResponseData<PageResult<LogRecordDTO>> page(LogManagerRequest logManagerRequest) {
+        return new SuccessResponseData<>(logManagerApi.findPage(logManagerRequest));
     }
 
     /**
@@ -92,9 +95,9 @@ public class LogManagerController {
      * @date 2020/11/3 13:47
      */
     @PostResource(name = "删除日志", path = "/logManager/delete")
-    public ResponseData delete(@RequestBody @Validated(LogManagerRequest.delete.class) LogManagerRequest logManagerRequest) {
+    public ResponseData<?> delete(@RequestBody @Validated(LogManagerRequest.delete.class) LogManagerRequest logManagerRequest) {
         sysLogService.delAll(logManagerRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -105,8 +108,8 @@ public class LogManagerController {
      */
     @GetResource(name = "查看日志详情", path = "/logManager/detail")
     @Wrapper(LogInfoWrapper.class)
-    public ResponseData detail(@Validated(LogManagerRequest.detail.class) LogManagerRequest logManagerRequest) {
-        return new SuccessResponseData(logManagerApi.detail(logManagerRequest));
+    public ResponseData<LogRecordDTO> detail(@Validated(LogManagerRequest.detail.class) LogManagerRequest logManagerRequest) {
+        return new SuccessResponseData<>(logManagerApi.detail(logManagerRequest));
     }
 
 }
