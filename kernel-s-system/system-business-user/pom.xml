@@ -113,6 +113,13 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--登录sdk-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>auth-sdk</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--web模块-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

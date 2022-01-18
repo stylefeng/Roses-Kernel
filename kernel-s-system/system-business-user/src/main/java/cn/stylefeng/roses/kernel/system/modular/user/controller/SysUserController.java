@@ -256,4 +256,27 @@ public class SysUserController {
         return new SuccessResponseData<>(sysUserService.selector(sysUserRequest));
     }
 
+    /**
+     * 获取所有用户ID和名称列表
+     *
+     * @return {@link ResponseData< List< SysUserRequest>>}
+     * @author majianguo
+     * @date 2022/1/17 14:24
+     **/
+    @GetResource(name = "获取所有用户ID和名称列表", path = "/sysUser/getAllUserIdList")
+    public ResponseData<List<SysUserRequest>> getAllUserIdList() {
+        return new SuccessResponseData<>(sysUserService.getAllUserIdList());
+    }
+
+    /**
+     * 根据用户主键获取用户对应的token
+     *
+     * @return {@link ResponseData< List< SysUserRequest>>}
+     * @author majianguo
+     * @date 2022/1/17 14:24
+     **/
+    @GetResource(name = "根据用户主键获取用户对应的token", path = "/sysUser/getTokenByUserId")
+    public ResponseData<String> getTokenByUserId(Long userId) {
+        return new SuccessResponseData<>(sysUserService.getTokenByUserId(userId));
+    }
 }

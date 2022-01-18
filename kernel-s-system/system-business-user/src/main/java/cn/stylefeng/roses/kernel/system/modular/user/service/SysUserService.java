@@ -246,4 +246,22 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      */
     List<Long> getAllUserIds();
 
+    /**
+     * 获取所有用户ID和名称列表
+     *
+     * @return {@link List< SysUserRequest>}
+     * @author majianguo
+     * @date 2022/1/17 15:05
+     **/
+    List<SysUserRequest> getAllUserIdList();
+
+    /**
+     * 根据用户主键获取用户对应的token
+     *
+     * @param userId
+     * @return {@link String}
+     * @author majianguo
+     * @date 2022/1/17 15:05
+     **/
+    String getTokenByUserId(Long userId);
 }

@@ -75,6 +75,6 @@ public interface ScannerConstants {
     /**
      * DevOps平台资源汇报路径
      */
-    String DEVOPS_REQUEST_PATH = "/resource/addExternalResource";
+    String DEVOPS_REQUEST_PATH = "/scannerResource/addExternalResource";
 
 }
