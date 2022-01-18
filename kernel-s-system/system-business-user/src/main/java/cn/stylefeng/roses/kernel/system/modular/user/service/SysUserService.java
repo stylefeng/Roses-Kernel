@@ -258,7 +258,6 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
     /**
      * 根据用户主键获取用户对应的token
      *
-     * @param userId
      * @return {@link String}
      * @author majianguo
      * @date 2022/1/17 15:05

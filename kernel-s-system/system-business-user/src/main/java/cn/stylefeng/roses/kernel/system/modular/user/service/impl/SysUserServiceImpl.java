@@ -598,7 +598,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return new ArrayList<>();
         }
         LambdaQueryWrapper<SysUser> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.select(SysUser::getUserId, SysUser::getRealName);
+        userLambdaQueryWrapper.select(SysUser::getUserId, SysUser::getAccount);
         userLambdaQueryWrapper.eq(SysUser::getStatusFlag, StatusEnum.ENABLE.getCode());
         userLambdaQueryWrapper.ne(SysUser::getDelFlag, YesOrNotEnum.Y.getCode());
         List<SysUser> list = this.list(userLambdaQueryWrapper);
