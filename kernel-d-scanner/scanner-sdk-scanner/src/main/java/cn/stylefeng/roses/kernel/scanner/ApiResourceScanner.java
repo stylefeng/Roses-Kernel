@@ -39,6 +39,7 @@ import cn.stylefeng.roses.kernel.scanner.api.exception.ScannerException;
 import cn.stylefeng.roses.kernel.scanner.api.factory.ClassMetadataFactory;
 import cn.stylefeng.roses.kernel.scanner.api.holder.IpAddrHolder;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ParameterMetadata;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.scanner.ScannerProperties;
 import cn.stylefeng.roses.kernel.scanner.api.util.MethodReflectUtil;
@@ -302,12 +303,14 @@ public class ApiResourceScanner implements BeanPostProcessor {
         MetadataContext.cleanContext(processReturnTypeUuid);
 
         // 填充方法的请求参数字段的详细信息
-        Type[] methodGenericTypes = MethodReflectUtil.getMethodGenericTypes(method);
-        if (methodGenericTypes.length > 0) {
+        List<ParameterMetadata> methodParameterInfos = MethodReflectUtil.getMethodParameterInfos(method);
+        if (methodParameterInfos.size() > 0) {
             LinkedHashSet<FieldMetadata> fieldMetadataLinkedHashSet = new LinkedHashSet<>();
-            for (Type methodGenericType : methodGenericTypes) {
+            for (ParameterMetadata parameterMetadata : methodParameterInfos) {
                 String parameterContextUuid = RandomUtil.randomString(32);
-                fieldMetadataLinkedHashSet.add(ClassMetadataFactory.beginCreateFieldMetadata(methodGenericType, parameterContextUuid));
+                // 将当前参数的类型加到context中，后边会用到
+                MetadataContext.addParamTypeMetadata(parameterContextUuid, parameterMetadata.getParamTypeEnum());
+                fieldMetadataLinkedHashSet.add(ClassMetadataFactory.beginCreateFieldMetadata(parameterMetadata.getParameterizedType(), parameterContextUuid));
                 MetadataContext.cleanContext(parameterContextUuid);
             }
             resourceDefinition.setParamFieldDescriptions(fieldMetadataLinkedHashSet);

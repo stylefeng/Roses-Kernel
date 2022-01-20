@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.scanner.api.context;
 
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldTypeEnum;
+import cn.stylefeng.roses.kernel.scanner.api.enums.ParamTypeEnum;
 import cn.stylefeng.roses.kernel.scanner.api.util.ClassTypeUtil;
 
 import java.lang.reflect.ParameterizedType;
@@ -21,9 +22,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MetadataContext {
 
     /**
-     * 第一个key是唯一id，用来标识针对某一次的类元数据解析
+     * 第一个key是唯一id，第二个key是当前context下解析过的实体类，用来标识针对某一次的类元数据解析
      */
     public static ConcurrentHashMap<String, Set<String>> META_DATA_CLASS_COUNT_CONTEXT = new ConcurrentHashMap<>();
+
+    /**
+     * 第一个key是唯一id，第二个key是当前context下处理的参数类型
+     */
+    public static ConcurrentHashMap<String, ParamTypeEnum> META_DATA_PARAM_TYPE_CONTEXT = new ConcurrentHashMap<>();
 
     /**
      * 添加对某次解析的类记录
@@ -89,6 +95,26 @@ public class MetadataContext {
     }
 
     /**
+     * 添加本次解析的参数类型
+     *
+     * @author fengshuonan
+     * @date 2022/1/20 13:50
+     */
+    public static void addParamTypeMetadata(String uuid, ParamTypeEnum paramTypeEnum) {
+        META_DATA_PARAM_TYPE_CONTEXT.put(uuid, paramTypeEnum);
+    }
+
+    /**
+     * 获取本次解析的参数类型
+     *
+     * @author fengshuonan
+     * @date 2022/1/20 13:50
+     */
+    public static ParamTypeEnum getParamTypeMetadata(String uuid) {
+        return META_DATA_PARAM_TYPE_CONTEXT.get(uuid);
+    }
+
+    /**
      * 清空当前解析的记录
      *
      * @author fengshuonan
@@ -96,6 +122,7 @@ public class MetadataContext {
      */
     public static void cleanContext() {
         META_DATA_CLASS_COUNT_CONTEXT.clear();
+        META_DATA_PARAM_TYPE_CONTEXT.clear();
     }
 
     /**
@@ -109,6 +136,7 @@ public class MetadataContext {
             return;
         }
         META_DATA_CLASS_COUNT_CONTEXT.remove(uuid);
+        META_DATA_PARAM_TYPE_CONTEXT.remove(uuid);
     }
 
 }

@@ -25,14 +25,19 @@
 package cn.stylefeng.roses.kernel.scanner.api.util;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.stylefeng.roses.kernel.scanner.api.enums.ParamTypeEnum;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ParameterMetadata;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -151,6 +156,68 @@ public class MethodReflectUtil {
             return null;
         }
         return method.getGenericReturnType();
+    }
+
+    /**
+     * 获取方法的所有参数元数据信息
+     *
+     * @author fengshuonan
+     * @date 2022/1/20 11:51
+     */
+    public static List<ParameterMetadata> getMethodParameterInfos(Method method) {
+        List<ParameterMetadata> result = new LinkedList<>();
+
+        if (method == null) {
+            return result;
+        }
+
+        Parameter[] parameters = method.getParameters();
+        if (parameters.length == 0) {
+            return result;
+        }
+
+        for (Parameter parameter : parameters) {
+            ParameterMetadata parameterMetadata = new ParameterMetadata();
+
+            // 设置type类型
+            Type parameterizedType = parameterMetadata.getParameterizedType();
+            parameterMetadata.setParameterizedType(parameterizedType);
+
+            // 设置注解
+            Annotation[] annotations = parameter.getAnnotations();
+            parameterMetadata.setAnnotations(annotations);
+
+            // 设置参数是param参数还是request body参数
+            parameterMetadata.setParamTypeEnum(getParamTypeEnum(annotations));
+
+            result.add(parameterMetadata);
+        }
+
+        return result;
+    }
+
+    /**
+     * 根据参数上的注解判断出是param参数还是request body参数
+     *
+     * @author fengshuonan
+     * @date 2022/1/20 13:43
+     */
+    public static ParamTypeEnum getParamTypeEnum(Annotation[] annotations) {
+
+        // 注解为空，直接判断为param参数
+        if (annotations == null || annotations.length == 0) {
+            return ParamTypeEnum.QUERY_PARAM;
+        }
+
+        // 如果注解中包含@RequestBody注解，则是json请求
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType().equals(RequestBody.class)) {
+                return ParamTypeEnum.REQUEST_BODY;
+            }
+        }
+
+        // 其他情况，判定为时param参数
+        return ParamTypeEnum.QUERY_PARAM;
     }
 
 }

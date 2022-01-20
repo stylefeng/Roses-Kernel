@@ -49,7 +49,7 @@ public class ClassDetailMetadataFactory {
                 // 如果是简单数组类型，则描述一下这个基本类型的信息
                 Class<?> baseArrayFieldClazz = (Class<?>) fieldType;
                 Class<?> baseArrayComponentType = baseArrayFieldClazz.getComponentType();
-                FieldMetadata baseMetadata = ClassDescriptionUtil.createClassMetadata(baseArrayComponentType, FieldTypeEnum.BASIC);
+                FieldMetadata baseMetadata = ClassDescriptionUtil.createClassMetadata(baseArrayComponentType, FieldTypeEnum.BASIC, uuid);
                 fieldMetadata = new LinkedHashSet<>();
                 fieldMetadata.add(baseMetadata);
                 break;
@@ -61,7 +61,7 @@ public class ClassDetailMetadataFactory {
                 break;
             case BASE_COLLECTION:
                 // 如果是基础集合，因为不确定集合的内容，所以使用Object来描述一下集合的具体内容
-                FieldMetadata collectionFieldMetadata = ClassDescriptionUtil.createClassMetadata(Object.class, FieldTypeEnum.OBJECT);
+                FieldMetadata collectionFieldMetadata = ClassDescriptionUtil.createClassMetadata(Object.class, FieldTypeEnum.OBJECT, uuid);
                 fieldMetadata = new LinkedHashSet<>();
                 fieldMetadata.add(collectionFieldMetadata);
                 break;

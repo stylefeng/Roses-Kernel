@@ -2,8 +2,10 @@ package cn.stylefeng.roses.kernel.scanner.api.util;
 
 import cn.hutool.core.util.IdUtil;
 import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
+import cn.stylefeng.roses.kernel.scanner.api.context.MetadataContext;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldMetadataTypeEnum;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldTypeEnum;
+import cn.stylefeng.roses.kernel.scanner.api.enums.ParamTypeEnum;
 import cn.stylefeng.roses.kernel.scanner.api.factory.ClassDetailMetadataFactory;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
 
@@ -57,6 +59,11 @@ public class FieldDescriptionUtil {
         // 设置字段类型，基本、数组、还是object
         FieldTypeEnum classFieldType = ClassTypeUtil.getClassFieldType(genericType);
         fieldMetadataItem.setFieldType(classFieldType.getCode());
+        // 设置当前context构造的参数类型
+        ParamTypeEnum paramTypeMetadata = MetadataContext.getParamTypeMetadata(uuid);
+        if (paramTypeMetadata != null) {
+            fieldMetadataItem.setRequestParamType(paramTypeMetadata.getCode());
+        }
         return fieldMetadataItem;
     }
 

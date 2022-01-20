@@ -41,7 +41,7 @@ public class ClassMetadataFactory {
             Class<?> clazz = (Class<?>) type;
 
             // 创建类型的基本信息
-            fieldMetadata = ClassDescriptionUtil.createClassMetadata(clazz, classFieldType);
+            fieldMetadata = ClassDescriptionUtil.createClassMetadata(clazz, classFieldType, uuid);
 
             // 补充类型的子信息
             Set<FieldMetadata> fieldDetailMetadataSet = ClassDetailMetadataFactory.createFieldDetailMetadataSet(clazz, uuid);
@@ -53,7 +53,7 @@ public class ClassMetadataFactory {
             ParameterizedType parameterizedType = (ParameterizedType) type;
 
             // 创建类型的基本信息
-            fieldMetadata = ClassDescriptionUtil.createParameterizedMetadata(parameterizedType, classFieldType);
+            fieldMetadata = ClassDescriptionUtil.createParameterizedMetadata(parameterizedType, classFieldType, uuid);
 
             // 补充类型的子信息
             Set<FieldMetadata> fieldDetailMetadataSet = ClassDetailMetadataFactory.createFieldDetailMetadataSet(type, uuid);

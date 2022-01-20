@@ -99,10 +99,16 @@ public class FieldMetadata {
     private Integer genericFieldMetadataType;
 
     /**
-     * 字段类型：1-基本类型，2-数组，3-实体对象，4-其他
+     * 字段类型：详情在 FieldTypeEnum
      */
-    @ChineseDescription("字段类型：1-基本类型，2-数组，3-实体对象，4-其他")
+    @ChineseDescription("字段类型：详情在 FieldTypeEnum")
     private Integer fieldType;
+
+    /**
+     * 请求参数传值类型，详情在 ParamTypeEnum
+     */
+    @ChineseDescription("请求参数传值类型，详情在 ParamTypeEnum")
+    private Integer requestParamType;
 
     /**
      * 泛型或object类型的字段的描述
