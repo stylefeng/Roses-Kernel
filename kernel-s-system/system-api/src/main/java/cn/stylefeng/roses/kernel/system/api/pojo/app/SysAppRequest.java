@@ -101,6 +101,12 @@ public class SysAppRequest extends BaseRequest {
     private Integer statusFlag;
 
     /**
+     * 排序-升序
+     */
+    @ChineseDescription("排序-升序")
+    private Integer appSort;
+
+    /**
      * 设置为默认状态
      */
     public @interface updateActiveFlag {

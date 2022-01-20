@@ -76,6 +76,11 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         sysApp.setAppCode(sysAppRequest.getAppCode());
         sysApp.setAppIcon(sysAppRequest.getAppIcon());
 
+        // 默认排序值
+        if (sysAppRequest.getAppSort() == null) {
+            sysApp.setAppSort(999);
+        }
+
         // 默认不激活
         sysApp.setActiveFlag(YesOrNotEnum.N.getCode());
 
@@ -148,6 +153,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @Override
     public PageResult<SysApp> findPage(SysAppRequest sysAppRequest) {
         LambdaQueryWrapper<SysApp> wrapper = createWrapper(sysAppRequest);
+        wrapper.orderByAsc(SysApp::getAppSort);
         Page<SysApp> page = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(page);
     }

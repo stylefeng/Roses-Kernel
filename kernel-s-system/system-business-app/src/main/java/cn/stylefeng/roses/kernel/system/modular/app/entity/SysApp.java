@@ -93,4 +93,10 @@ public class SysApp extends BaseEntity {
     @ChineseDescription("是否删除：Y-已删除，N-未删除")
     private String delFlag;
 
+    /**
+     * 排序-升序
+     */
+    @TableField("app_sort")
+    @ChineseDescription("排序-升序")
+    private Integer appSort;
 }

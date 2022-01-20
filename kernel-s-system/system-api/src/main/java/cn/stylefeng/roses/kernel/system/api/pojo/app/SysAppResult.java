@@ -81,4 +81,9 @@ public class SysAppResult extends BaseEntity {
     @ChineseDescription("是否删除：Y-已删除，N-未删除")
     private String delFlag;
 
+    /**
+     * 排序-升序
+     */
+    @ChineseDescription("排序-升序")
+    private Integer appSort;
 }
