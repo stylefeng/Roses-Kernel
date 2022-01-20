@@ -431,7 +431,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         try {
             HttpResponse execute = httpRequest.execute();
             String body = execute.body();
-            ResponseData responseData = JSON.parseObject(body, ResponseData.class);
+            ResponseData<?> responseData = JSON.parseObject(body, ResponseData.class);
             // 返回结果为空
             if (responseData == null) {
                 throw new ScannerException(DevOpsExceptionEnum.HTTP_RESPONSE_EMPTY);
