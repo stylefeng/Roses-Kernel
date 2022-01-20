@@ -180,7 +180,7 @@ public class MethodReflectUtil {
             ParameterMetadata parameterMetadata = new ParameterMetadata();
 
             // 设置type类型
-            Type parameterizedType = parameterMetadata.getParameterizedType();
+            Type parameterizedType = parameter.getParameterizedType();
             parameterMetadata.setParameterizedType(parameterizedType);
 
             // 设置注解
