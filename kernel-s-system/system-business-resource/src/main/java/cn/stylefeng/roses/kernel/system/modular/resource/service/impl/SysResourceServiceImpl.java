@@ -287,7 +287,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         this.remove(wrapper);
     }
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void reportResources(@RequestBody ReportResourceParam reportResourceReq) {
@@ -414,9 +413,10 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
         // jwt token生成
         String projectInteractionSecretKey = devOpsReportProperties.getProjectInteractionSecretKey();
+        Long tokenValidityPeriodSeconds = devOpsReportProperties.getTokenValidityPeriodSeconds();
         JwtConfig jwtConfig = new JwtConfig();
         jwtConfig.setJwtSecret(projectInteractionSecretKey);
-        jwtConfig.setExpiredSeconds(DEVOPS_REPORT_TIMEOUT_SECONDS);
+        jwtConfig.setExpiredSeconds(ObjectUtil.isNotEmpty(tokenValidityPeriodSeconds) ? tokenValidityPeriodSeconds : DEVOPS_REPORT_TIMEOUT_SECONDS);
         JwtTokenOperator jwtTokenOperator = new JwtTokenOperator(jwtConfig);
         String jwtToken = jwtTokenOperator.generateToken(new HashMap<>());
 

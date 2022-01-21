@@ -28,6 +28,11 @@ public class DevOpsReportProperties {
     private String projectInteractionSecretKey;
 
     /**
+     * Token的有效期
+     */
+    private Long tokenValidityPeriodSeconds;
+
+    /**
      * FieldMetadata类的全路径
      * <p>
      * 默认是cn.stylefeng.roses开头的
