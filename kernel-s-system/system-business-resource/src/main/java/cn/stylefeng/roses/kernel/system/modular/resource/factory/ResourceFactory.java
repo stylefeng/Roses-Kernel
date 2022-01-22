@@ -149,8 +149,10 @@ public class ResourceFactory {
 
         // 接口的请求参数信息
         Set<FieldMetadata> paramFieldDescriptions = resourceDefinition.getParamFieldDescriptions();
-        for (FieldMetadata fieldMetadata : paramFieldDescriptions) {
-            fillDetailMessage(validateGroups, fieldMetadata);
+        if(paramFieldDescriptions != null && paramFieldDescriptions.size() > 0){
+            for (FieldMetadata fieldMetadata : paramFieldDescriptions) {
+                fillDetailMessage(validateGroups, fieldMetadata);
+            }
         }
 
         // 接口的响应参数信息
