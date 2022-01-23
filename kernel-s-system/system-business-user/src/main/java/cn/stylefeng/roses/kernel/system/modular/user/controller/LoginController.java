@@ -143,4 +143,15 @@ public class LoginController {
         return new SuccessResponseData<>(haveSessionFlag);
     }
 
+    /**
+     * 取消帐号冻结
+     *
+     * @author xixiaowei
+     * @date 2022/1/22 16:40
+     */
+    @PostResource(name = "取消帐号冻结", path = "/cancelFreeze")
+    public ResponseData<?> cancelFreeze(@RequestBody LoginRequest loginRequest) {
+        authServiceApi.cancelFreeze(loginRequest);
+        return new SuccessResponseData<>();
+    }
 }

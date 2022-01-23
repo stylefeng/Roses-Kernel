@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   cn.stylefeng.roses.kernel.auth.starter.GunsAuthAutoConfiguration,\
-  cn.stylefeng.roses.kernel.auth.starter.GunsSsoAutoConfiguration
+  cn.stylefeng.roses.kernel.auth.starter.GunsSsoAutoConfiguration,\
+  cn.stylefeng.roses.kernel.auth.starter.GunsLoginCacheAutoConfiguration
