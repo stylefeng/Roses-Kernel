@@ -1,38 +1,29 @@
 package cn.stylefeng.roses.kernel.db.starter;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
-import com.alibaba.druid.spring.boot.autoconfigure.properties.DruidStatProperties;
+import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import com.alibaba.druid.util.Utils;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import javax.servlet.*;
 import java.io.IOException;
 
 @Configuration
-@ConditionalOnWebApplication
-@AutoConfigureAfter(DruidDataSourceAutoConfigure.class)
-@ConditionalOnProperty(name = "spring.datasource.druid.stat-view-servlet.enabled", havingValue = "true", matchIfMissing = true)
+@AutoConfigureBefore(DataSourceAutoConfiguration.class)
 public class RemoveDruidAdConfig {
 
-
     /**
-     * 方法名: removeDruidAdFilterRegistrationBean
-     * 方法描述:  除去页面底部的广告
-     * @param properties
-     * @return org.springframework.boot.web.servlet.FilterRegistrationBean
-     * @throws
+     * 除去页面底部的广告
+     *
+     * @author xixiaowei
+     * @date 2022/1/24 15:23
      */
     @Bean
-    public FilterRegistrationBean removeDruidAdFilterRegistrationBean(DruidStatProperties properties) {
-        // 获取web监控页面的参数
-        DruidStatProperties.StatViewServlet config = properties.getStatViewServlet();
+    public FilterRegistrationBean removeDruidAdFilterRegistrationBean() {
         // 提取common.js的配置路径
-        String pattern = config.getUrlPattern() != null ? config.getUrlPattern() : "/druid/*";
+        String pattern = "/druid/*";
         String commonJsPattern = pattern.replaceAll("\\*", "js/common.js");
 
         final String filePath = "support/http/resources/js/common.js";

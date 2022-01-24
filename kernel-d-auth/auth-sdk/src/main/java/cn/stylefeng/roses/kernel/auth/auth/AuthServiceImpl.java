@@ -24,7 +24,6 @@
  */
 package cn.stylefeng.roses.kernel.auth.auth;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.CharsetUtil;
@@ -42,6 +41,7 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
+import cn.stylefeng.roses.kernel.auth.api.expander.LoginConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordTransferEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.SsoProperties;
@@ -49,9 +49,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginWithTokenRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import cn.stylefeng.roses.kernel.auth.session.cache.loginuser.RedisLoginUserCache;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
-import cn.stylefeng.roses.kernel.cache.memory.operator.DefaultMemoryCacheOperator;
 import cn.stylefeng.roses.kernel.demo.expander.DemoConfigExpander;
 import cn.stylefeng.roses.kernel.jwt.JwtTokenOperator;
 import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
@@ -77,7 +75,6 @@ import cn.stylefeng.roses.kernel.validator.api.exception.enums.ValidatorExceptio
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -132,9 +129,6 @@ public class AuthServiceImpl implements AuthServiceApi {
 
     @Resource
     private CacheOperatorApi<String> loginCacheOperatorApi;
-
-    @Value("${login.enable}")
-    private Boolean enable;
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
@@ -273,7 +267,7 @@ public class AuthServiceImpl implements AuthServiceApi {
     private LoginResponse loginAction(LoginRequest loginRequest, Boolean validatePassword, String caToken) {
         SysUser userByAccount = sysUserService.getUserByAccount(loginRequest.getAccount());
         // 判断登录错误检测是否开启
-        if (enable) {
+        if (LoginConfigExpander.getAccountErrorDetectionFlag()) {
             // 判断错误次数，超过最大放入缓存中
             if (StrUtil.isBlank(loginCacheOperatorApi.get(userByAccount.getUserId().toString()))) {
                 if (userByAccount.getLoginCount() > LoginCacheConstants.MAX_LOGIN_COUNT) {
