@@ -32,6 +32,11 @@ public class MetadataContext {
     public static ConcurrentHashMap<String, ParamTypeEnum> META_DATA_PARAM_TYPE_CONTEXT = new ConcurrentHashMap<>();
 
     /**
+     * 第一个key是唯一id，第二个key是当前context下处理的参数名称
+     */
+    public static ConcurrentHashMap<String, String> META_DATA_PARAM_NAME_CONTEXT = new ConcurrentHashMap<>();
+
+    /**
      * 添加对某次解析的类记录
      *
      * @author fengshuonan
@@ -115,6 +120,27 @@ public class MetadataContext {
     }
 
     /**
+     * 设置本次解析的参数名称
+     *
+     * @author fengshuonan
+     * @date 2022/1/24 15:09
+     */
+    public static void addParameterName(String uuid, String paramName) {
+        META_DATA_PARAM_NAME_CONTEXT.put(uuid, paramName);
+    }
+
+    /**
+     * 获取本次解析的参数名称
+     *
+     * @author fengshuonan
+     * @date 2022/1/24 15:09
+     */
+    public static String getParamName(String uuid) {
+        return META_DATA_PARAM_NAME_CONTEXT.get(uuid);
+    }
+
+
+    /**
      * 清空当前解析的记录
      *
      * @author fengshuonan
@@ -123,6 +149,7 @@ public class MetadataContext {
     public static void cleanContext() {
         META_DATA_CLASS_COUNT_CONTEXT.clear();
         META_DATA_PARAM_TYPE_CONTEXT.clear();
+        META_DATA_PARAM_NAME_CONTEXT.clear();
     }
 
     /**
@@ -137,6 +164,7 @@ public class MetadataContext {
         }
         META_DATA_CLASS_COUNT_CONTEXT.remove(uuid);
         META_DATA_PARAM_TYPE_CONTEXT.remove(uuid);
+        META_DATA_PARAM_NAME_CONTEXT.remove(uuid);
     }
 
 }

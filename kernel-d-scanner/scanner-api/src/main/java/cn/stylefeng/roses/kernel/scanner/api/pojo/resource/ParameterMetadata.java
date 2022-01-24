@@ -54,4 +54,9 @@ public class ParameterMetadata {
      */
     private Type parameterizedType;
 
+    /**
+     * 参数名，用来记录get请求的参数，例如String userAccount这种参数名userAccount
+     */
+    private String parameterName;
+
 }

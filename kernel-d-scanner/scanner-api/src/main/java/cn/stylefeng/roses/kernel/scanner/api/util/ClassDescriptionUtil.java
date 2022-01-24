@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.scanner.api.util;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.scanner.api.context.MetadataContext;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldMetadataTypeEnum;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldTypeEnum;
@@ -33,8 +34,11 @@ public class ClassDescriptionUtil {
         fieldMetadataItem.setFieldClassType(clazz.getSimpleName());
         // 设置类的全路径
         fieldMetadataItem.setFieldClassPath(clazz.getName());
-        // 设置对应字段名称，无字段名称则填写类的简称
-        fieldMetadataItem.setFieldName(null);
+        // 根据uuid获取参数的名称
+        String paramName = MetadataContext.getParamName(uuid);
+        if (StrUtil.isNotBlank(paramName)) {
+            fieldMetadataItem.setFieldName(paramName);
+        }
         // 设置是否带泛型
         fieldMetadataItem.setGenericFieldMetadataType(FieldMetadataTypeEnum.FIELD.getCode());
         // 设置字段类型，基本、数组、还是object

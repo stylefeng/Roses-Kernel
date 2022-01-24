@@ -310,6 +310,7 @@ public class ApiResourceScanner implements BeanPostProcessor {
                 String parameterContextUuid = RandomUtil.randomString(32);
                 // 将当前参数的类型加到context中，后边会用到
                 MetadataContext.addParamTypeMetadata(parameterContextUuid, parameterMetadata.getParamTypeEnum());
+                MetadataContext.addParameterName(parameterContextUuid, parameterMetadata.getParameterName());
                 fieldMetadataLinkedHashSet.add(ClassMetadataFactory.beginCreateFieldMetadata(parameterMetadata.getParameterizedType(), parameterContextUuid));
                 MetadataContext.cleanContext(parameterContextUuid);
             }

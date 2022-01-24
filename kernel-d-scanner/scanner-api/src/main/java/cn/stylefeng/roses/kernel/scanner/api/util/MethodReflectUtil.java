@@ -190,6 +190,9 @@ public class MethodReflectUtil {
             // 设置参数是param参数还是request body参数
             parameterMetadata.setParamTypeEnum(getParamTypeEnum(annotations));
 
+            // 设置参数名
+            parameterMetadata.setParameterName(parameter.getName());
+
             result.add(parameterMetadata);
         }
 
