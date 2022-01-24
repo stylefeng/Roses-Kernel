@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.scanner.api.factory;
 
+import cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants;
 import cn.stylefeng.roses.kernel.scanner.api.context.MetadataContext;
 import cn.stylefeng.roses.kernel.scanner.api.enums.FieldTypeEnum;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
@@ -82,6 +83,13 @@ public class ClassDetailMetadataFactory {
 
                 for (Field field : fields) {
                     FieldMetadata fieldInfo;
+
+                    // 判断字段是否是基础字段例如serialVersionUID，或者delFlag等字段
+                    if (ScannerConstants.DONT_PARSE_FIELD.contains(field.getName())) {
+                        continue;
+                    }
+
+                    // 判断该实体是否被解析过，防止无限递归解析实体
                     if (MetadataContext.ensureFieldClassHaveParse(uuid, field.getGenericType())) {
                         fieldInfo = FieldDescriptionUtil.createBasicMetadata(field, uuid);
                     } else {

@@ -24,6 +24,10 @@
  */
 package cn.stylefeng.roses.kernel.scanner.api.constants;
 
+import cn.hutool.core.collection.ListUtil;
+
+import java.util.List;
+
 /**
  * 资源扫描模块的常量
  *
@@ -76,5 +80,10 @@ public interface ScannerConstants {
      * DevOps平台资源汇报路径
      */
     String DEVOPS_REQUEST_PATH = "/scannerResource/addExternalResource";
+
+    /**
+     * 不需要解析的字段
+     */
+    List<String> DONT_PARSE_FIELD = ListUtil.list(false, "serialVersionUID", "delFlag", "createTime", "createUser", "updateTime", "updateUser");
 
 }
