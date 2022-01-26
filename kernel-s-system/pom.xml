@@ -28,6 +28,7 @@
         <module>system-integration-rest</module>
         <module>system-spring-boot-starter</module>
         <module>system-business-theme</module>
+        <module>system-business-home</module>
     </modules>
 
     <dependencies>
