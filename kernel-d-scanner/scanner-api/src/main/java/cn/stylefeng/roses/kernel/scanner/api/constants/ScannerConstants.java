@@ -86,4 +86,8 @@ public interface ScannerConstants {
      */
     List<String> DONT_PARSE_FIELD = ListUtil.list(false, "serialVersionUID", "delFlag", "createTime", "createUser", "updateTime", "updateUser");
 
+    /**
+     * 用在为validateGroups字段的标识，@Validate注解，不带class类时候的标识
+     */
+    String DEFAULT_VALIDATED = "default-all";
 }

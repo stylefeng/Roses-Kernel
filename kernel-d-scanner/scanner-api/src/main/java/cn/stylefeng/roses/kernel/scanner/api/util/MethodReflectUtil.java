@@ -41,6 +41,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants.DEFAULT_VALIDATED;
+
 /**
  * 反射工具类，获取方法的一些元数据
  *
@@ -112,13 +114,15 @@ public class MethodReflectUtil {
                     Object invoke = validateGroupMethod.invoke(annotation);
                     if (invoke != null) {
                         Class<?>[] result = (Class<?>[]) invoke;
+                        HashSet<String> groupClassNames = new HashSet<>();
                         if (result.length > 0) {
-                            HashSet<String> groupClassNames = new HashSet<>();
                             for (Class<?> groupClass : result) {
                                 groupClassNames.add(groupClass.getSimpleName());
                             }
-                            return groupClassNames;
+                        } else {
+                            groupClassNames.add(DEFAULT_VALIDATED);
                         }
+                        return groupClassNames;
                     }
                 }
             }

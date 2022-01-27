@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -62,7 +63,7 @@ public class SysTimersController {
      * @date 2020/6/30 18:26
      */
     @PostResource(name = "添加定时任务", path = "/sysTimers/add")
-    public ResponseData<?> add(@RequestBody @Validated(SysTimersParam.add.class) SysTimersParam sysTimersParam) {
+    public ResponseData<?> add(@RequestBody @Valid @Validated(SysTimersParam.add.class) SysTimersParam sysTimersParam) {
         sysTimersService.add(sysTimersParam);
         return new SuccessResponseData<>();
     }
