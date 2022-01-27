@@ -268,6 +268,19 @@ public class SysUserController {
         return new SuccessResponseData<>(sysUserService.getAllUserIdList());
     }
 
+
+    /**
+     * 运维平台接口检测
+     *
+     * @return {@link PageResult< Integer>}
+     * @author majianguo
+     * @date 2022/1/27 14:29
+     **/
+    @GetResource(name = "运维平台接口检测", path = "/sysUser/devopsApiCheck")
+    public ResponseData<Integer> devopsApiCheck(SysUserRequest sysUserRequest) {
+        return new SuccessResponseData<>(sysUserService.devopsApiCheck(sysUserRequest));
+    }
+
     /**
      * 根据用户主键获取用户对应的token
      *

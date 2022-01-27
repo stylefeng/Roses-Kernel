@@ -57,6 +57,7 @@ import cn.stylefeng.roses.kernel.system.api.DataScopeApi;
 import cn.stylefeng.roses.kernel.system.api.OrganizationServiceApi;
 import cn.stylefeng.roses.kernel.system.api.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.api.enums.DevopsCheckStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserExceptionEnum;
@@ -640,6 +641,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         return jwtToken;
+    }
+
+    @Override
+    public Integer devopsApiCheck(SysUserRequest sysUserRequest) {
+        String account = sysUserRequest.getAccount();
+        String password = sysUserRequest.getPassword();
+        SysUser sysUser = this.getUserByAccount(account);
+        if (ObjectUtil.isEmpty(sysUser)) {
+            return DevopsCheckStatusEnum.USER_NOT_EXIST.getCode();
+        } else if (!passwordStoredEncryptApi.checkPassword(password, sysUser.getPassword())) {
+            return DevopsCheckStatusEnum.ACCOUNT_PASSWORD_ERROR.getCode();
+        } else if (!SystemConfigExpander.getDevSwitchStatus()) {
+            return DevopsCheckStatusEnum.REQUESTER_NOT_OPEN_SWITCH.getCode();
+        }
+        return DevopsCheckStatusEnum.SUCCESSFUL.getCode();
     }
 
     @Override

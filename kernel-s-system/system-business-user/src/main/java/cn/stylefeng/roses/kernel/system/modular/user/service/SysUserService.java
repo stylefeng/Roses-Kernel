@@ -263,4 +263,13 @@ public interface SysUserService extends IService<SysUser>, UserServiceApi {
      * @date 2022/1/17 15:05
      **/
     String getTokenByUserId(Long userId);
+
+    /**
+     * 运维平台接口检测
+     *
+     * @return {@link Integer}
+     * @author majianguo
+     * @date 2022/1/27 14:29
+     **/
+    Integer devopsApiCheck(SysUserRequest sysUserRequest);
 }
