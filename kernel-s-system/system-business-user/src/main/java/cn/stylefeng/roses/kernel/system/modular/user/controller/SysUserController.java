@@ -276,7 +276,7 @@ public class SysUserController {
      * @author majianguo
      * @date 2022/1/27 14:29
      **/
-    @GetResource(name = "运维平台接口检测", path = "/sysUser/devopsApiCheck")
+    @GetResource(name = "运维平台接口检测", path = "/sysUser/devopsApiCheck", requiredLogin = false, requiredPermission = false)
     public ResponseData<Integer> devopsApiCheck(SysUserRequest sysUserRequest) {
         return new SuccessResponseData<>(sysUserService.devopsApiCheck(sysUserRequest));
     }
