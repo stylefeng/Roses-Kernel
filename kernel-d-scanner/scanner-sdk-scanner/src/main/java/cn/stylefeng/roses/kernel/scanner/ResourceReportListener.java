@@ -84,7 +84,11 @@ public class ResourceReportListener extends ApplicationReadyListener implements 
                     devOpsReportProperties.getProjectUniqueCode(),
                     devOpsReportProperties.getServerHost())) {
                 DevOpsReportApi devOpsReportApi = applicationContext.getBean(DevOpsReportApi.class);
-                devOpsReportApi.reportResources(devOpsReportProperties, persistencePojos);
+                try {
+                    devOpsReportApi.reportResources(devOpsReportProperties, persistencePojos);
+                } catch (Exception e) {
+                    log.error("向DevOps平台汇报异常出现网络错误，如无法联通DevOps平台可关闭相关配置。", e);
+                }
             }
 
             // 设置标识已经扫描过

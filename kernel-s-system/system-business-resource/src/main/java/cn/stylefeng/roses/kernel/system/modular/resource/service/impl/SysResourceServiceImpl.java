@@ -428,21 +428,17 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         HttpRequest httpRequest = HttpUtil.createPost(devopsReportUrl);
         httpRequest.body(JSON.toJSONString(devOpsReportResourceParam));
         httpRequest.setConnectionTimeout(Convert.toInt(DEVOPS_REPORT_CONNECTION_TIMEOUT_SECONDS * 1000));
-        try {
-            HttpResponse execute = httpRequest.execute();
-            String body = execute.body();
-            ResponseData<?> responseData = JSON.parseObject(body, ResponseData.class);
-            // 返回结果为空
-            if (responseData == null) {
-                throw new ScannerException(DevOpsExceptionEnum.HTTP_RESPONSE_EMPTY);
-            }
-            // 返回失败
-            if (!responseData.getSuccess()) {
-                throw new ScannerException(DevOpsExceptionEnum.HTTP_RESPONSE_ERROR, responseData.getMessage());
-            }
-        } catch (Exception e) {
-            log.error("向devops平台汇报资源异常，可以将devops相关配置删除", e);
+        ResponseData<?> responseData = null;
+        HttpResponse execute = httpRequest.execute();
+        String body = execute.body();
+        responseData = JSON.parseObject(body, ResponseData.class);
+        // 返回结果为空
+        if (responseData == null) {
             throw new ScannerException(DevOpsExceptionEnum.HTTP_RESPONSE_EMPTY);
+        }
+        // 返回失败
+        if (!responseData.getSuccess()) {
+            throw new ScannerException(DevOpsExceptionEnum.HTTP_RESPONSE_ERROR, responseData.getMessage());
         }
     }
 
