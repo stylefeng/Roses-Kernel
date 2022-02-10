@@ -1,11 +1,14 @@
-package service;
+package cn.stylefeng.roses.kernel.system.modular.home.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.home.HomeCompanyInfo;
+import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.OnlineUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
+import cn.stylefeng.roses.kernel.system.modular.home.entity.InterfaceStatistics;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -15,7 +18,7 @@ import java.util.List;
  * @author xixiaowei
  * @date 2022/1/25 9:43
  */
-public interface HomePageService {
+public interface HomePageService extends IService<InterfaceStatistics> {
 
     /**
      * 查询动态列表
@@ -48,4 +51,20 @@ public interface HomePageService {
      * @date 2022/1/25 15:31
      */
     HomeCompanyInfo getHomeCompanyInfo();
+
+    /**
+     * 获取常用功能
+     *
+     * @author xixiaowei
+     * @date 2022/2/10 11:19
+     */
+    List<ResourceRequest> getCommonFunctions();
+
+    /**
+     * 数据统计
+     *
+     * @author xixiaowei
+     * @date 2022/2/10 12:07
+     */
+    void interfaceStatistics();
 }

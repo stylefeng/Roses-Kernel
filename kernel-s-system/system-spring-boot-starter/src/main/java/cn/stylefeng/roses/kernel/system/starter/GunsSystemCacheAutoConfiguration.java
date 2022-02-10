@@ -27,9 +27,12 @@ package cn.stylefeng.roses.kernel.system.starter;
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
+import cn.stylefeng.roses.kernel.system.api.constants.InterfaceStatisticsCacheConstants;
 import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
+import cn.stylefeng.roses.kernel.system.modular.home.aop.InterfaceStatisticsAop;
+import cn.stylefeng.roses.kernel.system.modular.home.cache.InterfaceStatisticsMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleDataScopeMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleResourceMemoryCache;
@@ -145,4 +148,16 @@ public class GunsSystemCacheAutoConfiguration {
         return new ThemeMemoryCache(themeCache);
     }
 
+    /**
+     * 接口统计的缓存
+     *
+     * @author xixiaowei
+     * @date 2022/2/9 16:53
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "interCacheApi")
+    public CacheOperatorApi<String> interCacheApi() {
+        TimedCache<String, String> timedCache = CacheUtil.newTimedCache(InterfaceStatisticsCacheConstants.INTERFACE_STATISTICS_CACHE_TIMEOUT_SECONDS);
+        return new InterfaceStatisticsMemoryCache(timedCache);
+    }
 }

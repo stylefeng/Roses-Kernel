@@ -172,4 +172,9 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
         return queryWrapper;
     }
 
+    @Override
+    public Integer PositionNum() {
+        List<HrPosition> list = this.list();
+        return list.size();
+    }
 }
