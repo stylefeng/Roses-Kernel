@@ -66,5 +66,5 @@ public interface HomePageService extends IService<InterfaceStatistics> {
      * @author xixiaowei
      * @date 2022/2/10 12:07
      */
-    void interfaceStatistics();
+    void saveStatisticsCacheToDb();
 }

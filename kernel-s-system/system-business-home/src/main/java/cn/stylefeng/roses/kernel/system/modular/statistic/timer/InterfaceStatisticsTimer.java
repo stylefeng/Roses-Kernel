@@ -18,7 +18,7 @@ public class InterfaceStatisticsTimer implements TimerAction {
 
     @Override
     public void action(String params) {
-        homePageService.interfaceStatistics();
+        homePageService.saveStatisticsCacheToDb();
     }
 
 }

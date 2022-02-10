@@ -152,7 +152,7 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
     }
 
     @Override
-    public void interfaceStatistics() {
+    public void saveStatisticsCacheToDb() {
         // key是用户id，value的key是statUrlId，最后的value是次数
         Map<String, Map<Long, Integer>> userRequestStats = requestCountCacheApi.getAllKeyValues();
 

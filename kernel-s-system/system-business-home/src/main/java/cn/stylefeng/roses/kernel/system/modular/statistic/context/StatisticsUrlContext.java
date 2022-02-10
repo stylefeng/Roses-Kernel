@@ -31,7 +31,7 @@ public class StatisticsUrlContext implements CommandLineRunner {
     /**
      * 需要被统计的url集合，key是url，value是stat_url_id
      */
-    private static Map<String, Long> STATISTICS_KEY_VALUES = new HashMap<>(10);
+    private static final Map<String, Long> STATISTICS_KEY_VALUES = new HashMap<>(10);
 
     /**
      * 获取需要统计的url集合
