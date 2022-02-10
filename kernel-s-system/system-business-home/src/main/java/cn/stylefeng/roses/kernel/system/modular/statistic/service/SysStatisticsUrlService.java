@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface SysStatisticsUrlService extends IService<SysStatisticsUrl> {
 
-	/**
+    /**
      * 新增
      *
      * @param sysStatisticsUrlRequest 请求参数
@@ -24,7 +24,7 @@ public interface SysStatisticsUrlService extends IService<SysStatisticsUrl> {
      */
     void add(SysStatisticsUrlRequest sysStatisticsUrlRequest);
 
-	/**
+    /**
      * 删除
      *
      * @param sysStatisticsUrlRequest 请求参数
@@ -33,7 +33,7 @@ public interface SysStatisticsUrlService extends IService<SysStatisticsUrl> {
      */
     void del(SysStatisticsUrlRequest sysStatisticsUrlRequest);
 
-	/**
+    /**
      * 编辑
      *
      * @param sysStatisticsUrlRequest 请求参数
@@ -42,7 +42,7 @@ public interface SysStatisticsUrlService extends IService<SysStatisticsUrl> {
      */
     void edit(SysStatisticsUrlRequest sysStatisticsUrlRequest);
 
-	/**
+    /**
      * 查询详情
      *
      * @param sysStatisticsUrlRequest 请求参数
@@ -51,20 +51,20 @@ public interface SysStatisticsUrlService extends IService<SysStatisticsUrl> {
      */
     SysStatisticsUrl detail(SysStatisticsUrlRequest sysStatisticsUrlRequest);
 
-	/**
+    /**
      * 获取列表
      *
-     * @param sysStatisticsUrlRequest        请求参数
+     * @param sysStatisticsUrlRequest 请求参数
      * @return List<SysStatisticsUrl>   返回结果
      * @author fengshuonan
      * @date 2022/02/10 21:17
      */
     List<SysStatisticsUrl> findList(SysStatisticsUrlRequest sysStatisticsUrlRequest);
 
-	/**
+    /**
      * 获取列表（带分页）
      *
-     * @param sysStatisticsUrlRequest              请求参数
+     * @param sysStatisticsUrlRequest 请求参数
      * @return PageResult<SysStatisticsUrl>   返回结果
      * @author fengshuonan
      * @date 2022/02/10 21:17

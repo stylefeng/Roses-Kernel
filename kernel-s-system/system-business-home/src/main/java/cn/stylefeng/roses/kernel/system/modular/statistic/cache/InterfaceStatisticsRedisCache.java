@@ -12,9 +12,9 @@ import java.util.Map;
  * @author xixiaowei
  * @date 2022/2/9 16:38
  */
-public class InterfaceStatisticsRedisCache extends AbstractRedisCacheOperator<Map<Long,Integer>> {
+public class InterfaceStatisticsRedisCache extends AbstractRedisCacheOperator<Map<Long, Integer>> {
 
-    public InterfaceStatisticsRedisCache(RedisTemplate<String, Map<Long,Integer>> redisTemplate) {
+    public InterfaceStatisticsRedisCache(RedisTemplate<String, Map<Long, Integer>> redisTemplate) {
         super(redisTemplate);
     }
 

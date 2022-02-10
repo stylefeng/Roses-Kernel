@@ -12,9 +12,9 @@ import java.util.Map;
  * @author xixiaowei
  * @date 2022/2/9 16:36
  */
-public class InterfaceStatisticsMemoryCache extends AbstractMemoryCacheOperator<Map<Long,Integer>> {
+public class InterfaceStatisticsMemoryCache extends AbstractMemoryCacheOperator<Map<Long, Integer>> {
 
-    public InterfaceStatisticsMemoryCache(TimedCache<String, Map<Long,Integer>> timedCache) {
+    public InterfaceStatisticsMemoryCache(TimedCache<String, Map<Long, Integer>> timedCache) {
         super(timedCache);
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface SysStatisticsCountService extends IService<SysStatisticsCount> {
 
-	/**
+    /**
      * 新增
      *
      * @param sysStatisticsCountRequest 请求参数
@@ -24,7 +24,7 @@ public interface SysStatisticsCountService extends IService<SysStatisticsCount> 
      */
     void add(SysStatisticsCountRequest sysStatisticsCountRequest);
 
-	/**
+    /**
      * 删除
      *
      * @param sysStatisticsCountRequest 请求参数
@@ -33,7 +33,7 @@ public interface SysStatisticsCountService extends IService<SysStatisticsCount> 
      */
     void del(SysStatisticsCountRequest sysStatisticsCountRequest);
 
-	/**
+    /**
      * 编辑
      *
      * @param sysStatisticsCountRequest 请求参数
@@ -42,7 +42,7 @@ public interface SysStatisticsCountService extends IService<SysStatisticsCount> 
      */
     void edit(SysStatisticsCountRequest sysStatisticsCountRequest);
 
-	/**
+    /**
      * 查询详情
      *
      * @param sysStatisticsCountRequest 请求参数
@@ -51,20 +51,20 @@ public interface SysStatisticsCountService extends IService<SysStatisticsCount> 
      */
     SysStatisticsCount detail(SysStatisticsCountRequest sysStatisticsCountRequest);
 
-	/**
+    /**
      * 获取列表
      *
-     * @param sysStatisticsCountRequest        请求参数
+     * @param sysStatisticsCountRequest 请求参数
      * @return List<SysStatisticsCount>   返回结果
      * @author fengshuonan
      * @date 2022/02/10 21:17
      */
     List<SysStatisticsCount> findList(SysStatisticsCountRequest sysStatisticsCountRequest);
 
-	/**
+    /**
      * 获取列表（带分页）
      *
-     * @param sysStatisticsCountRequest              请求参数
+     * @param sysStatisticsCountRequest 请求参数
      * @return PageResult<SysStatisticsCount>   返回结果
      * @author fengshuonan
      * @date 2022/02/10 21:17

@@ -31,7 +31,7 @@ public class StatisticsUrlContext implements CommandLineRunner {
     /**
      * 需要被统计的url集合，key是url，value是stat_url_id
      */
-    private static Map<String,Long> STATISTICS_KEY_VALUES = new HashMap<>(10);
+    private static Map<String, Long> STATISTICS_KEY_VALUES = new HashMap<>(10);
 
     /**
      * 获取需要统计的url集合
@@ -39,7 +39,7 @@ public class StatisticsUrlContext implements CommandLineRunner {
      * @author fengshuonan
      * @date 2022/2/10 21:37
      */
-    public static List<SysStatisticsUrl> getUrls(){
+    public static List<SysStatisticsUrl> getUrls() {
         return STATISTICS_URLS;
     }
 
@@ -49,7 +49,7 @@ public class StatisticsUrlContext implements CommandLineRunner {
      * @author fengshuonan
      * @date 2022/2/10 21:37
      */
-    public static Long getStatUrlId(String url){
+    public static Long getStatUrlId(String url) {
         return STATISTICS_KEY_VALUES.get(url);
     }
 
@@ -63,7 +63,7 @@ public class StatisticsUrlContext implements CommandLineRunner {
     public void run(String... args) throws Exception {
         STATISTICS_URLS = sysStatisticsUrlService.list();
         for (SysStatisticsUrl statisticsUrl : STATISTICS_URLS) {
-            STATISTICS_KEY_VALUES.put(statisticsUrl.getStatUrl(),statisticsUrl.getStatUrlId());
+            STATISTICS_KEY_VALUES.put(statisticsUrl.getStatUrl(), statisticsUrl.getStatUrlId());
         }
     }
 
