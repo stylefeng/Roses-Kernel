@@ -174,7 +174,7 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
 
     @Override
     public Integer PositionNum() {
-        List<HrPosition> list = this.list();
-        return list.size();
+        return this.count();
     }
+
 }

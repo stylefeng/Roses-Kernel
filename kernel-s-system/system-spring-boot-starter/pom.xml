@@ -79,7 +79,7 @@
             <version>${roses.version}</version>
         </dependency>
 
-        <!--首页的业务-->
+        <!--首页统计的业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-home</artifactId>

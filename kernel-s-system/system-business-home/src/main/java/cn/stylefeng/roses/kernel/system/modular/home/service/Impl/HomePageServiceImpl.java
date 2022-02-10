@@ -20,12 +20,12 @@ import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.home.entity.InterfaceStatistics;
 import cn.stylefeng.roses.kernel.system.modular.home.mapper.InterfaceStatisticsMapper;
+import cn.stylefeng.roses.kernel.system.modular.home.service.HomePageService;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import cn.stylefeng.roses.kernel.system.modular.home.service.HomePageService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -59,8 +59,8 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
     @Resource
     private ResourceServiceApi resourceServiceApi;
 
-    @Resource(name = "interCacheApi")
-    private CacheOperatorApi<String> interCacheApi;
+    @Resource(name = "interCountCacheApi")
+    private CacheOperatorApi<String> interCountCacheApi;
 
     @Override
     public List<LogRecordDTO> getDynamicList(LogManagerRequest logManagerRequest) {
@@ -153,10 +153,10 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
 
     @Override
     public void interfaceStatistics() {
-        Map<String, String> allKeyValues = interCacheApi.getAllKeyValues();
+        Map<String, String> allKeyValues = interCountCacheApi.getAllKeyValues();
         if (ObjectUtil.isNotNull(allKeyValues.keySet())) {
             for (String key : allKeyValues.keySet()) {
-                String value = interCacheApi.get(key);
+                String value = interCountCacheApi.get(key);
                 InterfaceStatistics statistics = this.getOne(Wrappers.<InterfaceStatistics>lambdaQuery().eq(InterfaceStatistics::getInterfaceUrl, value));
                 // 不存在的数据添加
                 if (ObjectUtil.isNull(statistics)) {
@@ -175,7 +175,7 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
                     this.updateById(interfaceStatistics);
                     // 缓存到库中 删除缓存中数据
                 }
-                interCacheApi.remove(key);
+                interCountCacheApi.remove(key);
             }
         }
     }

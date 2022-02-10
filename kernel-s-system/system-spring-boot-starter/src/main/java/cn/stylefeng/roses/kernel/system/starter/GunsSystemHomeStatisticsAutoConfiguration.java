@@ -1,19 +1,18 @@
 package cn.stylefeng.roses.kernel.system.starter;
 
 import cn.stylefeng.roses.kernel.system.modular.home.aop.InterfaceStatisticsAop;
-import cn.stylefeng.roses.kernel.system.modular.home.holder.InterfaceStatisticsHolder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import cn.stylefeng.roses.kernel.system.modular.home.timer.InterfaceStatisticsTimer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 系统自动配置
+ * 首页统计数据的装载
  *
  * @author xixiaowei
  * @date 2022/2/9 17:57
  */
 @Configuration
-public class GunsSystemAutoConfiguration {
+public class GunsSystemHomeStatisticsAutoConfiguration {
 
     /**
      * 接口统计的AOP
@@ -27,14 +26,14 @@ public class GunsSystemAutoConfiguration {
     }
 
     /**
-     * 定时统计接口访问次数
+     * 定时将统计数据存入数据库
      *
      * @author xixiaowei
      * @date 2022/2/9 17:58
      */
     @Bean
-    @ConditionalOnMissingBean(InterfaceStatisticsHolder.class)
-    public InterfaceStatisticsHolder interfaceStatisticsHolder() {
-        return new InterfaceStatisticsHolder();
+    public InterfaceStatisticsTimer interfaceStatisticsHolder() {
+        return new InterfaceStatisticsTimer();
     }
+
 }

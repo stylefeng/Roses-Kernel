@@ -31,7 +31,6 @@ import cn.stylefeng.roses.kernel.system.api.constants.InterfaceStatisticsCacheCo
 import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
-import cn.stylefeng.roses.kernel.system.modular.home.aop.InterfaceStatisticsAop;
 import cn.stylefeng.roses.kernel.system.modular.home.cache.InterfaceStatisticsMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleDataScopeMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleMemoryCache;
@@ -155,8 +154,8 @@ public class GunsSystemCacheAutoConfiguration {
      * @date 2022/2/9 16:53
      */
     @Bean
-    @ConditionalOnMissingBean(name = "interCacheApi")
-    public CacheOperatorApi<String> interCacheApi() {
+    @ConditionalOnMissingBean(name = "interCountCacheApi")
+    public CacheOperatorApi<String> interCountCacheApi() {
         TimedCache<String, String> timedCache = CacheUtil.newTimedCache(InterfaceStatisticsCacheConstants.INTERFACE_STATISTICS_CACHE_TIMEOUT_SECONDS);
         return new InterfaceStatisticsMemoryCache(timedCache);
     }
