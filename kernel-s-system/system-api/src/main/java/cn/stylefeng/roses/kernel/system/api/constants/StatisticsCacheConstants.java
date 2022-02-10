@@ -6,7 +6,7 @@ package cn.stylefeng.roses.kernel.system.api.constants;
  * @author xixiaowei
  * @date 2022/2/9 16:42
  */
-public interface InterfaceStatisticsCacheConstants {
+public interface StatisticsCacheConstants {
 
     /**
      * 前缀
@@ -16,5 +16,10 @@ public interface InterfaceStatisticsCacheConstants {
     /**
      * 超时时间
      */
-    Long INTERFACE_STATISTICS_CACHE_TIMEOUT_SECONDS = 1200L;
+    Long INTERFACE_STATISTICS_CACHE_TIMEOUT_SECONDS = 3600L;
+
+    /**
+     * AOP统计执行的顺序
+     */
+    int INTERFACE_STATISTICS_AOP_ORDER = 600;
 }
