@@ -61,7 +61,7 @@ public class InterfaceStatisticsAop implements Ordered {
 
         // 执行统计业务，只统计指定的几个接口
         try {
-            saveRequestCount(joinPoint);
+            saveRequestCount();
         } catch (Exception e) {
             // 统计业务出现异常打印日志
             log.error("接口统计出现异常！", e);
@@ -76,7 +76,7 @@ public class InterfaceStatisticsAop implements Ordered {
      * @author fengshuonan
      * @date 2022/2/10 21:25
      */
-    private void saveRequestCount(ProceedingJoinPoint joinPoint) {
+    private void saveRequestCount() {
 
         // 获取请求的地址
         HttpServletRequest request = HttpServletUtil.getRequest();
