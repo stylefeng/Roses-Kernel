@@ -129,14 +129,15 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
 
         // 设置公司部门数
         int sectionNum = 1;
-        // 去除[] 的部门集合
-        List<String> orgPidList = new ArrayList<>();
+        List<Long> orgIds = new ArrayList<>();
+        // 添加当前用户部门ID
+        orgIds.add(organizationId);
         for (HrOrganization hrOrganization : hrOrganizationList) {
             String[] orgPids = hrOrganization.getOrgPids().split(",");
             for (String orgPid : orgPids) {
                 orgPid = orgPid.substring(1, orgPid.length() - 1);
                 if (organizationId.toString().equals(orgPid)) {
-                    orgPidList.add(orgPid);
+                    orgIds.add(hrOrganization.getOrgId());
                     sectionNum++;
                 }
             }
@@ -145,7 +146,7 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
 
         // 设置当前公司人数
         int currentCompanyPersonNum = 0;
-        for (String orgId : orgPidList) {
+        for (Long orgId : orgIds) {
             List<SysUserOrg> sysUserOrgs = sysUserOrgService.list(Wrappers.<SysUserOrg>lambdaQuery().eq(SysUserOrg::getOrgId, orgId));
             currentCompanyPersonNum += sysUserOrgs.size();
         }
@@ -187,6 +188,11 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
             sysStatisticsCount.setUserId(Long.valueOf(userId));
             Map<Long, Integer> map = userRequestStats.get(userId);
             for (Long statUrlId : map.keySet()) {
+                SysStatisticsCount statisticsCount = sysStatisticsCountService.getOne(Wrappers.<SysStatisticsCount>lambdaQuery().eq(SysStatisticsCount::getStatUrlId, statUrlId));
+                // 判断是否已存在该记录，如果存在更新次数，不存在添加记录
+                if (ObjectUtil.isNotNull(statisticsCount)) {
+                    sysStatisticsCount.setStatCountId(statisticsCount.getStatCountId());
+                }
                 sysStatisticsCount.setStatUrlId(statUrlId);
                 sysStatisticsCount.setStatCount(map.get(statUrlId));
             }
