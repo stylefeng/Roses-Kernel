@@ -22,7 +22,7 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.log.manage;
+package cn.stylefeng.roses.kernel.log.manage.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
@@ -30,6 +30,7 @@ import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.log.db.service.SysLogService;
 import cn.stylefeng.roses.kernel.log.manage.wrapper.LogInfoWrapper;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -95,6 +96,7 @@ public class LogManagerController {
      * @date 2020/11/3 13:47
      */
     @PostResource(name = "删除日志", path = "/logManager/delete")
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(LogManagerRequest.delete.class) LogManagerRequest logManagerRequest) {
         sysLogService.delAll(logManagerRequest);
         return new SuccessResponseData<>();

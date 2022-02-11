@@ -4,6 +4,7 @@ import cn.stylefeng.roses.kernel.customer.modular.entity.Customer;
 import cn.stylefeng.roses.kernel.customer.modular.request.CustomerRequest;
 import cn.stylefeng.roses.kernel.customer.modular.service.CustomerService;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -36,6 +37,7 @@ public class CustomerManageController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "添加", path = "/customer/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(CustomerRequest.add.class) CustomerRequest customerRequest) {
         customerService.add(customerRequest);
         return new SuccessResponseData<>();
@@ -48,6 +50,7 @@ public class CustomerManageController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "删除", path = "/customer/delete")
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(CustomerRequest.delete.class) CustomerRequest customerRequest) {
         customerService.del(customerRequest);
         return new SuccessResponseData<>();
@@ -60,6 +63,7 @@ public class CustomerManageController {
      * @date 2021/06/07 11:40
      */
     @PostResource(name = "编辑", path = "/customer/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(CustomerRequest.edit.class) CustomerRequest customerRequest) {
         customerService.edit(customerRequest);
         return new SuccessResponseData<>();

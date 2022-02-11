@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.dict.api.constants.DictConstants;
 import cn.stylefeng.roses.kernel.dict.modular.entity.SysDictType;
 import cn.stylefeng.roses.kernel.dict.modular.pojo.request.DictTypeRequest;
 import cn.stylefeng.roses.kernel.dict.modular.service.DictTypeService;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
@@ -62,6 +63,7 @@ public class DictTypeController {
      * @date 2018/7/25 下午12:36
      */
     @PostResource(name = "添加字典类型", path = "/dictType/add", requiredPermission = false)
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(DictTypeRequest.add.class) DictTypeRequest dictTypeRequest) {
         this.dictTypeService.add(dictTypeRequest);
         return new SuccessResponseData<>();
@@ -74,6 +76,7 @@ public class DictTypeController {
      * @date 2018/7/25 下午12:36
      */
     @PostResource(name = "删除字典类型", path = "/dictType/delete", requiredPermission = false)
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(DictTypeRequest.delete.class) DictTypeRequest dictTypeRequest) {
         this.dictTypeService.del(dictTypeRequest);
         return new SuccessResponseData<>();
@@ -86,6 +89,7 @@ public class DictTypeController {
      * @date 2018/7/25 下午12:36
      */
     @PostResource(name = "修改字典类型", path = "/dictType/edit", requiredPermission = false)
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(DictTypeRequest.edit.class) DictTypeRequest dictTypeRequest) {
         this.dictTypeService.edit(dictTypeRequest);
         return new SuccessResponseData<>();
@@ -98,6 +102,7 @@ public class DictTypeController {
      * @date 2018/7/25 下午12:36
      */
     @PostResource(name = "修改字典类型状态", path = "/dictType/updateStatus", requiredPermission = false)
+    @BusinessLog
     public ResponseData<?> updateStatus(@RequestBody @Validated(BaseRequest.updateStatus.class) DictTypeRequest dictTypeRequest) {
         this.dictTypeService.editStatus(dictTypeRequest);
         return new SuccessResponseData<>();

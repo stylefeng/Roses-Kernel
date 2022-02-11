@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.timer.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -63,6 +64,7 @@ public class SysTimersController {
      * @date 2020/6/30 18:26
      */
     @PostResource(name = "添加定时任务", path = "/sysTimers/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Valid @Validated(SysTimersParam.add.class) SysTimersParam sysTimersParam) {
         sysTimersService.add(sysTimersParam);
         return new SuccessResponseData<>();
@@ -75,6 +77,7 @@ public class SysTimersController {
      * @date 2020/6/30 18:26
      */
     @PostResource(name = "删除定时任务", path = "/sysTimers/delete")
+    @BusinessLog
     public ResponseData<?> del(@RequestBody @Validated(SysTimersParam.delete.class) SysTimersParam sysTimersParam) {
         sysTimersService.del(sysTimersParam);
         return new SuccessResponseData<>();
@@ -87,6 +90,7 @@ public class SysTimersController {
      * @date 2020/6/30 18:26
      */
     @PostResource(name = "编辑定时任务", path = "/sysTimers/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(SysTimersParam.edit.class) SysTimersParam sysTimersParam) {
         sysTimersService.edit(sysTimersParam);
         return new SuccessResponseData<>();
@@ -99,6 +103,7 @@ public class SysTimersController {
      * @date 2020/7/1 14:34
      */
     @PostResource(name = "启动定时任务", path = "/sysTimers/start")
+    @BusinessLog
     public ResponseData<?> start(@RequestBody @Validated(SysTimersParam.startTimer.class) SysTimersParam sysTimersParam) {
         sysTimersService.start(sysTimersParam);
         return new SuccessResponseData<>();
@@ -111,6 +116,7 @@ public class SysTimersController {
      * @date 2020/7/1 14:34
      */
     @PostResource(name = "停止定时任务", path = "/sysTimers/stop")
+    @BusinessLog
     public ResponseData<?> stop(@RequestBody @Validated(SysTimersParam.stopTimer.class) SysTimersParam sysTimersParam) {
         sysTimersService.stop(sysTimersParam);
         return new SuccessResponseData<>();
