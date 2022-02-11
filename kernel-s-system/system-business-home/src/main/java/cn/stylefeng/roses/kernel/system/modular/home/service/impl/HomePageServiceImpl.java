@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.system.modular.home.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
@@ -9,13 +8,9 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
-import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
-import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceUrlParam;
 import cn.stylefeng.roses.kernel.system.api.*;
 import cn.stylefeng.roses.kernel.system.api.pojo.home.HomeCompanyInfo;
-import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationDTO;
-import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.OnlineUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
@@ -26,21 +21,15 @@ import cn.stylefeng.roses.kernel.system.modular.home.service.SysStatisticsCountS
 import cn.stylefeng.roses.kernel.system.modular.home.service.SysStatisticsUrlService;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
-import cn.stylefeng.roses.kernel.system.modular.statistic.entity.SysStatisticsCount;
+import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
+import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
 import cn.stylefeng.roses.kernel.system.modular.statistic.pojo.OnlineUserStat;
-import cn.stylefeng.roses.kernel.system.modular.statistic.service.SysStatisticsCountService;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,16 +49,13 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
     private UserServiceApi userServiceApi;
 
     @Resource
-    private OrganizationServiceApi organizationServiceApi;
+    private HrOrganizationService hrOrganizationService;
 
     @Resource
     private PositionServiceApi positionServiceApi;
 
     @Resource
     private SysUserOrgService sysUserOrgService;
-
-    @Resource
-    private ResourceServiceApi resourceServiceApi;
 
     @Resource(name = "requestCountCacheApi")
     private CacheOperatorApi<Map<Long, Integer>> requestCountCacheApi;
@@ -123,8 +109,8 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
         HomeCompanyInfo homeCompanyInfo = new HomeCompanyInfo();
 
         // 获取组织机构数量
-        List<HrOrganizationDTO> hrOrganizationDTOS = organizationServiceApi.orgList();
-        homeCompanyInfo.setOrganizationNum(hrOrganizationDTOS.size());
+        List<HrOrganization> hrOrganizationList = hrOrganizationService.list();
+        homeCompanyInfo.setOrganizationNum(hrOrganizationList.size());
 
         // 获取企业人员总数
         SysUserRequest sysUserRequest = new SysUserRequest();
@@ -140,20 +126,30 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
 
         // 获取组织公司ID
         Long organizationId = loginUser.getOrganizationId();
-        List<SysUserOrg> sysUserOrgs = sysUserOrgService.list(Wrappers.<SysUserOrg>lambdaQuery().eq(SysUserOrg::getOrgId, organizationId));
-        homeCompanyInfo.setCurrentCompanyPersonNum(sysUserOrgs.size());
 
         // 设置公司部门数
-        int sectionNum = 0;
-        for (HrOrganizationDTO hrOrganizationDTO : hrOrganizationDTOS) {
-            String[] orgPids = hrOrganizationDTO.getOrgPids().split(",");
+        int sectionNum = 1;
+        // 去除[] 的部门集合
+        List<String> orgPidList = new ArrayList<>();
+        for (HrOrganization hrOrganization : hrOrganizationList) {
+            String[] orgPids = hrOrganization.getOrgPids().split(",");
             for (String orgPid : orgPids) {
+                orgPid = orgPid.substring(1, orgPid.length() - 1);
                 if (organizationId.toString().equals(orgPid)) {
+                    orgPidList.add(orgPid);
                     sectionNum++;
                 }
             }
         }
         homeCompanyInfo.setCurrentDeptNum(sectionNum);
+
+        // 设置当前公司人数
+        int currentCompanyPersonNum = 0;
+        for (String orgId : orgPidList) {
+            List<SysUserOrg> sysUserOrgs = sysUserOrgService.list(Wrappers.<SysUserOrg>lambdaQuery().eq(SysUserOrg::getOrgId, orgId));
+            currentCompanyPersonNum += sysUserOrgs.size();
+        }
+        homeCompanyInfo.setCurrentCompanyPersonNum(currentCompanyPersonNum);
 
         return homeCompanyInfo;
     }
@@ -166,7 +162,7 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
         // 菜单ID集合
         List<String> statMenuIds = new ArrayList<>();
         for (Long statUrlId : statUrlIds) {
-            SysStatisticsUrl sysStatisticsUrl = sysStatisticsUrlService.getOne(Wrappers.<SysStatisticsUrl>lambdaQuery().eq(SysStatisticsUrl::getStatUrl, statUrlId));
+            SysStatisticsUrl sysStatisticsUrl = sysStatisticsUrlService.getById(statUrlId);
             String statMenuId = sysStatisticsUrl.getStatMenuId();
             statMenuIds.add(statMenuId);
         }
@@ -184,8 +180,8 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
         // key是用户id，value的key是statUrlId，最后的value是次数
         Map<String, Map<Long, Integer>> userRequestStats = requestCountCacheApi.getAllKeyValues();
 
-        ArrayList<SysStatisticsCount> sysStatisticsCounts = new ArrayList<>();
-        // 遍历填充数据
+        List<SysStatisticsCount> sysStatisticsCountList = new ArrayList<>();
+        // 将数据存入DB
         for (String userId : userRequestStats.keySet()) {
             SysStatisticsCount sysStatisticsCount = new SysStatisticsCount();
             sysStatisticsCount.setUserId(Long.valueOf(userId));
@@ -196,11 +192,10 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
             }
 
             // 存放到集合中
-            sysStatisticsCounts.add(sysStatisticsCount);
+            sysStatisticsCountList.add(sysStatisticsCount);
         }
 
-        // 批量存入数据库
-        this.sysStatisticsCountService.saveBatch(sysStatisticsCounts);
+        // 更新DB
+        sysStatisticsCountService.saveOrUpdateBatch(sysStatisticsCountList);
     }
-
 }

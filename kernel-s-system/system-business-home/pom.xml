@@ -107,9 +107,17 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--菜单业务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>system-business-menu</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--组织业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-organization</artifactId>
             <version>${roses.version}</version>
         </dependency>
     </dependencies>
