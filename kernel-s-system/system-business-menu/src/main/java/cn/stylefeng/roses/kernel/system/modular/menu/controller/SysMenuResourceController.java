@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.menu.controller;
 
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -71,6 +72,7 @@ public class SysMenuResourceController {
      * @date 2021/8/10 11:55
      */
     @PostResource(name = "设置菜单资源绑定", path = "/sysMenuResource/addMenuResourceBind")
+    @BusinessLog
     public ResponseData<?> addMenuResourceBind(@RequestBody @Validated(value = SysMenuResourceRequest.add.class) SysMenuResourceRequest sysMenuResourceRequest) {
         sysMenuResourceService.addMenuResourceBind(sysMenuResourceRequest);
         return new SuccessResponseData<>();

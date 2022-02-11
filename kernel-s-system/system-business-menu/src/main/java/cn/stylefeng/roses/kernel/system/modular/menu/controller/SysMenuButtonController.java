@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -60,6 +61,7 @@ public class SysMenuButtonController {
      * @date 2021/1/9 11:28
      */
     @PostResource(name = "添加系统菜单按钮", path = "/sysMenuButton/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(SysMenuButtonRequest.add.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.add(sysMenuButtonRequest);
         return new SuccessResponseData<>();
@@ -72,6 +74,7 @@ public class SysMenuButtonController {
      * @date 2021/1/9 11:28
      */
     @PostResource(name = "添加系统默认菜单按钮", path = "/sysMenuButton/addSystemDefaultButton")
+    @BusinessLog
     public ResponseData<?> addSystemDefaultButton(@RequestBody @Validated(SysMenuButtonRequest.def.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.addDefaultButtons(sysMenuButtonRequest);
         return new SuccessResponseData<>();
@@ -85,6 +88,7 @@ public class SysMenuButtonController {
      * @date 2021/1/9 12:14
      */
     @PostResource(name = "删除单个系统菜单按钮", path = "/sysMenuButton/delete")
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(SysMenuButtonRequest.delete.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.del(sysMenuButtonRequest);
         return new SuccessResponseData<>();
@@ -98,6 +102,7 @@ public class SysMenuButtonController {
      * @date 2021/1/9 12:27
      */
     @PostResource(name = "批量删除多个系统菜单按钮", path = "/sysMenuButton/batchDelete")
+    @BusinessLog
     public ResponseData<?> batchDelete(@RequestBody @Validated(SysMenuButtonRequest.batchDelete.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.delBatch(sysMenuButtonRequest);
         return new SuccessResponseData<>();
@@ -111,6 +116,7 @@ public class SysMenuButtonController {
      * @date 2021/1/9 12:00
      */
     @PostResource(name = "编辑系统菜单按钮", path = "/sysMenuButton/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(SysMenuButtonRequest.edit.class) SysMenuButtonRequest sysMenuButtonRequest) {
         sysMenuButtonService.edit(sysMenuButtonRequest);
         return new SuccessResponseData<>();

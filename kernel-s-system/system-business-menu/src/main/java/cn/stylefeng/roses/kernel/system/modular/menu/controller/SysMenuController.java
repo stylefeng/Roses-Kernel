@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.menu.controller;
 
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
@@ -65,6 +66,7 @@ public class SysMenuController {
      * @date 2020/3/27 8:57
      */
     @PostResource(name = "添加系统菜单", path = "/sysMenu/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(SysMenuRequest.add.class) SysMenuRequest sysMenuRequest) {
         sysMenuService.add(sysMenuRequest);
         return new SuccessResponseData<>();
@@ -77,6 +79,7 @@ public class SysMenuController {
      * @date 2020/3/27 8:58
      */
     @PostResource(name = "删除系统菜单", path = "/sysMenu/delete")
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(SysMenuRequest.delete.class) SysMenuRequest sysMenuRequest) {
         sysMenuService.del(sysMenuRequest);
         return new SuccessResponseData<>();
@@ -89,6 +92,7 @@ public class SysMenuController {
      * @date 2020/3/27 8:59
      */
     @PostResource(name = "编辑系统菜单", path = "/sysMenu/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(SysMenuRequest.edit.class) SysMenuRequest sysMenuRequest) {
         sysMenuService.edit(sysMenuRequest);
         return new SuccessResponseData<>();
