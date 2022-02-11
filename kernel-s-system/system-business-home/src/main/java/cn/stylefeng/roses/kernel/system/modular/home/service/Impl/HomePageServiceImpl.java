@@ -21,6 +21,7 @@ import cn.stylefeng.roses.kernel.system.modular.home.entity.InterfaceStatistics;
 import cn.stylefeng.roses.kernel.system.modular.home.mapper.InterfaceStatisticsMapper;
 import cn.stylefeng.roses.kernel.system.modular.home.service.HomePageService;
 import cn.stylefeng.roses.kernel.system.modular.statistic.entity.SysStatisticsCount;
+import cn.stylefeng.roses.kernel.system.modular.statistic.service.SysStatisticsCountService;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -61,6 +62,9 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
 
     @Resource(name = "requestCountCacheApi")
     private CacheOperatorApi<Map<Long, Integer>> requestCountCacheApi;
+
+    @Resource
+    private SysStatisticsCountService sysStatisticsCountService;
 
     @Override
     public List<LogRecordDTO> getDynamicList(LogManagerRequest logManagerRequest) {
@@ -158,6 +162,9 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
 
         // todo
         ArrayList<SysStatisticsCount> sysStatisticsCounts = new ArrayList<>();
+
+        // todo
+        this.sysStatisticsCountService.saveBatch(sysStatisticsCounts);
     }
 
 }
