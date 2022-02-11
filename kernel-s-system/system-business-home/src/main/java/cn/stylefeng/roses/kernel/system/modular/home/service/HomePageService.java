@@ -41,18 +41,18 @@ public interface HomePageService {
     HomeCompanyInfo getHomeCompanyInfo();
 
     /**
-     * 获取常用功能
+     * 获取常用功能集合
      *
-     * @author xixiaowei
-     * @date 2022/2/10 11:19
+     * @author fengshuonan
+     * @date 2022/2/11 22:02
      */
     List<SysMenu> getCommonFunctions();
 
     /**
-     * 数据统计
+     * 将缓存中的访问次数信息保存到数据库
      *
-     * @author xixiaowei
-     * @date 2022/2/10 12:07
+     * @author fengshuonan
+     * @date 2022/2/11 22:02
      */
     void saveStatisticsCacheToDb();
 }

@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.home.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
@@ -8,6 +9,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.LogManagerApi;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
+import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.HomePageServiceApi;
 import cn.stylefeng.roses.kernel.system.api.PositionServiceApi;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
@@ -28,6 +30,7 @@ import cn.stylefeng.roses.kernel.system.modular.statistic.pojo.OnlineUserStat;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
 
@@ -148,51 +151,87 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
 
     @Override
     public List<SysMenu> getCommonFunctions() {
-        List<SysStatisticsCount> sysStatisticsCounts = sysStatisticsCountService.list(Wrappers.<SysStatisticsCount>lambdaQuery().orderByDesc(SysStatisticsCount::getStatCount));
-        List<Long> statUrlIds = sysStatisticsCounts.stream().map(SysStatisticsCount::getStatUrlId).collect(Collectors.toList());
 
-        // 菜单ID集合
-        List<String> statMenuIds = new ArrayList<>();
-        for (Long statUrlId : statUrlIds) {
-            SysStatisticsUrl sysStatisticsUrl = sysStatisticsUrlService.getById(statUrlId);
-            String statMenuId = sysStatisticsUrl.getStatMenuId();
-            statMenuIds.add(statMenuId);
-        }
+        // 获取当前用户常用功能，按使用次数排序
+        LoginUser loginUser = LoginContext.me().getLoginUser();
+        List<SysStatisticsCount> statList = sysStatisticsCountService.list(
+                Wrappers.lambdaQuery(SysStatisticsCount.class).eq(SysStatisticsCount::getUserId, loginUser.getUserId()).orderByDesc(SysStatisticsCount::getStatCount));
+        List<Long> statUrlId = statList.stream().map(SysStatisticsCount::getStatUrlId).collect(Collectors.toList());
 
-        List<SysMenu> sysMenuList = new ArrayList<>();
-        for (String statMenuId : statMenuIds) {
-            SysMenu sysMenu = sysMenuService.getOne(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getMenuId, statMenuId));
-            sysMenuList.add(sysMenu);
+        // 获取系统常驻常用功能
+        LambdaQueryWrapper<SysStatisticsUrl> wrapper = Wrappers.lambdaQuery(SysStatisticsUrl.class)
+                .eq(SysStatisticsUrl::getAlwaysShow, YesOrNotEnum.Y)
+                .or()
+                .in(ObjectUtil.isNotEmpty(statUrlId), SysStatisticsUrl::getStatUrlId, statUrlId)
+                .select(SysStatisticsUrl::getStatMenuId);
+        List<SysStatisticsUrl> alwaysShowList = sysStatisticsUrlService.list(wrapper);
+
+        // 获取菜单
+        List<String> usualMenuIds = alwaysShowList.stream().map(SysStatisticsUrl::getStatMenuId).collect(Collectors.toList());
+
+        // 获取菜单对应的图标和名称信息
+        LambdaQueryWrapper<SysMenu> sysMenuLambdaQueryWrapper = Wrappers.lambdaQuery(SysMenu.class)
+                .in(SysMenu::getMenuId, usualMenuIds)
+                .select(SysMenu::getMenuName, SysMenu::getAntdvIcon, SysMenu::getAntdvRouter);
+        List<SysMenu> list = sysMenuService.list(sysMenuLambdaQueryWrapper);
+
+        // 菜单的icon需要转为大写驼峰
+        for (SysMenu sysMenu : list) {
+            if (sysMenu.getAntdvIcon() != null) {
+                String replace = sysMenu.getAntdvIcon().replace("-", "_");
+                sysMenu.setAntdvIcon(StrUtil.upperFirst(StrUtil.toCamelCase(replace)));
+            }
         }
-        return sysMenuList;
+        return list;
     }
 
     @Override
     public void saveStatisticsCacheToDb() {
         // key是用户id，value的key是statUrlId，最后的value是次数
         Map<String, Map<Long, Integer>> userRequestStats = requestCountCacheApi.getAllKeyValues();
+        Set<String> userIds = userRequestStats.keySet();
 
-        List<SysStatisticsCount> sysStatisticsCountList = new ArrayList<>();
-        // 将数据存入DB
-        for (String userId : userRequestStats.keySet()) {
-            SysStatisticsCount sysStatisticsCount = new SysStatisticsCount();
-            sysStatisticsCount.setUserId(Long.valueOf(userId));
-            Map<Long, Integer> map = userRequestStats.get(userId);
-            for (Long statUrlId : map.keySet()) {
-                SysStatisticsCount statisticsCount = sysStatisticsCountService.getOne(Wrappers.<SysStatisticsCount>lambdaQuery().eq(SysStatisticsCount::getStatUrlId, statUrlId));
-                // 判断是否已存在该记录，如果存在更新次数，不存在添加记录
-                if (ObjectUtil.isNotNull(statisticsCount)) {
-                    sysStatisticsCount.setStatCountId(statisticsCount.getStatCountId());
-                }
-                sysStatisticsCount.setStatUrlId(statUrlId);
-                sysStatisticsCount.setStatCount(map.get(statUrlId));
-            }
-
-            // 存放到集合中
-            sysStatisticsCountList.add(sysStatisticsCount);
+        // 缓存为空，则不进行更新操作
+        if (ObjectUtil.isEmpty(userIds)) {
+            return;
         }
 
-        // 更新DB
-        sysStatisticsCountService.saveOrUpdateBatch(sysStatisticsCountList);
+        // 将缓存的数据合并到库中
+        List<SysStatisticsCount> cacheCountList = new ArrayList<>();
+        for (String userId : userIds) {
+            // 获取用户的访问记录缓存，key是statUrlId，value是次数
+            Map<Long, Integer> userCounts = userRequestStats.get(userId);
+            for (Map.Entry<Long, Integer> userCountItem : userCounts.entrySet()) {
+                Long statUrlId = userCountItem.getKey();
+                Integer count = userCountItem.getValue();
+                SysStatisticsCount sysStatisticsCount = new SysStatisticsCount();
+                sysStatisticsCount.setUserId(Long.valueOf(userId));
+                sysStatisticsCount.setStatUrlId(statUrlId);
+                sysStatisticsCount.setStatCount(count);
+                cacheCountList.add(sysStatisticsCount);
+            }
+        }
+
+        // 查询缓存用户在库中的统计记录
+        List<SysStatisticsCount> sysStatisticsCounts = sysStatisticsCountService.list(
+                Wrappers.lambdaQuery(SysStatisticsCount.class).in(SysStatisticsCount::getUserId, userIds));
+
+        for (SysStatisticsCount cacheItem : cacheCountList) {
+            boolean haveRecord = false;
+            for (SysStatisticsCount dbItem : sysStatisticsCounts) {
+                // 如果库里有这次统计数据，则更新这个记录
+                if (dbItem.getStatUrlId().equals(cacheItem.getStatUrlId()) && dbItem.getUserId().equals(cacheItem.getUserId())) {
+                    haveRecord = true;
+                    cacheItem.setStatCountId(dbItem.getStatCountId());
+                }
+            }
+            // 如果库里没有这次的缓存记录，从新生成一个id
+            if (!haveRecord) {
+                cacheItem.setStatCountId(IdWorker.getId());
+            }
+        }
+
+        // 将缓存的数据更新或插入到数据库中
+        sysStatisticsCountService.saveOrUpdateBatch(cacheCountList);
     }
 }
