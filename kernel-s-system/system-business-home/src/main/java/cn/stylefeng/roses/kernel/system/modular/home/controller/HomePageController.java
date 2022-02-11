@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.system.modular.home.controller;
 
-import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
@@ -36,20 +35,9 @@ public class HomePageController {
      * @author xixiaowei
      * @date 2022/1/25 14:52
      */
-    @GetResource(name = "查询动态列表", path = "/homePage/getDynamicList")
-    public ResponseData<List<LogRecordDTO>> getDynamicList(LogManagerRequest logManagerRequest) {
-        return new SuccessResponseData<>(homePageService.getDynamicList(logManagerRequest));
-    }
-
-    /**
-     * 查询动态列表(分页)
-     *
-     * @author xixiaowei
-     * @date 2022/1/25 10:00
-     */
-    @GetResource(name = "查询动态列表(分页)", path = "/homePage/getDynamicPage")
-    public ResponseData<PageResult<LogRecordDTO>> getDynamicPage(LogManagerRequest logManagerRequest) {
-        return new SuccessResponseData<>(homePageService.getDynamicPage(logManagerRequest));
+    @GetResource(name = "查询动态列表", path = "/homePage/getRecentLogs", requiredPermission = false)
+    public ResponseData<List<LogRecordDTO>> getRecentLogs(LogManagerRequest logManagerRequest) {
+        return new SuccessResponseData<>(homePageService.getRecentLogs(logManagerRequest));
     }
 
     /**

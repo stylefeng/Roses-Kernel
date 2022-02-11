@@ -68,21 +68,9 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
     private SysStatisticsCountService sysStatisticsCountService;
 
     @Override
-    public List<LogRecordDTO> getDynamicList(LogManagerRequest logManagerRequest) {
-        List<LogRecordDTO> logRecordDTOS = logManagerApi.findList(logManagerRequest);
-
-        // 当查询数据大于20条
-        if (logRecordDTOS.size() > 20) {
-            return logRecordDTOS.subList(0, 19);
-        }
-
-        // 查询数据不大于20条
-        return logRecordDTOS;
-    }
-
-    @Override
-    public PageResult<LogRecordDTO> getDynamicPage(LogManagerRequest logManagerRequest) {
-        return logManagerApi.findPage(logManagerRequest);
+    public List<LogRecordDTO> getRecentLogs(LogManagerRequest logManagerRequest) {
+        PageResult<LogRecordDTO> page = logManagerApi.findPage(logManagerRequest);
+        return page.getRows();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.system.modular.home.service;
 
-import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.home.HomeCompanyInfo;
@@ -26,15 +25,7 @@ public interface HomePageService extends IService<InterfaceStatistics> {
      * @author xixiaowei
      * @date 2022/1/25 14:48
      */
-    List<LogRecordDTO> getDynamicList(LogManagerRequest logManagerRequest);
-
-    /**
-     * 查询动态列表(分页)
-     *
-     * @author xixiaowei
-     * @date 2022/1/25 9:43
-     */
-    PageResult<LogRecordDTO> getDynamicPage(LogManagerRequest logManagerRequest);
+    List<LogRecordDTO> getRecentLogs(LogManagerRequest logManagerRequest);
 
     /**
      * 获取在线用户列表
