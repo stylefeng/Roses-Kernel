@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.theme.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -36,6 +37,7 @@ public class SysThemeTemplateFieldController {
      * @date 2021/12/17 11:22
      */
     @PostResource(name = "增加系统主题模板属性", path = "/sysThemeTemplateField/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(SysThemeTemplateFieldRequest.add.class) SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
         sysThemeTemplateFieldService.add(sysThemeTemplateFieldParam);
         return new SuccessResponseData<>();
@@ -48,6 +50,7 @@ public class SysThemeTemplateFieldController {
      * @date 2021/12/17 11:25
      */
     @PostResource(name = "删除系统主题模板属性", path = "/sysThemeTemplateField/del")
+    @BusinessLog
     public ResponseData<?> del(@RequestBody @Validated(SysThemeTemplateFieldRequest.delete.class) SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
         sysThemeTemplateFieldService.del(sysThemeTemplateFieldParam);
         return new SuccessResponseData<>();
@@ -60,6 +63,7 @@ public class SysThemeTemplateFieldController {
      * @date 2021/12/17 11:38
      */
     @PostResource(name = "修改系统模板属性", path = "/sysThemeTemplateField/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(SysThemeTemplateFieldRequest.edit.class) SysThemeTemplateFieldRequest sysThemeTemplateFieldParam) {
         sysThemeTemplateFieldService.edit(sysThemeTemplateFieldParam);
         return new SuccessResponseData<>();

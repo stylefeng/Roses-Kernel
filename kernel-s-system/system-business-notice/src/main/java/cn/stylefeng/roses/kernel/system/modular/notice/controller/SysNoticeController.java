@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.notice.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -62,6 +63,7 @@ public class SysNoticeController {
      * @date 2021/1/9 14:44
      */
     @PostResource(name = "添加通知管理", path = "/sysNotice/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(SysNoticeRequest.add.class) SysNoticeRequest sysNoticeParam) {
         sysNoticeService.add(sysNoticeParam);
         return new SuccessResponseData<>();
@@ -74,6 +76,7 @@ public class SysNoticeController {
      * @date 2021/1/9 14:54
      */
     @PostResource(name = "编辑通知管理", path = "/sysNotice/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(SysNoticeRequest.edit.class) SysNoticeRequest sysNoticeParam) {
         sysNoticeService.edit(sysNoticeParam);
         return new SuccessResponseData<>();
@@ -86,6 +89,7 @@ public class SysNoticeController {
      * @date 2021/1/9 14:54
      */
     @PostResource(name = "删除通知管理", path = "/sysNotice/delete")
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(SysNoticeRequest.delete.class) SysNoticeRequest sysNoticeParam) {
         sysNoticeService.del(sysNoticeParam);
         return new SuccessResponseData<>();

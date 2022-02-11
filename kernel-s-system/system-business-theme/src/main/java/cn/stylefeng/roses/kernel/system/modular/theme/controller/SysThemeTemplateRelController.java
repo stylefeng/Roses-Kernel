@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.system.modular.theme.controller;
 
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -32,6 +33,7 @@ public class SysThemeTemplateRelController {
      * @date 2021/12/24 11:17
      */
     @PostResource(name = "增加系统主题模板属性关系", path = "/sysThemeTemplateRel/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(SysThemeTemplateRelRequest.add.class) SysThemeTemplateRelRequest sysThemeTemplateParam) {
         sysThemeTemplateRelService.add(sysThemeTemplateParam);
         return new SuccessResponseData<>();
@@ -44,6 +46,7 @@ public class SysThemeTemplateRelController {
      * @date 2021/12/24 11:23
      */
     @PostResource(name = "删除系统主题模板属性关系", path = "/sysThemeTemplateRel/del")
+    @BusinessLog
     public ResponseData<?> del(@RequestBody SysThemeTemplateRelRequest sysThemeTemplateRelParam) {
         sysThemeTemplateRelService.del(sysThemeTemplateRelParam);
         return new SuccessResponseData<>();

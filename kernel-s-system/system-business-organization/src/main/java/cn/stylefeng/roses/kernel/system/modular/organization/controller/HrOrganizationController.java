@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
@@ -62,6 +63,7 @@ public class HrOrganizationController {
      * @date 2020/11/04 11:05
      */
     @PostResource(name = "添加系统组织机构", path = "/hrOrganization/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(HrOrganizationRequest.add.class) HrOrganizationRequest hrOrganizationRequest) {
         hrOrganizationService.add(hrOrganizationRequest);
         return new SuccessResponseData<>();
@@ -74,6 +76,7 @@ public class HrOrganizationController {
      * @date 2020/11/04 11:05
      */
     @PostResource(name = "删除系统组织机构", path = "/hrOrganization/delete")
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(HrOrganizationRequest.delete.class) HrOrganizationRequest hrOrganizationRequest) {
         hrOrganizationService.del(hrOrganizationRequest);
         return new SuccessResponseData<>();
@@ -86,6 +89,7 @@ public class HrOrganizationController {
      * @date 2020/11/04 11:05
      */
     @PostResource(name = "编辑系统组织机构", path = "/hrOrganization/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(HrOrganizationRequest.edit.class) HrOrganizationRequest hrOrganizationRequest) {
         hrOrganizationService.edit(hrOrganizationRequest);
         return new SuccessResponseData<>();
@@ -98,6 +102,7 @@ public class HrOrganizationController {
      * @date 2020/11/04 11:05
      */
     @PostResource(name = "修改组织机构状态", path = "/hrOrganization/updateStatus")
+    @BusinessLog
     public ResponseData<?> updateStatus(@RequestBody @Validated(HrOrganizationRequest.updateStatus.class) HrOrganizationRequest hrOrganizationRequest) {
         hrOrganizationService.updateStatus(hrOrganizationRequest);
         return new SuccessResponseData<>();

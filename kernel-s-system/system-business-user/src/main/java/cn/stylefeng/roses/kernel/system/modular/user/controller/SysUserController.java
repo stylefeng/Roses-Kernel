@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.system.modular.user.controller;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
@@ -71,6 +72,7 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_增加", path = "/sysUser/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(BaseRequest.add.class) SysUserRequest sysUserRequest) {
         sysUserService.add(sysUserRequest);
         return new SuccessResponseData<>();
@@ -83,6 +85,7 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_删除", path = "/sysUser/delete")
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(SysUserRequest.delete.class) SysUserRequest sysUserRequest) {
         sysUserService.del(sysUserRequest);
         return new SuccessResponseData<>();
@@ -95,6 +98,7 @@ public class SysUserController {
      * @date 2021/4/7 16:12
      */
     @PostResource(name = "系统用户_批量删除系统用户", path = "/sysUser/batchDelete")
+    @BusinessLog
     public ResponseData<?> batchDelete(@RequestBody @Validated(SysUserRequest.batchDelete.class) SysUserRequest sysUserRequest) {
         sysUserService.batchDelete(sysUserRequest);
         return new SuccessResponseData<>();
@@ -107,6 +111,7 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_编辑", path = "/sysUser/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(SysUserRequest.edit.class) SysUserRequest sysUserRequest) {
         sysUserService.edit(sysUserRequest);
         return new SuccessResponseData<>();
@@ -119,6 +124,7 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_修改状态", path = "/sysUser/changeStatus")
+    @BusinessLog
     public ResponseData<?> changeStatus(@RequestBody @Validated(SysUserRequest.changeStatus.class) SysUserRequest sysUserRequest) {
         sysUserService.editStatus(sysUserRequest);
         return new SuccessResponseData<>();
@@ -131,6 +137,7 @@ public class SysUserController {
      * @date 2020/11/6 13:48
      */
     @PostResource(name = "系统用户_重置密码", path = "/sysUser/resetPwd")
+    @BusinessLog
     public ResponseData<?> resetPwd(@RequestBody @Validated(SysUserRequest.resetPwd.class) SysUserRequest sysUserRequest) {
         sysUserService.resetPassword(sysUserRequest);
         return new SuccessResponseData<>();
@@ -143,6 +150,7 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_授权角色", path = "/sysUser/grantRole")
+    @BusinessLog
     public ResponseData<?> grantRole(@RequestBody @Validated(SysUserRequest.grantRole.class) SysUserRequest sysUserRequest) {
         sysUserService.grantRole(sysUserRequest);
         return new SuccessResponseData<>();
@@ -155,6 +163,7 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_授权数据", path = "/sysUser/grantData")
+    @BusinessLog
     public ResponseData<?> grantData(@RequestBody @Validated(SysUserRequest.grantData.class) SysUserRequest sysUserRequest) {
         sysUserService.grantData(sysUserRequest);
         return new SuccessResponseData<>();
@@ -204,6 +213,7 @@ public class SysUserController {
      * @date 2020/11/6 13:57
      */
     @GetResource(name = "系统用户_导出", path = "/sysUser/export")
+    @BusinessLog
     public void export(HttpServletResponse response) {
         sysUserService.export(response);
     }
@@ -259,7 +269,6 @@ public class SysUserController {
     /**
      * 获取所有用户ID和名称列表
      *
-     * @return {@link ResponseData< List< SysUserRequest>>}
      * @author majianguo
      * @date 2022/1/17 14:24
      **/
@@ -272,7 +281,6 @@ public class SysUserController {
     /**
      * 运维平台接口检测
      *
-     * @return {@link PageResult< Integer>}
      * @author majianguo
      * @date 2022/1/27 14:29
      **/
@@ -284,7 +292,6 @@ public class SysUserController {
     /**
      * 根据用户主键获取用户对应的token
      *
-     * @return {@link ResponseData< List< SysUserRequest>>}
      * @author majianguo
      * @date 2022/1/17 14:24
      **/

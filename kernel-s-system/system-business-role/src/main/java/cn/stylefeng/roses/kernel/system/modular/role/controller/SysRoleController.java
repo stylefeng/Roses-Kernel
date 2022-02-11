@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.system.modular.role.controller;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
@@ -67,6 +68,7 @@ public class SysRoleController {
      * @date 2020/11/5 上午10:38
      */
     @PostResource(name = "添加角色", path = "/sysRole/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(SysRoleRequest.add.class) SysRoleRequest sysRoleRequest) {
         sysRoleService.add(sysRoleRequest);
         return new SuccessResponseData<>();
@@ -79,6 +81,7 @@ public class SysRoleController {
      * @date 2020/11/5 上午10:48
      */
     @PostResource(name = "角色删除", path = "/sysRole/delete")
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(SysRoleRequest.delete.class) SysRoleRequest sysRoleRequest) {
         sysRoleService.del(sysRoleRequest);
         return new SuccessResponseData<>();
@@ -91,6 +94,7 @@ public class SysRoleController {
      * @date 2020/11/5 上午10:49
      */
     @PostResource(name = "角色编辑", path = "/sysRole/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(SysRoleRequest.edit.class) SysRoleRequest sysRoleRequest) {
         sysRoleService.edit(sysRoleRequest);
         return new SuccessResponseData<>();
