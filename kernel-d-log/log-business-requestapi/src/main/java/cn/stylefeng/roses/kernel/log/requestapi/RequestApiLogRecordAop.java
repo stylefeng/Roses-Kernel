@@ -26,7 +26,6 @@ package cn.stylefeng.roses.kernel.log.requestapi;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.log.api.LogRecordApi;
-import cn.stylefeng.roses.kernel.log.api.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.log.api.constants.LogConstants;
 import cn.stylefeng.roses.kernel.log.api.constants.LogFileConstants;
 import cn.stylefeng.roses.kernel.log.api.expander.LogConfigExpander;
@@ -35,6 +34,7 @@ import cn.stylefeng.roses.kernel.log.api.factory.appender.AuthedLogAppender;
 import cn.stylefeng.roses.kernel.log.api.factory.appender.HttpLogAppender;
 import cn.stylefeng.roses.kernel.log.api.factory.appender.ParamsLogAppender;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
@@ -304,20 +304,14 @@ public class RequestApiLogRecordAop implements Ordered {
                 return false;
             }
             // 如果方法上标明不记录日志，则不记录日志
-            if (methodBusinessLog != null && !methodBusinessLog.openLog()) {
-                return false;
-            }
-            return true;
+            return methodBusinessLog == null || methodBusinessLog.openLog();
         } else {
             // 如果全局开关没开启，但是类上有特殊标记开启日志，则以类上标注为准
             if (businessLog != null && businessLog.openLog()) {
                 return true;
             }
             // 如果方法上标明不记录日志，则不记录日志
-            if (methodBusinessLog != null && methodBusinessLog.openLog()) {
-                return true;
-            }
-            return false;
+            return methodBusinessLog != null && methodBusinessLog.openLog();
         }
     }
 
