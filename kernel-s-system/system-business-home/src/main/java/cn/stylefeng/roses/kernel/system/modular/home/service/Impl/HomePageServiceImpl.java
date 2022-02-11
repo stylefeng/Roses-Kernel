@@ -68,7 +68,12 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
     private SysStatisticsCountService sysStatisticsCountService;
 
     @Override
-    public List<LogRecordDTO> getRecentLogs(LogManagerRequest logManagerRequest) {
+    public List<LogRecordDTO> getRecentLogs() {
+
+        // 只查询当前用户的
+        LogManagerRequest logManagerRequest = new LogManagerRequest();
+        logManagerRequest.setUserId(LoginContext.me().getLoginUser().getUserId());
+
         PageResult<LogRecordDTO> page = logManagerApi.findPage(logManagerRequest);
         return page.getRows();
     }

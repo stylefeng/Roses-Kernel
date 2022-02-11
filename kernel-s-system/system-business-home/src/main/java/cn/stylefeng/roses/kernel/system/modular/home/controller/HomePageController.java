@@ -1,6 +1,5 @@
 package cn.stylefeng.roses.kernel.system.modular.home.controller;
 
-import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
@@ -36,8 +35,8 @@ public class HomePageController {
      * @date 2022/1/25 14:52
      */
     @GetResource(name = "查询动态列表", path = "/homePage/getRecentLogs", requiredPermission = false)
-    public ResponseData<List<LogRecordDTO>> getRecentLogs(LogManagerRequest logManagerRequest) {
-        return new SuccessResponseData<>(homePageService.getRecentLogs(logManagerRequest));
+    public ResponseData<List<LogRecordDTO>> getRecentLogs() {
+        return new SuccessResponseData<>(homePageService.getRecentLogs());
     }
 
     /**
