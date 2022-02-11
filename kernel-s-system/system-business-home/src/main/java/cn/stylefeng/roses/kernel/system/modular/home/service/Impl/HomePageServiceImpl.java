@@ -108,7 +108,7 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
         // 获取企业人员总数
         SysUserRequest sysUserRequest = new SysUserRequest();
         List<Long> allUserIdList = userServiceApi.queryAllUserIdList(sysUserRequest);
-        homeCompanyInfo.setEnterprisePersonnelNum(allUserIdList.size());
+        homeCompanyInfo.setEnterprisePersonNum(allUserIdList.size());
 
         // 获取职位总数
         int positionNum = positionServiceApi.PositionNum();
@@ -116,10 +116,11 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
 
         // 获取当前登录用户
         LoginUser loginUser = LoginContext.me().getLoginUser();
+
         // 获取组织公司ID
         Long organizationId = loginUser.getOrganizationId();
         List<SysUserOrg> sysUserOrgs = sysUserOrgService.list(Wrappers.<SysUserOrg>lambdaQuery().eq(SysUserOrg::getOrgId, organizationId));
-        homeCompanyInfo.setCompanyPersonnelNum(sysUserOrgs.size());
+        homeCompanyInfo.setCurrentCompanyPersonNum(sysUserOrgs.size());
 
         // 设置公司部门数
         int sectionNum = 0;
@@ -131,7 +132,7 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
                 }
             }
         }
-        homeCompanyInfo.setSectionNum(sectionNum);
+        homeCompanyInfo.setCurrentDeptNum(sectionNum);
 
         return homeCompanyInfo;
     }

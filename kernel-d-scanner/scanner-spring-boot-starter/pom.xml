@@ -24,6 +24,12 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--properties自动提示装载-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

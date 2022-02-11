@@ -12,27 +12,27 @@ import lombok.Data;
 public class HomeCompanyInfo {
 
     /**
-     * 组织机构数
+     * 所有组织机构数
      */
     private Integer organizationNum;
 
     /**
-     * 企业人员总数
+     * 所有企业人员总数
      */
-    private Integer enterprisePersonnelNum;
+    private Integer enterprisePersonNum;
 
     /**
-     * 职位总数
+     * 所有职位总数
      */
     private Integer positionNum;
 
     /**
-     * 部门总数
+     * 当前登录用户，所在公司的部门数量
      */
-    private Integer sectionNum;
+    private Integer currentDeptNum;
 
     /**
-     * 公司人员总数
+     * 当前登录用户，所在公司的总人数
      */
-    private Integer companyPersonnelNum;
+    private Integer currentCompanyPersonNum;
 }
