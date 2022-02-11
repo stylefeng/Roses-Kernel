@@ -5,9 +5,9 @@ import cn.stylefeng.roses.kernel.log.api.pojo.manage.LogManagerRequest;
 import cn.stylefeng.roses.kernel.log.api.pojo.record.LogRecordDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.home.HomeCompanyInfo;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.OnlineUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.home.entity.InterfaceStatistics;
+import cn.stylefeng.roses.kernel.system.modular.statistic.pojo.OnlineUserStat;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public interface HomePageService extends IService<InterfaceStatistics> {
      * @author xixiaowei
      * @date 2022/1/25 14:06
      */
-    List<OnlineUserDTO> getOnlineUserList(OnlineUserRequest onlineUserRequest);
+    OnlineUserStat getOnlineUserList(OnlineUserRequest onlineUserRequest);
 
     /**
      * 获取首页企业和公司信息

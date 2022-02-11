@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.system.modular.home.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
@@ -21,6 +22,7 @@ import cn.stylefeng.roses.kernel.system.modular.home.entity.InterfaceStatistics;
 import cn.stylefeng.roses.kernel.system.modular.home.mapper.InterfaceStatisticsMapper;
 import cn.stylefeng.roses.kernel.system.modular.home.service.HomePageService;
 import cn.stylefeng.roses.kernel.system.modular.statistic.entity.SysStatisticsCount;
+import cn.stylefeng.roses.kernel.system.modular.statistic.pojo.OnlineUserStat;
 import cn.stylefeng.roses.kernel.system.modular.statistic.service.SysStatisticsCountService;
 import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserOrg;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserOrgService;
@@ -29,9 +31,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 首页服务实现类
@@ -85,16 +86,27 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
     }
 
     @Override
-    public List<OnlineUserDTO> getOnlineUserList(OnlineUserRequest onlineUserRequest) {
+    public OnlineUserStat getOnlineUserList(OnlineUserRequest onlineUserRequest) {
+
+        OnlineUserStat onlineUserStat = new OnlineUserStat();
+
+        // 获取在线总人数
         List<OnlineUserDTO> onlineUserDTOS = userServiceApi.onlineUserList(onlineUserRequest);
 
-        // 在线人数大于20人
-        if (onlineUserDTOS.size() > 20) {
-            return onlineUserDTOS.subList(0, 19);
+        // 去重
+        HashSet<String> onlineUserList = new HashSet<>();
+        for (OnlineUserDTO onlineUserDTO : onlineUserDTOS) {
+            if (ObjectUtil.isNotEmpty(onlineUserDTO.getRealName())) {
+                onlineUserList.add(onlineUserDTO.getRealName());
+            }
         }
+        onlineUserStat.setTotalNum(onlineUserList.size());
 
-        // 在线人数小于20人
-        return onlineUserDTOS;
+        // 统计前20个人
+        Set<String> newSet = onlineUserList.stream().limit(20).collect(Collectors.toSet());
+        onlineUserStat.setTotalUserNames(newSet);
+
+        return onlineUserStat;
     }
 
     @Override
