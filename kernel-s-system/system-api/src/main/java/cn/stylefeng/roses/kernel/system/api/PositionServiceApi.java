@@ -14,6 +14,6 @@ public interface PositionServiceApi {
      * @author xixiaowei
      * @date 2022/2/9 9:37
      */
-    Integer PositionNum();
+    Integer positionNum();
 
 }

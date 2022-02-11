@@ -6,12 +6,9 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.home.HomeCompanyInfo;
-import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
-import cn.stylefeng.roses.kernel.system.api.pojo.user.OnlineUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
-import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
-import org.springframework.web.bind.annotation.RestController;
 import cn.stylefeng.roses.kernel.system.modular.home.service.HomePageService;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.modular.statistic.pojo.OnlineUserStat;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -70,7 +67,7 @@ public class HomePageController {
      * @author xixiaowei
      * @date 2022/2/10 11:34
      */
-    @GetResource(name = "获取常用功能接口", path = "/homePage/getCommonFunctions")
+    @GetResource(name = "获取常用功能接口", path = "/homePage/getCommonFunctions", requiredPermission = false)
     public ResponseData<List<SysMenu>> getCommonFunctions() {
         return new SuccessResponseData<>(homePageService.getCommonFunctions());
     }

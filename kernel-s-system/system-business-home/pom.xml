@@ -71,40 +71,32 @@
             <version>${roses.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>system-business-user</artifactId>
-            <version>${roses.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-            <scope>compile</scope>
-        </dependency>
-
+        <!--定时任务-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>timer-api</artifactId>
             <version>${roses.version}</version>
         </dependency>
+
+        <!--首页信息缓存-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-memory</artifactId>
             <version>${roses.version}</version>
-            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>cache-sdk-redis</artifactId>
             <version>${roses.version}</version>
-            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!--用户业务-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-user</artifactId>
+            <version>${roses.version}</version>
         </dependency>
 
         <!--菜单业务-->
@@ -120,6 +112,13 @@
             <artifactId>system-business-organization</artifactId>
             <version>${roses.version}</version>
         </dependency>
+
+        <!-- 拦截接口，记录常用功能 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
