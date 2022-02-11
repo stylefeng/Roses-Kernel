@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.modular.statistic.cache;
+package cn.stylefeng.roses.kernel.system.modular.home.cache;
 
 import cn.hutool.cache.impl.TimedCache;
 import cn.stylefeng.roses.kernel.cache.memory.AbstractMemoryCacheOperator;

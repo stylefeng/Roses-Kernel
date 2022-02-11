@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.modular.home.service.Impl;
+package cn.stylefeng.roses.kernel.system.modular.home.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -13,14 +13,19 @@ import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceUrlParam;
 import cn.stylefeng.roses.kernel.system.api.*;
 import cn.stylefeng.roses.kernel.system.api.pojo.home.HomeCompanyInfo;
+import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdSysMenuDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.OnlineUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
-import cn.stylefeng.roses.kernel.system.modular.home.entity.InterfaceStatistics;
-import cn.stylefeng.roses.kernel.system.modular.home.mapper.InterfaceStatisticsMapper;
+import cn.stylefeng.roses.kernel.system.modular.home.entity.SysStatisticsUrl;
 import cn.stylefeng.roses.kernel.system.modular.home.service.HomePageService;
+import cn.stylefeng.roses.kernel.system.modular.home.entity.SysStatisticsCount;
+import cn.stylefeng.roses.kernel.system.modular.home.service.SysStatisticsCountService;
+import cn.stylefeng.roses.kernel.system.modular.home.service.SysStatisticsUrlService;
+import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
+import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
 import cn.stylefeng.roses.kernel.system.modular.statistic.entity.SysStatisticsCount;
 import cn.stylefeng.roses.kernel.system.modular.statistic.pojo.OnlineUserStat;
 import cn.stylefeng.roses.kernel.system.modular.statistic.service.SysStatisticsCountService;
@@ -31,6 +36,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,7 +51,7 @@ import java.util.stream.Collectors;
  * @date 2022/1/25 9:45
  */
 @Service
-public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, InterfaceStatistics> implements HomePageService, HomePageServiceApi {
+public class HomePageServiceImpl implements HomePageService, HomePageServiceApi {
 
     @Resource
     private LogManagerApi logManagerApi;
@@ -66,6 +76,12 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
 
     @Resource
     private SysStatisticsCountService sysStatisticsCountService;
+
+    @Resource
+    private SysStatisticsUrlService sysStatisticsUrlService;
+
+    @Resource
+    private SysMenuService sysMenuService;
 
     @Override
     public List<LogRecordDTO> getRecentLogs() {
@@ -143,22 +159,24 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
     }
 
     @Override
-    public List<ResourceRequest> getCommonFunctions() {
-        // 获取当前用户
-        Long userId = LoginContext.me().getLoginUser().getUserId();
+    public List<SysMenu> getCommonFunctions() {
+        List<SysStatisticsCount> sysStatisticsCounts = sysStatisticsCountService.list(Wrappers.<SysStatisticsCount>lambdaQuery().orderByDesc(SysStatisticsCount::getStatCount));
+        List<Long> statUrlIds = sysStatisticsCounts.stream().map(SysStatisticsCount::getStatUrlId).collect(Collectors.toList());
 
-        List<InterfaceStatistics> interfaceStatisticsList = this.list(Wrappers.<InterfaceStatistics>lambdaQuery().eq(InterfaceStatistics::getCreateUser, userId));
-
-        List<ResourceRequest> resourceRequestList = new ArrayList<>();
-        for (InterfaceStatistics interfaceStatistics : interfaceStatisticsList) {
-            ResourceUrlParam resourceUrlParam = new ResourceUrlParam();
-            resourceUrlParam.setUrl(interfaceStatistics.getInterfaceUrl());
-            ResourceDefinition apiResourceByUrl = resourceServiceApi.getResourceByUrl(resourceUrlParam);
-            ResourceRequest resourceRequest = new ResourceRequest();
-            BeanUtil.copyProperties(apiResourceByUrl, resourceRequest);
-            resourceRequestList.add(resourceRequest);
+        // 菜单ID集合
+        List<String> statMenuIds = new ArrayList<>();
+        for (Long statUrlId : statUrlIds) {
+            SysStatisticsUrl sysStatisticsUrl = sysStatisticsUrlService.getOne(Wrappers.<SysStatisticsUrl>lambdaQuery().eq(SysStatisticsUrl::getStatUrl, statUrlId));
+            String statMenuId = sysStatisticsUrl.getStatMenuId();
+            statMenuIds.add(statMenuId);
         }
-        return resourceRequestList;
+
+        List<SysMenu> sysMenuList = new ArrayList<>();
+        for (String statMenuId : statMenuIds) {
+            SysMenu sysMenu = sysMenuService.getOne(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getMenuId, statMenuId));
+            sysMenuList.add(sysMenu);
+        }
+        return sysMenuList;
     }
 
     @Override
@@ -166,10 +184,22 @@ public class HomePageServiceImpl extends ServiceImpl<InterfaceStatisticsMapper, 
         // key是用户id，value的key是statUrlId，最后的value是次数
         Map<String, Map<Long, Integer>> userRequestStats = requestCountCacheApi.getAllKeyValues();
 
-        // todo
         ArrayList<SysStatisticsCount> sysStatisticsCounts = new ArrayList<>();
+        // 遍历填充数据
+        for (String userId : userRequestStats.keySet()) {
+            SysStatisticsCount sysStatisticsCount = new SysStatisticsCount();
+            sysStatisticsCount.setUserId(Long.valueOf(userId));
+            Map<Long, Integer> map = userRequestStats.get(userId);
+            for (Long statUrlId : map.keySet()) {
+                sysStatisticsCount.setStatUrlId(statUrlId);
+                sysStatisticsCount.setStatCount(map.get(statUrlId));
+            }
 
-        // todo
+            // 存放到集合中
+            sysStatisticsCounts.add(sysStatisticsCount);
+        }
+
+        // 批量存入数据库
         this.sysStatisticsCountService.saveBatch(sysStatisticsCounts);
     }
 

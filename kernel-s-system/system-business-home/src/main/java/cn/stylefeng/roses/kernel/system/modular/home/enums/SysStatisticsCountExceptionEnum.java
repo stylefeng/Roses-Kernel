@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.modular.statistic.enums;
+package cn.stylefeng.roses.kernel.system.modular.home.enums;
 
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.exception.AbstractExceptionEnum;

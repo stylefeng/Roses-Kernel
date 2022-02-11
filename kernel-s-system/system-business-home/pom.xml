@@ -106,6 +106,12 @@
             <version>${roses.version}</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-menu</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.modular.statistic.entity;
+package cn.stylefeng.roses.kernel.system.modular.home.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;

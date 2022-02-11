@@ -1,7 +1,7 @@
-package cn.stylefeng.roses.kernel.system.modular.statistic.context;
+package cn.stylefeng.roses.kernel.system.modular.home.context;
 
-import cn.stylefeng.roses.kernel.system.modular.statistic.entity.SysStatisticsUrl;
-import cn.stylefeng.roses.kernel.system.modular.statistic.service.SysStatisticsUrlService;
+import cn.stylefeng.roses.kernel.system.modular.home.entity.SysStatisticsUrl;
+import cn.stylefeng.roses.kernel.system.modular.home.service.SysStatisticsUrlService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

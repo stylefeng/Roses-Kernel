@@ -1,8 +1,8 @@
-package cn.stylefeng.roses.kernel.system.modular.statistic.service;
+package cn.stylefeng.roses.kernel.system.modular.home.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
-import cn.stylefeng.roses.kernel.system.modular.statistic.entity.SysStatisticsUrl;
-import cn.stylefeng.roses.kernel.system.modular.statistic.pojo.request.SysStatisticsUrlRequest;
+import cn.stylefeng.roses.kernel.system.modular.home.entity.SysStatisticsUrl;
+import cn.stylefeng.roses.kernel.system.modular.home.pojo.request.SysStatisticsUrlRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

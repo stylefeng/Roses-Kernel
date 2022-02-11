@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.modular.statistic.timer;
+package cn.stylefeng.roses.kernel.system.modular.home.timer;
 
 import cn.stylefeng.roses.kernel.system.modular.home.service.HomePageService;
 import cn.stylefeng.roses.kernel.timer.api.TimerAction;

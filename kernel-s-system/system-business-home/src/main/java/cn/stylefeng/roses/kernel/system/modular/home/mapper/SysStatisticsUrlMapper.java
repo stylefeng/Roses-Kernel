@@ -1,6 +1,6 @@
-package cn.stylefeng.roses.kernel.system.modular.statistic.mapper;
+package cn.stylefeng.roses.kernel.system.modular.home.mapper;
 
-import cn.stylefeng.roses.kernel.system.modular.statistic.entity.SysStatisticsUrl;
+import cn.stylefeng.roses.kernel.system.modular.home.entity.SysStatisticsUrl;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

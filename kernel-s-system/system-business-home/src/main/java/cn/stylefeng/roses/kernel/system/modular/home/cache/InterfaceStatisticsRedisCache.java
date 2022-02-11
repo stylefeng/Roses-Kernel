@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.modular.statistic.cache;
+package cn.stylefeng.roses.kernel.system.modular.home.cache;
 
 import cn.stylefeng.roses.kernel.cache.redis.AbstractRedisCacheOperator;
 import cn.stylefeng.roses.kernel.system.api.constants.StatisticsCacheConstants;

@@ -1,4 +1,4 @@
-package cn.stylefeng.roses.kernel.system.modular.statistic.service.impl;
+package cn.stylefeng.roses.kernel.system.modular.home.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -6,11 +6,11 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
-import cn.stylefeng.roses.kernel.system.modular.statistic.entity.SysStatisticsUrl;
-import cn.stylefeng.roses.kernel.system.modular.statistic.enums.SysStatisticsUrlExceptionEnum;
-import cn.stylefeng.roses.kernel.system.modular.statistic.mapper.SysStatisticsUrlMapper;
-import cn.stylefeng.roses.kernel.system.modular.statistic.pojo.request.SysStatisticsUrlRequest;
-import cn.stylefeng.roses.kernel.system.modular.statistic.service.SysStatisticsUrlService;
+import cn.stylefeng.roses.kernel.system.modular.home.entity.SysStatisticsUrl;
+import cn.stylefeng.roses.kernel.system.modular.home.enums.SysStatisticsUrlExceptionEnum;
+import cn.stylefeng.roses.kernel.system.modular.home.mapper.SysStatisticsUrlMapper;
+import cn.stylefeng.roses.kernel.system.modular.home.pojo.request.SysStatisticsUrlRequest;
+import cn.stylefeng.roses.kernel.system.modular.home.service.SysStatisticsUrlService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

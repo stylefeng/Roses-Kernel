@@ -35,7 +35,7 @@ import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleDataScopeMemoryCa
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleResourceMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
-import cn.stylefeng.roses.kernel.system.modular.statistic.cache.InterfaceStatisticsMemoryCache;
+import cn.stylefeng.roses.kernel.system.modular.home.cache.InterfaceStatisticsMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.theme.cache.ThemeMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.theme.pojo.DefaultTheme;
 import cn.stylefeng.roses.kernel.system.modular.user.cache.SysUserMemoryCache;
