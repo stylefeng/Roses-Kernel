@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.app.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -60,6 +61,7 @@ public class SysAppController {
      * @date 2020/3/25 14:44
      */
     @PostResource(name = "添加系统应用", path = "/sysApp/add")
+    @BusinessLog
     public ResponseData<?> add(@RequestBody @Validated(SysAppRequest.add.class) SysAppRequest sysAppParam) {
         sysAppService.add(sysAppParam);
         return new SuccessResponseData<>();
@@ -72,6 +74,7 @@ public class SysAppController {
      * @date 2020/3/25 14:54
      */
     @PostResource(name = "删除系统应用", path = "/sysApp/delete")
+    @BusinessLog
     public ResponseData<?> delete(@RequestBody @Validated(SysAppRequest.delete.class) SysAppRequest sysAppParam) {
         sysAppService.del(sysAppParam);
         return new SuccessResponseData<>();
@@ -84,6 +87,7 @@ public class SysAppController {
      * @date 2020/3/25 14:54
      */
     @PostResource(name = "编辑系统应用", path = "/sysApp/edit")
+    @BusinessLog
     public ResponseData<?> edit(@RequestBody @Validated(SysAppRequest.edit.class) SysAppRequest sysAppParam) {
         sysAppService.edit(sysAppParam);
         return new SuccessResponseData<>();
@@ -96,6 +100,7 @@ public class SysAppController {
      * @date 2020/6/29 16:49
      */
     @PostResource(name = "修改应用状态", path = "/sysApp/updateStatus")
+    @BusinessLog
     public ResponseData<?> updateStatus(@RequestBody @Validated(SysAppRequest.updateStatus.class) SysAppRequest sysAppParam) {
         sysAppService.editStatus(sysAppParam);
         return new SuccessResponseData<>();
@@ -141,6 +146,7 @@ public class SysAppController {
      * @date 2020/6/29 16:49
      */
     @PostResource(name = "设为默认应用", path = "/sysApp/updateActiveFlag")
+    @BusinessLog
     public ResponseData<?> setAsDefault(@RequestBody @Validated(SysAppRequest.updateActiveFlag.class) SysAppRequest sysAppParam) {
         sysAppService.updateActiveFlag(sysAppParam);
         return new SuccessResponseData<>();
