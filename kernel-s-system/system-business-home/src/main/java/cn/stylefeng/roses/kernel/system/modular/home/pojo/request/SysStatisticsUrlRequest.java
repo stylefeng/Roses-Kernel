@@ -34,7 +34,7 @@ public class SysStatisticsUrlRequest extends BaseRequest {
      * 被统计菜单ID
      */
     @ChineseDescription("被统计菜单ID")
-    private String statMenuId;
+    private Long statMenuId;
 
     /**
      * 被统计的URL

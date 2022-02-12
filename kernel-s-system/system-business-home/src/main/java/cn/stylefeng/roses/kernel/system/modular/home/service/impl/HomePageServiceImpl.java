@@ -19,11 +19,12 @@ import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
 import cn.stylefeng.roses.kernel.system.modular.home.entity.SysStatisticsCount;
 import cn.stylefeng.roses.kernel.system.modular.home.entity.SysStatisticsUrl;
+import cn.stylefeng.roses.kernel.system.modular.home.mapper.SysStatisticsUrlMapper;
 import cn.stylefeng.roses.kernel.system.modular.home.service.HomePageService;
 import cn.stylefeng.roses.kernel.system.modular.home.service.SysStatisticsCountService;
 import cn.stylefeng.roses.kernel.system.modular.home.service.SysStatisticsUrlService;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
-import cn.stylefeng.roses.kernel.system.modular.menu.service.SysMenuService;
+import cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuMapper;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
 import cn.stylefeng.roses.kernel.system.modular.organization.service.HrOrganizationService;
 import cn.stylefeng.roses.kernel.system.modular.statistic.pojo.OnlineUserStat;
@@ -75,7 +76,10 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
     private SysStatisticsUrlService sysStatisticsUrlService;
 
     @Resource
-    private SysMenuService sysMenuService;
+    private SysStatisticsUrlMapper sysStatisticsUrlMapper;
+
+    @Resource
+    private SysMenuMapper sysMenuMapper;
 
     @Override
     public List<LogRecordDTO> getRecentLogs() {
@@ -156,24 +160,29 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
         LoginUser loginUser = LoginContext.me().getLoginUser();
         List<SysStatisticsCount> statList = sysStatisticsCountService.list(
                 Wrappers.lambdaQuery(SysStatisticsCount.class).eq(SysStatisticsCount::getUserId, loginUser.getUserId()).orderByDesc(SysStatisticsCount::getStatCount));
-        List<Long> statUrlId = statList.stream().map(SysStatisticsCount::getStatUrlId).collect(Collectors.toList());
+        List<Long> statUrlIdList = statList.stream().map(SysStatisticsCount::getStatUrlId).collect(Collectors.toList());
 
         // 获取系统常驻常用功能
         LambdaQueryWrapper<SysStatisticsUrl> wrapper = Wrappers.lambdaQuery(SysStatisticsUrl.class)
                 .eq(SysStatisticsUrl::getAlwaysShow, YesOrNotEnum.Y)
-                .or()
-                .in(ObjectUtil.isNotEmpty(statUrlId), SysStatisticsUrl::getStatUrlId, statUrlId)
-                .select(SysStatisticsUrl::getStatMenuId);
+                .select(SysStatisticsUrl::getStatUrlId);
         List<SysStatisticsUrl> alwaysShowList = sysStatisticsUrlService.list(wrapper);
 
-        // 获取菜单
-        List<String> usualMenuIds = alwaysShowList.stream().map(SysStatisticsUrl::getStatMenuId).collect(Collectors.toList());
+        // 将常驻功能放在统计的常用功能最前边
+        if (ObjectUtil.isNotEmpty(alwaysShowList)) {
+            statUrlIdList.addAll(0, alwaysShowList.stream().map(SysStatisticsUrl::getStatUrlId).collect(Collectors.toList()));
+        }
+
+        // 如果statUrlId大于8，则只截取8个
+        if (statUrlIdList.size() > 8) {
+            statUrlIdList = statUrlIdList.subList(0, 8);
+        }
+
+        // 获取菜单id集合
+        List<Long> usualMenuIds = sysStatisticsUrlMapper.getMenuIdsByStatUrlIdList(statUrlIdList);
 
         // 获取菜单对应的图标和名称信息
-        LambdaQueryWrapper<SysMenu> sysMenuLambdaQueryWrapper = Wrappers.lambdaQuery(SysMenu.class)
-                .in(SysMenu::getMenuId, usualMenuIds)
-                .select(SysMenu::getMenuName, SysMenu::getAntdvIcon, SysMenu::getAntdvRouter);
-        List<SysMenu> list = sysMenuService.list(sysMenuLambdaQueryWrapper);
+        List<SysMenu> list = sysMenuMapper.getMenuStatInfoByMenuIds(usualMenuIds);
 
         // 菜单的icon需要转为大写驼峰
         for (SysMenu sysMenu : list) {
@@ -182,6 +191,7 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
                 sysMenu.setAntdvIcon(StrUtil.upperFirst(StrUtil.toCamelCase(replace)));
             }
         }
+
         return list;
     }
 

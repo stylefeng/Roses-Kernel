@@ -90,13 +90,13 @@ public class SysStatisticsUrlServiceImpl extends ServiceImpl<SysStatisticsUrlMap
 
         Long statUrlId = sysStatisticsUrlRequest.getStatUrlId();
         String statName = sysStatisticsUrlRequest.getStatName();
-        String statMenuId = sysStatisticsUrlRequest.getStatMenuId();
+        Long statMenuId = sysStatisticsUrlRequest.getStatMenuId();
         String statUrl = sysStatisticsUrlRequest.getStatUrl();
         String alwaysShow = sysStatisticsUrlRequest.getAlwaysShow();
 
         queryWrapper.eq(ObjectUtil.isNotNull(statUrlId), SysStatisticsUrl::getStatUrlId, statUrlId);
         queryWrapper.like(ObjectUtil.isNotEmpty(statName), SysStatisticsUrl::getStatName, statName);
-        queryWrapper.like(ObjectUtil.isNotEmpty(statMenuId), SysStatisticsUrl::getStatMenuId, statMenuId);
+        queryWrapper.eq(ObjectUtil.isNotEmpty(statMenuId), SysStatisticsUrl::getStatMenuId, statMenuId);
         queryWrapper.like(ObjectUtil.isNotEmpty(statUrl), SysStatisticsUrl::getStatUrl, statUrl);
         queryWrapper.like(ObjectUtil.isNotEmpty(alwaysShow), SysStatisticsUrl::getAlwaysShow, alwaysShow);
 

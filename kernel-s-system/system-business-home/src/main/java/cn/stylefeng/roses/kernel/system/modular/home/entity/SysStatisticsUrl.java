@@ -35,7 +35,7 @@ public class SysStatisticsUrl extends BaseEntity {
      * 被统计菜单ID
      */
     @TableField("stat_menu_id")
-    private String statMenuId;
+    private Long statMenuId;
 
     /**
      * 被统计的URL

@@ -26,6 +26,9 @@ package cn.stylefeng.roses.kernel.system.modular.menu.mapper;
 
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 系统菜单mapper接口
@@ -34,5 +37,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @date 2020/3/13 16:05
  */
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
+
+    /**
+     * 获取一些菜单的统计信息（只返回名称，路径，图标）
+     *
+     * @author fengshuonan
+     * @date 2022/2/12 19:07
+     */
+    List<SysMenu> getMenuStatInfoByMenuIds(@Param("menuIds") List<Long> menuIds);
 
 }
