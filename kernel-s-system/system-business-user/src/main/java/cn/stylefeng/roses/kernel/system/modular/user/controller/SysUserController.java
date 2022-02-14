@@ -277,7 +277,6 @@ public class SysUserController {
         return new SuccessResponseData<>(sysUserService.getAllUserIdList());
     }
 
-
     /**
      * 运维平台接口检测
      *

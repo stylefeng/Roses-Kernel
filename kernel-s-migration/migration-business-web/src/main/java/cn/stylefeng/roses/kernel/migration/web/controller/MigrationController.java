@@ -76,8 +76,8 @@ public class MigrationController {
      * @date 2021/7/7 11:11
      **/
     @PostResource(name = "恢复备份数据", path = "/dataMigration/restoreData")
-    public ResponseData<?> restoreData(@RequestPart("file") MultipartFile file,String type) {
-        migrationService.restoreData(file,type);
+    public ResponseData<?> restoreData(@RequestPart("file") MultipartFile file, String type) {
+        migrationService.restoreData(file, type);
         return new SuccessResponseData<>();
     }
 }
