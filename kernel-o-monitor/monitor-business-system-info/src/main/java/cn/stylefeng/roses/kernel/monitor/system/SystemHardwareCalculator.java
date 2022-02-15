@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.monitor.system;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.stylefeng.roses.kernel.monitor.api.pojo.*;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.util.IpInfoUtils;
 import lombok.Data;
 import oshi.SystemInfo;
@@ -57,26 +58,31 @@ public class SystemHardwareCalculator {
     /**
      * CPU相关信息
      */
+    @ChineseDescription("CPU相关信息")
     private CpuInfo cpu = new CpuInfo();
 
     /**
      * 內存相关信息
      */
+    @ChineseDescription("内存相关信息")
     private MemInfo mem = new MemInfo();
 
     /**
      * JVM相关信息
      */
+    @ChineseDescription("JWT相关信息")
     private JvmInfo jvm = new JvmInfo();
 
     /**
      * 服务器相关信息
      */
+    @ChineseDescription("服务器相关信息")
     private SysInfo sys = new SysInfo();
 
     /**
      * 磁盘相关信息
      */
+    @ChineseDescription("磁盘相关信息")
     private List<SysFileInfo> sysFiles = new LinkedList<>();
 
     /**

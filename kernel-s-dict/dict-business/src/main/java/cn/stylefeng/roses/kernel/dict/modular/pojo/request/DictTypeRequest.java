@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.dict.modular.pojo.request;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
 import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
@@ -48,17 +49,20 @@ public class DictTypeRequest extends BaseRequest {
      * 字典类型id
      */
     @NotNull(message = "id不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class})
+    @ChineseDescription("字典类型id")
     private Long dictTypeId;
 
     /**
      * 字典类型： 1-业务类型，2-系统类型，参考 DictTypeClassEnum
      */
     @NotNull(message = "字典类型不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("字典类型")
     private Integer dictTypeClass;
 
     /**
      * 字典类型业务编码
      */
+    @ChineseDescription("字典类型业务编码")
     private String dictTypeBusCode;
 
     /**
@@ -72,22 +76,26 @@ public class DictTypeRequest extends BaseRequest {
             columnName = "dict_type_code",
             idFieldName = "dict_type_id",
             excludeLogicDeleteItems = true)
+    @ChineseDescription("字典类型编码")
     private String dictTypeCode;
 
     /**
      * 字典类型名称
      */
     @NotBlank(message = "字典类型名称不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("字典类型名称")
     private String dictTypeName;
 
     /**
      * 字典类型名词拼音
      */
+    @ChineseDescription("字典类型名词拼音")
     private String dictTypeNamePinYin;
 
     /**
      * 字典类型描述
      */
+    @ChineseDescription("字典类型描述")
     private String dictTypeDesc;
 
     /**
@@ -95,12 +103,14 @@ public class DictTypeRequest extends BaseRequest {
      */
     @NotNull(message = "状态不能为空", groups = {updateStatus.class})
     @StatusValue(groups = updateStatus.class)
+    @ChineseDescription("字典类型的状态：1-启用，2-禁用")
     private Integer statusFlag;
 
     /**
      * 排序，带小数
      */
     @NotNull(message = "排序不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("排序")
     private BigDecimal dictTypeSort;
 
     /**

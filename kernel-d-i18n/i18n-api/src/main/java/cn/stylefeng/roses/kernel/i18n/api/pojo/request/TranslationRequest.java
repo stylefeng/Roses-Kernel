@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.i18n.api.pojo.request;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,35 +48,41 @@ public class TranslationRequest extends BaseRequest {
      * 主键id
      */
     @NotNull(message = "tranId不能为空", groups = {edit.class, detail.class, delete.class})
+    @ChineseDescription("主键id")
     private Long tranId;
 
     /**
      * 编码
      */
     @NotBlank(message = "tranCode不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("编码")
     private String tranCode;
 
     /**
      * 多语言条例名称
      */
+    @ChineseDescription("多语言条例名称")
     @NotBlank(message = "tranName不能为空", groups = {add.class, edit.class})
     private String tranName;
 
     /**
      * 语种字典
      */
+    @ChineseDescription("语种字典")
     @NotBlank(message = "tranLanguageCode不能为空", groups = {add.class, edit.class, changeUserLanguage.class, deleteTranLanguage.class})
     private String tranLanguageCode;
 
     /**
      * 翻译的值
      */
+    @ChineseDescription("翻译的值")
     @NotBlank(message = "tranValue不能为空", groups = {add.class, edit.class})
     private String tranValue;
 
     /**
      * 字典id，用在删除语种
      */
+    @ChineseDescription("字典id")
     @NotNull(message = "字典id", groups = {deleteTranLanguage.class})
     private Long dictId;
 

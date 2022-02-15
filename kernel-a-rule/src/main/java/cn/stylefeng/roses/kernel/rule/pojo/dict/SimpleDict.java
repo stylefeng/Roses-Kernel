@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.rule.pojo.dict;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import lombok.Data;
 
 /**
@@ -44,16 +45,19 @@ public class SimpleDict {
     /**
      * id
      */
+    @ChineseDescription("id")
     private Long id;
 
     /**
      * 名称
      */
+    @ChineseDescription("名称")
     private String name;
 
     /**
      * 编码
      */
+    @ChineseDescription("编码")
     private String code;
 
 }
