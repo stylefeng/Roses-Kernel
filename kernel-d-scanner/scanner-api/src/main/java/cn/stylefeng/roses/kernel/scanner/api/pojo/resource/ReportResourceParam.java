@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.scanner.api.pojo.resource;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -45,11 +46,13 @@ public class ReportResourceParam extends BaseRequest {
      * <p>
      * 修复一个项目启动的时候会误删别的项目资源的问题
      */
+    @ChineseDescription("项目编码")
     private String projectCode;
 
     /**
      * 资源集合
      */
+    @ChineseDescription("资源集合")
     private Map<String, Map<String, ResourceDefinition>> resourceDefinitions;
 
     public ReportResourceParam(String projectCode, Map<String, Map<String, ResourceDefinition>> resourceDefinitions) {

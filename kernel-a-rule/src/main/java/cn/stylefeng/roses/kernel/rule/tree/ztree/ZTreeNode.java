@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.rule.tree.ztree;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import lombok.EqualsAndHashCode;
@@ -48,11 +49,13 @@ public class ZTreeNode implements AbstractTreeNode<ZTreeNode> {
      */
     @Getter
     @Setter
+    @ChineseDescription("节点id")
     private Long id;
 
     /**
      * 父节点id
      */
+    @ChineseDescription("父节点id")
     private Long pId;
 
     /**
@@ -60,6 +63,7 @@ public class ZTreeNode implements AbstractTreeNode<ZTreeNode> {
      */
     @Getter
     @Setter
+    @ChineseDescription("节点名称")
     private String name;
 
     /**
@@ -67,6 +71,7 @@ public class ZTreeNode implements AbstractTreeNode<ZTreeNode> {
      */
     @Getter
     @Setter
+    @ChineseDescription("是否打开节点")
     private Boolean open;
 
     /**
@@ -74,6 +79,7 @@ public class ZTreeNode implements AbstractTreeNode<ZTreeNode> {
      */
     @Getter
     @Setter
+    @ChineseDescription("是否被选中")
     private Boolean checked;
 
     /**
@@ -81,6 +87,7 @@ public class ZTreeNode implements AbstractTreeNode<ZTreeNode> {
      */
     @Getter
     @Setter
+    @ChineseDescription("节点图标")
     private String iconSkin;
 
     /**
@@ -88,6 +95,7 @@ public class ZTreeNode implements AbstractTreeNode<ZTreeNode> {
      */
     @Getter
     @Setter
+    @ChineseDescription("子节点集合")
     private List<ZTreeNode> children;
 
     /**

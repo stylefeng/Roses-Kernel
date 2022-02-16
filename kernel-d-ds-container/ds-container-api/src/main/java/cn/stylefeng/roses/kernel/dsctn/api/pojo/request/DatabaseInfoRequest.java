@@ -97,7 +97,7 @@ public class DatabaseInfoRequest extends BaseRequest {
     /**
      * 数据库schemaName，注意，每种数据库的schema意义不同
      */
-    @ChineseDescription("数据库schemaName，注意，每种数据库的schema意义不同")
+    @ChineseDescription("数据库schemaName")
     private String schemaName;
 
     /**
@@ -109,7 +109,7 @@ public class DatabaseInfoRequest extends BaseRequest {
     /**
      * 备注，摘要
      */
-    @ChineseDescription("备注，摘要")
+    @ChineseDescription("备注")
     private String remarks;
 
 }

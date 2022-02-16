@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.dict.modular.pojo;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import lombok.Data;
 
@@ -43,26 +44,31 @@ public class TreeDictInfo implements AbstractTreeNode<TreeDictInfo> {
     /**
      * 字典id
      */
+    @ChineseDescription("字典id")
     private Long dictId;
 
     /**
      * 字典编码
      */
+    @ChineseDescription("字典编码")
     private String dictCode;
 
     /**
      * 字典名称
      */
+    @ChineseDescription("字典名称")
     private String dictName;
 
     /**
      * 上级字典id
      */
+    @ChineseDescription("上级字典id")
     private Long dictParentId;
 
     /**
      * tree子节点
      */
+    @ChineseDescription("tree子节点")
     private List<TreeDictInfo> children;
 
     @Override

@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.dsctn.modular.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,60 +47,70 @@ public class DatabaseInfo extends BaseEntity {
      * 主键id
      */
     @TableId(value = "db_id", type = IdType.ASSIGN_ID)
+    @ChineseDescription("主键id")
     private Long dbId;
 
     /**
      * 数据库名称（英文名称）
      */
     @TableField("db_name")
+    @ChineseDescription("数据库名称（英文名称）")
     private String dbName;
 
     /**
      * jdbc的驱动类型
      */
     @TableField("jdbc_driver")
+    @ChineseDescription("jdbc的驱动类型")
     private String jdbcDriver;
 
     /**
      * jdbc的url
      */
     @TableField("jdbc_url")
+    @ChineseDescription("jdbc的url")
     private String jdbcUrl;
 
     /**
      * 数据库连接的账号
      */
     @TableField("username")
+    @ChineseDescription("数据库连接的账号")
     private String username;
 
     /**
      * 数据库连接密码
      */
     @TableField("password")
+    @ChineseDescription("数据库连接密码")
     private String password;
 
     /**
      * 数据库的schema名称，每种数据库的schema意义都不同
      */
     @TableField("schema_name")
+    @ChineseDescription("数据库的schema名称")
     private String schemaName;
 
     /**
      * 状态标识：1-正常，2-无法连接
      */
     @TableField("status_flag")
+    @ChineseDescription("状态标识：1-正常，2-无法连接")
     private Integer statusFlag;
 
     /**
      * 无法连接原因
      */
     @TableField("error_description")
+    @ChineseDescription("无法连接原因")
     private String errorDescription;
 
     /**
      * 备注，摘要
      */
     @TableField("remarks")
+    @ChineseDescription("备注")
     private String remarks;
 
     /**

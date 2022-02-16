@@ -61,6 +61,7 @@ public class TranslationRequest extends BaseRequest {
     /**
      * 多语言条例名称
      */
+    @ChineseDescription("多语言条例名称")
     @NotBlank(message = "tranName不能为空", groups = {add.class, edit.class})
     @ChineseDescription("多语言条例名称")
     private String tranName;
@@ -68,6 +69,7 @@ public class TranslationRequest extends BaseRequest {
     /**
      * 语种字典
      */
+    @ChineseDescription("语种字典")
     @NotBlank(message = "tranLanguageCode不能为空", groups = {add.class, edit.class, changeUserLanguage.class, deleteTranLanguage.class})
     @ChineseDescription("语种字典")
     private String tranLanguageCode;
@@ -75,6 +77,7 @@ public class TranslationRequest extends BaseRequest {
     /**
      * 翻译的值
      */
+    @ChineseDescription("翻译的值")
     @NotBlank(message = "tranValue不能为空", groups = {add.class, edit.class})
     @ChineseDescription("翻译的值")
     private String tranValue;
@@ -82,6 +85,7 @@ public class TranslationRequest extends BaseRequest {
     /**
      * 字典id，用在删除语种
      */
+    @ChineseDescription("字典id")
     @NotNull(message = "字典id", groups = {deleteTranLanguage.class})
     @ChineseDescription("字典id，用在删除语种")
     private Long dictId;

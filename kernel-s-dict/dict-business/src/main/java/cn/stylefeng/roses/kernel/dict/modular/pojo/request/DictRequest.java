@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.dict.modular.pojo.request;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
 import lombok.Data;
@@ -47,44 +48,52 @@ public class DictRequest extends BaseRequest {
      * 字典id
      */
     @NotNull(message = "id不能为空", groups = {edit.class, delete.class, detail.class, updateStatus.class})
+    @ChineseDescription("字典id")
     private Long dictId;
 
     /**
      * 字典编码
      */
     @NotBlank(message = "字典编码不能为空", groups = {add.class, edit.class, validateAvailable.class})
+    @ChineseDescription("字典编码")
     private String dictCode;
 
     /**
      * 字典名称
      */
     @NotBlank(message = "字典名称不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("字典名称")
     private String dictName;
 
     /**
      * 字典名称拼音
      */
+    @ChineseDescription("字典名称拼音")
     private String dictNamePinYin;
 
     /**
      * 字典编码
      */
+    @ChineseDescription("字典编码")
     private String dictEncode;
 
     /**
      * 字典类型编码
      */
     @NotBlank(message = "字典类型编码不能为空", groups = {add.class, edit.class, treeList.class, dictZTree.class})
+    @ChineseDescription("字典类型编码")
     private String dictTypeCode;
 
     /**
      * 字典简称
      */
+    @ChineseDescription("字典简称")
     private String dictShortName;
 
     /**
      * 字典简称的编码
      */
+    @ChineseDescription("字典简称的编码")
     private String dictShortCode;
 
     /**
@@ -94,6 +103,7 @@ public class DictRequest extends BaseRequest {
      * <p>
      * 如果没有上级字典id，则为-1
      */
+    @ChineseDescription("上级字典的id")
     private Long dictParentId;
 
     /**
@@ -101,22 +111,26 @@ public class DictRequest extends BaseRequest {
      */
     @NotNull(message = "状态不能为空", groups = {updateStatus.class})
     @StatusValue(groups = updateStatus.class)
+    @ChineseDescription("状态")
     private Integer statusFlag;
 
     /**
      * 排序，带小数点
      */
+    @ChineseDescription("排序")
     @NotNull(message = "排序不能为空", groups = {add.class, edit.class})
     private BigDecimal dictSort;
 
     /**
      * 所有的父级id,逗号分隔
      */
+    @ChineseDescription("所有的父级id")
     private String dictPids;
 
     /**
      * 字典类型id，用在作为查询条件
      */
+    @ChineseDescription("字典类型id")
     private Long dictTypeId;
 
     /**

@@ -25,7 +25,7 @@
         </dependency>
 
         <!--auth鉴权模块的api-->
-        <!--QuickTranslateUtil需要获取当前用户的多语言类型属性-->
+        <!--QuickTranslateUtil需要获取当前用户的多语`言类型属性-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>auth-api</artifactId>

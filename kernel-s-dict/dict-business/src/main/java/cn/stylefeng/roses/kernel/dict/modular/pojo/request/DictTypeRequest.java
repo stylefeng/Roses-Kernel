@@ -56,7 +56,7 @@ public class DictTypeRequest extends BaseRequest {
      * 字典类型： 1-业务类型，2-系统类型，参考 DictTypeClassEnum
      */
     @NotNull(message = "字典类型不能为空", groups = {add.class, edit.class})
-    @ChineseDescription("字典类型： 1-业务类型，2-系统类型")
+    @ChineseDescription("字典类型")
     private Integer dictTypeClass;
 
     /**
@@ -110,7 +110,7 @@ public class DictTypeRequest extends BaseRequest {
      * 排序，带小数
      */
     @NotNull(message = "排序不能为空", groups = {add.class, edit.class})
-    @ChineseDescription("排序，带小数")
+    @ChineseDescription("排序")
     private BigDecimal dictTypeSort;
 
     /**
