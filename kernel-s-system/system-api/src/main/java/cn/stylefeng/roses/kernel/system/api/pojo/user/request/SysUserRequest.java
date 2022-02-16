@@ -183,11 +183,13 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 部门的数据范围集合
      */
+    @ChineseDescription("部门的数据范围集合")
     private Set<Long> scopeOrgIds;
 
     /**
      * 用户id的数据范围集合
      */
+    @ChineseDescription("用户id的数据范围集合")
     private Set<Long> userScopeIds;
 
     /**

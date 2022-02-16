@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.role.request;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import lombok.Data;
 
 /**
@@ -38,11 +39,13 @@ public class SysRoleMenuButtonRequest {
     /**
      * 按钮id
      */
+    @ChineseDescription("按钮id")
     private Long buttonId;
 
     /**
      * 按钮编码
      */
+    @ChineseDescription("按钮编码")
     private String buttonCode;
 
 }

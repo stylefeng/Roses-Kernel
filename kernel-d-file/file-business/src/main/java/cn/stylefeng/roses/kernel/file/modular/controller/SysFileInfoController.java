@@ -192,7 +192,7 @@ public class SysFileInfoController {
      * @author majianguo
      * @date 2020/12/16 15:34
      */
-    @PostResource(name = "替换文件", path = "/sysFileInfo/versionBack", requiredPermission = false)
+    @PostResource(name = "版本回退", path = "/sysFileInfo/versionBack", requiredPermission = false)
     public ResponseData<SysFileInfoResponse> versionBack(@Validated(SysFileInfoRequest.versionBack.class) SysFileInfoRequest sysFileInfoRequest) {
         SysFileInfoResponse fileUploadInfoResult = this.sysFileInfoService.versionBack(sysFileInfoRequest);
         return new SuccessResponseData<>(fileUploadInfoResult);

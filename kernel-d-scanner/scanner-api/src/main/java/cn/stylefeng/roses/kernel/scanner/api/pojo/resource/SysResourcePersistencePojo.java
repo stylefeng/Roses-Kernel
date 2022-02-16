@@ -156,6 +156,7 @@ public class SysResourcePersistencePojo {
     /**
      * 应用名称
      */
+    @ChineseDescription("应用名称")
     private transient String appName;
 
 }

@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.timer.modular.param;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -45,45 +46,53 @@ public class SysTimersParam extends BaseRequest {
      * 定时器id
      */
     @NotNull(message = "主键timerId不能为空", groups = {edit.class, detail.class, delete.class, startTimer.class, stopTimer.class})
+    @ChineseDescription("定时器id")
     private Long timerId;
 
     /**
      * 任务名称
      */
     @NotBlank(message = "任务名称不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("任务名称")
     private String timerName;
 
     /**
      * 执行任务的class的类名（实现了TimerTaskRunner接口的类的全称）
      */
     @NotBlank(message = "任务的class的类名不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("执行任务的class的类名")
     private String actionClass;
 
     /**
      * 定时任务表达式
      */
     @NotBlank(message = "定时任务表达式不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("定时任务表达式")
     private String cron;
 
     /**
      * 状态（字典 1运行  2停止）
      */
     @NotNull(message = "任务状态不能为空", groups = {edit.class})
+    @ChineseDescription("状态（字典 1运行  2停止）")
     private Integer jobStatus;
 
     /**
      * 参数
      */
+    @ChineseDescription("参数")
     private String params;
 
     /**
      * 备注信息
      */
+    @ChineseDescription("备注信息")
     private String remark;
 
     /**
      * 是否删除标记
      */
+    @ChineseDescription("是否删除标记")
     private String delFlag;
 
     /**

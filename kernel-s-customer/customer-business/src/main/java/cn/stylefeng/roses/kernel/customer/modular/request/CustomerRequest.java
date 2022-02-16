@@ -101,11 +101,13 @@ public class CustomerRequest extends BaseRequest {
     /**
      * 用在图形验证码或者拖拽验证码
      */
+    @ChineseDescription("用在图形验证码或者拖拽验证码")
     private String verKey;
 
     /**
      * 用在图形验证码或者拖拽验证码
      */
+    @ChineseDescription("用在图形验证码或者拖拽验证码")
     private String verCode;
 
     /**

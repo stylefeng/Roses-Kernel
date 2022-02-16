@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.dsctn.api.pojo.request;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
 import lombok.Data;
@@ -48,6 +49,7 @@ public class DatabaseInfoRequest extends BaseRequest {
      * 主键id
      */
     @NotNull(message = "dbId不能为空", groups = {edit.class, delete.class, detail.class})
+    @ChineseDescription("主键id")
     private Long dbId;
 
     /**
@@ -61,45 +63,53 @@ public class DatabaseInfoRequest extends BaseRequest {
             columnName = "db_name",
             idFieldName = "db_id",
             excludeLogicDeleteItems = true)
+    @ChineseDescription("数据库名称（英文名称）")
     private String dbName;
 
     /**
      * jdbc的驱动类型
      */
     @NotBlank(message = "jdbc的驱动类型为空", groups = {add.class, edit.class})
+    @ChineseDescription("jdbc的驱动类型")
     private String jdbcDriver;
 
     /**
      * jdbc的url
      */
     @NotBlank(message = "jdbc的url", groups = {add.class, edit.class})
+    @ChineseDescription("jdbc的url")
     private String jdbcUrl;
 
     /**
      * 数据库连接的账号
      */
     @NotBlank(message = "数据库连接的账号", groups = {add.class, edit.class})
+    @ChineseDescription("数据库连接的账号")
     private String username;
 
     /**
      * 数据库连接密码
      */
     @NotBlank(message = "数据库连接密码", groups = {add.class, edit.class})
+    @ChineseDescription("数据库连接密码")
     private String password;
 
     /**
      * 数据库schemaName，注意，每种数据库的schema意义不同
      */
+    @ChineseDescription("数据库schemaName，注意，每种数据库的schema意义不同")
     private String schemaName;
 
     /**
      * 状态标识：1-正常，2-无法连接
      */
+    @ChineseDescription("状态标识：1-正常，2-无法连接")
     private Integer statusFlag;
 
     /**
      * 备注，摘要
      */
+    @ChineseDescription("备注，摘要")
     private String remarks;
 
 }
