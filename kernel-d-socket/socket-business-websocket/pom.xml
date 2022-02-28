@@ -5,7 +5,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-socket</artifactId>
-        <version>7.2.0</version>
+        <version>7.2.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
