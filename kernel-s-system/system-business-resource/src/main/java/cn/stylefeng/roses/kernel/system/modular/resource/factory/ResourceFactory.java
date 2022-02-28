@@ -130,7 +130,7 @@ public class ResourceFactory {
 
         // 转化接口返回结果的字段描述
         if (ObjectUtil.isNotEmpty(sysResource.getResponseFieldDescriptions())) {
-            resourceDefinition.setResponseFieldDescriptions(JSON.parseObject(sysResource.getResponseFieldDescriptions(), Set.class, Feature.SupportAutoType));
+            resourceDefinition.setResponseFieldDescriptions(JSON.parseObject(sysResource.getResponseFieldDescriptions(), FieldMetadata.class, Feature.SupportAutoType));
         }
 
         return resourceDefinition;
@@ -149,10 +149,14 @@ public class ResourceFactory {
 
         // 接口的请求参数信息
         Set<FieldMetadata> paramFieldDescriptions = resourceDefinition.getParamFieldDescriptions();
-        fillDetailMessage(validateGroups, paramFieldDescriptions);
+        if(paramFieldDescriptions != null && paramFieldDescriptions.size() > 0){
+            for (FieldMetadata fieldMetadata : paramFieldDescriptions) {
+                fillDetailMessage(validateGroups, fieldMetadata);
+            }
+        }
 
         // 接口的响应参数信息
-        Set<FieldMetadata> responseFieldDescriptions = resourceDefinition.getResponseFieldDescriptions();
+        FieldMetadata responseFieldDescriptions = resourceDefinition.getResponseFieldDescriptions();
         fillDetailMessage(validateGroups, responseFieldDescriptions);
 
         return resourceDefinition;
@@ -164,33 +168,32 @@ public class ResourceFactory {
      * @author fengshuonan
      * @date 2021/1/16 18:00
      */
-    public static Set<FieldMetadata> fillDetailMessage(Set<String> validateGroups, Set<FieldMetadata> fieldMetadataSet) {
+    public static void fillDetailMessage(Set<String> validateGroups, FieldMetadata fieldMetadata) {
         if (validateGroups == null || validateGroups.isEmpty()) {
-            return fieldMetadataSet;
+            return;
         }
 
-        if (fieldMetadataSet == null || fieldMetadataSet.isEmpty()) {
-            return fieldMetadataSet;
+        if (fieldMetadata == null) {
+            return;
         }
-        for (FieldMetadata fieldMetadata : fieldMetadataSet) {
-            StringBuilder finalValidateMessages = new StringBuilder();
-            Map<String, Set<String>> groupAnnotations = fieldMetadata.getGroupValidationMessage();
-            if (groupAnnotations != null) {
-                for (String validateGroup : validateGroups) {
-                    Set<String> validateMessage = groupAnnotations.get(validateGroup);
-                    if (validateMessage != null && !validateMessage.isEmpty()) {
-                        finalValidateMessages.append(StrUtil.join("，", validateMessage));
-                    }
+        StringBuilder finalValidateMessages = new StringBuilder();
+        Map<String, Set<String>> groupAnnotations = fieldMetadata.getGroupValidationMessage();
+        if (groupAnnotations != null) {
+            for (String validateGroup : validateGroups) {
+                Set<String> validateMessage = groupAnnotations.get(validateGroup);
+                if (validateMessage != null && !validateMessage.isEmpty()) {
+                    finalValidateMessages.append(StrUtil.join("，", validateMessage));
                 }
             }
-            fieldMetadata.setValidationMessages(finalValidateMessages.toString());
+        }
+        fieldMetadata.setValidationMessages(finalValidateMessages.toString());
 
-            // 递归填充子类型的详细提示信息
-            if (fieldMetadata.getGenericFieldMetadata() != null && !fieldMetadata.getGenericFieldMetadata().isEmpty()) {
-                fillDetailMessage(validateGroups, fieldMetadata.getGenericFieldMetadata());
+        // 递归填充子类型的详细提示信息
+        if (fieldMetadata.getGenericFieldMetadata() != null && !fieldMetadata.getGenericFieldMetadata().isEmpty()) {
+            for (FieldMetadata metadata : fieldMetadata.getGenericFieldMetadata()) {
+                fillDetailMessage(validateGroups, metadata);
             }
         }
-        return fieldMetadataSet;
     }
 
     /**
@@ -209,7 +212,7 @@ public class ResourceFactory {
 
         for (ResourceDefinition sysResource : sysResourceList) {
             String url = sysResource.getUrl();
-            result.put(url,sysResource);
+            result.put(url, sysResource);
         }
 
         return result;

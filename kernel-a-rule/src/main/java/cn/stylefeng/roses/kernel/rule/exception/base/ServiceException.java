@@ -66,6 +66,11 @@ public class ServiceException extends RuntimeException {
     private String moduleName;
 
     /**
+     * 异常的具体携带数据
+     */
+    private Object data;
+
+    /**
      * 根据模块名，错误码，用户提示直接抛出异常
      */
     public ServiceException(String moduleName, String errorCode, String userTip) {
@@ -95,6 +100,17 @@ public class ServiceException extends RuntimeException {
         this.moduleName = RULE_MODULE_NAME;
         this.errorCode = exception.getErrorCode();
         this.userTip = exception.getUserTip();
+    }
+
+    /**
+     * 携带数据的异常构造函数
+     */
+    public ServiceException(String moduleName, String errorCode, String userTip, Object data) {
+        super(userTip);
+        this.errorCode = errorCode;
+        this.moduleName = moduleName;
+        this.userTip = userTip;
+        this.data = data;
     }
 
 }

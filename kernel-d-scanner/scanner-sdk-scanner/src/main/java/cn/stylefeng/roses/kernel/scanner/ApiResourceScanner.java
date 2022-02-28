@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.scanner;
 
 import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.net.NetUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.rule.util.AopTargetUtils;
 import cn.stylefeng.roses.kernel.scanner.api.ResourceCollectorApi;
@@ -33,11 +34,14 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants;
+import cn.stylefeng.roses.kernel.scanner.api.context.MetadataContext;
 import cn.stylefeng.roses.kernel.scanner.api.exception.ScannerException;
+import cn.stylefeng.roses.kernel.scanner.api.factory.ClassMetadataFactory;
 import cn.stylefeng.roses.kernel.scanner.api.holder.IpAddrHolder;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ParameterMetadata;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.scanner.ScannerProperties;
-import cn.stylefeng.roses.kernel.scanner.api.util.ClassReflectUtil;
 import cn.stylefeng.roses.kernel.scanner.api.util.MethodReflectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -49,10 +53,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.Type;
+import java.util.*;
 
 import static cn.stylefeng.roses.kernel.scanner.api.exception.enums.ScannerExceptionEnum.ERROR_CONTROLLER_NAME;
 
@@ -209,6 +211,7 @@ public class ApiResourceScanner implements BeanPostProcessor {
 
         // 填充模块编码，模块编码就是控制器名称截取Controller关键字前边的字符串
         String className = resourceDefinition.getClassName();
+
         int controllerIndex = className.indexOf("Controller");
         if (controllerIndex == -1) {
             throw new ScannerException(ERROR_CONTROLLER_NAME, controllerClass.getName());
@@ -294,18 +297,25 @@ public class ApiResourceScanner implements BeanPostProcessor {
         }
 
         // 填充方法返回结果字段的详细信息
-        // @ApiResource注解上标识了responseClass属性，则用responseClass的值为准，否则按真实方法的返回值class
-        Class<?> responseClass = invokeAnnotationMethod(apiResource, "responseClass", Class.class);
-        if (!Void.class.equals(responseClass)) {
-            resourceDefinition.setResponseFieldDescriptions(ClassReflectUtil.getClassFieldDescription(responseClass));
-        } else {
-            Class<?> methodReturnClass = MethodReflectUtil.getMethodReturnClass(method);
-            resourceDefinition.setResponseFieldDescriptions(ClassReflectUtil.getClassFieldDescription(methodReturnClass));
-        }
+        Type returnType = MethodReflectUtil.getMethodReturnType(method);
+        String processReturnTypeUuid = RandomUtil.randomString(32);
+        resourceDefinition.setResponseFieldDescriptions(ClassMetadataFactory.beginCreateFieldMetadata(returnType, processReturnTypeUuid));
+        MetadataContext.cleanContext(processReturnTypeUuid);
 
         // 填充方法的请求参数字段的详细信息
-        Class<?> firstParamClass = MethodReflectUtil.getMethodFirstParamClass(method);
-        resourceDefinition.setParamFieldDescriptions(ClassReflectUtil.getClassFieldDescription(firstParamClass));
+        List<ParameterMetadata> methodParameterInfos = MethodReflectUtil.getMethodParameterInfos(method);
+        if (methodParameterInfos.size() > 0) {
+            LinkedHashSet<FieldMetadata> fieldMetadataLinkedHashSet = new LinkedHashSet<>();
+            for (ParameterMetadata parameterMetadata : methodParameterInfos) {
+                String parameterContextUuid = RandomUtil.randomString(32);
+                // 将当前参数的类型加到context中，后边会用到
+                MetadataContext.addParamTypeMetadata(parameterContextUuid, parameterMetadata.getParamTypeEnum());
+                MetadataContext.addParameterName(parameterContextUuid, parameterMetadata.getParameterName());
+                fieldMetadataLinkedHashSet.add(ClassMetadataFactory.beginCreateFieldMetadata(parameterMetadata.getParameterizedType(), parameterContextUuid));
+                MetadataContext.cleanContext(parameterContextUuid);
+            }
+            resourceDefinition.setParamFieldDescriptions(fieldMetadataLinkedHashSet);
+        }
 
         return resourceDefinition;
     }

@@ -24,7 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.user.request;
 
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

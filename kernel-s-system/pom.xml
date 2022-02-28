@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>roses-kernel</artifactId>
-        <version>7.1.5</version>
+        <version>7.2.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -27,6 +27,8 @@
         <module>system-integration-beetl</module>
         <module>system-integration-rest</module>
         <module>system-spring-boot-starter</module>
+        <module>system-business-theme</module>
+        <module>system-business-home</module>
     </modules>
 
     <dependencies>

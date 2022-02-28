@@ -33,6 +33,7 @@ import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
+import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
@@ -42,6 +43,9 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
+import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
+import cn.stylefeng.roses.kernel.jwt.api.pojo.payload.DefaultJwtPayload;
+import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
 import cn.stylefeng.roses.kernel.office.api.OfficeExcelApi;
 import cn.stylefeng.roses.kernel.office.api.pojo.report.ExcelExportParam;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
@@ -53,6 +57,7 @@ import cn.stylefeng.roses.kernel.system.api.DataScopeApi;
 import cn.stylefeng.roses.kernel.system.api.OrganizationServiceApi;
 import cn.stylefeng.roses.kernel.system.api.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.api.enums.DevopsCheckStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserExceptionEnum;
@@ -552,7 +557,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         wrapper.ne(SysUser::getSuperAdminFlag, YesOrNotEnum.Y.getCode());
 
         // 只查询id和name
-        wrapper.select(SysUser::getRealName, SysUser::getUserId);
+        wrapper.select(SysUser::getRealName, SysUser::getUserId, SysUser::getAccount);
         List<SysUser> list = this.list(wrapper);
 
         ArrayList<SimpleDict> results = new ArrayList<>();
@@ -560,6 +565,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             SimpleDict simpleDict = new SimpleDict();
             simpleDict.setId(sysUser.getUserId());
             simpleDict.setName(sysUser.getRealName());
+            simpleDict.setCode(sysUser.getAccount());
             results.add(simpleDict);
         }
 
@@ -580,11 +586,76 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<Long> getAllUserIds() {
         LambdaQueryWrapper<SysUser> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userLambdaQueryWrapper.select(SysUser::getUserId);
-        userLambdaQueryWrapper.eq(SysUser::getStatusFlag, StatusEnum.ENABLE);
+        userLambdaQueryWrapper.eq(SysUser::getStatusFlag, StatusEnum.ENABLE.getCode());
         userLambdaQueryWrapper.ne(SysUser::getDelFlag, YesOrNotEnum.Y.getCode());
 
         List<SysUser> list = this.list(userLambdaQueryWrapper);
         return list.stream().map(SysUser::getUserId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SysUserRequest> getAllUserIdList() {
+        if (!SystemConfigExpander.getDevSwitchStatus()) {
+            return new ArrayList<>();
+        }
+        LambdaQueryWrapper<SysUser> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.select(SysUser::getUserId, SysUser::getAccount);
+        userLambdaQueryWrapper.eq(SysUser::getStatusFlag, StatusEnum.ENABLE.getCode());
+        userLambdaQueryWrapper.ne(SysUser::getDelFlag, YesOrNotEnum.Y.getCode());
+        List<SysUser> list = this.list(userLambdaQueryWrapper);
+        return list.stream().map(item -> BeanUtil.toBean(item, SysUserRequest.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getTokenByUserId(Long userId) {
+        if (!SystemConfigExpander.getDevSwitchStatus() || !LoginContext.me().getSuperAdminFlag()) {
+            return null;
+        }
+        LambdaQueryWrapper<SysUser> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.eq(SysUser::getUserId, userId);
+        SysUser sysUser = this.getOne(userLambdaQueryWrapper);
+
+        // 获取用户密码的加密值和用户的状态
+        UserLoginInfoDTO userValidateInfo = this.getUserLoginInfo(sysUser.getAccount());
+
+        // 获取LoginUser，用于用户的缓存
+        LoginUser loginUser = userValidateInfo.getLoginUser();
+
+        // 生成用户的token
+        DefaultJwtPayload defaultJwtPayload = new DefaultJwtPayload(loginUser.getUserId(), loginUser.getAccount(), false, null);
+        String jwtToken = JwtContext.me().generateTokenDefaultPayload(defaultJwtPayload);
+        loginUser.setToken(jwtToken);
+
+        synchronized (this) {
+
+            // 获取ws-url 保存到用户信息中
+            loginUser.setWsUrl(WebSocketConfigExpander.getWebSocketWsUrl());
+
+            // 缓存用户信息，创建会话
+            sessionManagerApi.createSession(jwtToken, loginUser, false);
+
+            // 如果开启了单账号单端在线，则踢掉已经上线的该用户
+            if (AuthConfigExpander.getSingleAccountLoginFlag()) {
+                sessionManagerApi.removeSessionExcludeToken(jwtToken);
+            }
+        }
+
+        return jwtToken;
+    }
+
+    @Override
+    public Integer devopsApiCheck(SysUserRequest sysUserRequest) {
+        String account = sysUserRequest.getAccount();
+        String password = sysUserRequest.getPassword();
+        SysUser sysUser = this.getUserByAccount(account);
+        if (ObjectUtil.isEmpty(sysUser)) {
+            return DevopsCheckStatusEnum.USER_NOT_EXIST.getCode();
+        } else if (!passwordStoredEncryptApi.checkPassword(password, sysUser.getPassword())) {
+            return DevopsCheckStatusEnum.ACCOUNT_PASSWORD_ERROR.getCode();
+        } else if (!SystemConfigExpander.getDevSwitchStatus()) {
+            return DevopsCheckStatusEnum.REQUESTER_NOT_OPEN_SWITCH.getCode();
+        }
+        return DevopsCheckStatusEnum.SUCCESSFUL.getCode();
     }
 
     @Override
@@ -633,6 +704,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         newLoginUser.setToken(loginUser.getToken());
         newLoginUser.setTenantCode(loginUser.getTenantCode());
         newLoginUser.setWsUrl(loginUser.getWsUrl());
+        newLoginUser.setOtherInfos(loginUser.getOtherInfos());
 
         return newLoginUser;
     }
@@ -754,6 +826,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         return Boolean.TRUE;
+    }
+
+    @Override
+    public String getUserAvatarUrlByUserId(Long userId) {
+
+        // 获取用户头像文件id
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserId, userId).select(SysUser::getAvatar);
+        SysUser sysUser = this.getOne(wrapper, false);
+
+        if (sysUser == null) {
+            return "";
+        }
+
+        return this.getUserAvatarUrl(sysUser.getAvatar());
     }
 
     /**

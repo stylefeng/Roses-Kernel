@@ -25,7 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.app.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -93,4 +93,10 @@ public class SysApp extends BaseEntity {
     @ChineseDescription("是否删除：Y-已删除，N-未删除")
     private String delFlag;
 
+    /**
+     * 排序-升序
+     */
+    @TableField("app_sort")
+    @ChineseDescription("排序-升序")
+    private Integer appSort;
 }

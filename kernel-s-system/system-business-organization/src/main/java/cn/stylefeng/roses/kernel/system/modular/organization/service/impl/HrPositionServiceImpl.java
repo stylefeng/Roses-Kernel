@@ -127,6 +127,11 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
         }
     }
 
+    @Override
+    public Integer positionNum() {
+        return this.count();
+    }
+
     /**
      * 根据主键id获取对象信息
      *

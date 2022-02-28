@@ -67,4 +67,9 @@ public interface SystemCachesConstants {
      */
     String ROLE_DATA_SCOPE_CACHE_PREFIX = "role_data_scope:";
 
+    /**
+     * 系统主题的缓存
+     */
+    String SYSTEM_THEME_CACHE_PREFIX = "system_cache:";
+
 }

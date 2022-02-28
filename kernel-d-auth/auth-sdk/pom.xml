@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-auth</artifactId>
-        <version>7.1.5</version>
+        <version>7.2.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -126,6 +126,11 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>system-business-user</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

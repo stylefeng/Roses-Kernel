@@ -88,7 +88,7 @@ public class LayuiMenusFactory {
 
                 // 如果当前用户时非中文状态，则翻译菜单
                 String tranLanguageCode = LoginContext.me().getLoginUser().getTranLanguageCode();
-                if (!RuleConstants.CHINES_TRAN_LANGUAGE_CODE.equals(tranLanguageCode)) {
+                if (!RuleConstants.CHINESE_TRAN_LANGUAGE_CODE.equals(tranLanguageCode)) {
                     Map<String, String> tranDictBook = TranslationContext.me().getTranslationDictByLanguage(tranLanguageCode);
                     String translatedName = tranDictBook.get(TranslationConstants.TRAN_CODE_MENU_PREFIX + appMenu.getMenuCode().toUpperCase());
                     if (StrUtil.isNotBlank(translatedName)) {

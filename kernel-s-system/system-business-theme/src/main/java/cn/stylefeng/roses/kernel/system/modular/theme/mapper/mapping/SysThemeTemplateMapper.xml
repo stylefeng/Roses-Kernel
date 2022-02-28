@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.roses.kernel.system.modular.theme.mapper.SysThemeTemplateMapper">
+
+    <resultMap id="sysThemeTemplateResult" type="cn.stylefeng.roses.kernel.system.api.pojo.theme.SysThemeTemplateDataDTO">
+        <result property="templateId" column="template_id"/>
+        <result property="templateCode" column="template_code"/>
+        <result property="templateName" column="template_name"/>
+        <result property="fieldId" column="field_id"/>
+        <result property="fieldCode" column="field_code"/>
+        <result property="fieldName" column="field_name"/>
+        <result property="fieldType" column="field_type"/>
+        <result property="fieldLength" column="field_length"/>
+        <result property="fieldRequired" column="field_required"/>
+        <result property="fieldDescription" column="field_description"/>
+    </resultMap>
+
+    <select id="sysThemeTemplateDetail" resultMap="sysThemeTemplateResult">
+        SELECT
+            stt.template_id,
+            stt.template_code,
+            stt.template_name,
+            sttf.field_id,
+            sttf.field_code,
+            sttf.field_name,
+            sttf.field_type,
+            sttf.field_length,
+            sttf.field_required,
+            sttf.field_description
+        FROM
+            sys_theme_template_field sttf,
+            sys_theme_template stt,
+            sys_theme_template_rel sttl
+        WHERE
+            sttf.field_code = sttl.field_code
+            AND stt.template_id = sttl.template_id
+            <if test="id != null" >
+                AND stt.template_id = #{id}
+            </if>
+    </select>
+</mapper>

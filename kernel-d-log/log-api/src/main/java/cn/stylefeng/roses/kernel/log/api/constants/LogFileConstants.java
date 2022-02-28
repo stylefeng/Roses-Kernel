@@ -64,4 +64,9 @@ public interface LogFileConstants {
      */
     Integer DEFAULT_API_LOG_AOP_SORT = 500;
 
+    /**
+     * 默认全局记录日志的开关
+     */
+    Boolean DEFAULT_GLOBAL_LOG_FLAG = false;
+
 }

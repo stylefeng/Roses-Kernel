@@ -26,6 +26,9 @@ package cn.stylefeng.roses.kernel.system.modular.user.controller;
 
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
+import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
@@ -35,6 +38,7 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserSelectTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.SysUserRequest;
+import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUserRole;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserRoleService;
 import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import org.springframework.validation.annotation.Validated;
@@ -68,9 +72,10 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_增加", path = "/sysUser/add")
-    public ResponseData add(@RequestBody @Validated(BaseRequest.add.class) SysUserRequest sysUserRequest) {
+    @BusinessLog
+    public ResponseData<?> add(@RequestBody @Validated(BaseRequest.add.class) SysUserRequest sysUserRequest) {
         sysUserService.add(sysUserRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -80,9 +85,10 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_删除", path = "/sysUser/delete")
-    public ResponseData delete(@RequestBody @Validated(SysUserRequest.delete.class) SysUserRequest sysUserRequest) {
+    @BusinessLog
+    public ResponseData<?> delete(@RequestBody @Validated(SysUserRequest.delete.class) SysUserRequest sysUserRequest) {
         sysUserService.del(sysUserRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -92,9 +98,10 @@ public class SysUserController {
      * @date 2021/4/7 16:12
      */
     @PostResource(name = "系统用户_批量删除系统用户", path = "/sysUser/batchDelete")
-    public ResponseData batchDelete(@RequestBody @Validated(SysUserRequest.batchDelete.class) SysUserRequest sysUserRequest) {
+    @BusinessLog
+    public ResponseData<?> batchDelete(@RequestBody @Validated(SysUserRequest.batchDelete.class) SysUserRequest sysUserRequest) {
         sysUserService.batchDelete(sysUserRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -104,9 +111,10 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_编辑", path = "/sysUser/edit")
-    public ResponseData edit(@RequestBody @Validated(SysUserRequest.edit.class) SysUserRequest sysUserRequest) {
+    @BusinessLog
+    public ResponseData<?> edit(@RequestBody @Validated(SysUserRequest.edit.class) SysUserRequest sysUserRequest) {
         sysUserService.edit(sysUserRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -116,9 +124,10 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_修改状态", path = "/sysUser/changeStatus")
-    public ResponseData changeStatus(@RequestBody @Validated(SysUserRequest.changeStatus.class) SysUserRequest sysUserRequest) {
+    @BusinessLog
+    public ResponseData<?> changeStatus(@RequestBody @Validated(SysUserRequest.changeStatus.class) SysUserRequest sysUserRequest) {
         sysUserService.editStatus(sysUserRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -128,9 +137,10 @@ public class SysUserController {
      * @date 2020/11/6 13:48
      */
     @PostResource(name = "系统用户_重置密码", path = "/sysUser/resetPwd")
-    public ResponseData resetPwd(@RequestBody @Validated(SysUserRequest.resetPwd.class) SysUserRequest sysUserRequest) {
+    @BusinessLog
+    public ResponseData<?> resetPwd(@RequestBody @Validated(SysUserRequest.resetPwd.class) SysUserRequest sysUserRequest) {
         sysUserService.resetPassword(sysUserRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -140,9 +150,10 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_授权角色", path = "/sysUser/grantRole")
-    public ResponseData grantRole(@RequestBody @Validated(SysUserRequest.grantRole.class) SysUserRequest sysUserRequest) {
+    @BusinessLog
+    public ResponseData<?> grantRole(@RequestBody @Validated(SysUserRequest.grantRole.class) SysUserRequest sysUserRequest) {
         sysUserService.grantRole(sysUserRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -152,9 +163,10 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @PostResource(name = "系统用户_授权数据", path = "/sysUser/grantData")
-    public ResponseData grantData(@RequestBody @Validated(SysUserRequest.grantData.class) SysUserRequest sysUserRequest) {
+    @BusinessLog
+    public ResponseData<?> grantData(@RequestBody @Validated(SysUserRequest.grantData.class) SysUserRequest sysUserRequest) {
         sysUserService.grantData(sysUserRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -163,9 +175,9 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:50
      */
-    @GetResource(name = "系统用户_查看", path = "/sysUser/detail", responseClass = SysUserDTO.class)
-    public ResponseData detail(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
-        return new SuccessResponseData(sysUserService.detail(sysUserRequest));
+    @GetResource(name = "系统用户_查看", path = "/sysUser/detail")
+    public ResponseData<SysUserDTO> detail(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
+        return new SuccessResponseData<>(sysUserService.detail(sysUserRequest));
     }
 
     /**
@@ -174,13 +186,13 @@ public class SysUserController {
      * @author fengshuonan
      * @date 2021/1/1 19:01
      */
-    @GetResource(name = "获取当前登录用户的信息", path = "/sysUser/currentUserInfo", requiredPermission = false,responseClass = SysUserDTO.class)
-    public ResponseData currentUserInfo() {
+    @GetResource(name = "获取当前登录用户的信息", path = "/sysUser/currentUserInfo", requiredPermission = false)
+    public ResponseData<SysUserDTO> currentUserInfo() {
         LoginUser loginUser = LoginContext.me().getLoginUser();
 
         SysUserRequest sysUserRequest = new SysUserRequest();
         sysUserRequest.setUserId(loginUser.getUserId());
-        return new SuccessResponseData(sysUserService.detail(sysUserRequest));
+        return new SuccessResponseData<>(sysUserService.detail(sysUserRequest));
     }
 
     /**
@@ -189,9 +201,9 @@ public class SysUserController {
      * @author luojie
      * @date 2020/11/6 13:49
      */
-    @GetResource(name = "系统用户_查询", path = "/sysUser/page",responseClass = SysUserDTO.class)
-    public ResponseData page(SysUserRequest sysUserRequest) {
-        return new SuccessResponseData(sysUserService.findPage(sysUserRequest));
+    @GetResource(name = "系统用户_查询", path = "/sysUser/page")
+    public ResponseData<PageResult<SysUserDTO>> page(SysUserRequest sysUserRequest) {
+        return new SuccessResponseData<>(sysUserService.findPage(sysUserRequest));
     }
 
     /**
@@ -201,6 +213,7 @@ public class SysUserController {
      * @date 2020/11/6 13:57
      */
     @GetResource(name = "系统用户_导出", path = "/sysUser/export")
+    @BusinessLog
     public void export(HttpServletResponse response) {
         sysUserService.export(response);
     }
@@ -211,9 +224,9 @@ public class SysUserController {
      * @author liuhanqing
      * @date 2021/1/15 8:28
      */
-    @GetResource(name = "获取用户选择树数据（用在系统通知，选择发送人的时候）", path = "/sysUser/getUserSelectTree",responseClass = UserSelectTreeNode.class)
-    public ResponseData getUserTree() {
-        return new SuccessResponseData(this.sysUserService.userSelectTree(new SysUserRequest()));
+    @GetResource(name = "获取用户选择树数据（用在系统通知，选择发送人的时候）", path = "/sysUser/getUserSelectTree")
+    public ResponseData<List<UserSelectTreeNode>> getUserTree() {
+        return new SuccessResponseData<>(this.sysUserService.userSelectTree(new SysUserRequest()));
     }
 
     /**
@@ -223,9 +236,9 @@ public class SysUserController {
      * @date 2020/11/6 13:51
      */
     @GetResource(name = "系统用户_获取用户数据范围列表", path = "/sysUser/getUserDataScope")
-    public ResponseData ownData(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
+    public ResponseData<List<Long>> ownData(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
         List<Long> userBindDataScope = sysUserService.getUserBindDataScope(sysUserRequest.getUserId());
-        return new SuccessResponseData(userBindDataScope);
+        return new SuccessResponseData<>(userBindDataScope);
     }
 
     /**
@@ -235,9 +248,9 @@ public class SysUserController {
      * @date 2020/11/6 13:50
      */
     @GetResource(name = "系统用户_获取用户的角色列表", path = "/sysUser/getUserRoles")
-    public ResponseData ownRole(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
+    public ResponseData<List<SysUserRole>> ownRole(@Validated(SysUserRequest.detail.class) SysUserRequest sysUserRequest) {
         Long userId = sysUserRequest.getUserId();
-        return new SuccessResponseData(sysUserRoleService.findListByUserId(userId));
+        return new SuccessResponseData<>(sysUserRoleService.findListByUserId(userId));
     }
 
     /**
@@ -249,8 +262,40 @@ public class SysUserController {
      * @date 2020/11/6 09:49
      */
     @GetResource(name = "系统用户_选择器", path = "/sysUser/selector")
-    public ResponseData selector(SysUserRequest sysUserRequest) {
-        return new SuccessResponseData(sysUserService.selector(sysUserRequest));
+    public ResponseData<List<SimpleDict>> selector(SysUserRequest sysUserRequest) {
+        return new SuccessResponseData<>(sysUserService.selector(sysUserRequest));
     }
 
+    /**
+     * 获取所有用户ID和名称列表
+     *
+     * @author majianguo
+     * @date 2022/1/17 14:24
+     **/
+    @GetResource(name = "获取所有用户ID和名称列表", path = "/sysUser/getAllUserIdList")
+    public ResponseData<List<SysUserRequest>> getAllUserIdList() {
+        return new SuccessResponseData<>(sysUserService.getAllUserIdList());
+    }
+
+    /**
+     * 运维平台接口检测
+     *
+     * @author majianguo
+     * @date 2022/1/27 14:29
+     **/
+    @GetResource(name = "运维平台接口检测", path = "/sysUser/devopsApiCheck", requiredLogin = false, requiredPermission = false)
+    public ResponseData<Integer> devopsApiCheck(SysUserRequest sysUserRequest) {
+        return new SuccessResponseData<>(sysUserService.devopsApiCheck(sysUserRequest));
+    }
+
+    /**
+     * 根据用户主键获取用户对应的token
+     *
+     * @author majianguo
+     * @date 2022/1/17 14:24
+     **/
+    @GetResource(name = "根据用户主键获取用户对应的token", path = "/sysUser/getTokenByUserId")
+    public ResponseData<String> getTokenByUserId(Long userId) {
+        return new SuccessResponseData<>(sysUserService.getTokenByUserId(userId));
+    }
 }

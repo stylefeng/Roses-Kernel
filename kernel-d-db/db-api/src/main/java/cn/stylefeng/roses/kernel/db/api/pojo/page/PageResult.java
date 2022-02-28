@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.db.api.pojo.page;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -43,26 +44,31 @@ public class PageResult<T> implements Serializable {
     /**
      * 第几页
      */
+    @ChineseDescription("第几页,从1开始")
     private Integer pageNo = 1;
 
     /**
      * 每页条数
      */
+    @ChineseDescription("每页条数")
     private Integer pageSize = 20;
 
     /**
      * 总页数
      */
+    @ChineseDescription("总页数")
     private Integer totalPage = 0;
 
     /**
      * 总记录数
      */
+    @ChineseDescription("总记录数")
     private Integer totalRows = 0;
 
     /**
      * 结果集
      */
+    @ChineseDescription("结果集")
     private List<T> rows;
 
 }

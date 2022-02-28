@@ -24,11 +24,15 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.loginlog.controller;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogDto;
 import cn.stylefeng.roses.kernel.log.api.pojo.loginlog.SysLoginLogRequest;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
+import cn.stylefeng.roses.kernel.system.modular.loginlog.entity.SysLoginLog;
 import cn.stylefeng.roses.kernel.system.modular.loginlog.service.SysLoginLogService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,9 +59,10 @@ public class SysLoginLogController {
      * @date 2021/1/13 17:51
      */
     @GetResource(name = "清空登录日志", path = "/loginLog/deleteAll")
-    public ResponseData deleteAll() {
+    @BusinessLog
+    public ResponseData<?> deleteAll() {
         sysLoginLogService.delAll();
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -67,8 +72,8 @@ public class SysLoginLogController {
      * @date 2021/1/13 17:51
      */
     @GetResource(name = "查看详情登录日志", path = "/loginLog/detail")
-    public ResponseData detail(@Validated(SysLoginLogRequest.detail.class) SysLoginLogRequest sysLoginLogRequest) {
-        return new SuccessResponseData(sysLoginLogService.detail(sysLoginLogRequest));
+    public ResponseData<SysLoginLog> detail(@Validated(SysLoginLogRequest.detail.class) SysLoginLogRequest sysLoginLogRequest) {
+        return new SuccessResponseData<>(sysLoginLogService.detail(sysLoginLogRequest));
     }
 
     /**
@@ -78,8 +83,8 @@ public class SysLoginLogController {
      * @date 2021/1/13 17:51
      */
     @GetResource(name = "分页查询登录日志", path = "/loginLog/page")
-    public ResponseData page(SysLoginLogRequest sysLoginLogRequest) {
-        return new SuccessResponseData(sysLoginLogService.findPage(sysLoginLogRequest));
+    public ResponseData<PageResult<SysLoginLogDto>> page(SysLoginLogRequest sysLoginLogRequest) {
+        return new SuccessResponseData<>(sysLoginLogService.findPage(sysLoginLogRequest));
     }
 
 }

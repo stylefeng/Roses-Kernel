@@ -24,7 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.scanner.api.pojo.resource;
 
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -148,7 +148,7 @@ public class ResourceDefinition implements Serializable {
      * 接口返回结果的字段描述
      */
     @ChineseDescription("接口返回结果的字段描述")
-    private Set<FieldMetadata> responseFieldDescriptions;
+    private FieldMetadata responseFieldDescriptions;
 
     /**
      * 资源添加日期

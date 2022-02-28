@@ -60,9 +60,9 @@ public class KaptchaController {
      * @author fengshuonan
      * @date 2021/7/5 12:00
      */
-    @GetResource(name = "获取图形验证码", path = "/captcha", requiredPermission = false, requiredLogin = false, responseClass = ImageCaptcha.class)
-    public ResponseData captcha() {
-        return new SuccessResponseData(captchaApi.captcha());
+    @GetResource(name = "获取图形验证码", path = "/captcha", requiredPermission = false, requiredLogin = false)
+    public ResponseData<ImageCaptcha> captcha() {
+        return new SuccessResponseData<>(captchaApi.captcha());
     }
 
     /**
@@ -71,12 +71,12 @@ public class KaptchaController {
      * @author fengshuonan
      * @date 2021/7/5 12:00
      */
-    @GetResource(name = "获取图形验证码", path = "/dragCaptcha", requiredPermission = false, requiredLogin = false, responseClass = DragCaptchaImageDTO.class)
-    public ResponseData dragCaptcha() {
+    @GetResource(name = "获取图形验证码", path = "/dragCaptcha", requiredPermission = false, requiredLogin = false)
+    public ResponseData<DragCaptchaImageDTO> dragCaptcha() {
         DragCaptchaImageDTO captcha = dragCaptchaApi.createCaptcha();
         captcha.setSrcImage(BASE64_IMG_PREFIX + captcha.getSrcImage());
         captcha.setCutImage(BASE64_IMG_PREFIX + captcha.getCutImage());
-        return new SuccessResponseData(captcha);
+        return new SuccessResponseData<>(captcha);
     }
 
 }

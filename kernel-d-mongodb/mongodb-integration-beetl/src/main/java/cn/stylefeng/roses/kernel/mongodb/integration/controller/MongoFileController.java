@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.mongodb.integration.controller;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.mongodb.api.MongoFileApi;
 import cn.stylefeng.roses.kernel.mongodb.file.entity.MongoFileEntity;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
@@ -64,8 +65,8 @@ public class MongoFileController {
      * @date 2021/03/31 17:28
      */
     @PostResource(name = "Mongodb文件新增", path = "/view/mongodb/file/add")
-    public ResponseData mongodbFileAdd(@RequestPart("file") MultipartFile file) {
-        return new SuccessResponseData(mongoFileApi.saveFile(file));
+    public ResponseData<?> mongodbFileAdd(@RequestPart("file") MultipartFile file) {
+        return new SuccessResponseData<>(mongoFileApi.saveFile(file));
     }
 
     /**
@@ -75,9 +76,9 @@ public class MongoFileController {
      * @date 2021/03/31 17:28
      */
     @PostResource(name = "Mongodb文件删除", path = "/view/mongodb/file/del")
-    public ResponseData mongodbFileDel(@RequestParam String id) {
+    public ResponseData<?> mongodbFileDel(@RequestParam String id) {
         mongoFileApi.removeFile(id);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -87,8 +88,8 @@ public class MongoFileController {
      * @date 2021/03/31 17:28
      */
     @GetResource(name = "Mongodb文件列表", path = "/view/mongodb/file/list")
-    public ResponseData mongodbFileList(MongoFileEntity mongoFileEntity) {
-        return new SuccessResponseData(mongoFileApi.getFilesByPage(mongoFileEntity));
+    public ResponseData<PageResult<?>> mongodbFileList(MongoFileEntity mongoFileEntity) {
+        return new SuccessResponseData<>(mongoFileApi.getFilesByPage(mongoFileEntity));
     }
 
     /**
@@ -98,7 +99,7 @@ public class MongoFileController {
      * @date 2021/03/31 17:28
      */
     @GetResource(name = "Mongodb文件下载", path = "/view/mongodb/file/down")
-    public ResponseEntity mongodbFileDown(@RequestParam String id) throws UnsupportedEncodingException {
+    public ResponseEntity<?> mongodbFileDown(@RequestParam String id) throws UnsupportedEncodingException {
         Optional<MongoFileEntity> file = mongoFileApi.getFileById(id);
         if (file.isPresent()) {
             return ResponseEntity.ok()

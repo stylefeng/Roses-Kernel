@@ -45,11 +45,11 @@ import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.exception.enums.defaults.DefaultBusinessExceptionEnum;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.security.api.DragCaptchaApi;
+import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
 import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
 import cn.stylefeng.roses.kernel.validator.api.exception.enums.ValidatorExceptionEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -107,12 +107,15 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     @Resource
     private OldPasswordValidateApi oldPasswordValidateApi;
 
+    @Resource
+    private ImageCaptchaApi imageCaptchaApi;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void reg(CustomerRequest customerRequest) {
 
-        // 验证拖拽验证码
-        this.validateDragCaptcha(customerRequest.getVerKey(), customerRequest.getVerCode());
+        // 验证验证码
+        this.validateCaptcha(customerRequest.getVerKey(), customerRequest.getVerCode());
 
         synchronized (REG_LOCK) {
             // 校验邮箱和账号是否重复
@@ -155,7 +158,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         loginRequest.setRememberMe(true);
 
         // 验证拖拽验证码
-        this.validateDragCaptcha(loginRequest.getVerKey(), loginRequest.getVerCode());
+        this.validateCaptcha(loginRequest.getVerKey(), loginRequest.getVerCode());
 
         // 查询用户信息
         LambdaQueryWrapper<Customer> wrapper = new LambdaQueryWrapper<>();
@@ -229,7 +232,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public void sendResetPwdEmail(CustomerRequest customerRequest) {
 
         // 验证拖拽验证码
-        this.validateDragCaptcha(customerRequest.getVerKey(), customerRequest.getVerCode());
+        this.validateCaptcha(customerRequest.getVerKey(), customerRequest.getVerCode());
 
         // 验证邮箱是否存在
         LambdaQueryWrapper<Customer> customerLambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -365,19 +368,54 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         // 获取当前登录用户
         Long userId = LoginContext.me().getLoginUser().getUserId();
 
+        // 查看当前用户是否有秘钥
+        Customer customer = this.getById(userId);
+        if (StrUtil.isEmpty(customer.getSecretKey())) {
+            throw new CustomerException(CustomerExceptionEnum.NO_SECRET);
+        }
+
+        // 判断秘钥是否过期
+        if (customer.getMemberExpireTime().before(new Date())) {
+            throw new CustomerException(CustomerExceptionEnum.SECRET_EXPIRED);
+        }
+
+        return this.createOrUpdateCustomerSecret(userId);
+    }
+
+    @Override
+    public String createOrUpdateCustomerSecret(Long customerId) {
+        if (customerId == null) {
+            return null;
+        }
+
         // 重新生成秘钥
-        String uuid = IdWorker.get32UUID();
+        String randomString = RandomUtil.randomString(32);
 
         // 更新用户秘钥
         LambdaUpdateWrapper<Customer> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.set(Customer::getSecretKey, uuid);
-        wrapper.eq(Customer::getCustomerId, userId);
+        wrapper.set(Customer::getSecretKey, randomString);
+        wrapper.eq(Customer::getCustomerId, customerId);
         this.update(wrapper);
 
         // 清除缓存中的用户信息
-        customerInfoCacheOperatorApi.remove(String.valueOf(userId));
+        customerInfoCacheOperatorApi.remove(String.valueOf(customerId));
 
-        return uuid;
+        return randomString;
+    }
+
+    @Override
+    public CustomerInfo getCustomerInfoByKeyWords(String keyWords) {
+        LambdaQueryWrapper<Customer> customerLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        customerLambdaQueryWrapper.eq(Customer::getAccount, keyWords)
+                .or().eq(Customer::getEmail, keyWords)
+                .or().eq(Customer::getCustomerId, keyWords)
+                .select(Customer::getCustomerId);
+        Customer one = this.getOne(customerLambdaQueryWrapper, false);
+        if (one == null) {
+            return null;
+        } else {
+            return this.getCustomerInfoById(one.getCustomerId());
+        }
     }
 
     @Override
@@ -523,12 +561,25 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     }
 
     /**
-     * 验证拖拽验证码是否正确
+     * 验证码是否正确
      *
      * @author fengshuonan
      * @date 2021/7/6 15:07
      */
-    private void validateDragCaptcha(String verKey, String verCode) {
+    private void validateCaptcha(String verKey, String verCode) {
+
+        // 如果开启了验证码校验，则验证当前请求的验证码是否正确
+        if (SecurityConfigExpander.getCaptchaOpen()) {
+            if (StrUtil.isEmpty(verKey) || StrUtil.isEmpty(verCode)) {
+                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
+            }
+            if (!imageCaptchaApi.validateCaptcha(verKey, verCode)) {
+                throw new AuthException(ValidatorExceptionEnum.CAPTCHA_ERROR);
+            }
+            return;
+        }
+
+        // 如果开启了拖拽验证码
         if (SecurityConfigExpander.getDragCaptchaOpen()) {
             if (StrUtil.isEmpty(verKey) || StrUtil.isEmpty(verCode)) {
                 throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
@@ -538,6 +589,5 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             }
         }
     }
-
 
 }

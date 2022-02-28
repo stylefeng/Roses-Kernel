@@ -24,19 +24,24 @@
  */
 package cn.stylefeng.roses.kernel.scanner;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.rule.listener.ApplicationReadyListener;
+import cn.stylefeng.roses.kernel.scanner.api.DevOpsReportApi;
 import cn.stylefeng.roses.kernel.scanner.api.ResourceCollectorApi;
 import cn.stylefeng.roses.kernel.scanner.api.ResourceReportApi;
 import cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants;
 import cn.stylefeng.roses.kernel.scanner.api.holder.InitScanFlagHolder;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.devops.DevOpsReportProperties;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ReportResourceParam;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.SysResourcePersistencePojo;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.scanner.ScannerProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,9 +71,25 @@ public class ResourceReportListener extends ApplicationReadyListener implements 
             ResourceCollectorApi resourceCollectorApi = applicationContext.getBean(ResourceCollectorApi.class);
             Map<String, Map<String, ResourceDefinition>> modularResources = resourceCollectorApi.getModularResources();
 
-            // 持久化资源，发送资源到资源服务或本项目（单体项目）
+            // 持久化资源，发送资源到资源服务或本项目
             ResourceReportApi resourceService = applicationContext.getBean(ResourceReportApi.class);
-            resourceService.reportResources(new ReportResourceParam(scannerProperties.getAppCode(), modularResources));
+            List<SysResourcePersistencePojo> persistencePojos = resourceService.reportResourcesAndGetResult(new ReportResourceParam(scannerProperties.getAppCode(), modularResources));
+
+            // 向DevOps一体化平台汇报资源
+            DevOpsReportProperties devOpsReportProperties = applicationContext.getBean(DevOpsReportProperties.class);
+            // 如果配置了相关属性则进行DevOps资源汇报
+            if (ObjectUtil.isAllNotEmpty(devOpsReportProperties,
+                    devOpsReportProperties.getServerHost(),
+                    devOpsReportProperties.getProjectInteractionSecretKey(),
+                    devOpsReportProperties.getProjectUniqueCode(),
+                    devOpsReportProperties.getServerHost())) {
+                DevOpsReportApi devOpsReportApi = applicationContext.getBean(DevOpsReportApi.class);
+                try {
+                    devOpsReportApi.reportResources(devOpsReportProperties, persistencePojos);
+                } catch (Exception e) {
+                    log.error("向DevOps平台汇报异常出现网络错误，如无法联通DevOps平台可关闭相关配置。", e);
+                }
+            }
 
             // 设置标识已经扫描过
             InitScanFlagHolder.setFlag();

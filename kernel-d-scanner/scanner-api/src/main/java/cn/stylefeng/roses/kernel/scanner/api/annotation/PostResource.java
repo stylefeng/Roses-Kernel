@@ -91,11 +91,6 @@ public @interface PostResource {
     boolean viewFlag() default false;
 
     /**
-     * 资源的响应类型，用于生成api文档
-     */
-    Class<?> responseClass() default Void.class;
-
-    /**
      * 请求路径(同RequestMapping)
      */
     @AliasFor(annotation = RequestMapping.class)

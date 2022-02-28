@@ -66,26 +66,26 @@ public class CustomDatabaseIdProvider implements DatabaseIdProvider {
 
             } catch (Exception e2) {
                 log.warn("CustomDatabaseIdProvider无法判断当前数据源类型，默认选择Mysql类型");
-                return DbTypeEnum.MYSQL.getUrlWords();
+                return DbTypeEnum.MYSQL.getXmlDatabaseId();
             }
         }
 
         // 达梦和oracle使用同一种
         if (url.contains(DbTypeEnum.ORACLE.getUrlWords())) {
-            return DbTypeEnum.ORACLE.getUrlWords();
+            return DbTypeEnum.ORACLE.getXmlDatabaseId();
         }
         if (url.contains(DbTypeEnum.DM.getUrlWords())) {
-            return DbTypeEnum.ORACLE.getUrlWords();
+            return DbTypeEnum.ORACLE.getXmlDatabaseId();
         }
 
         if (url.contains(DbTypeEnum.MS_SQL.getUrlWords())) {
-            return DbTypeEnum.MS_SQL.getUrlWords();
+            return DbTypeEnum.MS_SQL.getXmlDatabaseId();
         }
         if (url.contains(DbTypeEnum.PG_SQL.getUrlWords())) {
-            return DbTypeEnum.PG_SQL.getUrlWords();
+            return DbTypeEnum.PG_SQL.getXmlDatabaseId();
         }
 
-        return DbTypeEnum.MYSQL.getUrlWords();
+        return DbTypeEnum.MYSQL.getXmlDatabaseId();
     }
 
 }

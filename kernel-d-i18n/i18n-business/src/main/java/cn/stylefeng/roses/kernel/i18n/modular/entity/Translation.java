@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.i18n.modular.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -49,30 +50,35 @@ public class Translation extends BaseEntity {
      * 主键id
      */
     @TableId(value = "tran_id", type = IdType.ASSIGN_ID)
+    @ChineseDescription("主键id")
     private Long tranId;
 
     /**
      * 编码
      */
     @TableField("tran_code")
+    @ChineseDescription("编码")
     private String tranCode;
 
     /**
      * 多语言条例名称
      */
     @TableField("tran_name")
+    @ChineseDescription("多语言条例名称")
     private String tranName;
 
     /**
      * 语种字典
      */
     @TableField("tran_language_code")
+    @ChineseDescription("语种字典")
     private String tranLanguageCode;
 
     /**
      * 翻译的值
      */
     @TableField("tran_value")
+    @ChineseDescription("翻译的值")
     private String tranValue;
 
 }

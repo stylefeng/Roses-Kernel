@@ -27,6 +27,7 @@ package cn.stylefeng.roses.kernel.system.starter;
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
+import cn.stylefeng.roses.kernel.system.api.constants.StatisticsCacheConstants;
 import cn.stylefeng.roses.kernel.system.api.constants.SystemCachesConstants;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.SysUserOrgDTO;
@@ -34,6 +35,9 @@ import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleDataScopeMemoryCa
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.cache.RoleResourceMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.role.entity.SysRole;
+import cn.stylefeng.roses.kernel.system.modular.home.cache.InterfaceStatisticsMemoryCache;
+import cn.stylefeng.roses.kernel.system.modular.theme.cache.ThemeMemoryCache;
+import cn.stylefeng.roses.kernel.system.modular.theme.pojo.DefaultTheme;
 import cn.stylefeng.roses.kernel.system.modular.user.cache.SysUserMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.user.cache.UserOrgMemoryCache;
 import cn.stylefeng.roses.kernel.system.modular.user.cache.UserRoleMemoryCache;
@@ -42,6 +46,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统管理缓存的自动配置（默认内存缓存）
@@ -130,4 +135,29 @@ public class GunsSystemCacheAutoConfiguration {
         return new RoleDataScopeMemoryCache(roleCache);
     }
 
+    /**
+     * 主题的缓存
+     *
+     * @author fengshuonan
+     * @date 2021/7/31 17:59
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "themeCacheApi")
+    public CacheOperatorApi<DefaultTheme> themeCacheApi() {
+        TimedCache<String, DefaultTheme> themeCache = CacheUtil.newTimedCache(Long.MAX_VALUE);
+        return new ThemeMemoryCache(themeCache);
+    }
+
+    /**
+     * 接口统计的缓存
+     *
+     * @author xixiaowei
+     * @date 2022/2/9 16:53
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "requestCountCacheApi")
+    public CacheOperatorApi<Map<Long,Integer>> requestCountCacheApi() {
+        TimedCache<String, Map<Long,Integer>> timedCache = CacheUtil.newTimedCache(StatisticsCacheConstants.INTERFACE_STATISTICS_CACHE_TIMEOUT_SECONDS);
+        return new InterfaceStatisticsMemoryCache(timedCache);
+    }
 }

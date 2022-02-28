@@ -24,7 +24,6 @@
  */
 package cn.stylefeng.roses.kernel.auth.auth;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginUserHolder;
@@ -32,9 +31,6 @@ import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.loginuser.CommonLoginUserUtil;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
-import cn.stylefeng.roses.kernel.dsctn.api.constants.DatasourceContainerConstants;
-import cn.stylefeng.roses.kernel.dsctn.api.context.CurrentDataSourceContext;
-import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import org.springframework.stereotype.Service;
 
@@ -80,19 +76,7 @@ public class LoginUserImpl implements LoginUserApi {
             throw new AuthException(AuthExceptionEnum.AUTH_EXPIRED_ERROR);
         }
 
-        // 获取当前上下文的数据源名称
-        String dataSourceName = CurrentDataSourceContext.getDataSourceName();
-
-        // 如果当前用户有租户编码，则需要切下数据源
-        if (ObjectUtil.isNotEmpty(session.getTenantCode()) && !session.getTenantCode().equals(DatasourceContainerConstants.MASTER_DATASOURCE_NAME)) {
-            CurrentDataSourceContext.setDataSourceName(RuleConstants.TENANT_DB_PREFIX + session.getTenantCode());
-        }
-        try {
-            // 从新组装一次loginUser，保证loginUser中数据的时效性
-            return userServiceApi.getEffectiveLoginUser(session);
-        } finally {
-            CurrentDataSourceContext.setDataSourceName(dataSourceName);
-        }
+        return session;
     }
 
     @Override

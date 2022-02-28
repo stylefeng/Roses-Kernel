@@ -8,4 +8,12 @@ package cn.stylefeng.roses.kernel.system.api;
  */
 public interface PositionServiceApi {
 
+    /**
+     * 查询职位总数
+     *
+     * @author xixiaowei
+     * @date 2022/2/9 9:37
+     */
+    Integer positionNum();
+
 }

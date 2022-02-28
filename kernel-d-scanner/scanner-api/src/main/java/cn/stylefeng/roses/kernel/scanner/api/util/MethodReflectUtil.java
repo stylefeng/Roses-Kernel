@@ -25,15 +25,23 @@
 package cn.stylefeng.roses.kernel.scanner.api.util;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.stylefeng.roses.kernel.scanner.api.enums.ParamTypeEnum;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ParameterMetadata;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import static cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants.DEFAULT_VALIDATED;
 
 /**
  * 反射工具类，获取方法的一些元数据
@@ -105,14 +113,16 @@ public class MethodReflectUtil {
                     Method validateGroupMethod = annotation.annotationType().getMethod("value");
                     Object invoke = validateGroupMethod.invoke(annotation);
                     if (invoke != null) {
-                        Class<?>[] result = (Class<?>[])invoke;
+                        Class<?>[] result = (Class<?>[]) invoke;
+                        HashSet<String> groupClassNames = new HashSet<>();
                         if (result.length > 0) {
-                            HashSet<String> groupClassNames = new HashSet<>();
                             for (Class<?> groupClass : result) {
                                 groupClassNames.add(groupClass.getSimpleName());
                             }
-                            return groupClassNames;
+                        } else {
+                            groupClassNames.add(DEFAULT_VALIDATED);
                         }
+                        return groupClassNames;
                     }
                 }
             }
@@ -123,43 +133,98 @@ public class MethodReflectUtil {
     }
 
     /**
-     * 获取方法第一个参数的类类型
+     * 返回方法的所有类型参数信息
      *
      * @param method 方法反射信息
      * @return 方法第一个参数的class类型
      * @author fengshuonan
      * @date 2020/12/8 18:16
      */
-    public static Class<?> getMethodFirstParamClass(Method method) {
+    public static Type[] getMethodGenericTypes(Method method) {
         if (method == null) {
             return null;
         }
-
-        if (method.getParameterCount() <= 0) {
-            return null;
-        }
-
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        if (parameterTypes.length > 0) {
-            return parameterTypes[0];
-        } else {
-            return null;
-        }
+        return method.getGenericParameterTypes();
     }
 
     /**
-     * 获取方法的返回值class类型
+     * 获取方法的返回值type类型，type可能是class也可能是带泛型的类型
      *
      * @param method 方法反射信息
      * @return 方法返回值的class类型
      * @author fengshuonan
      * @date 2020/12/8 18:20
      */
-    public static Class<?> getMethodReturnClass(Method method) {
+    public static Type getMethodReturnType(Method method) {
         if (method == null) {
             return null;
         }
-        return method.getReturnType();
+        return method.getGenericReturnType();
+    }
+
+    /**
+     * 获取方法的所有参数元数据信息
+     *
+     * @author fengshuonan
+     * @date 2022/1/20 11:51
+     */
+    public static List<ParameterMetadata> getMethodParameterInfos(Method method) {
+        List<ParameterMetadata> result = new LinkedList<>();
+
+        if (method == null) {
+            return result;
+        }
+
+        Parameter[] parameters = method.getParameters();
+        if (parameters.length == 0) {
+            return result;
+        }
+
+        for (Parameter parameter : parameters) {
+            ParameterMetadata parameterMetadata = new ParameterMetadata();
+
+            // 设置type类型
+            Type parameterizedType = parameter.getParameterizedType();
+            parameterMetadata.setParameterizedType(parameterizedType);
+
+            // 设置注解
+            Annotation[] annotations = parameter.getAnnotations();
+            parameterMetadata.setAnnotations(annotations);
+
+            // 设置参数是param参数还是request body参数
+            parameterMetadata.setParamTypeEnum(getParamTypeEnum(annotations));
+
+            // 设置参数名
+            parameterMetadata.setParameterName(parameter.getName());
+
+            result.add(parameterMetadata);
+        }
+
+        return result;
+    }
+
+    /**
+     * 根据参数上的注解判断出是param参数还是request body参数
+     *
+     * @author fengshuonan
+     * @date 2022/1/20 13:43
+     */
+    public static ParamTypeEnum getParamTypeEnum(Annotation[] annotations) {
+
+        // 注解为空，直接判断为param参数
+        if (annotations == null || annotations.length == 0) {
+            return ParamTypeEnum.QUERY_PARAM;
+        }
+
+        // 如果注解中包含@RequestBody注解，则是json请求
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType().equals(RequestBody.class)) {
+                return ParamTypeEnum.REQUEST_BODY;
+            }
+        }
+
+        // 其他情况，判定为时param参数
+        return ParamTypeEnum.QUERY_PARAM;
     }
 
 }

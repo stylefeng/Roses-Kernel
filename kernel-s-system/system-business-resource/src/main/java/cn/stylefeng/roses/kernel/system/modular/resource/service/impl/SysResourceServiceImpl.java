@@ -25,7 +25,12 @@
 package cn.stylefeng.roses.kernel.system.modular.resource.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
 import cn.stylefeng.roses.kernel.auth.api.LoginUserApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
@@ -33,17 +38,25 @@ import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.jwt.JwtTokenOperator;
+import cn.stylefeng.roses.kernel.jwt.api.pojo.config.JwtConfig;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
+import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
+import cn.stylefeng.roses.kernel.scanner.api.DevOpsReportApi;
 import cn.stylefeng.roses.kernel.scanner.api.ResourceReportApi;
+import cn.stylefeng.roses.kernel.scanner.api.exception.ScannerException;
+import cn.stylefeng.roses.kernel.scanner.api.exception.enums.DevOpsExceptionEnum;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.devops.DevOpsReportProperties;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.devops.DevOpsReportResourceParam;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ReportResourceParam;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceDefinition;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ResourceUrlParam;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.SysResourcePersistencePojo;
 import cn.stylefeng.roses.kernel.system.api.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
-import cn.stylefeng.roses.kernel.system.api.pojo.resource.ExternalResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.LayuiApiResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleResourceDTO;
@@ -52,11 +65,13 @@ import cn.stylefeng.roses.kernel.system.modular.resource.factory.ResourceFactory
 import cn.stylefeng.roses.kernel.system.modular.resource.mapper.SysResourceMapper;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +81,8 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static cn.stylefeng.roses.kernel.scanner.api.constants.ScannerConstants.*;
+
 /**
  * 资源表 服务实现类
  *
@@ -73,7 +90,8 @@ import java.util.stream.Collectors;
  * @date 2020/11/23 22:45
  */
 @Service
-public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysResourceService, ResourceReportApi, ResourceServiceApi {
+@Slf4j
+public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysResourceService, ResourceReportApi, ResourceServiceApi, DevOpsReportApi {
 
     @Resource
     private SysResourceMapper resourceMapper;
@@ -271,43 +289,17 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addExternalResource(ExternalResourceRequest externalResourceRequest) {
-        if (ObjectUtil.isNotEmpty(externalResourceRequest.getResourceRequestList())) {
-            String appCode = externalResourceRequest.getResourceRequestList().get(0).getAppCode();
-
-            // 删除本app下的所有资源
-            LambdaQueryWrapper<SysResource> sysResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            sysResourceLambdaQueryWrapper.eq(SysResource::getAppCode, appCode);
-            this.remove(sysResourceLambdaQueryWrapper);
-
-            // 添加新的资源
-            List<SysResource> sysResources = externalResourceRequest.getResourceRequestList().stream().map(item -> {
-                SysResource sysResource = BeanUtil.toBean(item, SysResource.class);
-                if (ObjectUtil.isEmpty(sysResource.getViewFlag())) {
-                    sysResource.setViewFlag(YesOrNotEnum.N.getCode());
-                }
-                // 处理JSON序列号类型
-                if (ObjectUtil.isNotEmpty(sysResource.getParamFieldDescriptions())) {
-                    sysResource.setParamFieldDescriptions(sysResource.getParamFieldDescriptions().replaceAll("com.sedinbj.kernel.resource.api.pojo.resource.FieldMetadata", "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata"));
-                }
-                if (ObjectUtil.isNotEmpty(sysResource.getResponseFieldDescriptions())) {
-                    sysResource.setResponseFieldDescriptions(sysResource.getResponseFieldDescriptions().replaceAll("com.sedinbj.kernel.resource.api.pojo.resource.FieldMetadata", "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata"));
-                }
-                return sysResource;
-            }).collect(Collectors.toList());
-            this.saveBatch(sysResources);
-        }
+    public void reportResources(@RequestBody ReportResourceParam reportResourceReq) {
+        this.reportResourcesAndGetResult(reportResourceReq);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void reportResources(@RequestBody ReportResourceParam reportResourceReq) {
-
+    public List<SysResourcePersistencePojo> reportResourcesAndGetResult(ReportResourceParam reportResourceReq) {
         String projectCode = reportResourceReq.getProjectCode();
         Map<String, Map<String, ResourceDefinition>> resourceDefinitions = reportResourceReq.getResourceDefinitions();
 
         if (ObjectUtil.isEmpty(projectCode) || resourceDefinitions == null) {
-            return;
+            return new ArrayList<>();
         }
 
         //根据project删除该项目下的所有资源
@@ -333,6 +325,16 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         for (Map.Entry<String, ResourceDefinition> entry : resourceDefinitionMap.entrySet()) {
             resourceCache.put(entry.getKey(), entry.getValue());
         }
+
+        // 组装返回结果
+        ArrayList<SysResourcePersistencePojo> finalResult = new ArrayList<>();
+        for (SysResource item : allResources) {
+            SysResourcePersistencePojo sysResourcePersistencePojo = new SysResourcePersistencePojo();
+            BeanUtil.copyProperties(item, sysResourcePersistencePojo);
+            finalResult.add(sysResourcePersistencePojo);
+        }
+
+        return finalResult;
     }
 
     @Override
@@ -395,6 +397,49 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Override
     public Integer getResourceCount() {
         return this.count();
+    }
+
+    @Override
+    public void reportResources(DevOpsReportProperties devOpsReportProperties, List<SysResourcePersistencePojo> sysResourcePersistencePojoList) {
+
+        // 去掉请求地址结尾的左斜杠
+        String serverHost = devOpsReportProperties.getServerHost();
+        if (StrUtil.endWith(serverHost, "/")) {
+            serverHost = StrUtil.removeSuffix(serverHost, "/");
+        }
+
+        // 组装请求DevOps平台的地址
+        String devopsReportUrl = serverHost + DEVOPS_REQUEST_PATH;
+
+        // jwt token生成
+        String projectInteractionSecretKey = devOpsReportProperties.getProjectInteractionSecretKey();
+        Long tokenValidityPeriodSeconds = devOpsReportProperties.getTokenValidityPeriodSeconds();
+        JwtConfig jwtConfig = new JwtConfig();
+        jwtConfig.setJwtSecret(projectInteractionSecretKey);
+        jwtConfig.setExpiredSeconds(ObjectUtil.isNotEmpty(tokenValidityPeriodSeconds) ? tokenValidityPeriodSeconds : DEVOPS_REPORT_TIMEOUT_SECONDS);
+        JwtTokenOperator jwtTokenOperator = new JwtTokenOperator(jwtConfig);
+        String jwtToken = jwtTokenOperator.generateToken(new HashMap<>());
+
+        // 组装请求参数
+        DevOpsReportResourceParam devOpsReportResourceParam = new DevOpsReportResourceParam(
+                devOpsReportProperties.getProjectUniqueCode(), jwtToken, sysResourcePersistencePojoList, devOpsReportProperties.getFieldMetadataClassPath());
+
+        // 进行post请求，汇报资源
+        HttpRequest httpRequest = HttpUtil.createPost(devopsReportUrl);
+        httpRequest.body(JSON.toJSONString(devOpsReportResourceParam));
+        httpRequest.setConnectionTimeout(Convert.toInt(DEVOPS_REPORT_CONNECTION_TIMEOUT_SECONDS * 1000));
+        ResponseData<?> responseData = null;
+        HttpResponse execute = httpRequest.execute();
+        String body = execute.body();
+        responseData = JSON.parseObject(body, ResponseData.class);
+        // 返回结果为空
+        if (responseData == null) {
+            throw new ScannerException(DevOpsExceptionEnum.HTTP_RESPONSE_EMPTY);
+        }
+        // 返回失败
+        if (!responseData.getSuccess()) {
+            throw new ScannerException(DevOpsExceptionEnum.HTTP_RESPONSE_ERROR, responseData.getMessage());
+        }
     }
 
     /**

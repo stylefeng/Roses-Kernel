@@ -24,6 +24,10 @@
  */
 package cn.stylefeng.roses.kernel.scanner.api.constants;
 
+import cn.hutool.core.collection.ListUtil;
+
+import java.util.List;
+
 /**
  * 资源扫描模块的常量
  *
@@ -57,4 +61,33 @@ public interface ScannerConstants {
      */
     String VIEW_CONTROLLER_PATH_START_WITH = "/view";
 
+    /**
+     * FieldMetadata类全路径
+     */
+    String FIELD_METADATA_CLASS_ALL_PATH = "cn.stylefeng.roses.kernel.scanner.api.pojo.resource.FieldMetadata";
+
+    /**
+     * DevOps平台资源汇报接口token超时时间
+     */
+    Long DEVOPS_REPORT_TIMEOUT_SECONDS = 5L;
+
+    /**
+     * DevOps平台资源汇报接口连接超时时间
+     */
+    Integer DEVOPS_REPORT_CONNECTION_TIMEOUT_SECONDS = 3;
+
+    /**
+     * DevOps平台资源汇报路径
+     */
+    String DEVOPS_REQUEST_PATH = "/scannerResource/addExternalResource";
+
+    /**
+     * 不需要解析的字段
+     */
+    List<String> DONT_PARSE_FIELD = ListUtil.list(false, "serialVersionUID", "delFlag", "createTime", "createUser", "updateTime", "updateUser");
+
+    /**
+     * 用在为validateGroups字段的标识，@Validate注解，不带class类时候的标识
+     */
+    String DEFAULT_VALIDATED = "default-all";
 }

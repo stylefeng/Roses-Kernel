@@ -80,7 +80,7 @@ public interface RuleConstants {
     /**
      * 中文的多语言类型编码
      */
-    String CHINES_TRAN_LANGUAGE_CODE = "chinese";
+    String CHINESE_TRAN_LANGUAGE_CODE = "chinese";
 
     /**
      * 租户数据源标识前缀

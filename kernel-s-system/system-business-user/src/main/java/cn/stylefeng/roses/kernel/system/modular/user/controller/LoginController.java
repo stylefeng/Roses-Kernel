@@ -71,11 +71,11 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/3/17 17:23
      */
-    @PostResource(name = "登陆", path = "/login", requiredLogin = false, requiredPermission = false, responseClass = String.class)
-    public ResponseData login(@RequestBody @Validated LoginRequest loginRequest) {
+    @PostResource(name = "登陆", path = "/login", requiredLogin = false, requiredPermission = false)
+    public ResponseData<String> login(@RequestBody @Validated LoginRequest loginRequest) {
         loginRequest.setCreateCookie(true);
         LoginResponse loginResponse = authServiceApi.login(loginRequest);
-        return new SuccessResponseData(loginResponse.getToken());
+        return new SuccessResponseData<>(loginResponse.getToken());
     }
 
     /**
@@ -84,11 +84,11 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/3/17 17:23
      */
-    @PostResource(name = "登陆（分离版）", path = "/loginApi", requiredLogin = false, requiredPermission = false, responseClass = LoginResponse.class)
-    public ResponseData loginApi(@RequestBody @Validated LoginRequest loginRequest) {
+    @PostResource(name = "登陆（分离版）", path = "/loginApi", requiredLogin = false, requiredPermission = false)
+    public ResponseData<LoginResponse> loginApi(@RequestBody @Validated LoginRequest loginRequest) {
         loginRequest.setCreateCookie(false);
         LoginResponse loginResponse = authServiceApi.login(loginRequest);
-        return new SuccessResponseData(loginResponse);
+        return new SuccessResponseData<>(loginResponse);
     }
 
     /**
@@ -97,10 +97,10 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/5/25 22:36
      */
-    @PostResource(name = "适用于单点登录", path = "/loginWithToken", requiredLogin = false, requiredPermission = false, responseClass = String.class)
-    public ResponseData loginWithToken(@RequestBody @Validated LoginWithTokenRequest loginWithTokenRequest) {
+    @PostResource(name = "适用于单点登录", path = "/loginWithToken", requiredLogin = false, requiredPermission = false)
+    public ResponseData<String> loginWithToken(@RequestBody @Validated LoginWithTokenRequest loginWithTokenRequest) {
         LoginResponse loginResponse = authServiceApi.LoginWithToken(loginWithTokenRequest);
-        return new SuccessResponseData(loginResponse.getToken());
+        return new SuccessResponseData<>(loginResponse.getToken());
     }
 
     /**
@@ -110,9 +110,9 @@ public class LoginController {
      * @date 2021/3/17 17:24
      */
     @ApiResource(name = "登出", path = "/logoutAction", requiredPermission = false, method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseData logoutAction() {
+    public ResponseData<?> logoutAction() {
         authServiceApi.logout();
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -121,14 +121,14 @@ public class LoginController {
      * @author fengshuonan
      * @date 2021/3/17 17:37
      */
-    @GetResource(name = "获取当前用户的用户信息", path = "/getCurrentLoginUserInfo", requiredPermission = false, responseClass = CurrentUserInfoResponse.class)
-    public ResponseData getCurrentLoginUserInfo() {
+    @GetResource(name = "获取当前用户的用户信息", path = "/getCurrentLoginUserInfo", requiredPermission = false)
+    public ResponseData<CurrentUserInfoResponse> getCurrentLoginUserInfo() {
         LoginUser loginUser = LoginContext.me().getLoginUser();
 
         // 转化返回结果
         CurrentUserInfoResponse currentUserInfoResponse = UserLoginInfoFactory.parseUserInfo(loginUser);
 
-        return new SuccessResponseData(currentUserInfoResponse);
+        return new SuccessResponseData<>(currentUserInfoResponse);
     }
 
     /**
@@ -138,9 +138,20 @@ public class LoginController {
      * @date 2021/6/18 15:26
      */
     @PostResource(name = "校验token是否正确", path = "/validateToken", requiredPermission = false, requiredLogin = false)
-    public ResponseData validateToken(@RequestBody @Valid ValidateTokenRequest validateTokenRequest) {
+    public ResponseData<Boolean> validateToken(@RequestBody @Valid ValidateTokenRequest validateTokenRequest) {
         boolean haveSessionFlag = sessionManagerApi.haveSession(validateTokenRequest.getToken());
-        return new SuccessResponseData(haveSessionFlag);
+        return new SuccessResponseData<>(haveSessionFlag);
     }
 
+    /**
+     * 取消帐号冻结
+     *
+     * @author xixiaowei
+     * @date 2022/1/22 16:40
+     */
+    @PostResource(name = "取消帐号冻结", path = "/cancelFreeze")
+    public ResponseData<?> cancelFreeze(@RequestBody LoginRequest loginRequest) {
+        authServiceApi.cancelFreeze(loginRequest);
+        return new SuccessResponseData<>();
+    }
 }

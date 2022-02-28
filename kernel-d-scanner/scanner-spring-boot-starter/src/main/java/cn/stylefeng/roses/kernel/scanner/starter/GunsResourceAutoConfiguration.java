@@ -28,6 +28,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.scanner.ApiResourceScanner;
 import cn.stylefeng.roses.kernel.scanner.DefaultResourceCollector;
 import cn.stylefeng.roses.kernel.scanner.api.ResourceCollectorApi;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.devops.DevOpsReportProperties;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.scanner.ScannerProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -47,6 +48,8 @@ public class GunsResourceAutoConfiguration {
 
     public static final String SCANNER_PREFIX = "scanner";
 
+    public static final String DEVOPS_REPORT_PREFIX = "devops";
+
     @Value("${spring.application.name:}")
     private String springApplicationName;
 
@@ -63,6 +66,18 @@ public class GunsResourceAutoConfiguration {
     @ConfigurationProperties(prefix = SCANNER_PREFIX)
     public ScannerProperties scannerProperties() {
         return new ScannerProperties();
+    }
+
+    /**
+     * DevOps一体化平台的交互配置
+     *
+     * @author fengshuonan
+     * @date 2020/12/3 17:54
+     */
+    @Bean
+    @ConfigurationProperties(prefix = DEVOPS_REPORT_PREFIX)
+    public DevOpsReportProperties devOpsReportProperties() {
+        return new DevOpsReportProperties();
     }
 
     /**

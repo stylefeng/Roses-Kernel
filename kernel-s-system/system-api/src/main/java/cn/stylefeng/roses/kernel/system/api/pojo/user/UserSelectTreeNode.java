@@ -25,9 +25,9 @@
 package cn.stylefeng.roses.kernel.system.api.pojo.user;
 
 import cn.hutool.core.collection.IterUtil;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.enums.TreeNodeEnum;
 import cn.stylefeng.roses.kernel.rule.tree.factory.node.DefaultTreeNode;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

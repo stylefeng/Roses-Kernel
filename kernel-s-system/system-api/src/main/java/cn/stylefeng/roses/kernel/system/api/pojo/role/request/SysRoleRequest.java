@@ -24,8 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.role.request;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.validator.api.validators.unique.TableUniqueValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -157,22 +157,26 @@ public class SysRoleRequest extends BaseRequest {
      * 是否是新增绑定菜单，true-新增绑定菜单，false-取消绑定菜单
      */
     @NotNull(message = "是否是新增绑定菜单", groups = {grantMenu.class})
+    @ChineseDescription("是否是新增绑定菜单，true-新增绑定菜单，false-取消绑定菜单")
     private Boolean grantAddMenuFlag;
 
     /**
      * 绑定菜单的id
      */
     @NotNull(message = "绑定菜单的id", groups = {grantMenu.class})
+    @ChineseDescription("绑定菜单的id")
     private Long grantMenuId;
 
     /**
      * 模块下所有的按钮id
      */
+    @ChineseDescription("模块下所有的按钮id")
     private List<Long> modularButtonIds;
 
     /**
      * 模块下选中的按钮id
      */
+    @ChineseDescription("模块下选中的按钮id")
     private List<Long> selectedButtonIds;
 
     /**

@@ -114,4 +114,11 @@ public interface AuthServiceApi {
      */
     void checkAuth(String token, String requestUrl);
 
+    /**
+     * 取消冻结帐号
+     *
+     * @author xixiaowei
+     * @date 2022/1/22 16:37
+     */
+    void cancelFreeze(LoginRequest loginRequest);
 }

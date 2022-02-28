@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.sms.modular.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -53,42 +54,49 @@ public class SysSms extends BaseEntity implements Serializable {
      * 主键
      */
     @TableId(value = "sms_id", type = IdType.ASSIGN_ID)
+    @ChineseDescription("主键id")
     private Long smsId;
 
     /**
      * 手机号
      */
     @TableField("phone_number")
+    @ChineseDescription("手机号")
     private String phoneNumber;
 
     /**
      * 短信验证码
      */
     @TableField("validate_code")
+    @ChineseDescription("短信验证码")
     private String validateCode;
 
     /**
      * 短信模板编号
      */
     @TableField("template_code")
+    @ChineseDescription("短信模板编号")
     private String templateCode;
 
     /**
      * 业务id
      */
     @TableField("biz_id")
+    @ChineseDescription("业务id")
     private String bizId;
 
     /**
      * 发送状态：1-未发送，2-发送成功，3-发送失败，4-失效
      */
     @TableField("status_flag")
+    @ChineseDescription("发送状态：1-未发送，2-发送成功，3-发送失败，4-失效")
     private Integer statusFlag;
 
     /**
      * 来源：1-app，2-pc，3-其他
      */
     @TableField("source")
+    @ChineseDescription("来源：1-app，2-pc，3-其他")
     private Integer source;
 
     /**
@@ -96,6 +104,7 @@ public class SysSms extends BaseEntity implements Serializable {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("invalid_time")
+    @ChineseDescription("短信失效截止时间")
     private Date invalidTime;
 
 }

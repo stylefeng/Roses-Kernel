@@ -25,8 +25,8 @@
 package cn.stylefeng.roses.kernel.system.modular.menu.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -218,11 +218,17 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode<SysMenu> {
 
     @Override
     public String getNodeId() {
+        if (menuId == null) {
+            return null;
+        }
         return menuId.toString();
     }
 
     @Override
     public String getNodeParentId() {
+        if (menuParentId == null) {
+            return null;
+        }
         return menuParentId.toString();
     }
 

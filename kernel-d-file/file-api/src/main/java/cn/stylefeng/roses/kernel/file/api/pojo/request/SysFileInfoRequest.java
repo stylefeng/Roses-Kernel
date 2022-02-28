@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.file.api.pojo.request;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,6 +49,7 @@ public class SysFileInfoRequest extends BaseRequest {
      * 文件ID
      */
     @NotNull(message = "fileId不能为空", groups = {versionBack.class, detail.class})
+    @ChineseDescription("文件id")
     private Long fileId;
 
     /**
@@ -58,6 +60,7 @@ public class SysFileInfoRequest extends BaseRequest {
      * 版本号升级的依据，code相同id不同视为同一个文件的不同版本
      */
     @NotNull(message = "fileCode不能为空", groups = {edit.class, delete.class,})
+    @ChineseDescription("文件编码")
     private Long fileCode;
 
     /**
@@ -66,48 +69,57 @@ public class SysFileInfoRequest extends BaseRequest {
      * 机密文件为需要鉴权的文件，非机密文件则不需要任何权限（不登录也可以访问）
      */
     @NotBlank(message = "是否是机密文件不能为空", groups = {add.class, edit.class})
+    @ChineseDescription("是否为机密文件，Y-是机密，N-不是机密")
     private String secretFlag;
 
     /**
      * 文件名称（上传时候的文件全名，例如：开发文档.txt）
      */
+    @ChineseDescription("文件名称（上传时候的文件全名，例如：开发文档.txt）")
     private String fileOriginName;
 
     /**
      * 其他文件形式传参
      */
+    @ChineseDescription("其他文件形式参数")
     private String token;
 
     /**
      * 文件存储位置：1-阿里云，2-腾讯云，3-minio，4-本地
      */
+    @ChineseDescription("文件存储位置：1-阿里云，2-腾讯云，3-minio，4-本地")
     private Integer fileLocation;
 
     /**
      * 文件仓库（文件夹）
      */
     @NotBlank(message = "fileBucket不能为空", groups = {previewByObjectName.class})
+    @ChineseDescription("文件仓库(文件夹)")
     private String fileBucket;
 
     /**
      * 文件后缀
      */
+    @ChineseDescription("文件后缀")
     private String fileSuffix;
 
     /**
      * 文件大小kb
      */
+    @ChineseDescription("文件大小")
     private Long fileSizeKb;
 
     /**
      * 存储到bucket中的名称，主键id+.后缀
      */
     @NotBlank(message = "fileObjectName不能为空", groups = {previewByObjectName.class})
+    @ChineseDescription("存储到bucket中的名称，主键id+.后缀")
     private String fileObjectName;
 
     /**
      * 存储路径
      */
+    @ChineseDescription("存储路径")
     private String filePath;
 
     /**

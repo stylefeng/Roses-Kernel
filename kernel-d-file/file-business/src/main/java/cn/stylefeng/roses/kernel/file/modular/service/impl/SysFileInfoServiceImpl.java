@@ -25,7 +25,6 @@
 package cn.stylefeng.roses.kernel.file.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
@@ -38,6 +37,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
+import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
@@ -49,11 +49,12 @@ import cn.stylefeng.roses.kernel.file.api.util.DownloadUtil;
 import cn.stylefeng.roses.kernel.file.api.util.PdfFileTypeUtil;
 import cn.stylefeng.roses.kernel.file.api.util.PicFileTypeUtil;
 import cn.stylefeng.roses.kernel.file.modular.entity.SysFileInfo;
+import cn.stylefeng.roses.kernel.file.modular.entity.SysFileStorage;
 import cn.stylefeng.roses.kernel.file.modular.factory.FileInfoFactory;
 import cn.stylefeng.roses.kernel.file.modular.mapper.SysFileInfoMapper;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
+import cn.stylefeng.roses.kernel.file.modular.service.SysFileStorageService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
-import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -92,6 +93,9 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     @Resource
     private FileOperatorApi fileOperatorApi;
 
+    @Resource
+    private SysFileStorageService sysFileStorageService;
+
     @Override
     public SysFileInfoResponse getFileInfoResult(Long fileId) {
 
@@ -103,7 +107,13 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         // 获取文件字节码
         byte[] fileBytes;
         try {
-            fileBytes = fileOperatorApi.getFileBytes(FileConfigExpander.getDefaultBucket(), sysFileInfo.getFileObjectName());
+            // 如果是存储在数据库，从数据库中获取，其他的方式走FileOperatorApi
+            if (FileLocationEnum.DB.getCode().equals(sysFileInfo.getFileLocation())) {
+                SysFileStorage storage = sysFileStorageService.getById(fileId);
+                fileBytes = storage.getFileBytes();
+            } else {
+                fileBytes = fileOperatorApi.getFileBytes(FileConfigExpander.getDefaultBucket(), sysFileInfo.getFileObjectName());
+            }
         } catch (Exception e) {
             log.error("获取文件流异常，具体信息为：{}", e.getMessage());
             throw new FileException(FileExceptionEnum.FILE_STREAM_ERROR, e.getMessage());
@@ -188,8 +198,10 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         SysFileInfoResponse sysFileInfoResponse = this.getFileInfoResult(sysFileInfoRequest.getFileId());
 
         // 如果文件加密等级不符合，文件不允许被访问
-        if (!sysFileInfoRequest.getSecretFlag().equals(sysFileInfoResponse.getSecretFlag())) {
-            throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+        if (YesOrNotEnum.Y.getCode().equals(sysFileInfoResponse.getSecretFlag())) {
+            if (YesOrNotEnum.N.getCode().equals(sysFileInfoRequest.getSecretFlag())) {
+                throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+            }
         }
 
         DownloadUtil.download(sysFileInfoResponse.getFileOriginName(), sysFileInfoResponse.getFileBytes(), response);
@@ -201,7 +213,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
         // 查询该Code的所有历史版本
         LambdaQueryWrapper<SysFileInfo> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(SysFileInfo::getFileCode, sysFileInfoRequest.getFileCode());
+        lqw.eq(SysFileInfo::getFileCode, sysFileInfoRequest.getFileCode()).or().eq(SysFileInfo::getFileId, sysFileInfoRequest.getFileId());
         List<SysFileInfo> fileInfos = this.list(lqw);
 
         // 批量删除
@@ -209,7 +221,12 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
         // 删除具体文件
         for (SysFileInfo fileInfo : fileInfos) {
-            this.fileOperatorApi.deleteFile(fileInfo.getFileBucket(), fileInfo.getFileObjectName());
+            //如果文件是在数据库存储，则特殊处理
+            if (fileInfo.getFileLocation().equals(FileLocationEnum.DB.getCode())) {
+                this.sysFileStorageService.removeById(fileInfo.getFileId());
+            } else {
+                this.fileOperatorApi.deleteFile(fileInfo.getFileBucket(), fileInfo.getFileObjectName());
+            }
         }
     }
 
@@ -219,7 +236,15 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         List<SysFileInfoListResponse> list = this.baseMapper.fileInfoList(page, sysFileInfoRequest);
 
         // 排除defaultAvatar.png这个图片,这个是默认头像
-        List<SysFileInfoListResponse> newList = list.stream().filter(i -> !i.getFileOriginName().equals("defaultAvatar.png")).collect(Collectors.toList());
+        List<SysFileInfoListResponse> newList = list.stream().filter(i -> !i.getFileOriginName().equals(FileConstants.DEFAULT_AVATAR_FILE_OBJ_NAME)).collect(Collectors.toList());
+
+        // 拼接图片url地址
+        for (SysFileInfoListResponse sysFileInfoListResponse : newList) {
+            // 判断是否是可以预览的文件
+            if (PicFileTypeUtil.getFileImgTypeFlag(sysFileInfoListResponse.getFileSuffix())) {
+                sysFileInfoListResponse.setFileUrl(this.getFileAuthUrl(sysFileInfoListResponse.getFileId()));
+            }
+        }
 
         return PageResultFactory.createPageResult(page.setRecords(newList));
     }
@@ -285,18 +310,14 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
     @Override
     public void preview(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
 
-        // 如果是默认头像
-        if (FileConstants.DEFAULT_AVATAR_FILE_ID.equals(sysFileInfoRequest.getFileId())) {
-            DownloadUtil.renderPreviewFile(response, Base64.decode(FileConfigExpander.getDefaultAvatarBase64()));
-            return;
-        }
-
         // 根据文件id获取文件信息结果集
         SysFileInfoResponse sysFileInfoResponse = this.getFileInfoResult(sysFileInfoRequest.getFileId());
 
         // 如果文件加密等级不符合，文件不允许被访问
-        if (!sysFileInfoRequest.getSecretFlag().equals(sysFileInfoResponse.getSecretFlag())) {
-            throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+        if (YesOrNotEnum.Y.getCode().equals(sysFileInfoResponse.getSecretFlag())) {
+            if (YesOrNotEnum.N.getCode().equals(sysFileInfoRequest.getSecretFlag())) {
+                throw new FileException(FileExceptionEnum.FILE_DENIED_ACCESS);
+            }
         }
 
         // 获取文件后缀
@@ -344,12 +365,6 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
     @Override
     public void previewByBucketAndObjName(SysFileInfoRequest sysFileInfoRequest, HttpServletResponse response) {
-
-        // 如果是默认头像
-        if (FileConstants.DEFAULT_AVATAR_FILE_OBJ_NAME.equals(sysFileInfoRequest.getFileObjectName())) {
-            DownloadUtil.renderPreviewFile(response, Base64.decode(FileConfigExpander.getDefaultAvatarBase64()));
-            return;
-        }
 
         // 判断文件是否需要鉴权，需要鉴权的需要带token访问
         LambdaQueryWrapper<SysFileInfo> wrapper = new LambdaQueryWrapper<>();
@@ -415,23 +430,39 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
 
     @Override
     public String getFileAuthUrl(Long fileId) {
-
-        // 获取登录用户的token
-        String token = LoginContext.me().getToken();
-
-        // 获取context-path
-        String contextPath = HttpServletUtil.getRequest().getContextPath();
-
-        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
+        return this.getFileAuthUrl(fileId, LoginContext.me().getToken());
     }
 
     @Override
     public String getFileAuthUrl(Long fileId, String token) {
+        // 获取文件的基本信息
+        SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
+        sysFileInfoRequest.setFileId(fileId);
+        SysFileInfo sysFileInfo = querySysFileInfo(sysFileInfoRequest);
 
-        // 获取context-path
-        String contextPath = HttpServletUtil.getRequest().getContextPath();
+        // 如果是数据库存储，则返回previewUrl
+        if (sysFileInfo.getFileLocation().equals(FileLocationEnum.DB.getCode())) {
+            return this.sysFileStorageService.getFileAuthUrl(String.valueOf(fileId));
+        } else {
+            // 返回第三方存储文件url
+            return fileOperatorApi.getFileAuthUrl(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName(), FileConfigExpander.getDefaultFileTimeoutSeconds());
+        }
+    }
 
-        return FileConfigExpander.getServerDeployHost() + contextPath + FileConstants.FILE_PRIVATE_PREVIEW_URL + "?fileId=" + fileId + "&token=" + token;
+    @Override
+    public String getFileUnAuthUrl(Long fileId) {
+        // 获取文件的基本信息
+        SysFileInfoRequest sysFileInfoRequest = new SysFileInfoRequest();
+        sysFileInfoRequest.setFileId(fileId);
+        SysFileInfo sysFileInfo = querySysFileInfo(sysFileInfoRequest);
+
+        // 如果是数据库存储，则返回previewUrl
+        if (sysFileInfo.getFileLocation().equals(FileLocationEnum.DB.getCode())) {
+            return this.sysFileStorageService.getFileUnAuthUrl(String.valueOf(fileId));
+        } else {
+            // 返回第三方存储文件url
+            return fileOperatorApi.getFileUnAuthUrl(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName());
+        }
     }
 
     /**

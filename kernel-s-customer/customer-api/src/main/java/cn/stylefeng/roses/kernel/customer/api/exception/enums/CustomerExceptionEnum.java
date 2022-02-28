@@ -81,7 +81,17 @@ public enum CustomerExceptionEnum implements AbstractExceptionEnum {
     /**
      * 用户原密码错误
      */
-    PWD_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "08", "更改密码失败，原密码错误!");
+    PWD_ERROR(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "08", "更改密码失败，原密码错误!"),
+
+    /**
+     * 尚未开通秘钥
+     */
+    NO_SECRET(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "09", "尚未开通秘钥"),
+
+    /**
+     * 秘钥已过期
+     */
+    SECRET_EXPIRED(RuleConstants.BUSINESS_ERROR_TYPE_CODE + CustomerConstants.CUSTOMER_EXCEPTION_STEP_CODE + "10", "秘钥已过期");
 
     /**
      * 错误编码

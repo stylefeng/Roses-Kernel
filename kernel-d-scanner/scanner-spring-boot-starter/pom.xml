@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-d-scanner</artifactId>
-        <version>7.1.5</version>
+        <version>7.2.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -22,6 +22,12 @@
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-sdk-scanner</artifactId>
             <version>${roses.version}</version>
+        </dependency>
+
+        <!--properties自动提示装载-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
 
     </dependencies>

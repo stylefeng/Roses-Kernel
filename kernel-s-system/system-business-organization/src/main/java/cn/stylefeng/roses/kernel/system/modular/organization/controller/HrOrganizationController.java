@@ -24,6 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.organization.controller;
 
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.rule.annotation.BusinessLog;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
@@ -61,9 +63,10 @@ public class HrOrganizationController {
      * @date 2020/11/04 11:05
      */
     @PostResource(name = "添加系统组织机构", path = "/hrOrganization/add")
-    public ResponseData add(@RequestBody @Validated(HrOrganizationRequest.add.class) HrOrganizationRequest hrOrganizationRequest) {
+    @BusinessLog
+    public ResponseData<?> add(@RequestBody @Validated(HrOrganizationRequest.add.class) HrOrganizationRequest hrOrganizationRequest) {
         hrOrganizationService.add(hrOrganizationRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -73,9 +76,10 @@ public class HrOrganizationController {
      * @date 2020/11/04 11:05
      */
     @PostResource(name = "删除系统组织机构", path = "/hrOrganization/delete")
-    public ResponseData delete(@RequestBody @Validated(HrOrganizationRequest.delete.class) HrOrganizationRequest hrOrganizationRequest) {
+    @BusinessLog
+    public ResponseData<?> delete(@RequestBody @Validated(HrOrganizationRequest.delete.class) HrOrganizationRequest hrOrganizationRequest) {
         hrOrganizationService.del(hrOrganizationRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -85,9 +89,10 @@ public class HrOrganizationController {
      * @date 2020/11/04 11:05
      */
     @PostResource(name = "编辑系统组织机构", path = "/hrOrganization/edit")
-    public ResponseData edit(@RequestBody @Validated(HrOrganizationRequest.edit.class) HrOrganizationRequest hrOrganizationRequest) {
+    @BusinessLog
+    public ResponseData<?> edit(@RequestBody @Validated(HrOrganizationRequest.edit.class) HrOrganizationRequest hrOrganizationRequest) {
         hrOrganizationService.edit(hrOrganizationRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -97,9 +102,10 @@ public class HrOrganizationController {
      * @date 2020/11/04 11:05
      */
     @PostResource(name = "修改组织机构状态", path = "/hrOrganization/updateStatus")
-    public ResponseData updateStatus(@RequestBody @Validated(HrOrganizationRequest.updateStatus.class) HrOrganizationRequest hrOrganizationRequest) {
+    @BusinessLog
+    public ResponseData<?> updateStatus(@RequestBody @Validated(HrOrganizationRequest.updateStatus.class) HrOrganizationRequest hrOrganizationRequest) {
         hrOrganizationService.updateStatus(hrOrganizationRequest);
-        return new SuccessResponseData();
+        return new SuccessResponseData<>();
     }
 
     /**
@@ -108,9 +114,9 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    @GetResource(name = "查看详情系统组织机构", path = "/hrOrganization/detail", responseClass = HrOrganization.class)
-    public ResponseData detail(@Validated(HrOrganizationRequest.detail.class) HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.detail(hrOrganizationRequest));
+    @GetResource(name = "查看详情系统组织机构", path = "/hrOrganization/detail")
+    public ResponseData<HrOrganization> detail(@Validated(HrOrganizationRequest.detail.class) HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData<>(hrOrganizationService.detail(hrOrganizationRequest));
     }
 
     /**
@@ -119,9 +125,9 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    @GetResource(name = "分页查询系统组织机构", path = "/hrOrganization/page", responseClass = HrOrganization.class)
-    public ResponseData page(HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.findPage(hrOrganizationRequest));
+    @GetResource(name = "分页查询系统组织机构", path = "/hrOrganization/page")
+    public ResponseData<PageResult<HrOrganization>> page(HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData<>(hrOrganizationService.findPage(hrOrganizationRequest));
     }
 
     /**
@@ -130,9 +136,9 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2020/11/04 11:05
      */
-    @GetResource(name = "获取全部系统组织机构", path = "/hrOrganization/list", responseClass = HrOrganization.class)
-    public ResponseData list(HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.findList(hrOrganizationRequest));
+    @GetResource(name = "获取全部系统组织机构", path = "/hrOrganization/list")
+    public ResponseData<List<HrOrganization>> list(HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData<>(hrOrganizationService.findList(hrOrganizationRequest));
     }
 
     /**
@@ -141,9 +147,9 @@ public class HrOrganizationController {
      * @author chenjinlong
      * @date 2021/01/05 15:55
      */
-    @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/tree", responseClass = OrganizationTreeNode.class)
-    public ResponseData organizationTree(HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.organizationTree(hrOrganizationRequest));
+    @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/tree")
+    public ResponseData<List<OrganizationTreeNode>> organizationTree(HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData<>(hrOrganizationService.organizationTree(hrOrganizationRequest));
     }
 
     /**
@@ -152,9 +158,9 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2021/3/19 22:20
      */
-    @GetResource(name = "获取组织机构树(用于用户绑定数据范围)", path = "/hrOrganization/userBindOrgScope", responseClass = OrganizationTreeNode.class)
-    public ResponseData userBindOrgScope(@Validated(HrOrganizationRequest.userBindOrgScope.class) HrOrganizationRequest hrOrganizationRequest) {
-        return new SuccessResponseData(hrOrganizationService.organizationTree(hrOrganizationRequest));
+    @GetResource(name = "获取组织机构树(用于用户绑定数据范围)", path = "/hrOrganization/userBindOrgScope")
+    public ResponseData<List<OrganizationTreeNode>> userBindOrgScope(@Validated(HrOrganizationRequest.userBindOrgScope.class) HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData<>(hrOrganizationService.organizationTree(hrOrganizationRequest));
     }
 
     /**
@@ -163,7 +169,7 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2021/1/9 18:37
      */
-    @GetResource(name = "Layui版本--获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）", path = "/hrOrganization/roleBindOrgScope", responseClass = ZTreeNode.class)
+    @GetResource(name = "Layui版本--获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）", path = "/hrOrganization/roleBindOrgScope")
     public List<ZTreeNode> roleBindOrgScope(@Validated(HrOrganizationRequest.roleBindOrgScope.class) HrOrganizationRequest hrOrganizationRequest) {
         return hrOrganizationService.orgZTree(hrOrganizationRequest, false);
     }
@@ -174,10 +180,10 @@ public class HrOrganizationController {
      * @author fengshuonan
      * @date 2021/1/9 18:37
      */
-    @GetResource(name = "AntdVue版本--获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）", path = "/hrOrganization/roleBindOrgScopeAntdv", responseClass = ZTreeNode.class)
-    public ResponseData roleBindOrgScopeAntdv(@Validated(HrOrganizationRequest.roleBindOrgScope.class) HrOrganizationRequest hrOrganizationRequest) {
+    @GetResource(name = "AntdVue版本--获取组织机构树（用于角色配置数据范围类型，并且数据范围类型是指定组织机构时）", path = "/hrOrganization/roleBindOrgScopeAntdv")
+    public ResponseData<List<ZTreeNode>> roleBindOrgScopeAntdv(@Validated(HrOrganizationRequest.roleBindOrgScope.class) HrOrganizationRequest hrOrganizationRequest) {
         List<ZTreeNode> zTreeNodes = hrOrganizationService.orgZTree(hrOrganizationRequest, true);
-        return new SuccessResponseData(zTreeNodes);
+        return new SuccessResponseData<>(zTreeNodes);
     }
 
 }

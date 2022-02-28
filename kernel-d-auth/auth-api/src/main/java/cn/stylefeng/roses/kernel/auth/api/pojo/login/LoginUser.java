@@ -30,8 +30,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.enums.DataScopeTypeEnum;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleUserInfo;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -160,7 +160,7 @@ public class LoginUser implements Serializable {
      * 默认语种是中文
      */
     @ChineseDescription("当前用户语种的标识")
-    private String tranLanguageCode = RuleConstants.CHINES_TRAN_LANGUAGE_CODE;
+    private String tranLanguageCode = RuleConstants.CHINESE_TRAN_LANGUAGE_CODE;
 
     /**
      * 租户的编码

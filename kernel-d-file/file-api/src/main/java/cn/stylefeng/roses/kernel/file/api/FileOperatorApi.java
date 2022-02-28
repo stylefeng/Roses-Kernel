@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.file.api;
 
 import cn.stylefeng.roses.kernel.file.api.enums.BucketAuthEnum;
+import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 
 import java.io.InputStream;
 
@@ -187,5 +188,13 @@ public interface FileOperatorApi {
      * @date 2020/10/26 10:42
      */
     void deleteFile(String bucketName, String key);
+
+    /**
+     * 获取当前api的文件存储类型
+     *
+     * @author fengshuonan
+     * @date 2022/1/2 20:50
+     */
+    FileLocationEnum getFileLocationEnum();
 
 }

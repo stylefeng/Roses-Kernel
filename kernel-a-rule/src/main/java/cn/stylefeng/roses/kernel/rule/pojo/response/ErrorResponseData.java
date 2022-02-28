@@ -35,7 +35,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ErrorResponseData extends ResponseData {
+public class ErrorResponseData<T> extends ResponseData<T> {
 
     /**
      * 异常的具体类名称
@@ -58,7 +58,7 @@ public class ErrorResponseData extends ResponseData {
         super(Boolean.FALSE, code, message, null);
     }
 
-    public ErrorResponseData(String code, String message, Object object) {
+    public ErrorResponseData(String code, String message, T object) {
         super(Boolean.FALSE, code, message, object);
     }
 

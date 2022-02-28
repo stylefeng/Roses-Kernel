@@ -24,7 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.scanner.api.pojo.resource;
 
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import lombok.Data;
 
 import java.util.Map;
@@ -91,6 +91,24 @@ public class FieldMetadata {
      */
     @ChineseDescription("校验信息的提示信息")
     private String validationMessages;
+
+    /**
+     * 泛型或object类型的字段的描述类型(1-字段，2-泛型)
+     */
+    @ChineseDescription("泛型或object类型的字段的描述(1-字段，2-泛型)")
+    private Integer genericFieldMetadataType;
+
+    /**
+     * 字段类型：详情在 FieldTypeEnum
+     */
+    @ChineseDescription("字段类型：详情在 FieldTypeEnum")
+    private Integer fieldType;
+
+    /**
+     * 请求参数传值类型，详情在 ParamTypeEnum
+     */
+    @ChineseDescription("请求参数传值类型，详情在 ParamTypeEnum")
+    private Integer requestParamType;
 
     /**
      * 泛型或object类型的字段的描述

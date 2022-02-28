@@ -24,8 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.user.request;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
 import cn.stylefeng.roses.kernel.validator.api.validators.date.DateValue;
 import cn.stylefeng.roses.kernel.validator.api.validators.phone.PhoneValue;
 import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
@@ -183,11 +183,13 @@ public class SysUserRequest extends BaseRequest {
     /**
      * 部门的数据范围集合
      */
+    @ChineseDescription("部门的数据范围集合")
     private Set<Long> scopeOrgIds;
 
     /**
      * 用户id的数据范围集合
      */
+    @ChineseDescription("用户id的数据范围集合")
     private Set<Long> userScopeIds;
 
     /**

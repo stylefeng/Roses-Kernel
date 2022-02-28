@@ -60,4 +60,23 @@ public interface CustomerApi {
      */
     void updateMemberExpiryDate(Long customerId, Date expiryDate);
 
+    /**
+     * 重置个人秘钥
+     *
+     * @param customerId 用户id
+     * @return 用户秘钥
+     * @author fengshuonan
+     * @date 2021/7/20 10:44
+     */
+    String createOrUpdateCustomerSecret(Long customerId);
+
+    /**
+     * 获取用户信息
+     *
+     * @param keyWords 用户账号，邮箱，或用户id
+     * @author fengshuonan
+     * @date 2021/7/20 10:44
+     */
+    CustomerInfo getCustomerInfoByKeyWords(String keyWords);
+
 }

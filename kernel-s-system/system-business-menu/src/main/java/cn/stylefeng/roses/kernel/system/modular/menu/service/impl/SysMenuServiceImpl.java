@@ -44,7 +44,6 @@ import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.menu.SysMenuExceptionEnum;
-import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
@@ -482,7 +481,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 非超级管理员，获取当前用户所有的菜单id
         List<Long> menuIdList = getCurrentUserMenuIds();
         if (menuIdList.isEmpty()) {
-            throw new SystemModularException(SysUserExceptionEnum.USER_NOT_HAVE_MENUS);
+            return new ArrayList<>();
         }
         queryWrapper.in(SysMenu::getMenuId, menuIdList);
 
@@ -550,6 +549,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<String> getResourceCodesByBusinessId(List<Long> businessIds) {
+        if (ObjectUtil.isEmpty(businessIds)) {
+            return new ArrayList<>();
+        }
+
         LambdaQueryWrapper<SysMenuResource> wrapper = new LambdaQueryWrapper<>();
         wrapper.in(SysMenuResource::getBusinessId, businessIds);
         wrapper.select(SysMenuResource::getResourceCode);

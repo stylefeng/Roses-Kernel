@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.entity;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -45,18 +46,21 @@ public class SysUserRole extends BaseEntity {
      * 主键
      */
     @TableId(value = "user_role_id", type = IdType.ASSIGN_ID)
+    @ChineseDescription("主键id")
     private Long userRoleId;
 
     /**
      * 用户id
      */
     @TableField("user_id")
+    @ChineseDescription("用户id")
     private Long userId;
 
     /**
      * 角色id
      */
     @TableField("role_id")
+    @ChineseDescription("角色id")
     private Long roleId;
 
 }

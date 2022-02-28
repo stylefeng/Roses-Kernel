@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-s-system</artifactId>
-        <version>7.1.5</version>
+        <version>7.2.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -16,6 +16,13 @@
     <packaging>jar</packaging>
 
     <dependencies>
+
+        <!--jwt相关参数-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>jwt-sdk</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
 
         <!--系统管理api模块-->
         <dependency>

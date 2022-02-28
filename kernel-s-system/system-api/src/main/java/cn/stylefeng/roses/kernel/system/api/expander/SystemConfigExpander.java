@@ -76,5 +76,15 @@ public class SystemConfigExpander {
     public static String getDefaultPassWord() {
         return ConfigContext.me().getSysConfigValueWithDefault("SYS_DEFAULT_PASSWORD", String.class, DEFAULT_PASSWORD);
     }
-
+    
+    /**
+     * 获取开发开关的状态
+     *
+     * @return {@link Boolean}
+     * @author majianguo
+     * @date 2022/1/17 14:59
+     **/
+    public static Boolean getDevSwitchStatus() {
+        return ConfigContext.me().getSysConfigValueWithDefault("DEVOPS_DEV_SWITCH_STATUS", Boolean.class, Boolean.FALSE);
+    }
 }

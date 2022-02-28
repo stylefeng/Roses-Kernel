@@ -54,9 +54,9 @@ public class MonitorStatusController {
      * @date 2020/6/29 16:49
      */
     @GetResource(name = "获取系统信息", path = "/getSystemInfo")
-    public ResponseData getSystemInfo() {
+    public ResponseData<SystemHardwareCalculator> getSystemInfo() {
         SystemHardwareCalculator systemHardwareInfo = systemHardwareInfoHolder.getSystemHardwareInfo();
-        return new SuccessResponseData(systemHardwareInfo);
+        return new SuccessResponseData<>(systemHardwareInfo);
     }
 
 }

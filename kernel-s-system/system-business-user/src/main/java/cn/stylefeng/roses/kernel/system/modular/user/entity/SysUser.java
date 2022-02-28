@@ -154,4 +154,9 @@ public class SysUser extends BaseEntity {
     @TableField(value = "del_flag", fill = FieldFill.INSERT)
     private String delFlag;
 
+    /**
+     * 登录次数
+     */
+    @TableField("login_count")
+    private Integer loginCount;
 }

@@ -151,4 +151,12 @@ public interface UserServiceApi {
      */
     Boolean userExist(Long userId);
 
+    /**
+     * 获取用户的头像url
+     *
+     * @author fengshuonan
+     * @date 2021/12/29 17:27
+     */
+    String getUserAvatarUrlByUserId(Long userId);
+
 }

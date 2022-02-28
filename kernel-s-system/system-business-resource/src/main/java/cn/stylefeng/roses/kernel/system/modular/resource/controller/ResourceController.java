@@ -24,25 +24,19 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.resource.controller;
 
-import cn.hutool.core.codec.Base64Decoder;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
-import cn.stylefeng.roses.kernel.system.api.pojo.resource.ExternalResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.resource.ResourceRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.request.SysRoleRequest;
 import cn.stylefeng.roses.kernel.system.modular.resource.entity.SysResource;
 import cn.stylefeng.roses.kernel.system.modular.resource.pojo.ResourceTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.resource.service.SysResourceService;
-import com.alibaba.fastjson.JSON;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -64,10 +58,10 @@ public class ResourceController {
      * @author fengshuonan
      * @date 2020/11/24 19:47
      */
-    @GetResource(name = "获取资源列表", path = "/resource/pageList", responseClass = SysResource.class)
-    public ResponseData pageList(ResourceRequest resourceRequest) {
+    @GetResource(name = "获取资源列表", path = "/resource/pageList")
+    public ResponseData<PageResult<SysResource>> pageList(ResourceRequest resourceRequest) {
         PageResult<SysResource> result = this.sysResourceService.findPage(resourceRequest);
-        return new SuccessResponseData(result);
+        return new SuccessResponseData<>(result);
     }
 
     /**
@@ -76,10 +70,10 @@ public class ResourceController {
      * @author fengshuonan
      * @date 2020/11/24 19:51
      */
-    @GetResource(name = "获取资源下拉列表", path = "/resource/getMenuResourceList", responseClass = SysResource.class)
-    public ResponseData getMenuResourceList(ResourceRequest resourceRequest) {
+    @GetResource(name = "获取资源下拉列表", path = "/resource/getMenuResourceList")
+    public ResponseData<List<SysResource>> getMenuResourceList(ResourceRequest resourceRequest) {
         List<SysResource> menuResourceList = this.sysResourceService.findList(resourceRequest);
-        return new SuccessResponseData(menuResourceList);
+        return new SuccessResponseData<>(menuResourceList);
     }
 
     /**
@@ -88,7 +82,7 @@ public class ResourceController {
      * @author majianguo
      * @date 2021/1/9 15:07
      */
-    @GetResource(name = "Layui版本--获取资源树列表，用于角色分配接口权限", path = "/resource/getRoleResourceTree", responseClass = ResourceTreeNode.class)
+    @GetResource(name = "Layui版本--获取资源树列表，用于角色分配接口权限", path = "/resource/getRoleResourceTree")
     public List<ResourceTreeNode> getLateralTree(SysRoleRequest sysRoleRequest) {
         return sysResourceService.getRoleResourceTree(sysRoleRequest.getRoleId(), false);
     }
@@ -99,24 +93,9 @@ public class ResourceController {
      * @author majianguo
      * @date 2021/1/9 15:07
      */
-    @GetResource(name = "AntdVue版本--获取资源树列表，用于角色分配接口权限", path = "/resource/getRoleResourceTreeAntdv", responseClass = ResourceTreeNode.class)
-    public ResponseData getLateralTreeChildren(SysRoleRequest sysRoleRequest) {
+    @GetResource(name = "AntdVue版本--获取资源树列表，用于角色分配接口权限", path = "/resource/getRoleResourceTreeAntdv")
+    public ResponseData<List<ResourceTreeNode>> getLateralTreeChildren(SysRoleRequest sysRoleRequest) {
         List<ResourceTreeNode> resourceLateralTree = sysResourceService.getRoleResourceTree(sysRoleRequest.getRoleId(), true);
-        return new SuccessResponseData(resourceLateralTree);
+        return new SuccessResponseData<>(resourceLateralTree);
     }
-
-    /**
-     * 添加外部资源
-     *
-     * @return {@link cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData}
-     * @author majianguo
-     * @date 2021/6/8 下午2:30
-     **/
-    @PostResource(name = "添加外部资源", path = "/resource/addExternalResource", requiredPermission = false, requiredLogin = false)
-    public ResponseData addExternalResource(@RequestBody String base64Data) {
-        String jsonStr = new String(Base64Decoder.decode(base64Data), StandardCharsets.UTF_8);
-        sysResourceService.addExternalResource(JSON.parseObject(jsonStr, ExternalResourceRequest.class));
-        return new SuccessResponseData();
-    }
-
 }

@@ -121,7 +121,12 @@ public enum AuthExceptionEnum implements AbstractExceptionEnum {
     /**
      * 无法访问未经授权的接口
      */
-    CANT_REQUEST_UN_OPEN_API(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "17", "无法访问未经授权的接口，未授权url为：{}");
+    CANT_REQUEST_UN_OPEN_API(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "17", "无法访问未经授权的接口，未授权url为：{}"),
+
+    /**
+     * 超过最大登录次数
+     */
+    EXCEED_MAX_LOGIN_COUNT(RuleConstants.BUSINESS_ERROR_TYPE_CODE + AuthConstants.AUTH_EXCEPTION_STEP_CODE + "18", "超过最大登录次数，帐号被锁定");
 
     /**
      * 错误编码

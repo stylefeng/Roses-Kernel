@@ -1,5 +1,6 @@
 package cn.stylefeng.roses.kernel.migration.api.pojo;
 
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import lombok.Data;
 
@@ -20,12 +21,14 @@ public class MigrationAggregationPOJO extends BaseRequest {
      * 应用和模块名称列表
      */
     @NotNull(message = "模块名称不能为空", groups = {export.class, restore.class})
+    @ChineseDescription("应用和模块名称列表")
     private List<String> appAndModuleNameList;
 
     /**
      * 数据集
      */
     @NotNull(message = "数据集不能为空", groups = {restore.class})
+    @ChineseDescription("数据集")
     private Map<String, MigrationInfo> data;
 
     /**

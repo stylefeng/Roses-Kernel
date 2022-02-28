@@ -31,6 +31,7 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.file.api.FileOperatorApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.file.api.enums.BucketAuthEnum;
+import cn.stylefeng.roses.kernel.file.api.enums.FileLocationEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.api.expander.FileConfigExpander;
@@ -231,6 +232,11 @@ public class MinIoFileOperator implements FileOperatorApi {
             throw new FileException(FileExceptionEnum.MINIO_FILE_ERROR, e.getMessage());
         }
 
+    }
+
+    @Override
+    public FileLocationEnum getFileLocationEnum() {
+        return FileLocationEnum.MINIO;
     }
 
     /**

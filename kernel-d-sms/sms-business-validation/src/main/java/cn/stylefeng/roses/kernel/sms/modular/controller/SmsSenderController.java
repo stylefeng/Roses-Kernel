@@ -27,11 +27,13 @@ package cn.stylefeng.roses.kernel.sms.modular.controller;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.sms.modular.entity.SysSms;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsInfoParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsSendParam;
 import cn.stylefeng.roses.kernel.sms.modular.param.SysSmsVerifyParam;
@@ -63,8 +65,8 @@ public class SmsSenderController {
      * @date 2020/10/26 18:34
      */
     @GetResource(name = "发送记录查询", path = "/sms/page")
-    public ResponseData page(SysSmsInfoParam sysSmsInfoParam) {
-        return new SuccessResponseData(sysSmsInfoService.page(sysSmsInfoParam));
+    public ResponseData<PageResult<SysSms>> page(SysSmsInfoParam sysSmsInfoParam) {
+        return new SuccessResponseData<>(sysSmsInfoService.page(sysSmsInfoParam));
     }
 
     /**
@@ -74,7 +76,7 @@ public class SmsSenderController {
      * @date 2020/10/26 18:34
      */
     @PostResource(name = "发送验证码短信", path = "/sms/sendLoginMessage", requiredLogin = false, requiredPermission = false)
-    public ResponseData sendMessage(@RequestBody @Validated SysSmsSendParam sysSmsSendParam) {
+    public ResponseData<Boolean> sendMessage(@RequestBody @Validated SysSmsSendParam sysSmsSendParam) {
 
         // 清空params参数
         sysSmsSendParam.setParams(null);
@@ -84,7 +86,7 @@ public class SmsSenderController {
         paramMap.put("code", RandomUtil.randomNumbers(6));
         sysSmsSendParam.setParams(paramMap);
 
-        return new SuccessResponseData(sysSmsInfoService.sendShortMessage(sysSmsSendParam));
+        return new SuccessResponseData<>(sysSmsInfoService.sendShortMessage(sysSmsSendParam));
     }
 
     /**
@@ -94,9 +96,9 @@ public class SmsSenderController {
      * @date 2020/10/26 18:35
      */
     @PostResource(name = "验证短信验证码", path = "/sms/validateMessage", requiredLogin = false, requiredPermission = false)
-    public ResponseData validateMessage(@RequestBody @Validated SysSmsVerifyParam sysSmsVerifyParam) {
+    public ResponseData<?> validateMessage(@RequestBody @Validated SysSmsVerifyParam sysSmsVerifyParam) {
         sysSmsInfoService.validateSmsInfo(sysSmsVerifyParam);
-        return new SuccessResponseData("短信验证成功");
+        return new SuccessResponseData<>("短信验证成功");
     }
 
 }

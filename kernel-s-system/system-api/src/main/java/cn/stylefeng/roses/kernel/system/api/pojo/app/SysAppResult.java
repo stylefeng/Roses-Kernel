@@ -25,7 +25,7 @@
 package cn.stylefeng.roses.kernel.system.api.pojo.app;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
-import cn.stylefeng.roses.kernel.scanner.api.annotation.field.ChineseDescription;
+import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -81,4 +81,9 @@ public class SysAppResult extends BaseEntity {
     @ChineseDescription("是否删除：Y-已删除，N-未删除")
     private String delFlag;
 
+    /**
+     * 排序-升序
+     */
+    @ChineseDescription("排序-升序")
+    private Integer appSort;
 }
