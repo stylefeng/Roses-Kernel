@@ -42,4 +42,9 @@ public interface ConfigConstants {
      */
     String CONFIG_EXCEPTION_STEP_CODE = "04";
 
+    /**
+     * 后端部署的地址，在sys_config中的编码
+     */
+    String SYS_SERVER_DEPLOY_HOST = "SYS_SERVER_DEPLOY_HOST";
+
 }

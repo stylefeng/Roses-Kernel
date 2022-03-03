@@ -31,6 +31,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.stylefeng.roses.kernel.config.api.ConfigInitCallbackApi;
 import cn.stylefeng.roses.kernel.config.api.ConfigInitStrategyApi;
+import cn.stylefeng.roses.kernel.config.api.constants.ConfigConstants;
 import cn.stylefeng.roses.kernel.config.api.context.ConfigContext;
 import cn.stylefeng.roses.kernel.config.api.exception.ConfigException;
 import cn.stylefeng.roses.kernel.config.api.exception.enums.ConfigExceptionEnum;
@@ -43,6 +44,7 @@ import cn.stylefeng.roses.kernel.config.modular.service.SysConfigService;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.rule.constants.RuleConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
@@ -228,6 +230,21 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             configInitItemList.addAll(value.getInitConfigs());
         }
         return configInitItemList;
+    }
+
+    @Override
+    public String getServerDeployHost() {
+
+        // 获取后端部署的服务器
+        LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysConfig::getConfigCode, ConfigConstants.SYS_SERVER_DEPLOY_HOST);
+        SysConfig sysConfig = this.getOne(wrapper, false);
+
+        if (sysConfig != null) {
+            return sysConfig.getConfigValue();
+        } else {
+            return FileConstants.DEFAULT_SERVER_DEPLOY_HOST;
+        }
     }
 
     /**

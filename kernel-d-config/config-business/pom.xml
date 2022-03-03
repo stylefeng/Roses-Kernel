@@ -17,6 +17,13 @@
 
     <dependencies>
 
+        <!--文件api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>file-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--系统配置表的redis的sdk-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>

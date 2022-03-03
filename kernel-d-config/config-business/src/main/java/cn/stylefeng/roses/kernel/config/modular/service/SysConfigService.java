@@ -123,4 +123,11 @@ public interface SysConfigService extends IService<SysConfig> {
      */
     List<ConfigInitItem> getInitConfigs();
 
+    /**
+     * 获取后端部署的地址
+     *
+     * @author fengshuonan
+     * @date 2022/3/3 14:23
+     */
+    String getServerDeployHost();
 }
