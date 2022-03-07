@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.stylefeng.roses</groupId>
         <artifactId>kernel-s-dict</artifactId>
-        <version>7.2.1</version>
+        <version>7.2.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
