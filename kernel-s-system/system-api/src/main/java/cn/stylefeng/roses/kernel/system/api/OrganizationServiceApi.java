@@ -47,8 +47,9 @@ public interface OrganizationServiceApi {
 
     /**
      * 获取组织机构详情
-     * @param orgId
-     * @return
+     *
+     * @author yexing
+     * @date 2022/3/8 23:32
      */
     HrOrganizationDTO getOrgDetail(Long orgId);
 }

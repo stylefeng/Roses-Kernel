@@ -20,8 +20,9 @@ public interface PositionServiceApi {
 
     /**
      * 获取职位详情
-     * @param positionId
-     * @return
+     *
+     * @author yexing
+     * @date 2022/3/8 23:33
      */
     HrPositionDTO getPositionDetail(Long positionId);
 }
