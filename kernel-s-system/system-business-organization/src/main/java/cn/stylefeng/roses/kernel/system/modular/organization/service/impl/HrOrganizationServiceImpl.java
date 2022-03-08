@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
@@ -332,6 +333,18 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         // 返回数据
         List<HrOrganization> list = this.list(queryWrapper);
         return list.stream().filter(Objects::nonNull).map(mapper).collect(Collectors.toList());
+    }
+
+    @Override
+    public HrOrganizationDTO getOrgDetail(Long orgId) {
+        HrOrganizationDTO hrOrganizationDTO = new HrOrganizationDTO();
+        HrOrganizationRequest request = new HrOrganizationRequest();
+        request.setOrgId(orgId);
+        HrOrganization detail = this.detail(request);
+        if (ObjectUtil.isNotNull(detail)) {
+            BeanUtil.copyProperties(detail, hrOrganizationDTO, CopyOptions.create().ignoreError());
+        }
+        return hrOrganizationDTO;
     }
 
     /**

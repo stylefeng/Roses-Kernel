@@ -1,5 +1,7 @@
 package cn.stylefeng.roses.kernel.system.api;
 
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionDTO;
+
 /**
  * 职位api
  *
@@ -16,4 +18,10 @@ public interface PositionServiceApi {
      */
     Integer positionNum();
 
+    /**
+     * 获取职位详情
+     * @param positionId
+     * @return
+     */
+    HrPositionDTO getPositionDetail(Long positionId);
 }

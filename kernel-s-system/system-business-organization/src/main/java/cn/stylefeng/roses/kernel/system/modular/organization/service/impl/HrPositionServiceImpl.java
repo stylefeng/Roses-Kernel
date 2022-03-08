@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.organization.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
@@ -35,6 +36,7 @@ import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.UserOrgServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.organization.PositionExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionRequest;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrPosition;
 import cn.stylefeng.roses.kernel.system.modular.organization.mapper.HrPositionMapper;
@@ -130,6 +132,18 @@ public class HrPositionServiceImpl extends ServiceImpl<HrPositionMapper, HrPosit
     @Override
     public Integer positionNum() {
         return this.count();
+    }
+
+    @Override
+    public HrPositionDTO getPositionDetail(Long positionId) {
+        HrPositionDTO hrPositionDTO = new HrPositionDTO();
+        HrPositionRequest request = new HrPositionRequest();
+        request.setPositionId(positionId);
+        HrPosition detail = this.detail(request);
+        if (ObjectUtil.isNotNull(detail)) {
+            BeanUtil.copyProperties(detail, hrPositionDTO, CopyOptions.create().ignoreError());
+        }
+        return hrPositionDTO;
     }
 
     /**

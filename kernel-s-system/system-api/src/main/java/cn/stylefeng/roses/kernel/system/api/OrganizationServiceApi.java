@@ -45,4 +45,10 @@ public interface OrganizationServiceApi {
      */
     List<HrOrganizationDTO> orgList();
 
+    /**
+     * 获取组织机构详情
+     * @param orgId
+     * @return
+     */
+    HrOrganizationDTO getOrgDetail(Long orgId);
 }
