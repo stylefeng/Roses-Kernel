@@ -114,6 +114,12 @@ public class SysUserDTO {
     private Long orgId;
 
     /**
+     * 用户所属机构名称
+     */
+    @ChineseDescription("用户所属机构名称")
+    private String orgName;
+
+    /**
      * 用户所属机构的职务
      */
     @ChineseDescription("用户所属机构的职务")

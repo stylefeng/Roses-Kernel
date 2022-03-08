@@ -53,10 +53,7 @@ import cn.stylefeng.roses.kernel.rule.enums.TreeNodeEnum;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.rule.tree.factory.DefaultTreeBuildFactory;
-import cn.stylefeng.roses.kernel.system.api.DataScopeApi;
-import cn.stylefeng.roses.kernel.system.api.OrganizationServiceApi;
-import cn.stylefeng.roses.kernel.system.api.ResourceServiceApi;
-import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.api.*;
 import cn.stylefeng.roses.kernel.system.api.enums.DevopsCheckStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
@@ -64,6 +61,7 @@ import cn.stylefeng.roses.kernel.system.api.exception.enums.user.SysUserExceptio
 import cn.stylefeng.roses.kernel.system.api.expander.SystemConfigExpander;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.DataScopeDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationDTO;
+import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrPositionDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.role.dto.SysRoleDTO;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.*;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.request.OnlineUserRequest;
@@ -143,6 +141,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private CacheOperatorApi<SysUserDTO> sysUserCacheOperatorApi;
+
+    @Resource
+    private PositionServiceApi positionServiceApi;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -388,8 +389,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 获取用户组织绑定信息
         SysUserOrgDTO userOrgInfo = sysUserOrgService.getUserOrgByUserId(sysUser.getUserId());
-        sysUserResponse.setOrgId(userOrgInfo.getOrgId());
-        sysUserResponse.setPositionId(userOrgInfo.getPositionId());
+        if (ObjectUtil.isNotNull(userOrgInfo.getOrgId())) {
+            sysUserResponse.setOrgId(userOrgInfo.getOrgId());
+            HrOrganizationDTO orgDetail = organizationServiceApi.getOrgDetail(userOrgInfo.getOrgId());
+            sysUserResponse.setOrgName(orgDetail.getOrgName());
+        }
+        if (ObjectUtil.isNotNull(userOrgInfo.getPositionId())) {
+            sysUserResponse.setPositionId(userOrgInfo.getPositionId());
+            HrPositionDTO positionDetail = positionServiceApi.getPositionDetail(userOrgInfo.getPositionId());
+            sysUserResponse.setPositionName(positionDetail.getPositionName());
+        }
 
         // 获取用户角色信息
         sysUserResponse.setGrantRoleIdList(sysUserRoleService.findRoleIdsByUserId(sysUser.getUserId()));
