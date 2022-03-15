@@ -114,30 +114,16 @@
         </dependency>
 
         <!--登录sdk-->
-        <!--<dependency>-->
-        <!--    <groupId>cn.stylefeng.roses</groupId>-->
-        <!--    <artifactId>auth-sdk</artifactId>-->
-        <!--    <version>${roses.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>auth-sdk</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
 
         <!--web模块-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!--jwt-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>jwt-api</artifactId>
-            <version>${roses.version}</version>
-        </dependency>
-
-        <!--message-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>message-api</artifactId>
-            <version>${roses.version}</version>
         </dependency>
 
     </dependencies>

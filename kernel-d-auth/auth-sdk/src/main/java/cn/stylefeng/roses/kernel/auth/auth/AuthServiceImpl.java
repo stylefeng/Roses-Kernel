@@ -41,7 +41,6 @@ import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.exception.AuthException;
 import cn.stylefeng.roses.kernel.auth.api.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
-import cn.stylefeng.roses.kernel.auth.api.expander.LoginConfigExpander;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordStoredEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.password.PasswordTransferEncryptApi;
 import cn.stylefeng.roses.kernel.auth.api.pojo.SsoProperties;
@@ -69,8 +68,6 @@ import cn.stylefeng.roses.kernel.system.api.ResourceServiceApi;
 import cn.stylefeng.roses.kernel.system.api.UserServiceApi;
 import cn.stylefeng.roses.kernel.system.api.enums.UserStatusEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.user.UserLoginInfoDTO;
-import cn.stylefeng.roses.kernel.system.modular.user.entity.SysUser;
-import cn.stylefeng.roses.kernel.system.modular.user.service.SysUserService;
 import cn.stylefeng.roses.kernel.validator.api.exception.enums.ValidatorExceptionEnum;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -124,11 +121,8 @@ public class AuthServiceImpl implements AuthServiceApi {
     @Resource
     private ResourceServiceApi resourceServiceApi;
 
-    @Resource
-    private SysUserService sysUserService;
-
-    @Resource
-    private CacheOperatorApi<String> loginCacheOperatorApi;
+    @Resource(name = "loginErrorCountCacheApi")
+    private CacheOperatorApi<Integer> loginErrorCountCacheApi;
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
@@ -265,26 +259,6 @@ public class AuthServiceImpl implements AuthServiceApi {
      * @date 2020/10/21 16:59
      */
     private LoginResponse loginAction(LoginRequest loginRequest, Boolean validatePassword, String caToken) {
-        SysUser userByAccount = sysUserService.getUserByAccount(loginRequest.getAccount());
-        // 判断登录错误检测是否开启
-        if (LoginConfigExpander.getAccountErrorDetectionFlag()) {
-            // 判断错误次数，超过最大放入缓存中
-            if (StrUtil.isBlank(loginCacheOperatorApi.get(userByAccount.getUserId().toString()))) {
-                if (userByAccount.getLoginCount() > LoginCacheConstants.MAX_LOGIN_COUNT) {
-                    loginCacheOperatorApi.put(userByAccount.getUserId().toString(), "true", 1800L);
-                    throw new AuthException(AuthExceptionEnum.EXCEED_MAX_LOGIN_COUNT);
-                }
-            } else {
-                throw new AuthException(AuthExceptionEnum.EXCEED_MAX_LOGIN_COUNT);
-            }
-        }
-
-        // 5. 获取用户密码的加密值和用户的状态
-        UserLoginInfoDTO userValidateInfo = userServiceApi.getUserLoginInfo(loginRequest.getAccount());
-
-        // 8. 获取LoginUser，用于用户的缓存
-        LoginUser loginUser = userValidateInfo.getLoginUser();
-
         // 1.参数为空校验
         if (validatePassword) {
             if (loginRequest == null || StrUtil.hasBlank(loginRequest.getAccount(), loginRequest.getPassword())) {
@@ -296,6 +270,12 @@ public class AuthServiceImpl implements AuthServiceApi {
             }
         }
 
+        // 1.2 判断账号是否密码重试次数过多被冻结
+        Integer loginErrorCount = loginErrorCountCacheApi.get(loginRequest.getAccount());
+        if (loginErrorCount != null && loginErrorCount >= LoginCacheConstants.MAX_ERROR_LOGIN_COUNT) {
+            throw new AuthException(AuthExceptionEnum.LOGIN_LOCKED);
+        }
+
         // 2. 如果开启了验证码校验，则验证当前请求的验证码是否正确
         if (SecurityConfigExpander.getCaptchaOpen()) {
             String verKey = loginRequest.getVerKey();
@@ -305,8 +285,6 @@ public class AuthServiceImpl implements AuthServiceApi {
                 throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
             }
             if (!captchaApi.validateCaptcha(verKey, verCode)) {
-                // 登录失败日志
-                loginLogServiceApi.loginFail(loginUser.getUserId(), "验证码错误");
                 throw new AuthException(ValidatorExceptionEnum.CAPTCHA_ERROR);
             }
         }
@@ -320,8 +298,6 @@ public class AuthServiceImpl implements AuthServiceApi {
                 throw new AuthException(ValidatorExceptionEnum.CAPTCHA_EMPTY);
             }
             if (!dragCaptchaApi.validateCaptcha(verKey, Convert.toInt(verXLocationValue))) {
-                // 登录失败日志
-                loginLogServiceApi.loginFail(loginUser.getUserId(), "拖拽验证码错误");
                 throw new AuthException(ValidatorExceptionEnum.DRAG_CAPTCHA_ERROR);
             }
         }
@@ -342,15 +318,17 @@ public class AuthServiceImpl implements AuthServiceApi {
             return new LoginResponse(remoteLoginCode);
         }
 
+        // 5. 获取用户密码的加密值和用户的状态
+        UserLoginInfoDTO userValidateInfo = userServiceApi.getUserLoginInfo(loginRequest.getAccount());
+
         // 6. 校验用户密码是否正确
         if (validatePassword) {
             Boolean checkResult = passwordStoredEncryptApi.checkPassword(loginRequest.getPassword(), userValidateInfo.getUserPasswordHexed());
             if (!checkResult) {
-                //更新登录次数
-                userByAccount.setLoginCount(userByAccount.getLoginCount() + 1);
-                sysUserService.updateById(userByAccount);
-                // 登录失败日志
-                loginLogServiceApi.loginFail(loginUser.getUserId(), "帐号或密码错误");
+                if (loginErrorCount == null) {
+                    loginErrorCount = 0;
+                }
+                loginErrorCountCacheApi.put(loginRequest.getAccount(), loginErrorCount + 1);
                 throw new AuthException(AuthExceptionEnum.USERNAME_PASSWORD_ERROR);
             }
         }
@@ -359,6 +337,9 @@ public class AuthServiceImpl implements AuthServiceApi {
         if (!UserStatusEnum.ENABLE.getCode().equals(userValidateInfo.getUserStatus())) {
             throw new AuthException(AuthExceptionEnum.USER_STATUS_ERROR, UserStatusEnum.getCodeMessage(userValidateInfo.getUserStatus()));
         }
+
+        // 8. 获取LoginUser，用于用户的缓存
+        LoginUser loginUser = userValidateInfo.getLoginUser();
 
         // 9. 生成用户的token
         DefaultJwtPayload defaultJwtPayload = new DefaultJwtPayload(loginUser.getUserId(), loginUser.getAccount(), loginRequest.getRememberMe(), caToken);
@@ -387,10 +368,6 @@ public class AuthServiceImpl implements AuthServiceApi {
             // 12. 更新用户登录时间和ip
             String ip = HttpServletUtil.getRequestClientIp(HttpServletUtil.getRequest());
             userServiceApi.updateUserLoginInfo(loginUser.getUserId(), new Date(), ip);
-
-            //重置登录次数
-            userByAccount.setLoginCount(1);
-            sysUserService.updateById(userByAccount);
 
             // 13.登录成功日志
             loginLogServiceApi.loginSuccess(loginUser.getUserId());
@@ -442,11 +419,6 @@ public class AuthServiceImpl implements AuthServiceApi {
 
     @Override
     public void cancelFreeze(LoginRequest loginRequest) {
-        SysUser sysUser = sysUserService.getUserByAccount(loginRequest.getAccount());
-        sysUser.setLoginCount(1);
-        // 修改数据库中的登录次数
-        sysUserService.updateById(sysUser);
-        // 删除缓存中的数据
-        loginCacheOperatorApi.remove(sysUser.getUserId().toString());
+        loginErrorCountCacheApi.remove(loginRequest.getAccount());
     }
 }

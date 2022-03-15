@@ -1,18 +1,24 @@
 package cn.stylefeng.roses.kernel.db.starter;
 
-import cn.stylefeng.roses.kernel.db.api.pojo.druid.DruidProperties;
 import com.alibaba.druid.util.Utils;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import javax.servlet.*;
 import java.io.IOException;
 
+/**
+ * 去除druid底部广告
+ *
+ * @author fengshuonan
+ * @date 2022/3/15 16:40
+ */
 @Configuration
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
-public class RemoveDruidAdConfig {
+public class GunsRemoveDruidAdAutoConfiguration {
 
     /**
      * 除去页面底部的广告
@@ -21,7 +27,8 @@ public class RemoveDruidAdConfig {
      * @date 2022/1/24 15:23
      */
     @Bean
-    public FilterRegistrationBean removeDruidAdFilterRegistrationBean() {
+    public FilterRegistrationBean<?> removeDruidAdFilterRegistrationBean() {
+
         // 提取common.js的配置路径
         String pattern = "/druid/*";
         String commonJsPattern = pattern.replaceAll("\\*", "js/common.js");
@@ -31,7 +38,7 @@ public class RemoveDruidAdConfig {
         //创建filter进行过滤
         Filter filter = new Filter() {
             @Override
-            public void init(FilterConfig filterConfig) throws ServletException {
+            public void init(FilterConfig filterConfig) {
             }
 
             @Override
@@ -51,7 +58,8 @@ public class RemoveDruidAdConfig {
             public void destroy() {
             }
         };
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+
+        FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(filter);
         registrationBean.addUrlPatterns(commonJsPattern);
         return registrationBean;

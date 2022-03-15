@@ -9,17 +9,18 @@ package cn.stylefeng.roses.kernel.auth.api.constants;
 public interface LoginCacheConstants {
 
     /**
-     * 登录最大次数
+     * 登录失败最大次数
      */
-    Integer MAX_LOGIN_COUNT = 5;
+    Integer MAX_ERROR_LOGIN_COUNT = 5;
 
     /**
      * 登录冻结缓存前缀
      */
-    String LOGIN_CACHE_PREFIX = "login:";
+    String LOGIN_ERROR_CACHE_PREFIX = "LOGIN:COUNT:";
 
     /**
-     * 冻结时间
+     * 冻结时间：30分钟
      */
     Long LOGIN_CACHE_TIMEOUT_SECONDS = 1800L;
+
 }
