@@ -223,8 +223,9 @@ public class HomePageServiceImpl implements HomePageService, HomePageServiceApi 
         }
 
         // 查询缓存用户在库中的统计记录
+        List<Long> userIdsLong = userIds.stream().map(Long::valueOf).collect(Collectors.toList());
         List<SysStatisticsCount> sysStatisticsCounts = sysStatisticsCountService.list(
-                Wrappers.lambdaQuery(SysStatisticsCount.class).in(SysStatisticsCount::getUserId, userIds));
+                Wrappers.lambdaQuery(SysStatisticsCount.class).in(SysStatisticsCount::getUserId, userIdsLong));
 
         for (SysStatisticsCount cacheItem : cacheCountList) {
             boolean haveRecord = false;

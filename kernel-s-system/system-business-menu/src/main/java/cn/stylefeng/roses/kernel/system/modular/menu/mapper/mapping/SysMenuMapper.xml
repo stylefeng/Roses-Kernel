@@ -36,4 +36,22 @@
         </foreach>,menu_id)
     </select>
 
+    <!--获取一些菜单的统计信息（只返回名称，路径，图标）pgsql版本-->
+    <select id="getMenuStatInfoByMenuIds" resultType="cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu" databaseId="pgsql">
+        select menu_name as menuName, antdv_icon as antdvIcon , antdv_router as antdvRouter from sys_menu menu
+        <where>
+            <if test="menuIds != null and menuIds.size() > 0">
+                menu.menu_id in
+                <foreach item="item" collection="menuIds" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by case menu_id
+        <foreach item="item" collection="menuIds" index="index" open="" separator="," close="">
+            when ${item} then ${index}
+        </foreach>
+        end
+    </select>
+
 </mapper>
