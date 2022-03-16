@@ -15,6 +15,7 @@
         <result property="fieldDescription" column="field_description"/>
     </resultMap>
 
+    <!--系统主题模板详细查询 mysql版本-->
     <select id="sysThemeTemplateDetail" resultMap="sysThemeTemplateResult">
         SELECT
             stt.template_id,
@@ -38,4 +39,33 @@
                 AND stt.template_id = #{id}
             </if>
     </select>
+
+    <!--系统主题模板详细查询 oracle版本-->
+    <select id="sysThemeTemplateDetail" resultMap="sysThemeTemplateResult" databaseId="oracle">
+        SELECT
+        stt.template_id,
+        stt.template_code,
+        stt.template_name,
+        sttf.field_id,
+        sttf.field_code,
+        sttf.field_name,
+        sttf.field_type,
+        sttf.field_length,
+        sttf.field_required,
+        sttf.field_description
+        FROM
+        sys_theme_template_field sttf,
+        sys_theme_template stt,
+        sys_theme_template_rel sttl
+        WHERE
+        sttf.field_code = sttl.field_code
+        AND stt.template_id = sttl.template_id
+        <if test="id != null" >
+            AND stt.template_id = #{id}
+        </if>
+
+    </select>
+
+
+
 </mapper>

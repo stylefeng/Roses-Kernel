@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuMapper">
 
+    <!--获取一些菜单的统计信息（只返回名称，路径，图标）mysql-->
     <select id="getMenuStatInfoByMenuIds" resultType="cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu">
         select menu_name as menuName, antdv_icon as antdvIcon , antdv_router as antdvRouter from sys_menu menu
         <where>
@@ -16,6 +17,23 @@
         <foreach item="item" collection="menuIds" index="index" open="" separator="," close=")">
             #{item}
         </foreach>
+    </select>
+
+    <!--获取一些菜单的统计信息（只返回名称，路径，图标）oracle版本-->
+    <select id="getMenuStatInfoByMenuIds" resultType="cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu" databaseId="oracle">
+        select menu_name as menuName, antdv_icon as antdvIcon , antdv_router as antdvRouter from sys_menu menu
+        <where>
+            <if test="menuIds != null and menuIds.size() > 0">
+                menu.menu_id in
+                <foreach item="item" collection="menuIds" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by instr(
+        <foreach item="item" collection="menuIds" index="index" open="'" separator="," close="'">
+            #{item}
+        </foreach>,menu_id)
     </select>
 
 </mapper>
