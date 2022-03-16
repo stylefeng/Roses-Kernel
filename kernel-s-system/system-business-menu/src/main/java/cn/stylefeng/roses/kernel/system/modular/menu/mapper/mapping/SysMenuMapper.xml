@@ -32,7 +32,7 @@
         </where>
         order by instr(
         <foreach item="item" collection="menuIds" index="index" open="'" separator="," close="'">
-            #{item}
+            ${item}
         </foreach>,menu_id)
     </select>
 
