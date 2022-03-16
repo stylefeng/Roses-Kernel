@@ -54,4 +54,22 @@
         end
     </select>
 
+    <!--根据统计urlId集合获取菜单id集合，sql server版本-->
+    <select id="getMenuIdsByStatUrlIdList" resultType="java.lang.Long" databaseId="mssql">
+        select stat_menu_id as statMenuId from sys_statistics_url stat
+        <where>
+            <if test="statUrlIds != null and statUrlIds.size() > 0">
+                stat.stat_url_id in
+                <foreach item="item" collection="statUrlIds" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by charindex(CAST(stat_url_id AS VARCHAR),
+        <foreach item="item" collection="statUrlIds" index="index" open="'" separator="," close="'">
+            ${item}
+        </foreach>
+        )
+    </select>
+
 </mapper>
