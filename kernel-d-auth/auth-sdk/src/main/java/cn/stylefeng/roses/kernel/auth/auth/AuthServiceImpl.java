@@ -373,6 +373,9 @@ public class AuthServiceImpl implements AuthServiceApi {
             loginLogServiceApi.loginSuccess(loginUser.getUserId());
         }
 
+        // 13.1 登录成功，清空用户的错误登录次数
+        this.cancelFreeze(loginRequest);
+
         // 14. 组装返回结果
         return new LoginResponse(loginUser, jwtToken, defaultJwtPayload.getExpirationDate());
     }
