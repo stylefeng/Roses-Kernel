@@ -7,10 +7,10 @@ import cn.stylefeng.roses.kernel.security.database.annotation.ProtectedField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.plugin.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.sql.Statement;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.Properties;
 @Intercepts({@Signature(type = ResultSetHandler.class, method = "handleResultSets", args = {Statement.class})})
 public class ResultInterceptor implements Interceptor {
 
-    @Autowired
+    @Resource
     private EncryptAlgorithmApi encryptAlgorithmApi;
 
     @Override
@@ -42,7 +42,7 @@ public class ResultInterceptor implements Interceptor {
 
         // 判断结果是List还是对象
         if (resultObject instanceof List) {
-            List resultList = (List)resultObject;
+            List resultList = (List) resultObject;
             // 判断是否为空
             if (ObjectUtil.isNotNull(resultList)) {
                 // 处理数据
@@ -94,7 +94,7 @@ public class ResultInterceptor implements Interceptor {
             Object object = field.get(result);
             //String的解密
             if (object instanceof String) {
-                String value = (String)object;
+                String value = (String) object;
                 //对注解的字段进行逐一解密
                 try {
                     String decrypt = encryptAlgorithmApi.decrypt(value);

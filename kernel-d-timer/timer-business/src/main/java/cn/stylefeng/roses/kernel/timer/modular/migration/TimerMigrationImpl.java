@@ -13,9 +13,9 @@ import cn.stylefeng.roses.kernel.timer.modular.param.SysTimersParam;
 import cn.stylefeng.roses.kernel.timer.modular.service.SysTimersService;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Component
 public class TimerMigrationImpl implements AccessMigrationApi {
 
-    @Autowired
+    @Resource
     private SysTimersService sysTimersService;
 
     @Override
@@ -67,7 +67,7 @@ public class TimerMigrationImpl implements AccessMigrationApi {
 
     @Override
     public boolean importData(String type, MigrationInfo data) {
-        TimerMigrationInfo timerMigrationInfo = JSONObject.toJavaObject((JSONObject)data.getData(), TimerMigrationInfo.class);
+        TimerMigrationInfo timerMigrationInfo = JSONObject.toJavaObject((JSONObject) data.getData(), TimerMigrationInfo.class);
 
         if (MigrationAggregationTypeEnum.MIGRATION_INCREMENTAL.getCode().equals(type)) {
             // 查询配置信息

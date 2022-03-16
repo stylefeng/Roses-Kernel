@@ -8,10 +8,10 @@ import cn.stylefeng.roses.kernel.security.database.annotation.ProtectedField;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.plugin.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.util.Properties;
@@ -27,14 +27,14 @@ import java.util.Properties;
 @Intercepts({@Signature(type = ParameterHandler.class, method = "setParameters", args = PreparedStatement.class),})
 public class ParameterInterceptor implements Interceptor {
 
-    @Autowired
+    @Resource
     private EncryptAlgorithmApi encryptAlgorithmApi;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
 
         // 若指定ResultSetHandler ，这里则能强转为ResultSetHandler
-        ParameterHandler parameterHandler = (ParameterHandler)invocation.getTarget();
+        ParameterHandler parameterHandler = (ParameterHandler) invocation.getTarget();
 
         // 获取参数对像，即 mapper 中 paramsType 的实例
         Field parameterField = parameterHandler.getClass().getDeclaredField("parameterObject");
@@ -63,7 +63,7 @@ public class ParameterInterceptor implements Interceptor {
                         Object fieldData = declaredField.get(parameterObject);
                         // 如果是String就处理
                         if (fieldData instanceof String) {
-                            String value = (String)fieldData;
+                            String value = (String) fieldData;
                             try {
                                 String encrypt = encryptAlgorithmApi.encrypt(value);
                                 declaredField.set(parameterObject, encrypt);

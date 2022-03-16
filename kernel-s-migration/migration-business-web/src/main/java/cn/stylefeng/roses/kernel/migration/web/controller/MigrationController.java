@@ -8,12 +8,12 @@ import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.List;
 @ApiResource(name = "数据迁移控制器")
 public class MigrationController {
 
-    @Autowired
+    @Resource
     private MigrationService migrationService;
 
     /**
