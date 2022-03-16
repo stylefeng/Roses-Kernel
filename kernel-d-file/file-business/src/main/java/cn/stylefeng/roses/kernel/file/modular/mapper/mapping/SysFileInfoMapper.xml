@@ -56,10 +56,12 @@
         </where>
     </sql>
 
-    <!--  附件列表 mysql版本 -->
+    <!--  附件列表 mysql版本、pgsql、sqlserver -->
     <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse">
         <include refid="file_list_mysql"></include>
     </select>
+
+    <!--  附件列表 oracle -->
     <select id="fileInfoList" resultType="cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse" databaseId="oracle">
         <include refid="file_list_oracle"></include>
     </select>
