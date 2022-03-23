@@ -331,13 +331,22 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
         // 校验旧密码是否正确
         Boolean passwordRightFlag = passwordStoredEncryptApi.checkPassword(customerInfoRequest.getOldPassword(), customer.getPassword());
-        if (!passwordRightFlag) {
+
+        // 上一代密码校验md5
+        boolean lastPasswordRightFlag = oldPasswordValidateApi.validatePassword(customerInfoRequest.getOldPassword(), customer.getOldPassword(), customer.getOldPasswordSalt());
+
+        if (!passwordRightFlag && !lastPasswordRightFlag) {
             throw new CustomerException(CustomerExceptionEnum.PWD_ERROR);
         }
 
         // 更新密码
         String encryptPwd = passwordStoredEncryptApi.encrypt(customerInfoRequest.getNewPassword());
         customer.setPassword(encryptPwd);
+
+        // 如果有上一代密码，则清空掉
+        customer.setOldPassword(CustomerConstants.DEFAULT_EMPTY_PASSWORD);
+        customer.setOldPasswordSalt(CustomerConstants.DEFAULT_EMPTY_PASSWORD);
+
         this.updateById(customer);
 
         // 清除缓存中的用户信息
