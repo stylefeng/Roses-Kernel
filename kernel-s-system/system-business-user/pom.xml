@@ -126,6 +126,14 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--office模块-->
+        <!--用户有导出功能-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>office-spring-boot-starter</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
