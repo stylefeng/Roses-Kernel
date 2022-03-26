@@ -61,6 +61,7 @@ import cn.stylefeng.roses.kernel.message.api.expander.WebSocketConfigExpander;
 import cn.stylefeng.roses.kernel.rule.util.HttpServletUtil;
 import cn.stylefeng.roses.kernel.scanner.api.exception.ScannerException;
 import cn.stylefeng.roses.kernel.scanner.api.exception.enums.ScannerExceptionEnum;
+import cn.stylefeng.roses.kernel.scanner.api.holder.InitScanFlagHolder;
 import cn.stylefeng.roses.kernel.security.api.DragCaptchaApi;
 import cn.stylefeng.roses.kernel.security.api.ImageCaptchaApi;
 import cn.stylefeng.roses.kernel.security.api.expander.SecurityConfigExpander;
@@ -303,8 +304,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         }
 
         // 2.2 校验当前系统是否初始化资源完成，如果资源还没有初始化，提示用户请等一下再登录
-        Integer resourceCount = resourceServiceApi.getResourceCount();
-        if (resourceCount == null || resourceCount.equals(0)) {
+        if (!InitScanFlagHolder.getFlag()) {
             throw new ScannerException(ScannerExceptionEnum.SYSTEM_RESOURCE_URL_NOT_INIT);
         }
 
