@@ -142,4 +142,9 @@ public class DefaultResourceCollector implements ResourceCollectorApi {
         return this.urlDefineResources.get(url);
     }
 
+    @Override
+    public Integer getAllResourceCount() {
+        return this.resourceDefinitions.size();
+    }
+
 }

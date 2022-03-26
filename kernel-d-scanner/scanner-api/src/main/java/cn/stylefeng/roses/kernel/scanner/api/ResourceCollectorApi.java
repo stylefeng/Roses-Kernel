@@ -128,4 +128,12 @@ public interface ResourceCollectorApi {
      */
     ResourceDefinition getResourceByUrl(String url);
 
+    /**
+     * 获取所有资源的数量
+     *
+     * @author fengshuonan
+     * @date 2020/10/19 16:17
+     */
+    Integer getAllResourceCount();
+
 }
