@@ -31,10 +31,12 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.stylefeng.roses.kernel.auth.api.AuthServiceApi;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
+import cn.stylefeng.roses.kernel.auth.api.TempSecretApi;
 import cn.stylefeng.roses.kernel.auth.api.constants.AuthConstants;
 import cn.stylefeng.roses.kernel.auth.api.constants.LoginCacheConstants;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
@@ -250,6 +252,11 @@ public class AuthServiceImpl implements AuthServiceApi {
 
     }
 
+    @Override
+    public void cancelFreeze(LoginRequest loginRequest) {
+        loginErrorCountCacheApi.remove(loginRequest.getAccount());
+    }
+
     /**
      * 登录的真正业务逻辑
      *
@@ -322,16 +329,7 @@ public class AuthServiceImpl implements AuthServiceApi {
         UserLoginInfoDTO userValidateInfo = userServiceApi.getUserLoginInfo(loginRequest.getAccount());
 
         // 6. 校验用户密码是否正确
-        if (validatePassword) {
-            Boolean checkResult = passwordStoredEncryptApi.checkPassword(loginRequest.getPassword(), userValidateInfo.getUserPasswordHexed());
-            if (!checkResult) {
-                if (loginErrorCount == null) {
-                    loginErrorCount = 0;
-                }
-                loginErrorCountCacheApi.put(loginRequest.getAccount(), loginErrorCount + 1);
-                throw new AuthException(AuthExceptionEnum.USERNAME_PASSWORD_ERROR);
-            }
-        }
+        validateUserPassword(validatePassword, loginErrorCount, loginRequest, userValidateInfo);
 
         // 7. 校验用户是否异常（不是正常状态）
         if (!UserStatusEnum.ENABLE.getCode().equals(userValidateInfo.getUserStatus())) {
@@ -420,8 +418,47 @@ public class AuthServiceImpl implements AuthServiceApi {
         return loginCode;
     }
 
-    @Override
-    public void cancelFreeze(LoginRequest loginRequest) {
-        loginErrorCountCacheApi.remove(loginRequest.getAccount());
+    /**
+     * 用户密码校验，校验失败会报异常
+     *
+     * @author fengshuonan
+     * @date 2022/3/26 14:16
+     */
+    private void validateUserPassword(Boolean validatePassword, Integer loginErrorCount, LoginRequest loginRequest, UserLoginInfoDTO userValidateInfo) {
+
+        // 如果本次登录需要校验密码
+        if (validatePassword) {
+            Boolean checkResult = passwordStoredEncryptApi.checkPassword(loginRequest.getPassword(), userValidateInfo.getUserPasswordHexed());
+
+            // 校验用户表密码是否正确，如果正确则直接返回
+            if (checkResult) {
+                return;
+            }
+
+            // 如果密码不正确则校验用户是否有临时秘钥
+            TempSecretApi tempSecretApi = null;
+            try {
+                tempSecretApi = SpringUtil.getBean(TempSecretApi.class);
+                if (tempSecretApi != null) {
+                    String userTempSecretKey = tempSecretApi.getUserTempSecretKey(userValidateInfo.getLoginUser().getUserId());
+                    // 如果用户有临时秘钥，则校验秘钥是否正确
+                    if (StrUtil.isNotBlank(userTempSecretKey)) {
+                        Boolean checkTempKeyResult = passwordStoredEncryptApi.checkPassword(loginRequest.getPassword(), userTempSecretKey);
+                        if (checkTempKeyResult) {
+                            return;
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+
+            // 临时秘钥校验完成，返回前端用户密码错误
+            if (loginErrorCount == null) {
+                loginErrorCount = 0;
+            }
+            loginErrorCountCacheApi.put(loginRequest.getAccount(), loginErrorCount + 1);
+            throw new AuthException(AuthExceptionEnum.USERNAME_PASSWORD_ERROR);
+        }
     }
+
 }
