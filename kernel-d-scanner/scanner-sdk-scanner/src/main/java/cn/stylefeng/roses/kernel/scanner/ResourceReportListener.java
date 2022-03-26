@@ -61,6 +61,8 @@ public class ResourceReportListener extends ApplicationReadyListener implements 
         // 获取有没有开资源扫描开关
         ScannerProperties scannerProperties = applicationContext.getBean(ScannerProperties.class);
         if (!scannerProperties.getOpen()) {
+            // 设置已经扫描标识
+            InitScanFlagHolder.setFlag();
             return;
         }
 
