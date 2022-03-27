@@ -44,7 +44,7 @@ public class RoleDataScopeRedisCache extends AbstractRedisCacheOperator<List<Lon
 
     @Override
     public String getCommonKeyPrefix() {
-        return SystemCachesConstants.ROLE_INFO_CACHE_PREFIX;
+        return SystemCachesConstants.ROLE_DATA_SCOPE_CACHE_PREFIX;
     }
 
 }
