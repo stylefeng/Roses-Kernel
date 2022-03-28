@@ -28,10 +28,12 @@ import cn.stylefeng.roses.kernel.scanner.api.ResourceReportApi;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.ReportResourceParam;
+import cn.stylefeng.roses.kernel.scanner.api.pojo.resource.SysResourcePersistencePojo;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 微服务汇报资源接口
@@ -55,6 +57,17 @@ public class ResourceReportController {
     @PostResource(path = "/resourceService/reportResources", name = "汇报资源")
     public void reportResources(@RequestBody ReportResourceParam reportResourceReq) {
         resourceReportApi.reportResources(reportResourceReq);
+    }
+
+    /**
+     * 接收远程服务资源
+     *
+     * @author fengshuonan
+     * @date 2021/9/25 17:55
+     */
+    @PostResource(path = "/resourceService/reportResourcesAndGetResult", name = "汇报资源")
+    public List<SysResourcePersistencePojo> reportResourcesAndGetResult(@RequestBody ReportResourceParam reportResourceReq) {
+        return resourceReportApi.reportResourcesAndGetResult(reportResourceReq);
     }
 
 }
