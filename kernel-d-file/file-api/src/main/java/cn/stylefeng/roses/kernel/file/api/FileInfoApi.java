@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.file.api;
 
+import cn.stylefeng.roses.kernel.file.api.pojo.AntdvFileInfo;
 import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 
 /**
@@ -74,5 +75,13 @@ public interface FileInfoApi {
      * @date 2020/10/26 10:40
      */
     String getFileUnAuthUrl(Long fileId);
+
+    /**
+     * 获取AntdV组件格式对应的文件信息封装
+     *
+     * @author fengshuonan
+     * @date 2022/3/28 14:32
+     */
+    AntdvFileInfo buildAntdvFileInfo(Long fileId);
 
 }

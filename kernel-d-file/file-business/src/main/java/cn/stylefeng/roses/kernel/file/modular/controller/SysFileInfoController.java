@@ -25,7 +25,9 @@
 package cn.stylefeng.roses.kernel.file.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
+import cn.stylefeng.roses.kernel.file.api.pojo.AntdvFileInfo;
 import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
 import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse;
 import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
@@ -73,6 +75,9 @@ public class SysFileInfoController {
 
     @Resource
     private SysFileInfoService sysFileInfoService;
+
+    @Resource
+    private FileInfoApi fileInfoApi;
 
     /**
      * 上传文件
@@ -269,6 +274,17 @@ public class SysFileInfoController {
     @GetResource(name = "查看详情文件信息表", path = "/sysFileInfo/detail", requiredPermission = false)
     public ResponseData<SysFileInfo> detail(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
         return new SuccessResponseData<>(sysFileInfoService.detail(sysFileInfoRequest));
+    }
+
+    /**
+     * 获取antdv类型的文件详情信息
+     *
+     * @author fengshuonan
+     * @date 2022/3/28 14:37
+     */
+    @GetResource(name = "获取antdv类型的文件详情信息", path = "/sysFileInfo/getAntdVInfo")
+    public ResponseData<AntdvFileInfo> getAntdVInfo(@Validated(SysFileInfoRequest.detail.class) SysFileInfoRequest sysFileInfoRequest) {
+        return new SuccessResponseData<>(fileInfoApi.buildAntdvFileInfo(sysFileInfoRequest.getFileId()));
     }
 
 }

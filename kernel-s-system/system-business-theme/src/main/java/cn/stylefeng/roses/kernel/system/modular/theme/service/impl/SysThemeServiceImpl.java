@@ -9,8 +9,8 @@ import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.entity.BaseEntity;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
+import cn.stylefeng.roses.kernel.file.api.pojo.AntdvFileInfo;
 import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
-import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
 import cn.stylefeng.roses.kernel.file.modular.service.SysFileInfoService;
 import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.system.api.ThemeServiceApi;
@@ -26,7 +26,6 @@ import cn.stylefeng.roses.kernel.system.modular.theme.entity.SysThemeTemplateRel
 import cn.stylefeng.roses.kernel.system.modular.theme.enums.ThemeFieldTypeEnum;
 import cn.stylefeng.roses.kernel.system.modular.theme.factory.DefaultThemeFactory;
 import cn.stylefeng.roses.kernel.system.modular.theme.mapper.SysThemeMapper;
-import cn.stylefeng.roses.kernel.system.modular.theme.pojo.AntdvFileInfo;
 import cn.stylefeng.roses.kernel.system.modular.theme.pojo.DefaultTheme;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeService;
 import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateFieldService;
@@ -35,7 +34,6 @@ import cn.stylefeng.roses.kernel.system.modular.theme.service.SysThemeTemplateSe
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -196,20 +194,7 @@ public class SysThemeServiceImpl extends ServiceImpl<SysThemeMapper, SysTheme> i
             // 判断是否是文件类型
             boolean keyFileFlag = sysThemeTemplateFieldService.getKeyFileFlag(key);
             if (keyFileFlag) {
-                AntdvFileInfo antdvFileInfo = new AntdvFileInfo();
-                // 设置唯一id
-                antdvFileInfo.setUid(IdWorker.getIdStr());
-                // 设置文件名称
-                SysFileInfoResponse fileInfoWithoutContent = null;
-                try {
-                    fileInfoWithoutContent = fileInfoApi.getFileInfoWithoutContent(Long.valueOf(value));
-                    antdvFileInfo.setName(fileInfoWithoutContent.getFileOriginName());
-                } catch (Exception e) {
-                    // 未查询到文件继续查询下一个文件
-                }
-                // 设置文件访问url
-                String fileAuthUrl = fileInfoApi.getFileAuthUrl(Long.valueOf(value));
-                antdvFileInfo.setThumbUrl(fileAuthUrl);
+                AntdvFileInfo antdvFileInfo = this.fileInfoApi.buildAntdvFileInfo(Long.valueOf(value));
                 tempFileList.put(key, new AntdvFileInfo[]{antdvFileInfo});
             }
         }

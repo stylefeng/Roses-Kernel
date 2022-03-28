@@ -42,6 +42,7 @@ import cn.stylefeng.roses.kernel.file.api.enums.FileStatusEnum;
 import cn.stylefeng.roses.kernel.file.api.exception.FileException;
 import cn.stylefeng.roses.kernel.file.api.exception.enums.FileExceptionEnum;
 import cn.stylefeng.roses.kernel.file.api.expander.FileConfigExpander;
+import cn.stylefeng.roses.kernel.file.api.pojo.AntdvFileInfo;
 import cn.stylefeng.roses.kernel.file.api.pojo.request.SysFileInfoRequest;
 import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoListResponse;
 import cn.stylefeng.roses.kernel.file.api.pojo.response.SysFileInfoResponse;
@@ -463,6 +464,25 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             // 返回第三方存储文件url
             return fileOperatorApi.getFileUnAuthUrl(sysFileInfo.getFileBucket(), sysFileInfo.getFileObjectName());
         }
+    }
+
+    @Override
+    public AntdvFileInfo buildAntdvFileInfo(Long fileId) {
+        AntdvFileInfo antdvFileInfo = new AntdvFileInfo();
+        // 设置唯一id
+        antdvFileInfo.setUid(IdWorker.getIdStr());
+        // 设置文件名称
+        SysFileInfoResponse fileInfoWithoutContent;
+        try {
+            fileInfoWithoutContent = this.getFileInfoWithoutContent(fileId);
+            antdvFileInfo.setName(fileInfoWithoutContent.getFileOriginName());
+        } catch (Exception e) {
+            // 未存在文件信息，忽略
+        }
+        // 设置文件访问url
+        String fileAuthUrl = this.getFileAuthUrl(fileId);
+        antdvFileInfo.setThumbUrl(fileAuthUrl);
+        return antdvFileInfo;
     }
 
     /**
