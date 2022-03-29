@@ -91,6 +91,9 @@
         <!--字典业务模块-->
         <module>kernel-s-dict</module>
 
+        <!--字段拓展业务-->
+        <module>kernel-s-expand</module>
+
         <!--系统消息模块-->
         <module>kernel-s-message</module>
 
