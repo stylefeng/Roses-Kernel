@@ -49,10 +49,25 @@ public class SysExpand extends BaseEntity {
     private Integer expandStatus;
 
     /**
+     * 主业务表，例如：sys_user
+     */
+    @TableField("primary_table_name")
+    @ChineseDescription("主业务表，例如：sys_user")
+    private String primaryTableName;
+
+    /**
      * 业务主键id字段名，例如：user_id
      */
     @TableField("primary_field_name")
     @ChineseDescription("业务主键id字段名，例如：user_id")
     private String primaryFieldName;
+
+    /**
+     * 业务主键id字段名驼峰法，例如：userId
+     */
+    @TableField("primary_field_camel")
+    @ChineseDescription("业务主键id字段名驼峰法，例如：userId")
+    private String primaryFieldCamel;
+
 
 }

@@ -46,9 +46,21 @@ public class SysExpandRequest extends BaseRequest {
     private Integer expandStatus;
 
     /**
+     * 主业务表，例如：sys_user
+     */
+    @ChineseDescription("主业务表，例如：sys_user")
+    private String primaryTableName;
+
+    /**
      * 业务主键id字段名，例如：user_id
      */
     @ChineseDescription("业务主键id字段名，例如：user_id")
     private String primaryFieldName;
+
+    /**
+     * 业务主键id字段名驼峰法，例如：userId
+     */
+    @ChineseDescription("业务主键id字段名驼峰法，例如：userId")
+    private String primaryFieldCamel;
 
 }

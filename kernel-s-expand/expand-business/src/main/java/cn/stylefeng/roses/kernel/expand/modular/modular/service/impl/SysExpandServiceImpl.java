@@ -10,6 +10,7 @@ import cn.stylefeng.roses.kernel.expand.modular.modular.enums.SysExpandException
 import cn.stylefeng.roses.kernel.expand.modular.modular.mapper.SysExpandMapper;
 import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandRequest;
 import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandService;
+import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -31,6 +32,10 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
     public void add(SysExpandRequest sysExpandRequest) {
         SysExpand sysExpand = new SysExpand();
         BeanUtil.copyProperties(sysExpandRequest, sysExpand);
+
+        // 设置启用状态
+        sysExpand.setExpandStatus(StatusEnum.ENABLE.getCode());
+
         this.save(sysExpand);
     }
 
