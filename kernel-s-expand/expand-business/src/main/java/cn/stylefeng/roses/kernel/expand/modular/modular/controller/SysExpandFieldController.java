@@ -4,7 +4,6 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandField;
 import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandFieldRequest;
 import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandFieldService;
-import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -95,7 +94,7 @@ public class SysExpandFieldController {
      * @date 2022/03/29 23:47
      */
     @GetResource(name = "分页查询", path = "/sysExpandField/page")
-    public ResponseData<PageResult<SysExpandField>> page(@Validated(BaseRequest.page.class) SysExpandFieldRequest sysExpandFieldRequest) {
+    public ResponseData<PageResult<SysExpandField>> page(SysExpandFieldRequest sysExpandFieldRequest) {
         return new SuccessResponseData<>(sysExpandFieldService.findPage(sysExpandFieldRequest));
     }
 
