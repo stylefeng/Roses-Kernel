@@ -28,7 +28,7 @@ public class SysExpandFieldRequest extends BaseRequest {
     /**
      * 对应拓展业务的主键id
      */
-    @NotNull(message = "对应拓展业务的主键id不能为空", groups = {add.class, edit.class})
+    @NotNull(message = "对应拓展业务的主键id不能为空", groups = {add.class, edit.class, page.class})
     @ChineseDescription("对应拓展业务的主键id")
     private Long expandId;
 

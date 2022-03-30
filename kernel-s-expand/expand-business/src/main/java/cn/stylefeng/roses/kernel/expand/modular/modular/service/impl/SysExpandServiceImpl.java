@@ -74,6 +74,8 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
     @Override
     public List<SysExpand> findList(SysExpandRequest sysExpandRequest) {
         LambdaQueryWrapper<SysExpand> wrapper = this.createWrapper(sysExpandRequest);
+        wrapper.select(SysExpand::getExpandId, SysExpand::getExpandName, SysExpand::getExpandCode);
+        wrapper.eq(SysExpand::getExpandStatus, StatusEnum.ENABLE.getCode());
         return this.list(wrapper);
     }
 
@@ -103,14 +105,10 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
         Long expandId = sysExpandRequest.getExpandId();
         String expandName = sysExpandRequest.getExpandName();
         String expandCode = sysExpandRequest.getExpandCode();
-        Integer expandStatus = sysExpandRequest.getExpandStatus();
-        String primaryFieldName = sysExpandRequest.getPrimaryFieldName();
 
         queryWrapper.eq(ObjectUtil.isNotNull(expandId), SysExpand::getExpandId, expandId);
         queryWrapper.like(ObjectUtil.isNotEmpty(expandName), SysExpand::getExpandName, expandName);
         queryWrapper.like(ObjectUtil.isNotEmpty(expandCode), SysExpand::getExpandCode, expandCode);
-        queryWrapper.eq(ObjectUtil.isNotNull(expandStatus), SysExpand::getExpandStatus, expandStatus);
-        queryWrapper.like(ObjectUtil.isNotEmpty(primaryFieldName), SysExpand::getPrimaryFieldName, primaryFieldName);
 
         return queryWrapper;
     }

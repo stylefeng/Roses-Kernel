@@ -88,23 +88,9 @@ public class SysExpandFieldServiceImpl extends ServiceImpl<SysExpandFieldMapper,
     private LambdaQueryWrapper<SysExpandField> createWrapper(SysExpandFieldRequest sysExpandFieldRequest) {
         LambdaQueryWrapper<SysExpandField> queryWrapper = new LambdaQueryWrapper<>();
 
-        Long fieldId = sysExpandFieldRequest.getFieldId();
         Long expandId = sysExpandFieldRequest.getExpandId();
-        String fieldName = sysExpandFieldRequest.getFieldName();
-        String fieldCode = sysExpandFieldRequest.getFieldCode();
-        Integer fieldType = sysExpandFieldRequest.getFieldType();
-        String fieldRequired = sysExpandFieldRequest.getFieldRequired();
-        Integer fieldLength = sysExpandFieldRequest.getFieldLength();
-        String listShowFlag = sysExpandFieldRequest.getListShowFlag();
 
-        queryWrapper.eq(ObjectUtil.isNotNull(fieldId), SysExpandField::getFieldId, fieldId);
         queryWrapper.eq(ObjectUtil.isNotNull(expandId), SysExpandField::getExpandId, expandId);
-        queryWrapper.like(ObjectUtil.isNotEmpty(fieldName), SysExpandField::getFieldName, fieldName);
-        queryWrapper.like(ObjectUtil.isNotEmpty(fieldCode), SysExpandField::getFieldCode, fieldCode);
-        queryWrapper.eq(ObjectUtil.isNotNull(fieldType), SysExpandField::getFieldType, fieldType);
-        queryWrapper.like(ObjectUtil.isNotEmpty(fieldRequired), SysExpandField::getFieldRequired, fieldRequired);
-        queryWrapper.eq(ObjectUtil.isNotNull(fieldLength), SysExpandField::getFieldLength, fieldLength);
-        queryWrapper.like(ObjectUtil.isNotEmpty(listShowFlag), SysExpandField::getListShowFlag, listShowFlag);
 
         return queryWrapper;
     }
