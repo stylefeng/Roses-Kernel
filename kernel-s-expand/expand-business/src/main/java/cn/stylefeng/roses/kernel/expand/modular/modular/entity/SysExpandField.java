@@ -70,6 +70,13 @@ public class SysExpandField extends BaseEntity {
     private Integer fieldLength;
 
     /**
+     * 字典类型编码，用于字典类型
+     */
+    @TableField("field_dict_type_code")
+    @ChineseDescription("字典类型编码，用于字典类型")
+    private String fieldDictTypeCode;
+
+    /**
      * 列表是否显示：Y-显示，N-不显示
      */
     @TableField("list_show_flag")

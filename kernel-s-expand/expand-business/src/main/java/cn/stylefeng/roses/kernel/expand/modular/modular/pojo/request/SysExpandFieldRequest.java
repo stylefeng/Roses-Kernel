@@ -50,12 +50,14 @@ public class SysExpandFieldRequest extends BaseRequest {
      * 字段类型：1-字符串类型，2-数字类型，3-字典类型
      */
     @ChineseDescription("字段类型：1-字符串类型，2-数字类型，3-字典类型")
+    @NotNull(message = "字典类型不能为空", groups = {add.class, edit.class})
     private Integer fieldType;
 
     /**
      * 是否必填：Y-必填，N-非必填
      */
     @ChineseDescription("是否必填：Y-必填，N-非必填")
+    @NotBlank(message = "是否必填不能为空", groups = {add.class, edit.class})
     private String fieldRequired;
 
     /**
@@ -65,9 +67,16 @@ public class SysExpandFieldRequest extends BaseRequest {
     private Integer fieldLength;
 
     /**
+     * 字典类型编码，用于字典类型
+     */
+    @ChineseDescription("字典类型编码，用于字典类型")
+    private String fieldDictTypeCode;
+
+    /**
      * 列表是否显示：Y-显示，N-不显示
      */
     @ChineseDescription("列表是否显示：Y-显示，N-不显示")
+    @NotBlank(message = "列表是否显示不能为空", groups = {add.class, edit.class})
     private String listShowFlag;
 
 }
