@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface SysExpandService extends IService<SysExpand> {
 
-	/**
+    /**
      * 新增
      *
      * @param sysExpandRequest 请求参数
@@ -24,7 +24,7 @@ public interface SysExpandService extends IService<SysExpand> {
      */
     void add(SysExpandRequest sysExpandRequest);
 
-	/**
+    /**
      * 删除
      *
      * @param sysExpandRequest 请求参数
@@ -33,7 +33,7 @@ public interface SysExpandService extends IService<SysExpand> {
      */
     void del(SysExpandRequest sysExpandRequest);
 
-	/**
+    /**
      * 编辑
      *
      * @param sysExpandRequest 请求参数
@@ -42,7 +42,7 @@ public interface SysExpandService extends IService<SysExpand> {
      */
     void edit(SysExpandRequest sysExpandRequest);
 
-	/**
+    /**
      * 查询详情
      *
      * @param sysExpandRequest 请求参数
@@ -51,24 +51,31 @@ public interface SysExpandService extends IService<SysExpand> {
      */
     SysExpand detail(SysExpandRequest sysExpandRequest);
 
-	/**
+    /**
      * 获取列表
      *
-     * @param sysExpandRequest        请求参数
+     * @param sysExpandRequest 请求参数
      * @return List<SysExpand>   返回结果
      * @author fengshuonan
      * @date 2022/03/29 23:47
      */
     List<SysExpand> findList(SysExpandRequest sysExpandRequest);
 
-	/**
+    /**
      * 获取列表（带分页）
      *
-     * @param sysExpandRequest              请求参数
+     * @param sysExpandRequest 请求参数
      * @return PageResult<SysExpand>   返回结果
      * @author fengshuonan
      * @date 2022/03/29 23:47
      */
     PageResult<SysExpand> findPage(SysExpandRequest sysExpandRequest);
 
+    /**
+     * 修改业务状态
+     *
+     * @author fengshuonan
+     * @date 2022/3/30 10:37
+     */
+    void updateStatus(SysExpandRequest sysExpandRequest);
 }

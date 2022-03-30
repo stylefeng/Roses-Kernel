@@ -27,7 +27,7 @@ import java.util.List;
 @Service
 public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand> implements SysExpandService {
 
-	@Override
+    @Override
     public void add(SysExpandRequest sysExpandRequest) {
         SysExpand sysExpand = new SysExpand();
         BeanUtil.copyProperties(sysExpandRequest, sysExpand);
@@ -57,6 +57,13 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
         LambdaQueryWrapper<SysExpand> wrapper = createWrapper(sysExpandRequest);
         Page<SysExpand> sysRolePage = this.page(PageFactory.defaultPage(), wrapper);
         return PageResultFactory.createPageResult(sysRolePage);
+    }
+
+    @Override
+    public void updateStatus(SysExpandRequest sysExpandRequest) {
+        SysExpand sysExpand = this.querySysExpand(sysExpandRequest);
+        sysExpand.setExpandStatus(sysExpandRequest.getExpandStatus());
+        this.updateById(sysExpand);
     }
 
     @Override

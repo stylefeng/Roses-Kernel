@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request;
 
 import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
+import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,7 +21,7 @@ public class SysExpandRequest extends BaseRequest {
     /**
      * 主键id
      */
-    @NotNull(message = "主键id不能为空", groups = {edit.class, delete.class})
+    @NotNull(message = "主键id不能为空", groups = {edit.class, delete.class, updateStatus.class})
     @ChineseDescription("主键id")
     private Long expandId;
 
@@ -40,6 +41,8 @@ public class SysExpandRequest extends BaseRequest {
      * 状态：1-启用，2-禁用
      */
     @ChineseDescription("状态：1-启用，2-禁用")
+    @NotNull(message = "状态不能为空", groups = {updateStatus.class})
+    @StatusValue(groups = updateStatus.class)
     private Integer expandStatus;
 
     /**

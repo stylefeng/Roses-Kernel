@@ -4,6 +4,7 @@ import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpand;
 import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandRequest;
 import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandService;
+import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -62,6 +63,18 @@ public class SysExpandController {
     @PostResource(name = "编辑", path = "/sysExpand/edit")
     public ResponseData<?> edit(@RequestBody @Validated(SysExpandRequest.edit.class) SysExpandRequest sysExpandRequest) {
         sysExpandService.edit(sysExpandRequest);
+        return new SuccessResponseData<>();
+    }
+
+    /**
+     * 修改业务状态
+     *
+     * @author fengshuonan
+     * @date 2022/03/29 23:47
+     */
+    @PostResource(name = "修改业务状态", path = "/sysExpand/updateStatus")
+    public ResponseData<?> updateStatus(@RequestBody @Validated(BaseRequest.updateStatus.class) SysExpandRequest sysExpandRequest) {
+        sysExpandService.updateStatus(sysExpandRequest);
         return new SuccessResponseData<>();
     }
 
