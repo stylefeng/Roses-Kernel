@@ -103,6 +103,9 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
         SysExpandData sysExpandData = new SysExpandData();
         if (StrUtil.isNotBlank(sysExpandRequest.getPrimaryFieldValue())) {
             sysExpandData = sysExpandDataService.detailByPrimaryFieldValue(sysExpandRequest.getPrimaryFieldValue());
+            if(sysExpandData == null){
+                sysExpandData = new SysExpandData();
+            }
         }
 
         //  设置返回信息
