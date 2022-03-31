@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * 业务拓展-具体数据实例类
  *
@@ -47,5 +49,17 @@ public class SysExpandData extends BaseEntity {
     @TableField("expand_data")
     @ChineseDescription("拓展业务具体数据")
     private String expandData;
+
+    /**
+     * 拓展业务信息
+     */
+    @ChineseDescription("拓展业务信息")
+    private transient SysExpand expandInfo;
+
+    /**
+     * 字段元数据信息列表
+     */
+    @ChineseDescription("字段元数据信息列表")
+    private transient List<SysExpandField> fieldInfoList;
 
 }

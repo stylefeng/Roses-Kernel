@@ -5,17 +5,24 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpand;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandData;
+import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandField;
 import cn.stylefeng.roses.kernel.expand.modular.modular.enums.SysExpandDataExceptionEnum;
 import cn.stylefeng.roses.kernel.expand.modular.modular.mapper.SysExpandDataMapper;
 import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandDataRequest;
+import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandFieldRequest;
+import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandRequest;
 import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandDataService;
+import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandFieldService;
+import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandService;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -27,7 +34,13 @@ import java.util.List;
 @Service
 public class SysExpandDataServiceImpl extends ServiceImpl<SysExpandDataMapper, SysExpandData> implements SysExpandDataService {
 
-	@Override
+    @Resource
+    private SysExpandService sysExpandService;
+
+    @Resource
+    private SysExpandFieldService sysExpandFieldService;
+
+    @Override
     public void add(SysExpandDataRequest sysExpandDataRequest) {
         SysExpandData sysExpandData = new SysExpandData();
         BeanUtil.copyProperties(sysExpandDataRequest, sysExpandData);
@@ -49,7 +62,23 @@ public class SysExpandDataServiceImpl extends ServiceImpl<SysExpandDataMapper, S
 
     @Override
     public SysExpandData detail(SysExpandDataRequest sysExpandDataRequest) {
-        return this.querySysExpandData(sysExpandDataRequest);
+        // 获取拓展数据详情
+        SysExpandData sysExpandData = this.querySysExpandData(sysExpandDataRequest);
+
+        // 获取拓展业务信息
+        SysExpandRequest sysExpandRequest = new SysExpandRequest();
+        sysExpandRequest.setExpandId(sysExpandData.getExpandId());
+        SysExpand detail = sysExpandService.detail(sysExpandRequest);
+
+        // 获取拓展业务的字段信息
+        SysExpandFieldRequest sysExpandFieldRequest = new SysExpandFieldRequest();
+        sysExpandFieldRequest.setExpandId(sysExpandData.getExpandId());
+        List<SysExpandField> list = sysExpandFieldService.findList(sysExpandFieldRequest);
+
+        // 设置返回结果的元数据字段信息
+        sysExpandData.setExpandInfo(detail);
+        sysExpandData.setFieldInfoList(list);
+        return sysExpandData;
     }
 
     @Override
