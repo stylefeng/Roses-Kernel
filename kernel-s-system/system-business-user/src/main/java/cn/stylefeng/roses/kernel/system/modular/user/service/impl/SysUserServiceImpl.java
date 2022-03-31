@@ -41,6 +41,7 @@ import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.expand.modular.api.ExpandApi;
 import cn.stylefeng.roses.kernel.file.api.FileInfoApi;
 import cn.stylefeng.roses.kernel.file.api.constants.FileConstants;
 import cn.stylefeng.roses.kernel.jwt.api.context.JwtContext;
@@ -145,6 +146,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private PositionServiceApi positionServiceApi;
 
+    @Resource
+    private ExpandApi expandApi;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void add(SysUserRequest sysUserRequest) {
@@ -171,6 +175,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             sysUserOrgService.add(sysUser.getUserId(), sysUserRequest.getOrgId());
         } else {
             sysUserOrgService.add(sysUser.getUserId(), sysUserRequest.getOrgId(), sysUserRequest.getPositionId());
+        }
+
+        // 处理动态表单数据
+        if (sysUserRequest.getExpandDataInfo() != null) {
+            sysUserRequest.getExpandDataInfo().setPrimaryFieldValue(sysUser.getUserId());
+            expandApi.saveOrUpdateExpandData(sysUserRequest.getExpandDataInfo());
         }
     }
 
@@ -239,6 +249,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 清除缓存中的用户信息
         sysUserCacheOperatorApi.remove(String.valueOf(sysUserId));
+
+        // 处理动态表单数据
+        if (sysUserRequest.getExpandDataInfo() != null) {
+            sysUserRequest.getExpandDataInfo().setPrimaryFieldValue(sysUser.getUserId());
+            expandApi.saveOrUpdateExpandData(sysUserRequest.getExpandDataInfo());
+        }
     }
 
     @Override

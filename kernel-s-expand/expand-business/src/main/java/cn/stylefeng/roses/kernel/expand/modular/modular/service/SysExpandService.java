@@ -1,6 +1,7 @@
 package cn.stylefeng.roses.kernel.expand.modular.modular.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.expand.modular.api.ExpandApi;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpand;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandData;
 import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandRequest;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2022/03/29 23:47
  */
-public interface SysExpandService extends IService<SysExpand> {
+public interface SysExpandService extends IService<SysExpand>, ExpandApi {
 
     /**
      * 新增

@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.expand.modular.api.pojo.ExpandDataInfo;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpand;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandData;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandField;
@@ -18,6 +19,7 @@ import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandFieldSe
 import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 业务拓展业务实现层
@@ -103,12 +106,13 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
         SysExpandData sysExpandData = new SysExpandData();
         if (StrUtil.isNotBlank(sysExpandRequest.getPrimaryFieldValue())) {
             sysExpandData = sysExpandDataService.detailByPrimaryFieldValue(sysExpandRequest.getPrimaryFieldValue());
-            if(sysExpandData == null){
+            if (sysExpandData == null) {
                 sysExpandData = new SysExpandData();
             }
         }
 
         //  设置返回信息
+        sysExpandData.setExpandId(sysExpand.getExpandId());
         sysExpandData.setFieldInfoList(list);
         sysExpandData.setExpandInfo(sysExpand);
 
@@ -121,6 +125,40 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
         wrapper.select(SysExpand::getExpandId, SysExpand::getExpandName, SysExpand::getExpandCode);
         wrapper.eq(SysExpand::getExpandStatus, StatusEnum.ENABLE.getCode());
         return this.list(wrapper);
+    }
+
+    @Override
+    public void saveOrUpdateExpandData(ExpandDataInfo expandDataInfo) {
+        if (expandDataInfo == null) {
+            return;
+        }
+
+        Map<String, Object> dynamicFormData = expandDataInfo.getExpandData();
+        if (dynamicFormData == null || dynamicFormData.size() <= 0) {
+            return;
+        }
+
+        // 具体数据转化为json
+        String dynamicData = JSON.toJSONString(dynamicFormData);
+
+        SysExpandData saveData = new SysExpandData();
+        saveData.setExpandId(expandDataInfo.getExpandId());
+        saveData.setPrimaryFieldValue(expandDataInfo.getPrimaryFieldValue());
+        saveData.setExpandData(dynamicData);
+
+        // 查询数据有没有在库中存在
+        LambdaQueryWrapper<SysExpandData> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysExpandData::getExpandId, expandDataInfo.getExpandId());
+        wrapper.eq(SysExpandData::getPrimaryFieldValue, expandDataInfo.getPrimaryFieldValue());
+        SysExpandData sysExpandData = this.sysExpandDataService.getOne(wrapper, false);
+
+        // 数据库中不存在，则保存
+        if (sysExpandData == null) {
+            this.sysExpandDataService.save(saveData);
+        } else {
+            saveData.setExpandDataId(sysExpandData.getExpandDataId());
+            this.sysExpandDataService.updateById(saveData);
+        }
     }
 
     /**
@@ -156,5 +194,4 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
 
         return queryWrapper;
     }
-
 }

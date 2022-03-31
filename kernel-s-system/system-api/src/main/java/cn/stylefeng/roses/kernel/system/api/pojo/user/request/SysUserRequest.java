@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.user.request;
 
+import cn.stylefeng.roses.kernel.expand.modular.api.pojo.ExpandDataInfo;
 import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.api.validators.date.DateValue;
@@ -191,6 +192,12 @@ public class SysUserRequest extends BaseRequest {
      */
     @ChineseDescription("用户id的数据范围集合")
     private Set<Long> userScopeIds;
+
+    /**
+     * 动态表单数据
+     */
+    @ChineseDescription("动态表单数据")
+    private ExpandDataInfo expandDataInfo;
 
     /**
      * 参数校验分组：修改密码

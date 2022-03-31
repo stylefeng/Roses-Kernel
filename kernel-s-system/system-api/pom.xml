@@ -17,6 +17,13 @@
 
     <dependencies>
 
+        <!--数据拓展的api-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>expand-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--参数校验模块的api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>

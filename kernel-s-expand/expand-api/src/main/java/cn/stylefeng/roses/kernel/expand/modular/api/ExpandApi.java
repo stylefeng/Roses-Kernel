@@ -24,6 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.expand.modular.api;
 
+import cn.stylefeng.roses.kernel.expand.modular.api.pojo.ExpandDataInfo;
+
 /**
  * 拓展字段Api
  *
@@ -32,5 +34,12 @@ package cn.stylefeng.roses.kernel.expand.modular.api;
  */
 public interface ExpandApi {
 
+    /**
+     * 保存或更新动态数据
+     *
+     * @author fengshuonan
+     * @date 2022/3/31 21:20
+     */
+    void saveOrUpdateExpandData(ExpandDataInfo expandDataInfo);
 
 }
