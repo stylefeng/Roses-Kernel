@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface SysExpandDataService extends IService<SysExpandData> {
 
-	/**
+    /**
      * 新增
      *
      * @param sysExpandDataRequest 请求参数
@@ -24,7 +24,7 @@ public interface SysExpandDataService extends IService<SysExpandData> {
      */
     void add(SysExpandDataRequest sysExpandDataRequest);
 
-	/**
+    /**
      * 删除
      *
      * @param sysExpandDataRequest 请求参数
@@ -33,7 +33,7 @@ public interface SysExpandDataService extends IService<SysExpandData> {
      */
     void del(SysExpandDataRequest sysExpandDataRequest);
 
-	/**
+    /**
      * 编辑
      *
      * @param sysExpandDataRequest 请求参数
@@ -42,7 +42,7 @@ public interface SysExpandDataService extends IService<SysExpandData> {
      */
     void edit(SysExpandDataRequest sysExpandDataRequest);
 
-	/**
+    /**
      * 查询详情
      *
      * @param sysExpandDataRequest 请求参数
@@ -51,20 +51,28 @@ public interface SysExpandDataService extends IService<SysExpandData> {
      */
     SysExpandData detail(SysExpandDataRequest sysExpandDataRequest);
 
-	/**
+    /**
+     * 查询详情
+     *
+     * @author fengshuonan
+     * @date 2022/03/29 23:47
+     */
+    SysExpandData detailByPrimaryFieldValue(String primaryFieldValue);
+
+    /**
      * 获取列表
      *
-     * @param sysExpandDataRequest        请求参数
+     * @param sysExpandDataRequest 请求参数
      * @return List<SysExpandData>   返回结果
      * @author fengshuonan
      * @date 2022/03/29 23:47
      */
     List<SysExpandData> findList(SysExpandDataRequest sysExpandDataRequest);
 
-	/**
+    /**
      * 获取列表（带分页）
      *
-     * @param sysExpandDataRequest              请求参数
+     * @param sysExpandDataRequest 请求参数
      * @return PageResult<SysExpandData>   返回结果
      * @author fengshuonan
      * @date 2022/03/29 23:47

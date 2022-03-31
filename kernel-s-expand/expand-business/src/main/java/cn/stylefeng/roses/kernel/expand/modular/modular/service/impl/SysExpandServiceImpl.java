@@ -2,13 +2,19 @@ package cn.stylefeng.roses.kernel.expand.modular.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpand;
+import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandData;
+import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandField;
 import cn.stylefeng.roses.kernel.expand.modular.modular.enums.SysExpandExceptionEnum;
 import cn.stylefeng.roses.kernel.expand.modular.modular.mapper.SysExpandMapper;
+import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandFieldRequest;
 import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandRequest;
+import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandDataService;
+import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandFieldService;
 import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
@@ -17,6 +23,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -27,6 +34,12 @@ import java.util.List;
  */
 @Service
 public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand> implements SysExpandService {
+
+    @Resource
+    private SysExpandFieldService sysExpandFieldService;
+
+    @Resource
+    private SysExpandDataService sysExpandDataService;
 
     @Override
     public void add(SysExpandRequest sysExpandRequest) {
@@ -69,6 +82,34 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
         SysExpand sysExpand = this.querySysExpand(sysExpandRequest);
         sysExpand.setExpandStatus(sysExpandRequest.getExpandStatus());
         this.updateById(sysExpand);
+    }
+
+    @Override
+    public SysExpandData getByExpandCode(SysExpandRequest sysExpandRequest) {
+        // 根据编码获取拓展信息
+        LambdaQueryWrapper<SysExpand> sysExpandLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        sysExpandLambdaQueryWrapper.eq(SysExpand::getExpandCode, sysExpandRequest.getExpandCode());
+        SysExpand sysExpand = this.getOne(sysExpandLambdaQueryWrapper, false);
+        if (sysExpand == null) {
+            throw new ServiceException(SysExpandExceptionEnum.SYS_EXPAND_NOT_EXISTED);
+        }
+
+        // 获取拓展业务的字段信息
+        SysExpandFieldRequest sysExpandFieldRequest = new SysExpandFieldRequest();
+        sysExpandFieldRequest.setExpandId(sysExpand.getExpandId());
+        List<SysExpandField> list = sysExpandFieldService.findList(sysExpandFieldRequest);
+
+        // 如果传了主键id，则查询一下业务表单的数据
+        SysExpandData sysExpandData = new SysExpandData();
+        if (StrUtil.isNotBlank(sysExpandRequest.getPrimaryFieldValue())) {
+            sysExpandData = sysExpandDataService.detailByPrimaryFieldValue(sysExpandRequest.getPrimaryFieldValue());
+        }
+
+        //  设置返回信息
+        sysExpandData.setFieldInfoList(list);
+        sysExpandData.setExpandInfo(sysExpand);
+
+        return sysExpandData;
     }
 
     @Override

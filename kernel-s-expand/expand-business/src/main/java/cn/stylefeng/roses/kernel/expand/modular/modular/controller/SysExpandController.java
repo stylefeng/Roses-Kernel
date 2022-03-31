@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.expand.modular.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpand;
+import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandData;
 import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandRequest;
 import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandService;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
@@ -87,6 +88,17 @@ public class SysExpandController {
     @GetResource(name = "查看详情", path = "/sysExpand/detail")
     public ResponseData<SysExpand> detail(@Validated(SysExpandRequest.detail.class) SysExpandRequest sysExpandRequest) {
         return new SuccessResponseData<>(sysExpandService.detail(sysExpandRequest));
+    }
+
+    /**
+     * 根据业务编码获取业务数据详情
+     *
+     * @author fengshuonan
+     * @date 2022/03/29 23:47
+     */
+    @GetResource(name = "根据业务编码获取业务数据详情", path = "/sysExpand/getByExpandCode")
+    public ResponseData<SysExpandData> getByExpandCode(@Validated(SysExpandRequest.getByExpandCode.class) SysExpandRequest sysExpandRequest) {
+        return new SuccessResponseData<>(sysExpandService.getByExpandCode(sysExpandRequest));
     }
 
     /**

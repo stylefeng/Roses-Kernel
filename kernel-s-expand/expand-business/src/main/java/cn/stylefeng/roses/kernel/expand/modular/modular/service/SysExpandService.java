@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.expand.modular.modular.service;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpand;
+import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandData;
 import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -78,4 +79,12 @@ public interface SysExpandService extends IService<SysExpand> {
      * @date 2022/3/30 10:37
      */
     void updateStatus(SysExpandRequest sysExpandRequest);
+
+    /**
+     * 获取业务元数据信息
+     *
+     * @author fengshuonan
+     * @date 2022/3/31 15:26
+     */
+    SysExpandData getByExpandCode(SysExpandRequest sysExpandRequest);
 }

@@ -82,6 +82,13 @@ public class SysExpandDataServiceImpl extends ServiceImpl<SysExpandDataMapper, S
     }
 
     @Override
+    public SysExpandData detailByPrimaryFieldValue(String primaryFieldValue) {
+        LambdaQueryWrapper<SysExpandData> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysExpandData::getPrimaryFieldValue, primaryFieldValue);
+        return this.getOne(wrapper, false);
+    }
+
+    @Override
     public PageResult<SysExpandData> findPage(SysExpandDataRequest sysExpandDataRequest) {
         LambdaQueryWrapper<SysExpandData> wrapper = createWrapper(sysExpandDataRequest);
         Page<SysExpandData> sysRolePage = this.page(PageFactory.defaultPage(), wrapper);

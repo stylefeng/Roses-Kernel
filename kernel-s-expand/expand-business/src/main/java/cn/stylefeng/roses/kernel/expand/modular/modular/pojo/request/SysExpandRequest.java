@@ -6,6 +6,7 @@ import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -35,6 +36,7 @@ public class SysExpandRequest extends BaseRequest {
      * 拓展业务唯一编码
      */
     @ChineseDescription("拓展业务唯一编码")
+    @NotBlank(message = "拓展编码不能为空", groups = getByExpandCode.class)
     private String expandCode;
 
     /**
@@ -62,5 +64,21 @@ public class SysExpandRequest extends BaseRequest {
      */
     @ChineseDescription("业务主键id字段名驼峰法，例如：userId")
     private String primaryFieldCamel;
+
+    /**
+     * 业务主键id的值
+     */
+    @ChineseDescription("业务主键id的值")
+    private String primaryFieldValue;
+
+    /**
+     * 获取业务元数据信息
+     *
+     * @author fengshuonan
+     * @date 2022/3/31 15:25
+     */
+    public @interface getByExpandCode {
+    }
+
 
 }
