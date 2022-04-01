@@ -57,7 +57,7 @@ public interface SysExpandDataService extends IService<SysExpandData> {
      * @author fengshuonan
      * @date 2022/03/29 23:47
      */
-    SysExpandData detailByPrimaryFieldValue(String primaryFieldValue);
+    SysExpandData detailByPrimaryFieldValue(Long primaryFieldValue);
 
     /**
      * 获取列表

@@ -69,7 +69,7 @@ public class SysExpandRequest extends BaseRequest {
      * 业务主键id的值
      */
     @ChineseDescription("业务主键id的值")
-    private String primaryFieldValue;
+    private Long primaryFieldValue;
 
     /**
      * 获取业务元数据信息

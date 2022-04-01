@@ -16,20 +16,20 @@
     <packaging>jar</packaging>
 
     <dependencies>
-	
-		<!--拓展字段api-->
+
+        <!--拓展字段api-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>expand-api</artifactId>
             <version>${roses.version}</version>
-        </dependency>   
-		
-		<!--拓展字段SDK模块-->
+        </dependency>
+
+        <!--拓展字段SDK模块-->
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>expand-sdk</artifactId>
             <version>${roses.version}</version>
-        </dependency> 
+        </dependency>
 
         <!--system业务api-->
         <!--调用用户相关业务-->
@@ -44,6 +44,13 @@
         <dependency>
             <groupId>cn.stylefeng.roses</groupId>
             <artifactId>scanner-api</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
+        <!--字典api模块-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>dict-api</artifactId>
             <version>${roses.version}</version>
         </dependency>
 

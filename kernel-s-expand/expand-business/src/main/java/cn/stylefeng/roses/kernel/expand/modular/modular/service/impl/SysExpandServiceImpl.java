@@ -6,7 +6,10 @@ import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.dict.api.DictApi;
+import cn.stylefeng.roses.kernel.expand.modular.api.enums.FieldTypeEnum;
 import cn.stylefeng.roses.kernel.expand.modular.api.pojo.ExpandDataInfo;
+import cn.stylefeng.roses.kernel.expand.modular.api.pojo.ExpandFieldInfo;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpand;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandData;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandField;
@@ -18,14 +21,18 @@ import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandDataSer
 import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandFieldService;
 import cn.stylefeng.roses.kernel.expand.modular.modular.service.SysExpandService;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
+import cn.stylefeng.roses.kernel.rule.enums.YesOrNotEnum;
 import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +50,9 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
 
     @Resource
     private SysExpandDataService sysExpandDataService;
+
+    @Resource
+    private DictApi dictApi;
 
     @Override
     public void add(SysExpandRequest sysExpandRequest) {
@@ -104,7 +114,7 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
 
         // 如果传了主键id，则查询一下业务表单的数据
         SysExpandData sysExpandData = new SysExpandData();
-        if (StrUtil.isNotBlank(sysExpandRequest.getPrimaryFieldValue())) {
+        if (sysExpandRequest.getPrimaryFieldValue() != null) {
             sysExpandData = sysExpandDataService.detailByPrimaryFieldValue(sysExpandRequest.getPrimaryFieldValue());
             if (sysExpandData == null) {
                 sysExpandData = new SysExpandData();
@@ -159,6 +169,61 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
             saveData.setExpandDataId(sysExpandData.getExpandDataId());
             this.sysExpandDataService.updateById(saveData);
         }
+    }
+
+    @Override
+    public List<ExpandFieldInfo> getPageListExpandFieldList(String expandCode) {
+        SysExpandRequest sysExpandRequest = new SysExpandRequest();
+        sysExpandRequest.setExpandCode(expandCode);
+        SysExpandData sysExpandData = this.getByExpandCode(sysExpandRequest);
+
+        List<SysExpandField> fieldInfoList = sysExpandData.getFieldInfoList();
+
+        ArrayList<ExpandFieldInfo> expandFieldInfos = new ArrayList<>();
+        for (SysExpandField sysExpandField : fieldInfoList) {
+            // 获取是否需要列表展示
+            String listShowFlag = sysExpandField.getListShowFlag();
+            if (YesOrNotEnum.Y.getCode().equals(listShowFlag)) {
+                ExpandFieldInfo expandFieldInfo = new ExpandFieldInfo();
+                expandFieldInfo.setExpandId(sysExpandField.getExpandId());
+                expandFieldInfo.setFieldName(sysExpandField.getFieldName());
+                expandFieldInfo.setFieldCode(sysExpandField.getFieldCode());
+                expandFieldInfos.add(expandFieldInfo);
+            }
+        }
+
+        return expandFieldInfos;
+    }
+
+    @Override
+    public Map<String, Object> getExpandDataInfo(String expandCode, Long primaryFieldValue) {
+
+        SysExpandRequest sysExpandRequest = new SysExpandRequest();
+        sysExpandRequest.setExpandCode(expandCode);
+        SysExpandData sysExpandData = this.getByExpandCode(sysExpandRequest);
+
+        // 获取对应数据
+        HashMap<String, Object> result = new HashMap<>();
+        String expandData = sysExpandData.getExpandData();
+        if (StrUtil.isEmpty(expandData)) {
+            return result;
+        }
+
+        // 将json转化为Map
+        JSONObject jsonObject = JSON.parseObject(expandData);
+
+        // 获取字段元数据，将需要进行字典转化的，转化为字典中文名称
+        List<SysExpandField> fieldInfoList = sysExpandData.getFieldInfoList();
+        for (SysExpandField sysExpandField : fieldInfoList) {
+            if (FieldTypeEnum.DICT.getCode().equals(sysExpandField.getFieldType())) {
+                String dictTypeCode = sysExpandField.getFieldDictTypeCode();
+                String dictValue = jsonObject.getString(sysExpandField.getFieldCode());
+                String dictName = dictApi.getDictName(dictTypeCode, dictValue);
+                jsonObject.put(sysExpandField.getFieldCode(), dictName);
+            }
+        }
+
+        return jsonObject;
     }
 
     /**

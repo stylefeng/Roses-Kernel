@@ -82,7 +82,7 @@ public class SysExpandDataServiceImpl extends ServiceImpl<SysExpandDataMapper, S
     }
 
     @Override
-    public SysExpandData detailByPrimaryFieldValue(String primaryFieldValue) {
+    public SysExpandData detailByPrimaryFieldValue(Long primaryFieldValue) {
         LambdaQueryWrapper<SysExpandData> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysExpandData::getPrimaryFieldValue, primaryFieldValue);
         return this.getOne(wrapper, false);

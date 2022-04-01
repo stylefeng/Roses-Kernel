@@ -25,6 +25,10 @@
 package cn.stylefeng.roses.kernel.expand.modular.api;
 
 import cn.stylefeng.roses.kernel.expand.modular.api.pojo.ExpandDataInfo;
+import cn.stylefeng.roses.kernel.expand.modular.api.pojo.ExpandFieldInfo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 拓展字段Api
@@ -41,5 +45,21 @@ public interface ExpandApi {
      * @date 2022/3/31 21:20
      */
     void saveOrUpdateExpandData(ExpandDataInfo expandDataInfo);
+
+    /**
+     * 获取列表需要的拓展字段信息
+     *
+     * @author fengshuonan
+     * @date 2022/4/1 9:48
+     */
+    List<ExpandFieldInfo> getPageListExpandFieldList(String expandCode);
+
+    /**
+     * 获取某一条拓展数据
+     *
+     * @author fengshuonan
+     * @date 2022/4/1 9:55
+     */
+    Map<String, Object> getExpandDataInfo(String expandCode, Long primaryFieldValue);
 
 }

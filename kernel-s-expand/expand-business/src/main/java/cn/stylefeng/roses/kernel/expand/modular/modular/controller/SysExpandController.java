@@ -1,6 +1,8 @@
 package cn.stylefeng.roses.kernel.expand.modular.modular.controller;
 
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.expand.modular.api.ExpandApi;
+import cn.stylefeng.roses.kernel.expand.modular.api.pojo.ExpandFieldInfo;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpand;
 import cn.stylefeng.roses.kernel.expand.modular.modular.entity.SysExpandData;
 import cn.stylefeng.roses.kernel.expand.modular.modular.pojo.request.SysExpandRequest;
@@ -30,6 +32,9 @@ public class SysExpandController {
 
     @Resource
     private SysExpandService sysExpandService;
+
+    @Resource
+    private ExpandApi expandApi;
 
     /**
      * 添加
@@ -121,6 +126,17 @@ public class SysExpandController {
     @GetResource(name = "分页查询", path = "/sysExpand/page")
     public ResponseData<PageResult<SysExpand>> page(SysExpandRequest sysExpandRequest) {
         return new SuccessResponseData<>(sysExpandService.findPage(sysExpandRequest));
+    }
+
+    /**
+     * 获取某个业务，需要列表展示的拓展字段
+     *
+     * @author fengshuonan
+     * @date 2022/03/29 23:47
+     */
+    @GetResource(name = "获取某个业务，需要列表展示的拓展字段", path = "/sysExpand/getListFields")
+    public ResponseData<List<ExpandFieldInfo>> getListFields(@Validated(SysExpandRequest.getByExpandCode.class) SysExpandRequest sysExpandRequest) {
+        return new SuccessResponseData<>(expandApi.getPageListExpandFieldList(sysExpandRequest.getExpandCode()));
     }
 
 }
