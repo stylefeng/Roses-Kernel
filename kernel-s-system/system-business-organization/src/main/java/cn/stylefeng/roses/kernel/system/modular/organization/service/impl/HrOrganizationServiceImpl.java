@@ -37,6 +37,7 @@ import cn.stylefeng.roses.kernel.db.api.context.DbOperatorContext;
 import cn.stylefeng.roses.kernel.db.api.factory.PageFactory;
 import cn.stylefeng.roses.kernel.db.api.factory.PageResultFactory;
 import cn.stylefeng.roses.kernel.db.api.pojo.page.PageResult;
+import cn.stylefeng.roses.kernel.expand.modular.api.ExpandApi;
 import cn.stylefeng.roses.kernel.rule.constants.SymbolConstant;
 import cn.stylefeng.roses.kernel.rule.constants.TreeConstants;
 import cn.stylefeng.roses.kernel.rule.enums.StatusEnum;
@@ -90,7 +91,11 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     @Resource
     private RoleDataScopeServiceApi roleDataScopeServiceApi;
 
+    @Resource
+    private ExpandApi expandApi;
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void add(HrOrganizationRequest hrOrganizationRequest) {
 
         // 获取父id
@@ -109,6 +114,12 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         hrOrganization.setStatusFlag(StatusEnum.ENABLE.getCode());
 
         this.save(hrOrganization);
+
+        // 处理动态表单数据
+        if (hrOrganizationRequest.getExpandDataInfo() != null) {
+            hrOrganizationRequest.getExpandDataInfo().setPrimaryFieldValue(hrOrganization.getOrgId());
+            expandApi.saveOrUpdateExpandData(hrOrganizationRequest.getExpandDataInfo());
+        }
     }
 
     @Override
@@ -143,6 +154,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void edit(HrOrganizationRequest hrOrganizationRequest) {
 
         HrOrganization hrOrganization = this.queryOrganization(hrOrganizationRequest);
@@ -161,6 +173,12 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
 
         // 更新这条记录
         this.updateById(hrOrganization);
+
+        // 处理动态表单数据
+        if (hrOrganizationRequest.getExpandDataInfo() != null) {
+            hrOrganizationRequest.getExpandDataInfo().setPrimaryFieldValue(hrOrganization.getOrgId());
+            expandApi.saveOrUpdateExpandData(hrOrganizationRequest.getExpandDataInfo());
+        }
     }
 
     @Override

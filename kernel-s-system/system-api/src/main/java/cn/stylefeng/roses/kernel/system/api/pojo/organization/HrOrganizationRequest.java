@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.api.pojo.organization;
 
+import cn.stylefeng.roses.kernel.expand.modular.api.pojo.ExpandDataInfo;
 import cn.stylefeng.roses.kernel.rule.annotation.ChineseDescription;
 import cn.stylefeng.roses.kernel.rule.pojo.request.BaseRequest;
 import cn.stylefeng.roses.kernel.validator.api.validators.status.StatusValue;
@@ -120,6 +121,12 @@ public class HrOrganizationRequest extends BaseRequest {
     @NotNull(message = "用户id不能为空", groups = userBindOrgScope.class)
     @ChineseDescription("用户id（作为查询条件）")
     private Long userId;
+
+    /**
+     * 动态表单数据
+     */
+    @ChineseDescription("动态表单数据")
+    private ExpandDataInfo expandDataInfo;
 
     /**
      * 组织机构树zTree形式
