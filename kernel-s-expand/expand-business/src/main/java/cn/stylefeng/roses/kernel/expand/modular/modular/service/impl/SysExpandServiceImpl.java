@@ -200,6 +200,7 @@ public class SysExpandServiceImpl extends ServiceImpl<SysExpandMapper, SysExpand
 
         SysExpandRequest sysExpandRequest = new SysExpandRequest();
         sysExpandRequest.setExpandCode(expandCode);
+        sysExpandRequest.setPrimaryFieldValue(primaryFieldValue);
         SysExpandData sysExpandData = this.getByExpandCode(sysExpandRequest);
 
         // 获取对应数据
