@@ -24,6 +24,13 @@
             <version>${roses.version}</version>
         </dependency>
 
+        <!--jwt模块，汇报资源需要生成token用-->
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>jwt-sdk</artifactId>
+            <version>${roses.version}</version>
+        </dependency>
+
         <!--spring-web-->
         <dependency>
             <groupId>org.springframework</groupId>
