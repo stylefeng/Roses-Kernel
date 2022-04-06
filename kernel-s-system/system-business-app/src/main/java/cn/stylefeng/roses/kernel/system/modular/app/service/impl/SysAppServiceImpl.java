@@ -53,6 +53,7 @@ import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 系统应用service接口实现类
@@ -267,6 +268,14 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         } else {
             return new SysAppResult();
         }
+    }
+
+    @Override
+    public List<String> getAppNameSorted() {
+        LambdaQueryWrapper<SysApp> wrapper = this.createWrapper(new SysAppRequest());
+        wrapper.select(SysApp::getAppName);
+        List<SysApp> list = this.list(wrapper);
+        return list.stream().map(SysApp::getAppName).collect(Collectors.toList());
     }
 
     /**

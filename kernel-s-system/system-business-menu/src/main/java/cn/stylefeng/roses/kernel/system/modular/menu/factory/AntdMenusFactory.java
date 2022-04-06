@@ -58,39 +58,36 @@ public class AntdMenusFactory {
      * 组装antdv用的获取所有菜单列表详情
      *
      * @param appSortedMenus 按应用排序过的菜单集合
+     * @param appNames       排序过的应用名称
      * @author fengshuonan
      * @date 2021/1/7 18:17
      */
-    public static List<AntdSysMenuDTO> createTotalMenus(Map<String, List<SysMenu>> appSortedMenus, String activeAppCode) {
+    public static List<AntdSysMenuDTO> createTotalMenus(Map<String, List<SysMenu>> appSortedMenus, List<String> appNames) {
 
         // 创建应用级别的菜单集合
         ArrayList<AntdSysMenuDTO> appSortedAntdMenus = new ArrayList<>();
 
-        // 如果用户菜单中包含了激活的应用，先放激活的应用的
-        if (appSortedMenus.containsKey(activeAppCode)) {
+        // 创建其他应用的菜单
+        for (Map.Entry<String, List<SysMenu>> entry : appSortedMenus.entrySet()) {
             // 创建顶层应用菜单
-            AntdSysMenuDTO firstSortApp = createRootAppMenu(activeAppCode);
-            List<SysMenu> treeStructMenu = new DefaultTreeBuildFactory<SysMenu>(TreeConstants.DEFAULT_PARENT_ID.toString()).doTreeBuild(appSortedMenus.get(activeAppCode));
+            AntdSysMenuDTO rootAppMenu = createRootAppMenu(entry.getKey());
+            List<SysMenu> treeStructMenu = new DefaultTreeBuildFactory<SysMenu>(TreeConstants.DEFAULT_PARENT_ID.toString()).doTreeBuild(entry.getValue());
             List<AntdSysMenuDTO> antdSysMenuDTOS = doModelTransfer(treeStructMenu);
 
             // 更新顶层应用级别的菜单
-            firstSortApp.setChildren(antdSysMenuDTOS);
-            appSortedAntdMenus.add(firstSortApp);
+            rootAppMenu.setChildren(antdSysMenuDTOS);
+            appSortedAntdMenus.add(rootAppMenu);
         }
 
-        // 创建其他应用的菜单
-        for (Map.Entry<String, List<SysMenu>> entry : appSortedMenus.entrySet()) {
-            if (!entry.getKey().equals(activeAppCode)) {
-                // 创建顶层应用菜单
-                AntdSysMenuDTO rootAppMenu = createRootAppMenu(entry.getKey());
-                List<SysMenu> treeStructMenu = new DefaultTreeBuildFactory<SysMenu>(TreeConstants.DEFAULT_PARENT_ID.toString()).doTreeBuild(entry.getValue());
-                List<AntdSysMenuDTO> antdSysMenuDTOS = doModelTransfer(treeStructMenu);
-
-                // 更新顶层应用级别的菜单
-                rootAppMenu.setChildren(antdSysMenuDTOS);
-                appSortedAntdMenus.add(rootAppMenu);
-            }
+        // 更新排序
+        if (ObjectUtil.isEmpty(appNames)) {
+            return appSortedAntdMenus;
         }
+        appSortedAntdMenus.sort((antdSysMenuDTO, antdSysMenuDTO2) -> {
+            int one = appNames.indexOf(antdSysMenuDTO.getTitle());
+            int two = appNames.indexOf(antdSysMenuDTO2.getTitle());
+            return Integer.compare(one, two);
+        });
 
         return appSortedAntdMenus;
     }

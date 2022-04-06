@@ -299,12 +299,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, false);
 
         // 获取当前激活的应用
-        String activeAppCode = appServiceApi.getActiveAppCode();
+        List<String> appNameSorted = appServiceApi.getAppNameSorted();
 
         // 将菜单按应用编码分类，激活的应用放在最前边
         Map<String, List<SysMenu>> sortedUserMenus = AntdMenusFactory.sortUserMenusByAppCode(currentUserMenus);
 
-        return AntdMenusFactory.createTotalMenus(sortedUserMenus, activeAppCode);
+        return AntdMenusFactory.createTotalMenus(sortedUserMenus, appNameSorted);
     }
 
     @Override
