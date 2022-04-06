@@ -619,14 +619,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return queryWrapper;
         }
 
-        // 根据所属应用查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(sysMenuRequest.getAppCode()), SysMenu::getAppCode, sysMenuRequest.getAppCode());
-
-        // 根据菜单名称模糊查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(sysMenuRequest.getMenuName()), SysMenu::getMenuName, sysMenuRequest.getMenuName());
-
-        // 根据菜单编码模糊查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(sysMenuRequest.getMenuCode()), SysMenu::getMenuCode, sysMenuRequest.getMenuCode());
+        if (ObjectUtil.isNotEmpty(sysMenuRequest.getAppCode()) || ObjectUtil.isNotEmpty(sysMenuRequest.getMenuName()) || ObjectUtil.isNotEmpty(sysMenuRequest.getMenuCode())) {
+            queryWrapper.nested(
+                    // 根据所属应用查询
+                    i -> i.like(ObjectUtil.isNotEmpty(sysMenuRequest.getAppCode()), SysMenu::getAppCode, sysMenuRequest.getAppCode())
+                            .or()
+                            // 根据菜单名称模糊查询
+                            .like(ObjectUtil.isNotEmpty(sysMenuRequest.getMenuName()), SysMenu::getMenuName, sysMenuRequest.getMenuName())
+                            .or()
+                            // 根据菜单编码模糊查询
+                            .like(ObjectUtil.isNotEmpty(sysMenuRequest.getMenuCode()), SysMenu::getMenuCode, sysMenuRequest.getMenuCode()));
+        }
 
         return queryWrapper;
     }
