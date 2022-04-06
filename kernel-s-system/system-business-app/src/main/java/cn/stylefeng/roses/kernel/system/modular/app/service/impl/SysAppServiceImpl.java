@@ -311,6 +311,9 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         // 根据激活状态
         queryWrapper.eq(ObjectUtil.isNotEmpty(sysAppRequest.getStatusFlag()), SysApp::getActiveFlag, sysAppRequest.getActiveFlag());
 
+        // 排序
+        queryWrapper.orderByAsc(SysApp::getAppSort);
+
         return queryWrapper;
     }
 
