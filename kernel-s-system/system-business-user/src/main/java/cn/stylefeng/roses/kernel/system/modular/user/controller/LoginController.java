@@ -38,7 +38,9 @@ import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
 import cn.stylefeng.roses.kernel.system.api.pojo.login.CurrentUserInfoResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.login.ValidateTokenRequest;
+import cn.stylefeng.roses.kernel.system.api.pojo.login.v3.IndexUserInfoV3;
 import cn.stylefeng.roses.kernel.system.modular.user.factory.UserLoginInfoFactory;
+import cn.stylefeng.roses.kernel.system.modular.user.service.IndexUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,6 +66,9 @@ public class LoginController {
 
     @Resource
     private SessionManagerApi sessionManagerApi;
+
+    @Resource
+    private IndexUserInfoService indexUserInfoService;
 
     /**
      * 用户登陆
@@ -154,4 +159,16 @@ public class LoginController {
         authServiceApi.cancelFreeze(loginRequest);
         return new SuccessResponseData<>();
     }
+
+    /**
+     * 新版Antdv3版本的用户信息获取
+     *
+     * @author fengshuonan
+     * @date 2022/4/8 15:31
+     */
+    @GetResource(name = "新版Antdv3版本的用户信息获取", path = "/v3/userInfo", requiredPermission = false)
+    public ResponseData<IndexUserInfoV3> userInfoV3() {
+        return new SuccessResponseData<>(indexUserInfoService.userInfoV3());
+    }
+
 }

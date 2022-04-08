@@ -24,6 +24,8 @@
  */
 package cn.stylefeng.roses.kernel.system.api;
 
+import cn.stylefeng.roses.kernel.system.api.pojo.login.v3.IndexMenuInfo;
+
 import java.util.List;
 import java.util.Set;
 
@@ -78,5 +80,13 @@ public interface MenuServiceApi {
      * @date 2021/8/11 14:25
      */
     List<String> getResourceCodesByBusinessId(List<Long> businessIds);
+
+    /**
+     * 构建Antdv3版本的菜单和权限信息
+     *
+     * @author fengshuonan
+     * @date 2022/4/8 15:59
+     */
+    List<IndexMenuInfo> buildAuthorities();
 
 }

@@ -44,6 +44,7 @@ import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.menu.SysMenuExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.login.v3.IndexMenuInfo;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.antd.AntdMenuSelectTreeNode;
@@ -57,6 +58,7 @@ import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenu;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuButton;
 import cn.stylefeng.roses.kernel.system.modular.menu.entity.SysMenuResource;
 import cn.stylefeng.roses.kernel.system.modular.menu.factory.AntdMenusFactory;
+import cn.stylefeng.roses.kernel.system.modular.menu.factory.Antdv3MenusFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.factory.LayuiMenusFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.factory.MenuTypeFactory;
 import cn.stylefeng.roses.kernel.system.modular.menu.mapper.SysMenuMapper;
@@ -559,6 +561,21 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<SysMenuResource> list = sysMenuResourceService.list(wrapper);
 
         return list.stream().map(SysMenuResource::getResourceCode).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<IndexMenuInfo> buildAuthorities() {
+
+        // 不分离应用查询菜单
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, false);
+
+        // 获取当前激活的应用
+        List<String> appNameSorted = appServiceApi.getAppNameSorted();
+
+        // 将菜单按应用编码分类，激活的应用放在最前边
+        Map<String, List<SysMenu>> sortedUserMenus = AntdMenusFactory.sortUserMenusByAppCode(currentUserMenus);
+
+        return Antdv3MenusFactory.createTotalMenus(sortedUserMenus, appNameSorted);
     }
 
     /**
