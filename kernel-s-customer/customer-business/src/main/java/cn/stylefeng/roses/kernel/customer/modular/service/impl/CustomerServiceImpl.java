@@ -2,6 +2,7 @@ package cn.stylefeng.roses.kernel.customer.modular.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -376,18 +377,6 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public String updateSecret() {
         // 获取当前登录用户
         Long userId = LoginContext.me().getLoginUser().getUserId();
-
-        // 查看当前用户是否有秘钥
-        Customer customer = this.getById(userId);
-        if (StrUtil.isEmpty(customer.getSecretKey())) {
-            throw new CustomerException(CustomerExceptionEnum.NO_SECRET);
-        }
-
-        // 判断秘钥是否过期
-        if (customer.getMemberExpireTime().before(new Date())) {
-            throw new CustomerException(CustomerExceptionEnum.SECRET_EXPIRED);
-        }
-
         return this.createOrUpdateCustomerSecret(userId);
     }
 
@@ -400,9 +389,13 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         // 重新生成秘钥
         String randomString = RandomUtil.randomString(32);
 
+        // 秘钥过期时间24个月
+        Date memberExpireTime = DateUtil.offset(new Date(), DateField.MONTH, 24);
+
         // 更新用户秘钥
         LambdaUpdateWrapper<Customer> wrapper = new LambdaUpdateWrapper<>();
         wrapper.set(Customer::getSecretKey, randomString);
+        wrapper.set(Customer::getMemberExpireTime, memberExpireTime);
         wrapper.eq(Customer::getCustomerId, customerId);
         this.update(wrapper);
 
