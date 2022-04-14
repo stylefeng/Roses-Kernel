@@ -44,7 +44,12 @@ public enum SysMenuExceptionEnum implements AbstractExceptionEnum {
     /**
      * 菜单不存在
      */
-    MENU_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "33", "菜单不存在，菜单id：{}");
+    MENU_NOT_EXIST(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "33", "菜单不存在，菜单id：{}"),
+
+    /**
+     * 无法获取菜单，所有应用已被禁用
+     */
+    CANT_FIND_APPS(RuleConstants.USER_OPERATION_ERROR_TYPE_CODE + SystemConstants.SYSTEM_EXCEPTION_STEP_CODE + "34", "无法获取菜单，所有应用已被禁用");
 
     private final String errorCode;
 

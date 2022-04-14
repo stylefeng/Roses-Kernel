@@ -27,7 +27,6 @@ package cn.stylefeng.roses.kernel.system.modular.menu.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
@@ -44,6 +43,7 @@ import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.menu.SysMenuExceptionEnum;
+import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppResult;
 import cn.stylefeng.roses.kernel.system.api.pojo.login.v3.IndexMenuInfo;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.MenuAndButtonTreeResponse;
 import cn.stylefeng.roses.kernel.system.api.pojo.menu.SysMenuRequest;
@@ -296,17 +296,22 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<AntdSysMenuDTO> getLeftMenusAntdv(SysMenuRequest sysMenuRequest) {
+        // 获取当前已经启用的应用，并且按排序字段排序的
+        List<SysAppResult> appNameSorted = appServiceApi.getSortedApps();
+        if (ObjectUtil.isEmpty(appNameSorted)) {
+            throw new ServiceException(SysMenuExceptionEnum.CANT_FIND_APPS);
+        }
 
-        // 不分应用查询菜单
-        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, false);
+        // 查询菜单
+        List<String> appCodes = appNameSorted.stream().map(SysAppResult::getAppCode).collect(Collectors.toList());
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCodes, false);
 
-        // 获取当前激活的应用
-        List<String> appNameSorted = appServiceApi.getAppNameSorted();
-
-        // 将菜单按应用编码分类，激活的应用放在最前边
+        // 将菜单按应用编码分类
         Map<String, List<SysMenu>> sortedUserMenus = AntdMenusFactory.sortUserMenusByAppCode(currentUserMenus);
 
-        return AntdMenusFactory.createTotalMenus(sortedUserMenus, appNameSorted);
+        // 获取应用名称集合，带顺序
+        List<String> appNames = appNameSorted.stream().map(SysAppResult::getAppName).collect(Collectors.toList());
+        return AntdMenusFactory.createTotalMenus(sortedUserMenus, appNames);
     }
 
     @Override
@@ -459,15 +464,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<SysMenu> getCurrentUserMenus(String appCode, Boolean layuiVisibleFlag) {
+    public List<SysMenu> getCurrentUserMenus(List<String> appCodeList, Boolean layuiVisibleFlag) {
 
         // 菜单查询条件
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysMenu::getStatusFlag, StatusEnum.ENABLE.getCode()).eq(SysMenu::getDelFlag, YesOrNotEnum.N.getCode()).orderByAsc(SysMenu::getMenuSort);
 
         // 如果应用编码不为空，则拼接应用编码
-        if (StrUtil.isNotBlank(appCode)) {
-            queryWrapper.eq(SysMenu::getAppCode, appCode);
+        if (ObjectUtil.isNotEmpty(appCodeList)) {
+            queryWrapper.in(SysMenu::getAppCode, appCodeList);
         }
 
         // 如果是不分离版本，则筛选一下不需要显示的菜单
@@ -570,12 +575,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, false);
 
         // 获取当前激活的应用
-        List<String> appNameSorted = appServiceApi.getAppNameSorted();
+        List<SysAppResult> sortedApps = appServiceApi.getSortedApps();
+        List<String> appNames = sortedApps.stream().map(SysAppResult::getAppName).collect(Collectors.toList());
 
         // 将菜单按应用编码分类，激活的应用放在最前边
         Map<String, List<SysMenu>> sortedUserMenus = AntdMenusFactory.sortUserMenusByAppCode(currentUserMenus);
 
-        return Antdv3MenusFactory.createTotalMenus(sortedUserMenus, appNameSorted);
+        return Antdv3MenusFactory.createTotalMenus(sortedUserMenus, appNames);
     }
 
     /**

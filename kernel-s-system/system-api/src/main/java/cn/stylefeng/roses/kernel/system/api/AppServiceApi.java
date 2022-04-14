@@ -76,11 +76,11 @@ public interface AppServiceApi {
     SysAppResult getAppInfoByAppCode(String appCode);
 
     /**
-     * 按顺序获取app的编码
+     * 按顺序获取app的编码和名称
      *
      * @author fengshuonan
      * @date 2022/4/6 22:34
      */
-    List<String> getAppNameSorted();
+    List<SysAppResult> getSortedApps();
 
 }

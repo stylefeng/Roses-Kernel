@@ -35,7 +35,6 @@ import cn.stylefeng.roses.kernel.rule.exception.base.ServiceException;
 import cn.stylefeng.roses.kernel.rule.pojo.dict.SimpleDict;
 import cn.stylefeng.roses.kernel.system.api.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
-import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.app.AppExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppResult;
@@ -265,11 +264,23 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     }
 
     @Override
-    public List<String> getAppNameSorted() {
+    public List<SysAppResult> getSortedApps() {
         LambdaQueryWrapper<SysApp> wrapper = this.createWrapper(new SysAppRequest());
+
+        // 只查询应用名称和应用编码
         wrapper.select(SysApp::getAppName);
+        wrapper.select(SysApp::getAppCode);
+
+        // 只查询启用的应用
+        wrapper.eq(SysApp::getStatusFlag, StatusEnum.ENABLE.getCode());
+
         List<SysApp> list = this.list(wrapper);
-        return list.stream().map(SysApp::getAppName).collect(Collectors.toList());
+
+        return list.stream().map(i -> {
+            SysAppResult target = new SysAppResult();
+            BeanUtil.copyProperties(i, target);
+            return target;
+        }).collect(Collectors.toList());
     }
 
     /**
