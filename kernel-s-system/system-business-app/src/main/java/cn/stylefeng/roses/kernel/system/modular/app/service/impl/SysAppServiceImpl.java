@@ -131,13 +131,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @Override
     public void editStatus(SysAppRequest sysAppParam) {
         SysApp currentApp = this.querySysApp(sysAppParam);
-
-        // 激活状态的不能被禁用
-        if (YesOrNotEnum.Y.getCode().equals(currentApp.getActiveFlag())
-                && StatusEnum.DISABLE.getCode().equals(sysAppParam.getStatusFlag())) {
-            throw new SystemModularException(AppExceptionEnum.CANT_DISABLE);
-        }
-
         currentApp.setStatusFlag(sysAppParam.getStatusFlag());
         this.updateById(currentApp);
     }
