@@ -80,6 +80,8 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         // 默认排序值
         if (sysAppRequest.getAppSort() == null) {
             sysApp.setAppSort(999);
+        } else {
+            sysApp.setAppSort(sysAppRequest.getAppSort());
         }
 
         // 默认不激活
