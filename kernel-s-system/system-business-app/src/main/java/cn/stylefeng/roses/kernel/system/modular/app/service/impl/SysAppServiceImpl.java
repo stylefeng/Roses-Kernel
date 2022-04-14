@@ -268,8 +268,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         LambdaQueryWrapper<SysApp> wrapper = this.createWrapper(new SysAppRequest());
 
         // 只查询应用名称和应用编码
-        wrapper.select(SysApp::getAppName);
-        wrapper.select(SysApp::getAppCode);
+        wrapper.select(SysApp::getAppName, SysApp::getAppCode);
 
         // 只查询启用的应用
         wrapper.eq(SysApp::getStatusFlag, StatusEnum.ENABLE.getCode());
