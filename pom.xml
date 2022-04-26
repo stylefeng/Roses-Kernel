@@ -100,9 +100,6 @@
         <!--mongodb模块-->
         <module>kernel-d-mongodb</module>
 
-        <!-- 支付模块 -->
-        <module>kernel-d-pay</module>
-
         <!--系统管理基础业务-->
         <module>kernel-s-system</module>
 
