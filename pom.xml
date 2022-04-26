@@ -112,9 +112,6 @@
         <!-- 数据迁移模块 -->
         <module>kernel-s-migration</module>
 
-        <!-- 第三方单点登录模块 -->
-        <module>kernel-d-sso</module>
-
     </modules>
 
     <properties>
