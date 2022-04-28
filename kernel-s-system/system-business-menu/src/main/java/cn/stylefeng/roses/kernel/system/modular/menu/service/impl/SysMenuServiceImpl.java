@@ -41,6 +41,7 @@ import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.system.api.AppServiceApi;
 import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
 import cn.stylefeng.roses.kernel.system.api.RoleServiceApi;
+import cn.stylefeng.roses.kernel.system.api.enums.MenuFrontTypeEnum;
 import cn.stylefeng.roses.kernel.system.api.exception.SystemModularException;
 import cn.stylefeng.roses.kernel.system.api.exception.enums.menu.SysMenuExceptionEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.app.SysAppResult;
@@ -130,6 +131,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 设置添加的菜单的类型
         MenuTypeFactory.processMenuType(sysMenu, sysMenuRequest.getVisible());
 
+        // 设置如果菜单前后台类型如果为空，则默认为都显示
+        if (ObjectUtil.isEmpty(sysMenuRequest.getAntdvFrontType())) {
+            sysMenu.setAntdvFrontType(MenuFrontTypeEnum.TOTAL.getCode());
+        }
+
         this.save(sysMenu);
     }
 
@@ -171,7 +177,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 不能修改状态，用修改状态接口修改状态
         oldMenu.setStatusFlag(null);
 
-        // 设置添加的菜单的类型fengshuonan_sedinbj
+        // 设置添加的菜单的类型
         MenuTypeFactory.processMenuType(oldMenu, sysMenuRequest.getVisible());
 
         this.updateById(oldMenu);

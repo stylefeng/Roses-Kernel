@@ -157,6 +157,12 @@ public class SysMenuRequest extends BaseRequest {
     private String antdvLinkUrl;
 
     /**
+     * 前台还是后台菜单：1-前台，2-后台，3-前后台都显示
+     */
+    @ChineseDescription("前台还是后台菜单")
+    private Integer antdvFrontType;
+
+    /**
      * 获取主页左侧菜单列表（适配Antd Vue的版本）
      */
     public @interface getAppMenusAntdVue {

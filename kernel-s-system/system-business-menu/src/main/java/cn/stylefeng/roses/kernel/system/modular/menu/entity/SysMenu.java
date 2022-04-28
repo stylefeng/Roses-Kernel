@@ -182,6 +182,13 @@ public class SysMenu extends BaseEntity implements AbstractTreeNode<SysMenu> {
     private String antdvVisible;
 
     /**
+     * 前台还是后台菜单：1-前台，2-后台，3-前后台都显示
+     */
+    @TableField("antdv_front_type")
+    @ChineseDescription("前台还是后台菜单")
+    private Integer antdvFrontType;
+
+    /**
      * 是否删除：Y-被删除，N-未删除
      */
     @TableField(value = "del_flag", fill = FieldFill.INSERT)
