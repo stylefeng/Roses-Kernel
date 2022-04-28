@@ -159,9 +159,10 @@ public interface SysMenuService extends IService<SysMenu> {
      *
      * @param appCodeList      应用编码集合
      * @param layuiVisibleFlag layui版本查询查询条件，如果穿true，则会带上layui_visible为Y的查询条件
+     * @param antdvFrontType   前台菜单或者后台菜单的类型
      * @author fengshuonan
      * @date 2020/12/27 18:11
      */
-    List<SysMenu> getCurrentUserMenus(List<String> appCodeList, Boolean layuiVisibleFlag);
+    List<SysMenu> getCurrentUserMenus(List<String> appCodeList, Boolean layuiVisibleFlag, Integer antdvFrontType);
 
 }

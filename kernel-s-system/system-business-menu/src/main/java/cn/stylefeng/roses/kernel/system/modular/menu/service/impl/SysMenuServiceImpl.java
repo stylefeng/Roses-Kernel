@@ -26,6 +26,7 @@ package cn.stylefeng.roses.kernel.system.modular.menu.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
@@ -284,7 +285,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<LayuiAppIndexMenusVO> getLayuiIndexMenus() {
 
         // 获取当前用户所有菜单
-        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, true);
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, true, null);
 
         // 组装每个应用的菜单树
         List<LayuiAppIndexMenusVO> layuiAppIndexMenuVOS = LayuiMenusFactory.createLayuiAppIndexMenus(currentUserMenus);
@@ -302,6 +303,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<AntdSysMenuDTO> getLeftMenusAntdv(SysMenuRequest sysMenuRequest) {
+
+        // 获取前台或者后台类型
+        Integer antdvFrontType = sysMenuRequest.getAntdvFrontType();
+        if (antdvFrontType == null) {
+            antdvFrontType = MenuFrontTypeEnum.FRONT.getCode();
+        }
+
         // 获取当前已经启用的应用，并且按排序字段排序的
         List<SysAppResult> appNameSorted = appServiceApi.getSortedApps();
         if (ObjectUtil.isEmpty(appNameSorted)) {
@@ -310,7 +318,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 查询菜单
         List<String> appCodes = appNameSorted.stream().map(SysAppResult::getAppCode).collect(Collectors.toList());
-        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCodes, false);
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCodes, false, antdvFrontType);
 
         // 将菜单按应用编码分类
         Map<String, List<SysMenu>> sortedUserMenus = AntdMenusFactory.sortUserMenusByAppCode(currentUserMenus);
@@ -470,7 +478,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<SysMenu> getCurrentUserMenus(List<String> appCodeList, Boolean layuiVisibleFlag) {
+    public List<SysMenu> getCurrentUserMenus(List<String> appCodeList, Boolean layuiVisibleFlag, Integer antdvFrontType) {
 
         // 菜单查询条件
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
@@ -479,6 +487,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 如果应用编码不为空，则拼接应用编码
         if (ObjectUtil.isNotEmpty(appCodeList)) {
             queryWrapper.in(SysMenu::getAppCode, appCodeList);
+        }
+
+        // 判断前台还是后台菜单
+        if (ObjectUtil.isNotEmpty(antdvFrontType)) {
+            queryWrapper.in(SysMenu::getAntdvFrontType, ListUtil.list(true, antdvFrontType, MenuFrontTypeEnum.TOTAL.getCode()));
         }
 
         // 如果是不分离版本，则筛选一下不需要显示的菜单
@@ -578,7 +591,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<IndexMenuInfo> buildAuthorities() {
 
         // 不分离应用查询菜单
-        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, false);
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, false, null);
 
         // 获取当前激活的应用
         List<SysAppResult> sortedApps = appServiceApi.getSortedApps();
@@ -651,11 +664,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (ObjectUtil.isNotEmpty(sysMenuRequest.getAppCode()) || ObjectUtil.isNotEmpty(sysMenuRequest.getMenuName()) || ObjectUtil.isNotEmpty(sysMenuRequest.getMenuCode())) {
             queryWrapper.nested(
                     // 根据所属应用查询
-                    i -> i.like(ObjectUtil.isNotEmpty(sysMenuRequest.getAppCode()), SysMenu::getAppCode, sysMenuRequest.getAppCode())
-                            .or()
+                    i -> i.like(ObjectUtil.isNotEmpty(sysMenuRequest.getAppCode()), SysMenu::getAppCode, sysMenuRequest.getAppCode()).or()
                             // 根据菜单名称模糊查询
-                            .like(ObjectUtil.isNotEmpty(sysMenuRequest.getMenuName()), SysMenu::getMenuName, sysMenuRequest.getMenuName())
-                            .or()
+                            .like(ObjectUtil.isNotEmpty(sysMenuRequest.getMenuName()), SysMenu::getMenuName, sysMenuRequest.getMenuName()).or()
                             // 根据菜单编码模糊查询
                             .like(ObjectUtil.isNotEmpty(sysMenuRequest.getMenuCode()), SysMenu::getMenuCode, sysMenuRequest.getMenuCode()));
         }
