@@ -25,6 +25,7 @@
 package cn.stylefeng.roses.kernel.system.modular.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
@@ -57,7 +58,7 @@ public class IndexUserInfoServiceImpl implements IndexUserInfoService {
     private MenuServiceApi menuServiceApi;
 
     @Override
-    public IndexUserInfoV3 userInfoV3() {
+    public IndexUserInfoV3 userInfoV3(Integer menuFrontType) {
 
         // 获取当前登录用户
         LoginUser loginUser = LoginContext.me().getLoginUser();
@@ -106,7 +107,10 @@ public class IndexUserInfoServiceImpl implements IndexUserInfoService {
         indexUserInfoV3.setRoles(buildRoles(loginUser));
 
         // 获取用户菜单和权限信息
-        indexUserInfoV3.setAuthorities(menuServiceApi.buildAuthorities(MenuFrontTypeEnum.FRONT.getCode()));
+        if (ObjectUtil.isEmpty(menuFrontType)) {
+            menuFrontType = MenuFrontTypeEnum.FRONT.getCode();
+        }
+        indexUserInfoV3.setAuthorities(menuServiceApi.buildAuthorities(menuFrontType));
 
         // 登录人的ws-url
         indexUserInfoV3.setWsUrl(loginUser.getWsUrl());

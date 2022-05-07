@@ -167,8 +167,8 @@ public class LoginController {
      * @date 2022/4/8 15:31
      */
     @GetResource(name = "新版Antdv3版本的用户信息获取", path = "/v3/userInfo", requiredPermission = false)
-    public ResponseData<IndexUserInfoV3> userInfoV3() {
-        return new SuccessResponseData<>(indexUserInfoService.userInfoV3());
+    public ResponseData<IndexUserInfoV3> userInfoV3(Integer menuFrontType) {
+        return new SuccessResponseData<>(indexUserInfoService.userInfoV3(menuFrontType));
     }
 
 }

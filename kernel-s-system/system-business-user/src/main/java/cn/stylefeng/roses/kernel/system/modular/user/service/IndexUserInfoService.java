@@ -35,11 +35,12 @@ import cn.stylefeng.roses.kernel.system.api.pojo.login.v3.IndexUserInfoV3;
 public interface IndexUserInfoService {
 
     /**
-     * 获取用户头像的url
+     * 获取用户信息（新版Antdv3版本）
      *
+     * @param menuFrontType 菜单类型：前台菜单还是后台菜单
      * @author fengshuonan
-     * @date 2020/12/27 19:13
+     * @date 2022/4/8 15:31
      */
-    IndexUserInfoV3 userInfoV3();
+    IndexUserInfoV3 userInfoV3(Integer menuFrontType);
 
 }
