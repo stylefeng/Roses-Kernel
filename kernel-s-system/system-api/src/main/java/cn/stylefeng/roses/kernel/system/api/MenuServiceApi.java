@@ -84,9 +84,10 @@ public interface MenuServiceApi {
     /**
      * 构建Antdv3版本的菜单和权限信息
      *
+     * @param menuFrontType 菜单的前后台类型，如果没传递，默认查前台菜单
      * @author fengshuonan
      * @date 2022/4/8 15:59
      */
-    List<IndexMenuInfo> buildAuthorities();
+    List<IndexMenuInfo> buildAuthorities(Integer menuFrontType);
 
 }

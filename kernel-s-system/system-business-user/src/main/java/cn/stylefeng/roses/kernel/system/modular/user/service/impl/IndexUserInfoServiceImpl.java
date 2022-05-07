@@ -30,6 +30,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.basic.SimpleRoleInfo;
 import cn.stylefeng.roses.kernel.rule.enums.SexEnum;
 import cn.stylefeng.roses.kernel.system.api.MenuServiceApi;
+import cn.stylefeng.roses.kernel.system.api.enums.MenuFrontTypeEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.login.v3.IndexRoleInfo;
 import cn.stylefeng.roses.kernel.system.api.pojo.login.v3.IndexUserInfoV3;
 import cn.stylefeng.roses.kernel.system.modular.user.service.IndexUserInfoService;
@@ -105,7 +106,7 @@ public class IndexUserInfoServiceImpl implements IndexUserInfoService {
         indexUserInfoV3.setRoles(buildRoles(loginUser));
 
         // 获取用户菜单和权限信息
-        indexUserInfoV3.setAuthorities(menuServiceApi.buildAuthorities());
+        indexUserInfoV3.setAuthorities(menuServiceApi.buildAuthorities(MenuFrontTypeEnum.FRONT.getCode()));
 
         // 登录人的ws-url
         indexUserInfoV3.setWsUrl(loginUser.getWsUrl());
