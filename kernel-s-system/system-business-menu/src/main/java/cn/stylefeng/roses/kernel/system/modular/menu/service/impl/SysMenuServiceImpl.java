@@ -591,10 +591,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<IndexMenuInfo> buildAuthorities(Integer menuFrontType) {
 
         // 不分离应用查询菜单
-        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(null, false, menuFrontType);
+        List<SysAppResult> sortedApps = appServiceApi.getSortedApps();
+        List<String> appCodes = sortedApps.stream().map(SysAppResult::getAppCode).collect(Collectors.toList());
+        List<SysMenu> currentUserMenus = this.getCurrentUserMenus(appCodes, false, menuFrontType);
 
         // 获取当前激活的应用
-        List<SysAppResult> sortedApps = appServiceApi.getSortedApps();
         List<String> appNames = sortedApps.stream().map(SysAppResult::getAppName).collect(Collectors.toList());
 
         // 将菜单按应用编码分类，激活的应用放在最前边
