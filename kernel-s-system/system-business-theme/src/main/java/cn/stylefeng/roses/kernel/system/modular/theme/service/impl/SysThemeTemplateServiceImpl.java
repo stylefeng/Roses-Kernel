@@ -81,7 +81,7 @@ public class SysThemeTemplateServiceImpl extends ServiceImpl<SysThemeTemplateMap
         SysThemeTemplate sysThemeTemplate = this.querySysThemeTemplateById(sysThemeTemplateRequest);
 
         // Guns开头的模板字段不能删除，系统内置
-        if (sysThemeTemplateRequest.getTemplateCode().toUpperCase(Locale.ROOT).startsWith(SystemConstants.THEME_CODE_SYSTEM_PREFIX)) {
+        if (sysThemeTemplate.getTemplateCode().toUpperCase(Locale.ROOT).startsWith(SystemConstants.THEME_CODE_SYSTEM_PREFIX)) {
             throw new SystemModularException(SysThemeExceptionEnum.THEME_IS_SYSTEM);
         }
 
