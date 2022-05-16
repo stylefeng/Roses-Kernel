@@ -22,33 +22,16 @@
  * 5.在修改包名，模块名称，项目代码等时，请注明软件出处 https://gitee.com/stylefeng/guns
  * 6.若您的项目无法满足以上几点，可申请商业授权
  */
-package cn.stylefeng.roses.kernel.auth.starter;
-
-import cn.stylefeng.roses.kernel.auth.api.pojo.sso.SsoProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
+package cn.stylefeng.roses.kernel.auth.api.enums;
 
 /**
- * 单点配置
+ * 单点登录客户端
  *
  * @author fengshuonan
- * @date 2021/5/25 22:29
+ * @date 2022/5/16 16:48
  */
-@Configuration
-public class GunsSsoAutoConfiguration {
+public enum SsoClientTypeEnum {
 
-    /**
-     * 单点的开关配置
-     *
-     * @author fengshuonan
-     * @date 2021/5/25 22:29
-     */
-    @Bean
-    @ConfigurationProperties(prefix = "sso")
-    public SsoProperties ssoProperties() {
-        return new SsoProperties();
-    }
+    client, server
 
 }
