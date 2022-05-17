@@ -121,7 +121,7 @@
         <roses.version>7.2.2</roses.version>
         <hutool.version>5.7.6</hutool.version>
         <fastjson.version>1.2.78</fastjson.version>
-        <lombok.versin>1.18.14</lombok.versin>
+        <lombok.versin>1.18.24</lombok.versin>
         <mp.version>3.4.0</mp.version>
         <mysql-connector-java.version>8.0.21</mysql-connector-java.version>
         <druid.version>1.2.4</druid.version>
