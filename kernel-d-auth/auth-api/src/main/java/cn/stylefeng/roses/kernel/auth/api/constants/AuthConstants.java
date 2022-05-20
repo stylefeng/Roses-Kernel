@@ -122,4 +122,9 @@ public interface AuthConstants {
      */
     String SYS_AUTH_SSO_GET_LOGIN_CODE = "/sso/getLoginCode";
 
+    /**
+     * 用户存放单点登录回调时的token和本系统token的缓存
+     */
+    String CA_CLIENT_TOKEN_CACHE_PREFIX = "CA_CLIENT:TOKEN:";
+
 }

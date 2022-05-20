@@ -24,8 +24,6 @@
  */
 package cn.stylefeng.roses.kernel.auth.starter;
 
-import cn.hutool.cache.CacheUtil;
-import cn.hutool.cache.impl.TimedCache;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.cookie.SessionCookieCreator;
 import cn.stylefeng.roses.kernel.auth.api.expander.AuthConfigExpander;
@@ -35,12 +33,9 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
 import cn.stylefeng.roses.kernel.auth.password.BcryptPasswordStoredEncrypt;
 import cn.stylefeng.roses.kernel.auth.password.RsaPasswordTransferEncrypt;
 import cn.stylefeng.roses.kernel.auth.session.DefaultSessionManager;
-import cn.stylefeng.roses.kernel.auth.session.cache.logintoken.MemoryLoginTokenCache;
-import cn.stylefeng.roses.kernel.auth.session.cache.loginuser.MemoryLoginUserCache;
 import cn.stylefeng.roses.kernel.auth.session.cookie.DefaultSessionCookieCreator;
 import cn.stylefeng.roses.kernel.auth.session.timer.ClearInvalidLoginUserCacheTimer;
 import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
-import cn.stylefeng.roses.kernel.cache.api.constants.CacheConstants;
 import cn.stylefeng.roses.kernel.jwt.JwtTokenOperator;
 import cn.stylefeng.roses.kernel.jwt.api.JwtApi;
 import cn.stylefeng.roses.kernel.jwt.api.pojo.config.JwtConfig;
@@ -118,37 +113,6 @@ public class GunsAuthAutoConfiguration {
     }
 
     /**
-     * 登录用户的缓存，默认使用内存方式
-     * <p>
-     * 如需redis，可在项目创建一个名为 loginUserCache 的bean替代即可
-     *
-     * @author fengshuonan
-     * @date 2021/1/31 21:04
-     */
-    @Bean
-    @ConditionalOnMissingBean(name = "loginUserCache")
-    public CacheOperatorApi<LoginUser> loginUserCache() {
-        Long sessionExpiredSeconds = AuthConfigExpander.getSessionExpiredSeconds();
-        TimedCache<String, LoginUser> loginUsers = CacheUtil.newTimedCache(1000L * sessionExpiredSeconds);
-        return new MemoryLoginUserCache(loginUsers);
-    }
-
-    /**
-     * 登录用户token的缓存，默认使用内存方式
-     * <p>
-     * 如需redis，可在项目创建一个名为 allPlaceLoginTokenCache 的bean替代即可
-     *
-     * @author fengshuonan
-     * @date 2021/1/31 21:04
-     */
-    @Bean
-    @ConditionalOnMissingBean(name = "allPlaceLoginTokenCache")
-    public CacheOperatorApi<Set<String>> allPlaceLoginTokenCache() {
-        TimedCache<String, Set<String>> loginTokens = CacheUtil.newTimedCache(CacheConstants.NONE_EXPIRED_TIME);
-        return new MemoryLoginTokenCache(loginTokens);
-    }
-
-    /**
      * 默认的session缓存为内存缓存，方便启动
      * <p>
      * 如需替换请在项目中增加一个SessionManagerApi Bean即可
@@ -171,8 +135,8 @@ public class GunsAuthAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(ClearInvalidLoginUserCacheTimer.class)
-    public ClearInvalidLoginUserCacheTimer clearInvalidLoginUserCacheTimer() {
-        return new ClearInvalidLoginUserCacheTimer(loginUserCache(), allPlaceLoginTokenCache());
+    public ClearInvalidLoginUserCacheTimer clearInvalidLoginUserCacheTimer(CacheOperatorApi<LoginUser> loginUserCache, CacheOperatorApi<Set<String>> allPlaceLoginTokenCache) {
+        return new ClearInvalidLoginUserCacheTimer(loginUserCache, allPlaceLoginTokenCache);
     }
 
 }

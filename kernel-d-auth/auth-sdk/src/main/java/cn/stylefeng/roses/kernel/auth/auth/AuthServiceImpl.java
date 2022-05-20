@@ -130,6 +130,9 @@ public class AuthServiceImpl implements AuthServiceApi {
     @Resource(name = "loginErrorCountCacheApi")
     private CacheOperatorApi<Integer> loginErrorCountCacheApi;
 
+    @Resource(name = "caClientTokenCacheApi")
+    private CacheOperatorApi<String> caClientTokenCacheApi;
+
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         return loginAction(loginRequest, true, null);
@@ -192,7 +195,12 @@ public class AuthServiceImpl implements AuthServiceApi {
             throw new AuthException(AuthExceptionEnum.SSO_TOKEN_DECRYPT_USER_ERROR);
         }
 
-        return loginWithUserNameAndCaToken(account, caToken);
+        LoginResponse loginResponse = loginWithUserNameAndCaToken(account, caToken);
+
+        // 存储单点token和生成的本地token的映射关系
+        caClientTokenCacheApi.put(loginWithTokenRequest.getToken(), loginResponse.getToken());
+
+        return loginResponse;
     }
 
     @Override
@@ -208,7 +216,6 @@ public class AuthServiceImpl implements AuthServiceApi {
 
         logoutWithToken(token);
         sessionManagerApi.destroySessionCookie();
-
     }
 
     @Override

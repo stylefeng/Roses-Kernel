@@ -24,6 +24,7 @@
  */
 package cn.stylefeng.roses.kernel.system.modular.user.controller;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.roses.kernel.auth.api.AuthServiceApi;
 import cn.stylefeng.roses.kernel.auth.api.SessionManagerApi;
 import cn.stylefeng.roses.kernel.auth.api.context.LoginContext;
@@ -31,6 +32,7 @@ import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginResponse;
 import cn.stylefeng.roses.kernel.auth.api.pojo.auth.LoginWithTokenRequest;
 import cn.stylefeng.roses.kernel.auth.api.pojo.login.LoginUser;
+import cn.stylefeng.roses.kernel.cache.api.CacheOperatorApi;
 import cn.stylefeng.roses.kernel.rule.pojo.response.ResponseData;
 import cn.stylefeng.roses.kernel.rule.pojo.response.SuccessResponseData;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
@@ -45,6 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -69,6 +72,9 @@ public class LoginController {
 
     @Resource
     private IndexUserInfoService indexUserInfoService;
+
+    @Resource(name = "caClientTokenCacheApi")
+    private CacheOperatorApi<String> caClientTokenCacheApi;
 
     /**
      * 用户登陆
@@ -106,6 +112,28 @@ public class LoginController {
     public ResponseData<String> loginWithToken(@RequestBody @Validated LoginWithTokenRequest loginWithTokenRequest) {
         LoginResponse loginResponse = authServiceApi.LoginWithToken(loginWithTokenRequest);
         return new SuccessResponseData<>(loginResponse.getToken());
+    }
+
+    /**
+     * 单点退出，基于CaClientToken的单点退出
+     *
+     * @param caClientToken token是单点登录回调本系统时候的token
+     * @author fengshuonan
+     * @date 2021/3/17 17:24
+     */
+    @ApiResource(name = "单点退出", path = "/logoutByCaClientToken", requiredLogin = false, requiredPermission = false, method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseData<?> ssoLogout(@RequestParam("caClientToken") String caClientToken) {
+
+        // 获取CaClientToken对应的本地用户
+        String currentSystemToken = caClientTokenCacheApi.get(caClientToken);
+
+        if (StrUtil.isNotBlank(currentSystemToken)) {
+            // 移除本系统中token
+            authServiceApi.logoutWithToken(currentSystemToken);
+            caClientTokenCacheApi.remove(caClientToken);
+        }
+
+        return new SuccessResponseData<>();
     }
 
     /**
