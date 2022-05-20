@@ -29,6 +29,7 @@ import cn.stylefeng.roses.kernel.rule.tree.factory.base.AbstractTreeNode;
 import cn.stylefeng.roses.kernel.rule.tree.xmtree.base.AbstractXmSelectNode;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -69,6 +70,42 @@ public class OrganizationTreeNode implements AbstractTreeNode<OrganizationTreeNo
      */
     @ChineseDescription("是否选中")
     private boolean selected = false;
+
+    /**
+     * 组织名称
+     */
+    @ChineseDescription("组织名称")
+    private String orgName;
+
+    /**
+     * 组织编码
+     */
+    @ChineseDescription("组织编码")
+    private String orgCode;
+
+    /**
+     * 排序
+     */
+    @ChineseDescription("排序")
+    private BigDecimal orgSort;
+
+    /**
+     * 状态：1-启用，2-禁用
+     */
+    @ChineseDescription("状态：1-启用，2-禁用")
+    private Integer statusFlag;
+
+    /**
+     * 组织机构类型：1-公司，2-部门
+     */
+    @ChineseDescription("组织机构类型：1-公司，2-部门")
+    private Integer orgType;
+
+    /**
+     * 组织机构描述
+     */
+    @ChineseDescription("组织机构描述")
+    private String orgRemark;
 
     /**
      * 子节点的集合

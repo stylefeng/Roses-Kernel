@@ -52,6 +52,14 @@ public class OrganizationFactory {
         treeNode.setId(hrOrganization.getOrgId());
         treeNode.setParentId(hrOrganization.getOrgParentId());
         treeNode.setTitle(hrOrganization.getOrgName());
+
+        treeNode.setOrgName(hrOrganization.getOrgName());
+        treeNode.setOrgCode(hrOrganization.getOrgCode());
+        treeNode.setStatusFlag(hrOrganization.getStatusFlag());
+        treeNode.setOrgSort(hrOrganization.getOrgSort());
+        treeNode.setOrgRemark(hrOrganization.getOrgRemark());
+        treeNode.setOrgType(hrOrganization.getOrgType());
+
         return treeNode;
     }
 

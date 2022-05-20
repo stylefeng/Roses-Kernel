@@ -96,6 +96,13 @@ public class HrOrganization extends BaseEntity {
     private Integer statusFlag;
 
     /**
+     * 组织机构类型：1-公司，2-部门
+     */
+    @TableField(value = "org_type")
+    @ChineseDescription("组织机构类型：1-公司，2-部门")
+    private Integer orgType;
+
+    /**
      * 组织机构描述
      */
     @TableField("org_remark")
