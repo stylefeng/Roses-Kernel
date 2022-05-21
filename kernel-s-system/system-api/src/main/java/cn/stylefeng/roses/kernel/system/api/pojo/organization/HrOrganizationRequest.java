@@ -103,6 +103,12 @@ public class HrOrganizationRequest extends BaseRequest {
     private Integer statusFlag;
 
     /**
+     * 组织机构类型：1-公司，2-部门
+     */
+    @ChineseDescription("组织机构类型：1-公司，2-部门")
+    private Integer orgType;
+
+    /**
      * 描述
      */
     @ChineseDescription("描述")
