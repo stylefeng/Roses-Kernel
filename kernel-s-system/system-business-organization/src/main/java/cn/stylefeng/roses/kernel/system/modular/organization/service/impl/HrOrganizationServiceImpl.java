@@ -233,8 +233,12 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
             }
         }
 
-        // 构建树并返回
-        return new DefaultTreeBuildFactory<OrganizationTreeNode>().doTreeBuild(treeNodeList);
+        if (ObjectUtil.isNotEmpty(hrOrganizationRequest.getOrgName())
+                || ObjectUtil.isNotEmpty(hrOrganizationRequest.getOrgCode())) {
+            return treeNodeList;
+        } else {
+            return new DefaultTreeBuildFactory<OrganizationTreeNode>().doTreeBuild(treeNodeList);
+        }
     }
 
     @Override
@@ -393,7 +397,7 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         queryWrapper.like(ObjectUtil.isNotEmpty(orgName), HrOrganization::getOrgName, orgName);
 
         // 拼接组织机构编码条件
-        queryWrapper.eq(ObjectUtil.isNotEmpty(orgCode), HrOrganization::getOrgCode, orgCode);
+        queryWrapper.like(ObjectUtil.isNotEmpty(orgCode), HrOrganization::getOrgCode, orgCode);
 
         // 拼接父机构id查询条件
         if (ObjectUtil.isNotEmpty(orgParentId)) {
