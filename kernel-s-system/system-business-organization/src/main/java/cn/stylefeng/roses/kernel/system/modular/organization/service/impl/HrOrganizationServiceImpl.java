@@ -392,12 +392,16 @@ public class HrOrganizationServiceImpl extends ServiceImpl<HrOrganizationMapper,
         String orgCode = hrOrganizationRequest.getOrgCode();
         Long orgParentId = hrOrganizationRequest.getOrgParentId();
         Long orgId = hrOrganizationRequest.getOrgId();
+        Integer orgType = hrOrganizationRequest.getOrgType();
 
         // 拼接组织机构名称条件
         queryWrapper.like(ObjectUtil.isNotEmpty(orgName), HrOrganization::getOrgName, orgName);
 
         // 拼接组织机构编码条件
         queryWrapper.like(ObjectUtil.isNotEmpty(orgCode), HrOrganization::getOrgCode, orgCode);
+
+        // 组织机构类型拼接
+        queryWrapper.eq(ObjectUtil.isNotEmpty(orgType), HrOrganization::getOrgType, orgType);
 
         // 拼接父机构id查询条件
         if (ObjectUtil.isNotEmpty(orgParentId)) {

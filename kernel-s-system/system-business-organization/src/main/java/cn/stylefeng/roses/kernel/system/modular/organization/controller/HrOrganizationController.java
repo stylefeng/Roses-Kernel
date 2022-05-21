@@ -32,6 +32,7 @@ import cn.stylefeng.roses.kernel.rule.tree.ztree.ZTreeNode;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.ApiResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.GetResource;
 import cn.stylefeng.roses.kernel.scanner.api.annotation.PostResource;
+import cn.stylefeng.roses.kernel.system.api.enums.OrgTypeEnum;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.HrOrganizationRequest;
 import cn.stylefeng.roses.kernel.system.api.pojo.organization.OrganizationTreeNode;
 import cn.stylefeng.roses.kernel.system.modular.organization.entity.HrOrganization;
@@ -149,6 +150,18 @@ public class HrOrganizationController {
      */
     @GetResource(name = "获取全部系统组织机构树", path = "/hrOrganization/tree")
     public ResponseData<List<OrganizationTreeNode>> organizationTree(HrOrganizationRequest hrOrganizationRequest) {
+        return new SuccessResponseData<>(hrOrganizationService.organizationTree(hrOrganizationRequest));
+    }
+
+    /**
+     * 获取公司管理组织机构树
+     *
+     * @author fengshuonan
+     * @date 2022/5/21 11:24
+     */
+    @GetResource(name = "获取公司管理组织机构树", path = "/hrOrganization/companyTree")
+    public ResponseData<List<OrganizationTreeNode>> companyTree(HrOrganizationRequest hrOrganizationRequest) {
+        hrOrganizationRequest.setOrgType(OrgTypeEnum.COMPANY.getCode());
         return new SuccessResponseData<>(hrOrganizationService.organizationTree(hrOrganizationRequest));
     }
 
