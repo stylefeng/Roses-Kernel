@@ -18,7 +18,6 @@
     <modules>
         <module>expand-api</module>
         <module>expand-business</module>
-        <module>expand-sdk</module>
         <module>expand-spring-boot-starter</module>
     </modules>
 

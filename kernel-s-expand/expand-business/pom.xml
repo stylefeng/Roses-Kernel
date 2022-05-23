@@ -24,13 +24,6 @@
             <version>${roses.version}</version>
         </dependency>
 
-        <!--拓展字段SDK模块-->
-        <dependency>
-            <groupId>cn.stylefeng.roses</groupId>
-            <artifactId>expand-sdk</artifactId>
-            <version>${roses.version}</version>
-        </dependency>
-
         <!--system业务api-->
         <!--调用用户相关业务-->
         <dependency>
